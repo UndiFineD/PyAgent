@@ -21,6 +21,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ConflictResolution(Enum):
 """"Strategies for merge conflict resolution.
 #     OURS = "ours"#     THEIRS = "theirs"#     MANUAL = "manual"#     AUTO = "auto"

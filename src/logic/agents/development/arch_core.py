@@ -35,6 +35,8 @@ except ImportError:
 __version__ = VERSION
 
 
+
+
 class ArchCore:
 """"Pure logic core for architectural analysis.
     @staticmethod

@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Module: universal_agent
 Implementation of Pillar 3: The Universal Agent Shell.
+"""
+
 
 from __future__ import annotations
 import logging
@@ -44,6 +46,8 @@ import asyncio
 from src.core.base.lifecycle.base_agent import BaseAgent
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class UniversalAgent(BaseAgent):
@@ -101,6 +105,8 @@ import asyncio
 from src.core.base.lifecycle.base_agent import BaseAgent
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class UniversalAgent(BaseAgent):

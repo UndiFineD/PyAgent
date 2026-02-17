@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 - Implement full local AsyncModelRunner integration (proper input serialization,
   batching, streaming, and response parsing) and use a pooled/singleton pattern
   for heavy native clients (llama_cpp) instead of per-call initialization.
-- Expand Anthropic implementation from placeholder to proper request/response flow
+- Expand Anthropic implementation from TODO Placeholder to proper request/response flow
   and harmonize response shapes across providers.
 - Improve configuration and credential handling (explicit env var precedence,
   secrets management), add robust retrying, timeouts, streaming support, token
@@ -85,6 +85,8 @@ except ImportError:
 from src.inference.execution.async_model_runner import AsyncModelRunner, ModelInput
 
 logger = logging.getLogger("pyagent.inference.engine")
+
+
 
 
 class InferenceEngine:

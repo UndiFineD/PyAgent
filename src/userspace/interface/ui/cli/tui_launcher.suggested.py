@@ -27,6 +27,8 @@ from rich.table import Table
 from datetime import datetime
 
 
+
+
 class PyAgentTUI:
     def __init__(self) -> None:
         self.console = Console()

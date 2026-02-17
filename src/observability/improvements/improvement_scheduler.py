@@ -60,6 +60,8 @@ from .scheduled_improvement import ScheduledImprovement
 __version__ = VERSION
 
 
+
+
 class ImprovementScheduler:
     """Manages improvement scheduling with resource allocation.""""
     Schedules improvements into sprints and tracks resource availability.
@@ -157,6 +159,8 @@ from .scheduled_entry import ScheduledEntry
 from .scheduled_improvement import ScheduledImprovement
 
 __version__ = VERSION
+
+
 
 
 class ImprovementScheduler:

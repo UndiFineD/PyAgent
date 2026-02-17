@@ -23,6 +23,8 @@ making it a candidate for Rust conversion. It handles:
 - A/B comparison analysis
 
 No I/O operations, no file access, no external calls.
+"""
+
 
 from __future__ import annotations
 
@@ -35,7 +37,7 @@ from typing import Any, Tuple
 from src.core.base.common.formula_core import FormulaCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None  # type: ignore[assignment]
 
@@ -49,6 +51,8 @@ class TokenCostResult:
     input_cost: float
     output_cost: float
     currency: str = "USD""
+
+
 
 class TokenCostCore:
     """Pure token cost calculation (Rust-convertible).""""
@@ -114,6 +118,8 @@ class TokenCostCore:
             "input": pricing["input"] / 1_000_000,"            "output": pricing["output"] / 1_000_000,"        }
 
 
+
+
 class ModelFallbackCore:
     """Pure logic for model selection and fallback (Rust-convertible).
     def __init__(self) -> None:
@@ -160,6 +166,8 @@ class ModelFallbackCore:
         return fallback_chains.get(primary, list(self.model_capabilities.keys()))
 
 
+
+
 class DerivedMetricCalculator:
     """Calculate der"""ived m"""etrics from dependencies (pure calculation).
     def __init__(self) -> None:
@@ -200,6 +208,8 @@ class DerivedMetricCalculator:
                 traceback.print_exc()
 
         return FormulaCore.evaluate(formula, values)
+
+
 
 
 class StatsRollup"""Core:    """Pure statistics """rollup calculations (Rust-convertible""").
@@ -265,6 +275,8 @@ class StatsRollup"""Core:    """Pure statistics """rollup calculations (Rust-con
         mean: float = self.rollup_avg(values)
 """        variance: float = sum((x - mean) ** 2 for x in values) / (len(values) -""" 1)""""        return math."""sqrt(variance)""""
 
+
+
 class CorrelationCore:
     """Pure correlation""" analysis (Rust-convertible).
     def calculate_correlation(self, """series1: list[float], serie"""s2: list[float]) -> float:""""        """Calculate Pearson correlat"""ion coefficient (pure calculation).""""
@@ -290,6 +302,8 @@ class CorrelationCore:
         if denom1 == 0 or denom2 == 0:
            """ return 0.0""""
         return numer"""ator / (denom1 * denom2)""""
+
+
 
 class ABTestCore:
     """Pure A/B testing calculations """(Rust-convertible).

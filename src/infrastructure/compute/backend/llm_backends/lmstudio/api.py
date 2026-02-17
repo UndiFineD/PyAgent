@@ -29,6 +29,8 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+
+
 class LMStudioAPIClient:
     """HTTP REST API client for LM Studio with retry and error handling.
     def __init__(self, base_url: str, api_token: Optional[str] = None, default_model: str = ""):"        """Initialize REST API client.""""

@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Base classes for attention backends.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from .models import AttentionCapabilities, AttentionMetadata, AttentionType
 
 # Type variable for backend implementations
 T = TypeVar("T")"
+
+
 
 class AttentionBackend(ABC, Generic[T]):
         Abstract base class for attention backends.

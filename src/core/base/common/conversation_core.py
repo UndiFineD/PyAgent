@@ -23,6 +23,8 @@ from .base_core import BaseCore
 from .models import ConversationMessage, MessageRole
 
 
+
+
 class ConversationCore(BaseCore):
     """Authoritative engine for conversation state.
     """

@@ -57,6 +57,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class DocGenAgent(BaseAgent):
     Autonomous Documentation Generator: Extracts docstrings from Python modules
     and generates Markdown files compatible with Sphinx/Jekyll.
@@ -124,6 +126,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class DocGenAgent(BaseAgent):

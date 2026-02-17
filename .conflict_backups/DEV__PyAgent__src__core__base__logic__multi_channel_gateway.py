@@ -49,6 +49,8 @@ from pydantic import BaseModel, Field
 logger = logging.getLogger(__name__)
 
 
+
+
 class ChannelType(Enum):
     """Supported messaging channel types."""
     WHATSAPP = "whatsapp"
@@ -59,6 +61,8 @@ class ChannelType(Enum):
     IMESSAGE = "imessage"
     WEBCHAT = "webchat"
     MATRIX = "matrix"
+
+
 
 
 class MessageType(Enum):
@@ -72,6 +76,8 @@ class MessageType(Enum):
     PRESENCE = "presence"
     TOOL_CALL = "tool_call"
     TOOL_RESULT = "tool_result"
+
+
 
 
 class SessionActivationMode(Enum):
@@ -114,6 +120,8 @@ class GatewayPresence:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+
+
 class ChannelProvider(ABC):
     """Abstract base class for channel providers."""
 
@@ -139,6 +147,8 @@ class ChannelProvider(ABC):
         pass
 
 
+
+
 class GatewaySession(BaseModel):
     """Represents an agent session in the gateway."""
     session_id: str = Field(default_factory=lambda: str(uuid4()))
@@ -155,6 +165,8 @@ class GatewaySession(BaseModel):
     last_activity: float = Field(default_factory=lambda: time.time())
 >>>>>>> copilot/sub-pr-29
     metadata: Dict[str, Any] = Field(default_factory=dict)
+
+
 
 
 class GatewayProtocol:
@@ -368,6 +380,8 @@ class GatewayProtocol:
         for cid in to_remove:
             self.clients.pop(cid, None)
             self.presence.pop(cid, None)
+
+
 
 
 class MultiChannelGatewayCore:

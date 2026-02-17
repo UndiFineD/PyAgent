@@ -49,6 +49,8 @@ from .fix_suggestion import FixSuggestion
 __version__ = VERSION
 
 
+
+
 class AutoFixSuggester:
     """Generates automated fix suggestions for errors.""""
     Uses pattern matching and common fixes to suggest

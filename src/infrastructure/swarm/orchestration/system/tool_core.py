@@ -15,6 +15,7 @@
 
 """
 Tool core.py module.
+"""
 
 
 from __future__ import annotations
@@ -30,13 +31,15 @@ from pydantic import BaseModel
 from src.core.base.lifecycle.version import VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except (ImportError, AttributeError):
     rc = None  # type: ignore[assignment]
 
 logger = logging.getLogger(__name__)
 
 __version__ = VERSION
+
+
 
 
 class ToolMetadata(BaseModel):
@@ -48,6 +51,8 @@ class ToolMetadata(BaseModel):
     owner: str  # Name of the agent providing this tool
     category: str = "general""    priority: int = 0
     reliability_score: float = 1.0  # Phase 119: Performance-based scoring
+
+
 
 
 class ToolCore:

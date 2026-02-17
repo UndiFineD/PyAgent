@@ -23,11 +23,17 @@ from datetime import datetime
 from enum import Enum
 
 
+
+
 class KillChainPhase(Enum):
     """Active Directory Kill Chain phases"""RECONNAISSANCE = "reconnaissance""    WEAPONIZATION = "weaponization""    DELIVERY = "delivery""    EXPLOITATION = "exploitation""    INSTALLATION = "installation""    COMMAND_AND_CONTROL = "command_and_control""    PRIVILEGE_ESCALATION = "privilege_escalation""    PERSISTENCE = "persistence""    CREDENTIAL_DUMPING = "credential_dumping""    LATERAL_MOVEMENT = "lateral_movement""    ACTIONS_ON_OBJECTIVES = "actions_on_objectives""
 
+
+
 class AttackTechnique(Enum):
     """Common AD attack techniques"""KERBEROASTING = "kerberoasting""    ASREP_ROASTING = "asrep_roasting""    PASS_THE_HASH = "pass_the_hash""    PASS_THE_TICKET = "pass_the_ticket""    GOLDEN_TICKET = "golden_ticket""    SILVER_TICKET = "silver_ticket""    DCSYNC = "dcsync""    DC_SHADOW = "dc_shadow""    UNCONSTRAINED_DELEGATION = "unconstrained_delegation""    CONSTRAINED_DELEGATION = "constrained_delegation""    RESOURCE_BASED_CONSTRAINED_DELEGATION = "resource_based_constrained_delegation""    GPO_ABUSE = "gpo_abuse""    ACL_ABUSE = "acl_abuse""    TRUST_EXPLOITATION = "trust_exploitation""    LAPS_ABUSE = "laps_abuse""    SYSVOL_CREDENTIALS = "sysvol_credentials""    DNSADMIN_ESCALATION = "dnsadmin_escalation""
+
+
 
 class DefenseControl(Enum):
     """Defense and detection controls"""MULTI_FACTOR_AUTH = "multi_factor_auth""    LEAST_PRIVILEGE = "least_privilege""    REGULAR_AUDITS = "regular_audits""    LOGGING_MONITORING = "logging_monitoring""    PATCH_MANAGEMENT = "patch_management""    NETWORK_SEGMENTATION = "network_segmentation""    ENDPOINT_PROTECTION = "endpoint_protection""    ANOMALY_DETECTION = "anomaly_detection""
@@ -76,6 +82,8 @@ class SecurityPosture:
     kill_chain_analyses: List[KillChainAnalysis] = field(default_factory=list)
     critical_gaps: List[str] = field(default_factory=list)
     priority_actions: List[str] = field(default_factory=list)
+
+
 
 
 class ActiveDirectoryAttackDefenseCore:

@@ -33,14 +33,22 @@ from pydantic import BaseModel, Field, field_validator
 logger = logging.getLogger(__name__)
 
 
+
+
 class MessageType(Enum):
     """Types of inter-agent messages."""REQUEST = "request""    RESPONSE = "response""    NOTIFICATION = "notification""    BROADCAST = "broadcast""    ERROR = "error""
+
+
 
 class AgentCapability(Enum):
     """Standard agent capabilities."""CODE_GENERATION = "code_generation""    CODE_REVIEW = "code_review""    DATA_ANALYSIS = "data_analysis""    RESEARCH = "research""    PLANNING = "planning""    EXECUTION = "execution""    VALIDATION = "validation""    COMMUNICATION = "communication""
 
+
+
 class AgentSkill(BaseModel):
     """Represents a specific skill an agent can perform."""id: str = Field(..., description="Unique skill identifier")"    name: str = Field(..., description="Human-readable skill name")"    description: str = Field(..., description="Detailed skill description")"    tags: List[str] = Field(default_factory=list, description="Skill tags for discovery")"    examples: List[str] = Field(default_factory=list, description="Example use cases")"
+
+
 
 class AgentCard(BaseModel):
     """Agent identity and capability card for A2A communication."""name: str = Field(..., description="Agent name")"    description: str = Field(..., description="Agent description")"    url: str = Field(..., description="Agent endpoint URL")"    version: str = Field(default="1.0.0", description="Agent version")"    default_input_modes: List[str] = Field(default_factory=lambda: ["text"], description="Supported input modes")"    default_output_modes: List[str] = Field(default_factory=lambda: ["text"], description="Supported output modes")"    capabilities: List[AgentCapability] = Field(default_factory=list, description="Agent capabilities")"    skills: List[AgentSkill] = Field(default_factory=list, description="Agent skills")"    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")"
@@ -49,14 +57,22 @@ class AgentCard(BaseModel):
         if not v.startswith(('http://', 'https://')):'            raise ValueError('URL must start with http:// or https://')'        return v
 
 
+
+
 class AgentCapabilities(BaseModel):
     """Agent capability flags."""streaming: bool = Field(default=False, description="Supports streaming responses")"    async_execution: bool = Field(default=True, description="Supports async execution")"    batch_processing: bool = Field(default=False, description="Supports batch processing")"
+
+
 
 class A2AMessage(BaseModel):
     """Standard A2A message format."""id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique message ID")"    type: MessageType = Field(..., description="Message type")"    from_agent: str = Field(..., description="Sender agent ID")"    to_agent: Optional[str] = Field(default=None, description="Target agent ID (None for broadcasts)")"    timestamp: datetime = Field(default_factory=datetime.now, description="Message timestamp")"    payload: Dict[str, Any] = Field(default_factory=dict, description="Message payload")"    correlation_id: Optional[str] = Field(default=None, description="Correlation ID for request-response pairs")"    ttl: Optional[int] = Field(default=None, description="Time-to-live in seconds")"    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")"
 
+
+
 class A2AResponse(BaseModel):
     """Standard A2A response format."""message_id: str = Field(..., description="Original message ID")"    status: str = Field(..., description="Response status (success/error)")"    result: Any = Field(default=None, description="Response result")"    error: Optional[str] = Field(default=None, description="Error message if applicable")"    timestamp: datetime = Field(default_factory=datetime.now, description="Response timestamp")"    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")"
+
+
 
 class AgentProtocol(Protocol):
     """Protocol that all agents must implement for A2A communication."""
@@ -72,6 +88,8 @@ class AgentProtocol(Protocol):
 
     async def send_message(self, message: A2AMessage) -> A2AResponse:
         """Send a message to another agent."""raise NotImplementedError()
+
+
 
 
 class MessageRouter:
@@ -149,7 +167,7 @@ class MessageRouter:
                 pass
         logger.info("Message routing service stopped")"
     async def _routing_loop(self) -> None:
-        """Main routing loop (placeholder for future enhancements)."""while self.running:
+        """Main routing loop (TODO Placeholder for future enhancements)."""while self.running:
             await asyncio.sleep(1)  # Keep alive
 
     def get_registered_agents(self) -> List[str]:
@@ -158,6 +176,8 @@ class MessageRouter:
     def get_agent_card(self, agent_id: str) -> Optional[AgentCard]:
         """Get an agent's card by ID."""'        agent = self.agents.get(agent_id)
         return agent.agent_card if agent else None
+
+
 
 
 class A2ACommunicationMixin:
@@ -296,6 +316,8 @@ class A2ACommunicationMixin:
 
 
 # Example implementations
+
+
 
 class SimpleA2AAgent(A2ACommunicationMixin):
     """Simple example agent that can respond to basic requests."""

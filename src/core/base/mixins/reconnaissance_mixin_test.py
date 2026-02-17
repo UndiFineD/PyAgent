@@ -16,6 +16,8 @@ from unittest.mock import Mock, patch
 from src.core.base.mixins.reconnaissance_mixin import ReconnaissanceMixin
 
 
+
+
 class TestReconnaissanceMixin:
     """Test cases for ReconnaissanceMixin."""
     def setup_method(self):

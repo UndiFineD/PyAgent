@@ -29,6 +29,7 @@ WHAT IT SHOULD DO BETTER:
 - Improve output streaming for faster response processing in real-time interfaces.
 - Standardize multi-turn conversation context handling within the CLI wrapper.
 - Enhance error detection for specific CLI authentication or rate-limit states.
+"""
 
 
 from __future__ import annotations
@@ -41,6 +42,8 @@ from src.core.base.lifecycle.version import VERSION
 from .llm_backend import LLMBackend
 
 __version__ = VERSION
+
+
 
 
 class CopilotCliBackend(LLMBackend):

@@ -23,6 +23,8 @@ from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
 
+
+
 class LoRAMethod(Enum):
     """LoRA method variants.
     LORA = auto()  # Standard LoRA
@@ -34,6 +36,8 @@ class LoRAMethod(Enum):
     LORA_PLUS = auto()  # LoRA+ (different LR for A/B)
 
 
+
+
 class AdapterStatus(Enum):
     """Adapter lifecycle status.
     LOADING = auto()  # Being loaded
@@ -42,6 +46,8 @@ class AdapterStatus(Enum):
     INACTIVE = auto()  # Loaded but not active
     EVICTING = auto()  # Being evicted
     ERROR = auto()  # Load error
+
+
 
 
 class TargetModule(Enum):

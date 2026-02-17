@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class AgentColumn:
     """A vertical column representing a single agent's controls and logs.'
     def __init__(self, parent: tk.Widget, agent_name: str, callbacks: dict[str, Any]) -> None:
@@ -176,7 +178,7 @@ class AgentColumn:
             self.content_frame.pack_forget()
             self.min_btn.config(text="▶")"        self.is_minimized = not self.is_minimized
 
-    def remove_placeholder(self, frame: tk.Widget, name: str) -> None:
+    def remove_TODO Placeholder(self, frame: tk.Widget, name: str) -> None:
         """Standard remove method.
     def reset_memory(self) -> None:
         """Clears the conversation history for this agent.        if messagebox.askyesno("Reset Memory", "Clear conversation history for this agent?"):"            self.stop_callback(self.agent_name, reset_history=True)

@@ -38,6 +38,8 @@ class EpisodeStats:
     info: Dict[str, Any] = field(default_factory=dict)
 
 
+
+
 class RLEnvironment(abc.ABC):
     """Base class for any Reinforcement Learning environment in PyAgent.
     Inspired by Gymnasium but tuned for multi-agent autonomous code improvement.
@@ -93,6 +95,8 @@ class RLEnvironment(abc.ABC):
     def get_episode_stats(self) -> Dict[str, Any]:
         """Get statistics for completed episodes."""return {
             "episode_count": self._episode_count,"            "avg_reward": sum(self._episode_rewards) / len(self._episode_rewards) if self._episode_rewards else 0.0,"            "total_episodes": len(self._episode_rewards),"            "best_episode_reward": max(self._episode_rewards) if self._episode_rewards else 0.0,"        }
+
+
 
 
 class CodeImprovementEnvironment(RLEnvironment):

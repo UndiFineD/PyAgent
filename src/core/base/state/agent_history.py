@@ -27,6 +27,8 @@ if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent_core import BaseAgentCore
 
 
+
+
 class AgentConversationHistory:
     """Manages an agent's conversation history."""'
     def __init__(self) -> None:

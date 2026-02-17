@@ -42,6 +42,8 @@ class AIServiceConfig:
             self.models = {}
 
 
+
+
 class AIServiceProvider(ABC):
     """Abstract base class for AI service providers."""
 
@@ -64,6 +66,8 @@ class AIServiceProvider(ABC):
         return self.config.models.get(service_type, "")
 
 
+
+
 class OpenAIProvider(AIServiceProvider):
     """OpenAI API provider."""
 
@@ -74,7 +78,7 @@ class OpenAIProvider(AIServiceProvider):
         **kwargs
     ) -> Dict[str, Any]:
         # Implementation would use OpenAI SDK
-        # This is a placeholder showing the pattern
+        # This is a TODO Placeholder showing the pattern
         start_time = time.time()
 
         try:
@@ -98,6 +102,8 @@ class OpenAIProvider(AIServiceProvider):
         except Exception as e:
             self.logger.error(f"OpenAI API error: {e}")
             raise
+
+
 
 
 class CloudflareProvider(AIServiceProvider):
@@ -209,6 +215,8 @@ class CloudflareProvider(AIServiceProvider):
             return {"translated_text": "Mock translated text"}
         else:
             return {"result": "Mock response"}
+
+
 
 
 class MultimodalAIService:

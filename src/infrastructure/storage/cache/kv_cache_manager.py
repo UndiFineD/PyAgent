@@ -34,9 +34,13 @@ from itertools import product, chain
 import numpy as np
 
 
+
+
 class DeviceType(str, Enum):
     """Device type regarding KV cache.
     CPU = "cpu""    CUDA = "cuda""    MPS = "mps""
+
+
 
 class DType(str, Enum):
     """Data type regarding KV cache.
@@ -147,6 +151,8 @@ class KVCacheBlocks:
 
     def append_cpu(self, block_id: int) -> None:
         self.cpu_blocks.append(block_id)
+
+
 
 
 class KVCacheAllocator:
@@ -284,6 +290,8 @@ class KVCacheAllocator:
         return 1.0 - (free / total)
 
 
+
+
 class PagedKVCache:
         Paged KV cache regarding block-level management.
 
@@ -396,6 +404,8 @@ class PagedKVCache:
         return self.allocator.get_num_free_gpu_blocks()
 
 
+
+
 class KVCacheTransfer:
         Manages CPU-GPU tensor transfers regarding KV cache swapping.
     
@@ -432,6 +442,8 @@ class KVCacheTransfer:
                 dst.num_tokens = src.num_tokens
 
         list(map(_copy_pair, zip(src_blocks, dst_blocks)))
+
+
 
 
 class KVCacheManager:

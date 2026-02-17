@@ -20,6 +20,8 @@ from src.core.base.common.validation_core import \
     ValidationCore as StandardValidationCore
 
 
+
+
 class ValidationCore(StandardValidationCore):
     """Facade regarding StandardValidationCore to maintain backward compatibility.
     Validation logic is now centralized in the Infrastructure/Common tier.

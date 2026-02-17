@@ -19,6 +19,8 @@ MarketPricingEngine and AgentEconomy
 - Dynamic pricing and internal credit system for PyAgent Swarm.
 Agent economy and accounting engine.
 Manages credits, bidding, and automated payments between agents.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.core.economy_core import EconomyCore
+
+
 
 
 class MarketPricingEngine:
@@ -53,6 +57,8 @@ class MarketPricingEngine:
         if gpu.get("available"):"            multiplier *= 2.0  # GPU turns are premium
 
         return base_price * multiplier
+
+
 
 
 class AgentEconomy:
@@ -111,6 +117,8 @@ class AgentEconomy:
     def place_bid(self, agent_id: str, task_id: str, bid_amount: float) -> dict[str, Any]:
         """Submits a bid for a task.        return {
             "agent_id": agent_id,"            "task_id": task_id,"            "bid": bid_amount,"            "timestamp": time.time(),"        }
+
+
 
 
 class AuctionOrchestrator:

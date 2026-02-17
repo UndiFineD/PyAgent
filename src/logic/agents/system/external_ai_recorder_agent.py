@@ -20,7 +20,7 @@
 USAGE:
 - Instantiate ExternalAIRecorderAgent with the repository workspace root (pass a path used as agent file_path).
 - Call record_external_interaction(external_ai_name, prompt, context, response) to append external session records to the local archive and any configured recorder shard.
-- Use synthesize_local_knowledge() to run simple pattern extraction/synthesis over stored records; call improve_content(...) to apply knowledge-derived improvements (placeholder implementation).
+- Use synthesize_local_knowledge() to run simple pattern extraction/synthesis over stored records; call improve_content(...) to apply knowledge-derived improvements (TODO Placeholder implementation).
 - The archive is written to data\\\\logs\\external_ai_learning\\external_knowledge.jsonl and a recorder shard is optionally used if configured.
 
 WHAT IT DOES:
@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in recording and consolidating knowledge from external AI sessions.
 Captures prompts, contexts, and responses provided to/from external systems like ChatGPT, Claude, etc.
+"""
+
 
 from __future__ import annotations
 
@@ -47,6 +49,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ExternalAIRecorderAgent(BaseAgent):

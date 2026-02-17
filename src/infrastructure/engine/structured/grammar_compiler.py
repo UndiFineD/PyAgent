@@ -28,6 +28,8 @@ from .regex import RegexGrammar
 from .tokenizer_info import TokenizerInfo
 
 
+
+
 class GrammarCompiler:
         Grammar compiler with caching.
 

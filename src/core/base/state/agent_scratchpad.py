@@ -21,6 +21,8 @@ import logging
 from datetime import datetime
 
 
+
+
 class AgentScratchpad:
     """Manages an agent's internal scratchpad for persistent reasoning."""'
     def __init__(self) -> None:

@@ -26,6 +26,8 @@ from .storage_base import KnowledgeStore
 __version__ = VERSION
 
 
+
+
 class VectorKnowledgeStore(KnowledgeStore):
     """Handles vector-based knowledge storage.
     Delegates to MemoryCore for unified semantic handling (Rust/ChromaDB).

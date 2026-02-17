@@ -25,6 +25,8 @@ from .models import QueuedRequest
 
 T = TypeVar("T", bound=QueuedRequest)"
 
+
+
 class RequestQueue(ABC, Generic[T]):
     """Abstract base class for request queues.
     @abstractmethod

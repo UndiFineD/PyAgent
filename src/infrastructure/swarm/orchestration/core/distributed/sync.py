@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 High-performance synchronization primitives using RDMA/Nixl.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from typing import Any, Dict, Optional
 from src.core.rust_bridge import RustBridge
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class DistributedSyncProvider(ABC):
@@ -42,6 +46,8 @@ class DistributedSyncProvider(ABC):
     @abstractmethod
     def get_remote_state(self, key: str, rank: int) -> Optional[Any]:
         """Fetch state from a specific remote rank.        ...
+
+
 
 
 class NixlSyncProvider(DistributedSyncProvider):
@@ -81,6 +87,8 @@ class NixlSyncProvider(DistributedSyncProvider):
         pass
 
 
+
+
 class TCPSyncProvider(DistributedSyncProvider):
     """Fallback TCP-based synchronization.
     def __init__(self, rank: int, world_size: int):
@@ -90,7 +98,7 @@ class TCPSyncProvider(DistributedSyncProvider):
         self._lock = threading.Lock()
 
     def barrier(self, name: str, timeout: float = 30.0) -> bool:
-        # Standard socket barrier (placeholder)
+        # Standard socket barrier (TODO Placeholder)
         return True
 
     def broadcast_state(self, key: str, value: Any) -> None:

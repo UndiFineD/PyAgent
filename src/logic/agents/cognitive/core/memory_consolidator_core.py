@@ -15,6 +15,8 @@
 
 # "MemoryConsolidatorCore logic for PyAgent."Pure logic for distilling interactions into insights. Maintains the integrity
 of memory fragments during the consolidation process.
+"""
+
 
 from __future__ import annotations
 import time
@@ -29,6 +31,8 @@ except ImportError:
     _RUST_ACCEL = False
 
 __version__ = VERSION
+
+
 
 
 class MemoryConsolidatorCore:

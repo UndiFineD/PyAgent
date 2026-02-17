@@ -28,6 +28,8 @@ from .blackboard_core import BlackboardCore
 __version__ = VERSION
 
 
+
+
 class BlackboardManager:
         Central repository for agents to post findings and look for data.
     Shell for BlackboardCore.

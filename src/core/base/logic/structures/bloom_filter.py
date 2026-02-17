@@ -33,6 +33,8 @@ from typing import Any
 RUST_AVAILABLE = False
 
 
+
+
 class BloomFilter:
     """Space-efficient probabilistic set membership test.
 
@@ -190,6 +192,8 @@ class BloomFilter:
         return bf
 
 
+
+
 class CountingBloomFilter:
     """Bloom filter that supports removal by using counters.
 
@@ -271,6 +275,8 @@ class CountingBloomFilter:
         """Get filter statistics."""non_zero = sum(map(lambda c: 1 if c > 0 else 0, self._counters))
         return {
             "size": self._size,"            "num_hashes": self._num_hashes,"            "counter_bits": self._counter_bits,"            "items_added": self._count,"            "non_zero_counters": non_zero,"            "fill_ratio": round(non_zero / self._size, 4),"        }
+
+
 
 
 class ScalableBloomFilter:

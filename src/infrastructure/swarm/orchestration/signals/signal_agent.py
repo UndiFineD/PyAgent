@@ -28,6 +28,8 @@ from .signal_registry import SignalRegistry
 __version__ = VERSION
 
 
+
+
 class SignalAgent(BaseAgent):
     """Monitors the SignalRegistry and triggers actions based on events.
     def __init__(self, file_path: str) -> None:

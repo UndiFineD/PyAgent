@@ -40,6 +40,8 @@ except ImportError:
     dist = None
 
 
+
+
 class NCCLCommunicator:
         Pure Python wrapper for NCCL collective operations.
 
@@ -356,6 +358,8 @@ class NCCLCommunicator:
 
     def reset_stats(self) -> None:
         """Reset statistics.        self._stats = NCCLStats()
+
+
 
 
 class CustomAllReduce:

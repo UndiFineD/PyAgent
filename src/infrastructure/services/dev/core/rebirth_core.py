@@ -25,6 +25,8 @@ from typing import Any
 import yaml
 
 
+
+
 class RebirthCore:
     """Pure logic core for swarm rebirth processes, handling project scaffolding.
     @staticmethod

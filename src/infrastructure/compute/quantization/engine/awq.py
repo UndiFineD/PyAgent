@@ -14,6 +14,8 @@
 
 
 Awq.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from .tensor import QuantizedTensor
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+
+
 
 
 class AWQQuantizer(Quantizer):

@@ -32,6 +32,8 @@ from src.core.base.logic.multi_channel_gateway import (
 )
 
 
+
+
 class MockChannelProvider(ChannelProvider):
     """Mock channel provider for testing."""
     def __init__(self, channel_type: ChannelType):
@@ -54,6 +56,8 @@ class MockChannelProvider(ChannelProvider):
         return GatewayPresence(client_id=user_id)
 
 
+
+
 class TestChannelMessage:
     """Test ChannelMessage dataclass."""
     def test_channel_message_creation(self):
@@ -67,6 +71,8 @@ class TestChannelMessage:
         assert message.metadata == {"key": "value"}"        assert message.thread_id == "thread_789""        assert message.timestamp > 0
 
 
+
+
 class TestGatewayPresence:
     """Test GatewayPresence dataclass."""
     def test_gateway_presence_creation(self):
@@ -75,6 +81,8 @@ class TestGatewayPresence:
 
         assert presence.client_id == "client_123""        assert presence.status == "online""        assert presence.last_seen > 0
         assert presence.metadata == {"device": "mobile"}"
+
+
 
 class TestGatewaySession:
     """Test GatewaySession model."""
@@ -100,6 +108,8 @@ class TestGatewaySession:
         assert session.is_active is True
         assert session.created_at > 0
         assert session.last_activity > 0
+
+
 
 
 class TestGatewayProtocol:
@@ -153,6 +163,8 @@ class TestGatewayProtocol:
         call_args = websocket.send.call_args[0][0]
         response = json.loads(call_args)
         assert response["type"] == "session_created""        assert response["session_id"] == session.session_id"
+
+
 
 class TestMultiChannelGatewayCore:
     """Test MultiChannelGatewayCore class."""

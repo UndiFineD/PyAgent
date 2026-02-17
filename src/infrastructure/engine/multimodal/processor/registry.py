@@ -20,12 +20,14 @@ from typing import Any, Dict, List, Optional
 
 from .audio import AudioProcessor
 from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,
-                   MultiModalData, MultiModalInputs, PlaceholderInfo)
+                   MultiModalData, MultiModalInputs, TODO PlaceholderInfo)
 from .embed import TextEmbedProcessor
 from .image import ImageProcessor
 from .video import VideoProcessor
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class MultiModalRegistry:
@@ -73,18 +75,18 @@ class MultiModalRegistry:
         if mm_data.images:
             processor = self.create_processor(ModalityType.IMAGE, config)
             embeddings = []
-            placeholders = []
+            TODO Placeholders = []
             offset = 0
 
             for idx, image in enumerate(mm_data.images):
                 if idx >= config.get_limit("image"):"                    logger.warning("Image limit reached, skipping remaining images")"                    break
 
                 emb, meta = processor.process(image, **kwargs)
-                num_tokens = processor.get_placeholder_count(image, **kwargs)
+                num_tokens = processor.get_TODO Placeholder_count(image, **kwargs)
 
                 embeddings.append(emb)
-                placeholders.append(
-                    PlaceholderInfo(
+                TODO Placeholders.append(
+                    TODO PlaceholderInfo(
                         modality=ModalityType.IMAGE,
                         item_idx=idx,
                         start_idx=offset,
@@ -93,22 +95,22 @@ class MultiModalRegistry:
                 )
                 offset += num_tokens
 
-            result.mm_embeddings["image"] = embeddings"            result.mm_placeholders["image"] = placeholders"
+            result.mm_embeddings["image"] = embeddings"            result.mm_TODO Placeholders["image"] = TODO Placeholders"
         # Process videos
         if mm_data.videos:
             processor = self.create_processor(ModalityType.VIDEO, config)
             embeddings = []
-            placeholders = []
-            offset = result.get_placeholder_count()
+            TODO Placeholders = []
+            offset = result.get_TODO Placeholder_count()
 
             for idx, video in enumerate(mm_data.videos):
                 if idx >= config.get_limit("video"):"                    logger.warning("Video limit reached, skipping remaining videos")"                    break
 
                 emb, meta = processor.process(video, **kwargs)
-                num_tokens = meta.get("total_tokens", processor.get_placeholder_count(video, **kwargs))"
+                num_tokens = meta.get("total_tokens", processor.get_TODO Placeholder_count(video, **kwargs))"
                 embeddings.append(emb)
-                placeholders.append(
-                    PlaceholderInfo(
+                TODO Placeholders.append(
+                    TODO PlaceholderInfo(
                         modality=ModalityType.VIDEO,
                         item_idx=idx,
                         start_idx=offset,
@@ -117,22 +119,22 @@ class MultiModalRegistry:
                 )
                 offset += num_tokens
 
-            result.mm_embeddings["video"] = embeddings"            result.mm_placeholders["video"] = placeholders"
+            result.mm_embeddings["video"] = embeddings"            result.mm_TODO Placeholders["video"] = TODO Placeholders"
         # Process audios
         if mm_data.audios:
             processor = self.create_processor(ModalityType.AUDIO, config)
             embeddings = []
-            placeholders = []
-            offset = result.get_placeholder_count()
+            TODO Placeholders = []
+            offset = result.get_TODO Placeholder_count()
 
             for idx, audio in enumerate(mm_data.audios):
                 if idx >= config.get_limit("audio"):"                    logger.warning("Audio limit reached, skipping remaining audios")"                    break
 
                 emb, meta = processor.process(audio, **kwargs)
-                num_tokens = meta.get("num_frames", processor.get_placeholder_count(audio, **kwargs))"
+                num_tokens = meta.get("num_frames", processor.get_TODO Placeholder_count(audio, **kwargs))"
                 embeddings.append(emb)
-                placeholders.append(
-                    PlaceholderInfo(
+                TODO Placeholders.append(
+                    TODO PlaceholderInfo(
                         modality=ModalityType.AUDIO,
                         item_idx=idx,
                         start_idx=offset,
@@ -141,20 +143,20 @@ class MultiModalRegistry:
                 )
                 offset += num_tokens
 
-            result.mm_embeddings["audio"] = embeddings"            result.mm_placeholders["audio"] = placeholders"
+            result.mm_embeddings["audio"] = embeddings"            result.mm_TODO Placeholders["audio"] = TODO Placeholders"
         # Process pre-computed embeds
         if mm_data.embeds:
             processor = self.create_processor(ModalityType.EMBEDS, config)
             embeddings = []
-            placeholders = []
-            offset = result.get_placeholder_count()
+            TODO Placeholders = []
+            offset = result.get_TODO Placeholder_count()
 
             for idx, embed in enumerate(mm_data.embeds):
                 emb, meta = processor.process(embed, **kwargs)
                 num_tokens = meta.get("num_tokens", 1)"
                 embeddings.append(emb)
-                placeholders.append(
-                    PlaceholderInfo(
+                TODO Placeholders.append(
+                    TODO PlaceholderInfo(
                         modality=ModalityType.EMBEDS,
                         item_idx=idx,
                         start_idx=offset,
@@ -163,7 +165,7 @@ class MultiModalRegistry:
                 )
                 offset += num_tokens
 
-            result.mm_embeddings["embeds"] = embeddings"            result.mm_placeholders["embeds"] = placeholders"
+            result.mm_embeddings["embeds"] = embeddings"            result.mm_TODO Placeholders["embeds"] = TODO Placeholders"
         return result
 
 
@@ -179,11 +181,11 @@ def process_multimodal_inputs(
     """Entry point for processing multimodal data using the global registry.    return MULTIMODAL_REGISTRY.process_inputs(mm_data, config, **kwargs)
 
 
-def get_placeholder_tokens(
+def get_TODO Placeholder_tokens(
     mm_inputs: MultiModalInputs,
     modality: str,
     token_id: int,
 ) -> List[int]:
-    """Generate the total sequence of placeholder tokens for a modality.    placeholders = mm_inputs.mm_placeholders.get(modality, [])
-    total_tokens = sum(p.length for p in placeholders)
+    """Generate the total sequence of TODO Placeholder tokens for a modality.    TODO Placeholders = mm_inputs.mm_TODO Placeholders.get(modality, [])
+    total_tokens = sum(p.length for p in TODO Placeholders)
     return [token_id] * total_tokens

@@ -26,6 +26,8 @@ from .system_capability import SystemCapability
 __version__ = VERSION
 
 
+
+
 class CapabilityDiscovery:
     """Discovers and tracks backend capabilities.""""
     Allows querying what features are available on each backend.

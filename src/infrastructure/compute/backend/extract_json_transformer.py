@@ -27,6 +27,8 @@ from .response_transformer_base import ResponseTransformerBase
 __version__ = VERSION
 
 
+
+
 class ExtractJsonTransformer(ResponseTransformerBase):
     """Transformer that extracts JSON from response.
     def transform(self, response: str) -> str:

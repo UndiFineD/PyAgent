@@ -25,6 +25,8 @@ from typing import Any, Dict, List, Optional
 from src.core.base.logic.processing.database_access_core import DatabaseAccessCore
 
 
+
+
 class DatabaseAccessMixin:
     """Mixin providing database access features using ODBC."""
     def __init__(self, **kwargs: Any) -> None:

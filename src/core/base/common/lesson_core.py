@@ -22,7 +22,7 @@ from typing import List, Optional, Set
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
@@ -36,6 +36,8 @@ class Lesson:
     cause: str
     solution: str
     impact_score: float = 0.5
+
+
 
 
 class LessonCore(BaseCore):

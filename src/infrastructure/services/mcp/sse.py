@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 SSE-based MCP tool server implementation.
+"""
+
 
 from __future__ import annotations
 
@@ -29,6 +31,8 @@ from .models import (MCPServerConfig, MCPSession, SessionState, ToolCall,
                      ToolResult, ToolSchema, ToolStatus)
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class SSEMCPServer(MCPToolServer):
@@ -136,6 +140,8 @@ class SSEMCPServer(MCPToolServer):
                 error=str(e),
                 duration_ms=(time.time() - start_time) * 1000,
             )
+
+
 
 
 class MockSSEClient:

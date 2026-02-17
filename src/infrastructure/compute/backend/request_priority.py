@@ -14,7 +14,8 @@
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py
+"""
 from __future__ import annotations
 
 from enum import Enum
@@ -24,8 +25,10 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class RequestPriority(Enum):
-    """Priority levels for request queuing.
+    """Priority levels for request queuing."""
     LOW = 0
     NORMAL = 1
     HIGH = 2

@@ -26,6 +26,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class DialogManager:
     """Handles modal dialogs and interactive prompts.
     def __init__(self, root: tk.Tk) -> None:

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from __future__ import annotations
 
 import ast
@@ -54,6 +55,7 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from __future__ import annotations
 
 import ast
@@ -74,6 +76,8 @@ except ImportError:
     _RUST_ACCEL = False
 
 __version__ = VERSION
+
+
 
 
 class DependencyGraphAgent(BaseAgent):
@@ -148,6 +152,8 @@ except ImportError:
     _RUST_ACCEL = False
 
 __version__ = VERSION
+
+
 
 
 class DependencyGraphAgent(BaseAgent):

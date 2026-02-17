@@ -15,17 +15,27 @@
 
 """Pytest fixtures for test_agent_test_utils tests."""
 
+
 import pytest
 from typing import Any
 
 # Add src to path
+
 import sys
 from pathlib import Path
-src_path = str(Path(__file__).parent.parent.parent.parent.parent.parent / "src")
-if src_path not in sys.path:
-    sys.path.insert(0, src_path)
 
-from tests.utils.agent_test_utils import agent_dir_on_path  # noqa: E402
+# Add both src and dev_utils_path to sys.path for dual-path import support
+src_path = str(Path(__file__).parent.parent.parent.parent.parent.parent / "src")
+dev_utils_path = str(Path(__file__).parent.parent / "src" / "infrastructure" / "services" / "dev")
+for p in (src_path, dev_utils_path):
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+# Try both absolute and relative imports for agent_dir_on_path
+try:
+    from agent_test_utils import agent_dir_on_path  # relative import
+except ImportError:
+    from src.infrastructure.services.dev.agent_test_utils import agent_dir_on_path  # absolute import
 
 
 @pytest.fixture

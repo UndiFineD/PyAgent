@@ -22,6 +22,8 @@ import numpy as np
 from .base import BaseMultiModalProcessor, ModalityType
 
 
+
+
 class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
     """Processor for pre-computed text embeddings.
     modality = ModalityType.EMBEDS
@@ -39,7 +41,7 @@ class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
 
         return data.astype(np.float32), metadata
 
-    def get_placeholder_count(self, data: np.ndarray, **kwargs: Any) -> int:
+    def get_TODO Placeholder_count(self, data: np.ndarray, **kwargs: Any) -> int:
         if data.ndim == 1:
             return 1
         return data.shape[0]

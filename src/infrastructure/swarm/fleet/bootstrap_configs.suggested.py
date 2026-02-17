@@ -16,6 +16,8 @@
 """
 Hardcoded bootstrap configurations for essential system components.
 These must remain static to ensure the system can boot up before dynamic discovery.
+"""
+
 
 from __future__ import annotations
 

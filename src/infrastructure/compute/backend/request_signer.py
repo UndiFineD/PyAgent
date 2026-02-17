@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class RequestSigner:
     """Signs and verifies requests for integrity and authenticity.""""
     Uses HMAC - SHA256 to sign request payloads, enabling verification

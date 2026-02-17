@@ -58,6 +58,8 @@ class VoiceSession:
                 "input_tokens": 0,"                "output_tokens": 0,"                "audio_duration": 0.0,"                "cost_usd": 0.0"            }
 
 
+
+
 class VoiceAgentOrchestrator:
     """Voice-controlled orchestrator for multi-agent systems.
 
@@ -280,7 +282,7 @@ class VoiceAgentOrchestrator:
         ]
 
     def _simulate_transcription(self, audio_data: bytes) -> str:
-        """Simulate audio transcription (placeholder for real OpenAI API)."""# In real implementation, would send to OpenAI Realtime API
+        """Simulate audio transcription (TODO Placeholder for real OpenAI API)."""# In real implementation, would send to OpenAI Realtime API
         # For now, return a simulated transcription that doesn't trigger actions'        return "Hello, how can you help me with my agents?""
     def _audio_processing_loop(self):
         """Background audio processing loop."""while self.running:

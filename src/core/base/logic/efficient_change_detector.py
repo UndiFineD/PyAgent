@@ -45,6 +45,8 @@ class FileMetadata:
     last_checked: float = field(default_factory=time.time)
 
 
+
+
 class EfficientChangeDetector:
     """USN-inspired change detection for file systems
     Uses metadata-based tracking instead of full content scanning

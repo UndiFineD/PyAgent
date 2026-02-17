@@ -14,7 +14,8 @@
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py
+"""
 from __future__ import annotations
 
 import time
@@ -31,14 +32,14 @@ __version__ = VERSION
 
 @dataclass
 class RequestContext:
-    """Context for a backend request.""""
+    """Context for a backend request.
     Attributes:
         request_id: Unique identifier for tracking.
         correlation_id: ID for tracing across services.
         priority: Request priority level.
         created_at: Timestamp when request was created.
         metadata: Additional request metadata.
-    
+    """
     request_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     correlation_id: str | None = None
     priority: RequestPriority = RequestPriority.NORMAL

@@ -26,13 +26,15 @@ from src.core.base.lifecycle.version import VERSION
 logger = logging.getLogger(__name__)
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
     RUST_AVAILABLE = False
 
 __version__ = VERSION
+
+
 
 
 class InterpretableCore:

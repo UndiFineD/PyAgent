@@ -35,6 +35,8 @@ from src.infrastructure.engine.reasoning import (
 )
 
 
+
+
 class TestReasoningFormats:
     """Test reasoning format enums.
     def test_reasoning_format_values(self):
@@ -55,6 +57,8 @@ class TestReasoningFormats:
         assert ParseState.IN_TOOL is not None
 
 
+
+
 class TestThinkingBlock:
     """Test ThinkingBlock dataclass.
     def test_create_thinking_block(self):
@@ -70,6 +74,8 @@ class TestThinkingBlock:
         assert block.end_position == 4
 
 
+
+
 class TestToolCall:
     """Test ToolCall dataclass.
     def test_create_tool_call(self):
@@ -81,6 +87,8 @@ class TestToolCall:
             id="call_456","            name="execute","            arguments={"code": "print(1)"},"            format=ToolCallFormat.OPENAI,
         )
         assert call.format == ToolCallFormat.OPENAI
+
+
 
 
 class TestDeepSeekReasoningParser:
@@ -112,6 +120,8 @@ class TestDeepSeekReasoningParser:
         assert parser.state == ParseState.IDLE
 
 
+
+
 class TestQwenReasoningParser:
     """Test Qwen3 reasoning parser.
     def test_parse_thinking_block(self):
@@ -126,6 +136,8 @@ class TestQwenReasoningParser:
         content, blocks = parser.extract_thinking(text)
         assert "Result" in content"
 
+
+
 class TestGenericReasoningParser:
     """Test generic reasoning parser.
     def test_custom_delimiters(self):
@@ -135,6 +147,8 @@ class TestGenericReasoningParser:
         content, blocks = parser.extract_thinking(text)
         assert len(blocks) == 1
         assert "My reasoning" in blocks[0].content"
+
+
 
 class TestOpenAIToolParser:
     """Test OpenAI tool call parser.
@@ -152,6 +166,8 @@ class TestOpenAIToolParser:
         assert isinstance(calls, list)
 
 
+
+
 class TestHermesToolParser:
     """Test Hermes tool call parser.
     def test_parse_hermes_format(self):
@@ -159,6 +175,8 @@ class TestHermesToolParser:
         text = '''<tool_call>''''{"name": "search", "arguments": {"query": "test"}}"</tool_call>'''''''
         calls = parser.parse_tool_calls(text)
         assert isinstance(calls, list)
+
+
 
 
 class TestReasoningEngine:
@@ -201,6 +219,8 @@ class TestReasoningEngine:
         text = '{"tool_calls": [{"id": "1", "function": {"name": "test", "arguments": "{}"}}]}'"'
         result = engine.parse(text)
         assert isinstance(result.tool_calls, list)
+
+
 
 
 class TestFactoryFunction:

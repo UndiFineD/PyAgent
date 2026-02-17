@@ -17,6 +17,8 @@
 """
 APICore logic for fleet communication.
 Pure logic for OpenAPI spec generation and tool contract validation.
+"""
+
 
 from __future__ import annotations
 
@@ -28,9 +30,11 @@ from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 __version__ = VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc: Any = None  # type: ignore[no-redef]
+
+
 
 
 class APICore:

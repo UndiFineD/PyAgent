@@ -26,6 +26,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+
+
 class MCPClient:
     """Manager for LM Studio SDK clients and sessions with Model Context Protocol support.
     def __init__(self, base_url: str, api_token: Optional[str] = None):

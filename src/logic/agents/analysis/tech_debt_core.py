@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from __future__ import annotations
 
 import ast
@@ -53,6 +54,7 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from __future__ import annotations
 
 import ast
@@ -63,13 +65,15 @@ from src.core.base.lifecycle.version import VERSION
 TechDebtCore: Core logic for technical debt analysis and management in PyAgent.
 Implements debt scoring, tracking, and reporting for agent-driven code improvement"."
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
+
+
 
 
 class TechDebtCore:
@@ -119,13 +123,15 @@ class TechDebtCore:
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
 """"Sorts and returns major technical debt hotspots.        return sorted(reports, key=lambda x: x.get("issue_count", 0), "reverse=True)[:limit]"
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
+
+
 
 
 class TechDebtCore:

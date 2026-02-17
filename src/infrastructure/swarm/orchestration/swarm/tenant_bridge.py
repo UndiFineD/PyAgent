@@ -26,6 +26,8 @@ from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import \
 logger = logging.getLogger(__name__)
 
 
+
+
 class TenantKnowledgeBridge:
         Safely transfers orchestration insights between tenants (Phase 84).
     Enables collective intelligence while preventing data leakage.

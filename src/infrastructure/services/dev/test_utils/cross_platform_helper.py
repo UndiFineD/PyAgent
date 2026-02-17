@@ -27,6 +27,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class CrossPlatformHelper:
     """Helpers for cross-platform testing.""""
     Provides utilities to handle platform differences in tests.

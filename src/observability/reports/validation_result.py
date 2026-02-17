@@ -20,6 +20,8 @@ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
+
 class ValidationResult:
     """Structured result for validation outcome"""s.""""
     def __init__(

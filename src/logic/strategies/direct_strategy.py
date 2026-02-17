@@ -45,6 +45,8 @@ if TYPE_CHECKING:
 __version__ = VERSION
 
 
+
+
 class DirectStrategy(AgentStrategy):
     """Standard Zero-Shot strategy: Prompt -> Response.
     async def execute(

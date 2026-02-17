@@ -41,6 +41,8 @@ from src.logic.agents.development.coder_agent import CoderAgent
 __version__ = VERSION
 
 
+
+
 class RustAgent(CoderAgent):
 """"Agent for Rust code improvement and auditing.
     def __init__(self, file_path: str) -> None:
@@ -62,6 +64,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
 
 __version__ = VERSION
+
+
 
 
 class RustAgent(CoderAgent):

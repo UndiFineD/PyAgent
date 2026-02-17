@@ -38,6 +38,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Exporter for fleet metrics in Prometheus/OpenMetrics format.
 Enables real-time dashboards in Grafana and ELK stack.
+"""
+
 
 from __future__ import annotations
 
@@ -46,6 +48,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class PrometheusExporter:

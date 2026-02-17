@@ -34,6 +34,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Ethics Guardrail Agent for PyAgent.
 Reviews task requests and agent actions against constitutional AI principles.
+"""
+
 
 from __future__ import annotations
 
@@ -44,6 +46,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class EthicsGuardrailAgent(BaseAgent):  # pylint: disable=too-many-ancestors

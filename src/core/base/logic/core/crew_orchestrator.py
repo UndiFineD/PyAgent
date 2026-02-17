@@ -26,8 +26,12 @@ from enum import Enum
 from datetime import datetime
 
 
+
+
 class AgentRole(Enum):
     """Agent roles in the crew orchestration"""LEAD = "lead""    SPECIALIST = "specialist""    REVIEWER = "reviewer""    COORDINATOR = "coordinator""
+
+
 
 class TaskStatus(Enum):
     """Task execution status"""PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    BLOCKED = "blocked""
@@ -64,6 +68,8 @@ class TaskResult:
     execution_time: float = 0.0
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
+
+
 
 
 class CrewAgent:
@@ -135,6 +141,8 @@ class CrewAgent:
             with open(file_path, 'w', encoding='utf-8') as f:'                f.write(content)
             self.logger.info(f"Output saved to {file_path}")"        except Exception as e:
             self.logger.error(f"Failed to save output to {file_path}: {str(e)}")"
+
+
 
 class CrewOrchestrator:
     """Orchestrates multi-agent task execution with dependencies.

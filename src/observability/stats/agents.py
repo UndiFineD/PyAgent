@@ -28,6 +28,8 @@ from .observability_core import (Alert, Metric, MetricSnapshot, MetricType, Thre
 logger = logging.getLogger(__name__)
 
 
+
+
 class StatsAgent:
     """Agent that calculates statistics for fleet progress and file maintenance.    def __init__(self, files: list[str]) -> None:        """Initialize the StatsAgent with a list of file paths to analyze and a StatsCore for metric recording.        self.files = [Path(f) for f in files if Path(f).exists()]
         self.core = StatsCore()
@@ -76,6 +78,8 @@ class StatsAgent:
             "total_files": total,"            "files_with_tests": with_tests,"            "files_with_context": with_context,"            "files_with_changes": with_changes,"            "files_with_errors": with_errors,"            "files_with_improvements": with_improvements,"        }
 
 
+
+
 class ReportingAgent(BaseAgent):
     """Observer agent that generates executive dashboards and reports.
     def __init__(self, fleet: Any) -> None:
@@ -84,6 +88,8 @@ class ReportingAgent(BaseAgent):
     async def generate_dashboard(self) -> str:
         summary = self.fleet.telemetry.summarize_performance()
         return f"# 🚀 PyAgent Active Progress Dashboard\\n\\n## 🛡️ Executive Summary\\n{json.dumps(summary, indent=2)}""
+
+
 
 class TransparencyAgent(BaseAgent):
     """Provides a detailed audit trail of agent thoughts, signals, and dependencies.

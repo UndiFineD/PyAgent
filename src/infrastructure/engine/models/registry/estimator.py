@@ -14,10 +14,14 @@
 
 
 Estimator.py module.
+"""
+
 
 from __future__ import annotations
 
 from .config import ModelInfo, QuantizationType, VRAMEstimate
+
+
 
 
 class VRAMEstimator:

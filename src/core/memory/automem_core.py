@@ -102,6 +102,8 @@ class Memory:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+
+
 class AutoMemCore:
     """AutoMem Memory System Core.
 
@@ -220,7 +222,7 @@ class AutoMemCore:
 
     def _store_in_vector(self, memory: Memory):
         """Store memory in Qdrant vector database."""try:
-            # Generate embedding (placeholder - would integrate with actual embedding service)
+            # Generate embedding (TODO Placeholder - would integrate with actual embedding service)
             vector = self._generate_embedding(memory.content)
 
             # Store in Qdrant
@@ -372,7 +374,7 @@ class AutoMemCore:
         return overlap / len(query_words) if query_words else 0.0
 
     def _calculate_graph_score(self, memory_id: str) -> float:
-        """Calculate graph relationship score."""# Placeholder - would analyze graph connections
+        """Calculate graph relationship score."""# TODO Placeholder - would analyze graph connections
         return 0.5  # Neutral score for now
 
     def _calculate_temporal_score(self, timestamp_str: str) -> float:
@@ -757,6 +759,8 @@ class AutoMemCore:
 
         except Exception as e:
             self.logger.warning(f"Multi-hop reasoning test failed: {e}")"            return 0.0
+
+
 
 
 class MemoryConsolidator:

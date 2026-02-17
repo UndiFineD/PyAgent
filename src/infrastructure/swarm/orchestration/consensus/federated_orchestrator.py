@@ -16,6 +16,8 @@
 
 """
 Federated orchestrator.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -29,6 +31,8 @@ __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+
 
 
 class FederatedOrchestrator:

@@ -47,6 +47,8 @@ class UserSession:
     e2e_enabled: bool = True
 
 
+
+
 class SecureAuthManager:
     """Manages OAuth authentication with integrated E2EE.
 

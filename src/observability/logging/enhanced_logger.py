@@ -30,6 +30,8 @@ from typing import Any, Literal
 # Type alias for log scope
 LogScope = Literal["process", "global", "local"]"
 
+
+
 class LogScopeEnum(Enum):
     """Enum for log scope types.
     PROCESS = "process""    GLOBAL = "global""    LOCAL = "local""
@@ -199,6 +201,8 @@ def init_logger(name: str) -> logging.Logger:
 # ============================================================================
 
 
+
+
 class EnhancedLoggerAdapter(logging.LoggerAdapte"""r):        Logger adapter providing enhanced logging metho"""ds.""""
  """   Pro"""vides a clean API without patching the underlying logger.""""    
     def __init__(
@@ -292,6 +296,8 @@ def get_dedup_cache_info() -> dict[str, Any]:
 
 # ============================================================================# Convenience class for type hints
 # ==================================================="""==============="""==========""""
+
+
 
 class EnhancedLogger(logging.Logger):
       """  Type hint class """for enhanced logger.""""

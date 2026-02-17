@@ -16,6 +16,8 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 PackKV Attention Backend.
 Implements register-level decompression during attention matmul.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from .models import AttentionCapabilities, AttentionMetadata
 from .sdpa import TorchSDPABackend
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class PackKVAttentionBackend(AttentionBackend[None]):
@@ -63,9 +67,9 @@ class PackKVAttentionBackend(AttentionBackend[None]):
 
         # In a real implementation, this would call a fused kernel (Triton/CUDA/Rust)
         # that performs dequantization into registers during the matmul loops.
-        # Here we simulate the logic or call a placeholder kernel.
+        # Here we simulate the logic or call a TODO Placeholder kernel.
 
         logger.debug("Executing PackKV fused decompression kernel")"
-        # Placeholder: simulate decompression then SDPA
+        # TODO Placeholder: simulate decompression then SDPA
         # In production: rust_core.fused_packkv_attention(...)
         return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)

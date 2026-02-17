@@ -20,6 +20,8 @@ from enum import Enum
 __version__ = VERSION
 
 
+
+
 class FileCategory(Enum):
 """"Categories for context files.
 #     CODE = "code"#     DOCUMENTATION = "documentation"#     CONFIGURATION = "configuration"#     TEST = "test"#     BUILD = "build"#     DATA = "data"#     OTHER = "other"

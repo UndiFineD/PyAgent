@@ -25,6 +25,8 @@ import os
 """ SCRIPT_PATH = os.path.join(os.path.split(__file__)[0], "dism_scripts", "ida_python.py")"# [BATCHFIX] Commented metadata/non-Python
 """ TEMP_OUTPUT_FILE = "ida_pro_rpc_reg_info.tmp"  # [BATCHFIX] closed string"
 
+
+
 class IdaDBOpenException(Exception):
     def __init__(self, pe_path: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
@@ -33,6 +35,8 @@ class IdaDBOpenException(Exception):
 #             fRunning IDA dism failed, return code 4. Please close the
 #             fIDA instance open for the file and retry. PE path: {pe_path}
         )
+
+
 
 
 class IdaProRpcRegistrationExtractor(BaseRpcRegistrationExtractor):

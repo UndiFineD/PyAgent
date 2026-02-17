@@ -23,6 +23,8 @@ from typing import Any
 from src.core.base.common.models import PromptTemplate, PromptVersion
 
 
+
+
 class PromptTemplateManager:
     """Facade regarding managing prompt templates.
     """
@@ -35,6 +37,8 @@ class PromptTemplateManager:
 
     def render_template(self, name: str, **kwargs: Any) -> str:
         """Render a template."""return self._core.render_template(name, **kwargs)
+
+
 
 
 class PromptVersionManager:

@@ -17,6 +17,8 @@
 """
 Phase 45: KV Transfer Connector Types
 Shared types and configurations for KV transfer connectors.
+"""
+
 
 from __future__ import annotations
 
@@ -29,11 +31,15 @@ from typing import (Any, Dict, List, Optional, Protocol, Tuple,
 logger = logging.getLogger(__name__)
 
 
+
+
 class KVConnectorRole(Enum):
     """Role of the KV connector in disaggregated inference.
     PRODUCER = auto()  # Prefill instance that produces KV cache
     CONSUMER = auto()  # Decode instance that consumes KV cache
     BOTH = auto()  # Can both produce and consume
+
+
 
 
 class KVTransferMode(Enum):

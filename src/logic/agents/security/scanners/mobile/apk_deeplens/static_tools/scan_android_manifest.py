@@ -18,6 +18,8 @@ from static_tools.utility.utility_class import util
 # from utility.utility_class import util
 
 
+
+
 class ScanAndroidManifest(object):
     def __init__(self) -> None:
         pass

@@ -20,6 +20,8 @@ Produces:
 - .external/patches/<sanitized_filename>.patch  (human-review patch proposals)
 
 This script does NOT apply patches; it only writes suggestions for reviewers.
+"""
+
 
 from __future__ import annotations
 import json

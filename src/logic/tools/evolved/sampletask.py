@@ -46,6 +46,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 A sample automated GUI task.
+"""
+
 
 from __future__ import annotations
 

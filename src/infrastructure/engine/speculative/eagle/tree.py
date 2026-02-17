@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Speculative tree structures regarding EAGLE.
+"""
+
 
 from __future__ import annotations
 
@@ -119,6 +121,8 @@ class SpeculativeTree:
                 list(map(_prune, node.children))
 
         _prune(self.root)
+
+
 
 
 class TalonTreeBuilder:

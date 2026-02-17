@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Metadata structures regarding speculative decoding.
+"""
+
 
 from __future__ import annotations
 
@@ -89,7 +91,7 @@ class SpecDecodeMetadataV2:
 
     @classmethod
     def make_dummy(cls: type[SpecDecodeMetadataV2], draft_token_ids: list[list[int]]) -> SpecDecodeMetadataV2:
-        """Create placeholder metadata regarding testing.        flattened = list(functools.reduce(lambda x, y: x + y, draft_token_ids, []))
+        """Create TODO Placeholder metadata regarding testing.        flattened = list(functools.reduce(lambda x, y: x + y, draft_token_ids, []))
         num_draft = list(map(len, draft_token_ids))
         return cls(draft_token_ids=flattened, num_draft_tokens=num_draft)
 
@@ -172,6 +174,8 @@ class TreeVerificationMetadata:
             path_lengths=res[3],
             path_start_indices=res[4],
         )
+
+
 
 
 class SpecDecodeMetadataFactory:

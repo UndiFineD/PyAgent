@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ImportSource(Enum):
     """External sources for changelog import.
     GITHUB_RELEASES = "github_releases""    JIRA = "jira""    GITLAB = "gitlab""    MANUAL = "manual""

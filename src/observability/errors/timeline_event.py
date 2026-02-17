@@ -26,6 +26,8 @@ Defines a minimal dataclass representing a point in an error timeline with field
 
 WHAT IT SHOULD DO BETTER:
 Use timezone-aware datetime objects instead of plain strings, validate and normalize timestamps, replace event_type strings with an Enum, add serialization/deserialization helpers, add unit tests and richer docstrings
+"""
+
 
 from __future__ import annotations
 
@@ -38,14 +40,16 @@ __version__ = VERSION
 
 @dataclass
 class TimelineEvent:
-    """Event in error timeline.""""
+    """
+    Event in error timeline.
+
     Attributes:
         timestamp: When the event occurred.
         event_type: Type of event (created, resolved, recurred).
         error_id: Associated error ID.
         details: Additional event details.
-    
+    """
     timestamp: str
     event_type: str
     error_id: str
-    details: str = """
+    details: str = ""

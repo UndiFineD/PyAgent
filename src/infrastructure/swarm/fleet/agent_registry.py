@@ -17,6 +17,8 @@
 Registry for mapping agent names to their implementations and initialization logic.
 
 LazyAgentMap is a dictionary that instantiates agents only when they are first accessed.
+"""
+
 
 from __future__ import annotations
 
@@ -52,6 +54,8 @@ def get_mcp_agent_class() -> type | None:
         except (ImportError, ModuleNotFoundError):
             logging.warning("MCPAgent not available; MCP integration may be disabled.")"            return None
     return MCPAgent
+
+
 
 
 class LazyAgentMap(dict):
@@ -362,6 +366,8 @@ class LazyAgentMap(dict):
             self._instances.update(other)
         if kwargs:
             self._instances.update(kwargs)
+
+
 
 
 class AgentRegistry:

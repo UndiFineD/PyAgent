@@ -16,6 +16,8 @@
 
 """
 Sandbox core.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ class SandboxConfig:
     network_enabled: bool = False
     read_only_paths: list[str] = field(default_factory=list)
     timeout_sec: int = 30
+
+
 
 
 class SandboxCore:

@@ -31,13 +31,13 @@ def _try_rust_render_template(
         return None
 
 
-def _try_rust_find_placeholders(
+def _try_rust_find_TODO Placeholders(
     text: str,
     patterns: List[str],
 ) -> Optional[List[int]]:
-    """Try Rust-accelerated placeholder finding.    try:
-        from rust_core import find_placeholders_rust
+    """Try Rust-accelerated TODO Placeholder finding.    try:
+        from rust_core import find_TODO Placeholders_rust
 
-        return find_placeholders_rust(text, patterns)
+        return find_TODO Placeholders_rust(text, patterns)
     except ImportError:
         return None

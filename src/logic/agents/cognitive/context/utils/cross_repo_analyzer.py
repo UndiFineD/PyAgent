@@ -20,6 +20,8 @@ from src.logic.agents.cognitive.context.utils.cross_repo_context import CrossRep
 __version__ = VERSION
 
 
+
+
 class CrossRepoAnalyzer:
     "Analyzes context across multiple repositories."
     Provides functionality to find related code and patterns

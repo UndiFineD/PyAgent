@@ -39,6 +39,8 @@ import base64
 from typing import Any
 
 
+
+
 class MultiModalCore:
 """"Core logic for multi-modal interactions (Vision/Image").
     @staticmethod
@@ -64,6 +66,8 @@ class MultiModalCore:
 
 import base64
 from typing import Any
+
+
 
 
 class MultiModalCore:

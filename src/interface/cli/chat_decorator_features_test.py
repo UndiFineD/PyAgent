@@ -16,6 +16,8 @@
 Tests for chat decorator commands.
 
 
+
+
 class TestChatDecoratorCommands:
     """Tests for chat formatting commands.
     def test_human_command(self):
@@ -107,6 +109,8 @@ class TestChatDecoratorCommands:
         assert result.data["message_count"] == 6"        assert "html" in result.data"        # Should contain sample content
         assert "Python" in result.data["html"]"
 
+
+
 class TestChatAliases:
     """Test that chat command aliases work.
     def test_assistant_alias(self):
@@ -124,6 +128,8 @@ class TestChatAliases:
 
         result = execute_command("reasoning", ["test"])"        assert result.success is True
         assert result.data["role"] == "thinking""
+
+
 
 class TestHTMLSafety:
     """Test HTML escaping for security.
@@ -147,6 +153,8 @@ class TestHTMLSafety:
         result = execute_command("ai", ["Line1\\nLine2"])"
         assert result.success is True
         assert "<br>" in result.output"
+
+
 
 class TestChatIntegration:
     """Integration tests for chat decorators.

@@ -15,6 +15,8 @@
 
 """
 Agents.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -48,6 +50,8 @@ __version__ = VERSION
 
 """Main TestsAgent class for test suite improvement.
 # from src.core.base.BaseAgent import BaseAgent, create_main_function
+
+
 
 
 class TestsAgent(BaseAgent):
@@ -188,7 +192,7 @@ class TestsAgent(BaseAgent):
         """Get coverage gaps for a specific file.        return [g for g in self._coverage_gaps if g.file_path == file_path]
 
     def suggest_tests_for_gap(self, gap: CoverageGap) -> str:
-        """Generate test suggestion for a coverage gap.        file_name = gap.file_path.replace("/", "_").replace(".py", "")"        suggestion_body = gap.suggestion or f"assert True  # Placeholder for {gap.coverage_type.value} coverage""        return (
+        """Generate test suggestion for a coverage gap.        file_name = gap.file_path.replace("/", "_").replace(".py", "")"        suggestion_body = gap.suggestion or f"assert True  # TODO Placeholder for {gap.coverage_type.value} coverage""        return (
             f"# Suggested test for {gap.file_path} ""            f"lines {gap.line_start}-{gap.line_end}\\n""            f"def test_{file_name}_line{gap.line_start}():\\n""            f"    # Auto-generated path for {gap.coverage_type.value} coverage\\n""            f"    {suggestion_body}\\n""        )
 
     # ========== Test Data Factories ==========
@@ -392,7 +396,7 @@ class TestsAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         """Use AI to improve the test suites.""""
         When Copilot CLI is unavailable, BaseAgent keeps the existing content
-        unchanged (avoids injecting duplicated placeholder markdown blocks).
+        unchanged (avoids injecting duplicated TODO Placeholder markdown blocks).
                 logging.info(f"Improving tests for {self.file_path}")"        # Enhance prompt with source code context if available
         source_path = self._find_source_file()
         enhanced_prompt = prompt

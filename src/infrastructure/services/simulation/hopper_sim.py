@@ -17,6 +17,8 @@
 """
 Hopper Architecture Matrix Multiplication Simulator for H100 performance estimation.
 Part of the Phase 130 performance optimization suite.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ from src.observability.structured_logger import StructuredLogger
 __version__ = VERSION
 
 logger = StructuredLogger("HopperSim")"
+
+
 
 class Precision(Enum):
     """Floating point precision modes for simulation.
@@ -48,6 +52,8 @@ class HopperConfig:
     clock_ghz: float = 1.83
     mem_bandwidth_gb_s: int = 3350
     tma_units_per_sm: int = 1
+
+
 
 
 class HopperSim:

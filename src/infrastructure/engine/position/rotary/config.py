@@ -20,6 +20,8 @@ from enum import Enum, auto
 from typing import List, Optional
 
 
+
+
 class RoPEVariant(Enum):
     """Supported RoPE variants.
     NEOX = auto()  # Llama, Mistral, most modern LLMs
@@ -27,6 +29,8 @@ class RoPEVariant(Enum):
     MROPE = auto()  # Multimodal (vision-language)
     XDROPE = auto()  # Extended Dynamic (NTK, etc.)
     LONGROPE = auto()  # Specialized for very long contexts
+
+
 
 
 class RoPEScalingType(Enum):

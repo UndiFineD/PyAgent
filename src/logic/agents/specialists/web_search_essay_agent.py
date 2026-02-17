@@ -66,8 +66,12 @@ from src.logic.agents.intelligence.search_agent import SearchAgent
 __version__ = VERSION
 
 
+
+
 class EssayStyle(Enum):
 """"Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
+
+
 
 class EssayLength(Enum):
 """"Essay length options.    SHORT = "short"  "# ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
@@ -159,8 +163,12 @@ from src.logic.agents.intelligence.search_agent import SearchAgent
 __version__ = VERSION
 
 
+
+
 class EssayStyle(Enum):
 """"Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
+
+
 
 class EssayLength(Enum):
 """"Essay length options.    SHORT = "short"  # ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"

@@ -17,6 +17,8 @@
 # Phase 41: Tool Parser Framework - Granite Parser
 
 IBM Granite tool call parser.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from typing import Optional, Tuple
 
 from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
                    ToolParserType)
+
+
 
 
 class GraniteToolParser(ToolParser):

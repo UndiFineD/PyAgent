@@ -19,11 +19,15 @@ SovereigntyOrchestrator: Management of federated data and privacy boundaries.
 
 This module handles the 'Sovereignty' tier of the swarm, ensuring that'distributed agents adhere to local privacy constraints and negotiate
 task agreements within a secure, multi-agent environment.
+"""
+
 
 from __future__ import annotations
 
 import logging
 from typing import Any, Dict, List
+
+
 
 
 class SovereigntyOrchestrator:

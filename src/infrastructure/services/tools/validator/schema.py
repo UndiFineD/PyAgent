@@ -17,6 +17,8 @@
 # Phase 41: Tool Parser Framework - Schema Validation
 
 Schema validation for tool calls.
+"""
+
 
 from __future__ import annotations
 

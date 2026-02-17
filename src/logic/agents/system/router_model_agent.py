@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 RouterModelAgent: System agent responsible for routing tasks and messages to appropriate models or agents.
 Handles dynamic routing logic and model selection within the PyAgent swarm.
+"""
+
 
 from __future__ import annotations
 
@@ -48,6 +50,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class RouterModelAgent(BaseAgent):
@@ -112,6 +116,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class RouterModelAgent(BaseAgent):

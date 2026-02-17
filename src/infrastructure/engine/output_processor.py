@@ -17,6 +17,8 @@
 OutputProcessor - Request output management and state tracking.
 
 Inspired by vLLM's v1/engine/output_processor.py - manages per-request state,'detokenization, and output batching.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Set
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class EventType(Enum):
@@ -134,6 +138,8 @@ class OutputProcessorOutput:
     finished_request_ids: Set[str] = field(default_factory=set)
 
 
+
+
 class RequestOutputCollector:
     """Queue for collecting request outputs.
     def __init__(self) -> None:
@@ -149,6 +155,8 @@ class RequestOutputCollector:
 
     def empty(self) -> bool:
         """Check if queue is empty.        return self._queue.empty()
+
+
 
 
 class RequestState:
@@ -272,6 +280,8 @@ class RequestState:
             metrics["generation_time"] = self.last_token_time - self.first_token_time"        return metrics
 
 
+
+
 class LoRARequestStates:
     """Track LoRA request states.
     def __init__(self, log_stats: bool = False) -> None:
@@ -291,6 +301,8 @@ class LoRARequestStates:
 
     def get_active_lora_ids(self) -> Set[int]:
         """Get currently active LoRA IDs.        return set(self.active_loras.keys())
+
+
 
 
 class OutputProcessor:
@@ -462,6 +474,8 @@ class OutputProcessor:
 
     def get_request_state(self, request_id: str) -> Optional[RequestState]:
         """Get state for a request.        return self.request_states.get(request_id)
+
+
 
 
 class IterationStats:

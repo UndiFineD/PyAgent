@@ -49,6 +49,8 @@ and an option to return masked spans/positions for downstream structured logging
 
 FILE CONTENT SUMMARY:
 Logging core.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -62,6 +64,8 @@ try:
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
+
 
 
 class LoggingCore:

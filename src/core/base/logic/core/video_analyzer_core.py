@@ -16,6 +16,8 @@ from typing import List, Any
 import math
 
 
+
+
 class VideoAnalyzerCore:
     """Core logic for fragmenting and preparing video data for multi-modal inference.
     Harvested from .external/AskVideos-VideoCLIP.

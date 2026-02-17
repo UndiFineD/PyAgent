@@ -63,6 +63,8 @@ if TYPE_CHECKING:
         AccessibilityAgent
 
 
+
+
 class AccessibilityCoreMixin:
 """"Mixin for core accessibility calculations and filtering in AccessibilityAgent.
     def check_color_contrast(
@@ -134,6 +136,8 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 if TYPE_CHECKING:
     from src.logic.agents.specialists.accessibility_agent import \
         AccessibilityAgent
+
+
 
 
 class AccessibilityCoreMixin:

@@ -46,6 +46,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Mixin for fixing license headers and docstring placement.
+"""
+
 
 from __future__ import annotations
 
@@ -53,6 +55,8 @@ import logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class HeaderFixerMixin:

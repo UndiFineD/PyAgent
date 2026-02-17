@@ -16,11 +16,15 @@ from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
 
 
+
+
 class AgentCapability(BaseModel):
     name: str
     description: str
     parameters: Dict[str, Any] = Field(default_factory=dict)
     returns: str = "Any""
+
+
 
 class AgentCard(BaseModel):
     """Standardized manifest for cross-agent discovery.
@@ -33,6 +37,8 @@ class AgentCard(BaseModel):
     contact_info: Dict[str, str] = Field(
         default_factory=dict
     )  # e.g., {"protocol": "voyager_p2p", "address": "peer_id"}"    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+
 
 
 class AgentCardCore:

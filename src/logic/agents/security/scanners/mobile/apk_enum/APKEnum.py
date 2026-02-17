@@ -26,6 +26,8 @@ urlparse = urllib.parse
 urllib2 = urllib.request
 
 
+
+
 class BColors:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

@@ -31,6 +31,8 @@ if TYPE_CHECKING:
     from .subagent_runner import SubagentRunner
 
 
+
+
 class SubagentCore:
     """Delegated execution core for SubagentRunner.
     def __init__(self, runner: SubagentRunner) -> None:

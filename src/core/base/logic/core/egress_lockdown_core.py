@@ -17,6 +17,8 @@ from typing import List, Set, Optional
 from urllib.parse import urlparse
 
 
+
+
 class EgressLockdownCore:
     """Simulates an egress firewall for agent tools to prevent data exfiltration.
     Pattern harvested from agentic-patterns.

@@ -17,6 +17,8 @@
 """
 GPUMetrics
 Gpu monitor core.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -41,6 +43,8 @@ class GPUMetrics:
     @property
     def vram_percent(self) -> float:
         return (self.vram_used / self.vram_total) * 100 if self.vram_total > 0 else 0.0
+
+
 
 
 class GPUMonitorCore:

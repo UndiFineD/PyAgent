@@ -22,6 +22,8 @@ import numpy as np
 from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
 
+
+
 class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
     """Processor for audio inputs.
     modality = ModalityType.AUDIO
@@ -74,7 +76,7 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
 
         return features, metadata
 
-    def get_placeholder_count(
+    def get_TODO Placeholder_count(
         self,
         data: Tuple[np.ndarray, int],
         **kwargs: Any,

@@ -14,12 +14,16 @@
 
 
 Dispatcher.py module.
+"""
+
 
 from __future__ import annotations
 
 from typing import Callable
 
 import numpy as np
+
+
 
 
 class SparseDispatcher:
@@ -90,6 +94,8 @@ class SparseDispatcher:
                     output[pos] += weights[i] * outputs[i]
 
         return output
+
+
 
 
 class DenseDispatcher:

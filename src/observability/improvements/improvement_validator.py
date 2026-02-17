@@ -26,11 +26,11 @@ USAGE:
 
 WHAT IT DOES:
 - Provides a facade over src.core.base.common.validation_core.ValidationCore to run a set of validation rules against Improvement instances.
-- Ships with default rules checking for a non-trivial description and a placeholder effort check; collects issues as ValidationResult entries with severity tags.
+- Ships with default rules checking for a non-trivial description and a TODO Placeholder effort check; collects issues as ValidationResult entries with severity tags.
 - Offers extensibility via add_rule for custom callables or a small named-rule DSL for common checks.
 
 WHAT IT SHOULD DO BETTER:
-- Replace the simplistic _rule_valid_effort placeholder with real effort validation (range checks, unit normalization, or heuristics).
+- Replace the simplistic _rule_valid_effort TODO Placeholder with real effort validation (range checks, unit normalization, or heuristics).
 - Provide configurable severity per-rule (currently all failures are recorded as ERROR) and allow rule metadata (id, category, auto-fix suggestion).
 - Improve error messages and localization, add logging, and support asynchronous or parallel validation for large batches; include unit tests for custom rule registration and edge cases.
 
@@ -47,6 +47,8 @@ from src.core.base.common.validation_core import ValidationCore
 from .improvement import Improvement
 from .validation_result import ValidationResult
 from .validation_severity import ValidationSeverity
+
+
 
 
 class ImprovementValidator(ValidationCore):
@@ -115,6 +117,8 @@ from src.core.base.common.validation_core import ValidationCore
 from .improvement import Improvement
 from .validation_result import ValidationResult
 from .validation_severity import ValidationSeverity
+
+
 
 
 class ImprovementValidator(ValidationCore):

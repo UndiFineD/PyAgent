@@ -14,6 +14,8 @@
 
 
 """Unified shell execution core for all PyAgent services."""
+
+
 import asyncio
 import logging
 import os
@@ -42,14 +44,20 @@ class ShellResult:
 
     def __post_init__(self) -> None:
         # success is True if returncode is 0
-        object.__setattr__(self, "success", self.returncode == 0)"
+        object.__setattr__(self, "success", self.returncode == 0)
+
+
     def __str__(self) -> str:
-        return f"ShellResult(rc={self.returncode}, success={self.success}, duration={self.duration:.2f}s)""
+        return f"ShellResult(rc={self.returncode}, success={self.success}, duration={self.duration:.2f}s)"
+
+
+
 
 class ShellCore:
     """Centralized handler for shell and subprocess operations.
     Provides consistent logging, error handling, and environmental setup.
     """
+
     def __init__(self, repo_root: Optional[Union[str, Path]] = None) -> None:
         if repo_root:
             self.repo_root = Path(repo_root)
@@ -60,43 +68,81 @@ class ShellCore:
 
                 # CoreConfigManager inherits from BaseCore which provides repo_root
                 config = CoreConfigManager()
-                self.repo_root = getattr(config, "repo_root", Path.cwd())"            except (ImportError, Exception):  # pylint: disable=unused-variable, broad-exception-caught
+                self.repo_root = getattr(config, "repo_root", Path.cwd())
+            except (ImportError, Exception):  # pylint: disable=unused-variable, broad-exception-caught
                 self.repo_root = Path.cwd()
 
-        self.logger = logging.getLogger("pyagent.shell")"        self._ansi_escape = re.compile(r"\\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")"
+        self.logger = logging.getLogger("pyagent.shell")
+        self._ansi_escape = re.compile(r"\x1B(?:[@-Z\-_]|\[[0-?]*[ -/]*[@-~])")
+
+
     def sanitize_env(self, env: Dict[str, str]) -> Dict[str, str]:
-        """Filters environment variables to prevent secret leakage.""""
+        """Filters environment variables to prevent secret leakage.
+
         This is intentionally conservative; prefer allowing well-known environment
         variables and the `PYAGENT_` / `DV_` prefixes.
-        """allow_list = {
-            "PATH","            "PYTHONPATH","            "LANG","            "LC_ALL","            "LC_CTYPE","            "SYSTEMROOT","            "WINDIR","            "USERPROFILE","            "HOME","            "TEMP","            "TMP","            "HTTP_PROXY","            "HTTPS_PROXY","            "NO_PROXY","            "AGENT_MODELS_CONFIG","            "PYAGENT_ENV","            "AGENT_NAME","            "WORKSPACE_ROOT","        }
+        """
+        allow_list = {
+            "PATH",
+            "PYTHONPATH",
+            "LANG",
+            "LC_ALL",
+            "LC_CTYPE",
+            "SYSTEMROOT",
+            "WINDIR",
+            "USERPROFILE",
+            "HOME",
+            "TEMP",
+            "TMP",
+            "HTTP_PROXY",
+            "HTTPS_PROXY",
+            "NO_PROXY",
+            "AGENT_MODELS_CONFIG",
+            "PYAGENT_ENV",
+            "AGENT_NAME",
+            "WORKSPACE_ROOT",
+        }
         sanitized: Dict[str, str] = {}
         for k, v in env.items():
             k_upper = k.upper()
-            if k_upper in allow_list or k_upper.startswith("PYAGENT_") or k_upper.startswith("DV_"):"                sanitized[k] = v
+            if k_upper in allow_list or k_upper.startswith("PYAGENT_") or k_upper.startswith("DV_"):
+                sanitized[k] = v
         return sanitized
 
+
     def strip_ansi(self, text: str) -> str:
-        """Removes ANSI escape sequences from a string.""""
+        """Removes ANSI escape sequences from a string.
+
         Safe for None/empty input.
-        """if not text:
-            return """        return self._ansi_escape.sub("", text)"
+        """
+        if not text:
+            return ""
+        return self._ansi_escape.sub("", text)
+
+
     def _record_shell_interaction(self, provider: str, prompt: str, result_text: str, meta: Dict[str, object]) -> None:
-        """Helper to record shell interactions to the fleet recorder safely.""""
+        """Helper to record shell interactions to the fleet recorder safely.
+
         Truncates large results and re-raises critical exceptions (KeyboardInterrupt/SystemExit).
-        """if not (hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder")):"            return
+        """
+        if not (hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder")):
+            return
         try:
             if len(result_text) > 2000:
-                result_text = result_text[:2000] + "... [TRUNCATED]""            self.fleet.recorder.record_interaction(
+                result_text = result_text[:2000] + "... [TRUNCATED]"
+            self.fleet.recorder.record_interaction(
                 provider=provider,
-                model="ShellCore","                prompt=prompt,
+                model="ShellCore",
+                prompt=prompt,
                 result=result_text,
                 meta=meta,
             )
         except (RuntimeError, OSError, AttributeError, ValueError) as e:  # pragma: no cover - recorder errors
             # Non-critical failures are logged for telemetry debugging
-            self.logger.debug("Failed to record shell interaction: %s", e)"
+            self.logger.debug("Failed to record shell interaction: %s", e)
     # pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
+
+
     async def execute_async(
         self,
         cmd: List[str],
@@ -106,7 +152,8 @@ class ShellCore:
         capture_output: bool = True,
         sanitize: bool = True,
     ) -> ShellResult:
-        """Execute a command asynchronously."""start_time = time.perf_counter()
+        """Execute a command asynchronously."""
+        start_time = time.perf_counter()
         current_env = os.environ.copy()
         if env:
             current_env.update(env)
@@ -127,14 +174,20 @@ class ShellCore:
 
             try:
                 stdout_bytes, stderr_bytes = await asyncio.wait_for(process.communicate(), timeout=timeout)
-                stdout = stdout_bytes.decode("utf-8", errors="replace") if stdout_bytes else """                stderr = stderr_bytes.decode("utf-8", errors="replace") if stderr_bytes else """            except asyncio.TimeoutError:
+                stdout = stdout_bytes.decode("utf-8", errors="replace") if stdout_bytes else ""
+                stderr = stderr_bytes.decode("utf-8", errors="replace") if stderr_bytes else ""
+            except asyncio.TimeoutError:
                 process.kill()
                 await process.wait()
-                res = ShellResult(cmd, -1, "", "Timeout expired", time.perf_counter() - start_time)"                prompt_trace = f"SHELL_EXECUTION_TIMEOUT: {' '.join(cmd)}""'                # Record the timeout event if recorder is available
+                res = ShellResult(cmd, -1, "", "Timeout expired", time.perf_counter() - start_time)
+                prompt_trace = f"SHELL_EXECUTION_TIMEOUT: {' '.join(cmd)}"
+                # Record the timeout event if recorder is available
                 self._record_shell_interaction(
-                    provider="shell","                    prompt=prompt_trace,
+                    provider="shell",
+                    prompt=prompt_trace,
                     result_text=str(res),
-                    meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},"                )
+                    meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},
+                )
                 return res
 
             duration = time.perf_counter() - start_time
@@ -146,21 +199,30 @@ class ShellCore:
                 duration=duration,
             )
             # Record the shell execution to fleet recorder if available
-            prompt_trace = f"SHELL_EXECUTION: {' '.join(cmd)}\\nCWD: {working_dir}""'            result_text = res.stdout if res.stdout else res.stderr
+            prompt_trace = f"SHELL_EXECUTION: {' '.join(cmd)}\nCWD: {working_dir}"
+            result_text = res.stdout if res.stdout else res.stderr
             self._record_shell_interaction(
-                provider="shell","                prompt=prompt_trace,
+                provider="shell",
+                prompt=prompt_trace,
                 result_text=result_text,
-                meta={"cmd": cmd, "cwd": str(working_dir), "duration": duration},"            )
+                meta={"cmd": cmd, "cwd": str(working_dir), "duration": duration},
+            )
 
             return res
 
         except (OSError, ValueError) as e:  # Expected runtime errors during process creation
-            self.logger.error("Failed to execute %s: %s", cmd[0], e)"            prompt_trace = f"SHELL_EXECUTION_ASYNC_ERROR: {' '.join(cmd)}\\nCWD: {working_dir}""'            self._record_shell_interaction(
-                provider="shell","                prompt=prompt_trace,
+            self.logger.error("Failed to execute %s: %s", cmd[0], e)
+            prompt_trace = f"SHELL_EXECUTION_ASYNC_ERROR: {' '.join(cmd)}\nCWD: {working_dir}"
+            self._record_shell_interaction(
+                provider="shell",
+                prompt=prompt_trace,
                 result_text=str(e),
-                meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},"            )
-            return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)"
+                meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},
+            )
+            return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
     # pylint: disable=too-many-arguments,too-many-positional-arguments
+
+
     def execute(
         self,
         cmd: List[str],
@@ -169,12 +231,14 @@ class ShellCore:
         cwd: Optional[Union[str, Path]] = None,
         check: bool = False,
     ) -> ShellResult:
-        """Execute a command synchronously."""start_time = time.perf_counter()
+        """Execute a command synchronously."""
+        start_time = time.perf_counter()
 
         # Use Rust-accelerated directory walking if available
         if (
             rc
-            and hasattr(rc, "execute_shell_rust")"            and not env
+            and hasattr(rc, "execute_shell_rust")
+            and not env
             and not cwd
         ):  # pylint: disable=no-member
             try:
@@ -190,7 +254,7 @@ class ShellCore:
                     duration=time.perf_counter() - start_time,
                 )
             except RuntimeError as e:  # pylint: disable=broad-exception-caught, unused-variable
-                self.logger.warning("Rust shell execution failed: %s", e)"
+                self.logger.warning("Rust shell execution failed: %s", e)
         current_env = os.environ.copy()
         if env:
             current_env.update(env)
@@ -199,7 +263,8 @@ class ShellCore:
 
         # Intelligence Gap: Record shell execution context for auditability
         self.logger.info(
-            "Executing shell command: %s | cwd=%s | env_keys=%s", cmd, working_dir, list((env or {}).keys())"        )
+            "Executing shell command: %s | cwd=%s | env_keys=%s", cmd, working_dir, list((env or {}).keys())
+        )
         try:
             result = subprocess.run(
                 cmd,
@@ -208,7 +273,9 @@ class ShellCore:
                 env=current_env,
                 cwd=working_dir,
                 timeout=timeout,
-                encoding="utf-8","                errors="replace","                check=check,
+                encoding="utf-8",
+                errors="replace",
+                check=check,
             )
 
             res = ShellResult(
@@ -220,11 +287,14 @@ class ShellCore:
             )
 
             # Record the successful execution
-            prompt_trace = f"SHELL_EXECUTION: {' '.join(cmd)}\\nCWD: {working_dir}""'            result_text = res.stdout if res.stdout else res.stderr
+            prompt_trace = f"SHELL_EXECUTION: {' '.join(cmd)}\nCWD: {working_dir}"
+            result_text = res.stdout if res.stdout else res.stderr
             self._record_shell_interaction(
-                provider="shell","                prompt=prompt_trace,
+                provider="shell",
+                prompt=prompt_trace,
                 result_text=result_text,
-                meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},"            )
+                meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},
+            )
 
             return res
 
@@ -232,23 +302,34 @@ class ShellCore:
             res = ShellResult(
                 command=cmd,
                 returncode=-1,
-                stdout=e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or ""),"                stderr=e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or ""),"                duration=time.perf_counter() - start_time,
+                stdout=e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or ""),
+                stderr=e.stderr.decode() if isinstance(e.stderr, bytes) else (e.stderr or ""),
+                duration=time.perf_counter() - start_time,
             )
-            prompt_trace = f"SHELL_EXECUTION_TIMEOUT: {' '.join(cmd)}\\nCWD: {working_dir}""'            result_text = (res.stdout or res.stderr)
+            prompt_trace = f"SHELL_EXECUTION_TIMEOUT: {' '.join(cmd)}\nCWD: {working_dir}"
+            result_text = (res.stdout or res.stderr)
             self._record_shell_interaction(
-                provider="shell","                prompt=prompt_trace,
+                provider="shell",
+                prompt=prompt_trace,
                 result_text=result_text,
-                meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},"            )
+                meta={"cmd": cmd, "cwd": str(working_dir), "duration": res.duration},
+            )
             return res
         except (OSError, ValueError) as e:
-            self.logger.error("Failed to execute %s: %s", cmd[0], e)"            prompt_trace = f"SHELL_EXECUTION_ERROR: {' '.join(cmd)}\\nCWD: {working_dir}""'            self._record_shell_interaction(
-                provider="shell","                prompt=prompt_trace,
+            self.logger.error("Failed to execute %s: %s", cmd[0], e)
+            prompt_trace = f"SHELL_EXECUTION_ERROR: {' '.join(cmd)}\nCWD: {working_dir}"
+            self._record_shell_interaction(
+                provider="shell",
+                prompt=prompt_trace,
                 result_text=str(e),
-                meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},"            )
-            return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)"
+                meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},
+            )
+            return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
     def redact_command(self, cmd: List[str], sensitive_patterns: List[str]) -> List[str]:
-        """Redact sensitive information from a command list for logging."""redacted = []
+        """Redact sensitive information from a command list for logging."""
+        redacted = []
         for part in cmd:
             for pattern in sensitive_patterns:
-                part = part.replace(pattern, "********")"            redacted.append(part)
+                part = part.replace(pattern, "********")
+            redacted.append(part)
         return redacted

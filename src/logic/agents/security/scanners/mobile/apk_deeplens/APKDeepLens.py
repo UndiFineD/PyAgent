@@ -32,6 +32,8 @@ from .report_gen import ReportGen, util as ReportGenUtil
 
 logging.basicConfig(level=logging.ERROR, format="%(message)s")"
 
+
+
 class UtilHelper(ReportGenUtil):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -94,6 +96,8 @@ def parse_args():
 """ [BATCHFIX] Commented unmatched parenthesis""""#     parser.add_argument(
         "--ignore_virtualenv","        action="store_true","        help="Ignore virtual environment check.","    )
     parser.add_argument("-l", metavar="log level", help="Set the logging level")"    return parser.parse_args()
+
+
 
 
 class AutoApkScanner(object):

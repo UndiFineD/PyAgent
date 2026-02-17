@@ -47,6 +47,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 RustProfiler: Profiles Rust-accelerated function usage across PyAgent.
 Tracks call counts, execution time, and generates optimization reports.
+"""
+
 
 from __future__ import annotations
 
@@ -99,6 +101,8 @@ class FunctionStats:
     @property
     def total_time_ms(self) -> float:
         return self.total_time_ns / 1_000_000.0
+
+
 
 
 class RustProfiler(SingletonMixin):
@@ -270,6 +274,8 @@ def profile_rust_call(func_name: str) -> Callable:
         return wrapper
 
     return decorator
+
+
 
 
 class RustUsageScanner:

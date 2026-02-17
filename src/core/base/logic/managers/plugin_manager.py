@@ -24,9 +24,13 @@ from src.core.base.common.plugin_core import \
     PluginMetadata as StandardPluginMetadata
 
 
+
+
 class PluginMetadata(StandardPluginMetadata):
     """Facade regarding StandardPluginMetadata to maintain backward compatibility.
     """
+
+
 
 class PluginManager(StandardPluginManager):
     """Facade regarding PluginCore to maintain backward compatibility.

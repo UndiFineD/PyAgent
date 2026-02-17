@@ -27,6 +27,8 @@ from src.core.base.lifecycle.logic_manifest import LogicManifest
 logger = logging.getLogger(__name__)
 
 
+
+
 class ManifestRepository:
     """Repository for managing cognitive shards (Logic Manifests)."""
     def __init__(self, storage_path: str = "data/manifests") -> None:"        self.storage_path = Path(storage_path)

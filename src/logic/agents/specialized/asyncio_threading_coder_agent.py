@@ -32,7 +32,7 @@ WHAT IT DOES:
 - Sets a version attribute from src.core.base.lifecycle.version and a simple specializations list intended to be populated with concrete capabilities.
 
 WHAT IT SHOULD DO BETTER:
-- Replace placeholder/simulated logic with deterministic, testable implementations: concretely analyze fleet_state to produce configuration objects (e.g., concurrency limits, suggested threadpool sizes, I/O vs CPU split) rather than returning static strings and names.
+- Replace TODO Placeholder/simulated logic with deterministic, testable implementations: concretely analyze fleet_state to produce configuration objects (e.g., concurrency limits, suggested threadpool sizes, I/O vs CPU split) rather than returning static strings and names.
 - Integrate with the project's StateTransaction API for safe filesystem changes when improving content; current API only returns strings and does not modify files atomically.'- Add robust typing and validation for fleet_state shape (use CascadeContext or typed models) and return structured results (dataclasses or dicts with explicit fields) so orchestrators can act programmatically.
 - Implement real concurrency helpers: spawn background workers, schedule asyncio tasks with cancellation and backpressure handling, and optionally leverage a ThreadPoolExecutor with tunable parameters driven by telemetry.
 - Add unit tests exercising concurrency edge cases, and add logging/observability (metrics, traces) to make decisions auditable and tunable at runtime.
@@ -40,6 +40,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Asyncio threading coder agent.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -47,6 +49,8 @@ from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+
+
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -66,6 +70,8 @@ class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancesto
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Improves content using asyncio and threading patterns."     "   "_ = target_file"#         return fOptimized {prompt} for asyncio/threading concurrency.
+"""
+
 
 from __future__ import annotations
 
@@ -73,6 +79,8 @@ from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
+
+
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors

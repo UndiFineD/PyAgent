@@ -15,6 +15,8 @@
 
 Module: scam_detector
 Implements swarm-wide scam and hallucination detection via Byzantine Consensus.
+"""
+
 
 from __future__ import annotations
 import logging
@@ -22,6 +24,8 @@ import re
 from typing import Any, List, Dict
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class ScamDetector:
@@ -63,4 +67,4 @@ class ScamDetector:
 
     async def _get_peer_opinion(self, peer: Any, prompt: str, resp: str) -> float:
         """Internal helper to simulate peer validation.        # In a real swarm, this would be a P2P request
-        return 0.9  # Hardcoded placeholder for now
+        return 0.9  # Hardcoded TODO Placeholder for now

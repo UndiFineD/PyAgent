@@ -15,6 +15,7 @@
 
 """
 Weather api tool.py module.
+"""
 
 
 from __future__ import annotations
@@ -27,6 +28,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 __version__ = VERSION
+
+
 
 
 class Weather_APITool:

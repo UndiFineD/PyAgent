@@ -40,6 +40,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 PredictiveSchedulerAgent: Swarm agent for forecasting workload, resource needs,
 and scheduling tasks across the PyAgent swarm.
+"""
+
 
 from __future__ import annotations
 
@@ -51,6 +53,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -122,6 +126,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors

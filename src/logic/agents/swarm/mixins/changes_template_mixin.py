@@ -28,10 +28,12 @@ WHAT IT DOES:
 WHAT IT SHOULD DO BETTER:
 - Validate input values (e.g., sections non-empty, unique) and raise clear exceptions instead of silently falling back.
 - Persist custom templates (e.g., to disk or agent state transaction) and expose listing/removal operations.
-- Allow template inheritance/extension and richer rendering hooks (placeholders, link formatting, contributor formatting).
+- Allow template inheritance/extension and richer rendering hooks (TODO Placeholders, link formatting, contributor formatting).
 
 FILE CONTENT SUMMARY:
 Template management logic for ChangesAgent.
+"""
+
 
 from __future__ import annotations
 
@@ -39,6 +41,8 @@ import logging
 from typing import List
 
 from ..changelog_template import ChangelogTemplate
+
+
 
 
 class ChangesTemplateMixin:
@@ -84,6 +88,8 @@ import logging
 from typing import List
 
 from ..changelog_template import ChangelogTemplate
+
+
 
 
 class ChangesTemplateMixin:

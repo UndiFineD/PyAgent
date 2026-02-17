@@ -16,6 +16,8 @@
 from typing import Any
 
 
+
+
 class ContextDataMixin:
 """"Mixin for fundamental context data operations.
     def get(self, category: str, key: str | None = None) -> Any:

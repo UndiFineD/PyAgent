@@ -28,6 +28,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+
+
 class EnvironmentSkill(SkillCore):
     """Environmental capability for Universal Agents.
     Handles file reads, writes, and discovery within the assigned workspace.

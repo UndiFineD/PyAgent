@@ -57,6 +57,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class CloudProviderAgent(BaseAgent):
     Phase 56: Multi-Cloud Infrastructure" as Code."    Manages cloud credentials, region selection, and generates IaC templates.
 
@@ -93,6 +95,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class CloudProviderAgent(BaseAgent):

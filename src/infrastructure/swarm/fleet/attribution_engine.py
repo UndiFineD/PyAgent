@@ -16,6 +16,8 @@
 """
 Attribution Engine for PyAgent.
 Tracks the lineage and provenance of every generated piece of content or code.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ from src.infrastructure.swarm.fleet.core.attribution_core import \
     AttributionCore
 
 __version__ = VERSION
+
+
 
 
 class AttributionEngine:

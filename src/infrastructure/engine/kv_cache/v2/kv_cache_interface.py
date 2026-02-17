@@ -24,11 +24,13 @@ import torch
 from src.infrastructure.engine.kv_cache.v2.block_table import BlockTableV2
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class KVCacheInterfaceV2:
@@ -43,7 +45,7 @@ class KVCacheInterfaceV2:
 
         self.block_table = BlockTableV2(num_blocks, block_size)
 
-        # Physical storage (placeholder for Torch tensors)
+        # Physical storage (TODO Placeholder for Torch tensors)
         self.k_cache: Optional[torch.Tensor] = None
         self.v_cache: Optional[torch.Tensor] = None
 

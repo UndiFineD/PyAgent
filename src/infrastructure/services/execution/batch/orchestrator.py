@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Main orchestrator for GPU-resident batch management.
+"""
+
 
 from __future__ import annotations
 
@@ -38,6 +40,8 @@ try:
 except ImportError:
     HAS_TORCH = False
     torch = None  # type: ignore
+
+
 
 
 class InputBatchOrchestrator:
@@ -368,7 +372,7 @@ class InputBatchOrchestrator:
                 torch.from_numpy(num_scheduled_tokens_np).to(self.device)
             )
 
-            # Placeholder tensors (would be filled by actual kernel)
+            # TODO Placeholder tensors (would be filled by actual kernel)
             input_ids = torch.zeros(total_tokens, dtype=torch.int32, device=self.device)
             positions = torch.zeros(total_tokens, dtype=torch.int64, device=self.device)
             mrope_positions = None

@@ -30,6 +30,8 @@ WHAT IT SHOULD DO BETTER:
 - Provide helper methods: matches(error_message) that compiles and caches the regex, is_expired(now) to evaluate expiry, and to_dict()/from_dict() for robust serialization.
 - Add validation for required fields (non-empty id/pattern/reason), canonicalize id format, and include unit tests and example fixtures demonstrating matching and expiry semantics.
 - Consider integration points: storage schema, versioned migrations, and clear handling of pattern types (regex vs substring) with an explicit enum.
+"""
+
 
 from __future__ import annotations
 
@@ -42,9 +44,10 @@ __version__ = VERSION
 
 @dataclass
 class SuppressionRule:
-    """Rule for suppressing specific errors.
+    """Rule for suppressing specific errors."""
     id: str
     pattern: str
     reason: str
     expires: str | None = None
-    created_by: str = """    created_at: str = """
+    created_by: str = ""
+    created_at: str = ""

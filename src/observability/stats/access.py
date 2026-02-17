@@ -18,6 +18,8 @@ from __future__ import annotations
 import fnmatch
 
 
+
+
 class StatsAccessController:
     """Controls access to stats.    def __init__(self) -> None:        self.permissions: dict[str, dict[str, str]] = {}
 

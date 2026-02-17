@@ -22,6 +22,8 @@ from src.logic.agents.swarm.security_analysis_mixin import (
 )
 
 
+
+
 class TestWorkflowSecurityAnalyzer:
     """Test the workflow security analyzer.
     def setup_method(self):
@@ -88,10 +90,14 @@ class TestWorkflowSecurityAnalyzer:
         assert len(parse_errors) == 1
 
 
+
+
 class MockOrchestrator(SecurityAnalysisMixin):
     """Mock orchestrator for testing the mixin.
     def __init__(self):
         super().__init__()
+
+
 
 
 class TestSecurityAnalysisMixin:

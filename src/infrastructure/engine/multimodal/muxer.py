@@ -15,6 +15,8 @@
 
 Multi-Channel MUXer for high-speed (120fps) multimodal I/O.
 Synchronizes separate channels for video, audio, and text.
+"""
+
 
 from __future__ import annotations
 
@@ -25,11 +27,13 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.multimodal.muxer")"
+
+
 
 class ChannelType(Enum):
     """Enumeration of supported modality channel types.    TEXT = 0x01
@@ -44,6 +48,8 @@ class ModalityChannel:
     modality_type: str
     fps: float = 120.0
     buffer_size: int = 1024
+
+
 
 
 class Muxer:

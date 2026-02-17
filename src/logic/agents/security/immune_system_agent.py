@@ -40,6 +40,8 @@ FILE CONTENT SUMMARY:
 Immune System Agent for PyAgent.
 Specializes in biological resilience, detecting malicious prompt injections,
 and monitoring swarm health for corrupted nodes.
+"""
+
 
 from __future__ import annotations
 
@@ -52,6 +54,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -141,6 +145,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors

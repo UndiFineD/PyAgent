@@ -13,11 +13,11 @@
 # limitations under the License.
 
 import pytest
-from core.base.common.utils.dynamic_importer import PlaceholderModule, LazyModuleRegistry, LazyAttribute, import_from_path, resolve_obj_by_qualname, resolve_obj_by_qualname_parts, lazy_import, safe_import, register_lazy_module, get_lazy_module, reload_module, unload_module, is_module_available, get_module_version, require_module
+from core.base.common.utils.dynamic_importer import TODO PlaceholderModule, LazyModuleRegistry, LazyAttribute, import_from_path, resolve_obj_by_qualname, resolve_obj_by_qualname_parts, lazy_import, safe_import, register_lazy_module, get_lazy_module, reload_module, unload_module, is_module_available, get_module_version, require_module
 
 
-def test_placeholdermodule_basic():
-    assert PlaceholderModule is not None
+def test_TODO Placeholdermodule_basic():
+    assert TODO PlaceholderModule is not None
 
 
 def test_lazymoduleregistry_basic():

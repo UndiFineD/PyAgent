@@ -23,6 +23,8 @@ from typing import Any
 from src.core.base.common.shell_core import ShellCore
 
 
+
+
 class AgentGitHandler:
     """Facade for Git operations with recording support."""
     def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) -> None:

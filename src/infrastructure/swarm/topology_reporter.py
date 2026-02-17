@@ -16,6 +16,8 @@
 """
 Swarm Topology Reporter (Phase 320 Integration).
 Represents the current state of the swarm for visualization and analysis.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class SwarmTopologyReporter:

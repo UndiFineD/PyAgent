@@ -14,7 +14,8 @@
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py
+"""
 from __future__ import annotations
 
 from enum import Enum
@@ -24,6 +25,11 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class LoadBalanceStrategy(Enum):
-    """Load balancing strategies for multiple backends.
-    ROUND_ROBIN = "round_robin""    LEAST_CONNECTIONS = "least_connections""    WEIGHTED = "weighted""    FAILOVER = "failover""
+    """Load balancing strategies for multiple backends."""
+    ROUND_ROBIN = "round_robin"
+    LEAST_CONNECTIONS = "least_connections"
+    WEIGHTED = "weighted"
+    FAILOVER = "failover"

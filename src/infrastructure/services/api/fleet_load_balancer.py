@@ -16,6 +16,7 @@
 
 """
 Fleet load balancer.py module.
+"""
 
 
 from __future__ import annotations
@@ -29,6 +30,8 @@ from src.infrastructure.swarm.fleet.core.load_balancer_core import (
     AgentMetrics, LoadBalancerCore)
 
 __version__: str = VERSION
+
+
 
 
 class FleetLoadBalancer:

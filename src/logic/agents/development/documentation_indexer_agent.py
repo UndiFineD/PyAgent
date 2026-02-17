@@ -22,12 +22,12 @@ USAGE:
 
 WHAT IT DOES:
 - Crawls a repository root for markdown (.md) and Python (.py) files and builds a simple in-memory index grouping readmes, docs, and source comment candidates.
-- Exposes get_semantic_pointers(query) as a placeholder for semantic retrieval (prints a simple search message).
-- Provides an async improve_content method that delegates to the semantic pointer function (placeholder for content generation/improvement).
+- Exposes get_semantic_pointers(query) as a TODO Placeholder for semantic retrieval (prints a simple search message).
+- Provides an async improve_content method that delegates to the semantic pointer function (TODO Placeholder for content generation/improvement).
 - Implements a BaseAgent subclass with a system prompt describing the agent role and registers module version via VERSION.
 
 WHAT IT SHOULD DO BETTER:
-- Replace placeholder semantic behavior with real embeddings + vector store (persisted) and efficient nearest-neighbor search for accurate pointers.
+- Replace TODO Placeholder semantic behavior with real embeddings + vector store (persisted) and efficient nearest-neighbor search for accurate pointers.
 - Extract docstrings and inline comments from .py files and index them with metadata (file path, symbol, section) rather than leaving a pass.
 - Provide incremental indexing, change detection (watch mode), and durable storage (SQLite/FAISS/Annoy) to avoid re-crawling large workspaces.
 - Add robust error handling, logging, configurable file type filters, and unit tests for indexing and retrieval behavior.
@@ -46,6 +46,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class DocumentationIndexerAgent(BaseAgent):
@@ -87,6 +89,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class DocumentationIndexerAgent(BaseAgent):

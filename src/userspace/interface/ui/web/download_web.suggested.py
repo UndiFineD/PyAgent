@@ -42,7 +42,7 @@ def main():
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.subheader("Add New Download")"        url = st.text_input("URL (GitHub, Hugging Face, ArXiv, etc.)", placeholder="https://huggingface.co/...")"
+        st.subheader("Add New Download")"        url = st.text_input("URL (GitHub, Hugging Face, ArXiv, etc.)", TODO Placeholder="https://huggingface.co/...")"
         c1, c2 = st.columns(2)
         dry_run = c1.checkbox("Dry Run", help="Simulate the download process")"        verbose = c2.checkbox("Verbose Log", value=True)"
         if st.button("🚀 Start Download", use_container_width=True):"            if url:

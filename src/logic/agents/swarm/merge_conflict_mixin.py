@@ -48,6 +48,8 @@ from __future__ import annotations
 from typing import Any
 
 
+
+
 class MergeConflictMixin:
 """"Mixin for handling merge conflicts in file content.
     def detect_merge_conflicts(self, content: str) -> list[dict[str, Any]]:
@@ -105,6 +107,8 @@ class MergeConflictMixin:
 from __future__ import annotations
 
 from typing import Any
+
+
 
 
 class MergeConflictMixin:

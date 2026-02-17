@@ -17,6 +17,8 @@
 FleetExecutionCore
 Core logic for Fleet workflow execution and reliability.
 Fleet execution core.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -35,6 +37,8 @@ __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+
 
 
 class FleetExecutionCore:
@@ -124,7 +128,7 @@ class FleetExecutionCore:
             for arg in args
         ]
 
-        variant_name = agent_name  # Placeholder for Phase 105
+        variant_name = agent_name  # TODO Placeholder for Phase 105
         _ = variant_name
 
         agent = self.fleet.agents.get(agent_name)

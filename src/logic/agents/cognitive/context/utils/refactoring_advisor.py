@@ -15,6 +15,8 @@
 
 # "Refactoring advice engine for Cognitive agents."This module analyzes agent contexts to identify potential refactoring
 opportunities and suggestions, leveraging Rust acceleration when available.
+"""
+
 
 from __future__ import annotations
 import re
@@ -32,6 +34,8 @@ except ImportError:
     _RUST_ACCEL = False
 
 __version__ = VERSION
+
+
 
 
 class RefactoringAdvisor:

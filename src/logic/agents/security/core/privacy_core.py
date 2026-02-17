@@ -16,6 +16,8 @@
 """
 PrivacyCore
 Provides high-speed text redaction and log scanning for PII.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class PrivacyCore:

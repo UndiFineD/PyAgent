@@ -44,11 +44,17 @@ from src.core.base.common.models.communication_models import CascadeContext
 logger = logging.getLogger(__name__)
 
 
+
+
 class ChangeType(Enum):
     """Types of AD object changes"""CREATED = "created""    MODIFIED = "modified""    DELETED = "deleted""    MOVED = "moved""
 
+
+
 class AttributeChangeType(Enum):
     """Types of attribute changes"""ADDED = "added""    MODIFIED = "modified""    DELETED = "deleted""
+
+
 
 class SecurityEventType(Enum):
     """Security-relevant event types"""USER_ACCOUNT_CONTROL_CHANGE = "user_account_control_change""    PASSWORD_CHANGE = "password_change""    GROUP_MEMBERSHIP_CHANGE = "group_membership_change""    PRIVILEGE_ESCALATION = "privilege_escalation""    ACCOUNT_LOCKOUT = "account_lockout""    SUSPICIOUS_LOGIN = "suspicious_login""    ADMIN_ACCESS_CHANGE = "admin_access_change""
@@ -104,6 +110,8 @@ class MonitoringConfig:
     retention_days: int = 30
 
 
+
+
 class ADConnectionProvider(Protocol):
     """Protocol for Active Directory connection providers"""
     async def connect(self, domain_controller: str, credentials: Optional[Dict[str, Any]] = None) -> Any:
@@ -127,6 +135,8 @@ class ADConnectionProvider(Protocol):
         """Close connection to domain controller"""...
 
 
+
+
 class AlertProvider(Protocol):
     """Protocol for alert/notification providers"""
     async def send_alert(self, change: ADObjectChange, severity: str, context: Dict[str, Any]) -> None:
@@ -134,6 +144,8 @@ class AlertProvider(Protocol):
 
     async def send_security_alert(self, events: List[SecurityEventType], change: ADObjectChange) -> None:
         """Send security-specific alert"""...
+
+
 
 
 class ADMonitoringCore(BaseCore):
@@ -514,7 +526,7 @@ class ADMonitoringCore(BaseCore):
 
         return True
 
-    # Placeholder methods for security rule checks
+    # TODO Placeholder methods for security rule checks
     def _check_user_account_control(self, change: AttributeChange) -> Optional[SecurityEventType]:
         """Check for suspicious UAC changes"""# Implementation would analyze UAC flag changes for security implications
         return None

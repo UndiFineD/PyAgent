@@ -22,11 +22,11 @@ Instantiate DimensionalityAgent with the agent file path inside the PyAgent life
 
 WHAT IT DOES:
 - Provides programmatic dimensionality reduction for single embeddings and batches, with built-in fallbacks and simple reconstruction/variance estimates.
-- Supports multiple reduction strategies (PCA, truncation, random projection, t-SNE/UMAP/autoencoder placeholders) and records basic compression metrics (variance_retained, compression_ratio).
+- Supports multiple reduction strategies (PCA, truncation, random projection, t-SNE/UMAP/autoencoder TODO Placeholders) and records basic compression metrics (variance_retained, compression_ratio).
 - Uses a projection and concept cache for reuse and attempts to utilize a rust_core extension for acceleration when available, defaulting to Python implementations when not.
 
 WHAT IT SHOULD DO BETTER:
-- Implement full, numerically robust PCA and alternatives (t-SNE, UMAP, autoencoder) with deterministic, tested implementations and batched linear algebra accelerated by rust_core or numpy; current PCA placeholder must be replaced with a true multi-vector covariance/EOF computation and projection.
+- Implement full, numerically robust PCA and alternatives (t-SNE, UMAP, autoencoder) with deterministic, tested implementations and batched linear algebra accelerated by rust_core or numpy; current PCA TODO Placeholder must be replaced with a true multi-vector covariance/EOF computation and projection.
 - Add input validation, consistent handling of edge cases (zero-norm vectors), and configurable random seeds for reproducibility of random projections and clustering.
 - Expose detailed diagnostics (explained variance per component, reconstruction functions, transform/inverse_transform APIs), async batching optimizations, and integration tests to verify equivalence between rust and Python implementations.
 
@@ -75,6 +75,8 @@ try:
 except ImportError:
     _RUST_AVAILABLE = False
     logging.debug("rust_core not available, using Python fallback for DimensionalityAgent")"
+
+
 
 class ReductionMethod(Enum):
 """"Supported dimensionality reduction methods.#     PCA = "pca"#     TSNE = "tsne"#     UMAP = "umap"#     TRUNCATION = "truncation"#     RANDOM_PROJECTION = "random_projection"#     AUTOENCODER = "autoencoder"
@@ -167,6 +169,8 @@ try:
 except ImportError:
     _RUST_AVAILABLE = False
     logging.debug("rust_core not available, using Python fallback for DimensionalityAgent")"
+
+
 
 class ReductionMethod(Enum):
 """"Supported dimensionality reduction methods.#     PCA = "pca"#     TSNE = "tsne"#     UMAP = "umap"#     TRUNCATION = "truncation"#     RANDOM_PROJECTION = "random_projection"#     AUTOENCODER = "autoencoder"

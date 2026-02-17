@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class SpecMethod(Enum):
     """Speculative decoding method types.
     NGRAM = auto()  # N-gram based prediction

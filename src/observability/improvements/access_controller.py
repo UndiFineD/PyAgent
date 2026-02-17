@@ -53,6 +53,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class AccessController:
     """Tracks per-improvement permissions and roles.
     def __init__(self) -> None:
@@ -82,6 +84,8 @@ from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class AccessController:

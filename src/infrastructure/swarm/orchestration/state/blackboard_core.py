@@ -15,6 +15,7 @@
 
 """
 Blackboard core.py module.
+"""
 
 
 from __future__ import annotations
@@ -24,6 +25,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class BlackboardCore:

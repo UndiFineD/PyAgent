@@ -17,6 +17,8 @@
 """
 MockAgent for a community-submitted plugin.
 Demonstrates how to wrap a Core and interact with the Fleet.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from src.core.base.lifecycle.version import VERSION
 from .mock_core import MockCore
 
 __version__ = VERSION
+
+
 
 
 class MockAgent(BaseAgent):

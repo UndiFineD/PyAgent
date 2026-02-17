@@ -47,6 +47,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Mixin for fixing Python syntax patterns and common type hint errors.
+"""
+
 
 from __future__ import annotations
 
@@ -55,6 +57,8 @@ import re
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class SyntaxFixerMixin:

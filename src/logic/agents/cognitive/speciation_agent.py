@@ -80,7 +80,7 @@ class {new_agent_name}(BaseAgent):
     ) -> dict[str, Any]:
         Detects if two agents are converging in their specialized roles (Red Queen stagnation).
         If similarity is > 80%, it recommends a divergence event.
-        # In a real scenario, we'd load both classes and "compare _system_prompts."'        # For simulation, we use a placeholder similarity check.
+        # In a real scenario, we'd load both classes and "compare _system_prompts."'        # For simulation, we use a TODO Placeholder similarity check.
         similarity = (
             0.85 if "Coder" in agent_a_name and "Coder" in agent_b_name else 0.3"        )
 
@@ -112,6 +112,8 @@ import os
 from {rel_import} import {agent_name}
 from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
+
+
 
 class Test{agent_name}(unittest.TestCase):
     def setUp(self) -> None:

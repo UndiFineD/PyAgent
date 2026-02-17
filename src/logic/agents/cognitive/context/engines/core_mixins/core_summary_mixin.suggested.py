@@ -18,6 +18,8 @@ Core summary mixin for cognitive agents.
 from typing import Any
 
 
+
+
 class CoreSummaryMixin:
 """"Methods for summary generation and pruning.
     def prune_lessons(self, lessons: list[dict[str, Any]], max_lessons: int = 20) -> list[dict[str, Any]]:

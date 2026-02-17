@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in configuration validation, secrets checking, and environment setup.
 Inspired by external-secrets and infrastructure-as-code patterns.
+"""
+
 
 from __future__ import annotations
 
@@ -47,6 +49,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.validation import ValidationCore
 
 __version__ = VERSION
+
+
 
 
 class ConfigAgent(BaseAgent):
@@ -89,6 +93,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.validation import ValidationCore
 
 __version__ = VERSION
+
+
 
 
 class ConfigAgent(BaseAgent):

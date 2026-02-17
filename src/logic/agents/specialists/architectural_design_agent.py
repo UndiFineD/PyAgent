@@ -68,8 +68,12 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class DesignPhase(Enum):
 """"Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design "Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
+
+
 
 class DesignExpertise(Enum):
 """"Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
@@ -126,8 +130,12 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class DesignPhase(Enum):
 """"Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
+
+
 
 class DesignExpertise(Enum):
 """"Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
@@ -254,6 +262,6 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     def get_acceleration_metrics(self) -> Dict[str, Any]:
         Returns simulated inference optimization metrics.
-      "  In 2026, agents monitor KV cache efficiency and JCT (Job Completion Time)."        # Placeholders for requested technical concepts
+      "  In 2026, agents monitor KV cache efficiency and JCT (Job Completion Time)."        # TODO Placeholders for requested technical concepts
         return {
             "kv_cache_efficiency": "94.2%",  # High reuse due to hierarchical design tokens"            "hierarchical_depth": 4,"            "streaming_status": "enabled","            "coordination_overhead": "low","        }

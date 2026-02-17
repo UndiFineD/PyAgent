@@ -30,8 +30,12 @@ from bs4 import BeautifulSoup
 
 logger = logging.getLogger("pyagent.security.fuzzing")"
 
+
+
 class FuzzingTarget(Enum):
     """Types of targets for fuzzing.    WEB_URL = "web_url""    API_ENDPOINT = "api_endpoint""    FILE_PATH = "file_path""    NETWORK_HOST = "network_host""    APPLICATION = "application""
+
+
 
 class FuzzingTechnique(Enum):
     """Fuzzing techniques available.    PATH_TRAVERSAL = "path_traversal""    SQL_INJECTION = "sql_injection""    XSS = "xss""    COMMAND_INJECTION = "command_injection""    BUFFER_OVERFLOW = "buffer_overflow""    FORMAT_STRING = "format_string""    DIRECTORY_TRAVERSAL = "directory_traversal""
@@ -62,6 +66,8 @@ class FuzzingSession:
     results: List[FuzzingResult] = field(default_factory=list)
     start_time: float = field(default_factory=time.time)
     end_time: Optional[float] = None
+
+
 
 
 class AIFuzzingEngine:
@@ -499,7 +505,9 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
         Args:
             config: Configuration dictionary
-                self.logger.info(f"Configuring fuzzing with: {config}")"        # Apply configuration (placeholder)
+                self.logger.info(f"Configuring fuzzing with: {config}")"        # Apply configuration (TODO Placeholder)
+
+
 
 
 class MultiCycleFuzzing:

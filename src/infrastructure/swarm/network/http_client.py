@@ -19,6 +19,8 @@ HTTPClient - Unified sync/async HTTP client with session reuse.
 
 Refactored to modular package structure for Phase 317.
 Decomposed into mixins for sync, async, and retry logic.
+"""
+
 
 from __future__ import annotations
 
@@ -30,13 +32,19 @@ from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
 # Convenience aliases
 
 
+
+
 class HTTPClient(HTTPConnection):
         Alias for HTTPConnection with sync-focused interface.
     
 
+
+
 class AsyncHTTPClient(HTTPConnection):
         Alias for HTTPConnection with async-focused interface.
     
+
+
 
 class RetryableHTTPClient(HTTPConnection, RetryHTTPMixin):
         HTTP client with automatic retry on failures.

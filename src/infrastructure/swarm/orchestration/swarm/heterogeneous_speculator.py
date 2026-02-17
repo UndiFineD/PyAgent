@@ -27,6 +27,8 @@ from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
 logger: logging.Logger = logging.getLogger(__name__)
 
 
+
+
 class HeterogeneousSpeculator:
         Orchestrates speculation across different hardware profiles (Phase 85).
     Pairs low-precision (FP8/INT4) fast experts with high-precision (FP16) verifiers.

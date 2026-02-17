@@ -66,6 +66,8 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
 ]
 
 
+
+
 class ContextValidationMixin:
 """"Validation methods for ContextAgent.
     def add_validation_rule(self, rule: ValidationRule) -> None:
@@ -113,6 +115,8 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
     ValidationRule(
         name="valid_code_blocks","        pattern=r"```\\w*\\n[\\\\s\\S]*?```","        message="Code blocks should have language identifier","        severity="info","    ),
 ]
+
+
 
 
 class ContextValidationMixin:

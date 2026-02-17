@@ -48,7 +48,7 @@ from src.core.base.common.base_utilities import as_tool
 __version__ = VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
@@ -125,7 +125,7 @@ from src.core.base.common.base_utilities import as_tool
 __version__ = VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
     RUST_AVAILABLE = True
 except ImportError:
     rc = None

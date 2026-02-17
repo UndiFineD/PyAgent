@@ -25,6 +25,8 @@ from .observability_core import MetricSubscription, StatsSubscription
 logger = logging.getLogger(__name__)
 
 
+
+
 class AnnotationManager:
     """Manage metric annotations and comments.    def __init__(self) -> None:        self.annotations: dict[str, list[MetricAnnotation]] = {}
 
@@ -65,6 +67,8 @@ class AnnotationManager:
         return result
 
 
+
+
 class StatsAnnotationManager:
     """Manages annotations on metrics (backward compat).
     def __init__(self) -> None:
@@ -83,6 +87,8 @@ class StatsAnnotationManager:
 
     def get_annotations(self, metric: str) -> list[MetricAnnotation]:
         return self.annotations.get(metric, [])
+
+
 
 
 class SubscriptionManager:
@@ -128,6 +134,8 @@ class SubscriptionManager:
                     self.last_notification[sub_id] = now
                     notified.append(sub_id)
         return notified
+
+
 
 
 class StatsSubscriptionManager:

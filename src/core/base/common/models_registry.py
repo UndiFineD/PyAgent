@@ -18,6 +18,8 @@ Ports the extensive provider list from .code_puppy's models.dev integration.'"""
 from typing import Dict, List, TypedDict
 
 
+
+
 class ModelSpec(TypedDict):
     id: str
     context_window: int
@@ -25,6 +27,8 @@ class ModelSpec(TypedDict):
     output_price: float  # Per 1M tokens
     provider: str
     literals: List[str]  # Trigger keywords
+
+
 
 
 class ProviderRegistry:
@@ -67,7 +71,7 @@ class ProviderRegistry:
             "llama3-70b-groq": {"                "id": "llama3-70b-8192","                "context_window": 8192,"                "input_price": 0.59,"                "output_price": 0.79,"                "provider": "groq","                "literals": ["groq70"]"            },
             # DeepSeek
             "deepseek-v2": {"                "id": "deepseek-coder-v2","                "context_window": 128000,"                "input_price": 0.14,"                "output_price": 0.28,"                "provider": "deepseek","                "literals": ["deepseek"]"            },
-            # ... (Placeholder for remaining 50+ models)
+            # ... (TODO Placeholder for remaining 50+ models)
         }
 
     @staticmethod

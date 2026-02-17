@@ -22,9 +22,11 @@ from typing import Any
 from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None  # type: ignore[assignment]
+
+
 
 
 class BenchmarkCore:

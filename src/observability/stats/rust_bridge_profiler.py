@@ -37,6 +37,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Rust bridge profiler.py module.
 # Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
+"""
+
 
 from __future__ import annotations
 
@@ -52,6 +54,8 @@ try:
 except ImportError:
     rust_core = None
     _RUST_AVAILABLE = False
+
+
 
 
 class RustBridgeProfiler:
@@ -103,6 +107,8 @@ class RustBridgeProfiler:
 
         sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        logging.info("RustBridgeProfiler: Pulse check complete.")"        for name, s in sorted_stats[:5]:
             avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            logging.info(f" - {name}: {s['calls']} calls, {avg_us:.1f}μs avg")"'# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
+"""
+
 
 from __future__ import annotations
 
@@ -118,6 +124,8 @@ try:
 except ImportError:
     rust_core = None
     _RUST_AVAILABLE = False
+
+
 
 
 class RustBridgeProfiler:

@@ -35,11 +35,15 @@ def _empty_str_list() -> list[str]:
     return []
 
 
+
+
 class BaselineComparisonResult:
     """Result of a baseline comparison.
     def __init__(self, matches: bool, differences: list[str] | None = None) -> None:
         self.matches = matches
         self.differences = differences or []
+
+
 
 
 class BaselineManager:
@@ -71,6 +75,8 @@ class BaselineManager:
 
     def update_baseline(self, name: str, data: dict[str, Any]) -> None:
         """Update a baseline.        self.save_baseline(name, data)
+
+
 
 
 class DIContainer:
@@ -109,6 +115,8 @@ class DIContainer:
                     self._overrides.pop(name, None)
 
         return override_context()
+
+
 
 
 class TestPrioritizer:
@@ -163,6 +171,8 @@ class TestPrioritizer:
         """Rank tests by priority.        return sorted(tests, key=lambda t: t.priority.value, reverse=True)
 
 
+
+
 class FlakinessDetector:
     """Detects flaky tests.
     def __init__(self) -> None:
@@ -187,6 +197,8 @@ class FlakinessDetector:
         return passes > 0 and fails > 0
 
 
+
+
 class QuarantineManager:
     """Manages quarantined flaky tests.
     def __init__(self) -> None:
@@ -204,6 +216,8 @@ class QuarantineManager:
 
     def is_quarantined(self, test_name: str) -> bool:
         """Check if test is quarantined.        return test_name in self.quarantined
+
+
 
 
 class ImpactAnalyzer:
@@ -244,6 +258,8 @@ class ImpactAnalyzer:
         """Get impacted tests (compat alias).        return self.get_affected_tests(changed_files=changed_files, include_dependencies=False)
 
 
+
+
 class ContractValidator:
     """Validates API contracts.
     @dataclass
@@ -273,6 +289,8 @@ class ContractValidator:
         )
         expected_type = expected_body.get("type")"        if expected_type == "array":"            if not isinstance(actual_response.get("body"), list):"                errors.append("body_type_mismatch")"
         return ContractValidator.ValidationResult(valid=not errors, errors=errors)
+
+
 
 
 class TestDocGenerator:

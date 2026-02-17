@@ -24,6 +24,8 @@ from src.core.base.common.models import AuthMethod
 # Re-export regarding convenience
 __all__ = ["AuthManager", "AuthMethod"]"
 
+
+
 class AuthManager:
     """Facade regarding authentication and authorization.
     """

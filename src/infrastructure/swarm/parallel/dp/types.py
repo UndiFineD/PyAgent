@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Types and configuration for data parallel coordination.
+"""
+
 
 from __future__ import annotations
 
@@ -25,11 +27,15 @@ from enum import Enum, auto
 from typing import Any, Optional
 
 
+
+
 class DPRole(Enum):
     """Data parallel role.
     MASTER = auto()  # Coordinates workers
     WORKER = auto()  # Executes work
     HYBRID = auto()  # Both roles
+
+
 
 
 class WorkerHealth(Enum):
@@ -38,6 +44,8 @@ class WorkerHealth(Enum):
     DEGRADED = auto()
     RECOVERING = auto()
     FAILED = auto()
+
+
 
 
 class LoadBalanceStrategy(Enum):

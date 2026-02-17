@@ -41,6 +41,8 @@ from src.core.base.base_agent import BaseAgent
 from src.core.base.common.models.communication_models import CascadeContext
 
 
+
+
 class VoiceAgentOrchestrator(BaseAgent):
     """
     Voice-controlled multi-agent orchestrator inspired by big-3-super-agent.
@@ -228,7 +230,7 @@ class VoiceAgentOrchestrator(BaseAgent):
         Process voice command using OpenAI Realtime API.
         This is a simplified version - full implementation would require WebSocket handling.
         """
-        # For now, return a placeholder response
+        # For now, return a TODO Placeholder response
         # Full implementation would:
         # 1. Send audio to OpenAI Realtime API
         # 2. Handle tool calls
@@ -236,7 +238,7 @@ class VoiceAgentOrchestrator(BaseAgent):
 
         self._log_panel("Voice command received - processing...", "Voice Input", "blue")
 
-        # Placeholder: convert speech to text (would use OpenAI Whisper or similar)
+        # TODO Placeholder: convert speech to text (would use OpenAI Whisper or similar)
         text_command = "Generate a hello world function in Python"
 
         # Process the command

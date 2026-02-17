@@ -34,6 +34,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in secure code execution and sandboxed prototyping.
 Prevents side effects on the host system by using containerized or WASM environments.
+"""
+
 
 from __future__ import annotations
 
@@ -44,6 +46,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class SandboxAgent(BaseAgent):
@@ -84,6 +88,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class SandboxAgent(BaseAgent):

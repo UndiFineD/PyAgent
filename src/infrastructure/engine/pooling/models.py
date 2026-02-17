@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Data models and Enums for the Pooling Engine.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 
 
+
+
 class PoolingTask(Enum):
     """Supported pooling tasks.
     EMBED = auto()  # Sentence/document embedding
@@ -33,6 +37,8 @@ class PoolingTask(Enum):
     TOKEN_EMBED = auto()  # Token-level embeddings
     TOKEN_CLASSIFY = auto()  # Token-level classification (NER, etc.)
     RERANK = auto()  # Cross-encoder reranking
+
+
 
 
 class PoolingStrategy(Enum):

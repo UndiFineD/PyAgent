@@ -34,6 +34,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Agent specializing in model inference optimization and low-VRAM strategies.
+"""
+
 
 from __future__ import annotations
 
@@ -46,9 +48,11 @@ from src.infrastructure.services.simulation.hopper_sim import (HopperSim,
                                                                Precision)
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class ModelOptimizerAgent(BaseAgent):
@@ -118,9 +122,11 @@ from src.infrastructure.services.simulation.hopper_sim import (HopperSim,
                                                                Precision)
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class ModelOptimizerAgent(BaseAgent):

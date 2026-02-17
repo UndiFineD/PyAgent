@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Audio loader implementation.
+"""
+
 
 from __future__ import annotations
 
@@ -26,7 +28,7 @@ from typing import BinaryIO, Tuple, Union
 import numpy as np
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
@@ -34,6 +36,8 @@ except ImportError:
 from .base import MediaLoader
 from .models import (AudioData, AudioFormat, MediaLoadConfig, MediaMetadata,
                      MediaType)
+
+
 
 
 class AudioLoader(MediaLoader):

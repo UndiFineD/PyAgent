@@ -17,13 +17,15 @@
 """
 AgentMetrics data class and LoadBalancerCore logic for cognitive load balancing.
 Load balancer core.py module.
+"""
+
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
@@ -37,6 +39,8 @@ class AgentMetrics:
     queue_depth: int
     avg_latency_ms: float
     error_rate: float
+
+
 
 
 class LoadBalancerCore:

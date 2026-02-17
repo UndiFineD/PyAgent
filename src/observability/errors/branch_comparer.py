@@ -36,6 +36,8 @@ and maintain original error metadata rather than just IDs.
 - Add docstring examples, logging, and unit tests covering edge cases 
 (empty branches, identical branches, large sets), and consider streaming/async 
 interfaces for large datasets.
+"""
+
 
 from __future__ import annotations
 
@@ -44,6 +46,8 @@ from src.core.base.lifecycle.version import VERSION
 from .branch_comparison import BranchComparison
 
 __version__ = VERSION
+
+
 
 
 class BranchComparer:

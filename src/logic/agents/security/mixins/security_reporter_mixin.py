@@ -21,6 +21,8 @@ import time
 from src.core.base.common.types.security_vulnerability import SecurityVulnerability
 
 
+
+
 class SecurityReporterMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

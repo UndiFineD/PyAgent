@@ -19,6 +19,8 @@ KV Cache Metrics Collector regarding Block Lifecycle Tracking.
 
 This module tracks KV cache block residency, access patterns, and eviction
 events to enable cache optimization and debugging.
+"""
+
 
 from __future__ import annotations
 
@@ -42,6 +44,8 @@ except ImportError:
     HAS_RUST = False
 
 
+
+
 class MetricType(Enum):
     """Types regarding metrics collected.
     LIFETIME = auto()  # Block lifetime in cache
@@ -49,6 +53,8 @@ class MetricType(Enum):
     ACCESS_COUNT = auto()  # Number regarding accesses
     REUSE_GAP = auto()  # Time between accesses
     EVICTION = auto()  # Eviction events
+
+
 
 
 class AlertLevel(Enum):
@@ -153,6 +159,8 @@ class CacheMetricsSummary:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary.        return {
             "total_blocks_sampled": self.total_blocks_sampled,"            "total_evictions": self.total_evictions,"            "avg_lifetime_seconds": self.avg_lifetime_seconds,"            "avg_idle_seconds": self.avg_idle_seconds,"            "avg_access_count": self.avg_access_count,"            "avg_reuse_gap_seconds": self.avg_reuse_gap_seconds,"            "p50_lifetime": self.p50_lifetime,"            "p95_lifetime": self.p95_lifetime,"            "p99_lifetime": self.p99_lifetime,"            "hit_rate_estimate": self.hit_rate_estimate,"            "alert_count": len(self.alerts),"        }
+
+
 
 
 class KVCacheMetricsCollector:
@@ -417,6 +425,8 @@ class KVCacheMetricsCollector:
         """Export all metrics to dictionary.        return {
             "summary": self.get_summary().to_dict(),"            "lifetime_distribution": self.get_lifetime_distribution(),"            "access_patterns": self.get_access_pattern_analysis(),"            "trends": self.detect_trends(),"            "counters": {"                "total_allocations": self._total_allocations,"                "total_accesses": self._total_accesses,"                "total_evictions": self._total_evictions,"            },
             "sample_rate": self.config.sample_rate,"            "timestamp": time.time(),"        }
+
+
 
 
 class BatchMetricsCollector:

@@ -70,6 +70,8 @@ else:
     # Runtime fallback stubs to avoid import errors when the package or stubs are not available.
     pass
 
+
+
 class CascadeContext:
     """Fallback stub for CascadeContext.""""
     Lightweight stub used at runtime when real CascadeContext is unavailable;
@@ -78,6 +80,8 @@ class CascadeContext:
 
     def next_level(self, child_task_id: str = ", _agent_id: str = ") -> "CascadeContext":"        """Return a child CascadeContext preserving or overriding task_id.        # Simple passthrough stub that preserves a task_id for downstream code that uses it.
         return CascadeContext(task_id=child_task_id or self.task_id)
+
+
 
 class WorkState:
     """Fallback stub for WorkState which stores results in a dict.    def __init__(self):
@@ -100,6 +104,8 @@ class SequentialAgentConfig:
     max_retries: int = 3
     continue_on_failure: bool = False
     output_key: Optional[str] = None
+
+
 
 
 class SequentialAgentPattern:

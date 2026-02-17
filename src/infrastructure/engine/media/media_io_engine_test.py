@@ -44,6 +44,8 @@ from src.infrastructure.services.mediaio import (
 )
 
 
+
+
 class TestEnums:
     """Test enum values.
     def test_media_type_values(self):
@@ -73,6 +75,8 @@ class TestEnums:
         assert ResizeMode.PAD is not None
         assert ResizeMode.STRETCH is not None
         assert ResizeMode.SHORTEST is not None
+
+
 
 
 class TestMediaMetadata:
@@ -114,6 +118,8 @@ class TestMediaMetadata:
         assert meta.sample_rate == 16000
 
 
+
+
 class TestImageData:
     """Test ImageData dataclass.
     def test_create_image_data(self):
@@ -139,6 +145,8 @@ class TestImageData:
 
         img = ImageData(data=data, metadata=meta, source="batch")"
         assert img.shape[0] == 4
+
+
 
 
 class TestVideoData:
@@ -171,6 +179,8 @@ class TestVideoData:
         assert len(video.timestamps) == 10
 
 
+
+
 class TestAudioData:
     """Test AudioData dataclass.
     def test_create_audio_data(self):
@@ -195,6 +205,8 @@ class TestAudioData:
 
         audio = AudioData(waveform=waveform, metadata=meta, source="stereo.wav")"
         assert audio.waveform.shape[0] == 2
+
+
 
 
 class TestMediaLoadConfig:
@@ -226,6 +238,8 @@ class TestMediaLoadConfig:
         assert len(config.std) == 3
 
 
+
+
 class TestImageLoader:
     """Test ImageLoader class.
     def test_create_loader(self):
@@ -254,6 +268,8 @@ class TestImageLoader:
         # Actual loading would require valid image bytes
         assert hasattr(loader, 'load')'
 
+
+
 class TestVideoLoader:
     """Test VideoLoader class.
     def test_create_loader(self):
@@ -267,6 +283,8 @@ class TestVideoLoader:
         assert loader.supports(MediaType.IMAGE) is False
 
 
+
+
 class TestAudioLoader:
     """Test AudioLoader class.
     def test_create_loader(self):
@@ -278,6 +296,8 @@ class TestAudioLoader:
 
         assert loader.supports(MediaType.AUDIO) is True
         assert loader.supports(MediaType.IMAGE) is False
+
+
 
 
 class TestMediaIOEngine:
@@ -337,6 +357,8 @@ class TestMediaIOEngine:
         assert inspect.iscoroutinefunction(engine.load_batch)
 
 
+
+
 class TestFactoryFunctions:
     """Test factory functions.
     def test_create_media_engine(self):
@@ -366,6 +388,8 @@ class TestFactoryFunctions:
     @pytest.mark.asyncio
     async def test_load_audio_function(self):
         """Test load_audio convenience function.        assert inspect.iscoroutinefunction(load_audio)
+
+
 
 
 class TestResizeModes:

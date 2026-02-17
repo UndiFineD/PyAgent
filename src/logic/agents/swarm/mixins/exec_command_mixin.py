@@ -23,6 +23,8 @@ USAGE: Used by OrchestratorAgent (or similar agents) to run subprocess commands,
 WHAT IT DOES: Provides _run_command (delegates to command_handler.run_command with timeout/retry), _with_agent_env context manager (delegates to command_handler.with_agent_env), run_stats_update (calls agent_stats.py), run_tests (discovers test_{module}.py, executes pytest, logs results) and _commit_and_push (git add/commit/push with basic logging and error handling). 
 
 WHAT IT SHOULD DO BETTER: Add configurable retry/backoff and richer subprocess capture, improve test discovery and isolation, make git operations idempotent and configurable (remote/branch/author), surface structured errors for callers, and avoid swallowing exceptions; FILE CONTENT SUMMARY omitted for brevity—request the full file block if you need the exact file text.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ import subprocess
 import sys
 from contextlib import contextmanager
 from pathlib import Path
+
+
 
 
 class ExecCommandMixin:

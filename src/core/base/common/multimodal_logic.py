@@ -28,7 +28,9 @@ Key Features:
 - Fallback to pure Python logic if Rust extensions are unavailable
 - Modular design for easy extension and integration with agent mixins
 
-Classes:
+
+
+classes:
 - MultimodalCore: Main class for multimodal alignment, streaming, and fusion
 
 Dependencies:
@@ -53,11 +55,13 @@ from .base_core import BaseCore
 from .multimodal_state import StreamState
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.multimodal")"
+
+
 
 class MultimodalCore(BaseCore):
     """Unified Multimodal Alignment and Streaming Core.

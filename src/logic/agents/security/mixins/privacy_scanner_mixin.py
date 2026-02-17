@@ -25,6 +25,8 @@ if TYPE_CHECKING:
     from src.logic.agents.security.compliance_agent import ComplianceAgent
 
 
+
+
 class PrivacyScannerMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

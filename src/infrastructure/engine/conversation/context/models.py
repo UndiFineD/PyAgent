@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Conversation context models and enums.
+"""
+
 
 from __future__ import annotations
 
@@ -24,13 +26,19 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 
+
+
 class ContextState(Enum):
     """Conversation context state.
     ACTIVE = "active""    WAITING_INPUT = "waiting_input""    WAITING_TOOL = "waiting_tool""    PROCESSING = "processing""    COMPLETED = "completed""    ERROR = "error""    EXPIRED = "expired""
 
+
+
 class TurnType(Enum):
     """Conversation turn type.
     SYSTEM = "system""    USER = "user""    ASSISTANT = "assistant""    TOOL_CALL = "tool_call""    TOOL_RESULT = "tool_result""    REASONING = "reasoning""
+
+
 
 class ToolExecutionPolicy(Enum):
     """Tool execution policy.

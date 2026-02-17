@@ -47,6 +47,8 @@ from src.logic.agents.development.core.linter_core import LinterCore
 __version__ = VERSION
 
 
+
+
 class LinterAgent(BaseAgent):
     Agent responsible for finding code quality issues using multiple linters.
 #     Integrates Ruff, Pylint, and Flake8.
@@ -104,6 +106,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.core.linter_core import LinterCore
 
 __version__ = VERSION
+
+
 
 
 class LinterAgent(BaseAgent):

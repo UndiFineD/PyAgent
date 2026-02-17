@@ -13,8 +13,8 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -27,18 +27,18 @@ __version__ = VERSION
 
 @dataclass
 class TestAssertion:
-    """Custom assertion for agent testing.""""
+    """Custom assertion for agent testing.
+
     Attributes:
         name: Assertion name.
         expected: Expected value.
         actual: Actual value.
         passed: Whether assertion passed.
         message: Assertion message.
-    
+    """
     __test__ = False
-
     name: str
     expected: Any
     actual: Any
     passed: bool = False
-    message: str = """
+    message: str = ""

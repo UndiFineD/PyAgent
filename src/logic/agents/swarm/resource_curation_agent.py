@@ -42,6 +42,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ResourceCurationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Manages the 'Good Read Unit' and research link lifecycle.'
     def __init__(self, file_path: str = ".") -> None:"        super().__init__(file_path)
@@ -103,6 +105,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ResourceCurationAgent(BaseAgent):  # pylint: disable=too-many-ancestors

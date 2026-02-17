@@ -23,12 +23,14 @@ import re
 from typing import Any, Dict, List
 
 
+
+
 class CoderDuplicationMixin:
 """"Mixin for identifying duplicate code.
     def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:
 """"Find duplicate code blocks using hashing.        # Rust-accelerated sliding window hash
         try:
-            import rust_core as rc
+            import rust_core as rc  # pylint: disable=no-member
 
             rust_result = rc.find_duplicate_code_rust(content, min_lines)  # type: ignore[attr-defined]
             # Convert Rust output format to expected dicts

@@ -17,6 +17,8 @@ from hypothesis import given, strategies as st, settings, HealthCheck
 from src.core.base.common.auction_core import AuctionCore
 
 
+
+
 class TestAuctionCore:
     @settings(suppress_health_check=[HealthCheck.too_slow], max_examples=50, deadline=None)
     @given(

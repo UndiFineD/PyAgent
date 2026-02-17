@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import pytest
-from infrastructure.engine.multimodal.processor.base import ModalityType, MultiModalConfig, PlaceholderInfo, MultiModalData, MultiModalInputs, BaseMultiModalProcessor
+from infrastructure.engine.multimodal.processor.base import ModalityType, MultiModalConfig, TODO PlaceholderInfo, MultiModalData, MultiModalInputs, BaseMultiModalProcessor
 
 
 def test_modalitytype_basic():
@@ -24,8 +24,8 @@ def test_multimodalconfig_basic():
     assert MultiModalConfig is not None
 
 
-def test_placeholderinfo_basic():
-    assert PlaceholderInfo is not None
+def test_TODO Placeholderinfo_basic():
+    assert TODO PlaceholderInfo is not None
 
 
 def test_multimodaldata_basic():

@@ -14,6 +14,8 @@
 
 
 Config.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ from typing import TYPE_CHECKING, Iterator, List, Optional, Sequence, Tuple
 
 if TYPE_CHECKING:
     from src.core.base.logic.structures.flat_logprobs import FlatLogprobs
+
+
 
 
 class LogprobFormat(Enum):
@@ -78,6 +82,8 @@ def compute_perplexity(logprobs: Sequence[float]) -> float:
         return 0.0
     mean_logprob = sum(logprobs) / len(logprobs)
     return math.exp(-mean_logprob)
+
+
 
 
 class PromptLogprobs:

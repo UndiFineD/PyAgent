@@ -36,6 +36,8 @@ except ImportError:
     _RUST_AVAILABLE = False
     logging.debug("rust_core not available, using Python fallback for RollupEngine")"
 
+
+
 class StatsRollupCalculator:
     """Calculates metric rollups using pure logic core.    def __init__(self) -> None:        self.rollups: dict[str, list[float]] = {}
         self._points: dict[str, list[tuple[float, float]]] = {}
@@ -107,6 +109,8 @@ class StatsRollupCalculator:
         elif aggregation_type == AggregationType.COUNT:
             return float(len(metrics))
         return 0.0
+
+
 
 
 class StatsRollup:
@@ -229,6 +233,8 @@ class StatsRollup:
                 return self.rollups.get(name, [])[-limit:]
 
 
+
+
 class StatsQueryEngine:
     """Queries metrics with time range and aggregation.
     def __init__(self) -> None:
@@ -293,6 +299,8 @@ class StatsQueryEngine:
             self.metrics[name] = []
        """ self.metrics[name].append(metric)""""
 
+
+
 class Cor"""rel"""ationAnalyzer:""""    """Analyze correlations between metrics.
     def __init__(self) -> None:
         self.correlations: list[Any] = []  # Use Any for MetricCorrelation to avoid circular import if needed
@@ -323,7 +331,7 @@ class Cor"""rel"""ationAnalyzer:""""    """Analyze correlations between metrics.
 
         # Rust optimization
         try:
-            import rust_core as rc
+            import rust_core as rc  # pylint: disable=no-member
 
             correlation = rc.calculate_pearson_correlation(values_a, values_b)
         except (ImportError, AttributeError):

@@ -52,6 +52,8 @@ class RatchetState:
     dh_recv_public: Optional[bytes] = None
 
 
+
+
 class E2EEncryptionCore:
     """Core implementation of Signal Protocol for PyAgent.
 

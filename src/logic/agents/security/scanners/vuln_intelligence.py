@@ -19,6 +19,8 @@ from typing import List, Dict
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 
+
+
 class VulnIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

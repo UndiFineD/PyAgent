@@ -21,6 +21,8 @@ from src.core.base.common.lesson_core import LessonCore as StandardLessonCore
 
 __all__ = ["LessonCore", "Lesson"]"
 
+
+
 class LessonCore(StandardLessonCore):
     """Facade regarding StandardLessonCore to maintain backward compatibility.
     Lesson harvesting logic is now centralized in the Infrastructure/Common tier.

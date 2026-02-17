@@ -23,6 +23,8 @@ from src.core.base.common.types.accessibility_severity import \
     AccessibilitySeverity
 
 
+
+
 class AccessibilityReportMixin:
 """"Mixin for generating accessibility reports.
     def _generate_report(self, file_path: str) -> AccessibilityReport:

@@ -35,6 +35,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 High-performance metrics engine for real-time observability and aggregation.
+"""
+
 
 from __future__ import annotations
 
@@ -55,7 +57,7 @@ from .metrics_core import ModelFallbackCore, TokenCostCore
 from .observability_core import AgentMetric, ObservabilityCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
@@ -66,6 +68,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__: str = VERSION
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class ObservabilityEngine:
@@ -147,7 +151,7 @@ from .metrics_core import ModelFallbackCore, TokenCostCore
 from .observability_core import AgentMetric, ObservabilityCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
@@ -158,6 +162,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__: str = VERSION
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class ObservabilityEngine:
@@ -317,6 +323,8 @@ class ObservabilityEngine:
                 self.metrics = []
 
 
+
+
 class TokenCostEngine:
     def __init__(self) -> None:
         self.core = TokenCostCore()
@@ -324,6 +332,8 @@ class TokenCostEngine:
     def calculate_cost(self, model: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
         res: TokenCostResult = self.core.calculate_cost(input_tokens, output_tokens, model)
         return res.total_cost
+
+
 
 
 class ModelFallbackEngine:

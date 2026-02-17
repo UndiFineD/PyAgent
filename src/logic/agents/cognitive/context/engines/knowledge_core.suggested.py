@@ -27,6 +27,8 @@ from .knowledge_mixins.knowledge_process_mixin import KnowledgeProcessMixin
 __version__ = VERSION
 
 
+
+
 class KnowledgeCore(KnowledgeSymbolMixin, KnowledgeSearchMixin, KnowledgeProcessMixin):
     KnowledgeCore performs pure computational analysis of workspace symbols.
 #     No I/O or database operations are allowed here to ensure Rust portability.

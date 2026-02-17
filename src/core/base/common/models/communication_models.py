@@ -31,15 +31,18 @@ from .core_enums import FilePriority, InputType, MessageRole
 
 @dataclass(slots=True)
 class WorkState:
-    """Mutable storage regarding intermediate results in a multi-agent pipeline."""results: dict[str, Any] = field(default_factory=dict)
+    """Mutable storage regarding intermediate results in a multi-agent pipeline."""
+    results: dict[str, Any] = field(default_factory=dict)
     shared_data: dict[str, Any] = field(default_factory=dict)
     artifacts: list[Path] = field(default_factory=list)
 
     def update(self, key: str, value: Any) -> None:
-        """Updates a result key regarding the current pipeline state."""self.results[key] = value
+        """Updates a result key regarding the current pipeline state."""
+        self.results[key] = value
 
     def add_artifact(self, path: Path) -> None:
-        """Records a new artifact path regarding the pipeline output."""if path not in self.artifacts:
+        """Records a new artifact path regarding the pipeline output."""
+        if path not in self.artifacts:
             self.artifacts.append(path)
 
 
@@ -58,7 +61,8 @@ class CascadeContext:
     failure_history: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
 
     def __post_init__(self) -> None:
-        """Validate and normalize failure history after initialization functionally."""# Backwards compatibility: if agent_id provided and task_id not set, use agent_id
+        """Validate and normalize failure history after initialization functionally."""
+        # Backwards compatibility: if agent_id provided and task_id not set, use agent_id
         if getattr(self, "agent_id", "") and not self.task_id:
             self.task_id = self.agent_id
         # Backwards compatibility: if workflow_id provided and task_id not set, use workflow_id
@@ -71,21 +75,30 @@ class CascadeContext:
                 if not isinstance(item, dict):
                     return None
                 norm = item.copy()
-                if "error" not in norm:"                    norm["error"] = "Unknown Error (Schema Violation)""                if "timestamp" not in norm:"                    norm["timestamp"] = time.time()"                if "failure_type" not in norm:"                    norm["failure_type"] = "unknown""                return norm
+                if "error" not in norm:
+                    norm["error"] = "Unknown Error (Schema Violation)"
+                if "timestamp" not in norm:
+                    norm["timestamp"] = time.time()
+                if "failure_type" not in norm:
+                    norm["failure_type"] = "unknown"
+                return norm
 
             # Filter and normalize regarding schema integrity
             self.failure_history = list(filter(None, map(_normalize, self.failure_history)))
 
-    def next_level(self, child_task_id: str = "", agent_id: str = "") -> 'CascadeContext':"'        """Create a child context at the next cascade level."""# Support both child_task_id and agent_id for backwards compatibility
+    def next_level(self, child_task_id: str = "", agent_id: str = "") -> 'CascadeContext':
+        """Create a child context at the next cascade level."""
+        # Support both child_task_id and agent_id for backwards compatibility
         task_id = child_task_id or agent_id
 
         if self.is_bursting():
-            raise RecursionError("Recursive Improvement Loop Detected - Cascade depth limit reached")"
+            raise RecursionError("Recursive Improvement Loop Detected - Cascade depth limit reached")
         # Check regarding recursive improvement loops functionally
         recursive_improvements = len(list(
-            filter(lambda e: e.get("failure_type") == "recursive_improvement", self.failure_history)"        ))
+            filter(lambda e: e.get("failure_type") == "recursive_improvement", self.failure_history)
+        ))
         if recursive_improvements >= 2:
-            raise RecursionError("Recursive Improvement Loop Detected - Multiple recursive improvement failures")"
+            raise RecursionError("Recursive Improvement Loop Detected - Multiple recursive improvement failures")
         return CascadeContext(
             task_id=task_id,
             cascade_depth=self.cascade_depth + 1,
@@ -95,22 +108,34 @@ class CascadeContext:
             failure_history=self.failure_history.copy()
         )
 
-    def log_failure(self, stage: str, error: str, failure_type: str = "unknown") -> None:"        """Log a failure in the cascade context."""entry = {
-            "stage": stage,"            "error": error,"            "failure_type": failure_type,"            "timestamp": time.time()"        }
+    def log_failure(self, stage: str, error: str, failure_type: str = "unknown") -> None:
+        """Log a failure in the cascade context."""
+        entry = {
+            "stage": stage,
+            "error": error,
+            "failure_type": failure_type,
+            "timestamp": time.time()
+        }
 
         # Check regarding repeating errors functionally (circuit breaker)
         recent_matches = list(filter(
-            lambda e: e.get("error") == error and e.get("stage") == stage,"            self.failure_history[-2:]
+            lambda e: e.get("error") == error and e.get("stage") == stage,
+            self.failure_history[-2:]
         ))
         if len(recent_matches) >= 2:
             # Replace the third occurrence with a circuit breaker
             entry = {
-                "stage": "circuit_breaker_repeating","                "error": f"Exact Repeating Error: {error} (Circuit Breaker Triggered)","                "failure_type": "circuit_breaker","                "timestamp": time.time()"            }
+                "stage": "circuit_breaker_repeating",
+                "error": f"Exact Repeating Error: {error} (Circuit Breaker Triggered)",
+                "failure_type": "circuit_breaker",
+                "timestamp": time.time()
+            }
 
         self.failure_history.append(entry)
 
     def is_bursting(self) -> bool:
-        """Check if recursion depth limit reached."""return self.cascade_depth >= self.depth_limit
+        """Check if recursion depth limit reached."""
+        return self.cascade_depth >= self.depth_limit
 
 
 @dataclass(slots=True)
@@ -120,10 +145,14 @@ class PromptTemplate:
 
     template: str
     variables: list[str] = field(default_factory=_empty_list_str)
-    id: str = """    description: str = """    version: str = "1.0""    tags: list[str] = field(default_factory=_empty_list_str)
+    id: str = ""
+    description: str = ""
+    version: str = "1.0"
+    tags: list[str] = field(default_factory=_empty_list_str)
 
     def render(self, **kwargs: Any) -> str:
-        """Render the prompt template with context variables."""return self.template.format(**kwargs)
+        """Render the prompt template with context variables."""
+        return self.template.format(**kwargs)
 
 
 @dataclass(slots=True)
@@ -135,6 +164,8 @@ class ConversationMessage:
     timestamp: float = field(default_factory=time.time)
 
 
+
+
 class ConversationHistory:
     """Manages a conversation history with message storage and retrieval."""
     def __init__(self, max_messages: int = 100) -> None:
@@ -142,7 +173,8 @@ class ConversationHistory:
         self.max_messages = max_messages
 
     def add(self, role: MessageRole, content: str) -> None:
-        """Add a message to the history."""msg = ConversationMessage(role=role, content=content)
+        """Add a message to the history."""
+        msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
             self.messages = self.messages[-self.max_messages :]
@@ -150,7 +182,8 @@ class ConversationHistory:
 
 @dataclass(slots=True)
 class SpeculativeProposal:
-    """Draft proposal from a lower-tier agent to a higher-tier agent (Phase 56).
+    """
+    Draft proposal from a lower-tier agent to a higher-tier agent (Phase 56).
     Used in speculative swarm mode to accelerate decision making.
     """
     request_id: str
@@ -163,7 +196,8 @@ class SpeculativeProposal:
 
 @dataclass(slots=True)
 class VerificationOutcome:
-    """Outcome of a speculative proposal verification (Phase 56).
+    """
+    Outcome of a speculative proposal verification (Phase 56).
     Determines if the draft was accepted, rejected, or partially modified.
     """
     proposal_id: str
@@ -177,8 +211,10 @@ class VerificationOutcome:
 
 @dataclass(slots=True)
 class AsyncSpeculativeToken:
-    """A single token yielded by the speculative async pipeline (Phase 60).
-    Includes a flag indicating if it's a 'draft' or 'verified' token.'    """
+    """
+    A single token yielded by the speculative async pipeline (Phase 60).
+    Includes a flag indicating if it's a 'draft' or 'verified' token.
+    """
     token: str
     is_draft: bool
     sequence_index: int
@@ -187,28 +223,27 @@ class AsyncSpeculativeToken:
 
 @dataclass(slots=True)
 class PipelineCorrection:
-    """signal to roll back and correct the output stream (Phase 60).
-    """
+    """signal to roll back and correct the output stream (Phase 60)."""
     rollback_to_index: int
     correct_tokens: list[str]
-    reason: str = "speculative_mismatch""
+    reason: str = "speculative_mismatch"
 
 @dataclass(slots=True)
 class ExpertProfile:
-    """Metadata about an agent's expertise for MoE routing (Phase 61).'    """
+    """Metadata about an agent's expertise for MoE routing (Phase 61)."""
     agent_id: str
     domains: list[str] = field(default_factory=_empty_list_str)
     performance_score: float = 1.0  # 0.0 to 1.0
     specialization_vector: list[float] = field(default_factory=_empty_list_str)  # Embedding
-    model_family: str = "unknown""    max_tokens: int = 4096
+    model_family: str = "unknown"
+    max_tokens: int = 4096
     is_replica: bool = False
     parent_id: str | None = None
-    acceleration_type: str = "standard"  # standard, fp8_bitnet, h100_tensor, etc. (Phase 74)"
+    acceleration_type: str = "standard"  # standard, fp8_bitnet, h100_tensor, etc. (Phase 74)
 
 @dataclass(slots=True)
 class MoERoutingDecision:
-    """The result of routing a task through the MoE Gatekeeper (Phase 61).
-    """
+    """The result of routing a task through the MoE Gatekeeper (Phase 61)."""
     task_id: str
     selected_experts: list[str]  # Top-K agent IDs
     routing_weights: list[float]
@@ -218,7 +253,8 @@ class MoERoutingDecision:
 
 @dataclass(slots=True)
 class SwarmAuditTrail:
-    """Detailed audit log for swarm decision making (Phase 69).
+    """
+    Detailed audit log for swarm decision making (Phase 69).
     Tracks routing, fusion, and expert selection reasoning.
     """
     request_id: str
@@ -230,14 +266,20 @@ class SwarmAuditTrail:
 
 @dataclass(slots=True)
 class ExpertEvaluation:
-    """Feedback evaluation for an expert's performance on a specific task (Phase 68).'    Used to drive Expert Specialization Evolution.
+    """
+    Feedback evaluation for an expert's performance 
+    on a specific task (Phase 68).'    
+    Used to drive Expert Specialization Evolution.
     """
     expert_id: str
     task_id: str
     is_correct: bool
     quality_score: float  # 0.0 to 1.0
     latency: float = 0.0
-    feedback_notes: str = """    timestamp: float = field(default_factory=time.time)
+    feedback_notes: str = ""
+    timestamp: float = field(default_factory=time.time)
+
+
 
 
 class PromptTemplateManager:
@@ -246,11 +288,15 @@ class PromptTemplateManager:
         self.templates: dict[str, PromptTemplate] = {}
 
     def register(self, template: PromptTemplate) -> None:
-        """Register a new template."""self.templates[template.name] = template
+        """Register a new template."""
+        self.templates[template.name] = template
 
     def render(self, template_name: str, **kwargs: Any) -> str:
-        """Render a registered template."""template = self.templates[template_name]
+        """Render a registered template."""
+        template = self.templates[template_name]
         return template.render(**kwargs)
+
+
 
 
 class ResponsePostProcessor:
@@ -259,13 +305,14 @@ class ResponsePostProcessor:
         self.hooks: list[tuple[Callable[[str], str], int]] = []
 
     def register(self, hook: Callable[[str], str], priority: int = 0) -> None:
-        """Register a post-processing hook."""self.hooks.append((hook, priority))
+        """Register a post-processing hook."""
+        self.hooks.append((hook, priority))
 
     def process(self, text: str) -> str:
-        """Apply all registered hooks to the text."""sorted_hooks = sorted(self.hooks, key=lambda x: x[1], reverse=True)
+        """Apply all registered hooks to the text."""
+        sorted_hooks = sorted(self.hooks, key=lambda x: x[1], reverse=True)
         for hook, _ in sorted_hooks:
             text = hook(text)
-
         return text
 
 
@@ -274,27 +321,32 @@ class PromptVersion:
     """Versioned prompt for A/B testing."""
     version: str
     content: str
-    description: str = """
+    description: str = ""
     active: bool = True
     created_at: datetime = field(default_factory=datetime.now)
     metrics: dict[str, float] = field(default_factory=_empty_dict_str_any)
 
     # Old API compatibility fields (initialized in __init__)
-    version_id: str = """    template_id: str = """
-    variant: str = """    prompt_text: str = """    weight: float = 1.0
+    version_id: str = ""
+    template_id: str = ""
+    variant: str = ""
+    prompt_text: str = ""
+    weight: float = 1.0
 
     def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         version: str | None = None,
         content: str | None = None,
-        description: str = "","        active: bool = True,
+        description: str = "",
+        active: bool = True,
         version_id: str | None = None,
         template_id: str | None = None,
         variant: str | None = None,
         prompt_text: str | None = None,
         weight: float = 1.0,
     ) -> None:
-        self.version = version or version_id or """        self.content = content or prompt_text or """
+        self.version = version or version_id or ""
+        self.content = content or prompt_text or ""
         self.description = description
         self.active = active
         self.created_at = datetime.now()
@@ -304,6 +356,8 @@ class PromptVersion:
         self.template_id = template_id or """        self.variant = variant or """
         self.prompt_text = self.content
         self.weight = weight
+
+
 
 
 class BatchRequest:
@@ -317,22 +371,26 @@ class BatchRequest:
         max_size: int | None = None,
     ) -> None:
         self.file_path = file_path
-        self.prompt = prompt or """        self.priority = priority
+        self.prompt = prompt or ""
+        self.priority = priority
         self.callback = callback
         self.max_size = max_size
         self.items: list[Any] = []
 
     def add(self, item: Any) -> None:
-        """Add an item to the batch."""if self.max_size is not None and len(self.items) >= self.max_size:
+        """Add an item to the batch."""
+        if self.max_size is not None and len(self.items) >= self.max_size:
             return
         self.items.append(item)
 
     @property
     def size(self) -> int:
-        """Return the number of items in the batch."""return len(self.items)
+        """Return the number of items in the batch."""
+        return len(self.items)
 
     def execute(self, processor: Callable[[list[Any]], list[Any]]) -> list[Any]:
-        """Execute the batch using the provided processor."""return processor(self.items)
+        """Execute the batch using the provided processor."""
+        return processor(self.items)
 
 
 @dataclass(slots=True)
@@ -340,7 +398,9 @@ class BatchResult:
     """Result of a batch processing request."""
     file_path: Path | None
     success: bool
-    content: str = """    error: str = """    processing_time: float = 0.0
+    content: str = ""
+    error: str = ""
+    processing_time: float = 0.0
 
 
 @dataclass(slots=True)
@@ -348,7 +408,8 @@ class MultimodalInput:
     """Multimodal input for agents."""
     input_type: InputType
     content: str
-    mime_type: str = """    metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    mime_type: str = ""
+    metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
 
 @dataclass(slots=True)
@@ -360,21 +421,25 @@ class ContextWindow:
 
     @property
     def used_tokens(self) -> int:
-        """Calculate total number of tokens used."""return sum(self.token_counts)
+        """Calculate total number of tokens used."""
+        return sum(self.token_counts)
 
     @property
     def available_tokens(self) -> int:
-        """Calculate remaining token budget."""return max(0, self.max_tokens - self.used_tokens)
+        """Calculate remaining token budget."""
+        return max(0, self.max_tokens - self.used_tokens)
 
     def add(self, message: str, token_count: int) -> None:
-        """Add a message and its token count, enforcing max_tokens."""self.messages.append(message)
+        """Add a message and its token count, enforcing max_tokens."""
+        self.messages.append(message)
         self.token_counts.append(token_count)
         while self.used_tokens > self.max_tokens and self.messages:
             self.messages.pop(0)
             self.token_counts.pop(0)
 
     def clear(self) -> None:
-        """Clear all messages from the window."""self.messages.clear()
+        """Clear all messages from the window."""
+        self.messages.clear()
         self.token_counts.clear()
 
 
@@ -384,16 +449,20 @@ class MultimodalBuilder:
     inputs: list[MultimodalInput] = field(default_factory=list)
 
     def add(self, content: str, input_type: InputType) -> None:
-        """Add a generic multimodal input."""self.inputs.append(MultimodalInput(content=content, input_type=input_type))
+        """Add a generic multimodal input."""
+        self.inputs.append(MultimodalInput(content=content, input_type=input_type))
 
     def add_text(self, content: str) -> None:
-        """Add text input."""self.inputs.append(MultimodalInput(content=content, input_type=InputType.TEXT))
+        """Add text input."""
+        self.inputs.append(MultimodalInput(content=content, input_type=InputType.TEXT))
 
     def add_image(self, content: str) -> None:
-        """Add image input."""self.inputs.append(MultimodalInput(content=content, input_type=InputType.IMAGE))
+        """Add image input."""
+        self.inputs.append(MultimodalInput(content=content, input_type=InputType.IMAGE))
 
     def build(self) -> list[MultimodalInput]:
-        """Return the list of built inputs."""return self.inputs
+        """Return the list of built inputs."""
+        return self.inputs
 
 
 @dataclass(slots=True)
@@ -420,20 +489,22 @@ class TelemetrySpan:
     events: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
 
 
+
+
 class SpanContext:
     """Context for a telemetry span."""
     def __init__(self, span: TelemetrySpan) -> None:
-        """Initialize span context."""self._span = span
+        """Initialize span context."""
+        self._span = span
 
     def set_attribute(self, key: str, value: Any) -> None:
-        """Set an attribute on the span."""self._span.attributes[key] = value
+        """Set an attribute on the span."""
+        self._span.attributes[key] = value
 
     def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
-            """Add an event to the span."""
-            self._span.events.append(
-                {
-                    "name": name,
-                    "timestamp": time.time(),
-                    "attributes": attributes or {},
-                }
-            )
+        """Add an event to the span."""
+        self._span.events.append({
+            "name": name,
+            "timestamp": time.time(),
+            "attributes": attributes or {},
+        })

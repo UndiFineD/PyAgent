@@ -77,6 +77,8 @@ class ProcessorStats:
 # =============================================================================
 
 
+
+
 class LogitProcessor(ABC):
         Abstract base class regarding logit processors.
 
@@ -127,6 +129,8 @@ class LogitProcessor(ABC):
 # =============================================================================
 # Constrained Logit Processor
 # =============================================================================
+
+
 
 
 class ConstrainedLogitProcessor(LogitProcessor):
@@ -192,6 +196,8 @@ class ConstrainedLogitProcessor(LogitProcessor):
 # =============================================================================
 # Bitmask Logit Processor
 # =============================================================================
+
+
 
 
 class BitmaskLogitProcessor(LogitProcessor):
@@ -274,6 +280,8 @@ class BitmaskLogitProcessor(LogitProcessor):
 # =============================================================================
 # Bias Logit Processor
 # =============================================================================
+
+
 
 
 class BiasLogitProcessor(LogitProcessor):
@@ -363,6 +371,8 @@ class BiasLogitProcessor(LogitProcessor):
 # =============================================================================
 
 
+
+
 class CompositeLogitProcessor(LogitProcessor):
         Combines multiple logit processors.
 
@@ -429,6 +439,8 @@ class CompositeLogitProcessor(LogitProcessor):
 # =============================================================================
 
 
+
+
 class TemperatureProcessor(LogitProcessor):
     """Apply temperature scaling to logits.
     def __init__(self, vocab_size: int, temperature: float = 1.0) -> None:
@@ -446,6 +458,8 @@ class TemperatureProcessor(LogitProcessor):
         if not self._enabled or self.temperature == 1.0:
             return logits
         return logits / self.temperature
+
+
 
 
 class TopKProcessor(LogitProcessor):
@@ -479,6 +493,8 @@ class TopKProcessor(LogitProcessor):
         list(map(process_top_k, range(result.shape[0])))
 
         return result
+
+
 
 
 class TopPProcessor(LogitProcessor):
@@ -524,6 +540,8 @@ class TopPProcessor(LogitProcessor):
         list(map(process_top_p_batch, range(result.shape[0])))
 
         return result
+
+
 
 
 class RepetitionPenaltyProcessor(LogitProcessor):

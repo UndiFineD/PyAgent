@@ -31,6 +31,8 @@ from src.core.base.mixins.ssrf_detector_mixin import SSRFDetectorMixin
 from src.core.base.mixins.vulnerability_scanner_mixin import VulnerabilityScannerMixin
 
 
+
+
 class SecurityScannerAgent(
         BaseAgent,
         VulnerabilityScannerMixin,

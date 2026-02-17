@@ -14,7 +14,8 @@
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py
+"""
 from __future__ import annotations
 
 from enum import Enum
@@ -24,6 +25,12 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ProviderType(Enum):
-    """Types of AI providers available.
-    CODEX = "codex""    COPILOT_CLI = "copilot""    GH_COPILOT = "gh""    GITHUB_MODELS = "github-models""    AUTO = "auto""
+    """Types of AI providers available."""
+    CODEX = "codex"
+    COPILOT_CLI = "copilot"
+    GH_COPILOT = "gh"
+    GITHUB_MODELS = "github-models"
+    AUTO = "auto"

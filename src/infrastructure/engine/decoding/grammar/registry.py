@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Backend selection and dispatching logic for structured output grammars.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ from .json_constraint import JSONSchemaGrammar
 from .regex_constraint import ChoiceGrammar, RegexGrammar
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class GrammarCompiler:
@@ -98,6 +102,8 @@ class GrammarCompiler:
             )
 
         raise ValueError(f"Unsupported option type: {option_type}")"
+
+
 
 class StructuredOutputManager:
     """Manages grammar compilation and lifecycle.""""

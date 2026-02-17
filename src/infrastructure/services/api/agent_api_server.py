@@ -15,6 +15,8 @@
 
 """
 FastAPI-based API gateway for the PyAgent fleet.
+"""
+
 
 from __future__ import annotations
 
@@ -53,6 +55,8 @@ fleet = FleetManager(workspace_root)
 load_balancer = FleetLoadBalancer(fleet)
 
 
+
+
 class TaskRequest(BaseModel):
     """Schema for incoming task requests via the REST API.
     agent_id: str
@@ -61,6 +65,8 @@ class TaskRequest(BaseModel):
 
     context: dict[str, Any] = {}
     interface: str | None = "Web"  # Default to web if not specified"
+
+
 
 class TelemetryManager:
     """Manages WebSocket connections for real-time fleet telemetry.

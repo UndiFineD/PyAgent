@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Engine core processor for data parallel coordination.
+"""
+
 
 from __future__ import annotations
 
@@ -33,6 +35,8 @@ from src.infrastructure.swarm.parallel.dp.types import (DPConfig, StepState,
                                                         WorkerState)
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class DPEngineCoreProc:

@@ -65,6 +65,8 @@ class SatelliteReconConfig:
         "https://network.satnogs.org/","        "https://amsat.org/","        "https://www.pe0sat.vgnet.nl/""    ])
 
 
+
+
 class SatelliteReconnaissanceCore(BaseCore):
     """Satellite Reconnaissance Core implementing specialized space/aerospace asset discovery.
 

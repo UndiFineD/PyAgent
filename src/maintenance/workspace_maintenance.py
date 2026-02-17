@@ -52,6 +52,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Workspace maintenance module for auditing and cleanup.
+"""
+
 
 from __future__ import annotations
 
@@ -68,6 +70,8 @@ from src.maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin
 
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin):
     """Consolidation of file system auditing, naming convention enforcement, and cleanup.

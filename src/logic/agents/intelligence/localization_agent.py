@@ -28,6 +28,7 @@ Use async file I/O for extraction, return structured locale metadata and plurali
 
 FILE CONTENT SUMMARY:
 Localization agent.py module.
+"""
 
 
 from __future__ import annotations
@@ -42,6 +43,8 @@ from src.logic.agents.intelligence.core.localization_core import \
     LocalizationCore
 
 __version__ = VERSION
+
+
 
 
 class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -94,6 +97,8 @@ from src.logic.agents.intelligence.core.localization_core import \
     LocalizationCore
 
 __version__ = VERSION
+
+
 
 
 class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors

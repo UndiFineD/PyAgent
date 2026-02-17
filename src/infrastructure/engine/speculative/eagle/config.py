@@ -15,11 +15,15 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Configuration regarding EAGLE speculative decoding.
+"""
+
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum, auto
+
+
 
 
 class EagleMethod(Enum):
@@ -28,6 +32,8 @@ class EagleMethod(Enum):
     EAGLE_2 = auto()  # EAGLE-2 with tree attention
     EAGLE_3 = auto()  # EAGLE-3 with aux hidden states
     EAGLE_3_LFM = auto()  # EAGLE-3 LFM variant
+
+
 
 
 class AttentionBackend(Enum):

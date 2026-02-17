@@ -19,6 +19,8 @@ Assisting classes for TDD and zero trust security for compliance agents.
 
 from typing import Any, Callable, List, Dict
 
+
+
 class DummyRecorder:
     """A simple recorder mock for capturing agent interactions during compliance audit tests.    def __init__(self):
         self.interactions = []
@@ -26,6 +28,8 @@ class DummyRecorder:
     def record_interaction(self, provider, model, prompt, result):
         self.interactions.append({
             "provider": provider,"            "model": model,"            "prompt": prompt,"            "result": result,"        })
+
+
 
 class ComplianceCheck:
     """Encapsulates a single compliance check for extensibility and testability.    def __init__(self, name: str, check_fn: Callable[[], bool] = None, recommendation: str = ""):"        self.name = name
@@ -35,6 +39,8 @@ class ComplianceCheck:
         passed = self.check_fn()
         return {
             "check": self.name,"            "status": "PASS" if passed else "FAIL","            "recommendation": None if passed else self.recommendation,"        }
+
+
 
 class ComplianceStandard:
     """Encapsulates a compliance standard and its checks for modularity and TDD.    def __init__(self, name: str, checks: List[ComplianceCheck]):

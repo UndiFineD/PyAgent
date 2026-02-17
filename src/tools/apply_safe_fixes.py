@@ -21,6 +21,8 @@ Currently implements:
 
 Writes unified diff patches to `.external/patches/` and optionally applies changes when
 `--apply` is passed. Re-runs static checks and generated tests after applying fixes.
+"""
+
 
 from __future__ import annotations
 import argparse

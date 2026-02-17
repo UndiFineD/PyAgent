@@ -60,12 +60,16 @@ try:
 
 T = TypeVar("T")"
 
+
+
 class StreamType(Enum):
     """Type of CUDA stream."""
     COMPUTE = auto()  # regarding compute operations
     COMMUNICATION = auto()  # regarding data transfers
     DEFAULT = auto()  # Default stream
     HIGH_PRIORITY = auto()  # High priority stream
+
+
 
 
 class MicroBatchState(Enum):
@@ -122,6 +126,8 @@ class MicroBatchInfo:
         """Duration in milliseconds."""if self.end_time > 0:
             return (self.end_time - self.start_time) * 1000
         return 0.0
+
+
 
 
 class StreamManager:
@@ -220,6 +226,8 @@ class StreamManager:
                 yield handle
         else:
             yield handle
+
+
 
 
 class MicroBatchContext(Generic[T]):
@@ -379,6 +387,8 @@ class MicroBatchContext(Generic[T]):
 
         return {
             "batch_size": self.batch_size,"            "micro_batch_size": self.micro_batch_size,"            "num_micro_batches": self.num_micro_batches,"            "completed_micro_batches": completed,"            "total_time_ms": (self._end_time - self._start_time) * 1000 if self._end_time > 0 else 0,"            "total_compute_time_ms": self._total_compute_time,"            "avg_micro_batch_time_ms": self._total_compute_time / completed if completed > 0 else 0,"            "outputs_recorded": len(list(filter(lambda o: o is not None, self._outputs))),"        }
+
+
 
 
 class AdaptiveMicroBatchContext(MicroBatchContext[T]):

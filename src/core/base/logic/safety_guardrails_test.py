@@ -36,6 +36,8 @@ from src.core.base.logic.safety_guardrails import (
 )
 
 
+
+
 class TestSafetyConfig:
     """Test SafetyConfig functionality."""
     def test_default_config(self):
@@ -50,6 +52,8 @@ class TestSafetyConfig:
         assert config.level == SafetyLevel.STRICT
         # Strict should have more blocked categories
         assert len(config.blocked_categories) >= 3
+
+
 
 
 class TestInputValidator:
@@ -78,6 +82,8 @@ class TestInputValidator:
 
         result = asyncio.run(validator.validate_input("This contains custom_block"))"        assert result.is_valid is False
         assert "Custom block" in result.message"
+
+
 
 class TestOutputValidator:
     """Test OutputValidator functionality."""
@@ -111,6 +117,8 @@ class TestOutputValidator:
         assert result.is_valid is True
 
 
+
+
 class TestRateLimiter:
     """Test RateLimiter functionality."""
     @pytest.fixture
@@ -133,6 +141,8 @@ class TestRateLimiter:
         asyncio.run(limiter.check_rate_limit("user1"))"        asyncio.run(limiter.check_rate_limit("user1"))"
         # User 2 should still be allowed
         result = asyncio.run(limiter.check_rate_limit("user2"))"        assert result.is_valid is True
+
+
 
 
 class TestGuardrail:
@@ -161,6 +171,8 @@ class TestGuardrail:
             return f"Processed: {input}""
         with pytest.raises(ValueError):
             asyncio.run(test_func("I want to kill someone"))"
+
+
 
 class TestResilienceDecorator:
     """Test ResilienceDecorator functionality."""
@@ -208,6 +220,8 @@ class TestResilienceDecorator:
         result = asyncio.run(sometimes_fails())
         assert result == "success""
 
+
+
 class TestValidationSchemas:
     """Test predefined validation schemas."""
     def test_research_summary_valid(self):
@@ -235,6 +249,8 @@ class TestValidationSchemas:
         )
         assert review.overall_score == 8
         assert len(review.issues) == 1
+
+
 
 
 class TestConvenienceFunctions:

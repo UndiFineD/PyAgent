@@ -41,6 +41,8 @@ except ImportError:
     requests = None
 
 
+
+
 class NotificationManager:
     """Manages event notifications via webhooks and internal callbacks."""
     def __init__(

@@ -29,6 +29,8 @@ from src.infrastructure.services.api.core.gateway_core import GatewayCore
 __version__ = VERSION
 
 
+
+
 class SaaSGateway:
     """Provides usage control and authentication for the fleet as a service.""""    Integrated with GatewayCore for external SaaS orchestration.
     

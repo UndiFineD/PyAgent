@@ -22,11 +22,13 @@ import logging
 from enum import Enum
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class EngineState(Enum):
@@ -37,6 +39,8 @@ class EngineState(Enum):
     COOLDOWN = 2
     ERROR = 3
     STOPPED = 4
+
+
 
 
 class EngineCoordinator:

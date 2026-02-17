@@ -68,6 +68,8 @@ class WorkflowAnalysis:
 #     risk_assessment: str = "unknown"    recommendations: List[str] = field(default_factory=list)
 
 
+
+
 class WorkflowSecurityAnalyzer:
     Security analyzer for PyAgent workflows.
 
@@ -251,6 +253,8 @@ class WorkflowSecurityAnalyzer:
         return report
 
 
+
+
 class WorkflowASTAnalyzer(ast.NodeVisitor):
     AST analyzer for extracting workflow components from Python code.
 
@@ -324,6 +328,8 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
             "    if child.value.id in self.imports:"                    return True
 
        " return False"
+
+
 
 class SecurityAnalysisMixin:
     Mixin to add security analysis capabilities to PyAgent orchestrators.

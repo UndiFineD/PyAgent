@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Proposer logic regarding EAGLE speculative decoding.
+"""
+
 
 from __future__ import annotations
 
@@ -35,6 +37,8 @@ try:
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
+
 
 
 class EagleProposer:
@@ -283,6 +287,8 @@ class EagleProposer:
         return padded_ids, padded_positions, padded_hidden
 
 
+
+
 class EagleProposerFactory:
     """Factory regarding creating EAGLE proposers.
     @staticmethod
@@ -314,6 +320,8 @@ class EagleProposerFactory:
             **kwargs,
         )
         return EagleProposer(config)
+
+
 
 
 class AsyncEagleProposer:

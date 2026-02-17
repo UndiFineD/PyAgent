@@ -29,6 +29,8 @@ WHAT IT SHOULD DO BETTER:
 - Validation & errors: validate inputs (vote_value range, id formats) and raise informative errors rather than silently coercing.  
 - API & observability: add methods to list voters, get raw vote maps, export/import (JSON), and emit events for changes; include unit tests and docstrings for public methods.  
 - Integration: expose adapter interface to plug in different backends and add optional dependency injection for better testability.
+"""
+
 
 from __future__ import annotations
 
@@ -37,6 +39,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class VotingSystem:

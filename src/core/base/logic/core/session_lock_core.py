@@ -18,6 +18,8 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 
 
+
+
 class SessionLockCore:
     """Core for managing multi-tenant session locking and space isolation."""
     def __init__(self, storage_path: str = "data/sessions"):"        self.storage_path = storage_path
@@ -39,5 +41,5 @@ class SessionLockCore:
         return False
 
     def validate_space(self, tenant_id: str, space_id: str) -> bool:
-        """Ensure space belongs to tenant (Isolation)."""# Placeholder for DB check
+        """Ensure space belongs to tenant (Isolation)."""# TODO Placeholder for DB check
         return True

@@ -18,6 +18,8 @@ VersionGate
 
 Unified Version Gatekeeper for PyAgent Fleet.
 Handles semantic versioning checks and capability validation.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ import logging
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class VersionGate:

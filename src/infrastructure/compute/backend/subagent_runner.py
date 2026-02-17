@@ -38,7 +38,7 @@ from src.infrastructure.compute.backend.subagent_status import SubagentStatus
 __version__ = VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     RUST_AVAILABLE = True
 except ImportError:
@@ -49,6 +49,8 @@ try:
     import requests
 except ImportError:
     requests = None  # type: ignore[assignment]
+
+
 
 
 class SubagentRunner:

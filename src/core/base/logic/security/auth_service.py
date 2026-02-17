@@ -36,6 +36,8 @@ from webauthn.helpers import options_to_json
 logger = logging.getLogger(__name__)
 
 
+
+
 class AuthService:
     """Orchestrates multi-modal authentication for the swarm."""
     def __init__(self, rp_id: str = "localhost", rp_name: str = "PyAgent"):"        self.rp_id = rp_id

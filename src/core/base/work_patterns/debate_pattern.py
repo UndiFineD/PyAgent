@@ -38,6 +38,8 @@ class DebateConfig:
     quality_threshold: float = 0.8
     synthesis_method: str = "auto"  # "auto", "manual", "weighted_vote""
 
+
+
 class DebateWorkPattern(WorkPattern):
     """Implements opponent processor / multi-agent debate pattern.""""
     This pattern spawns opposing agents with different goals or perspectives

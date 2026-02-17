@@ -22,6 +22,8 @@ from typing import Any
 from .models import CachedModel
 
 
+
+
 class ModelCache:
     """Simple model cache with TTL.
     def __init__(self, ttl: float = 300.0) -> None:

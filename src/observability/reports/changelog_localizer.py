@@ -22,6 +22,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ChangelogLocalizer:
     """Handles changelog localization to multiple languages.    Provides functionality to translate changelog entries to different
     languages for international users.

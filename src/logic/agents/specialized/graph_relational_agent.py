@@ -26,7 +26,7 @@ Instantiate GraphRelationalAgent with a workspace root and use its as_tool-wrapp
 - improve_content(prompt, target_file=None) to get a graph-enriched content summary
 
 WHAT IT DOES:
-Provides a minimal GraphRelationalAgent subclass of BaseAgent that maintains an in-memory dict of entities and a list of relations; exposes simple async tool-wrapped methods to add entities, add directed relations, query relations by source, and a placeholder improve_content that returns a graph-aware summary.
+Provides a minimal GraphRelationalAgent subclass of BaseAgent that maintains an in-memory dict of entities and a list of relations; exposes simple async tool-wrapped methods to add entities, add directed relations, query relations by source, and a TODO Placeholder improve_content that returns a graph-aware summary.
 
 WHAT IT SHOULD DO BETTER:
 - Persist the graph (disk/DB) and support transactional updates via StateTransaction for durability and rollback.
@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Graph relational agent.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -43,6 +45,8 @@ from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
+
+
 
 
 class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -75,6 +79,8 @@ from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
+
+
 
 
 class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors

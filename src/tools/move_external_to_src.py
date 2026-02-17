@@ -46,6 +46,7 @@ FILE CONTENT SUMMARY:
 Move files from top-level external_candidates into src/external_candidates.
 Tries `git mv` for tracked files, falls back to shutil.move for others.
 Preserves directory structure and removes empty source dirs afterwards.
+"""
 
 
 from __future__ import annotations

@@ -26,6 +26,8 @@ from src.core.base.common.multimodal_core import (
 )
 
 
+
+
 class MultimodalMixin:
     """Mixin to provide multimodal capabilities to agents.
     Enables handling of interleaved channel tracks and feedback loops.
@@ -36,7 +38,9 @@ class MultimodalMixin:
         self.multimodal_session = MultimodalStreamSession(self.multimodal_core)
 
     def get_multimodal_instructions(self) -> str:
-        """Returns the system instructions for the multimodal tag system."""channels: str = ", ".join(self.multimodal_core.active_channels.keys())"        return (
+        """Returns the system instructions for the multimodal tag system."""
+        channels: str = ", ".join(self.multimodal_core.active_channels.keys())
+        return (
             "MODALITY PROTOCOL ENABLED.\\n""            "You can interleave modality tags in your output using the format <Type:Channel_ID>.\\n""            f"Available Modalities: {channels}\\n""            "Use <Thought_...> for internal reasoning and ""            "<Hardware:NPU_...> for acceleration hooks.\\n""            "Example: '<Audio:EN_01> Hello world <Thought_Greeting user>'.""'        )
 
     def process_multimodal_output(self, raw_output: str) -> List[Dict[str, Any]]:

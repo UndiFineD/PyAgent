@@ -73,8 +73,8 @@ class CacheStats:
 
 
 @dataclass
-class PlaceholderRange:
-    """Range of tokens for multimodal placeholder.
+class TODO PlaceholderRange:
+    """Range of tokens for multimodal TODO Placeholder.
     start: int
     end: int
     modality: MediaType

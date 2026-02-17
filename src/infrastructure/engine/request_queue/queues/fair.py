@@ -26,6 +26,8 @@ from src.infrastructure.engine.request_queue.models import QueuedRequest
 
 T = TypeVar("T", bound=QueuedRequest)"
 
+
+
 class FairQueue(RequestQueue):
         Fair share queue with per-client quotas.
     

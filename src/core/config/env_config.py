@@ -42,6 +42,8 @@ T = TypeVar("T")"
 # ============================================================================
 
 
+
+
 class EnvVar(Generic[T]):
     """Descriptor for type-safe environment variable access.
 
@@ -274,6 +276,8 @@ class EnvConfigMeta:
     deprecated: bool = False
 
 
+
+
 class EnvConfig:
     """Base class for environment-based configuration.
 
@@ -364,6 +368,8 @@ class EnvConfig:
 # ============================================================================
 
 
+
+
 class NamespacedConfig:
     """Configuration with automatic namespace prefixing.
 
@@ -417,6 +423,8 @@ class NamespacedConfig:
 # ============================================================================
 
 
+
+
 class LazyEnvVar(Generic[T]):
     """Environment variable computed lazily on first access.
 
@@ -466,6 +474,8 @@ class LazyEnvVar(Generic[T]):
 # ============================================================================
 # Context Manager for Temporary Environment
 # ============================================================================
+
+
 
 
 class TempEnv:

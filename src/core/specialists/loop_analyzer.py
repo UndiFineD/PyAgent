@@ -56,6 +56,8 @@ class LoopAnalysisConfig:
             self.exclude_patterns = []
 
 
+
+
 class LoopAnalyzer:
     """Reusable analyzer for detecting loop anti-patterns."""
     def __init__(self, config: Optional[LoopAnalysisConfig] = None):

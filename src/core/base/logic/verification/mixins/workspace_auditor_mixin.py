@@ -29,6 +29,8 @@ except ImportError:
     HAS_RUST = False
 
 
+
+
 class WorkspaceAuditorMixin:
     """Methods regarding auditing the workspace regarding tech debt with Rust acceleration."""
     def audit_workspace(self, root_dir: str = "src") -> Dict[str, List]:"        """Performs a comprehensive health audit of the workspace codebase.

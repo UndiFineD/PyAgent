@@ -16,6 +16,8 @@
 """
 Phase 312: Autonomous Dependency Cleanup.
 Uses curate_dependencies logic to comment out unused requirements.
+"""
+
 
 from __future__ import annotations
 

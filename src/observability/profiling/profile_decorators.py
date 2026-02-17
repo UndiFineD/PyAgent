@@ -195,6 +195,8 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
     return decorator
 
 
+
+
 class ProfileAccumulator:
         Accumul"""ate"""s profiling data across multiple calls.""""
     Useful for tracking function performance over time.

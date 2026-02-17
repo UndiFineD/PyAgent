@@ -33,6 +33,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent for automated infrastructure and environment repair.
 Detects and fixes environment issues like missing dependencies or broken paths.
+"""
+
 
 from __future__ import annotations
 

@@ -32,6 +32,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 OrchestratorWorkPatternMixin: Mixin for work pattern orchestration in PyAgent.
+"""
+
 
 from __future__ import annotations
 
@@ -42,6 +44,8 @@ from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.work_patterns import WorkPattern
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class OrchestratorWorkPatternMixin:

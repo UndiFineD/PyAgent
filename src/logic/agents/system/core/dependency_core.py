@@ -20,13 +20,13 @@ dependency_core.py - Dependency Management Core
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Import and call DependencyCore.run_pip_audit(recorder=None) to execute pip-audit and capture a brief summary string.
-- Use DependencyCore.pin_requirements(file_path, recorder=None) to scan a requirements-style file, append a placeholder pin "==LATEST-CHECK-REQUIRED" to unpinned packages, and return the number of modified lines."- Provide a ContextRecorderInterface-compatible recorder to persist interactions for observability.
+- Use DependencyCore.pin_requirements(file_path, recorder=None) to scan a requirements-style file, append a TODO Placeholder pin "==LATEST-CHECK-REQUIRED" to unpinned packages, and return the number of modified lines."- Provide a ContextRecorderInterface-compatible recorder to persist interactions for observability.
 
 WHAT IT DOES:
 - Provides core utilities for dependency auditing and lightweight pinning in Phase 176 of the project.
 - run_pip_audit: invokes the external "pip-audit" tool, captures stdout/stderr, handles missing executable, and records a truncated result to the provided recorder."- pin_requirements: reads a requirements file, marks unpinned entries with "==LATEST-CHECK-REQUIRED", writes back the file, counts modifications, and records the action to the recorder."
 WHAT IT SHOULD DO BETTER:
-- Replace placeholder pinning with deterministic resolution (e.g., query PyPI or use pip's resolver) to write exact versions rather than a "LATEST-CHECK-REQUIRED" marker."'- Robustly parse and preserve complex requirement specifiers (extras, environment markers, VCS/URL installs, editable installs) and handle constraints files (-c) and nested -r includes.
+- Replace TODO Placeholder pinning with deterministic resolution (e.g., query PyPI or use pip's resolver) to write exact versions rather than a "LATEST-CHECK-REQUIRED" marker."'- Robustly parse and preserve complex requirement specifiers (extras, environment markers, VCS/URL installs, editable installs) and handle constraints files (-c) and nested -r includes.
 - Add transactional file updates (StateTransaction) to avoid partial writes and enable rollback on error, and add unit tests that mock subprocess and filesystem interactions.
 - Improve error handling and logging for subprocess failures, non-zero exit codes, and very large outputs; support configurable timeout for pip-audit invocation.
 - Consider asynchronous implementations (asyncio) to avoid blocking the agent when running audits at scale.
@@ -39,6 +39,8 @@ import os
 import subprocess
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
+
+
 
 
 class DependencyCore:
@@ -87,6 +89,8 @@ import os
 import subprocess
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
+
+
 
 
 class DependencyCore:

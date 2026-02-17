@@ -40,6 +40,8 @@ import pytest
 # ============================================================================
 
 
+
+
 class TestLMStudioConfig:
     """Tests for LMStudioConfig dataclass."""
 
@@ -156,6 +158,8 @@ class TestLMStudioConfig:
         assert config.api_host == "example.com:8080"
 
 
+
+
 class TestModelCache:
     """Tests for ModelCache class."""
 
@@ -203,6 +207,8 @@ class TestModelCache:
         time.sleep(0.02)
         removed = cache.prune_expired()
         assert removed == 2
+
+
 
 
 class TestLMStudioBackend:
@@ -368,6 +374,8 @@ class TestLMStudioBackend:
         mock_client.close.assert_called_once()
 
 
+
+
 class TestLMStudioConvenienceFunctions:
     """Tests for convenience functions."""
 
@@ -435,6 +443,8 @@ class TestLMStudioConvenienceFunctions:
 # MsgSpec Serializer Tests
 # ============================================================================
 
+
+
 class TestMsgSpecAvailability:
     """Tests for msgspec availability and module imports."""
 
@@ -450,6 +460,8 @@ class TestMsgSpecAvailability:
 
         # Should not raise
         require_msgspec()
+
+
 
 
 class TestJSONEncoder:
@@ -501,6 +513,8 @@ class TestJSONEncoder:
         assert [r["id"] for r in results] == [1, 2, 3]
 
 
+
+
 class TestMsgPackEncoder:
     """Tests for MsgPackEncoder class."""
 
@@ -533,6 +547,8 @@ class TestMsgPackEncoder:
         msgpack_size = len(msgpack_enc.encode(data))
 
         assert msgpack_size < json_size
+
+
 
 
 class TestTypedSerializer:
@@ -596,6 +612,8 @@ class TestTypedSerializer:
         assert len(parsed) == 3
 
 
+
+
 class TestChatMessageStructs:
     """Tests for chat message structures."""
 
@@ -640,6 +658,8 @@ class TestChatMessageStructs:
         assert not request.stream
 
 
+
+
 class TestChatHelpers:
     """Tests for chat encoding/decoding helpers."""
 
@@ -660,6 +680,8 @@ class TestChatHelpers:
         parsed = json.loads(encoded)
         assert parsed["model"] == "test"
         assert len(parsed["messages"]) == 2
+
+
 
 
 class TestBenchmarking:
@@ -687,6 +709,8 @@ class TestBenchmarking:
 # ============================================================================
 # Integration Tests
 # ============================================================================
+
+
 
 
 class TestLLMClientIntegration:
@@ -720,6 +744,8 @@ class TestLLMClientIntegration:
         # Check source code contains lmstudio in known_backends
         source = inspect.getsource(LLMClient.smart_chat)
         assert "lmstudio" in source
+
+
 
 
 class TestPhase21ModuleStructure:

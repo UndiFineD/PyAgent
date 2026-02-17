@@ -14,7 +14,8 @@
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py
+"""
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -27,21 +28,22 @@ __version__ = VERSION
 
 @dataclass
 class QueuedRequest:
-    """A request waiting in the queue.""""
+    """A request waiting in the queue.
     Attributes:
         priority: Request priority (higher=more urgent).
         timestamp: When request was queued.
         request_id: Unique request identifier.
         prompt: The prompt to send.
         callback: Optional callback function.
-    
+    """
     priority: int
     timestamp: float
     request_id: str
     prompt: str
     callback: Callable[[str], None] | None = None
 
-    def __lt__(self, other: QueuedRequest) -> bool:
-        """Compare by priority (descending) then timestamp (ascending).        if self.priority != other.priority:
+    def __lt__(self, other: 'QueuedRequest') -> bool:
+        """Compare by priority (descending) then timestamp (ascending)."""
+        if self.priority != other.priority:
             return self.priority > other.priority  # Higher priority first
         return self.timestamp < other.timestamp  # Earlier first

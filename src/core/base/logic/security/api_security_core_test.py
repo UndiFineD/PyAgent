@@ -25,6 +25,8 @@ from src.core.base.logic.security.api_security_core import (
     Authenticator, ErrorHandler, RateLimitConfig, SecurityEvent
 )
 
+
+
 class TestInputValidator:
     def test_sanitize_string_removes_injection(self):
         dangerous_input = "<script>alert('xss')</script> UNION SELECT * FROM users""'        sanitized = InputValidator.sanitize_input(dangerous_input)
@@ -54,6 +56,8 @@ class TestRateLimiter:
         limiter = RateLimiter(RateLimitConfig(requests_per_minute=10, burst_limit=1))
         agent_id = "test-agent""        assert limiter.is_allowed(agent_id)
         assert not limiter.is_allowed(agent_id)
+
+
 
 class TestAuthenticator:
     def test_register_and_authenticate(self):
@@ -90,6 +94,8 @@ class TestErrorHandler:
             event_type="AUTHENTICATION_FAILED","            agent_id="agent-1","            details={"ip": "192.168.1.1"},"            severity="WARNING""        )
         ErrorHandler.log_security_event(event)
         mock_logging.getLogger.return_value.warning.assert_called_once()
+
+
 
 class TestAPISecurityCore:
     @pytest.fixture

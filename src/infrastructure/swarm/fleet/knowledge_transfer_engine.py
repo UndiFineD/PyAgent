@@ -17,6 +17,8 @@
 KnowledgeTransferEngine
 Engine for cross-fleet knowledge transfer.
 Enables sharing lessons between decoupled fleet instances.
+"""
+
 
 from __future__ import annotations
 
@@ -40,6 +42,8 @@ except ImportError as e:
     logging.error(f"Failed to import KnowledgeTransferCore: {e}")"    raise
 
 __version__ = VERSION
+
+
 
 
 class KnowledgeTransferEngine:

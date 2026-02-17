@@ -58,6 +58,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Module: code_improver
 Autonomous Codebase Evolution Loop for self-optimizing system logic.
+"""
+
 
 from __future__ import annotations
 import asyncio
@@ -68,6 +70,8 @@ if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class EvolutionLoop:

@@ -14,6 +14,8 @@
 
 
 Engine.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ import numpy as np
 
 from .config import LogprobEntry, LogprobFormat, TopLogprob
 from .storage import FlatLogprobs
+
+
 
 
 class LogprobsProcessor:
@@ -100,6 +104,8 @@ class LogprobsProcessor:
             with contextlib.suppress(AttributeError, ValueError, RuntimeError):
                 return tokenizer.decode([tid])
         return f"<{tid}>""
+
+
 
 class StreamingLogprobs:
     """Streaming logprobs accumulator.

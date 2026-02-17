@@ -50,6 +50,8 @@ import fitz  # PyMuPDF
 from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 
+
+
 class ArxivCore:
 """"Core logic for interacting with Arxiv research papers.
     def __init__(self, download_dir: str = "data/research") -> None:"        self._workspace_root = os.getcwd()
@@ -110,6 +112,8 @@ import arxiv
 import fitz  # PyMuPDF
 
 from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+
+
 
 
 class ArxivCore:

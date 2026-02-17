@@ -31,6 +31,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Fleet economy agent.py module.
+"""
 
 
 from __future__ import annotations
@@ -44,6 +45,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -118,6 +121,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors

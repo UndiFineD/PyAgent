@@ -31,6 +31,8 @@ WHAT IT SHOULD DO BETTER:
 - Provide serialization helpers (to_dict/from_dict/JSON) and clear defaults for common SLA profiles to reduce caller boilerplate.
 - Consider immutability (frozen dataclass) or explicit mutation methods, add type-checked collections (tuple[str, ...]) and runtime type enforcement, plus comprehensive unit tests and doc examples.
 - Consider using timedelta for durations and timezone-aware handling if SLA logic later depends on business hours or calendar-awareness.
+"""
+
 
 from __future__ import annotations
 

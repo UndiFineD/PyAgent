@@ -19,6 +19,8 @@ Fast Serialization with msgpack and CBOR support.
 
 Phase 19: Beyond vLLM - Performance Patterns
 High-performance serialization for inter-process communication.
+"""
+
 
 from __future__ import annotations
 
@@ -34,6 +36,8 @@ from enum import Enum, auto
 from typing import Any, Dict, List, Optional, TypeVar
 
 T = TypeVar("T")"
+
+
 
 class SerializationFormat(Enum):
     """Supported serialization formats.
@@ -70,6 +74,8 @@ class SerializerStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary.        return {
             "serializations": self.serializations,"            "deserializations": self.deserializations,"            "bytes_serialized": self.bytes_serialized,"            "bytes_deserialized": self.bytes_deserialized,"            "errors": self.errors,"            "avg_serialize_time_us": self.avg_serialize_time_us,"            "avg_deserialize_time_us": self.avg_deserialize_time_us,"        }
+
+
 
 
 class Serializer(ABC):
@@ -138,6 +144,8 @@ class Serializer(ABC):
         """Get serializer statistics.        return self._stats
 
 
+
+
 class JSONSerializer(Serializer):
     """JSON serializer with optional compression.
     def __init__(
@@ -182,6 +190,8 @@ class JSONSerializer(Serializer):
 
         return json.loads(data.decode("utf-8"))"
 
+
+
 class PickleSerializer(Serializer):
     """Pickle serializer with protocol selection.
     def __init__(
@@ -218,6 +228,8 @@ class PickleSerializer(Serializer):
             data = zlib.decompress(data)
 
         return pickle.loads(data)
+
+
 
 
 class MsgPackSerializer(Serializer):
@@ -276,6 +288,8 @@ class MsgPackSerializer(Serializer):
         )
 
 
+
+
 class CBORSerializer(Serializer):
         CBOR serializer for cross-language compatibility.
 
@@ -311,6 +325,8 @@ class CBORSerializer(Serializer):
         """Deserialize from CBOR bytes.        if not self._available:
             return json.loads(data.decode("utf-8"))"
         return self._cbor2.loads(data)
+
+
 
 
 class BinarySerializer(Serializer):
@@ -410,6 +426,8 @@ class BinarySerializer(Serializer):
 
         else:
             raise ValueError(f"Unknown tag: {tag}")"
+
+
 
 class SerializerRegistry:
         Registry for serializers with format negotiation.

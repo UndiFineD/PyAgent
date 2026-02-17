@@ -18,6 +18,8 @@ from hypothesis import given, strategies as st, settings, HealthCheck
 from src.core.base.common.convergence_core import ConvergenceCore
 
 
+
+
 class TestConvergenceCore:
     @pytest.fixture
     def convergence_core(self):

@@ -14,6 +14,8 @@
 
 
 Debug script for testing Phases 20 (Visual/Multimodal) and 21 (Distributed Observability).
+"""
+
 
 from __future__ import annotations
 

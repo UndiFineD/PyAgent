@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Operational cost agent module for estimating improvement cycle costs.
+"""
+
 
 from __future__ import annotations
 
@@ -43,6 +45,8 @@ from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
+
+
 
 
 class OperationalCostAgent(BaseAgent):  # pylint: disable=too-many-ancestors

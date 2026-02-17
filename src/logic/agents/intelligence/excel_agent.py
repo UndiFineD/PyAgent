@@ -40,12 +40,16 @@ Excel agent.py module.
 from .data_intelligence_agent import DataIntelligenceAgent
 
 
+
+
 class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
 """"Agent specialized in Excel spreadsheet processing and data extraction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the ExcelAgent (via DataIntelligence core)."
 from .data_intelligence_agent import DataIntelligenceAgent
+
+
 
 
 class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors

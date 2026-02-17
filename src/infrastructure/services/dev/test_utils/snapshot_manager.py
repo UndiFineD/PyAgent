@@ -29,6 +29,8 @@ from .test_snapshot import TestSnapshot
 __version__ = VERSION
 
 
+
+
 class SnapshotManager:
     """Manages snapshots for snapshot testing.""""
     Example:

@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ProfilingCategory(Enum):
     """Categories for code profiling suggestions."""
     CPU_BOUND = "cpu_bound""    IO_BOUND = "io_bound""    MEMORY_INTENSIVE = "memory_intensive""    NETWORK_BOUND = "network_bound""

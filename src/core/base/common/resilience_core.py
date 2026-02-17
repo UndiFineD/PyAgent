@@ -26,7 +26,7 @@ import threading
 from typing import Any, Callable, Coroutine, TypeVar
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None  # type: ignore[assignment]
 
@@ -34,6 +34,8 @@ from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.resilience")"
 T = TypeVar("T")"
+
+
 
 class ResilienceCore(BaseCore):
     """Standard implementation of Agent Resilience and Fault Tolerance.

@@ -16,19 +16,23 @@
 Module: double_ratchet
 Python implementation of the Signal Protocol (Double Ratchet) for swarm E2EE.
 Accelerated by rust_core for KDF steps.
+"""
+
 
 from __future__ import annotations
 import logging
 from typing import Optional, Tuple
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
     RUST_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class DoubleRatchet:

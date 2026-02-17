@@ -52,6 +52,8 @@ except ImportError:
 __version__ = VERSION
 
 
+
+
 class MergeDetector:
     """Detects improvements that can be merged.""""
     Finds duplicate or similar improvements across files.
@@ -164,6 +166,8 @@ except ImportError:
     _RUST_AVAILABLE = False
 
 __version__ = VERSION
+
+
 
 
 class MergeDetector:

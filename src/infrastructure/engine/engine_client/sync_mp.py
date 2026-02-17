@@ -15,6 +15,8 @@
 
 Phase 45: Synchronous Multi-process Engine Client
 ZMQ-based synchronous client.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ if TYPE_CHECKING:
         EngineClientConfig, SchedulerOutput)
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"        Synchronous multi-process engine client with ZMQ.

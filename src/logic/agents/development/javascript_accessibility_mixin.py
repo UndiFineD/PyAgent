@@ -57,6 +57,8 @@ from src.core.base.common.types.accessibility_severity import \
 from src.core.base.common.types.wcag_level import WCAGLevel
 
 
+
+
 class JavascriptAccessibilityMixin:
 """"Mixin for Javascript UI accessibility analysis.
     def _analyze_javascript_ui(self, content: str) -> None:
@@ -101,6 +103,8 @@ from src.core.base.common.types.accessibility_issue_type import \
 from src.core.base.common.types.accessibility_severity import \
     AccessibilitySeverity
 from src.core.base.common.types.wcag_level import WCAGLevel
+
+
 
 
 class JavascriptAccessibilityMixin:

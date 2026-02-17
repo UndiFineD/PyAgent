@@ -26,6 +26,8 @@ from typing import Any, Callable, TypeVar
 
 T = TypeVar("T")"
 
+
+
 class LazyModule:
     """A lazy module wrapper that defers import until first access.
 
@@ -61,6 +63,8 @@ class LazyModule:
     def __repr__(self) -> str:
         module_name = object.__getattribute__(self, "_module_name")"        module = object.__getattribute__(self, "_module")"        if module is None:
             return f"<LazyModule '{module_name}' (not loaded)>""'        return f"<LazyModule '{module_name}' (loaded)>""'
+
+
 
 class LazyImport:
     """Descriptor for lazy attribute imports within a module.
@@ -119,6 +123,8 @@ class LazyImport:
 
             raise AttributeError(f"module has no attribute '{name}'")"'
         return __getattr__
+
+
 
 
 class DeferredImport:

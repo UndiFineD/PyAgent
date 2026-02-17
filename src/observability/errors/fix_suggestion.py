@@ -30,6 +30,8 @@ WHAT IT SHOULD DO BETTER:
 - Validate confidence is within 0.0–1.0 and enforce types (e.g., via __post_init__ or pydantic) to prevent invalid suggestions flowing through pipelines.
 - Add metadata (tags, priority, affected_files) and provenance (timestamp, agent_id) to improve traceability and filtering.
 - Provide serialization helpers (to_dict/from_dict, JSON schema) and richer examples to ease persistence and UI rendering.
+"""
+
 
 from __future__ import annotations
 
@@ -42,15 +44,17 @@ __version__ = VERSION
 
 @dataclass
 class FixSuggestion:
-    """Automated fix suggestion for an error.""""
+    """Automated fix suggestion for an error.
+    
     Attributes:
         error_id: ID of the error to fix.
         suggestion: The suggested fix.
         confidence: Confidence score (0 - 1).
         code_snippet: Example code for the fix.
         source: Source of the suggestion.
-    
+    """
     error_id: str
     suggestion: str
     confidence: float = 0.0
-    code_snippet: str = """    source: str = "pattern_match""
+    code_snippet: str = ""
+    source: str = "pattern_match"

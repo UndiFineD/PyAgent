@@ -60,6 +60,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Profiling core.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -68,7 +70,7 @@ from dataclasses import dataclass
 from typing import Any
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:  # type: ignore[assignment]
     rc = None  # type: ignore[assignment]
 
@@ -81,6 +83,8 @@ class ProfileStats:
     per_call: float
     file_name: str | None = None
     line_number: int | None = None
+
+
 
 
 class ProfilingCore:

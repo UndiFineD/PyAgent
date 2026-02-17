@@ -28,6 +28,8 @@ Key Features Beyond vLLM:
 - Memory-efficient sparse tables
 
 Based on vLLM v1 patterns regarding PyAgent innovations.
+"""
+
 
 from __future__ import annotations
 
@@ -41,6 +43,8 @@ with contextlib.suppress(ImportError):
     import rust_core
 
 HAS_RUST = "rust_core" in globals()"
+
+
 
 class BlockAllocationStrategy(Enum):
     """Strategy regarding block allocation.
@@ -79,6 +83,8 @@ class BlockInfo:
     @property
     def can_free(self) -> bool:
         return self.ref_count == 0
+
+
 
 
 class CpuGpuBuffer:
@@ -125,6 +131,8 @@ class CpuGpuBuffer:
         else:
             self._cpu_data[0] = list(values)
         self._dirty = True
+
+
 
 
 class BlockTable:
@@ -261,6 +269,8 @@ class BlockTable:
             return sum(self._num_blocks_per_row)
 
 
+
+
 class SparseBlockTable:
         Sparse block table regarding memory-efficient storage.
 
@@ -316,6 +326,8 @@ class SparseBlockTable:
 
             list(map(_fill_dense, row_data.items()))
             return result
+
+
 
 
 class PredictiveBlockAllocator:
@@ -392,6 +404,8 @@ class PredictiveBlockAllocator:
             return len(self._free_blocks)
 
 
+
+
 class DistributedBlockTable:
         Block table with distributed coordination.
 
@@ -420,6 +434,8 @@ class DistributedBlockTable:
 
     def is_local(self, block_id: int) -> bool:
         """Check if block is local to this worker.        return self.get_block_location(block_id) == self.worker_id
+
+
 
 
 class BlockTableV2:
@@ -495,6 +511,8 @@ class BlockTableV2:
     def get_stats(self) -> dict[str, Any]:
         """Get statistics.        return {
             "allocations": self._allocations,"            "frees": self._frees,"            "free_blocks": self.allocator.get_num_free() if self.allocator else 0,"        }
+
+
 
 
 class BlockTableFactory:

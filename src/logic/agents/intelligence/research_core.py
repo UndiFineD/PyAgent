@@ -35,6 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Research core.py module.
+"""
 
 
 from __future__ import annotations
@@ -42,13 +43,15 @@ from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
+
+
 
 
 class ResearchCore:
@@ -107,13 +110,15 @@ from __future__ import annotations
 from src.core.base.lifecycle.version import VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
+
+
 
 
 class ResearchCore:

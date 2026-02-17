@@ -49,6 +49,8 @@ class ResourceUsage:
         """Calculate elapsed time in seconds."""return time.time() - self.start_time
 
 
+
+
 class ResourceCore(BaseCore):
     """Authoritative engine for resource quota enforcement.
     """

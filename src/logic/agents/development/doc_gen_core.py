@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for extracting and formatting documentation from Python source code.
 No file I/O or side effects; designed for type safety and Rust FFI compatibility.
+"""
+
 
 from __future__ import annotations
 
@@ -45,6 +47,8 @@ import os
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class DocGenCore:
@@ -106,6 +110,8 @@ import os
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class DocGenCore:

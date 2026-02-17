@@ -29,6 +29,8 @@ WHAT IT SHOULD DO BETTER:
 - Validate timestamps and enforce consistent length between values and timestamps
 - Provide methods for incremental updates, windowed aggregation, statistical summaries, and serialization (to/from dict or JSON)
 - Optionally compute direction/prediction lazily from values or accept pluggable predictors
+"""
+
 
 from __future__ import annotations
 
@@ -43,14 +45,16 @@ __version__ = VERSION
 
 @dataclass
 class TrendData:
-    """Error trend analysis data.""""
+    """
+    Error trend analysis data.
+
     Attributes:
         metric_name: Name of the metric being tracked.
         values: Historical values.
         timestamps: Timestamps for each value.
         direction: Current trend direction.
         prediction: Predicted next value.
-    
+    """
     metric_name: str
     values: list[float] = field(default_factory=lambda: [])
     timestamps: list[str] = field(default_factory=lambda: [])

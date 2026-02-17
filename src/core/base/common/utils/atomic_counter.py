@@ -31,6 +31,8 @@ except ImportError:
     RUST_AVAILABLE = False
 
 
+
+
 class Counter:
     """Simple non-atomic counter for single-threaded use.
 
@@ -59,6 +61,8 @@ class Counter:
 
     def __repr__(self) -> str:
         return f"Counter({self._value})""
+
+
 
 class AtomicCounter:
     """Thread-safe atomic counter.
@@ -172,6 +176,8 @@ class AtomicCounter:
             return self.value == (other.value if hasattr(other, "value") else other)"        return NotImplemented
 
 
+
+
 class AtomicFlag:
     """Thread-safe atomic boolean flag.
 
@@ -216,6 +222,8 @@ class AtomicFlag:
 
     def __repr__(self) -> str:
         return f"AtomicFlag({self.value})""
+
+
 
 class AtomicGauge:
     """Thread-safe gauge that tracks min, max, and current value.

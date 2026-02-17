@@ -19,6 +19,8 @@ import pytest
 from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
+
+
 class MockTaskQueueAgent(TaskQueueMixin):
     """Mock agent for testing TaskQueueMixin."""
     def __init__(self, **kwargs):
@@ -27,6 +29,8 @@ class MockTaskQueueAgent(TaskQueueMixin):
     async def _process_task(self, task_data):
         """Mock task processing."""await asyncio.sleep(0.1)  # Simulate processing time
         return f"processed_{task_data['job_id']}""'
+
+
 
 class TestTaskQueueMixin:
     """Test TaskQueueMixin functionality."""

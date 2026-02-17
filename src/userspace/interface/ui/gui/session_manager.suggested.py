@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class SessionManager:
     """Handles saving and loading of the GUI state.
     def __init__(self, default_filename="gui_session.json") -> None:"        self.default_filename: str = default_filename

@@ -26,6 +26,8 @@ from src.logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore
 __version__ = VERSION
 
 
+
+
 class IntentionPredictionAgent:
     Predicts the future actions and goals of peer agents in the "fleet."#     Integrated with MetacognitiveCore for intent prediction and pre-warming.
 

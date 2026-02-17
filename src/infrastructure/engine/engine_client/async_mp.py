@@ -15,6 +15,8 @@
 
 Phase 45: Async Multi-process Engine Client
 Queue-based asynchronous client.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ if TYPE_CHECKING:
         EngineClientConfig, SchedulerOutput)
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"        Async multi-process engine client with queue handlers.

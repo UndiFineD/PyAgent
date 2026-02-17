@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Stop condition checker for detokenization.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ try:
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
+
 
 
 class StopChecker:

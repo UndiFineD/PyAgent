@@ -50,6 +50,8 @@ class PeerInfo:
         """Serializes peer info to a dictionary.        return asdict(self)
 
 
+
+
 class LANDiscovery:
         Decentralized LAN Discovery for PyAgents.
     Follows an Announce -> Respond -> Register -> Sync cycle.

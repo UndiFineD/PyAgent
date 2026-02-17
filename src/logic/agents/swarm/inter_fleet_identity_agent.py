@@ -34,6 +34,8 @@ FILE CONTENT SUMMARY:
 InterFleetIdentityAgent: Swarm agent for managing identity, authentication, and trust relationships
 between PyAgent fleets. Supports secure federation, cross-fleet authorization, and distributed
 identity management.
+"""
+
 
 from __future__ import annotations
 
@@ -47,6 +49,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.identity_core import IdentityCore
 
 __version__ = VERSION
+
+
 
 
 class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -105,6 +109,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.core.identity_core import IdentityCore
 
 __version__ = VERSION
+
+
 
 
 class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors

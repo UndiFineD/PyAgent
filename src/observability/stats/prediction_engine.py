@@ -48,6 +48,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Prediction engine.py module.
 # Forecasting and change detection engine.
+"""
+
 
 from __future__ import annotations
 
@@ -57,6 +59,8 @@ import math
 from typing import Any, Callable
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class StatsChangeDetector:
@@ -107,6 +111,8 @@ class StatsChangeDetector:
         return list(self._changes)
 
 
+
+
 class StatsForecaster:
     """Forecasts future metric values.
     def __init__(self, window_size: int = 10) -> None:
@@ -141,7 +147,7 @@ class StatsForecaster:
     def predict_with_confidence(self, historical: list[float], periods: int = 2) -> dict[str, list[float]]:
         # Rust optimization
         with contextlib.suppress(ImportError, AttributeError, Exception):
-            import rust_core as rc
+            import rust_core as rc  # pylint: disable=no-member
 
             preds, lower, upper = rc.predict_with_confidence_rust([float(v) for v in historical], periods)
             return {
@@ -160,6 +166,8 @@ class StatsForecaster:
         return {
             "predictions": preds,"            "confidence_lower": [p - margin for p in preds],"            "confidence_upper": [p + margin for p in preds],"        }
 # Forecasting and change detection engine.
+"""
+
 
 from __future__ import annotations
 
@@ -169,6 +177,8 @@ import math
 from typing import Any, Callable
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class StatsChangeDetector:
@@ -219,6 +229,8 @@ class StatsChangeDetector:
         return list(self._changes)
 
 
+
+
 class StatsForecaster:
     """Forecasts future metric values.
     def __init__(self, window_size: int = 10) -> None:
@@ -253,7 +265,7 @@ class StatsForecaster:
     def predict_with_confidence(self, historical: list[float], periods: int = 2) -> dict[str, list[float]]:
         # Rust optimization
         with contextlib.suppress(ImportError, AttributeError, Exception):
-            import rust_core as rc
+            import rust_core as rc  # pylint: disable=no-member
 
             preds, lower, upper = rc.predict_with_confidence_rust([float(v) for v in historical], periods)
             return {

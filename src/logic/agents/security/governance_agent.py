@@ -32,7 +32,7 @@ WHAT IT DOES:
 - Provides tools to submit proposals, record them to disk, and log metadata via the agent _record pipeline.
 - Allows agents to cast votes with rationale, enforces one-vote-per-agent, persists votes, and records vote events.
 - Closes proposals, tallies votes, determines a winner, and writes results back to the proposal artifact.
-- Supplies a small async placeholder improve_content method and CLI entrypoint integration via create_main_function.
+- Supplies a small async TODO Placeholder improve_content method and CLI entrypoint integration via create_main_function.
 
 WHAT IT SHOULD DO BETTER:
 - Add authentication/authorization and stronger identity verification for proposers and voters to prevent spoofing.
@@ -44,6 +44,8 @@ FILE CONTENT SUMMARY:
 GovernanceAgent for PyAgent.
 Specializes in multi-agent proposal deliberation, voting, and fleet-wide policy management.
 Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
+"""
+
 
 from __future__ import annotations
 
@@ -59,6 +61,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -204,6 +208,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors

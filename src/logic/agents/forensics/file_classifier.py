@@ -58,6 +58,8 @@ class FileAnalysisResult:
     embedded_files: List[Dict] = field(default_factory=list)
 
 
+
+
 class FileClassifier:
     Analyzes files to determine type, calculate hashes, and identify suspicious" content."    Ported concepts from 0xSojalSec-Catalyzer and 0xSojalSec-CanaryTokenScanner.
 

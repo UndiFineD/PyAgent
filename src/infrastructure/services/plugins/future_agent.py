@@ -15,6 +15,8 @@
 
 """
 Future agent.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ __version__ = VERSION
 
 """Plugin demonstrating forward-compatibility testing for the SDK.
 SDK_REQUIRED = "10.0.0""
+
+
 
 class FutureAgent:
     """Test agent for verifying forward compatibility with future SDK versions.

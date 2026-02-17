@@ -15,6 +15,8 @@
 
 Module: zero_trust
 Implements a swarm-wide Zero-Trust Firewall for agent communication.
+"""
+
 
 from __future__ import annotations
 import logging
@@ -22,13 +24,15 @@ import json
 from typing import Any, Dict
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
     RUST_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class ZeroTrustFirewall:

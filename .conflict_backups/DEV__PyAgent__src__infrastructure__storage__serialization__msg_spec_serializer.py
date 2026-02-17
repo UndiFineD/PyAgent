@@ -209,6 +209,8 @@ if MSGSPEC_AVAILABLE:
 # =============================================================================
 
 
+
+
 class JSONEncoder:
     """
     High-performance JSON encoder using msgspec.
@@ -292,6 +294,8 @@ class JSONEncoder:
                 yield self._decoder.decode(line)
 
 
+
+
 class MsgPackEncoder:
     """
     High-performance MessagePack encoder using msgspec.
@@ -348,6 +352,8 @@ class MsgPackEncoder:
 # =============================================================================
 # Typed Serializers
 # =============================================================================
+
+
 
 
 class TypedSerializer(Generic[T]):

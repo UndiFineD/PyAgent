@@ -40,6 +40,8 @@ FILE CONTENT SUMMARY:
 Agent specializing in Model Context Protocol (MCP) integration.
 Acts as a bridge between the PyAgent fleet and external MCP servers.
 Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
+"""
+
 
 from __future__ import annotations
 
@@ -54,6 +56,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.mcp_connector import MCPConnector
 
 __version__ = VERSION
+
+
 
 
 class MCPAgent:
@@ -119,6 +123,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.mcp_connector import MCPConnector
 
 __version__ = VERSION
+
+
 
 
 class MCPAgent:

@@ -30,6 +30,8 @@ FILE CONTENT SUMMARY:
 RewardModelAgent for PyAgent.
 Specializes in ranking multiple agent outputs to facilitate Reinforcement Learning from AI Feedback (RLAIF).
 Used in Phase 42 for model distillation and fine-tuning loops.
+"""
+
 
 from __future__ import annotations
 
@@ -41,6 +43,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class RewardModelAgent(BaseAgent):
@@ -110,6 +114,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class RewardModelAgent(BaseAgent):

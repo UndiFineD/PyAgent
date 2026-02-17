@@ -30,6 +30,8 @@ from src.core.base.common.models.communication_models import CascadeContext
 logger = logging.getLogger(__name__)
 
 
+
+
 class AgentStatus(Enum):
     """Agent lifecycle status"""ACTIVE = "active""    ELITE = "elite""    DEPRECATED = "deprecated""    INTEGRATED = "integrated""
 
@@ -61,6 +63,8 @@ class TaskRequirements:
     complexity_score: float  # 0.0 to 1.0
     estimated_duration: float  # seconds
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+
 
 
 class AgentPoolManager:

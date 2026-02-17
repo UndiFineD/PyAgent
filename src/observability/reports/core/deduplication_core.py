@@ -65,9 +65,11 @@ import json
 from typing import Any
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None  # type: ignore[assignment]
+
+
 
 
 class DeduplicationCore:

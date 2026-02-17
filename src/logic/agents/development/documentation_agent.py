@@ -47,6 +47,8 @@ from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 __version__ = VERSION
 
 
+
+
 class DocumentationAgent(BaseAgent):
 """"Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
@@ -91,6 +93,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 __version__ = VERSION
+
+
 
 
 class DocumentationAgent(BaseAgent):

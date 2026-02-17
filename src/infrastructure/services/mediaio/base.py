@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Base loader class for all media types.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ from abc import ABC, abstractmethod
 from typing import BinaryIO, Union
 
 from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
+
+
 
 
 class MediaLoader(ABC):

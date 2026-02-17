@@ -64,6 +64,8 @@ class BatchStats:
             "total_items": self.total_items,"            "total_batches": self.total_batches,"            "avg_batch_size": round(self.avg_batch_size, 2),"            "avg_wait_time_ms": round(self.avg_wait_time_ms, 2),"            "max_batch_size_seen": self.max_batch_size_seen,"        }
 
 
+
+
 class AsyncMicrobatcher(Generic[T, R]):
         Async micro-batcher that collects items and processes them in batches.
 
@@ -238,6 +240,8 @@ class AsyncMicrobatcher(Generic[T, R]):
         for item in batch:
             if not item.future.done():
                 item.future.set_exception(exc)
+
+
 
 
 class SyncMicrobatcher(Generic[T, R]):

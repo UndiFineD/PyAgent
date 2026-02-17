@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Models for Prompt Rendering.
+"""
+
 
 from __future__ import annotations
 
@@ -23,13 +25,19 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 
+
+
 class TruncationStrategy(Enum):
     """Prompt truncation strategies.
     NONE = "none""    AUTO = "auto""    LEFT = "left""    RIGHT = "right""    MIDDLE = "middle""    SMART = "smart""
 
+
+
 class InputType(Enum):
     """Input types for prompt rendering.
     TEXT = "text""    TOKENS = "tokens""    EMBEDDING = "embedding""    MULTIMODAL = "multimodal""
+
+
 
 class RenderMode(Enum):
     """Rendering modes.

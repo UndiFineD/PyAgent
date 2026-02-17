@@ -16,6 +16,8 @@
 
 """
 Multiproc logic.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ from src.infrastructure.services.executor.multiproc.base import Executor
 from src.infrastructure.services.executor.multiproc.future import FutureWrapper
 from src.infrastructure.services.executor.multiproc.types import (
     ResultMessage, TaskMessage, WorkerInfo, WorkerState)
+
+
 
 
 class MultiprocExecutor(Executor):

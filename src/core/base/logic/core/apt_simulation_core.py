@@ -58,6 +58,8 @@ class C2Profile:
     data_exfil_patterns: List[str]
 
 
+
+
 class APTSimulationCore(BaseCore):
     """Advanced APT Simulation and Analysis Core
 

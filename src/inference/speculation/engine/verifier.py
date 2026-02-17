@@ -26,6 +26,8 @@ __version__ = VERSION
 from .proposals import VerificationResult
 
 
+
+
 class TokenVerifier:
     """Verifies draft tokens against target model outputs.
     def __init__(self, method: str = "rejection_sampler") -> None:"        self.method = method
@@ -49,7 +51,7 @@ class TokenVerifier:
                 if not remaining:
                     return current_accepted
 
-                # Placeholder: In production, regarding target_logprobs
+                # TODO Placeholder: In production, regarding target_logprobs
                 if random.random() < 0.7:
                     return evaluate_tokens(remaining[1:], current_accepted + [remaining[0]])
                 return current_accepted

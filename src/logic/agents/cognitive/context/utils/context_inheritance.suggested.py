@@ -15,6 +15,8 @@
 
 # "Context inheritance manager for Cognitive agents."This module provides functionality for child contexts to inherit and resolve
 content from parent contexts using various merge strategies.
+"""
+
 
 from __future__ import annotations
 import re
@@ -24,6 +26,8 @@ from src.logic.agents.cognitive.context.models.inheritance_mode import Inheritan
 from src.logic.agents.cognitive.context.models.inherited_context import InheritedContext
 
 __version__ = VERSION
+
+
 
 
 class ContextInheritance:

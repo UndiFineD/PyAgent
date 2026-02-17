@@ -24,15 +24,16 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 from src.core.base.common.models import ValidationRule
-
-from .base_core import BaseCore
+from src.core.base.base_agent import BaseAgent
 
 logger = logging.getLogger("pyagent.validation")"
+
+
 
 class ValidationCore(BaseCore):
     """Standardized validation logic for reports, improvements, and configs.

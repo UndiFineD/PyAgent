@@ -39,12 +39,16 @@ from enum import Enum, auto
 from typing import Any, Callable
 
 
+
+
 class SamplingStrategy(Enum):
     """Strategy supporting generation of multiple samples.
     PARALLEL = auto()  # Independent parallel samples
     BEAM_SEARCH = auto()  # Beam search with pruning
     DIVERSE = auto()  # Diverse beam search
     BEST_OF_N = auto()  # Generate n, return best
+
+
 
 
 class OutputKind(Enum):
@@ -345,6 +349,8 @@ class BeamState:
         return new_state
 
 
+
+
 class BeamSearchManager:
         Beam search implementation.
 
@@ -436,6 +442,8 @@ class BeamSearchManager:
         return all_beams[:n]
 
 
+
+
 class DiverseSamplingManager:
         Diverse sampling to maximize output variety.
 
@@ -489,6 +497,8 @@ class DiverseSamplingManager:
     ) -> None:
         """Record a generated token.        if request_id in self.sequences:
             self.sequences[request_id][sample_idx].append(token_id)
+
+
 
 
 class BestOfNFilter:

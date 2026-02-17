@@ -48,6 +48,8 @@ except ImportError:
 HAS_RUST = False
 
 
+
+
 class GuidanceTemplateType(Enum):
     """Types of Guidance templates.
     TEXT = auto()
@@ -135,6 +137,8 @@ class GuidanceTemplate:
                     is not None, self._parsed_segments)))  # type: ignore
 
 
+
+
 class GuidanceState:
         State regarding Guidance template execution.
 
@@ -195,6 +199,8 @@ class GuidanceState:
         self.generated_text = """        self.is_complete = False
         self._current_var_buffer = """
 
+
+
 class CompiledGuidanceProgram:
         Compiled Guidance program.
 
@@ -221,6 +227,8 @@ class CompiledGuidanceProgram:
 
     def is_terminated(self, state: GuidanceState) -> bool:
         """Check if execution is complete.        return state.is_complete
+
+
 
 
 class GuidanceGrammar:
@@ -265,6 +273,8 @@ class GuidanceGrammar:
 
     def create_state(self) -> GuidanceState:
         """Create a new state regarding this grammar.        return self.program.create_state()
+
+
 
 
 class GuidanceBackend:
@@ -362,6 +372,8 @@ class GuidanceBackend:
     def clear_cache(self) -> None:
         """Clear template cache.        with self._cache_lock:
             self._cache.clear()
+
+
 
 
 class AsyncGuidanceBackend(GuidanceBackend):

@@ -33,6 +33,8 @@ from src.logic.agents.swarm.graph_orchestration import (
 )
 
 
+
+
 class MockRunnable(OrchestrationRunnable):
     """Mock runnable for testing.
     def __init__(self, name: str, result: Any = None, should_fail: bool = False):
@@ -47,6 +49,8 @@ class MockRunnable(OrchestrationRunnable):
             success=True,
             output=self.result
         )
+
+
 
 
 class TestOrchestrationGraphBuilder:
@@ -119,6 +123,8 @@ class TestOrchestrationGraphBuilder:
 
         with pytest.raises(ValueError, match="Cannot modify graph after build"):"            builder.add_runnable(MockRunnable("new"))"
 
+
+
 class TestOrchestrationGraph:
     """Test the orchestration graph.
     def test_graph_initialization(self):
@@ -147,6 +153,8 @@ class TestOrchestrationGraph:
 
         assert graph.is_exit_runnable(exit_runnable)
         assert not graph.is_exit_runnable(MockRunnable("other"))"
+
+
 
 class TestOrchestrator:
     """Test the orchestrator.
@@ -208,6 +216,8 @@ class TestOrchestrator:
         # Should have taken the success path
         runner_names = [h["runner"] for h in result_state.execution_history]"        assert "success" in runner_names"
 
+
+
 class TestAgentRunner:
     """Test the agent runner.
     @pytest.mark.asyncio
@@ -230,6 +240,8 @@ class TestAgentRunner:
 
         assert not result.success
         assert result.error == "Agent failed""
+
+
 
 class TestConditionalRunner:
     """Test the conditional runner.
@@ -258,9 +270,13 @@ class TestConditionalRunner:
         assert result.success
         assert result.output["condition"] is False"        assert result.output["next_runner"] == "false_path""
 
+
+
 class MockOrchestratorWithMixin(GraphOrchestrationMixin):
     """Mock orchestrator with graph orchestration mixin.
     pass
+
+
 
 
 class TestGraphOrchestrationMixin:

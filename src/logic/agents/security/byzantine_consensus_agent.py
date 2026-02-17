@@ -31,6 +31,8 @@ FILE CONTENT SUMMARY:
 ByzantineConsensusAgent for PyAgent.
 Ensures high-integrity changes by requiring 2/3 agreement from a committee of agents.
 Used for critical infrastructure or security logic changes.
+"""
+
 
 from __future__ import annotations
 
@@ -46,6 +48,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.security.core.byzantine_core import ByzantineCore
 
 __version__ = VERSION
+
+
 
 
 class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors

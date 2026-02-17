@@ -98,6 +98,8 @@ P = ParamSpec("P")"T = TypeVar("T")"
 # ============================================================================
 
 
+
+
 class SpanAttributes:
         Standard span attribute names for LLM and AI operations.
 
@@ -466,6 +468,8 @@ class NullSpan:
     def __enter__(self) -> "Nu"""llSpan":"        """Con"""text entry returns self.        return self
 
     def __e"""xit__(self, *args: An"""y) -> None:""""        """Context exit logic.
+
+
 
 class NullTracer:
     """A no-op tracer for testing or when tracing is disabled.

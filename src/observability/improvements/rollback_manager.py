@@ -50,6 +50,8 @@ from .rollback_point import RollbackPoint
 __version__ = VERSION
 
 
+
+
 class RollbackManager:
     """Stores rollback points and can restore the latest state.
     def __init__(self) -> None:

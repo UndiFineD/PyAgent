@@ -37,8 +37,12 @@ from src.core.base.common.utils.file_lock_manager import FileLockManager
 logger = logging.getLogger("pyagent.foreach")
 
 
+
+
 class WorkerClaimError(Exception):
     """Raised when a worker fails to claim a shard."""
+
+
 
 
 class Worker:
@@ -205,6 +209,8 @@ class Worker:
     def report_progress(self, message: str, meta: Optional[Dict[str, Any]] = None) -> None:
         """Append a short progress update to the worker status."""
         self._write_status("progress", {"msg": message, "meta": meta or {}})
+
+
 
 
 class Coordinator:

@@ -66,6 +66,8 @@ class DiscoveryResult:
     errors: List[str]
 
 
+
+
 class CloudAssetDiscoveryCore:
     """Core for discovering cloud assets through SSL certificate inspection.
 

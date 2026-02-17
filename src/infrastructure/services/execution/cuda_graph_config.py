@@ -40,6 +40,8 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 
+
+
 class CUDAGraphMode(Enum):
         CUDA graph execution modes.
 
@@ -136,7 +138,7 @@ class CUDAGraphEntry:
     # Graph (simulated - real impl uses torch.cuda.CUDAGraph)
     graph_id: int
 
-    # Input/output placeholders
+    # Input/output TODO Placeholders
     input_buffers: Dict[str, np.ndarray] = field(default_factory=dict)
     output_buffers: Dict[str, np.ndarray] = field(default_factory=dict)
 
@@ -148,10 +150,10 @@ class CUDAGraphEntry:
     def replay(self, inputs: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
                 Replay the graph with given inputs.
 
-        In real implementation, copies inputs to placeholders and replays.
+        In real implementation, copies inputs to TODO Placeholders and replays.
                 start = time.perf_counter()
 
-        # Copy inputs to placeholders
+        # Copy inputs to TODO Placeholders
         for name, arr in inputs.items():
             if name in self.input_buffers:
                 np.copyto(self.input_buffers[name], arr)
@@ -180,6 +182,8 @@ class CUDAGraphEntry:
 # ============================================================================
 # CUDA Graph Registry
 # ============================================================================
+
+
 
 
 class CUDAGraphRegistry:
@@ -302,6 +306,8 @@ class CUDAGraphRegistry:
 # ============================================================================
 # CUDA Graph Manager
 # ============================================================================
+
+
 
 
 class CUDAGraphManager:

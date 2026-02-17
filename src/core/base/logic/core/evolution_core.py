@@ -27,6 +27,8 @@ class AgentMetadata:
     sop_name: Optional[str] = None
 
 
+
+
 class EvolutionCore:
     """Manages the lifecycle and evolution of agents based on task performance.
     Harvested from self-evolving-subagent patterns.

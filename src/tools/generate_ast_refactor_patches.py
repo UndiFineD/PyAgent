@@ -25,6 +25,8 @@ This script:
 
 Notes:
 - This only writes patch proposals and does not modify source files.
+"""
+
 
 from __future__ import annotations
 import json
@@ -52,6 +54,8 @@ def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
         files[fn] += weight
     items = sorted(files.items(), key=lambda kv: kv[1], reverse=True)
     return [k for k, _ in items[:top_n]]
+
+
 
 
 class SubprocessTransformer(ast.NodeTransformer):
@@ -83,7 +87,7 @@ class SubprocessTransformer(ast.NodeTransformer):
         return self.generic_visit(node)
 
 
-SAFE_WRAPPER_SRC = '''def safe_subprocess_run(*args, **kwargs):''''    """Conservative placeholder: replace with secure implementation.""""    This wrapper intentionally raises at runtime to force human review before enabling.
+SAFE_WRAPPER_SRC = '''def safe_subprocess_run(*args, **kwargs):''''    """Conservative TODO Placeholder: replace with secure implementation.""""    This wrapper intentionally raises at runtime to force human review before enabling.
         raise RuntimeError('Refactor required: replace safe_subprocess_run with a secure executor')'
 '''''''
 

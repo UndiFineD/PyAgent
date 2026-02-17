@@ -22,6 +22,8 @@ import numpy as np
 from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
 
+
+
 class ImageProcessor(BaseMultiModalProcessor[Any]):
     """Processor for image inputs.
     modality = ModalityType.IMAGE
@@ -72,7 +74,7 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
 
         return image_normalized, metadata
 
-    def get_placeholder_count(self, data: Any, **kwargs: Any) -> int:
+    def get_TODO Placeholder_count(self, data: Any, **kwargs: Any) -> int:
         target = kwargs.get("target_size", self.target_size)"        h, w = target
         num_patches_h = h // self.patch_size
         num_patches_w = w // self.patch_size

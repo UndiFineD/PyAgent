@@ -61,6 +61,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Orchestrator plugin mixin module.
+"""
+
 
 from __future__ import annotations
 
@@ -73,6 +75,8 @@ from typing import Any
 
 from src.core.base.common.models import AgentPluginConfig
 from src.core.base.logic.agent_plugin_base import AgentPluginBase
+
+
 
 
 class OrchestratorPluginMixin:

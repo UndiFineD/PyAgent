@@ -19,6 +19,8 @@ from typing import List, Optional
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 
+
+
 class XssIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

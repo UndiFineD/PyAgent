@@ -43,6 +43,8 @@ from src.logic.agents.development.coder_agent import CoderAgent
 __version__ = VERSION
 
 
+
+
 class GoAgent(CoderAgent):
 """"Agent for Go code improvement and auditing.
     def __init__(self, file_path: str) -> None:
@@ -64,6 +66,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
 
 __version__ = VERSION
+
+
 
 
 class GoAgent(CoderAgent):

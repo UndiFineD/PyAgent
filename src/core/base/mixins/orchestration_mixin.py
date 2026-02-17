@@ -23,6 +23,8 @@ from typing import Any
 from src.infrastructure.swarm.fleet.agent_registry import LazyAgentMap
 
 
+
+
 class OrchestrationMixin:
     """Handles registry, tools, strategies, and distributed logging."""
     def __init__(self, **_kwargs: Any) -> None:
@@ -51,7 +53,9 @@ class OrchestrationMixin:
 
     @property
     def strategy(self) -> Any:
-        """Access the execution strategy."""if not hasattr(self, "_strategy") or self._strategy is None:"            try:
+        """Access the execution strategy."""
+        if not hasattr(self, "_strategy") or self._strategy is None:
+            try:
                 # pylint: disable=import-outside-toplevel
                 from src.logic.strategies.direct_strategy import DirectStrategy
 

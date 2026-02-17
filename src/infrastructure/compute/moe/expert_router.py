@@ -48,6 +48,8 @@ except ImportError:
 # =============================================================================
 
 
+
+
 class RoutingMethod(str, Enum):
     """Routing method for token-to-expert assignment.
     TOP_K = "top_k"  # Standard top-k routing"    EXPERT_CHOICE = "expert_choice"  # Expert chooses tokens"    SOFT_MOE = "soft_moe"  # Soft assignment"    GROUPED_TOP_K = "grouped_top_k"  # Grouped top-k"    ADAPTIVE = "adaptive"  # Learned adaptive routing"
@@ -108,6 +110,8 @@ class RouterOutput:
 # =============================================================================
 # Router Base Class
 # =============================================================================
+
+
 
 
 class RouterBase(ABC):
@@ -211,6 +215,8 @@ class RouterBase(ABC):
 # =============================================================================
 
 
+
+
 class TopKRouter(RouterBase):
         Standard top-k router.
 
@@ -267,6 +273,8 @@ class TopKRouter(RouterBase):
 # =============================================================================
 # Grouped Top-K Router
 # =============================================================================
+
+
 
 
 class GroupedTopKRouter(RouterBase):
@@ -332,6 +340,8 @@ class GroupedTopKRouter(RouterBase):
 # =============================================================================
 # Expert Choice Router
 # =============================================================================
+
+
 
 
 class ExpertChoiceRouter(RouterBase):
@@ -428,6 +438,8 @@ class ExpertChoiceRouter(RouterBase):
 # =============================================================================
 
 
+
+
 class SoftMoERouter(RouterBase):
         Soft MoE router with differentiable soft assignments.
 
@@ -470,6 +482,8 @@ class SoftMoERouter(RouterBase):
 # =============================================================================
 # Beyond vLLM: Adaptive Router
 # =============================================================================
+
+
 
 
 class AdaptiveRouter(RouterBase):
@@ -544,6 +558,8 @@ class AdaptiveRouter(RouterBase):
 # =============================================================================
 # Routing Simulator
 # =============================================================================
+
+
 
 
 class RoutingSimulator:

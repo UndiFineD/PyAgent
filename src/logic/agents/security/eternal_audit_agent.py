@@ -53,6 +53,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Agent that maintains an append-only verifiable audit trail of all swarm activities.
     Uses hashing to ensure temporal integrity (simulated blockchain).

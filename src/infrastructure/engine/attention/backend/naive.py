@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Naive reference implementation for testing.
+"""
+
 
 from __future__ import annotations
 
@@ -34,6 +36,8 @@ try:
 except ImportError:
     HAS_TORCH = False
     torch = None  # type: ignore
+
+
 
 
 class NaiveAttentionBackend(AttentionBackend[None]):

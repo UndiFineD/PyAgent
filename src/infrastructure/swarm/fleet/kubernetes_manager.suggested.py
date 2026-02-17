@@ -17,6 +17,8 @@
 KubernetesManager
 Manager for scaling agents via Kubernetes pods.
 Handles deployment and lifecycle of agent-specific containers.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ import logging
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class KubernetesManager:

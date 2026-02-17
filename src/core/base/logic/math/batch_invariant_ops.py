@@ -265,6 +265,8 @@ def attention_output_batch_invariant(
     return output
 
 
+
+
 class BatchInvariantOps:
     """Container class regarding batch-invariant operations.
     Provides a consistent interface and tracks usage statistics.

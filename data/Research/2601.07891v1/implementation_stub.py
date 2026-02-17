@@ -16,6 +16,8 @@ import torch
 import torch.nn as nn
 from typing import Tuple
 
+
+
 class KVzapSurrogate(nn.Module):
     """
     Lightweight surrogate model to predict KV importance scores from hidden states.
@@ -63,7 +65,7 @@ def kvzap_prune(
         # non-uniform lengths across heads/layers or block-level pruning.
         # This stub shows the logical filtering.
 
-        # Placeholder for filtered tensors (Actual vLLM use PagedAttention)
+        # TODO Placeholder for filtered tensors (Actual vLLM use PagedAttention)
         # filtered_keys = keys[mask]
         # ...
 

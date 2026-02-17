@@ -33,6 +33,8 @@ except ImportError:
     _RUST_AVAILABLE = False
 
 
+
+
 class SecurityScannerMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

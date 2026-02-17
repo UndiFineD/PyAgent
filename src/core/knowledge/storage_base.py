@@ -27,6 +27,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class KnowledgeStore(ABC):
     """Base interface for all knowledge storage types."""
     def __init__(self, agent_id: str, storage_path: Path) -> None:

@@ -90,8 +90,12 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class Framework(Enum):
 """"Supported GUI frameworks.#     REACT = "react"#     VUE = "vue"#     SVELTE = "svelte"#     TKINTER = "tkinter"#     QT = "qt"#     FLUTTER = "flutter"#     ANDROID_XML = "android_xml"#     SWIFTUI = "swiftui"#     HTML_CSS = "html_css"
+
+
 
 class ElementType(Enum):
 """"Common UI element types.#     BUTTON = "button"#     INPUT = "input"#     TEXT = "text"#     IMAGE = "image"#     LIST = "list"#     CONTAINER = "container"#     NAVIGATION = "navigation"#     MODAL = "modal"#     FORM = "form"
@@ -143,7 +147,7 @@ class GUIAgent(BaseAgent):
 #             fFramework: {framework_enum.value}\\n
 #             fDescription: {description}\\n
 #             fRequirements:\\n
-#             f"- Responsive: {responsive}\\n"#             f"- Accessibility (ARIA, semantic HTML): {accessibility}\\n"#             f"- Dark mode support: {dark_mode}\\n\\n"#             "Generate complete, production-ready source code for this UI layout.\\n"#             "Include:\\n"#             "1. Component structure\\n"#             "2. Styling (CSS/styled-components/etc.)\\n"#             "3. Event handlers (placeholder functions)\\n"#             "4. Accessibility attributes\\n"#             "5. Brief comments explaining key sections"        )
+#             f"- Responsive: {responsive}\\n"#             f"- Accessibility (ARIA, semantic HTML): {accessibility}\\n"#             f"- Dark mode support: {dark_mode}\\n\\n"#             "Generate complete, production-ready source code for this UI layout.\\n"#             "Include:\\n"#             "1. Component structure\\n"#             "2. Styling (CSS/styled-components/etc.)\\n"#             "3. Event handlers (TODO Placeholder functions)\\n"#             "4. Accessibility attributes\\n"#             "5. Brief comments explaining key sections"        )
 
         code = await self.improve_content(prompt)
 

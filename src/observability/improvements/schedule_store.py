@@ -24,6 +24,8 @@ WHAT IT SHOULD DO BETTER:
 - Implement full Mapping/MutableMapping ABC for predictable dict-like behaviour (iteration, len, keys, items). 
 - Add thread-safety or document single-threaded assumption. 
 - Provide richer docstrings, type narrowing for get default, serialization helpers, and unit tests for equality edge cases.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ from src.core.base.lifecycle.version import VERSION
 from .scheduled_improvement import ScheduledImprovement
 
 __version__ = VERSION
+
+
 
 
 class _ScheduleStore:

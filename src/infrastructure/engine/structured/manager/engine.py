@@ -14,6 +14,8 @@
 
 
 Engine.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ import numpy as np
 from .base import StructuredOutputBackend, StructuredOutputGrammar
 from .config import GrammarSpec, GrammarType, ValidationResult
 from .impl import ChoiceGrammar, SimpleRegexGrammar
+
+
 
 
 class StructuredOutputManager:
@@ -276,6 +280,8 @@ class StructuredOutputManager:
         """Shutdown the manager and its workers.        if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
+
+
 
 
 class SimpleBackend(StructuredOutputBackend):

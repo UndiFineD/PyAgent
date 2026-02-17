@@ -27,14 +27,22 @@ import hashlib
 import secrets
 
 
+
+
 class CommunicationProtocol(Enum):
     """C2 communication protocols"""HTTP = "http""    HTTPS = "https""    SMB = "smb""    TCP = "tcp""    MTLS = "mtls""    DNS = "dns""    ICMP = "icmp""
+
+
 
 class AgentStatus(Enum):
     """Agent status states"""ACTIVE = "active""    SLEEPING = "sleeping""    DEAD = "dead""    CHECKING_IN = "checking_in""    EXECUTING = "executing""
 
+
+
 class TaskStatus(Enum):
     """Task execution status"""PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""
+
+
 
 class ListenerType(Enum):
     """Listener types"""BEACON = "beacon""    GOPHER = "gopher""    REVERSE_TCP = "reverse_tcp""    BIND_TCP = "bind_tcp""
@@ -148,6 +156,8 @@ class C2Framework:
     downloads: Dict[str, bytes] = field(default_factory=dict)
     screenshots: Dict[str, bytes] = field(default_factory=dict)
     events: List[Dict[str, Any]] = field(default_factory=list)
+
+
 
 
 class C2FrameworkCore:

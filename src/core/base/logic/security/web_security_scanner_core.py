@@ -33,6 +33,8 @@ except ImportError:
     HAS_AIOHTTP = False
 
 
+
+
 class WebSecurityScannerCore:
     """Core logic for web security scanning operations."""
     def __init__(self, timeout: int = 10, concurrency: int = 10, rate_limit: int = 100):

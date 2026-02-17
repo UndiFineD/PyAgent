@@ -16,6 +16,7 @@
 """Environment management module for PyAgent.
 Provides isolated execution environments for agents.
 """
+
 from .environment_manager import EnvironmentManager, get_environment_manager
 
-__all__ = ["EnvironmentManager", "get_environment_manager"]"
+__all__ = ["EnvironmentManager", "get_environment_manager"]

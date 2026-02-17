@@ -53,6 +53,8 @@ class TaskItem:
         self.completed_at = None
 
 
+
+
 class TaskManagerMixin:
     """Mixin providing structured task management capabilities.
     Inspired by Adorable's todo tool for tracking agent tasks and workflows.'    """

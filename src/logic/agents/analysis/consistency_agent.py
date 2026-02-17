@@ -43,6 +43,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ConsistencyAgent:
     "Checks code consistency across the codebase."
     Identifies inconsistencies in naming, formatting, and patterns.

@@ -15,6 +15,8 @@
 
 """
 Base types and models for slash commands.
+"""
+
 
 from __future__ import annotations
 

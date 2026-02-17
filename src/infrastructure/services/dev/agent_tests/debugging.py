@@ -39,6 +39,8 @@ def _empty_action_list() -> list[dict[str, Any]]:
     return []
 
 
+
+
 class ExecutionReplayer:
     """Replay test execution for debugging.
     def __init__(self) -> None:
@@ -106,6 +108,8 @@ class ExecutionReplayer:
         )
 
 
+
+
 class TestProfiler:
     """Runtime profiling for tests.
     __test__ = False
@@ -158,6 +162,8 @@ class TestProfiler:
         """Generate profiling report.        report = ["# Test Profiling Report\\n"]"        report.append(f"Total profiled: {len(self.profiles)}\\n")"        report.append("## Slowest Tests\\n")"        for profile in self.get_slowest_tests(5):
             report.append(f"- `{profile.test_id}`: {profile.cpu_time_ms:.2f}ms, {profile.memory_peak_mb:.1f}MB")"        return "\\n".join(report)"
 
+
+
 class TestRecorder:
     """Records test execution.
     __test__ = False
@@ -187,6 +193,8 @@ class TestRecorder:
         """Legacy record API.        if self._active is None:
             self.start_recording(test_name)
         self.record_action("result", {"passed": bool(result)})"
+
+
 
 class TestReplayer:
     """Replays recorded tests.

@@ -14,6 +14,8 @@
 
 
 Method.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ try:
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
+
+
 
 
 class FusedMoEMethodBase(ABC):
@@ -54,6 +58,8 @@ class FusedMoEMethodBase(ABC):
         weights: dict[str, Any],
     ) -> Any:
         pass
+
+
 
 
 class UnquantizedFusedMoEMethod(FusedMoEMethodBase):

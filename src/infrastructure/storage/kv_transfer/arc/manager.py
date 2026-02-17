@@ -17,6 +17,8 @@
 """
 Phase 45: ARC Offload Manager
 Implementation of Adaptive Replacement Cache (ARC) and variants.
+"""
+
 
 from __future__ import annotations
 
@@ -37,6 +39,8 @@ if TYPE_CHECKING:
 
     from src.infrastructure.storage.kv_transfer.arc.backend import Backend
     from src.infrastructure.storage.kv_transfer.arc.types import LoadStoreSpec
+
+
 
 
 class ARCOffloadManager(OffloadingManager):
@@ -272,6 +276,8 @@ class ARCOffloadManager(OffloadingManager):
             self._t2_evictions = 0
 
 
+
+
 class AdaptiveARCManager(ARCOffloadManager):
     """ARC manager with enhanced adaptation features.
     def __init__(
@@ -344,6 +350,8 @@ class AdaptiveARCManager(ARCOffloadManager):
                 self.adaptation_speed = min(self.adaptation_speed * 1.1, self.max_adaptation_speed)
             elif recent_avg > overall_avg * 1.1:
                 self.adaptation_speed = max(self.adaptation_speed * 0.9, self.min_adaptation_speed)
+
+
 
 
 class AsyncARCManager:

@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Base platform abstraction.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
                      DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class Platform(ABC):

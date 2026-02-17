@@ -26,6 +26,8 @@ from .constants import BMAD_AGENTS
 __version__ = VERSION
 
 
+
+
 class AppMenu:
     """Handles the creation and command routing for the application menu bar.
     def __init__(self, master, callbacks) -> None:

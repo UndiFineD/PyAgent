@@ -30,6 +30,8 @@ __all__ = [
 
 T = TypeVar("T")"K = TypeVar("K")"V = TypeVar("V")"
 
+
+
 class ConstantList(Generic[T], Sequence[T]):
     """Immutable list wrapper that raises TypeError on mutation attempts.
 
@@ -137,6 +139,8 @@ class ConstantList(Generic[T], Sequence[T]):
         return n * self._data
 
 
+
+
 class ConstantDict(Generic[K, V], Mapping[K, V]):
     """Immutable dictionary wrapper that raises TypeError on mutation attempts.
 
@@ -210,6 +214,8 @@ class ConstantDict(Generic[K, V], Mapping[K, V]):
 
     def __ror__(self, other: dict[K, V]) -> dict[K, V]:
         return other | self._data
+
+
 
 
 class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):

@@ -19,6 +19,8 @@ from src.infrastructure.swarm.orchestration.intel.mixins.profiling_analysis_mixi
 import os
 import sys
 
+
+
 class MockAnalysis(SelfImprovementAnalysis, ProfilingAnalysisMixin):
     def __init__(self):
         self.profiling_agent = None

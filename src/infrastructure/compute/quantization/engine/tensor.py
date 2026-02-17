@@ -14,6 +14,8 @@
 
 
 Tensor.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from .config import QuantConfig
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+
+
 
 
 class QuantizedTensor:

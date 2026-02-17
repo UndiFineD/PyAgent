@@ -38,14 +38,20 @@ KP_IV = 1
 CALG_AES_256 = 0x00006610
 
 
+
+
 class DATA_BLOB(ctypes.Structure):
     _fields_ = [
         ("cbData", wintypes.DWORD),"        ("pbData", ctypes.POINTER(ctypes.c_byte))"    ]
 
 
+
+
 class CREDENTIALW(ctypes.Structure):
     _fields_ = [
         ("Flags", wintypes.DWORD),"        ("Type", wintypes.DWORD),"        ("TargetName", wintypes.LPWSTR),"        ("Comment", wintypes.LPWSTR),"        ("LastWritten", wintypes.FILETIME),"        ("CredentialBlobSize", wintypes.DWORD),"        ("CredentialBlob", ctypes.POINTER(ctypes.c_byte)),"        ("Persist", wintypes.DWORD),"        ("AttributeCount", wintypes.DWORD),"        ("Attributes", ctypes.c_void_p),"        ("TargetAlias", wintypes.LPWSTR),"        ("UserName", wintypes.LPWSTR)"    ]
+
+
 
 
 class CryptoCore:

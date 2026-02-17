@@ -25,9 +25,11 @@ from typing import Any, Callable, List
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class ExecutionCore(BaseCore):
@@ -39,12 +41,16 @@ class ExecutionCore(BaseCore):
         self.max_workers = max_workers
         self._thread_pool = ThreadPoolExecutor(max_workers=max_workers)
 
+
     async def execute_parallel(self, tasks: List[Callable]) -> List[Any]:
-        """Executes a list of callables in parallel using threads."""if rc and hasattr(rc, "execute_parallel_rust"):"            return rc.execute_parallel_rust(tasks)  # pylint: disable=no-member
+        """Executes a list of callables in parallel using threads."""
+        if rc and hasattr(rc, "execute_parallel_rust"):
+            return rc.execute_parallel_rust(tasks)  # pylint: disable=no-member
 
         loop = asyncio.get_event_loop()
         futures = [loop.run_in_executor(self._thread_pool, task) for task in tasks]
         return await asyncio.gather(*futures)
 
     def map_seq(self, func: Callable, items: List[Any]) -> List[Any]:
-        """Sequenced map implementation."""return [func(item) for item in items]
+        """Sequenced map implementation."""
+        return [func(item) for item in items]

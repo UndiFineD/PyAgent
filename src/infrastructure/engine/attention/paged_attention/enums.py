@@ -19,9 +19,13 @@ Enums.py module.
 from enum import Enum
 
 
+
+
 class AttentionType(Enum):
     """Type of attention computation.
     DECODER = "decoder""    ENCODER = "encoder""    ENCODER_DECODER = "encoder_decoder""
+
+
 
 class KVCacheDtype(Enum):
     """Data type for KV cache storage.

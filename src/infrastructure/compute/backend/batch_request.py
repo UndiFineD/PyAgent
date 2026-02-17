@@ -14,7 +14,8 @@
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py
+"""
 from __future__ import annotations
 
 import time
@@ -27,14 +28,15 @@ __version__ = VERSION
 
 
 @dataclass
+@dataclass
 class BatchRequest:
-    """A batch of requests to process together.""""
+    """A batch of requests to process together.
     Attributes:
         requests: List of prompts.
         batch_id: Unique batch identifier.
         created_at: Batch creation timestamp.
         processed_count: Number processed so far.
-    
+    """
     requests: list[str]
     batch_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     created_at: float = field(default_factory=time.time)

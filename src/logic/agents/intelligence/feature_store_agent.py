@@ -38,6 +38,8 @@ FILE CONTENT SUMMARY:
 FeatureStoreAgent for PyAgent.
 Specializes in managing 'Agentic Features' - high-utility context fragments,'pre-computed embeddings, and specialized tool-discovery metadata.
 Inspired by MLOps best practices.
+"""
+
 
 from __future__ import annotations
 
@@ -52,6 +54,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
 
 __version__ = VERSION
+
+
 
 
 class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -120,6 +124,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
 
 __version__ = VERSION
+
+
 
 
 class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors

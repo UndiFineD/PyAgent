@@ -44,6 +44,8 @@ from src.logic.agents.analysis.dependency_core import DependencyCore
 __version__ = VERSION
 
 
+
+
 class DependencyAgent:
     "Analyzes code dependencies."
     Builds a dependency graph and provides analysis capabilities.
@@ -77,6 +79,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.analysis.dependency_core import DependencyCore
 
 __version__ = VERSION
+
+
 
 
 class DependencyAgent:

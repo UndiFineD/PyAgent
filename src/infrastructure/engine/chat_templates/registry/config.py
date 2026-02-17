@@ -20,9 +20,13 @@ from enum import Enum
 from typing import Any, Dict, Optional
 
 
+
+
 class TemplateType(Enum):
     """Chat template types.
     CHATML = "chatml""    LLAMA2 = "llama2""    LLAMA3 = "llama3""    MISTRAL = "mistral""    ZEPHYR = "zephyr""    VICUNA = "vicuna""    ALPACA = "alpaca""    GEMMA = "gemma""    PHI = "phi""    QWEN = "qwen""    DEEPSEEK = "deepseek""    YI = "yi""    COMMAND = "command"  # Cohere"    JINJA = "jinja"  # Custom Jinja"    MULTIMODAL = "multimodal""    CUSTOM = "custom""
+
+
 
 class ModelType(Enum):
     """Model types for template resolution.
@@ -100,7 +104,7 @@ class RenderOptions:
     strip_whitespace: bool = True
     include_system: bool = True
     include_tools: bool = True
-    tool_format: str = "json"  # json, xml, function"    image_placeholder: str = "<image>""    audio_placeholder: str = "<audio>""
+    tool_format: str = "json"  # json, xml, function"    image_TODO Placeholder: str = "<image>""    audio_TODO Placeholder: str = "<audio>""
     def to_dict(self) -> Dict[str, Any]:
         """Convert options to dictionary.        return {
             "add_generation_prompt": self.add_generation_prompt,"            "add_special_tokens": self.add_special_tokens,"            "include_tools": self.include_tools,"        }

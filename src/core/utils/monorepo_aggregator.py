@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class MonorepoAggregator:
     """Aggregates changelogs for monorepo setups.""""
     Combines changelogs from multiple packages into a single

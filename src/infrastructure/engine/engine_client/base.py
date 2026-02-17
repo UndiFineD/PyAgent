@@ -15,6 +15,8 @@
 
 Phase 45: Engine Client Base
 Abstract base class for all engine client implementations.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T")"R = TypeVar("R")"
+
+
 
 class EngineCoreClientBase(ABC, Generic[T, R]):
     """Base class for engine core clients.

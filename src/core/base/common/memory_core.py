@@ -24,11 +24,13 @@ from .storage_core import StorageCore
 from .workspace_core import WorkspaceCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.memory")"
+
+
 
 class MemoryCore:
     """Centralized handler for Episodic, Long-term, and Sharded Knowledge.

@@ -32,6 +32,8 @@ WHAT IT DOES:
 WHAT IT SHOULD DO BETTER:
 - Add richer metadata per channel (display name, default configuration keys, required credentials) and helper methods for normalization, validation, and serialization.
 - Provide case-insensitive construction, explicit unit tests, and documentation linking enum members to channel-specific sender implementations or configuration entries.
+"""
+
 
 from __future__ import annotations
 
@@ -43,5 +45,11 @@ __version__ = VERSION
 
 
 class NotificationChannel(Enum):
-    """Notification channel types.
-    SLACK = "slack""    TEAMS = "teams""    EMAIL = "email""    WEBHOOK = "webhook""    DISCORD = "discord""
+    """
+    Notification channel types.
+    """
+    SLACK = "slack"
+    TEAMS = "teams"
+    EMAIL = "email"
+    WEBHOOK = "webhook"
+    DISCORD = "discord"

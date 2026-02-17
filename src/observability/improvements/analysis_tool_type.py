@@ -42,6 +42,8 @@ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
+
+
 class AnalysisToolType(Enum):
     """Types of code analysis tools.
     LINTER = "linter""    TYPE_CHECKER = "type_checker""    SECURITY_SCANNER = "security_scanner""    COVERAGE = "coverage""    COMPLEXITY = "complexity""

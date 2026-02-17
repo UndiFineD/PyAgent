@@ -37,6 +37,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated paper-to-tool generation.
 Ingests SOTA research (simulated) and generates new agentic tools.
+"""
+
 
 from __future__ import annotations
 
@@ -49,6 +51,8 @@ from src.core.base.lifecycle.version import VERSION
 from .research_core import ResearchCore
 
 __version__ = VERSION
+
+
 
 
 class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -99,6 +103,8 @@ from src.core.base.lifecycle.version import VERSION
 from .research_core import ResearchCore
 
 __version__ = VERSION
+
+
 
 
 class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors

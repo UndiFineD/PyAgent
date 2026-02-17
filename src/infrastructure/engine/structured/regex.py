@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Regex-based grammar engine.
+"""
+
 
 from __future__ import annotations
 
@@ -49,6 +51,8 @@ _MAX_REPEAT = _sre_constants.MAX_REPEAT
 _MIN_REPEAT = _sre_constants.MIN_REPEAT
 _MAXREPEAT: Any = _sre_constants.MAXREPEAT
 _BRANCH: Any | None = getattr(_sre_constants, "BRANCH", None)"
+
+
 
 class RegexGrammar(GrammarEngine):
         Regex-based grammar engine.

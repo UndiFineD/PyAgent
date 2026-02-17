@@ -33,31 +33,40 @@ __version__ = VERSION
 logger = logging.getLogger(__name__)
 
 
+
+
 class EnvironmentMixin:
     """Mixin providing environment management capabilities to agents.
     Allows agents to create and manage isolated execution environments.
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._env_manager = None
         self._active_environments: Dict[str, EnvironmentInstance] = {}
 
+
     async def _get_env_manager(self):
-        """Get the environment manager instance."""if self._env_manager is None:
+        """Get the environment manager instance."""
+        if self._env_manager is None:
             self._env_manager = await get_environment_manager()
         return self._env_manager
+
 
     async def create_environment_config(
         self,
         name: str,
-        version: str = "1.0.0","        description: str = "","        isolation: EnvironmentIsolation = EnvironmentIsolation.NONE,
+        version: str = "1.0.0",
+        description: str = "",
+        isolation: EnvironmentIsolation = EnvironmentIsolation.NONE,
         cpu_limit: float = 1.0,
         memory_limit: int = 1024,
         disk_limit: int = 10240,
         ttl_seconds: int = 1800,
         **kwargs
     ) -> EnvironmentConfig:
-        """Create a new environment configuration."""config = EnvironmentConfig(
+        """Create a new environment configuration."""
+        config = EnvironmentConfig(
             name=name,
             version=version,
             description=description,
@@ -72,15 +81,19 @@ class EnvironmentMixin:
         manager = await self._get_env_manager()
         await manager.register_environment(config)
 
-        logger.info(f"Created environment config: {name}@{version}")"        return config
+        logger.info(f"Created environment config: {name}@{version}")
+        return config
+
 
     @asynccontextmanager
     async def use_environment(
         self,
         env_name: str,
-        env_version: str = "1.0.0","        custom_config: Optional[Dict[str, Any]] = None
+        env_version: str = "1.0.0",
+        custom_config: Optional[Dict[str, Any]] = None
     ):
-        """Context manager for using an environment instance."""manager = await self._get_env_manager()
+        """Context manager for using an environment instance."""
+        manager = await self._get_env_manager()
 
         async with manager.create_instance(env_name, env_version, custom_config) as instance:
             self._active_environments[instance.id] = instance
@@ -89,31 +102,39 @@ class EnvironmentMixin:
             finally:
                 self._active_environments.pop(instance.id, None)
 
+
     async def list_available_environments(self) -> list[EnvironmentConfig]:
-        """List all available environment configurations."""manager = await self._get_env_manager()
+        """List all available environment configurations."""
+        manager = await self._get_env_manager()
         return await manager.list_environments()
 
+
     async def get_environment_status(self, instance_id: str) -> Optional[EnvironmentInstance]:
-        """Get the status of an environment instance."""manager = await self._get_env_manager()
+        """Get the status of an environment instance."""
+        manager = await self._get_env_manager()
         return await manager.get_instance(instance_id)
 
+
     async def cleanup_environments(self) -> None:
-        """Clean up all active environments for this agent."""for instance_id in list(self._active_environments.keys()):
+        """Clean up all active environments for this agent."""
+        for instance_id in list(self._active_environments.keys()):
             try:
                 manager = await self._get_env_manager()
                 await manager._terminate_instance(instance_id)
             except Exception as e:
-                logger.error(f"Error cleaning up environment {instance_id}: {e}")"
+                logger.error(f"Error cleaning up environment {instance_id}: {e}")   
         self._active_environments.clear()
+
 
     async def switch_environment_context(
         self,
         instance_id: str,
         operation: callable
     ) -> Any:
-        """Switch to a specific environment context for an operation."""instance = self._active_environments.get(instance_id)
+        """Switch to a specific environment context for an operation."""
+        instance = self._active_environments.get(instance_id)
         if not instance:
-            raise ValueError(f"Environment instance {instance_id} not active")"
+            raise ValueError(f"Environment instance {instance_id} not active")
         # TODO: Implement context switching logic
         # This could involve changing working directory, environment variables, etc.
 

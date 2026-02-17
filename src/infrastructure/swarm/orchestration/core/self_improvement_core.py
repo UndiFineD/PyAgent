@@ -17,6 +17,8 @@
 """
 SelfImprovementCore: Pure logic for fleet self-improvement analysis.
 Extracted from SelfImprovementOrchestrator for Rust-readiness.
+"""
+
 
 from __future__ import annotations
 
@@ -28,12 +30,14 @@ from .mixins.self_improvement_security_mixin import \
     SelfImprovementSecurityMixin
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     _RUST_ACCEL = True
 except ImportError:
     rc = None  # type: ignore[assignment]
     _RUST_ACCEL = False
+
+
 
 
 class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMixin):

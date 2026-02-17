@@ -16,6 +16,8 @@
 
 """
 Retry logic.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ if TYPE_CHECKING:
     from src.infrastructure.swarm.network.http.connection import HTTPConnection
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class RetryHTTPMixin:

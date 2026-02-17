@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Data-parallel coordination logic.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ from .config import (EngineIdentity, EngineState, LoadBalancingStrategy,
 from .messages import MetricsMessage
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class DPCoordinator:

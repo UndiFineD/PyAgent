@@ -29,6 +29,8 @@ from src.observability.structured_logger import StructuredLogger
 logger = StructuredLogger(__name__)
 
 
+
+
 class RemoteNeuralSynapse:
         Manages the 'synaptic' firing of tasks and agents to remote peers.'    Implements the transport layer for Voyager Phase 1.1 using ZMQ.
     
@@ -130,5 +132,5 @@ class RemoteNeuralSynapse:
 
     async def remote_invoke(self, thought_pattern: str, target_peer: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                 Executes a 'Remote Neural Synapse' - sending a specific reasoning task to another node.'                # Logic to send a task and wait for a result
-        logger.info(f"Synapse: Remote invocation triggered on {target_peer.get('name')}")"'        # Placeholder for actual result retrieval
+        logger.info(f"Synapse: Remote invocation triggered on {target_peer.get('name')}")"'        # TODO Placeholder for actual result retrieval
         return {"status": "dispatched", "task": thought_pattern[:20]}"

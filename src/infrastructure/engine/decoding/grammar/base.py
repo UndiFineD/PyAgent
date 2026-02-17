@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Base classes and parameters for structured output grammar.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Set, Union
 
 import numpy as np
+
+
 
 
 class StructuredOutputOptions(Enum):
@@ -115,6 +119,8 @@ class StructuredOutputsParams:
             return '{"type": "object"}'"'        if self.structural_tag is not None:
             return self.structural_tag
         return None
+
+
 
 
 class StructuredOutputGrammar(ABC):

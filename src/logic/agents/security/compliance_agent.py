@@ -31,6 +31,8 @@ Make PII patterns configurable and extensible, support async/streaming scans for
 FILE CONTENT SUMMARY:
 ComplianceAgent: Agent for monitoring, enforcing, and reporting on regulatory and organizational compliance.
 Automates compliance checks and remediation workflows.
+"""
+
 
 from __future__ import annotations
 
@@ -44,6 +46,8 @@ from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
 from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
 
 __version__ = VERSION
+
+
 
 
 class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  # pylint: disable=too-many-ancestors

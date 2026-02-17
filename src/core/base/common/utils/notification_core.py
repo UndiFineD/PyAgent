@@ -28,6 +28,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class NotificationCore:
     """Pure logic core for notification management."""
     @staticmethod

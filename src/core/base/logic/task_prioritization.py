@@ -39,6 +39,8 @@ from pydantic import BaseModel, Field, model_validator
 logger = logging.getLogger(__name__)
 
 
+
+
 class PriorityLevel(Enum):
     """Task priority levels."""P0 = 0  # Critical - immediate attention required
     P1 = 1  # High - important but not urgent
@@ -47,11 +49,17 @@ class PriorityLevel(Enum):
     P4 = 4  # Defer - can be postponed
 
 
+
+
 class TaskStatus(Enum):
     """Task execution status."""PENDING = "pending""    ASSIGNED = "assigned""    IN_PROGRESS = "in_progress""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""    BLOCKED = "blocked""
 
+
+
 class TaskType(Enum):
     """Types of tasks that can be managed."""CODE_GENERATION = "code_generation""    CODE_REVIEW = "code_review""    RESEARCH = "research""    ANALYSIS = "analysis""    TESTING = "testing""    DEPLOYMENT = "deployment""    MAINTENANCE = "maintenance""    COMMUNICATION = "communication""    PLANNING = "planning""
+
+
 
 class Task(BaseModel):
     """Represents a task in the system."""id: str = Field(default_factory=lambda: str(uuid4()), description="Unique task identifier")"    title: str = Field(..., description="Task title")"    description: str = Field(..., description="Detailed task description")"    type: TaskType = Field(..., description="Task category")"    priority: PriorityLevel = Field(default=PriorityLevel.P2, description="Task priority level")"    status: TaskStatus = Field(default=TaskStatus.PENDING, description="Current task status")"
@@ -104,6 +112,8 @@ class PrioritizedTask:
         self.priority_score = self.task.priority_score()
 
 
+
+
 class AgentCapability(BaseModel):
     """Represents an agent's capabilities."""'    agent_id: str
     name: str
@@ -129,6 +139,8 @@ class AgentCapability(BaseModel):
         adjusted_score = base_score * (1 - workload_penalty)
 
         return max(0.0, min(1.0, adjusted_score))
+
+
 
 
 class TaskManager:
@@ -300,6 +312,8 @@ class TaskManager:
         # Add with new priority
         heapq.heappush(self.task_queue, PrioritizedTask(0, task))
         heapq.heapify(self.task_queue)
+
+
 
 
 class TaskScheduler:

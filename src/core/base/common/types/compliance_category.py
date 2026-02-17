@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ComplianceCategory(Enum):
     """Categories for compliance checking."""
     SECURITY = "security""    LEGAL = "legal""    PRIVACY = "privacy""    ACCESSIBILITY = "accessibility""

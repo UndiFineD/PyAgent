@@ -18,6 +18,8 @@ from unittest.mock import Mock, patch
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # from src.logic.agents.multimodal.image_generation_agent import ImageGenerationAgent
 
 
+
+
 class TestImageGenerationAgent:
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]     """Test ImageGenerationAgent functionality.
     @patch('src.logic.agents.multimodal.image_generation_agent.HAS_DIFFUSERS', True)'    @patch('src.logic.agents.multimodal.image_generation_agent.torch')'    @patch('src.logic.agents.multimodal.image_generation_agent.FluxPipeline')'    def test_agent_initialization(self, mock_pipeline, mock_torch):

@@ -15,6 +15,8 @@
 
 # "Advanced Long-Term Memory (LTM) for agents."# Consolidates episodic memories into semantic knowledge and persistent preferences.
 Inspired by mem0 and BabyAGI patterns.
+"""
+
 
 from __future__ import annotations
 from pathlib import Path
@@ -30,6 +32,8 @@ from .mixins.context_entity_mixin import ContextEntityMixin
 from .mixins.context_consolidation_mixin import ContextConsolidationMixin
 
 __version__ = VERSION
+
+
 
 
 class GlobalContextEngine(

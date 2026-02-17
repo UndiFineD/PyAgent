@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Models and configurations for tokenization.
+"""
+
 
 from __future__ import annotations
 
@@ -23,6 +25,8 @@ from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
+
+
 
 
 class TokenizerBackend(Enum):
@@ -34,6 +38,8 @@ class TokenizerBackend(Enum):
     CUSTOM = auto()
 
 
+
+
 class SpecialTokenHandling(Enum):
     """How to handle special tokens.
     INCLUDE = auto()
@@ -43,12 +49,16 @@ class SpecialTokenHandling(Enum):
     CUSTOM = auto()
 
 
+
+
 class TruncationStrategy(Enum):
     """Truncation strategies for long sequences.
     NONE = auto()
     LEFT = auto()
     RIGHT = auto()
     LONGEST_FIRST = auto()
+
+
 
 
 class PaddingStrategy(Enum):

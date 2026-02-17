@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class FeedGenerator:
     """Generates RSS / Atom feeds from changelog.    Creates syndication feeds for changelog updates.
 

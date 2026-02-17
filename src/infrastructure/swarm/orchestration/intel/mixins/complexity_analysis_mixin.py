@@ -28,12 +28,14 @@ if TYPE_CHECKING:
         SelfImprovementAnalysis
 
 
+
+
 class ComplexityAnalysisMixin:
     """Mixin for workspace-wide complexity scanning in SelfImprovementAnalysis.
     def scan_workspace_complexity(self: SelfImprovementAnalysis, target_dir: str = "src") -> list[dict[str, Any]]:"                Scans the workspace for high-complexity files using the Rust bridge.
         Returns a sorted list of complexity targets.
                 try:
-            import rust_core as rc
+            import rust_core as rc  # pylint: disable=no-member
         except ImportError:
             logging.warning("Self-Improvement: Rust core not found. Complexity scan using Python fallback.")"            return []
 

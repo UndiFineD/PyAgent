@@ -48,6 +48,8 @@ d = {}  # store SSRF detections
 extra_headers = {}
 
 
+
+
 class Detector(BaseHTTPRequestHandler):
     def __init__(self, token, d, *args):
         self.d = d

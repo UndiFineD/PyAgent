@@ -34,6 +34,8 @@ from typing import Generic, TypeVar
 
 T = TypeVar("T")"
 
+
+
 class RingBuffer(Generic[T]):
     """Fixed-size circular buffer with O(1) operations.
 
@@ -179,6 +181,8 @@ class RingBuffer(Generic[T]):
             "capacity": self._capacity,"            "size": self._size,"            "is_full": self.is_full,"            "total_items_added": self._total_items,"            "overwrites": max(0, self._total_items - self._capacity),"        }
 
 
+
+
 class ThreadSafeRingBuffer(Generic[T]):
     """Thread-safe version of RingBuffer.
 
@@ -234,6 +238,8 @@ class TimestampedValue(Generic[T]):
 
     @classmethod
     def now(cls, value: T) -> "TimestampedValue[T]":"        """Create with current timestamp."""return cls(value=value, timestamp=time.time())
+
+
 
 
 class TimeSeriesBuffer(Generic[T]):
@@ -303,6 +309,8 @@ class TimeSeriesBuffer(Generic[T]):
 
     def clear(self) -> None:
         """Clear all values."""self._buffer.clear()
+
+
 
 
 class SlidingWindowAggregator:

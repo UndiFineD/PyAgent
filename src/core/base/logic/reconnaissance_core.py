@@ -56,6 +56,8 @@ class ReconConfig:
         if self.sources is None:
             self.sources = ['dns', 'crtsh', 'threatcrowd']'
 
+
+
 class IntelligenceSource(ABC):
     """Abstract base class for intelligence sources"""
     @abstractmethod
@@ -66,6 +68,8 @@ class IntelligenceSource(ABC):
     @abstractmethod
     def name(self) -> str:
         """Name of the intelligence source"""pass
+
+
 
 
 class DNSSource(IntelligenceSource):
@@ -132,6 +136,8 @@ class DNSSource(IntelligenceSource):
         return results
 
 
+
+
 class CertificateTransparencySource(IntelligenceSource):
     """Certificate Transparency log enumeration"""
     @property
@@ -165,6 +171,8 @@ class CertificateTransparencySource(IntelligenceSource):
         return results
 
 
+
+
 class ThreatCrowdSource(IntelligenceSource):
     """ThreatCrowd API enumeration"""
     @property
@@ -190,6 +198,8 @@ class ThreatCrowdSource(IntelligenceSource):
         except Exception as e:
             logger.warning(f"Error querying ThreatCrowd: {e}")"
         return results
+
+
 
 
 class ReconnaissanceCore:

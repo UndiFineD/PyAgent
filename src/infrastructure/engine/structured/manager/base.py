@@ -14,6 +14,8 @@
 
 
 Base.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ from typing import Any, Callable, List, Optional, Sequence
 import numpy as np
 
 from .config import BackendStats, GrammarSpec, GrammarType
+
+
 
 
 class StructuredOutputGrammar(ABC):
@@ -104,6 +108,8 @@ class StructuredOutputGrammar(ABC):
         """Reset the grammar state.        self._is_terminated = False
         self._tokens_accepted = 0
         self._state_history.clear()
+
+
 
 
 class StructuredOutputBackend(ABC):

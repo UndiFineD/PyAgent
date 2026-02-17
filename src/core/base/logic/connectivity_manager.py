@@ -28,6 +28,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ConnectivityManager:
     """Manages connection status regarding external APIs with persistent 15-minute TTL caching."""
     _instance = None

@@ -51,6 +51,8 @@ class ContentTemplate:
     examples: List[Dict[str, Any]] = field(default_factory=list)
 
 
+
+
 class AIContentEditorCore(BaseCore):
     """AI Content Editor Core for instruction-based content generation and editing.
 

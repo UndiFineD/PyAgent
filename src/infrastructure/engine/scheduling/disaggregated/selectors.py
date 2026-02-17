@@ -25,6 +25,8 @@ from typing import List, Optional
 from .config import InstanceInfo, ScheduledRequest
 
 
+
+
 class InstanceSelector(ABC):
     """Abstract base for instance selection strategies.
     @abstractmethod
@@ -34,6 +36,8 @@ class InstanceSelector(ABC):
         request: ScheduledRequest,
     ) -> Optional[InstanceInfo]:
         """Select an instance for the request.        raise NotImplementedError
+
+
 
 
 class RoundRobinSelector(InstanceSelector):
@@ -58,6 +62,8 @@ class RoundRobinSelector(InstanceSelector):
         return healthy[idx]
 
 
+
+
 class LeastLoadedSelector(InstanceSelector):
     """Select least loaded instance.
     def select(
@@ -72,6 +78,8 @@ class LeastLoadedSelector(InstanceSelector):
         return min(healthy, key=lambda i: i.load_score)
 
 
+
+
 class RandomSelector(InstanceSelector):
     """Random instance selection.
     def select(
@@ -84,6 +92,8 @@ class RandomSelector(InstanceSelector):
             return None
 
         return random.choice(healthy)
+
+
 
 
 class HashSelector(InstanceSelector):

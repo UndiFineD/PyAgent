@@ -22,6 +22,8 @@ from typing import Any
 from src.core.base.common.base_modules import BaseModule
 
 
+
+
 class CodeQualityModule(BaseModule):
     """Consolidated core module for code quality analysis.
     Migrated from CodeQualityCore.

@@ -37,6 +37,8 @@ class DNSScanResult:
     def __repr__(self):
         return f"<DNSScanResult {self.hostname} -> {self.ip}>""
 
+
+
 class DNSIntelligence:
         Async DNS scanning and intelligence gathering.
     Refactored from subbrute logic.

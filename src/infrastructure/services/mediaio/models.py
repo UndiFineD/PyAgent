@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Models and configurations for media loading.
+"""
+
 
 from __future__ import annotations
 
@@ -26,12 +28,16 @@ from typing import Optional, Tuple, Union
 import numpy as np
 
 
+
+
 class MediaType(Enum):
     """Supported media types.
     IMAGE = auto()
     VIDEO = auto()
     AUDIO = auto()
     DOCUMENT = auto()
+
+
 
 
 class ImageFormat(Enum):
@@ -45,6 +51,8 @@ class ImageFormat(Enum):
     HEIC = auto()
 
 
+
+
 class VideoFormat(Enum):
     """Supported video formats.
     MP4 = auto()
@@ -54,6 +62,8 @@ class VideoFormat(Enum):
     MKV = auto()
 
 
+
+
 class AudioFormat(Enum):
     """Supported audio formats.
     WAV = auto()
@@ -61,6 +71,8 @@ class AudioFormat(Enum):
     FLAC = auto()
     OGG = auto()
     M4A = auto()
+
+
 
 
 class ResizeMode(Enum):

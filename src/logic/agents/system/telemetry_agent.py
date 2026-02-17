@@ -24,7 +24,7 @@ USAGE:
 WHAT IT DOES:
 - Collects and buffers telemetry events in-memory, logs structured messages, checks connectivity to a telemetry endpoint, and archives events locally via LocalContextRecorder for later analysis.
 - Uses ConnectivityManager for TTL-based endpoint availability decisions and StructuredLogger for consistent observability.
-- Keeps a rolling in-memory buffer (max 100) and attempts non-blocking network delivery (placeholder / commented out).
+- Keeps a rolling in-memory buffer (max 100) and attempts non-blocking network delivery (TODO Placeholder / commented out).
 
 WHAT IT SHOULD DO BETTER:
 - Implement robust async delivery with configurable retry/backoff, batching, and non-blocking I/O to avoid blocking the agent (use asyncio and aiohttp).
@@ -66,6 +66,8 @@ from src.infrastructure.compute.backend.local_context_recorder import \
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
+
+
 
 
 class TelemetryAgent(BaseAgent):
@@ -117,6 +119,8 @@ from src.infrastructure.compute.backend.local_context_recorder import \
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
+
+
 
 
 class TelemetryAgent(BaseAgent):

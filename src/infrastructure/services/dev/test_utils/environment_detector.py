@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class EnvironmentDetector:
     """Detects and reports test environment information.
     def detect(self) -> dict[str, Any]:

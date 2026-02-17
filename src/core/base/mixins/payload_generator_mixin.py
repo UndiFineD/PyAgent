@@ -19,6 +19,8 @@ from typing import Dict, Any, List, Optional
 from urllib.parse import quote
 
 
+
+
 class PayloadGeneratorMixin:
     """
     Mixin providing payload generation capabilities for various exploits.

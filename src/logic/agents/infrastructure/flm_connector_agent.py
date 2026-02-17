@@ -35,6 +35,8 @@ WHAT IT SHOULD DO BETTER:
 - Return structured results (objects or dataclasses) instead of raw strings to enable downstream programmatic handling and clearer error semantics.
 
 # FILE CONTENT SUMMARY:Agent for connecting to local FastFlowLM instances on NPU edge nodes.
+"""
+
 
 from __future__ import annotations
 

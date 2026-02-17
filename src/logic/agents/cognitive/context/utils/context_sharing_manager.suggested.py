@@ -15,6 +15,8 @@
 
 # "Context sharing and synchronization for Cognitive agents."This module manages permissions and sharing of context objects across
 different users and agents within the team.
+"""
+
 
 from __future__ import annotations
 from datetime import datetime
@@ -26,6 +28,8 @@ from src.logic.agents.cognitive.context.models.sharing_permission import (
 )
 
 __version__ = VERSION
+
+
 
 
 class ContextSharingManager:

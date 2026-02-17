@@ -16,6 +16,8 @@
 """
 FleetConsensusManager
 Consensus management for the FleetManager.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+
 
 
 class FleetConsensusManager:

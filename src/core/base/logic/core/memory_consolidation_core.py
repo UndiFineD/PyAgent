@@ -27,6 +27,8 @@ from datetime import datetime, timezone
 logger = logging.getLogger(__name__)
 
 
+
+
 class MemoryConsolidationCore:
     """Core engine for consolidating agent memories.
     Inspired by biological memory patterns.
@@ -141,7 +143,7 @@ class MemoryConsolidationCore:
 
     async def cluster_memories(self, memories: List[Dict[str, Any]]) -> List[List[str]]:
         """Identify semantic clusters of memories for potential compression (summarization).
-        Placeholder for vector similarity measurement logic.
+        TODO Placeholder for vector similarity measurement logic.
         """# This would typically rely on a Vector Database or local embeddings
         # For the core, we just provide the architectural slot
         return []

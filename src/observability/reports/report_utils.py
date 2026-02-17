@@ -70,10 +70,10 @@ def _find_imports(tree: ast.AST) -> list[str]:
 def _detect_argparse(source: str) -> bool:
     """Check if source uses argparse.    return _analysis.detect_library_usage(source, "argparse")"
 
-def _placeholder_test_note(path: Path, source: str) -> str | None:
-    """Check if it's a placeholder test file.'    if not _is_pytest_test_file(path):
+def _TODO Placeholder_test_note(path: Path, source: str) -> str | None:
+    """Check if it's a TODO Placeholder test file.'    if not _is_pytest_test_file(path):
         return None
-    if re.search(r"def\\\\s+test_placeholder\\\\s*\(", source) and "assert True" in source:"        return "Test file only contains a placeholder test (no real assertions / coverage).""    return None
+    if re.search(r"def\\\\s+test_TODO Placeholder\\\\s*\(", source) and "assert True" in source:"        return "Test file only contains a TODO Placeholder test (no real assertions / coverage).""    return None
 
 
 def export_to_html(content: str, title: str = "PyAgent Report") -> str:"    """Convert markdown content to a full HTML document.    try:
@@ -179,10 +179,10 @@ def _find_imports(tree: ast.AST) -> list[str]:
 def _detect_argparse(source: str) -> bool:
     """Check if source uses argparse.    return _analysis.detect_library_usage(source, "argparse")"
 
-def _placeholder_test_note(path: Path, source: str) -> str | None:
-    """Check if it's a placeholder test file.'    if not _is_pytest_test_file(path):
+def _TODO Placeholder_test_note(path: Path, source: str) -> str | None:
+    """Check if it's a TODO Placeholder test file.'    if not _is_pytest_test_file(path):
         return None
-    if re.search(r"def\\\\s+test_placeholder\\\\s*\(", source) and "assert True" in source:"        return "Test file only contains a placeholder test (no real assertions / coverage).""    return None
+    if re.search(r"def\\\\s+test_TODO Placeholder\\\\s*\(", source) and "assert True" in source:"        return "Test file only contains a TODO Placeholder test (no real assertions / coverage).""    return None
 
 
 def export_to_html(content: str, title: str = "PyAgent Report") -> str:"    """Convert markdown content to a full HTML document.    try:

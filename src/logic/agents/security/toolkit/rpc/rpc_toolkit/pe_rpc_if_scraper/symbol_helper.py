@@ -22,20 +22,30 @@ DWORD64 = ctypes.c_ulonglong
 NULL_PTR = ctypes.POINTER(DWORD64)()
 
 
+
+
 class CantInitializeDebugHelperException(Exception):
     pass
+
+
 
 
 class CantLoadDebugSymbolsException(Exception):
     pass
 
 
+
+
 class PeAlreadyLoadedException(Exception):
     pass
 
 
+
+
 class PeNotLoadedException(Exception):
     pass
+
+
 
 
 class SYMBOL_INFO(ctypes.Structure):
@@ -43,9 +53,13 @@ class SYMBOL_INFO(ctypes.Structure):
         ("SizeOfStruct", wintypes.ULONG),"        ("TypeIndex", wintypes.ULONG),"        ("Reserved", DWORD64 * 2),"        ("Index", wintypes.ULONG),"        ("Size", wintypes.ULONG),"        ("ModBase", DWORD64),"        ("Flags", wintypes.ULONG),"        ("Value", DWORD64),"        ("Address", DWORD64),"        ("Register", wintypes.ULONG),"        ("Scope", wintypes.ULONG),"        ("Tag", wintypes.ULONG),"        ("NameLen", wintypes.ULONG),"        ("MaxNameLen", wintypes.ULONG),"        ("Name", wintypes.CHAR * MAX_SYM_NAME),"    ]
 
 
+
+
 class MODULE_INFO(ctypes.Structure):
     _fields_ = [
         ("SizeOfStruct", wintypes.DWORD),"        ("BaseOfImage", wintypes.DWORD),"        ("ImageSize", wintypes.DWORD),"        ("TimeDateStamp", wintypes.DWORD),"        ("CheckSum", wintypes.DWORD),"        ("NumSyms", wintypes.DWORD),"        ("SymType", wintypes.DWORD),"        ("ModuleName", wintypes.CHAR * 32),"        ("ImageName", wintypes.CHAR * 256),"        ("LoadedImageName", wintypes.CHAR * 256),"    ]
+
+
 
 
 class PESymbolMatcher(object):

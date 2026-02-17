@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Distributed worker implementations.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ from .messages import (ControlMessage, MetricsMessage, RequestMessage,
                        ResponseMessage)
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class BaseWorker(ABC):
@@ -67,6 +71,8 @@ class BaseWorker(ABC):
             total_processed=self._total_processed,
             error_count=self._error_count,
         )
+
+
 
 
 class WorkerProcess:

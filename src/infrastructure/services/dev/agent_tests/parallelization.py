@@ -23,6 +23,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ParallelizationStrategy:
     """Strategy for parallel test execution.
     def __init__(self, strategy_type: str = "round_robin", workers: int = 1) -> None:"        """Initialize strategy.        self.strategy_type = strategy_type

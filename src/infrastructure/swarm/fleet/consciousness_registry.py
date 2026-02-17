@@ -16,6 +16,8 @@
 """
 ConsciousnessRegistry
 Consciousness registry.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from typing import Any
 
 from src.infrastructure.swarm.orchestration.signals.signal_registry import \
     SignalRegistry
+
+
 
 
 class ConsciousnessRegistry:

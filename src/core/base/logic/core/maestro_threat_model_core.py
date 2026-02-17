@@ -17,11 +17,17 @@ from enum import Enum
 from pydantic import BaseModel
 
 
+
+
 class MaestroLayer(str, Enum):
     FOUNDATION_MODELS = "L1_Foundation_Models""    DATA_OPERATIONS = "L2_Data_Operations""    AGENT_FRAMEWORKS = "L3_Agent_Frameworks""    DEPLOYMENT_INFRASTRUCTURE = "L4_Deployment_Infrastructure""    EVALUATION_OBSERVABILITY = "L5_Evaluation_Observability""    SECURITY_COMPLIANCE = "L6_Security_Compliance""    AGENT_ECOSYSTEM = "L7_Agent_Ecosystem""
 
+
+
 class ThreatSeverity(str, Enum):
     LOW = "low""    MEDIUM = "medium""    HIGH = "high""    CRITICAL = "critical""
+
+
 
 class AgentThreat(BaseModel):
     layer: MaestroLayer
@@ -29,6 +35,8 @@ class AgentThreat(BaseModel):
     description: str
     severity: ThreatSeverity
     mitigated: bool = False
+
+
 
 
 class MaestroThreatModelCore:

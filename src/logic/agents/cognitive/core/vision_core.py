@@ -18,6 +18,8 @@
 
 Provides logic for image hashing, glitch detection, and visual signature extraction
 from GUI screenshots and other visual data sources.
+"""
+
 
 from __future__ import annotations
 import hashlib
@@ -25,6 +27,8 @@ import hashlib
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class VisionCore:

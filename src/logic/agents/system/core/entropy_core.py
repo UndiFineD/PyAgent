@@ -53,11 +53,13 @@ import ast
 import os
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
+
 
 
 class EntropyCore:
@@ -127,11 +129,13 @@ import ast
 import os
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
+
 
 
 class EntropyCore:

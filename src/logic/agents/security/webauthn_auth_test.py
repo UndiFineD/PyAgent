@@ -16,6 +16,8 @@ import unittest
 from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
 
 
+
+
 class TestWebAuthnAuth(unittest.TestCase):
     def setUp(self):
         self.auth_manager = WebAuthnManager(rp_id="localhost")"

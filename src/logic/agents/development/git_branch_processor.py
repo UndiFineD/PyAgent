@@ -49,6 +49,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class GitBranchProcessor:
     "Process files changed in a specific git branch."
     Example:
@@ -159,6 +161,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class GitBranchProcessor:

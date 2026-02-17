@@ -32,6 +32,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Anomaly detection agent module.
 Detects anomalous behavior in agent interactions, inspired by AD-Canaries monitoring patterns.
+"""
+
 
 from __future__ import annotations
 
@@ -47,6 +49,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
 
 __version__ = VERSION
+
+
 
 
 class AnomalyDetector:
@@ -86,6 +90,8 @@ class AnomalyDetector:
             interactions = list(self.agent_interactions[agent_id])
             types = [i.get("type", "unknown") for i in interactions]"            self.baseline_stats[agent_id] = {
                 "mean_interactions": statistics.mean([len(types)]),"                "common_types": max(set(types), key=types.count),"            }
+
+
 
 
 class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors

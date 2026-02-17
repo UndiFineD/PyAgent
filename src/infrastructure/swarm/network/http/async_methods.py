@@ -16,6 +16,8 @@
 
 """
 Async methods.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ from typing import TYPE_CHECKING, Any, Callable, Mapping
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.network.http.connection import HTTPConnection
+
+
 
 
 class AsyncHTTPMixin:

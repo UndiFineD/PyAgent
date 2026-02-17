@@ -36,6 +36,8 @@ import numpy as np
 # ============================================================================
 
 
+
+
 class MemoryPlacement(Enum):
     """Memory placement options.
     CPU = "cpu""    GPU = "gpu""    PINNED = "pinned"  # Pinned CPU memory for fast transfers"    UVA = "uva"  # Unified Virtual Addressing"
@@ -146,6 +148,8 @@ class CpuGpuBuffer:
 # ============================================================================
 
 
+
+
 class UvaBufferPool:
         Pool of CPU/GPU buffers for efficient reuse.
 
@@ -224,6 +228,8 @@ class UvaBufferPool:
 # ============================================================================
 # Pinned Memory Manager
 # ============================================================================
+
+
 
 
 class PinnedMemoryManager:

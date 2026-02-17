@@ -16,14 +16,16 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Facade for Multimodal Cache.
 Delegates to modularized sub-packages in src/infrastructure/multimodal/cache/.
+"""
+
 
 from __future__ import annotations
 
 from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
                     IPCMultiModalCache, MediaHash, MediaType,
                     MemoryMultiModalCache, MultiModalCache, MultiModalHasher,
-                    PerceptualCache, PlaceholderRange, PrefetchMultiModalCache,
+                    PerceptualCache, TODO PlaceholderRange, PrefetchMultiModalCache,
                     compute_media_hash, create_cache)
 
 __all__ = [
-    "MediaType","    "CacheBackend","    "HashAlgorithm","    "MediaHash","    "CacheEntry","    "CacheStats","    "PlaceholderRange","    "MultiModalHasher","    "MultiModalCache","    "MemoryMultiModalCache","    "PerceptualCache","    "PrefetchMultiModalCache","    "IPCMultiModalCache","    "compute_media_hash","    "create_cache","]
+    "MediaType","    "CacheBackend","    "HashAlgorithm","    "MediaHash","    "CacheEntry","    "CacheStats","    "TODO PlaceholderRange","    "MultiModalHasher","    "MultiModalCache","    "MemoryMultiModalCache","    "PerceptualCache","    "PrefetchMultiModalCache","    "IPCMultiModalCache","    "compute_media_hash","    "create_cache","]

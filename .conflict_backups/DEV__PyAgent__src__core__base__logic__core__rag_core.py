@@ -31,6 +31,8 @@ from enum import Enum
 from src.core.base.common.base_core import BaseCore
 
 
+
+
 class VectorStoreType(str, Enum):
     """Supported vector store types."""
     QDRANT = "qdrant"
@@ -38,6 +40,8 @@ class VectorStoreType(str, Enum):
     CHROMA = "chroma"
     WEAVIATE = "weaviate"
     MILVUS = "milvus"
+
+
 
 
 class RetrievalStrategy(str, Enum):
@@ -48,6 +52,8 @@ class RetrievalStrategy(str, Enum):
     MULTI_QUERY = "multi_query"
     TIME_WEIGHTED = "time_weighted"
     CONTEXTUAL_COMPRESSION = "contextual_compression"
+
+
 
 
 class DocumentType(str, Enum):
@@ -119,6 +125,8 @@ class RAGQuery:
     context: Dict[str, Any] = field(default_factory=dict)
 
 
+
+
 class VectorStoreInterface(Protocol):
     """Protocol for vector store implementations."""
 
@@ -143,6 +151,8 @@ class VectorStoreInterface(Protocol):
     async def update_document(self, doc_id: str, document: Document) -> bool:
         """Update a document in the vector store."""
         ...
+
+
 
 
 class BaseVectorStore:
@@ -173,6 +183,8 @@ class BaseVectorStore:
     async def update_document(self, doc_id: str, document: Document) -> bool:
         """Update a document in the vector store."""
         raise NotImplementedError
+
+
 
 
 class RAGCore(BaseCore):
@@ -751,6 +763,8 @@ class RAGCore(BaseCore):
         self.embedders.clear()
 
 
+
+
 class QdrantVectorStore(BaseVectorStore):
     """Real vector store implementation using Qdrant."""
 
@@ -785,6 +799,8 @@ class QdrantVectorStore(BaseVectorStore):
         # Real search would be:
         # self.client.search(...)
         return []
+
+
 
 
 class MockVectorStore(BaseVectorStore):

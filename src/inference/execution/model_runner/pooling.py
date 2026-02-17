@@ -21,6 +21,8 @@ from typing import Callable, Generic, Optional, TypeVar
 
 T = TypeVar("T")"
 
+
+
 class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
     """Pooled async output container.
 

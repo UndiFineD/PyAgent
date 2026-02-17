@@ -23,6 +23,8 @@ from .coordinator import KVCacheCoordinator
 from .data_classes import CacheConfig, KVCacheBlocks
 
 
+
+
 class HierarchicalKVCacheCoordinator(KVCacheCoordinator):
     """Hierarchical coordinator for complex model architectures.
     def __init__(self, config: CacheConfig, max_model_len: int, num_layers: int) -> None:
@@ -32,6 +34,8 @@ class HierarchicalKVCacheCoordinator(KVCacheCoordinator):
     def allocate_for_layer(self, request_id: str, num_tokens: int, layer_idx: int) -> KVCacheBlocks:
         """Allocate KV cache specifically for a specific model layer.        blocks = self.allocate(request_id, num_tokens)
         self.layer_stats[layer_idx]["allocations"] += 1"        return blocks
+
+
 
 
 class PredictiveKVCacheCoordinator(KVCacheCoordinator):
@@ -57,6 +61,8 @@ class PredictiveKVCacheCoordinator(KVCacheCoordinator):
         """Allocate KV cache based on predicted future demand.        predicted = self.predict_length(prompt_length)
         target_tokens = max(current_tokens, predicted)
         return self.allocate(request_id, target_tokens)
+
+
 
 
 class AsyncPrefetchCoordinator(KVCacheCoordinator):

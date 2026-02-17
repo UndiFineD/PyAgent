@@ -5,6 +5,8 @@ import re
 from pathlib import Path
 
 
+
+
 class FixHeadersAgent:
     """"Agent for fixing and standardizing license headers in Python files.
     HEADER_TEMPLATE = """#!/usr/bin/env python3""""# Copyright 2026 PyAgent Authors

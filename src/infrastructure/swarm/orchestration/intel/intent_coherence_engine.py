@@ -27,6 +27,8 @@ if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
+
+
 class IntentCoherenceEngine:
         Implements Swarm Consciousness (Phase 30).
     Maintains a unified 'Intent' layer that synchronizes all agent goals'    without necessitating explicit task decomposition.

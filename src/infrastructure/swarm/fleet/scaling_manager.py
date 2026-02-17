@@ -18,6 +18,8 @@ ScalingManager
 
 Manager for dynamic scaling of the agent fleet.
 Monitors system load and spawns new agent instances as needed.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.scaling_core import ScalingCore
 
 __version__ = VERSION
+
+
 
 
 class ScalingManager:

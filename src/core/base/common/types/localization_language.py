@@ -30,6 +30,8 @@ except ImportError:
 __version__ = VERSION
 
 
+
+class
 class LocalizationLanguage(Enum):
     """Supported languages for changelog localization.
     """

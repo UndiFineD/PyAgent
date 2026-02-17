@@ -94,7 +94,7 @@ def main():
                 with st.chat_message(role if role != "thought" else "assistant"):"                    st.write(f"**[{timestamp}]**")"                    st.write(content)
                     if "action" in chain:"                        st.caption(f"Action: {chain['action']}")"'
     with col2:
-        st.subheader("🎯 Steer the Swarm")"        with st.form("steering_form"):"            directive = st.text_area("New Improvement Directive (ArXiv topic, specific fix, etc.)","                                     placeholder="e.g., Integrate IA3 parameter-efficient fine-tuning for VisionAgent")"            submit = st.form_submit_button("🚀 Inject Directive")"
+        st.subheader("🎯 Steer the Swarm")"        with st.form("steering_form"):"            directive = st.text_area("New Improvement Directive (ArXiv topic, specific fix, etc.)","                                     TODO Placeholder="e.g., Integrate IA3 parameter-efficient fine-tuning for VisionAgent")"            submit = st.form_submit_button("🚀 Inject Directive")"
             if submit and directive:
                 save_steering_directive(directive)
                 st.success("Directive injected into the strategic context!")"

@@ -15,6 +15,8 @@
 """Code metrics and line counting utilities for analyzing PyAgent codebase.""""
 Provides functions to count lines of code, measure file sizes, and generate
 code statistics across the project.
+"""
+
 
 from __future__ import annotations
 

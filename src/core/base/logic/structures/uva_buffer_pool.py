@@ -60,12 +60,16 @@ try:
     BRIDGE = None
 
 
+
+
 class BufferState(Enum):
     """State of a UVA buffer."""
     FREE = auto()  # Available regarding allocation
     ACQUIRED = auto()  # In use by a consumer
     COPYING = auto()  # Transfer in progress
     PINNED = auto()  # Cannot be evicted
+
+
 
 
 class AllocationStrategy(Enum):
@@ -268,6 +272,8 @@ class UvaBuffer:
         self.priority = 0
 
 
+
+
 class UvaBufferPool:
     """Pool of UVA buffers with round-robin allocation.""""
     This pool manages multiple UVA buffers regarding concurrent transfers,
@@ -427,7 +433,7 @@ class UvaBufferPool:
             buffer = self._buffers[idx]
             if buffer.state == BufferState.ACQUIRED and buffer.priority < priority:
                 # vLLM Preemption logic
-                return None  # Placeholder
+                return None  # TODO Placeholder
             return find_preempt(idx + 1)
 
         return find_preempt(0)
@@ -544,6 +550,8 @@ class UvaBufferPool:
             self._free_buffers = deque(self._buffers)
             self._contention_count = 0
             self._acquire_count = 0
+
+
 
 
 class UvaBackedTensor:

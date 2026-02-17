@@ -19,6 +19,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 
+
+
 class LoRATarget(Enum):
     """Common LoRA target modules.
     Q_PROJ = "q_proj""    K_PROJ = "k_proj""    V_PROJ = "v_proj""    O_PROJ = "o_proj""    GATE_PROJ = "gate_proj""    UP_PROJ = "up_proj""    DOWN_PROJ = "down_proj""    QKV_PROJ = "qkv_proj"  # Packed QKV"    GATE_UP_PROJ = "gate_up_proj"  # Packed gate+up"    LM_HEAD = "lm_head""    EMBED_TOKENS = "embed_tokens""
@@ -43,6 +45,8 @@ class LoRAConfig:
     @property
     def scaling(self) -> float:
         """LoRA scaling factor (alpha / rank).        return self.alpha / self.rank
+
+
 
 
 class LoRAModelState(Enum):

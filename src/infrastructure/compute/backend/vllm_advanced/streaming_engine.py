@@ -17,6 +17,8 @@ Streaming vLLM Engine Integration.
 
 Provides real-time token streaming for vLLM inference.
 Supports both callback-based and iterator-based streaming.
+"""
+
 
 from __future__ import annotations
 
@@ -48,6 +50,8 @@ except ImportError:
     HAS_VLLM = False
     SamplingParams = None
     LLM = None
+
+
 
 
 class StreamCallback(Protocol):
@@ -87,6 +91,8 @@ class StreamToken:
     timestamp: float = field(default_factory=time.time)
     is_special: bool = False
     logprob: Optional[float] = None
+
+
 
 
 class TokenStreamIterator:
@@ -183,6 +189,8 @@ class TokenStreamIterator:
 
     def get_full_text(self) -> str:
         """Get all generated text so far.        return "".join(t.text for t in self._buffer)"
+
+
 
 class StreamingVllmEngine:
         Streaming vLLM engine for real-time token output.
@@ -296,7 +304,7 @@ class StreamingVllmEngine:
             for i, char in enumerate(full_text):
                 callback(
                     token=char,
-                    token_id=i,  # Placeholder
+                    token_id=i,  # TODO Placeholder
                     is_finished=(i == len(full_text) - 1),
                     finish_reason="stop" if i == len(full_text) - 1 else None,"                )
 

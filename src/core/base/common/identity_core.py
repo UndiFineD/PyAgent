@@ -26,7 +26,7 @@ from ..lifecycle.version import SDK_VERSION
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
@@ -37,6 +37,8 @@ class AgentIdentity:
     agent_id: str
     public_key: str
     claims: dict[str, Any]
+
+
 
 
 class IdentityCore(BaseCore):

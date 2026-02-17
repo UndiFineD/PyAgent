@@ -23,27 +23,33 @@ from typing import Optional
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
-logger = logging.getLogger("pyagent.hardware")"
+logger = logging.getLogger("pyagent.hardware")
+
+
 
 class HardwareCore(BaseCore):
     """Standard interface for hardware-specific optimizations (NPU, GPU).
     """
-    def __init__(self, name: str = "HardwareCore", repo_root: Optional[str] = None) -> None:"        super().__init__(name=name, repo_root=repo_root)
+    def __init__(self, name: str = "HardwareCore", repo_root: Optional[str] = None) -> None:
+        super().__init__(name=name, repo_root=repo_root)
         self._npu_status = False
 
     def initialize_npu(self) -> bool:
-        """Attempts to initialize NPU acceleration via Rust core."""if rc and hasattr(rc, "initialize_npu"):  # pylint: disable=no-member"            # pylint: disable=no-member
+        """Attempts to initialize NPU acceleration via Rust core."""
+        if rc and hasattr(rc, "initialize_npu"):  # pylint: disable=no-member
+            # pylint: disable=no-member
             result = rc.initialize_npu()
             self._npu_status = result == 0
             return self._npu_status
         return False
 
     def run_npu_model(self, model_path: str) -> bool:
-        """Executes a model on the NPU."""if rc and hasattr(rc, "run_npu_model") and self._npu_status:  # pylint: disable=no-member"            # pylint: disable=no-member
+        if rc and hasattr(rc, "run_npu_model") and self._npu_status:  # pylint: disable=no-member
+            # pylint: disable=no-member
             result = rc.run_npu_model(model_path)
             return result == 0
         return False

@@ -15,6 +15,8 @@
 
 """
 Command loader - discovers and loads command modules.
+"""
+
 
 from __future__ import annotations
 

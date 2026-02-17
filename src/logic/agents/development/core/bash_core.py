@@ -30,6 +30,8 @@ from typing import Any, Optional, TypedDict
 from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
+
+
 class ShellCheckIssue(TypedDict):
 """"Represents a single issue found by shellcheck.
     file: str
@@ -45,11 +47,15 @@ class ShellCheckIssue(TypedDict):
     fix: Any
 
 
+
+
 class BashLintResult(TypedDict):
 """"Result of a bash script linting session.
     valid: bool
     issues: list[ShellCheckIssue]
     error: Optional[str]
+
+
 
 
 class BashCore:

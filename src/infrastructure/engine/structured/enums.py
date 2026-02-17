@@ -18,6 +18,8 @@ Enums for structured output engine.
 from enum import Enum, auto
 
 
+
+
 class GrammarType(Enum):
     """Types of grammar specifications.
     JSON_SCHEMA = auto()
@@ -27,6 +29,8 @@ class GrammarType(Enum):
     LARK = auto()
     STRUCTURAL_TAG = auto()
     CUSTOM = auto()
+
+
 
 
 class VocabType(Enum):

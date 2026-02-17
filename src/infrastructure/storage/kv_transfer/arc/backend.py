@@ -17,6 +17,8 @@
 """
 Phase 45: ARC Offload Backends
 Backends for block storage in the ARC offloading system.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from src.infrastructure.storage.kv_transfer.arc.types import (BlockHash,
                                                               BlockStatus,
                                                               LoadStoreSpec,
                                                               OffloadMedium)
+
+
 
 
 class Backend(ABC):
@@ -57,6 +61,8 @@ class Backend(ABC):
     @abstractmethod
     def medium(self) -> OffloadMedium:
         """Get storage medium.        pass
+
+
 
 
 class SimpleBackend(Backend):

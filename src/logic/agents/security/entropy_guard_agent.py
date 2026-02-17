@@ -41,6 +41,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 EntropyGuardAgent: Agent for monitoring entropy, randomness, and cryptographic health.
 Detects entropy depletion and enforces secure randomness policies.
+"""
+
 
 from __future__ import annotations
 
@@ -52,6 +54,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class EntropyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors

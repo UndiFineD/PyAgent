@@ -1,9 +1,12 @@
+[tool.env]
+# Activate venv and set PYTHONPATH for development/CI
+activate_and_set_pythonpath = "& c:/Dev/PyAgent/.venv/Scripts/Activate.ps1; $env:PYTHONPATH='c:/Dev/PyAgent/src';"
 [build-system]
 requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
 
 [project]
-name = "pyagent"
+name = "PyAgent"
 version = "4.0.0"
 description = "Autonomous Multi-Agent Swarm Framework"
 readme = "README.md"
@@ -71,19 +74,17 @@ rust = [
 
 [tool.uv]
 # Optimization for 'uv' package manager
-cache-keys = [{ file = "requirements/base.txt" }]
+cache-keys = [{ file = "requirements.txt" }]
 
 [tool.ruff]
 line-length = 120
 target-version = "py312"
 
 [tool.pytest.ini_options]
+testpaths = ["src"]
+python_files = "*_test.py"
 minversion = "6.0"
 addopts = "-ra -q --asyncio-mode=strict -p no:anyio"
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
 asyncio_mode = "strict"
 timeout = 10
 norecursedirs = [".external", ".hypothesis"]

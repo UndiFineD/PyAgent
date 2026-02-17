@@ -49,6 +49,8 @@ import re
 from typing import Any
 
 
+
+
 class ChangelogAnalyticsMixin:
 """"Mixin for calculating statistics and analytics for changelogs.
     def calculate_statistics(self) -> dict[str, Any]:
@@ -74,6 +76,8 @@ from __future__ import annotations
 
 import re
 from typing import Any
+
+
 
 
 class ChangelogAnalyticsMixin:

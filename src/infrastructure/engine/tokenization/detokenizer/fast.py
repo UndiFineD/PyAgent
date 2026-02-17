@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Fast incremental detokenization for HuggingFace fast tokenizers.
+"""
+
 
 from __future__ import annotations
 
@@ -34,6 +36,8 @@ try:
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
+
 
 
 class FastIncrementalDetokenizer(IncrementalDetokenizer):

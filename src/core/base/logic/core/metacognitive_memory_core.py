@@ -16,10 +16,14 @@ from typing import List, Dict, Any
 from pydantic import BaseModel
 
 
+
+
 class MemoryItem(BaseModel):
     id: str
     content: str
     metadata: Dict[str, Any] = {}
+
+
 
 
 class MetacognitiveMemoryCore:
@@ -48,7 +52,7 @@ class MetacognitiveMemoryCore:
             del self.memories[m_id]
             return f"Memory {m_id} deleted.""        return f"Memory {m_id} not found.""
     async def query_memories(self, query: str) -> List[MemoryItem]:
-        """Queries memories (placeholder for semantic search)."""# In a real implementation, this would use an embedder
+        """Queries memories (TODO Placeholder for semantic search)."""# In a real implementation, this would use an embedder
         return list(self.memories.values())
 
     def get_tool_definitions(self) -> List[Dict]:

@@ -26,11 +26,15 @@ from src.logic.agents.swarm.self_evolution_mixin import (
 from src.core.base.common.models.communication_models import CascadeContext
 
 
+
+
 class MockOrchestrator(SelfEvolutionMixin):
     """Mock orchestrator for testing the mixin.
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.execute_with_pattern = AsyncMock()
+
+
 
 
 class TestEvolutionMetrics:
@@ -45,6 +49,8 @@ class TestEvolutionMetrics:
         assert isinstance(metrics.last_updated, datetime)
 
 
+
+
 class TestEvolutionHistory:
     """Test EvolutionHistory dataclass.
     def test_default_values(self):
@@ -54,6 +60,8 @@ class TestEvolutionHistory:
         assert history.evolved_workflows == []
         assert history.performance_history == []
         assert history.lessons_learned == []
+
+
 
 
 class TestSelfEvolutionMixin:

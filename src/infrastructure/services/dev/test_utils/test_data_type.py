@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class TestDataType(Enum):
     """Types of test data.
     __test__ = False

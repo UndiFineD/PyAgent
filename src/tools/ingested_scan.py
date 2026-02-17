@@ -24,6 +24,8 @@ Usage (PowerShell):
 python -m src.tools.external_refactor_scan
 
 Run only after reviewing and ensuring safety.
+"""
+
 
 from __future__ import annotations
 import os

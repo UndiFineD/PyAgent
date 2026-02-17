@@ -22,6 +22,8 @@ from typing import Any, Dict, Optional
 from .base_core import BaseCore
 
 
+
+
 class BaseManager(BaseCore):
     """Standard implementation for stateful Managers.
     Provides a dictionary-based state cache and standard operations.

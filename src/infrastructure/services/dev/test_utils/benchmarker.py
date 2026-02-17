@@ -27,6 +27,8 @@ from .test_timer import TestTimer
 __version__ = VERSION
 
 
+
+
 class Benchmarker:
     """Runs benchmarks and collects statistics.
     def __init__(self) -> None:

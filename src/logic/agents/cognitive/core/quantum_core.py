@@ -14,6 +14,8 @@
 
 
 # "QuantumCore logic for Quantum-Ready Reasoning (Phase 177)."Mathematical models for "Superposition Prompting" and probability modeling"for high-dimensional intent spaces.
+"""
+
 
 from __future__ import annotations
 import math
@@ -21,6 +23,8 @@ import math
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class QuantumCore:

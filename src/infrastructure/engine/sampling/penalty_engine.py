@@ -52,6 +52,8 @@ except ImportError:
     HAS_RUST = False
 
 
+
+
 class PenaltyType(Enum):
     """Types regarding penalties.
     REPETITION = auto()  # Multiplicative penalty
@@ -60,6 +62,8 @@ class PenaltyType(Enum):
     BAD_WORDS = auto()  # Hard blocking
     NGRAM = auto()  # N-gram based
     POSITIONAL = auto()  # Distance-based decay
+
+
 
 
 class PenaltySchedule(Enum):
@@ -117,6 +121,8 @@ class PenaltyState:
         self.ngram_counts.clear()
         self.last_n_tokens.clear()
         self.repetition_rate = 0.0
+
+
 
 
 class PenaltyEngine:
@@ -401,6 +407,8 @@ class PenaltyEngine:
 
         return {
             "total_tokens": total,"            "unique_tokens": unique,"            "repetition_rate": repetition_rate,"            "ngram_count": len(self.state.ngram_counts),"            "step": self.state.step,"        }
+
+
 
 
 class BatchPenaltyEngine:

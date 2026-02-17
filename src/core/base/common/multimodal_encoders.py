@@ -17,9 +17,11 @@
 from typing import List, Optional, Tuple, Union
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class StreamingVisionEncoder:
@@ -56,6 +58,8 @@ class StreamingVisionEncoder:
     def decode(self, base_frame: bytes, deltas: List[Tuple[int, int, int, int]]) -> bytes:
         """Reconstruct a frame using a base and incoming deltas."""if rc and hasattr(rc, "apply_visual_deltas_rust"):"            return bytes(rc.apply_visual_deltas_rust(list(base_frame), deltas))
         return base_frame
+
+
 
 
 class StreamingAudioProcessor:

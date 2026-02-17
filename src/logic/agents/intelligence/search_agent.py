@@ -34,12 +34,16 @@ Search agent.py module.
 from .web_intelligence_agent import WebIntelligenceAgent
 
 
+
+
 class SearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
 """"Agent specialized in various search provider orchestrations and query refinement.
     def __init__(self, context_or_path: str) -> None:
         super().__init__(context_or_path)
 #         self._system_prompt = "You are the SearchAgent (via WebIntelligence core)."
 from .web_intelligence_agent import WebIntelligenceAgent
+
+
 
 
 class SearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors

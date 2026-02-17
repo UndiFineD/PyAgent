@@ -58,6 +58,8 @@ class MemoryRelation:
             self.created_at = time.time()
 
 
+
+
 class MemoryStore(ABC):
     """Abstract base class for memory storage backends"""
     @abstractmethod
@@ -86,6 +88,8 @@ class MemoryStore(ABC):
     async def search_by_tags(
         self, tags: List[str], mode: str = "any", match: str = "exact""    ) -> List[MemoryNode]:
         """Search memories by tags"""pass
+
+
 
 
 class GraphMemoryStore(MemoryStore):
@@ -140,8 +144,8 @@ class GraphMemoryStore(MemoryStore):
         results = []
         for node in self.nodes.values():
             if node.embedding:
-                # Simple cosine similarity placeholder
-                similarity = 0.8  # Placeholder
+                # Simple cosine similarity TODO Placeholder
+                similarity = 0.8  # TODO Placeholder
                 if similarity >= threshold:
                     results.append((node, similarity))
 
@@ -206,6 +210,8 @@ class GraphMemoryStore(MemoryStore):
 
         await traverse(memory_id, 0, 1.0)
         return results[1:]  # Exclude the original node
+
+
 
 
 class VectorMemoryStore(MemoryStore):
@@ -288,6 +294,8 @@ class VectorMemoryStore(MemoryStore):
                         results.append(node)
 
         return results
+
+
 
 
 class HybridMemoryCore:

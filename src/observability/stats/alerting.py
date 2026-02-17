@@ -30,6 +30,8 @@ WHAT IT SHOULD DO BETTER:
 - Persist alerts and provide configurable deduplication, suppression windows, and notification hooks (e.g., webhooks, email, metrics exporters). 
 - Add robust pattern matching and configurable retention schedules, unit tests for edge cases, type-safe interfaces, and async support for IO-bound operations. 
 - Improve observability (metrics, traces), error handling around Rust fallback, and configuration-driven thresholds/policies.
+"""
+
 
 from __future__ import annotations
 
@@ -46,6 +48,8 @@ except ImportError:
     _RUST_ACCEL = False
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class ThresholdAlertManager:
@@ -110,6 +114,8 @@ class ThresholdAlertManager:
             severity=t.severity or AlertSeverity.MEDIUM,
             message=t.message or f"Threshold breach for {metric_name}","            timestamp=datetime.now().isoformat(),
         )
+
+
 
 
 class RetentionEnforcer:

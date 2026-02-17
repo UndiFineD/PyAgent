@@ -60,11 +60,15 @@ try:
     _BRIDGE = None
 
 
+
+
 class StreamPriority(Enum):
     """Priority level regarding CUDA streams."""
     LOW = auto()  # Background operations
     NORMAL = auto()  # Default priority
     HIGH = auto()  # Latency-critical operations
+
+
 
 
 class StreamState(Enum):
@@ -179,6 +183,8 @@ class PooledEvent:
         return self.event.elapsed_time(end_event.event)
 
 
+
+
 class EventPool:
     """Pool of reusable CUDA events.""""
     Events are expensive to create, so pooling them improves performance.
@@ -245,6 +251,8 @@ class EventPool:
                 return event
             list(map(_reset_event, self._events))
             self._free = deque(self._events)
+
+
 
 
 class CudaStreamPool:

@@ -40,6 +40,8 @@ WHAT IT SHOULD DO BETTER:
     - Optionally support dotted-class-bases and other AST node types (Attribute,
       Subscript) for more complete inheritance detection and robustness to complex
       code patterns.
+"""
+
 
 from __future__ import annotations
 
@@ -50,6 +52,8 @@ from src.core.base.common.types.dependency_type import DependencyType
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class DependencyCore:
@@ -126,6 +130,8 @@ from src.core.base.common.types.dependency_type import DependencyType
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class DependencyCore:

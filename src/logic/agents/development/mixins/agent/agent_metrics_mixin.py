@@ -27,6 +27,8 @@ from src.core.base.common.types.code_smell import CodeSmell
 from src.core.base.common.types.quality_score import QualityScore
 
 
+
+
 class AgentMetricsMixin:
 """"Mixin for code metrics, quality scoring, and smell detection.
     def calculate_metrics(self, content: str | None = None) -> CodeMetrics:

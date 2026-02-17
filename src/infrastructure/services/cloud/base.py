@@ -19,6 +19,8 @@ Base classes for cloud provider integration.
 
 Defines the abstract interface that all cloud providers must implement,
 along with standardized request/response dataclasses.
+"""
+
 
 from __future__ import annotations
 
@@ -72,6 +74,8 @@ class InferenceResponse:
     """Reason generation stopped (e.g., 'stop', 'length', 'content_filter').'
     raw_response: Optional[Dict[str, Any]] = None
     """Raw response from the provider for debugging.
+
+
 
 class CloudProviderBase(ABC):
         Abstract base class for cloud AI provider integrations.
@@ -170,6 +174,8 @@ class CloudProviderBase(ABC):
         """Async context manager exit - cleanup resources.        pass
 
 
+
+
 class CloudProviderError(Exception):
     """Base exception for cloud provider errors.
     def __init__(self, message: str, provider: str, retriable: bool = False) -> None:
@@ -178,11 +184,15 @@ class CloudProviderError(Exception):
         self.retriable: bool = retriable
 
 
+
+
 class RateLimitError(CloudProviderError):
     """Raised when rate limits are exceeded.
     def __init__(self, message: str, provider: str, retry_after: Optional[float] = None) -> None:
         super().__init__(message, provider, retriable=True)
         self.retry_after: float | None = retry_after
+
+
 
 
 class AuthenticationError(CloudProviderError):

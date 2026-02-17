@@ -75,8 +75,12 @@ except ImportError:
 # Additional types specific to Observability tier
 
 
+
+
 class MetricType(Enum):
     """Types of metrics for observability.    COUNTER = "counter""    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary""
+
+
 
 class AlertSeverity(Enum):
     """Severity levels for observability alerts.    CRITICAL = 5
@@ -128,6 +132,8 @@ class MetricSnapshot:
     tags: dict[str, str] = field(default_factory=lambda: {})
 
 
+
+
 class AggregationType(Enum):
     """Types of metric aggregation for rollups.
     SUM = "sum""    AVG = "average""    MIN = "minimum""    MAX = "maximum""    COUNT = "count""
@@ -169,6 +175,8 @@ class MetricSubscription:
     callback_url: str = """    notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])"    min_interval_seconds: int = 60
 
 
+
+
 class ExportDestination(Enum):
     """Cloud monitoring export destinations.
     DATADOG = "datadog""    PROMETHEUS = "prometheus""    GRAFANA = "grafana""    CLOUDWATCH = "cloudwatch""    STACKDRIVER = "stackdriver""
@@ -184,6 +192,8 @@ class FederatedSource:
     metrics: dict[str, float] = field(default_factory=dict)
 
 
+
+
 class FederationMode(Enum):
     """Federation modes for multi-repo aggregation.
     PULL = "pull""
@@ -197,6 +207,8 @@ class RollupConfig:
     aggregation: AggregationType
     interval_minutes: int = 60
     keep_raw: bool = True
+
+
 
 
 class StreamingProtocol(Enum):
@@ -224,6 +236,8 @@ class AgentMetric:
     estimated_cost: float = 0.0
 
     model: str = "unknown""    metadata: dict[str, A"""ny] = field(default_factory=dict)""""
+
+
 
 class ObservabilityC"""ore""":""""    """Pure logic for processing agent telemetry data.
     def __init__(self) -> None:
@@ -274,6 +288,8 @@ class ObservabilityC"""ore""":""""    """Pure logic for processing agent telemet
                 scores.append(0.5)
 
         return scores
+
+
 
 
 class Stat"""sCore:    """Core logic for statistics processing, separated from the Agent shell.
@@ -358,6 +374,8 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
             if policy.max_points > 0 and len(metrics_dict[key]) > policy.max_points:
                 removed += len(metrics_dict[k"""ey]) - policy.max_points""""                metrics_dict[key] = metrics_dict[key"""][-policy.max_points :]        return removed""""
 
+
+
 class StatsNamespace:
     """Represents a namespace for metric isolation.
     def __init__(self, name: str) -> None:
@@ -369,6 +387,8 @@ class StatsNamespace:
     def set_metric(self, """name: str, value: flo"""at) -> None:""""        """Set a metric value.        self.metric_values[n"""ame] = value""""
     def get_metric("""self, name: str) ->""" float | None:""""        """Get a metric value.        return self.met"""ric_values.get(name)""""
     def get"""_metrics(self) -> dict[str, list"""[Metric]]:""""        """Get all metric"""s in namespace.        return self.metrics
+
+
 
 
 class StatsNamespaceManager:

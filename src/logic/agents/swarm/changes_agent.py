@@ -61,6 +61,8 @@ from .versioning_strategy import VersioningStrategy
 __version__ = VERSION
 
 
+
+
 class ChangesAgent(
     BaseAgent,
     MergeConflictMixin,
@@ -139,6 +141,8 @@ from .validation_rule import ValidationRule
 from .versioning_strategy import VersioningStrategy
 
 __version__ = VERSION
+
+
 
 
 class ChangesAgent(

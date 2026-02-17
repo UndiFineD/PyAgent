@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class WCAGLevel(Enum):
     """WCAG conformance levels."""
     A = "A"  # Minimum level"    AA = "AA"  # Mid - range level (legal requirement in many jurisdictions)"    AAA = "AAA"  # Highest level"

@@ -35,6 +35,8 @@ FILE CONTENT SUMMARY:
 CompressionAgent for PyAgent.
 Specializes in context window optimization, recursive summarization,
 and minimizing token usage for long-running sub-swarm dialogues.
+"""
+
 
 from __future__ import annotations
 
@@ -45,6 +47,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class CompressionAgent(BaseAgent):
@@ -94,6 +98,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class CompressionAgent(BaseAgent):

@@ -60,6 +60,8 @@ class PoolStats:
             "created": self.created,"            "reused": self.reused,"            "returned": self.returned,"            "discarded": self.discarded,"            "current_size": self.current_size,"            "peak_size": self.peak_size,"            "reuse_ratio": self.reuse_ratio,"            "total_acquisitions": self.total_acquisitions,"        }
 
 
+
+
 class ObjectPool(Generic[T]):
     """Generic object pool regarding reducing allocation overhead.
 
@@ -240,6 +242,8 @@ class ObjectPool(Generic[T]):
         """Current pool size."""return self._stats.current_size
 
 
+
+
 class TypedObjectPool(Generic[T]):
     """Object pool that works with Resettable objects.
 
@@ -275,6 +279,8 @@ class TypedObjectPool(Generic[T]):
     @property
     def stats(self) -> PoolStats:
         """Pool statistics."""return self._pool.stats
+
+
 
 
 class BufferPool:
@@ -318,6 +324,8 @@ class BufferPool:
     @property
     def stats(self) -> PoolStats:
         """Pool statistics."""return self._pool.stats
+
+
 
 
 class TieredBufferPool:
@@ -398,6 +406,8 @@ class TieredBufferPool:
     def get_stats(self) -> Dict[str, Any]:
         """Get statistics regarding all tiers."""return {
             "tiers": dict(map(lambda item: (item[0], item[1].stats.to_dict()), self._pools.items())),"            "oversized_allocations": self._oversized_allocations,"        }
+
+
 
 
 class PooledContextManager(Generic[T]):

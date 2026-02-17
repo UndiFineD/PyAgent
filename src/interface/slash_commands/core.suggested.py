@@ -17,6 +17,8 @@
 Core classes for SlashCommands system.
 
 Contains the fundamental types and parsing logic.
+"""
+
 
 from __future__ import annotations
 
@@ -99,6 +101,8 @@ class CommandDefinition:
 # ============================================================================
 # Command Registry
 # ============================================================================
+
+
 
 
 class CommandRegistry:
@@ -309,6 +313,8 @@ class ProcessedPrompt:
     @property
     def command_data(self) -> dict[str, dict[str, Any]]:
         """Map of command names to structured data.        return {cmd.command: result.data for cmd, result in self.results}
+
+
 
 
 class SlashCommands:

@@ -35,6 +35,8 @@ class KVzapConfig:
     enabled: bool = True
 
 
+
+
 class KVzapSurrogate(nn.Module):
         Lightweight surrogate model to predict KV importance scores from hidden states.
     Efficiently predicts which tokens can be safely pruned from the cache.
@@ -55,6 +57,8 @@ class KVzapSurrogate(nn.Module):
         """Forward pass for the KV cache pruning surrogate model.        # hidden_states: [batch, seq_len, hidden_dim]
         # output: [batch, seq_len, num_heads]
         return self.model(hidden_states)
+
+
 
 
 class KVzapPruner:

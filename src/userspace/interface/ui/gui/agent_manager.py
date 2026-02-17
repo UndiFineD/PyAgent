@@ -25,6 +25,8 @@ from .agent_column import AgentColumn
 __version__ = VERSION
 
 
+
+
 class AgentManager:
     """Manages the lifecycle and state of agent columns.
     def __init__(self, main_app, columns_container) -> None:

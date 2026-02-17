@@ -14,6 +14,8 @@
 
 # SPDX-License-Identifier: Apache-2.0
 Mamba Configuration and State Classes.
+"""
+
 
 from __future__ import annotations
 
@@ -87,6 +89,8 @@ class MambaState:
             conv_state=self.conv_state.copy(),
             ssm_state=self.ssm_state.copy(),
         )
+
+
 
 
 class MambaOutput(NamedTuple):

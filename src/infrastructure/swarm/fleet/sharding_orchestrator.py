@@ -18,6 +18,8 @@ ShardingOrchestrator
 
 Dynamic Communication Sharding Orchestrator (Phase 128).
 Optimizes swarm latency by clustering frequently interacting agents.
+"""
+
 
 from __future__ import annotations
 
@@ -38,6 +40,8 @@ except ImportError:
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ShardingOrchestrator:

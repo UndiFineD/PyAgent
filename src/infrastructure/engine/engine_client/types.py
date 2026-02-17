@@ -15,6 +15,8 @@
 
 Phase 45: Engine Client Types
 Shared types and configurations for engine clients.
+"""
+
 
 from __future__ import annotations
 
@@ -24,12 +26,16 @@ from enum import Enum, auto
 from typing import Any, Optional
 
 
+
+
 class ClientMode(Enum):
     """Engine client execution mode.
     INPROC = auto()  # In-process, single GPU
     SYNC_MP = auto()  # Synchronous multi-process
     ASYNC_MP = auto()  # Async multi-process
     DP_ASYNC = auto()  # Data parallel with load balancing
+
+
 
 
 class WorkerState(Enum):

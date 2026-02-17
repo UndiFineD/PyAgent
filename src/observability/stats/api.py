@@ -48,6 +48,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Api.py module.
 # Stats API server engine.
+"""
+
 
 from __future__ import annotations
 
@@ -67,6 +69,8 @@ class APIEndpoint:
     method: str = "GET""    auth_required: bool = True
     rate_limit: int = 100
     cache_ttl: int = 60
+
+
 
 
 class StatsAPIServer:

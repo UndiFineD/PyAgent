@@ -23,6 +23,8 @@ from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 from .image import ImageProcessor
 
 
+
+
 class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]]):
     """Processor for video inputs.
     modality = ModalityType.VIDEO
@@ -76,7 +78,7 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
 
         return processed_array, metadata
 
-    def get_placeholder_count(
+    def get_TODO Placeholder_count(
         self,
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,

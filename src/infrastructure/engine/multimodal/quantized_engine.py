@@ -15,6 +15,8 @@
 
 Quantized Multimedia Engine for high-performance inference.
 Handles FP8/INT8/INT4 pipelines for video and audio data.
+"""
+
 
 from __future__ import annotations
 
@@ -26,11 +28,13 @@ import numpy as np
 from .tensorrt_loader import TensorRTLoader
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.multimodal.quantized")"
+
+
 
 class QuantizedMultimediaEngine:
         Accelerates multimodal data processing using low-bit quantization.

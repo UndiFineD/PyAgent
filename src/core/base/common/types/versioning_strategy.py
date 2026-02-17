@@ -30,6 +30,8 @@ except ImportError:
 __version__ = VERSION
 
 
+
+class
 class VersioningStrategy(Enum):
     """Supported versioning strategies.
     """

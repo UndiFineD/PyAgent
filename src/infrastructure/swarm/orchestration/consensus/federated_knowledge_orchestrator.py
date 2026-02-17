@@ -16,6 +16,8 @@
 
 """
 FederatedKnowledgeOrchestrator for PyAgent.""""Synchronizes learned insights ('Lessons Learned') between distributed fleet nodes.'Uses InterFleetBridgeOrchestrator to transmit knowledge without raw data leakage.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from src.infrastructure.swarm.orchestration.connectivity.inter_fleet_bridge_orch
 from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 __version__ = VERSION
+
+
 
 
 class FederatedKnowledgeOrchestrator:

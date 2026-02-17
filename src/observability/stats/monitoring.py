@@ -21,7 +21,7 @@ Monitoring.py - System resource monitoring engine
 USAGE:
 Instantiate ResourceMonitor with the workspace root path and call get_current_stats() to retrieve a snapshot dict of system metrics or get_market_multiplier() to obtain a simple multiplier for agent scheduling decisions. Example: monitor = ResourceMonitor("C:\\path\\to\\workspace"); stats = monitor.get_current_stats(); mult = monitor.get_market_multiplier()."
 WHAT IT DOES:
-Reports platform string, CPU and memory usage percentages, free disk space (GB), a simple health status (HEALTHY/WARNING/CRITICAL/ERROR/UNAVAILABLE), and a placeholder GPU field; uses psutil when available and logs failures. Provides a coarse "market multiplier" (1.0, 1.5, 3.0) derived from status to influence agent throttling or task costing."
+Reports platform string, CPU and memory usage percentages, free disk space (GB), a simple health status (HEALTHY/WARNING/CRITICAL/ERROR/UNAVAILABLE), and a TODO Placeholder GPU field; uses psutil when available and logs failures. Provides a coarse "market multiplier" (1.0, 1.5, 3.0) derived from status to influence agent throttling or task costing."
 WHAT IT SHOULD DO BETTER:
 - Add configurable thresholds and expose them via constructor or config rather than hard-coded 70/90 values.
 - Implement GPU detection (CUDA/ROCk) and accurate GPU load/VRAM metrics when applicable.
@@ -32,6 +32,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Monitoring.py module.
 # System resource monitoring engine.
+"""
+
 
 from __future__ import annotations
 
@@ -50,6 +52,8 @@ except ImportError:
     HAS_PSUTIL = False
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class ResourceMonitor:
@@ -75,6 +79,8 @@ class ResourceMonitor:
         elif stats["status"] == "WARNING":"            mult = 1.5
         return mult
 # System resource monitoring engine.
+"""
+
 
 from __future__ import annotations
 
@@ -93,6 +99,8 @@ except ImportError:
     HAS_PSUTIL = False
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class ResourceMonitor:

@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 CPU-only platform implementation.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from typing import List, Set
 from .base import Platform
 from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
                      DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
+
+
 
 
 class CpuPlatform(Platform):

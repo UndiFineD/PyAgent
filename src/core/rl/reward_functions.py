@@ -24,6 +24,8 @@ from enum import Enum
 from typing import Any, Callable, List
 
 
+
+
 class RewardType(Enum):
     SPARSE = "sparse""    DENSE = "dense""    SHAPED = "shaped""    INTRINSIC = "intrinsic""
 
@@ -34,6 +36,8 @@ class RewardSignal:
     reward_type: RewardType
     source: str
     explanation: str = """
+
+
 
 class RewardFunctions:
     """Library of standard reward functions for agentic behavior."""
@@ -82,6 +86,8 @@ class RewardFunctions:
             return RewardSignal(penalty, RewardType.SHAPED, "resources", "Over budget penalty")"        efficiency = 1.0 - (resources_used / budget)
         return RewardSignal(efficiency * scale, RewardType.SHAPED, "resources", f"Efficiency: {efficiency:.2%}")"
 
+
+
 class CompositeRewardFunction:
     """Combines multiple reward functions with weights."""
     def __init__(self) -> None:
@@ -100,6 +106,8 @@ class CompositeRewardFunction:
                 explanations.append(f"{name}: {result.value:.3f}")"            else:
                 total += result * weight
                 explanations.append(f"{name}: {result:.3f}")"        return RewardSignal(total, RewardType.SHAPED, "composite", " | ".join(explanations))"
+
+
 
 class RewardShaper:
     """Applies potential-based reward shaping to avoid changing optimal policy."""

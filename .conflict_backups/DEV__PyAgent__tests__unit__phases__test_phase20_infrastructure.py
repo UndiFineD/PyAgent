@@ -40,6 +40,8 @@ import pytest
 # ============================================================================
 
 
+
+
 class TestExtensionManager:
     """Tests for ExtensionManager class."""
 
@@ -97,6 +99,8 @@ class TestExtensionManager:
         assert len(registry) == 2
 
 
+
+
 class TestTypedExtensionManager:
     """Tests for TypedExtensionManager class."""
 
@@ -134,6 +138,8 @@ class TestTypedExtensionManager:
                 pass
 
 
+
+
 class TestMultiExtensionManager:
     """Tests for MultiExtensionManager class."""
 
@@ -160,6 +166,8 @@ class TestMultiExtensionManager:
         assert len(all_formatters) == 2
 
 
+
+
 class TestLazyExtensionManager:
     """Tests for LazyExtensionManager class."""
 
@@ -183,6 +191,8 @@ class TestLazyExtensionManager:
 # ============================================================================
 # CollectionUtils Tests
 # ============================================================================
+
+
 
 
 class TestLazyDict:
@@ -230,6 +240,8 @@ class TestLazyDict:
         assert d.is_computed("a")
 
 
+
+
 class TestListUtilities:
     """Tests for list utility functions."""
 
@@ -263,6 +275,8 @@ class TestListUtilities:
         assert result == [1, 2, 3, 4]
 
 
+
+
 class TestGroupingUtilities:
     """Tests for grouping functions."""
 
@@ -281,6 +295,8 @@ class TestGroupingUtilities:
         evens, odds = partition([1, 2, 3, 4, 5], lambda x: x % 2 == 0)
         assert evens == [2, 4]
         assert odds == [1, 3, 5]
+
+
 
 
 class TestDictUtilities:
@@ -309,6 +325,8 @@ class TestDictUtilities:
 # ============================================================================
 
 
+
+
 class TestRunOnce:
     """Tests for run_once decorator."""
 
@@ -329,6 +347,8 @@ class TestRunOnce:
         assert counter[0] == 1
 
 
+
+
 class TestDeprecation:
     """Tests for deprecation decorators."""
 
@@ -345,6 +365,8 @@ class TestDeprecation:
             foo(old_param=1)
             assert len(w) == 1
             assert "deprecated" in str(w[0].message).lower()
+
+
 
 
 class TestSupportsKw:
@@ -371,6 +393,8 @@ class TestSupportsKw:
         assert supports_kw(foo, "anything", allow_var_kwargs=True)
 
 
+
+
 class TestMemoize:
     """Tests for memoization."""
 
@@ -392,6 +416,8 @@ class TestMemoize:
 
         assert expensive(10) == 20
         assert call_count[0] == 2
+
+
 
 
 class TestThrottle:
@@ -418,6 +444,8 @@ class TestThrottle:
 # ============================================================================
 # NetworkUtils Tests
 # ============================================================================
+
+
 
 
 class TestIPDetection:
@@ -448,6 +476,8 @@ class TestIPDetection:
         assert not is_valid_ipv6_address("not-an-ip")
 
 
+
+
 class TestHostPortParsing:
     """Tests for host:port parsing."""
 
@@ -475,6 +505,8 @@ class TestHostPortParsing:
         assert join_host_port("::1", 8080) == "[::1]:8080"
 
 
+
+
 class TestPortDiscovery:
     """Tests for port discovery functions."""
 
@@ -497,6 +529,8 @@ class TestPortDiscovery:
 # ============================================================================
 # EnvConfig Tests
 # ============================================================================
+
+
 
 
 class TestEnvVar:
@@ -523,6 +557,8 @@ class TestEnvVar:
             assert port == 9000
         finally:
             del os.environ["TEST_PORT_PHASE20"]
+
+
 
 
 class TestEnvFunctions:
@@ -559,6 +595,8 @@ class TestEnvFunctions:
             del os.environ["TEST_LIST_PHASE20"]
 
 
+
+
 class TestTempEnv:
     """Tests for temp_env context manager."""
 
@@ -572,6 +610,8 @@ class TestTempEnv:
             assert os.environ.get("TEST_TEMP_PHASE20") == "temporary"
 
         assert os.environ.get("TEST_TEMP_PHASE20") == original
+
+
 
 
 class TestNamespacedConfig:
@@ -597,6 +637,8 @@ class TestNamespacedConfig:
 # ============================================================================
 
 
+
+
 class TestOtelAvailability:
     """Tests for OpenTelemetry availability."""
 
@@ -609,6 +651,8 @@ class TestOtelAvailability:
         assert isinstance(result, bool)
 
 
+
+
 class TestSpanAttributes:
     """Tests for SpanAttributes class."""
 
@@ -619,6 +663,8 @@ class TestSpanAttributes:
         assert SpanAttributes.GEN_AI_USAGE_PROMPT_TOKENS == "gen_ai.usage.prompt_tokens"
         assert SpanAttributes.GEN_AI_REQUEST_MODEL == "gen_ai.request.model"
         assert SpanAttributes.AGENT_NAME == "agent.name"
+
+
 
 
 class TestNullTracer:
@@ -634,6 +680,8 @@ class TestNullTracer:
             span.set_attribute("key", "value")
             span.add_event("event")
             assert not span.is_recording()
+
+
 
 
 class TestSpanTiming:
@@ -658,6 +706,8 @@ class TestSpanTiming:
         assert "total" in attrs
         assert "step1" in attrs
         assert "step2" in attrs
+
+
 
 
 class TestTraceContextPropagation:
@@ -689,6 +739,8 @@ class TestTraceContextPropagation:
 # ============================================================================
 # Integration Tests
 # ============================================================================
+
+
 
 
 class TestPhase20Integration:

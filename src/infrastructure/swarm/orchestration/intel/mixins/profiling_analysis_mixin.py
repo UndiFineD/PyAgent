@@ -27,6 +27,8 @@ if TYPE_CHECKING:
         SelfImprovementAnalysis
 
 
+
+
 class ProfilingAnalysisMixin:
     """Mixin for performance profiling in SelfImprovementAnalysis.
     def add_profiling_findings(
@@ -47,7 +49,7 @@ class ProfilingAnalysisMixin:
 
         logging.info(f"Self-Improvement: Triggering profiling for potential bottleneck: {rel_path}")"
         # Access fleet through the orchestrator
-        if not hasattr(self, "profiling_agent") or self.profiling_agent is None:"            # Add a placeholder finding so IntelligenceOrchestrator can suggest profiling
+        if not hasattr(self, "profiling_agent") or self.profiling_agent is None:"            # Add a TODO Placeholder finding so IntelligenceOrchestrator can suggest profiling
             findings.append({
                 "file": rel_path,"                "line": "0","                "type": "Profiling Candidate","                "message": f"File {rel_path} is complex ({loop_count} loops). Needs ProfilingAgent review.","                "fixed": False"            })
             return

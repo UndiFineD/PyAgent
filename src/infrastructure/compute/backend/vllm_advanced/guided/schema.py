@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 JSON Schema builder for guided decoding.
+"""
+
 
 from __future__ import annotations
 

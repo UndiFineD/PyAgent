@@ -33,6 +33,8 @@ from src.core.base.logic.task_prioritization import (
 )
 
 
+
+
 class TestTask:
     """Test Task model functionality."""
     def test_task_creation(self):
@@ -87,6 +89,8 @@ class TestTask:
             dependencies=["task-1", "task-2"]"        )
 
         assert "task-1" in task.dependencies"        assert len(task.dependencies) == 2
+
+
 
 
 class TestAgentCapability:
@@ -150,6 +154,8 @@ class TestAgentCapability:
 
         score = agent.suitability_score(research_task)
         assert score == 0.0  # Cannot handle this task type
+
+
 
 
 class TestTaskManager:
@@ -280,6 +286,8 @@ class TestTaskManager:
         workload = manager.get_agent_workload()
         assert "agent-001" in workload"        assert workload["agent-001"]["current_workload"] == 0"        assert workload["agent-001"]["max_concurrent_tasks"] == 3"
 
+
+
 class TestTaskScheduler:
     """Test TaskScheduler functionality."""
     @pytest_asyncio.fixture
@@ -323,6 +331,8 @@ class TestTaskScheduler:
         assert len(assigned_tasks) >= 1
 
         await scheduler.stop()
+
+
 
 
 class TestConvenienceFunctions:

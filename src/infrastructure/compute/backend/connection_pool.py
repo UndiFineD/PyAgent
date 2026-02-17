@@ -30,6 +30,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ConnectionPool:
         Manages a pool of reusable connections with Phase 108 status caching.
     Reduces connection overhead and prevents repeated failure pings by

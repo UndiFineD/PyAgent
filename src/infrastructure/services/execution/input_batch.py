@@ -257,7 +257,7 @@ class InputBatch:
         buffers: InputBuffers,
     ) -> "InputBatch":"                Create a dummy batch for CUDA graph capture.
 
-        Fills buffers with placeholder values.
+        Fills buffers with TODO Placeholder values.
                 # Fill dummy values
         buffers.input_ids[:num_tokens] = 0
         buffers.positions[:num_tokens] = np.arange(num_tokens)
@@ -359,6 +359,8 @@ class InputBatch:
 # ============================================================================
 # Batch Builder
 # ============================================================================
+
+
 
 
 class BatchBuilder:

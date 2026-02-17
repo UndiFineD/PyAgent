@@ -14,6 +14,8 @@
 
 
 Base manager.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -23,6 +25,8 @@ from abc import ABC
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class BaseManager(ABC):

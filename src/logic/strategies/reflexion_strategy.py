@@ -47,6 +47,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Reflexion strategy.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -63,6 +65,8 @@ if TYPE_CHECKING:
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
+
+
 
 
 class ReflexionStrategy(AgentStrategy):

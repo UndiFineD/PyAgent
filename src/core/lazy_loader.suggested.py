@@ -53,6 +53,8 @@ __all__ = [
 
 T = TypeVar("T")"
 
+
+
 class LazyLoader:
     """A descriptor class for deferred imports.
 
@@ -151,6 +153,8 @@ def lazy_import(func: Callable[[], T]) -> Callable[[], T]:
 
     wrapper.__wrapped__ = func  # type: ignore[attr-defined]
     return wrapper
+
+
 
 
 class ModuleLazyLoader:

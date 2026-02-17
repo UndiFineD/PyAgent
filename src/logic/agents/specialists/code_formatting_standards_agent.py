@@ -19,6 +19,8 @@ This agent enforces strict code formatting standards and quality requirements.
 It is extremely strict on indentation, docstrings, line length, syntax errors,
 naming conventions, whitespace, and final newlines. The agent learns from mistakes
 and prevents common code quality issues.
+"""
+
 
 from __future__ import annotations
 
@@ -34,6 +36,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.mixins.identity_mixin import IdentityMixin
 from src.core.base.common.models.communication_models import CascadeContext, ConversationMessage
 from src.core.base.common.models.core_enums import MessageRole
+
+
 
 
 class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):

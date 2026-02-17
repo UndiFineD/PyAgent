@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 MCP-related data models and enums.
+"""
+
 
 from __future__ import annotations
 
@@ -27,13 +29,19 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Set
 
 
+
+
 class MCPServerType(Enum):
     """MCP server connection types.
     SSE = "sse"  # Server-Sent Events"    STDIO = "stdio"  # Standard I/O"    WEBSOCKET = "websocket""    HTTP = "http""    LOCAL = "local"  # In-process"
 
+
+
 class ToolStatus(Enum):
     """Tool execution status.
     PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""    TIMEOUT = "timeout""
+
+
 
 class SessionState(Enum):
     """MCP session state.

@@ -14,6 +14,8 @@
 
 
 High-performance native vLLM engine for PyAgent's 'Own AI'.'Optimized for local inference and future trillion-parameter context handling.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ try:
     HAS_VLLM = True
 except ImportError:
     HAS_VLLM = False
+
+
 
 
 class VllmNativeEngine:

@@ -80,6 +80,8 @@ class ScanResult:
     extracted_data: Optional[Dict[str, Any]] = None
 
 
+
+
 class NucleiTemplateEngine:
     """Nuclei-style vulnerability detection engine.
 

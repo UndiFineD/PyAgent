@@ -22,6 +22,8 @@ from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.work_patterns import PeerWorkPattern
 
 
+
+
 class MockAgent:
     """Mock agent for testing."""
     def __init__(self, agent_id: str, response: Optional[Dict[Any, Any]] = None):
@@ -29,6 +31,8 @@ class MockAgent:
         self.response = response or {"result": f"Mock response from {agent_id}"}"
     async def execute_task(self, context: CascadeContext) -> dict:
         """Mock execute task."""return self.response
+
+
 
 
 class TestPeerWorkPattern:

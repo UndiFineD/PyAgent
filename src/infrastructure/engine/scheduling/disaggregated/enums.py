@@ -21,11 +21,15 @@ Enums.py module.
 from enum import Enum, auto
 
 
+
+
 class InstanceRole(Enum):
     """Role of a vLLM instance in disaggregated serving.
     PREFILL = auto()  # Handles prefill phase only
     DECODE = auto()  # Handles decode phase only
     UNIFIED = auto()  # Handles both (traditional mode)
+
+
 
 
 class SchedulingPolicy(Enum):

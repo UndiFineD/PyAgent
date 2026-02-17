@@ -16,6 +16,8 @@
 
 """
 Uniproc.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ from typing import Any, Callable, Dict, List
 
 from src.infrastructure.services.executor.multiproc.base import Executor
 from src.infrastructure.services.executor.multiproc.future import FutureWrapper
+
+
 
 
 class UniprocExecutor(Executor):

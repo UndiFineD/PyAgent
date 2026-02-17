@@ -125,6 +125,8 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 }
 
 
+
+
 class ContextTemplateMixin:
 """"Template management methods for ContextAgent.
     def set_template(self, template_name: str) -> bool:
@@ -219,6 +221,8 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 [Note which modules / functions are tested]
 ","        required_fields=["Purpose", "Test Cases"],"    ),
 # }
+
+
 
 
 class ContextTemplateMixin:

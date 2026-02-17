@@ -44,11 +44,17 @@ from pydantic import BaseModel, Field
 logger = logging.getLogger(__name__)
 
 
+
+
 class ChannelType(Enum):
     """Supported messaging channel types."""WHATSAPP = "whatsapp""    TELEGRAM = "telegram""    DISCORD = "discord""    SLACK = "slack""    SIGNAL = "signal""    IMESSAGE = "imessage""    WEBCHAT = "webchat""    MATRIX = "matrix""
 
+
+
 class MessageType(Enum):
     """Types of messages in the gateway protocol."""TEXT = "text""    IMAGE = "image""    AUDIO = "audio""    VIDEO = "video""    FILE = "file""    TYPING = "typing""    PRESENCE = "presence""    TOOL_CALL = "tool_call""    TOOL_RESULT = "tool_result""
+
+
 
 class SessionActivationMode(Enum):
     """How sessions are activated in channels."""MENTION = "mention"  # Only respond when mentioned"    ALWAYS = "always"    # Always respond"    NEVER = "never"      # Never respond automatically"
@@ -75,6 +81,8 @@ class GatewayPresence:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+
+
 class ChannelProvider(ABC):
     """Abstract base class for channel providers."""
     @property
@@ -95,6 +103,8 @@ class ChannelProvider(ABC):
         """Get presence information for a user."""pass
 
 
+
+
 class GatewaySession(BaseModel):
     """Represents an agent session in the gateway."""session_id: str = Field(default_factory=lambda: str(uuid4()))
     agent_id: str
@@ -105,6 +115,8 @@ class GatewaySession(BaseModel):
     created_at: float = Field(default_factory=time.time)
     last_activity: float = Field(default_factory=time.time)
     metadata: Dict[str, Any] = Field(default_factory=dict)
+
+
 
 class GatewayProtocol:
     """WebSocket protocol for gateway communication."""
@@ -237,6 +249,8 @@ class GatewayProtocol:
         for cid in to_remove:
             self.clients.pop(cid, None)
             self.presence.pop(cid, None)
+
+
 
 
 class MultiChannelGatewayCore:

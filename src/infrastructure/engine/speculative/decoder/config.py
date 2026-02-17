@@ -18,9 +18,13 @@
 from enum import Enum
 
 
+
+
 class ProposerType(Enum):
     """Types of speculative proposers.
     EAGLE = "eagle"  # EAGLE-style draft model"    MEDUSA = "medusa"  # Medusa multi-head prediction"    NGRAM = "ngram"  # N-gram based lookup"    DRAFT_MODEL = "draft"  # Separate draft model"    LOOKAHEAD = "lookahead"  # Lookahead decoding"
+
+
 
 class AcceptanceMethod(Enum):
     """Token acceptance verification methods.

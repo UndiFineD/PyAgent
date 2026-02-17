@@ -39,6 +39,8 @@ import numpy as np
 # =============================================================================
 
 
+
+
 class PromptType(Enum):
     """Types of prompt input.
     TEXT = auto()  # Raw text string
@@ -47,6 +49,8 @@ class PromptType(Enum):
     ENCODER_DECODER = auto()  # Separate encoder/decoder prompts
     CHAT = auto()  # Multi-turn conversation
     HYBRID = auto()  # Mixed text and tokens
+
+
 
 
 class InputFormat(Enum):
@@ -196,6 +200,8 @@ class ProcessedInput:
 # =============================================================================
 
 
+
+
 class PromptTemplate:
     """Template for formatting prompts.
     # Common templates
@@ -224,6 +230,8 @@ class PromptTemplate:
 # =============================================================================
 # Prompt Validator
 # =============================================================================
+
+
 
 
 class PromptValidator:
@@ -293,6 +301,8 @@ class PromptValidator:
 # =============================================================================
 
 
+
+
 class ConversationLinearizer:
         Linearizes multi-turn conversations to single prompt.
 
@@ -338,6 +348,8 @@ class ConversationLinearizer:
 # =============================================================================
 # Main Input Preprocessor
 # =============================================================================
+
+
 
 
 class InputPreprocessor:

@@ -16,6 +16,8 @@
 
 """
 Future.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ import threading
 from typing import Callable, Generic, List, Optional, TypeVar
 
 T = TypeVar("T")"
+
+
 
 class FutureWrapper(Generic[T]):
         Future wrapper for async task results.

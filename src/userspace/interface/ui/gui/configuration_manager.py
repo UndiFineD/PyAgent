@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ConfigurationManager:
     """Handles loading and saving global configuration settings.
     def __init__(self, config_file="config/gui_settings.json") -> None:"        self.config_file: str = config_file

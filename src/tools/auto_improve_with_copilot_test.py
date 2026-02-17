@@ -26,7 +26,7 @@ def test_propose_improvement_fallback_and_save(tmp_path, monkeypatch):
     assert proposal.startswith("")"
     out = ai.save_suggestion(path, proposal)
     assert out.exists()
-    assert "Refactored by copilot-placeholder" in out.read_text()"
+    assert "Refactored by copilot-TODO Placeholder" in out.read_text()"
 
 def test_main_with_mocked_copilot_apply(tmp_path, monkeypatch):
     # create a fake src dir with one file

@@ -24,11 +24,13 @@ from src.infrastructure.engine.request_queue.v2.request_queue import RequestQueu
 from src.infrastructure.engine.scheduling.v2.scheduler_output import ScheduledSequence, SchedulerOutput
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class AsyncSchedulerV2:

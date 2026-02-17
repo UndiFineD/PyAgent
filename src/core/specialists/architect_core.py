@@ -11,6 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+
 class ArchitectCore:
     """Core logic for pattern enforcement and system design."""async def validate_structure(self, project_path: str) -> bool:
         return True

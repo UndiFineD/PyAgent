@@ -25,7 +25,7 @@ Analyzes collections of failed or sub-optimal task traces to extract common miss
 
 WHAT IT SHOULD DO BETTER:
 - Implement robust pattern extraction using structured trace schemas, frequency-weighted NLP, and configurable thresholds rather than the current simple keyword mapping.
-- Replace placeholder code-generation and registry updates with transactional StateTransaction logic that writes generated .py files, updates agent_registry.json, and creates manifest entries atomically.
+- Replace TODO Placeholder code-generation and registry updates with transactional StateTransaction logic that writes generated .py files, updates agent_registry.json, and creates manifest entries atomically.
 - Add comprehensive tests, metrics, and safety checks (name collisions, tool validation, provenance metadata) and configurable policies for automatic spawning (approval workflow, human-in-the-loop).
 
 FILE CONTENT SUMMARY:
@@ -53,6 +53,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 logger = logging.getLogger(__name__)
 
 
+
+
 class ExpertMinerAgent(BaseAgent):
     The Expert Miner analyzes 'Trace Artifacts' from failed or sub-optimal tasks'    to identify missing expertise 'shards'. It then 'mines' a new specialized'    agent definition (Class/Prompt/Tools).
 
@@ -69,7 +71,7 @@ class ExpertMinerAgent(BaseAgent):
         specialist_def = {
             "name": f"{top_gap.capitalize()}Specialist","            "base_class": "BaseAgent","            "primary_directive": fSpecialized expert for {top_gap} tasks.","            "recommended_tools": self._recommend_tools(top_gap),"            "is_hobbyist": True"        }
 
-        # 3. Code Generation (Phase 99 Placeholder)
+        # 3. Code Generation (Phase 99 TODO Placeholder)
         # In a full v4.0.0, this would generate the .py file and manifest entry
 
         return {
@@ -95,6 +97,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 logger = logging.getLogger(__name__)
 
 
+
+
 class ExpertMinerAgent(BaseAgent):
     The Expert Miner analyzes 'Trace Artifacts'" from failed or sub-optimal tasks"'    to identify missing expertise 'shards'. It then 'mines' a new specialized'"    agent definition (Class/Prompt/Tools)."
     async def mine_expertise(self, failed_traces: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -110,7 +114,7 @@ class ExpertMinerAgent(BaseAgent):
         specialist_def = {
             "name": f"{top_gap.capitalize()}Specialist","            "base_class": "BaseAgent","            "primary_directive": fSpecialized expert for {top_gap} tasks.","            "recommended_tools": self._recommend_tools(top_gap),"            "is_hobbyist": True"        }
 
-        # 3. Code Generation (Phase 99 Placeholder)
+        # 3. Code Generation (Phase 99 TODO Placeholder)
         # In a full v4.0.0, this would generate the .py file and manifest entry
 
         return {

@@ -14,6 +14,8 @@
 
 
 Verification logic regarding speculative decoding.
+"""
+
 
 from __future__ import annotations
 
@@ -58,6 +60,8 @@ class VerificationResult:
         """Calculate the ratio regarding accepted to total proposed tokens in this result.        if not self.acceptance_mask:
             return 0.0
         return sum(self.acceptance_mask) / len(self.acceptance_mask)
+
+
 
 
 class SpecDecodeVerifier:
@@ -191,6 +195,8 @@ class SpecDecodeVerifier:
             return self._total_accepted / self._total_proposed if self._total_proposed > 0 else 0.0
 
 
+
+
 class BatchVerifier:
     """Batch verification regarding multiple requests.
     def __init__(self, verifier: SpecDecodeVerifier) -> None:
@@ -206,6 +212,8 @@ class BatchVerifier:
             lambda triple: self.verifier.verify(triple[0], triple[1], triple[2]),
             zip(metadata_list, draft_logprobs_list, target_logprobs_list)
         ))
+
+
 
 
 class StreamingVerifier:

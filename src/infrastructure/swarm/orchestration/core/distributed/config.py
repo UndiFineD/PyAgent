@@ -16,12 +16,16 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Configuration and state enums for distributed coordination.
+"""
+
 
 from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum, auto
+
+
 
 
 class EngineState(Enum):
@@ -34,6 +38,8 @@ class EngineState(Enum):
     ERROR = auto()  # Engine encountered an error
 
 
+
+
 class WorkerState(Enum):
     """State of a worker process.
     STARTING = auto()
@@ -42,6 +48,8 @@ class WorkerState(Enum):
     STOPPING = auto()
     STOPPED = auto()
     ERROR = auto()
+
+
 
 
 class LoadBalancingStrategy(Enum):

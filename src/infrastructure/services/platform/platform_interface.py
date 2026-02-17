@@ -17,6 +17,8 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Facade for Platform Abstraction.
 Delegates to modularized sub-packages in src/infrastructure/platform/.
+"""
+
 
 from __future__ import annotations
 

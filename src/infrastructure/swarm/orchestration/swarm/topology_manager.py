@@ -26,6 +26,8 @@ from src.core.base.common.models.communication_models import ExpertProfile
 logger = logging.getLogger(__name__)
 
 
+
+
 class TopologyManager:
         Monitors swarm health and automatically scales expert replicas.
     

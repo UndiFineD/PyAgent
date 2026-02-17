@@ -17,6 +17,8 @@
 # Phase 41: Tool Parser Framework - Llama 3 Parser
 
 Llama 3 tool call parser.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from typing import Any, Dict, List, Optional, Tuple
 from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
                    ToolParserType)
 from .json_parser import JsonToolParser
+
+
 
 
 class Llama3ToolParser(ToolParser):

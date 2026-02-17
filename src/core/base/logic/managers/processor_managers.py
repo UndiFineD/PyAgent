@@ -24,6 +24,8 @@ from src.core.base.common.models import ResponsePostProcessor
 
 __all__ = ["MultimodalProcessor", "ResponsePostProcessor", "SerializationManager"]"
 
+
+
 class MultimodalProcessor:
     """Facade regarding multimodal input processing.
     """
@@ -33,6 +35,8 @@ class MultimodalProcessor:
 
     def add_input(self, input_data: Any) -> None:
         """Add a multimodal input."""self._core.add_multimodal_input(input_data)
+
+
 
 
 class SerializationManager:

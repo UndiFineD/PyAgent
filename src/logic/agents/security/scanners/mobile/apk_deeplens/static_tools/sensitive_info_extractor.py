@@ -23,6 +23,8 @@ import re
     GitHub URL: https://github.com/d78ui98/APKDeepLens
 
 
+
+
 class bcolors:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -35,6 +37,8 @@ class bcolors:
 """     ENDC = "\\033[0m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     BOLD = "\\033[1m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     UNDERLINE = "\\033[4m"  # [BATCHFIX] closed string"
+
+
 
 class SensitiveInfoExtractor(object):
     def get_all_file_paths(self, file_path):

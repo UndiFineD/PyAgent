@@ -32,6 +32,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in terminal-native interactions and context-aware shell execution.
 Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
+"""
+
 
 from __future__ import annotations
 

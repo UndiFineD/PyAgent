@@ -22,6 +22,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ReleaseNotesGenerator:
     """Generates release notes from changelog entries.    Creates formatted release notes suitable for publication.
 

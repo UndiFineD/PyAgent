@@ -22,6 +22,8 @@ from .data_classes import ParseResult, ThinkingBlock, ToolCall
 from .enums import ParseState, ReasoningFormat, ToolCallFormat
 
 
+
+
 class ReasoningParser(ABC):
     """Abstract base for reasoning token extraction.
     def __init__(
@@ -47,6 +49,8 @@ class ReasoningParser(ABC):
         """Reset parser state.        self.state = ParseState.IDLE
         self.buffer = """        self.thinking_blocks = []
         self._current_block_start = 0
+
+
 
 
 class ToolParser(ABC):

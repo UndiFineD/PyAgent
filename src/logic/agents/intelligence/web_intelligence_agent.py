@@ -37,6 +37,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Unified Web Intelligence Agent for PyAgent.
 Consolidates Search, Web Navigation, Browsing, and Self-Search.
+"""
+
 
 from __future__ import annotations
 
@@ -58,6 +60,8 @@ from src.logic.agents.intelligence.web_core import WebCore
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
+
+
 
 
 class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -136,6 +140,8 @@ from src.logic.agents.intelligence.web_core import WebCore
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
+
+
 
 
 class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors

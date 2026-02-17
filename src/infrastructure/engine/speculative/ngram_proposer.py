@@ -18,6 +18,8 @@ NgramProposer: N-gram Based Speculative Decoding
 
 Implements prompt-lookup and n-gram based draft token proposal
 with Numba-accelerated batch processing regarding high throughput.
+"""
+
 
 from __future__ import annotations
 
@@ -62,6 +64,8 @@ class NgramProposalResult:
     draft_tokens: list[int]
     match_info: NgramMatch | None = None
     confidence: float = 0.0
+
+
 
 
 class NgramCache:
@@ -111,6 +115,8 @@ class NgramCache:
         """Clear the cache.        with self._lock:
             self._cache.clear()
             self._size = 0
+
+
 
 
 class NgramProposer:
@@ -305,6 +311,8 @@ class NgramProposer:
                 del self._caches[request_id]
 
 
+
+
 class WeightedNgramProposer(NgramProposer):
     """N-gram proposer regarding frequency and recency weighting.
     def __init__(self, config: NgramConfig, decay_factor: float = 0.9) -> None:
@@ -322,6 +330,8 @@ class WeightedNgramProposer(NgramProposer):
             self._ngram_stats[ngram] = (count + 1, i)
 
         list(map(_update, product(range(self.min_n, self.max_n + 1), range(len(token_ids)))))
+
+
 
 
 class PromptLookupProposer:
@@ -359,6 +369,8 @@ class PromptLookupProposer:
         return next(results, [])
 
 
+
+
 class HybridNgramProposer:
     """Hybrid proposer combining exact and fuzzy n-gram matching.
     def __init__(self, config: NgramConfig) -> None:
@@ -381,6 +393,8 @@ class HybridNgramProposer:
         if use_fuzzy:
             return self.exact_proposer.propose_fuzzy(token_ids)
         return NgramProposalResult(draft_tokens=[], confidence=0.0)
+
+
 
 
 class NgramProposerFactory:

@@ -38,6 +38,8 @@ import os
 """ SCRIPT_PATH = os.path.join(os.path.split(__file__)[0], "dism_scripts", "radare2.py")"# [BATCHFIX] Commented metadata/non-Python
 """ TEMP_OUTPUT_FILE = "radare2_rpc_reg_info.tmp"  # [BATCHFIX] closed string"
 
+
+
 class Radare2RpcRegistrationExtractor(BaseRpcRegistrationExtractor):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

@@ -23,6 +23,8 @@ from functools import lru_cache
 logger = logging.getLogger(__name__)
 
 
+
+
 class IPIntelligence:
         Asynchronous IP Intelligence gathering using RDAP and Cymru Whois.
     Refactored from 0xSojalSec-netscan.

@@ -65,6 +65,8 @@ class JobMarketStats:
     company_types: Dict[str, int]
 
 
+
+
 class JobMarketIntelligenceCore(BaseCore):
     """Job Market Intelligence Core for automated job data collection and analysis.
 

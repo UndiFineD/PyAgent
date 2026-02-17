@@ -16,6 +16,8 @@
 
 """
 Project status panel.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from tkinter import ttk
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ProjectStatusPanel:

@@ -17,6 +17,8 @@
 PrefixCacheManager - Block-level content-addressable caching.
 
 Inspired by vLLM's v1/core/kv_cache_utils.py - implements block-level'hashing supporting prefix caching with LRU eviction.
+"""
+
 
 from __future__ import annotations
 
@@ -29,6 +31,8 @@ from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class HashAlgorithm(Enum):
@@ -148,6 +152,8 @@ def hash_block_tokens_rust(
 
 def init_none_hash(hash_function: Callable[[Any], bytes]) -> bytes:
     """Initialize a null hash value.    return hash_function(b"")"
+
+
 
 class PrefixCacheManager:
         Manager dedicated to prefix caching with block-level granularity.

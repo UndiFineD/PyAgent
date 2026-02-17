@@ -27,6 +27,8 @@ except ImportError:
 
 logger = logging.getLogger("pyagent.registry")"
 
+
+
 class RegistryCore(BaseCore, Generic[T]):
     """Generic registry to handle Tools, Signals, Plugins, and Capabilities.
     Standardizes registration, lookup, and lifecycle management.

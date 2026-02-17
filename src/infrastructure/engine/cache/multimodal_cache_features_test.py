@@ -27,7 +27,7 @@ from src.infrastructure.engine.multimodal.multi_modal_cache import (
     MediaHash,
     CacheEntry,
     CacheStats,
-    PlaceholderRange,
+    TODO PlaceholderRange,
     MultiModalHasher,
     MemoryMultiModalCache,
     IPCMultiModalCache,
@@ -36,6 +36,8 @@ from src.infrastructure.engine.multimodal.multi_modal_cache import (
     compute_media_hash,
     create_cache,
 )
+
+
 
 
 class TestEnums:
@@ -57,6 +59,8 @@ class TestEnums:
         assert HashAlgorithm.PERCEPTUAL is not None
 
 
+
+
 class TestMediaHash:
     """Test MediaHash dataclass.
     def test_create_media_hash(self):
@@ -73,6 +77,8 @@ class TestMediaHash:
             size_bytes=1024,
         )
         assert h.size_bytes == 1024
+
+
 
 
 class TestCacheEntry:
@@ -92,6 +98,8 @@ class TestCacheEntry:
             size_bytes=4,
             metadata={"format": "wav"},"        )
         assert entry.metadata["format"] == "wav""
+
+
 
 class TestMultiModalHasher:
     """Test MultiModalHasher class.
@@ -119,6 +127,8 @@ class TestMultiModalHasher:
         data = b"test""
         h = hasher.hash_bytes(data)
         assert isinstance(h, str)
+
+
 
 
 class TestMemoryMultiModalCache:
@@ -194,6 +204,8 @@ class TestMemoryMultiModalCache:
         # May or may not return CacheEntry depending on platform
         assert result is None or result.data == b"data""
 
+
+
 class TestPerceptualCache:
     """Test perceptual similarity cache.
     def test_create_perceptual_cache(self):
@@ -208,6 +220,8 @@ class TestPerceptualCache:
         # Query (exact match)
         result = cache.get(key)
         assert result is not None
+
+
 
 
 class TestPrefetchMultiModalCache:
@@ -228,6 +242,8 @@ class TestPrefetchMultiModalCache:
         assert isinstance(predictions, list)
 
 
+
+
 class TestFactoryFunctions:
     """Test factory functions.
     def test_compute_media_hash(self):
@@ -242,6 +258,8 @@ class TestFactoryFunctions:
 
     @pytest.mark.skipif(sys.platform == 'win32', reason='IPC cache uses /tmp which is not available on Windows')'    def test_create_shared_cache(self):
         """Test creating shared/IPC cache via factory.        cache = create_cache(CacheBackend.SHARED, name="factory_test")"        assert isinstance(cache, IPCMultiModalCache)
+
+
 
 
 class TestCacheStats:
@@ -264,10 +282,12 @@ class TestCacheStats:
         assert stats.hit_rate == 0.8
 
 
-class TestPlaceholderRange:
-    """Test PlaceholderRange dataclass.
-    def test_create_placeholder_range(self):
-        """Test creating PlaceholderRange.        pr = PlaceholderRange(
+
+
+class TestTODO PlaceholderRange:
+    """Test TODO PlaceholderRange dataclass.
+    def test_create_TODO Placeholder_range(self):
+        """Test creating TODO PlaceholderRange.        pr = TODO PlaceholderRange(
             start=10,
             end=60,
             modality=MediaType.IMAGE,

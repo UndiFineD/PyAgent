@@ -17,12 +17,16 @@ from pydantic import BaseModel, Field
 import uuid
 
 
+
+
 class SopStep(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
     description: str
     tool_requirement: Optional[str] = None
     expected_outcome: str
+
+
 
 
 class SopManifest(BaseModel):
@@ -32,6 +36,8 @@ class SopManifest(BaseModel):
     steps: List[SopStep] = Field(default_factory=list)
     success_rate: float = 0.0
     usage_count: int = 0
+
+
 
 
 class SopCore:

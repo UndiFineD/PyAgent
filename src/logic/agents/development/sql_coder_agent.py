@@ -45,6 +45,8 @@ from src.logic.agents.development.coder_agent import CoderAgent
 __version__ = VERSION
 
 
+
+
 class SQLCoderAgent(CoderAgent):
 """"Agent for auditing and improving SQL scripts.
     def __init__(self, file_path: str) -> None:
@@ -67,6 +69,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
 
 __version__ = VERSION
+
+
 
 
 class SQLCoderAgent(CoderAgent):

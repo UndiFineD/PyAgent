@@ -26,6 +26,8 @@ if TYPE_CHECKING:
 __version__ = VERSION
 
 
+
+
 class SpeciationOrchestrator:
         Orchestrator for managing agent speciation and occupational evolution.
     Uses task telemetry to identify gaps in agent capabilities.

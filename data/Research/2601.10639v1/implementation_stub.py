@@ -15,6 +15,8 @@
 import torch
 import torch.nn as nn
 
+
+
 class STEMScalingModule(nn.Module):
     """
     Dynamic Embedding Expansion for 1M+ contexts (arXiv:2601.10639).

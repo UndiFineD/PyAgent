@@ -15,6 +15,7 @@
 
 """
 Simple math agent.py module.
+"""
 
 
 from __future__ import annotations
@@ -24,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.orchestration.system.tool_registry import as_tool
 
 __version__ = VERSION
+
+
 
 
 class SimpleMathAgent(BaseAgent):

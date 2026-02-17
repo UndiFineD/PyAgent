@@ -18,6 +18,8 @@ Reverse Proxy Application Firewall.
 Serves as the centralized gateway for all incoming and outgoing network traffic.
 Enforces security rules, manages connection resilience, and logs traffic patterns.
 Replaces direct usage of HTTP clients (requests, httpx) throughout the swarm.
+"""
+
 
 from __future__ import annotations
 
@@ -37,6 +39,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.configuration.config_manager import config
 
 __version__ = VERSION
+
+
 
 
 class ReverseProxyFirewall:

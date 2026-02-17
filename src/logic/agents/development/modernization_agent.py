@@ -50,6 +50,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ModernizationAgent:
     "Advises on modernizing deprecated" APIs."
     Tracks deprecated API usage and suggests modern replacements.
@@ -109,6 +111,8 @@ from src.core.base.common.types.modernization_suggestion import \
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ModernizationAgent:

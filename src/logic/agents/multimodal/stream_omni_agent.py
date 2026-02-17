@@ -26,7 +26,7 @@ USAGE:
 - For task-based use: call await agent.execute_task({"type": "audio_pipeline", ...}) to run the pipeline-style task handler."
 WHAT IT DOES:
 - Provides a focused orchestrator class (StreamOmniAgent) built on BaseAgent that models a real-time "See-While-Hear" pipeline: ingest audio, perform STT, stream tokens into an LLM, stream LLM tokens into a TTS engine, and emit audio output."- Exposes an async full-duplex process_stream(audio_generator) method which demonstrates the intended per-chunk flow (stt -> llm -> tts) as an AsyncGenerator.
-- Includes lightweight stubs for the core transforms (_stt_decode, _llm_infer, _tts_encode) and a simple execute_task hook for task-based invocation; records a system prompt and a placeholder for latency_metrics.
+- Includes lightweight stubs for the core transforms (_stt_decode, _llm_infer, _tts_encode) and a simple execute_task hook for task-based invocation; records a system prompt and a TODO Placeholder for latency_metrics.
 
 WHAT IT SHOULD DO BETTER:
 - Replace stubs with real, pluggable integrations for robust STT (e.g., whisper/cosyvoice streaming), streaming LLM inference (support partial tokens, backpressure), and production-grade TTS (configurable codecs, sample rates).

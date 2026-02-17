@@ -28,6 +28,8 @@ if TYPE_CHECKING:
         SelfImprovementAnalysis
 
 
+
+
 class StructuralAnalysisMixin:
     """Mixin for structural health and versioning checks in SelfImprovementAnalysis.
     def check_versioning(self: SelfImprovementAnalysis) -> dict[str, str] | None:

@@ -28,6 +28,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+
+
 class SkillManager:
     """Orchestrates the lifecycle of SkillCores for a Universal Agent."""
     def __init__(self, agent: BaseAgent) -> None:

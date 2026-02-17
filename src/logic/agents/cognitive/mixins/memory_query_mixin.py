@@ -17,6 +17,8 @@
 # Supports multi-level memory search, retrieval, and query optimization.
 Provides strategies for searching across multiple memory tiers (short, mid, long, archival)
 with support for tag filtering and Rust-accelerated search.
+"""
+
 
 from __future__ import annotations
 import json
@@ -28,6 +30,8 @@ if TYPE_CHECKING:
     from src.logic.agents.cognitive.hierarchical_memory_agent import HierarchicalMemoryAgent
 
 __version__ = VERSION
+
+
 
 
 class MemoryQueryMixin:

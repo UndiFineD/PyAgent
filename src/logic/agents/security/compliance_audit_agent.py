@@ -28,6 +28,8 @@ an available recorder, logs progress, and produces a human-readable audit summar
 WHAT IT SHOULD DO BETTER:
 Expand dynamic discovery of checks (plugin or policy files), implement real verification logic instead of
 simulation, add configurable severity/risk scoring, surface recorder failures (don't silently swallow them),'and include richer telemetry and remediation tracking.
+"""
+
 
 from __future__ import annotations
 
@@ -40,6 +42,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
+
+
 
 
 

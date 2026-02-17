@@ -22,6 +22,8 @@ Implements vLLM's CUDA graph patterns regarding efficient GPU execution:'- CUDAG
 - CUDAGraphManager: Capture/lookup/replay operations
 
 Beyond vLLM: LRU eviction regarding memory pressure management.
+"""
+
 
 from __future__ import annotations
 
@@ -46,11 +48,15 @@ except ImportError:
     torch = None  # type: ignore
 
 
+
+
 class CUDAGraphMode(Enum):
     """CUDA graph execution modes.
     NONE = auto()  # No CUDA graph, eager execution
     PIECEWISE = auto()  # Piecewise capture (attention separate)
     FULL = auto()  # Full model capture
+
+
 
 
 class BatchDescriptor(NamedTuple):
@@ -68,8 +74,8 @@ class CUDAGraphEntry:
     
     key: str  # Hash key regarding lookup
     graph: Any  # torch.cuda.CUDAGraph
-    input_buffers: dict[str, Any]  # Input placeholder tensors
-    output_buffers: dict[str, Any]  # Output placeholder tensors
+    input_buffers: dict[str, Any]  # Input TODO Placeholder tensors
+    output_buffers: dict[str, Any]  # Output TODO Placeholder tensors
     num_tokens: int
     num_reqs: int
     capture_time: float = field(default_factory=time.time)
@@ -80,6 +86,8 @@ class CUDAGraphEntry:
     def mark_used(self) -> None:
         """Update usage statistics.        self.replay_count += 1
         self.last_used = time.time()
+
+
 
 
 class CUDAGraphRegistry:
@@ -190,6 +198,8 @@ def generate_warmup_sizes(max_tokens: int, max_reqs: int, granularity: int = 8) 
                            filter(lambda nr: nr <= max_reqs, req_counts)))
 
     return sorted(set(p2_sizes + max_tokens_size + multi_req_sizes))
+
+
 
 
 class CUDAGraphManager:

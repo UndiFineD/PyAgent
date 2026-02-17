@@ -14,12 +14,16 @@
 
 
 Detector.py module.
+"""
+
 
 from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
 from .config import ModelArchitecture, ModelCapability
+
+
 
 
 class ArchitectureDetector:

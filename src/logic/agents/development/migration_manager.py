@@ -49,6 +49,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class MigrationManager:
     "Manages code migration from old APIs to new" ones."
     This class provides functionality to define migration rules,
@@ -113,6 +115,8 @@ from src.core.base.common.types.migration_status import MigrationStatus
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class MigrationManager:

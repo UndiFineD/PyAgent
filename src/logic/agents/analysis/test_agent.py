@@ -35,6 +35,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated testing and coverage analysis.
 Inspired by SGI-Bench and py.test.
+"""
+
 
 from __future__ import annotations
 
@@ -49,6 +51,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models.core_enums import FailureClassification
 
 __version__ = VERSION
+
+
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -121,6 +125,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models.core_enums import FailureClassification
 
 __version__ = VERSION
+
+
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors

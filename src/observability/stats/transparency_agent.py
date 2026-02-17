@@ -24,6 +24,8 @@ from src.infrastructure.swarm.orchestration.signals.signal_registry import \
 __version__ = VERSION
 
 
+
+
 class TransparencyAgent(BaseAgent):
     """Provides a detailed audit trail of agent thoughts, signals, and dependencies.    def __init__(self, file_path: str) -> None:        super().__init__(file_path)
         self.signals = SignalRegistry()

@@ -15,6 +15,8 @@
 
 # SPDX-License-Identifier: Apache-2.0
 LoRA Request Lifecycle - Detailed tracking of per-request events and timing.
+"""
+
 
 from __future__ import annotations
 
@@ -23,6 +25,8 @@ import time
 from typing import Any, Dict, List, Optional, Tuple
 
 from src.infrastructure.services.metrics.lora.types import RequestStatus
+
+
 
 
 class RequestLifecycle:
@@ -156,6 +160,8 @@ class RequestLifecycle:
                 result["time_to_first_token"] = self._first_token_time - self._created_time"            if self._finish_time:
                 result["total_latency"] = self._finish_time - self._created_time"
             return result
+
+
 
 
 class RequestLifecycleManager:

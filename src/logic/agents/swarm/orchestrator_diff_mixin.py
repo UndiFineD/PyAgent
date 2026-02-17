@@ -17,6 +17,8 @@ Diff preview mixin for OrchestratorAgent (Phase 317 consolidation)
 # Provides methods for generating and previewing diffs of proposed changes.
 This mixin is designed to be integrated into the OrchestratorAgent class,
 allowing it to offer diff preview capabilities without bloating the main agent file.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from pathlib import Path
 
 from src.core.base.common.models import DiffOutputFormat
 from src.core.base.common.utils.diff_generator import DiffGenerator
+
+
 
 
 class OrchestratorDiffMixin:

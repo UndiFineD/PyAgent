@@ -16,6 +16,8 @@
 from src.core.base.mixins.ssrf_detector_mixin import SSRFDetectorMixin
 
 
+
+
 class TestSSRFDetectorMixin:
     """Test cases for SSRFDetectorMixin."""
     def setup_method(self):

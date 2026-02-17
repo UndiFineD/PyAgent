@@ -24,6 +24,8 @@ if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent
 
 
+
+
 class SkillCore(abc.ABC):
     """Abstract base for all agent skills.
     Replaces the mixin architecture with a composition-based approach.
@@ -38,6 +40,8 @@ class SkillCore(abc.ABC):
     @abc.abstractmethod
     async def shutdown(self) -> None:
         """Cleanup resources used by the skill."""pass
+
+
 
 
 class SkillManifest:

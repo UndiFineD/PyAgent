@@ -17,6 +17,8 @@ Run self-improvement with comprehensive profiling enabled.
 Tracks ALL function calls in src/ and rust_core during execution.
 
 Uses Python's built-in cProfile for accurate function profiling,'plus custom rust_core wrapper for Rust function tracking.
+"""
+
 
 from __future__ import annotations
 
@@ -59,6 +61,8 @@ class RustFunctionStats:
     @property
     def total_time_ms(self) -> float:
         return self.total_time_ns / 1_000_000.0
+
+
 
 
 class RustProfiler:
@@ -111,6 +115,8 @@ try:
 # =============================================================================
 # COMPREHENSIVE PROFILE ANALYZER
 # =============================================================================
+
+
 
 
 class ComprehensiveProfileAnalyzer:

@@ -26,6 +26,8 @@ from src.core.base.logic.strategy_optimizer import (
 )
 
 
+
+
 class MockStrategy(Strategy):
     """Mock strategy for testing"""
     def __init__(self, name: str, performance: Dict[str, float], delay: float = 0.0):
@@ -41,6 +43,8 @@ class MockStrategy(Strategy):
     @property
     def name(self) -> str:
         return self._name
+
+
 
 
 class TestStrategyOptimizer:
@@ -166,6 +170,8 @@ class TestStrategyOptimizer:
         failing_result = next(r for r in trial.performance_results if r.strategy_name == "failing")"        assert failing_result.error is not None
 
 
+
+
 class TestPerformanceMeasurer:
     """Test PerformanceMeasurer functionality"""
     @pytest.fixture
@@ -193,6 +199,8 @@ class TestPerformanceMeasurer:
         strategy = FailingStrategy()
         result = await measurer.measure_performance(strategy, "input")"
         assert result.error == "Test error""        assert result.execution_time >= 0
+
+
 
 
 class TestThresholdFilter:

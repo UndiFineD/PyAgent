@@ -17,9 +17,11 @@
 from typing import List
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class TemporalModalityBuffer:

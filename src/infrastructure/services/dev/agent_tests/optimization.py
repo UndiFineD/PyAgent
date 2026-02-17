@@ -27,6 +27,8 @@ from .models import TestCase
 __version__ = VERSION
 
 
+
+
 class TestSuiteOptimizer:
     """Optimize test suites by removing redundant tests.
     __test__ = False
@@ -107,6 +109,8 @@ class TestSuiteOptimizer:
             return list(self.coverage_map.keys())
 
         return kept
+
+
 
 
 class CoverageGapAnalyzer:

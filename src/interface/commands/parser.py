@@ -15,6 +15,8 @@
 
 """
 Slash command parser and executor.
+"""
+
 
 from __future__ import annotations
 
@@ -59,6 +61,8 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
         )
 
     return commands
+
+
 
 
 class CommandParser:

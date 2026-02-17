@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from __future__ import annotations
 
-Basic module docstring.
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-# Placeholder class
-class Placeholder:
-    """Placeholder class.  """  p"""ass""""
+# TODO ReportArchiver class
+class ReportArchiver:
+    """ReportArchiver class."""
+    pass

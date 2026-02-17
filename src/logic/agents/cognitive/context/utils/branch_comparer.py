@@ -22,6 +22,8 @@ __version__ = VERSION
 __version__ = VERSION
 
 
+
+
 class BranchComparer:
     "Compares context across git branches."
     Provides functionality to compare context files between branches.

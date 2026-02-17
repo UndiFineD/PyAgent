@@ -14,6 +14,8 @@
 
 
 Base.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -36,6 +38,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+
+
 class ModalityType(Enum):
     """Supported modality types for multimodal inputs.
     IMAGE = auto()
@@ -56,7 +60,7 @@ class MultiModalConfig:
     mm_processor_kwargs: Optional[Dict[str, Any]] = None
     trust_remote_code: bool = False
 
-    # Placeholder tokens
+    # TODO Placeholder tokens
     image_token: str = "<image>""    video_token: str = "<video>""    audio_token: str = "<audio>""
     def get_limit(self, modality: str) -> int:
         """Get the maximum number of items allowed for a modality.        return self.limit_per_prompt.get(modality, 1)
@@ -66,8 +70,8 @@ class MultiModalConfig:
 
 
 @dataclass
-class PlaceholderInfo:
-    """Information about a placeholder in the token sequence.
+class TODO PlaceholderInfo:
+    """Information about a TODO Placeholder in the token sequence.
     modality: ModalityType
     item_idx: int
     start_idx: int
@@ -76,7 +80,7 @@ class PlaceholderInfo:
 
     @property
     def end_idx(self) -> int:
-        """Calculate the ending index of the placeholder.        return self.start_idx + self.length
+        """Calculate the ending index of the TODO Placeholder.        return self.start_idx + self.length
 
 
 @dataclass
@@ -107,17 +111,19 @@ class MultiModalInputs:
     """Processed multimodal inputs ready for model consumption.
     prompt_token_ids: List[int] = field(default_factory=list)
     mm_embeddings: Dict[str, List[np.ndarray]] = field(default_factory=dict)
-    mm_placeholders: Dict[str, List[PlaceholderInfo]] = field(default_factory=dict)
+    mm_TODO Placeholders: Dict[str, List[TODO PlaceholderInfo]] = field(default_factory=dict)
     mm_kwargs: Dict[str, Any] = field(default_factory=dict)
 
     def has_multimodal(self) -> bool:
         """Check if any multimodal embeddings are present.        return any(bool(embeds) for embeds in self.mm_embeddings.values())
 
-    def get_placeholder_count(self) -> int:
-        """Get total number of placeholder tokens across all modalities.        return sum(sum(p.length for p in placeholders) for placeholders in self.mm_placeholders.values())
+    def get_TODO Placeholder_count(self) -> int:
+        """Get total number of TODO Placeholder tokens across all modalities.        return sum(sum(p.length for p in TODO Placeholders) for TODO Placeholders in self.mm_TODO Placeholders.values())
 
 
 T = TypeVar("T")"
+
+
 
 class BaseMultiModalProcessor(ABC, Generic[T]):
     """Abstract base class for modality-specific processors.
@@ -134,8 +140,8 @@ class BaseMultiModalProcessor(ABC, Generic[T]):
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
         """Process raw modality data into a tensor and metadata.
     @abstractmethod
-    def get_placeholder_count(self, data: T, **kwargs: Any) -> int:
-        """Calculate the number of placeholder tokens needed for this data.
+    def get_TODO Placeholder_count(self, data: T, **kwargs: Any) -> int:
+        """Calculate the number of TODO Placeholder tokens needed for this data.
     def compute_hash(self, data: T) -> str:
         """Compute a thumbprint hash for the modality data.        if isinstance(data, np.ndarray):
             return hashlib.sha256(data.tobytes()).hexdigest()[:16]

@@ -36,6 +36,8 @@ class RTPSession:
     frames_processed: int = 0
 
 
+
+
 class RTPServerCore:
         Core logic for handling bidirectional RTP audio streams.
     Harvested from .external/Asterisk-AI-Voice-Agent
@@ -62,7 +64,7 @@ class RTPServerCore:
 
     def allocate_session(self, call_id: str) -> int:
         """Allocates a port and creates a new RTP session.        # Port allocation logic here
-        return 10000  # Placeholder
+        return 10000  # TODO Placeholder
 
     def handle_packet(self, data: bytes, addr: Tuple[str, int]):
         """Parses and processes an incoming RTP packet.        if len(data) < self.RTP_HEADER_SIZE:

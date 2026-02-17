@@ -26,8 +26,12 @@ import logging
 from src.core.base.common.base_core import BaseCore
 
 
+
+
 class ThreatLevel(Enum):
     """Threat severity levels"""LOW = "low""    MEDIUM = "medium""    HIGH = "high""    CRITICAL = "critical""
+
+
 
 class ADObjectType(Enum):
     """Active Directory object types"""USER = "user""    COMPUTER = "computer""    GROUP = "group""    OU = "organizational_unit""    GPO = "group_policy_object""    SERVICE_ACCOUNT = "service_account""
@@ -67,6 +71,8 @@ class HuntingResult:
     execution_time: float
     risk_score: float
     summary: Dict[str, Any] = field(default_factory=dict)
+
+
 
 
 class ActiveDirectoryThreatHuntingCore(BaseCore):

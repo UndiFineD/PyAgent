@@ -33,6 +33,8 @@ WHAT IT SHOULD DO BETTER:
 - Use proper datetime types (datetime.date/datetime.datetime or typing.Annotated) for period_start/period_end instead of strings, and provide parsing helpers for ISO formats.  
 - Add convenience methods: remaining(), consume(amount), reset(period_start, period_end), percent_consumed(), and serialization/deserialization (to_dict/from_dict).  
 - Consider immutability or thread-safety guarantees if used concurrently and richer SLO metadata (window length, alert thresholds).
+"""
+
 
 from __future__ import annotations
 

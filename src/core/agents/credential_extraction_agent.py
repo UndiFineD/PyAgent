@@ -33,6 +33,8 @@ from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
 from src.core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationMixin
 
 
+
+
 class CredentialExtractionAgent(
     BaseAgent,
     PrivilegeEscalationMixin,

@@ -27,6 +27,8 @@ from src.infrastructure.swarm.orchestration.swarm.audit_logger import \
 logger = logging.getLogger(__name__)
 
 
+
+
 class SwarmTraceSynthesizer:
         Condenses raw audit logs into actionable 'Global Wisdom' (Phase 82).'    Analyzes historical expert pairings to optimize future MoE routing decisions.
     

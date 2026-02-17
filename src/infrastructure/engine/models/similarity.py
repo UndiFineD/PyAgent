@@ -22,11 +22,13 @@ from typing import List
 import numpy as np
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class EmbeddingSimilarityService:

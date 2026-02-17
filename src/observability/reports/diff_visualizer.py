@@ -22,6 +22,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class DiffVisualizer:
     """Visualizes changelog differences with multiple view modes.    Provides side-by-side and unified diff views for changelog
     comparison.

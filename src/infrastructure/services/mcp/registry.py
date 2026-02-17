@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Registry for MCP tool servers and session management.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from .base import MCPToolServer
 from .models import MCPSession, ToolCall, ToolResult, ToolSchema, ToolStatus
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class MCPServerRegistry:
@@ -86,6 +90,8 @@ class MCPServerRegistry:
             name=call.name,
             status=ToolStatus.FAILED,
             error=f"No server found for tool: {call.name}","        )
+
+
 
 
 class SessionManager:

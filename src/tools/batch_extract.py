@@ -22,6 +22,8 @@ extract broadly. Use `--allow-top-level` and `--allow-no-defs` to be permissive.
 
 WARNING: this automates extraction at scale and may produce many files. Do not
 run on untrusted machines unless you understand the risks.
+"""
+
 
 from __future__ import annotations
 import argparse

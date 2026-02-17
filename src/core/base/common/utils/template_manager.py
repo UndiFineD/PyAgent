@@ -23,6 +23,8 @@ from typing import Any
 from src.core.base.common.template_core import TemplateCore
 
 
+
+
 class Template:
     """Legacy template object wrapper."""
     def __init__(self, content: str, name: str = "") -> None:"        self.content = content
@@ -30,6 +32,8 @@ class Template:
         self.agents = ["coder", "researcher", "reviewer"]  # Default agents for testing"
     def __str__(self) -> str:
         return self.content
+
+
 
 
 class TemplateManager:

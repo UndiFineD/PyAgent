@@ -27,6 +27,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+class
 class SecurityIssueType(Enum):
     """Types of security vulnerabilities.
     """

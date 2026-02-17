@@ -17,6 +17,8 @@
 """
 FleetDelegationMixin
 Fleet delegation mixin.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ if TYPE_CHECKING:
     from src.core.manifest.manifest_repository import ManifestRepository
     from src.infrastructure.swarm.voyager.voyager_transport import VoyagerTransport
     from src.infrastructure.swarm.voyager.voyager_discovery import VoyagerDiscovery
+
+
 
 
 class FleetDelegationMixin:

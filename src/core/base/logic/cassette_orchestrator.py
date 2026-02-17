@@ -21,6 +21,8 @@ from typing import Any, Dict, Optional
 from src.core.base.common.models.communication_models import CascadeContext
 
 
+
+
 class BaseLogicCassette(abc.ABC):
     """Abstract base class regarding a logic 'cassette'.'    A cassette is a self-contained, structurally transferable algorithmic primitive.
     """
@@ -34,6 +36,8 @@ class BaseLogicCassette(abc.ABC):
 
     async def initialize(self) -> None:
         """Optional initialization logic regarding hardware or state."""self.is_initialized = True
+
+
 
 
 class CassetteOrchestrator:

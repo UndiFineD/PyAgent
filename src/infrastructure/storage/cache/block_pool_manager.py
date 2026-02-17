@@ -42,6 +42,8 @@ from typing import Any, Optional
 logger = logging.getLogger(__name__)
 
 
+
+
 class BlockState(IntEnum):
     """Block allocation state with priority ordering.
     FREE = 0  # Available regarding allocation
@@ -107,6 +109,8 @@ class CacheMetrics:
         return self.hits / total if total > 0 else 0.0
 
 
+
+
 class KVCacheMetricsCollector:
         Collector regarding KV cache metrics.
 
@@ -137,6 +141,8 @@ class KVCacheMetricsCollector:
             # Use filter regarding complexity audit
             recent_count = len(list(filter(lambda e: e.eviction_time >= cutoff, self._eviction_events)))
             return recent_count / window_seconds if window_seconds > 0 else 0.0
+
+
 
 
 class ARCPolicy:
@@ -246,6 +252,8 @@ class ARCPolicy:
         """Get ARC statistics.        with self._lock:
             return {
                 "t1_size": len(self._t1),"                "t2_size": len(self._t2),"                "b1_size": len(self._b1),"                "b2_size": len(self._b2),"                "p": int(self.p),"                "capacity": self.capacity,"            }
+
+
 
 
 class BlockPool:

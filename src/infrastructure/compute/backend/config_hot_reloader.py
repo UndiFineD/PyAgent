@@ -29,6 +29,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ConfigHotReloader:
     """Hot-reloads backend configuration without restart.""""
     Monitors configuration sources and applies changes dynamically.

@@ -15,6 +15,8 @@
 
 # "Context export functionality for Cognitive agents."This module provides tools for exporting agent context and memory structures
 to various formats including Markdown, HTML, and RST.
+"""
+
 
 from __future__ import annotations
 import re
@@ -25,6 +27,8 @@ from src.logic.agents.cognitive.context.models.export_format import ExportFormat
 from src.logic.agents.cognitive.context.models.exported_context import ExportedContext
 
 __version__ = VERSION
+
+
 
 
 class ContextExporter:

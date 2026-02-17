@@ -35,11 +35,15 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Model registry core.py module.
+"""
+
 
 from __future__ import annotations
 
 import logging
 from pathlib import Path
+
+
 
 
 class ModelRegistryCore:
@@ -99,6 +103,8 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+
+
 
 
 class ModelRegistryCore:

@@ -14,20 +14,5 @@
 
 
 """
-Dev package.
-
-from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION as VERSION
-
-__version__ = VERSION
-
-# You may obtain a copy of the License at
-#
-#
-# limitations under the License.
-
-
+Development scripts and stability tools for the PyAgent ecosystem.
 """
-
-"""Development scripts and stability tools for the PyAgent ecosystem.

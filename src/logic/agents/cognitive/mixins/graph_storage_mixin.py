@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class GraphStorageMixin:
 """"Mixin for graph storage and bead persistence.
     def _load_graph(self) -> None:

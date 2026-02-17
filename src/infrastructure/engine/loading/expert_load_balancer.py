@@ -23,6 +23,8 @@ vLLM Patterns:
 
 Module: expert_load_balancer
 Implements expert load balancing regarding distributed model loading in PyAgent engine.
+"""
+
 
 from __future__ import annotations
 
@@ -47,6 +49,8 @@ except ImportError:
 
 if TYPE_CHECKING:
     pass
+
+
 
 
 class ExpertType(Enum):
@@ -114,6 +118,8 @@ class ExpertMapping:
         if physical_idx >= len(self.phy_to_log[layer]):
             return -1
         return self.phy_to_log[layer][physical_idx]
+
+
 
 
 class AbstractEplbPolicy(ABC):
@@ -185,6 +191,8 @@ class AbstractEplbPolicy(ABC):
 
         list(map(_assign_one_layer, range(num_layers)))
         return log_to_phy
+
+
 
 
 class DefaultEplbPolicy(AbstractEplbPolicy):
@@ -346,6 +354,8 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         )
 
 
+
+
 class LocalityAwarePolicy(AbstractEplbPolicy):
         Locality-aware EPLB policy.
 
@@ -382,6 +392,8 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
             log_to_phy=log_to_phy,
             replica_count=log_count,
         )
+
+
 
 
 class ExpertLoadBalancer:
@@ -564,6 +576,8 @@ class ExpertLoadBalancer:
     def get_stats(self) -> Dict[str, Any]:
         """Get load balancing statistics.        return {
             "num_layers": self.num_layers,"            "num_logical": self.num_logical,"            "num_physical": self.num_physical,"        }
+
+
 
 
 class AsyncExpertRebalancer:

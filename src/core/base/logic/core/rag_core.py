@@ -28,11 +28,17 @@ from enum import Enum
 from src.core.base.common.base_core import BaseCore
 
 
+
+
 class VectorStoreType(str, Enum):
     """Supported vector store types."""QDRANT = "qdrant""    PINECONE = "pinecone""    CHROMA = "chroma""    WEAVIATE = "weaviate""    MILVUS = "milvus""
 
+
+
 class RetrievalStrategy(str, Enum):
     """Retrieval strategies for RAG."""SIMILARITY = "similarity""    MMR = "mmr"  # Maximal Marginal Relevance"    SELF_QUERY = "self_query""    MULTI_QUERY = "multi_query""    TIME_WEIGHTED = "time_weighted""    CONTEXTUAL_COMPRESSION = "contextual_compression""
+
+
 
 class DocumentType(str, Enum):
     """Types of documents that can be stored."""TEXT = "text""    PDF = "pdf""    WEBPAGE = "webpage""    CODE = "code""    MARKDOWN = "markdown""
@@ -91,6 +97,8 @@ class RAGQuery:
     context: Dict[str, Any] = field(default_factory=dict)
 
 
+
+
 class VectorStoreInterface(Protocol):
     """Protocol for vector store implementations."""
     async def add_documents(self, documents: List[Document]) -> List[str]:
@@ -110,6 +118,8 @@ class VectorStoreInterface(Protocol):
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
         """Update a document in the vector store."""pass
+
+
 
 
 class BaseVectorStore:
@@ -135,6 +145,8 @@ class BaseVectorStore:
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
         """Update a document in the vector store."""raise NotImplementedError
+
+
 
 
 class RAGCore(BaseCore):
@@ -583,6 +595,8 @@ class RAGCore(BaseCore):
         self.embedders.clear()
 
 
+
+
 class QdrantVectorStore(BaseVectorStore):
     """Real vector store implementation using Qdrant."""
     def __init__(self, config: Dict[str, Any]):
@@ -636,6 +650,8 @@ class QdrantVectorStore(BaseVectorStore):
             return False
         # Real Qdrant update would be implemented here
         return True
+
+
 
 
 class MockVectorStore(BaseVectorStore):

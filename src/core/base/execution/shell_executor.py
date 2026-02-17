@@ -12,9 +12,12 @@
 # limitations under the License.
 
 
-"""Shell execution core for agents.
+"""
+Shell execution core for agents.
 Handles subprocess spawning, environment propagation, and interaction recording.
 """
+
+
 from __future__ import annotations
 
 import json
@@ -41,6 +44,7 @@ class ShellExecutor:
             cls._core = ShellCore()
         return cls._core
 
+
     @staticmethod
     async def async_run_command(
         cmd: list[str],
@@ -50,12 +54,13 @@ class ShellExecutor:
         recorder: Optional[Any] = None,
         timeout: int = 120,
     ) -> subprocess.CompletedProcess[str]:
-        """Phase 266: Asynchronous subprocess execution via ShellCore."""_ = agent_name
+        """Phase 266: Asynchronous subprocess execution via ShellCore."""
+        _ = agent_name
         core: ShellCore = ShellExecutor._get_core()
 
         env: Dict[str, str] = {}
         if models_config:
-            env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)"
+            env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
         result: subprocess.CompletedProcess = await core.execute_async(
             cmd=cmd, timeout=timeout, env=env, cwd=workspace_root, sanitize=True
         )
@@ -63,12 +68,14 @@ class ShellExecutor:
         if recorder:
             output = result.stdout + result.stderr
             recorder.record_interaction(
-                provider="ShellAsync","                model="async_subprocess","                prompt=" ".join(cmd),"                result=output,
-                meta={"exit_code": result.returncode},"            )
+                provider="ShellAsync", model="async_subprocess", prompt=" ".join(cmd), result=output,
+                meta={"exit_code": result.returncode},
+            )
 
         return subprocess.CompletedProcess(
             args=cmd, returncode=result.returncode, stdout=result.stdout, stderr=result.stderr
         )
+
 
     @staticmethod
     def run_command(
@@ -80,12 +87,13 @@ class ShellExecutor:
         timeout: int = 120,
         max_retries: int = 1,
     ) -> subprocess.CompletedProcess[str]:
-        """Run a command via core synchronous execution."""_ = agent_name
+        """Run a command via core synchronous execution."""
+        _ = agent_name
         core: ShellCore = ShellExecutor._get_core()
 
         env: Dict[str, str] = os.environ.copy()
         if models_config:
-            env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)"
+            env["AGENT_MODELS_CONFIG"] = json.dumps(models_config)
         env = core.sanitize_env(env)
 
         last_error: Optional[Exception] = None
@@ -103,16 +111,19 @@ class ShellExecutor:
 
                 if recorder:
                     recorder.record_interaction(
-                        provider="Shell","                        model="subprocess","                        prompt=" ".join(cmd),"                        result=result.stdout + result.stderr,
-                        meta={"exit_code": result.returncode, "attempt": attempt + 1},"                    )
+                        provider="Shell", model="subprocess", prompt=" ".join(cmd), result=result.stdout + result.stderr,
+                        meta={"exit_code": result.returncode, "attempt": attempt + 1},
+                    )
 
                 return result
             except subprocess.TimeoutExpired as e:
-                logging.warning("Timeout (attempt %s/%s)", attempt + 1, max_retries)"                last_error = e
+                logging.warning("Timeout (attempt %s/%s)", attempt + 1, max_retries)                
+                last_error = e
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error("Execution failure: %s", e)"                last_error = e
+                logging.error("Execution failure: %s", e)                
+                last_error = e
 
         if isinstance(last_error, subprocess.TimeoutExpired):
             raise last_error
 
-        return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr=str(last_error))"
+        return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr=str(last_error))

@@ -36,12 +36,16 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Namespaces.py module.
 # Metric namespace management engine.
+"""
+
 
 from __future__ import annotations
 
 from typing import Any
 
 from .metrics import MetricNamespace
+
+
 
 
 class MetricNamespaceManager:
@@ -84,12 +88,16 @@ class MetricNamespaceManager:
             ns: MetricNamespace | None = self.namespaces.get(current)
             current = ns.parent if ns else None
         return " / ".join(hierarchy)"# Metric namespace management engine.
+"""
+
 
 from __future__ import annotations
 
 from typing import Any
 
 from .metrics import MetricNamespace
+
+
 
 
 class MetricNamespaceManager:

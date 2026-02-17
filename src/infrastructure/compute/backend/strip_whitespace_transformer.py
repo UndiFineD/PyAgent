@@ -24,6 +24,8 @@ from .response_transformer_base import ResponseTransformerBase
 __version__ = VERSION
 
 
+
+
 class StripWhitespaceTransformer(ResponseTransformerBase):
     """Transformer that strips whitespace.
     def transform(self, response: str) -> str:

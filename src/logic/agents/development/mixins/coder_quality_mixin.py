@@ -26,6 +26,8 @@ from src.core.base.common.types.code_smell import CodeSmell
 from src.core.base.common.types.quality_score import QualityScore
 
 
+
+
 class CoderQualityMixin:
 """"Mixin for computing quality scores and refactoring suggestions.
     def calculate_quality_score(

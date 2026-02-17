@@ -17,6 +17,8 @@ AWS Bedrock cloud provider connector.
 
 Provides integration with AWS Bedrock for inference requests,
 supporting Claude, Titan, and other Bedrock-hosted models.
+"""
+
 
 from __future__ import annotations
 
@@ -33,6 +35,8 @@ from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
                     InferenceRequest, InferenceResponse, RateLimitError)
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class AWSBedrockConnector(CloudProviderBase):

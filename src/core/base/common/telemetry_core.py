@@ -16,6 +16,8 @@
 """Centralized Telemetry and Metrics Core.
 Provides high-performance aggregation, alerting, and cross-tier observability.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -25,17 +27,24 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 from .base_core import BaseCore
 
-logger = logging.getLogger("pyagent.telemetry")"
+logger = logging.getLogger("pyagent.telemetry")
+
+
+
 
 class MetricType(Enum):
     """Enumeration of supported metric types."""
-    COUNTER = "counter""    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary""
+    COUNTER = "counter"
+    GAUGE = "gauge"
+    HISTOGRAM = "histogram"
+    SUMMARY = "summary"
+
 
 @dataclass
 class Metric:
@@ -45,11 +54,14 @@ class Metric:
     metric_type: MetricType = MetricType.GAUGE
     timestamp: float = field(default_factory=time.time)
     tags: Dict[str, str] = field(default_factory=dict)
-    namespace: str = "default""    unit: str = """
+    namespace: str = "default"
+    unit: str = ""
+
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
     def __iter__(self) -> Any:
         yield self.timestamp
         yield self.value
+
 
     def __getitem__(self, index: int) -> Any:
         return (self.timestamp, self.value)[index]
@@ -59,25 +71,31 @@ class TelemetryCore(BaseCore):
     """Authoritative engine for system metrics and event tracking.
     Standardizes how agents and infrastructure report health and performance.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self._metrics_buffer: List[Metric] = []
         self._alerts: List[Dict[str, Any]] = []
 
+
     def record_metric(
         self, name: str, value: float, mtype: MetricType = MetricType.GAUGE, tags: Optional[Dict[str, str]] = None
     ) -> None:
-        """Records a single metric point."""metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
+        """Records a single metric point."""
+        metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
         self._metrics_buffer.append(metric)
 
         # Trim buffer if too large (10k points)
         if len(self._metrics_buffer) > 10000:
             self._metrics_buffer = self._metrics_buffer[-5000:]
 
+
     def get_rollups(self, metric_name: str, window_seconds: int = 3600) -> Dict[str, float]:
         """Calculates basic stats for a metric.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
-        """if rc and hasattr(rc, "calculate_rollups"):"            try:
+        """
+        if rc and hasattr(rc, "calculate_rollups"):
+            try:
                 # Optimized Rust rollup calculation
                 return rc.calculate_rollups(  # pylint: disable=no-member
                     [(m.name, m.timestamp, m.value) for m in self._metrics_buffer],
@@ -86,21 +104,28 @@ class TelemetryCore(BaseCore):
                     time.time(),
                 )
             except Exception as err:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.debug("Rust calculate_rollups failed, falling back: %s", err)"
+                logger.debug("Rust calculate_rollups failed, falling back: %s", err)
         now = time.time()
         relevant = [
             m.value for m in self._metrics_buffer if m.name == metric_name and (now - m.timestamp) < window_seconds
         ]
 
         if not relevant:
-            return {"avg": 0.0, "max": 0.0, "count": 0}"
-        return {"avg": sum(relevant) / len(relevant), "max": max(relevant), "count": len(relevant)}"
+            return {"avg": 0.0, "max": 0.0, "count": 0}
+        return {"avg": sum(relevant) / len(relevant), "max": max(relevant), "count": len(relevant)}
+
+
     def get_cluster_health_score(self) -> float:
-        """Calculates a unified health score (0.0 - 1.0) for the local machine or cluster."""cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)"        mem_avg = self.get_rollups("swarm.node.memory_percent", window_seconds=60).get("avg", 0.0)"
-        # Invert the load to get a 'health' score'        # (e.g. 20% CPU + 30% MEM -> 0.75 health)
+        """Calculates a unified health score (0.0 - 1.0) for the local machine or cluster."""
+        cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)
+        mem_avg = self.get_rollups("swarm.node.memory_percent", window_seconds=60).get("avg", 0.0)
+        # Invert the load to get a 'health' score
+        # (e.g. 20% CPU + 30% MEM -> 0.75 health)
         load = (cpu_avg + mem_avg) / 2.0
         return max(0.0, min(1.0, 1.0 - (load / 100.0)))
 
+
     def clear(self) -> None:
-        """Clears all buffered metrics and alerts."""self._metrics_buffer.clear()
+        """Clears all buffered metrics and alerts."""
+        self._metrics_buffer.clear()
         self._alerts.clear()

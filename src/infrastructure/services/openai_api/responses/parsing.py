@@ -25,6 +25,8 @@ from .models import (Message, Response, ResponseConfig, ToolCallContent,
                      ToolDefinition)
 
 
+
+
 class ConversationBuilder:
     """Build conversation messages from Responses API format.
     @staticmethod

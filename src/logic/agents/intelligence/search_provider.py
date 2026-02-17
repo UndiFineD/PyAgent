@@ -34,6 +34,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 
 Search Agent: Perform deep research and search operations across the workspace.
+"""
+
 
 from __future__ import annotations
 

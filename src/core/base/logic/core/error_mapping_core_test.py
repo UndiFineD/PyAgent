@@ -20,6 +20,8 @@ from hypothesis import given, strategies as st
 from src.core.base.logic.core.error_mapping_core import ErrorMappingCore
 
 
+
+
 class TestErrorMappingCoreBasics:
     """Basic functionality tests."""
     def test_get_code_for_known_exception(self) -> None:
@@ -32,6 +34,8 @@ class TestErrorMappingCoreBasics:
         """Test error description for known code."""desc = ErrorMappingCore.describe_error("PA-1001")"        assert "FileSystemError" in desc"        assert "workspace" in desc.lower()"
     def test_describe_error_unknown(self) -> None:
         """Test error description for unknown code."""desc = ErrorMappingCore.describe_error("PA-9999")"        assert "Unknown" in desc"
+
+
 
 class TestErrorMappingCoreCategories:
     """Test error code categories."""
@@ -76,6 +80,8 @@ class TestErrorMappingCoreCategories:
             assert code == expected_code
 
 
+
+
 class TestErrorMappingCorePropertyBased:
     """Property-based tests for error mapping consistency."""
     @given(st.sampled_from(list(ErrorMappingCore.ERROR_CODES.keys())))
@@ -108,6 +114,8 @@ class TestErrorMappingCorePropertyBased:
         """Property: describe_error always returns a non-empty string."""desc = ErrorMappingCore.describe_error(code)
         assert isinstance(desc, str)
         assert len(desc) > 0
+
+
 
 
 class TestErrorMappingCoreEdgeCases:

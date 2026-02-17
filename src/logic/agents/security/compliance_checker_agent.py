@@ -46,6 +46,8 @@ from src.logic.agents.security.compliance_assist import ComplianceCheck, Complia
 __version__ = VERSION
 
 
+
+
 class ComplianceChecker:
     """Checks changelog compliance with various requirements.""""
     Verifies changelog entries meet security, legal, and

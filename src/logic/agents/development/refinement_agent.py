@@ -52,6 +52,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class RefinementAgent(BaseAgent):
 """"Refines the swarm's core logic and instructions through performance feedback.'
     def __init__(self, file_path: str) -> None:
@@ -119,6 +121,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class RefinementAgent(BaseAgent):

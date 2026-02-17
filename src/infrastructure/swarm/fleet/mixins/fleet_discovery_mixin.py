@@ -30,6 +30,8 @@ from src.observability.structured_logger import StructuredLogger
 logger = StructuredLogger(__name__)
 
 
+
+
 class FleetDiscoveryMixin:
         Mixin for FleetManager to support LAN-based peer discovery and synchronization.
     

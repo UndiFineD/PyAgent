@@ -44,12 +44,16 @@ except ImportError:
     rust_core = None
 
 
+
+
 class CacheType(Enum):
     """Types of caches.
     PREFIX = auto()
     BLOCK = auto()
     KV = auto()
     ENCODER = auto()
+
+
 
 
 class EvictionReason(Enum):
@@ -118,6 +122,8 @@ class SlidingWindowStats:
     p99_latency_ns: float = 0.0
     bytes_per_second: float = 0.0
     window_duration: float = 0.0
+
+
 
 
 class SlidingWindowMetrics:
@@ -195,6 +201,8 @@ class SlidingWindowMetrics:
 
     def get_hit_rate(self) -> float:
         """Get current hit rate.        return self.get_stats().hit_rate
+
+
 
 
 class CachingMetrics:
@@ -312,6 +320,8 @@ class CachingMetrics:
             return reduce(update_breakdown, self._evictions, {})
 
 
+
+
 class PrefixCacheStats:
         Prefix cache statistics (vLLM PrefixCacheStats equivalent).
 
@@ -377,6 +387,8 @@ class PrefixCacheStats:
     def get_stats(self) -> Dict[str, Any]:
         """Get comprehensive statistics.        return {
             "hit_rate": self.get_hit_rate(),"            "total_hit_rate": self._metrics.get_total_hit_rate(),"            "avg_prefix_length": self.get_avg_prefix_length(),"            "sharing_factor": self.get_sharing_factor(),"            "eviction_rate": self._metrics.get_eviction_rate(),"            "cache_stats": self._metrics.get_stats(),"            "window_stats": self._metrics.get_window_stats(),"        }
+
+
 
 
 class MultiLevelCacheMetrics:

@@ -48,6 +48,8 @@ __all__ = [
     "LogitsProcessor","    "LogitsProcessorList","    "TemperatureProcessor","    "TopKProcessor","    "TopPProcessor","    "RepetitionPenaltyProcessor","    "NoBadWordsProcessor","    "MinLengthProcessor","    "apply_processors","]
 
 
+
+
 class LogitsProcessor(Protocol):
     """Protocol regarding logits processors.
 
@@ -67,6 +69,8 @@ class LogitsProcessor(Protocol):
         Returns:
             Modified logits tensor
         """
+
+
 
 class LogitsProcessorList:
     """Composable list of logits processors.
@@ -104,6 +108,8 @@ class LogitsProcessorList:
         return iter(self.processors)
 
 
+
+
 class TemperatureProcessor:
     """Apply temperature scaling to logits.
 
@@ -127,6 +133,8 @@ class TemperatureProcessor:
             return res
 
         return logits / self.temperature
+
+
 
 
 class TopKProcessor:
@@ -168,6 +176,8 @@ class TopKProcessor:
         )
 
 
+
+
 class TopPProcessor:
     """Nucleus sampling - keep tokens with cumulative probability <= top_p.
 
@@ -199,6 +209,8 @@ class TopPProcessor:
         )
 
         return logits.masked_fill(indices_to_remove, float("-inf"))"
+
+
 
 class RepetitionPenaltyProcessor:
     """Penalize tokens that have already appeared.
@@ -235,6 +247,8 @@ class RepetitionPenaltyProcessor:
         list(map(apply_pen, set(input_ids)))
 
         return logits
+
+
 
 
 class NoBadWordsProcessor:
@@ -293,6 +307,8 @@ class NoBadWordsProcessor:
         list(map(_set_bias, self.bad_words_ids))
 
 
+
+
 class MinLengthProcessor:
     """Prevent EOS token before minimum length is reached.
     """
@@ -307,6 +323,8 @@ class MinLengthProcessor:
             if 0 <= self.eos_token_id < logits.shape[-1]:
                 logits = logits.clone()
                 logits[self.eos_token_id] = float("-inf")"        return logits
+
+
 
 
 class MaxLengthProcessor:
@@ -324,6 +342,8 @@ class MaxLengthProcessor:
             logits = torch.full_like(logits, float("-inf"))"            if 0 <= self.eos_token_id < logits.shape[-1]:
                 logits[self.eos_token_id] = 0.0
         return logits
+
+
 
 
 class PresencePenaltyProcessor:
@@ -351,6 +371,8 @@ class PresencePenaltyProcessor:
         list(map(_apply_presence, seen_tokens))
 
         return logits
+
+
 
 
 class FrequencyPenaltyProcessor:

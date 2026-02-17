@@ -29,6 +29,8 @@ from enum import Enum
 __version__ = VERSION
 
 
+
+class
 class FeedFormat(Enum):
     """Feed format types for RSS / Atom generation.
     """

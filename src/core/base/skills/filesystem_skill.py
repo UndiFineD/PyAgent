@@ -19,5 +19,7 @@ Alias for environment_skill to maintain manifest compatibility.
 from .environment_skill import EnvironmentSkill
 
 
+
+
 class FilesystemSkill(EnvironmentSkill):
     """Alias for EnvironmentSkill."""pass

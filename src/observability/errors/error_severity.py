@@ -28,7 +28,10 @@ Provides a small, explicit Enum (ErrorSeverity) representing five discrete sever
 WHAT IT SHOULD DO BETTER:
 - Add rich-comparison helpers or a utility wrapper to make ordinal comparisons and threshold checks more ergonomic and type-safe.
 - Provide mappings to logging levels, human-readable labels, and JSON (de)serialization methods for configuration and transport.
-- Include unit tests and examples showing intended comparison semantics and integration with the project's logging and alerting subsystems.'
+- Include unit tests and examples showing intended comparison semantics and integration with the project's logging and alerting subsystems.
+"""
+
+
 from __future__ import annotations
 
 from enum import Enum
@@ -38,8 +41,10 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ErrorSeverity(Enum):
-    """Error severity levels.
+    """Error severity levels."""
     CRITICAL = 5
     HIGH = 4
     MEDIUM = 3

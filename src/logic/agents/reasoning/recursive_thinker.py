@@ -18,6 +18,8 @@ from typing import List, Protocol
 from dataclasses import dataclass
 
 
+
+
 class LLMInterface(Protocol):
     async def chat(self, messages: List[dict]) -> str: ...
 
@@ -28,6 +30,8 @@ class RoundResult:
     alternatives: List[str]
     best_response: str
     rationale: str
+
+
 
 
 class RecursiveThinker:
@@ -67,6 +71,8 @@ from typing import List, Protocol
 from dataclasses import dataclass
 
 
+
+
 class LLMInterface(Protocol):
     async def chat(self, messages: List[dict]) -> str: ...
 
@@ -77,6 +83,8 @@ class RoundResult:
     alternatives: List[str]
     best_response: str
     rationale: str
+
+
 
 
 class RecursiveThinker:

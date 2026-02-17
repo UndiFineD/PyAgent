@@ -40,6 +40,8 @@ FILE CONTENT SUMMARY:
 SecurityCore logic for workspace safety.
 Combines scanning for secrets, command auditing, shell script analysis, and injection detection.
 This is designed for high-performance static analysis and future Rust migration.
+"""
+
 
 from __future__ import annotations
 
@@ -54,6 +56,8 @@ from src.logic.agents.security.mixins.security_reporter_mixin import SecurityRep
 from src.logic.agents.security.mixins.security_scanner_mixin import SecurityScannerMixin
 
 _RUST_AVAILABLE = importlib.util.find_spec("rust_core") is not None"__version__ = VERSION
+
+
 
 
 class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterMixin):
@@ -111,6 +115,8 @@ from src.logic.agents.security.mixins.security_reporter_mixin import SecurityRep
 from src.logic.agents.security.mixins.security_scanner_mixin import SecurityScannerMixin
 
 _RUST_AVAILABLE = importlib.util.find_spec("rust_core") is not None"__version__ = VERSION
+
+
 
 
 class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterMixin):

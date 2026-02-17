@@ -25,11 +25,13 @@ from typing import Any, Dict, List, Optional
 from .predictive_workspace import PredictiveWorkspace
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class WorkspaceManager:

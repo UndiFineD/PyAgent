@@ -22,11 +22,15 @@ from src.core.base.common.models.core_enums import EnvironmentIsolation
 from src.core.base.mixins.environment_mixin import EnvironmentMixin
 
 
+
+
 class MockAgent(EnvironmentMixin):
     """Mock agent class with EnvironmentMixin."""
     def __init__(self):
         super().__init__()
         self.name = "test-agent""
+
+
 
 class TestEnvironmentMixin:
     """Test cases for EnvironmentMixin."""

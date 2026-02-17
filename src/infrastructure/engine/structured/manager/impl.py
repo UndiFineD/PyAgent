@@ -14,6 +14,8 @@
 
 
 Impl.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ import numpy as np
 
 from .base import StructuredOutputGrammar
 from .config import GrammarSpec
+
+
 
 
 class SimpleRegexGrammar(StructuredOutputGrammar):
@@ -114,6 +118,8 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         Returns:
             list of all token IDs.
                 return list(range(self.vocab_size))
+
+
 
 
 class ChoiceGrammar(StructuredOutputGrammar):

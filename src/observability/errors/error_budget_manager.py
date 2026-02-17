@@ -33,6 +33,8 @@ Persist budgets to durable storage, enforce and roll budgets on period boundarie
 add concurrency protection and validation, expose asynchronous APIs for integration 
 with asyncio-based agents, emit metrics/events on consumption and breaches, 
 and add tests for edge cases (zero budgets, negative consumes, missing budgets).
+"""
+
 
 from __future__ import annotations
 
@@ -43,6 +45,8 @@ from src.core.base.lifecycle.version import VERSION
 from .error_budget import ErrorBudget
 
 __version__ = VERSION
+
+
 
 
 class ErrorBudgetManager:

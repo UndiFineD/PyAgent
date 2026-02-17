@@ -28,10 +28,14 @@ class TableMetadata:
     sample_rows: List[Dict[str, Any]] = dataclasses.field(default_factory=list)
 
 
+
+
 class TableTrieNode:
     def __init__(self):
         self.children: Dict[str, TableTrieNode] = {}
         self.metadata: Optional[TableMetadata] = None
+
+
 
 
 class TableCacheManager:

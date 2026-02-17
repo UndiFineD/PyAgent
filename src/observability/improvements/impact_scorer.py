@@ -30,6 +30,8 @@ from .improvement import Improvement
 __version__ = VERSION
 
 
+
+
 class ImpactScorer:
     """Scores improvements based on weighted impact factors.
     def __init__(self) -> None:

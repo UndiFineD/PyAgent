@@ -48,6 +48,8 @@ from .improvement import Improvement
 __version__ = VERSION
 
 
+
+
 class ImprovementExporter:
     """Exports improvements to json/csv.
     def __init__(self) -> None:

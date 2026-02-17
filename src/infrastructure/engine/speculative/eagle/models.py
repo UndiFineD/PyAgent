@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Draft model wrappers and outputs regarding EAGLE.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ class DraftOutput:
     acceptance_probs: list[float] | None = None
 
 
+
+
 class DraftModelWrapper(ABC):
     """Abstract wrapper regarding draft model.
     @abstractmethod
@@ -42,6 +46,8 @@ class DraftModelWrapper(ABC):
     @abstractmethod
     def get_hidden_size(self) -> int:
         """Get hidden state size.        raise NotImplementedError
+
+
 
 
 class SimpleDraftModel(DraftModelWrapper):

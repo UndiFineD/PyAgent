@@ -67,6 +67,8 @@ class StreamInfo:
             stream_id=data["stream_id"],"            agent_id=data["agent_id"],"            created_at=data["created_at"],"            last_keepalive=data["last_keepalive"]"        )
 
 
+
+
 class StreamManagerMixin:
     """Mixin providing Redis-backed stream management capabilities.
     Adapted from Adorable's stream-manager.ts patterns for Python/asyncio.'    """

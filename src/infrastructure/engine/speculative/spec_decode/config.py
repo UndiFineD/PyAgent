@@ -15,11 +15,15 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Configuration regarding speculative decoding verification.
+"""
+
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum, auto
+
+
 
 
 class VerificationStrategy(Enum):
@@ -28,6 +32,8 @@ class VerificationStrategy(Enum):
     TYPICAL_ACCEPTANCE = auto()  # Typical acceptance sampling
     TOP_K_SAMPLING = auto()  # Top-k based acceptance
     SPECULATIVE_STREAMING = auto()  # Streaming verification
+
+
 
 
 class AcceptancePolicy(Enum):

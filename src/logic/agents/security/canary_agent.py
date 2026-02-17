@@ -26,6 +26,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class CanaryObject:
     """Represents a decoy object that triggers alerts when accessed.
     def __init__(self, name: str, obj_type: str, description: str = ""):"        self.id = str(uuid.uuid4())
@@ -37,6 +39,8 @@ class CanaryObject:
 
     def attempt_access(self, agent_id: str, context: Dict[str, Any]) -> bool:
         """Log access attempt and deny access.        self.access_log.append({"agent_id": agent_id, "timestamp": context.get("timestamp", None), "context": context})"        logging.warning(f"Canary object {self.name} accessed by {agent_id}")"        return False  # Deny access
+
+
 
 
 class CanaryAgent(BaseAgent):  # pylint: disable=too-many-ancestors

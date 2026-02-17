@@ -18,7 +18,7 @@ TraceSynthesizer - Consolidate reasoning traces into a swarm graph
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-- Instantiate: ts = TraceSynthesizer(log_dir="data/logs")"- Synthesize graph: report = ts.synthesize()  # returns {"nodes": [...], "links": [...]}"- Record step (placeholder): ts.record_trace(agent_name, status, context, metadata={})
+- Instantiate: ts = TraceSynthesizer(log_dir="data/logs")"- Synthesize graph: report = ts.synthesize()  # returns {"nodes": [...], "links": [...]}"- Record step (TODO Placeholder): ts.record_trace(agent_name, status, context, metadata={})
 WHAT IT DOES:
 - Reads newline-delimited JSON trace entries from data/logs/reasoning_chains.jsonl, builds a set of unique nodes keyed by task_id and directed links for parent->child delegation relationships, and returns a graph-like dict for UI visualization.
 - Provides a light wrapper to record traces (record_trace) but currently is a stub delegating to structured logging or FleetInteractionRecorder.
@@ -52,6 +52,8 @@ from typing import Dict, Any
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class TraceSynthesizer:
@@ -97,6 +99,8 @@ from typing import Dict, Any
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class TraceSynthesizer:

@@ -18,6 +18,8 @@ Enums.py module.
 from enum import Enum, auto
 
 
+
+
 class ReasoningFormat(Enum):
     """Supported reasoning token formats.
     DEEPSEEK_R1 = auto()  # <think>...</think>
@@ -30,6 +32,8 @@ class ReasoningFormat(Enum):
     NONE = auto()  # No reasoning extraction
 
 
+
+
 class ToolCallFormat(Enum):
     """Supported tool/function call formats.
     OPENAI = auto()  # OpenAI function calling
@@ -39,6 +43,8 @@ class ToolCallFormat(Enum):
     ANTHROPIC = auto()  # tool_use blocks
     CUSTOM = auto()  # Configurable format
     NONE = auto()  # No tool parsing
+
+
 
 
 class ParseState(Enum):

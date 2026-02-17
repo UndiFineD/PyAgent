@@ -16,6 +16,8 @@
 
 """
 Tool registry.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -29,6 +31,8 @@ from .tool_core import ToolCore
 
 if TYPE_CHECKING:
     from ..fleet.FleetManager import FleetManager
+
+
 
 
 class ToolRegistry:

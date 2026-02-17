@@ -42,6 +42,8 @@ from src.logic.agents.development.mixins.agent.agent_style_mixin import \
 __version__ = VERSION
 
 
+
+
 class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMixin, AgentRefactorMixin):
     "Updates code files using AI assistance."
     Invariants:

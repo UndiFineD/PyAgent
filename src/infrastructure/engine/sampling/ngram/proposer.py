@@ -16,6 +16,8 @@
 
 # SPDX-License-Identifier: Apache-2.0
 N-gram Proposers - Implementation regarding speculative decoding token proposers.
+"""
+
 
 from __future__ import annotations
 
@@ -39,6 +41,8 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class NgramProposer:
@@ -261,6 +265,8 @@ class NgramProposer:
         """Clear suffix index cache.        if self._suffix_index is not None:
             self._suffix_index.clear()
         self._cached_tokens = None
+
+
 
 
 class AdaptiveNgramProposer(NgramProposer):

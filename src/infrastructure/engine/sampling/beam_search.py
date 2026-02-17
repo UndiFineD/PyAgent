@@ -17,6 +17,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Beam search implementation regarding speculative decoding.
+"""
+
 
 from __future__ import annotations
 
@@ -72,6 +74,8 @@ class BeamHypothesis:
             score=self.score,
             finished=True,
         )
+
+
 
 
 class BeamSearchSampler(Sampler):

@@ -43,6 +43,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ImprovementStatus(Enum):
     """Status of an improvement.
     PROPOSED = "proposed""    APPROVED = "approved""    IN_PROGRESS = "in_progress""    COMPLETED = "completed""    REJECTED = "rejected""    DEFERRED = "deferred""

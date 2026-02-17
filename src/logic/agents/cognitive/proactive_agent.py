@@ -66,7 +66,7 @@ class ProactiveAgent(BaseAgent):
         if state.get("disk_free_gb", 100) < 5:"            triggered_tasks.append(
 #                 "Cleanup workspace: Disk space is critically low (less than 5GB free)"            )
 
-        # Original placeholders
+        # Original TODO Placeholders
         if state.get("error_count", 0) > 5:"            triggered_tasks.append("Diagnostic: High error rate detected")"
         return triggered_tasks
 

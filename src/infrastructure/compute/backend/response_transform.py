@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ResponseTransform(Enum):
     """Types of response transformations.
     NONE = "none""    STRIP_WHITESPACE = "strip""    EXTRACT_CODE = "extract_code""    EXTRACT_JSON = "extract_json""    MARKDOWN_TO_TEXT = "markdown_to_text""

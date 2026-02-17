@@ -31,6 +31,8 @@ Usage:
 This script makes small, reversible changes: 
 writes new files under src/external_candidates/auto
 and tests under tests/unit/. It does not modify `.external`.
+"""
+
 
 from __future__ import annotations
 import argparse

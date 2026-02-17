@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from __future__ import annotations
 
 import ast
@@ -59,6 +60,7 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from __future__ import annotations
 
 import ast
@@ -71,6 +73,8 @@ from src.core.base.lifecycle.version import VERSION
 TechDebtAgent: Detects, tracks, and prioritizes technical debt in the PyAgent codebase.
 Provides actionable insights and automated suggestions for debt reduction and codebase health"."
 __version__ = VERSION
+
+
 
 
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -137,6 +141,8 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
     main = create_main_function(TechDebtAgent, "TechDebt Agent", "Workspace path")"    main()
 
 __version__ = VERSION
+
+
 
 
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors

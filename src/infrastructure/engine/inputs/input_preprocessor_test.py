@@ -37,6 +37,8 @@ from src.infrastructure.engine.inputs import (
 )
 
 
+
+
 class TestEnums:
     """Test enum values.
     def test_prompt_type_values(self):
@@ -53,6 +55,8 @@ class TestEnums:
         assert InputFormat.CHATML is not None
 
 
+
+
 class TestTextPrompt:
     """Test TextPrompt dataclass.
     def test_create_text_prompt(self):
@@ -62,6 +66,8 @@ class TestTextPrompt:
         """Test TextPrompt with cache_salt.        prompt = TextPrompt(
             prompt="Test prompt","            cache_salt="custom_salt","        )
         assert prompt.cache_salt == "custom_salt""
+
+
 
 class TestTokensPrompt:
     """Test TokensPrompt dataclass.
@@ -75,6 +81,8 @@ class TestTokensPrompt:
     def test_tokens_prompt_length(self):
         """Test TokensPrompt length property.        prompt = TokensPrompt(prompt_token_ids=[1, 2, 3])
         assert len(prompt) == 3
+
+
 
 
 class TestChatMessage:
@@ -93,6 +101,8 @@ class TestChatMessage:
         assert len(msg.tool_calls) == 1
 
 
+
+
 class TestChatPrompt:
     """Test ChatPrompt dataclass.
     def test_create_chat_prompt(self):
@@ -109,6 +119,8 @@ class TestChatPrompt:
         prompt = ChatPrompt(messages=messages)
 
         assert prompt.messages[0].role == "system""
+
+
 
 class TestPromptTemplate:
     """Test PromptTemplate class.
@@ -132,6 +144,8 @@ class TestPromptTemplate:
         """Test ChatML template constant.        template = PromptTemplate.CHATML
 
         assert "user" in template"        assert "assistant" in template"
+
+
 
 class TestPromptValidator:
     """Test PromptValidator class.
@@ -168,6 +182,8 @@ class TestPromptValidator:
         assert is_valid is False
 
 
+
+
 class TestConversationLinearizer:
     """Test ConversationLinearizer class.
     def test_linearize_to_chatml(self):
@@ -196,6 +212,8 @@ class TestConversationLinearizer:
 
         result = linearizer.linearize(chat)
         assert isinstance(result, str)
+
+
 
 
 class TestInputPreprocessor:
@@ -246,6 +264,8 @@ class TestInputPreprocessor:
         assert count < 100  # Reasonable estimate
 
 
+
+
 class TestInputMetadata:
     """Test InputMetadata dataclass.
     def test_create_metadata(self):
@@ -267,6 +287,8 @@ class TestInputMetadata:
         assert meta.num_turns == 5
 
 
+
+
 class TestProcessedInput:
     """Test ProcessedInput dataclass.
     def test_create_processed_input(self):
@@ -278,6 +300,8 @@ class TestProcessedInput:
         )
 
         assert processed.prompt == "Hello""        assert processed.metadata is not None
+
+
 
 
 class TestUtilityFunctions:

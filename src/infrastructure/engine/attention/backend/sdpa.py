@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 PyTorch Scaled Dot-Product Attention backend.
+"""
+
 
 from __future__ import annotations
 
@@ -34,6 +36,8 @@ try:
 except ImportError:
     HAS_TORCH = False
     torch = None  # type: ignore
+
+
 
 
 class TorchSDPABackend(AttentionBackend[None]):

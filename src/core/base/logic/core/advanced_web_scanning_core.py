@@ -49,6 +49,8 @@ class HostHeaderTest:
     expected_behavior: str
 
 
+
+
 class AdvancedWebScanningCore:
     """Core for advanced web application scanning and vulnerability detection.
 

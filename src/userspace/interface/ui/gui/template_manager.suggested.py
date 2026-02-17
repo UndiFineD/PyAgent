@@ -70,6 +70,8 @@ BMAD_TEMPLATES: dict[str, str] = {
 """,""""}
 
 
+
+
 class TemplateManager:
     """Manages insertion of BMAD-standard templates into text widgets.
     @staticmethod

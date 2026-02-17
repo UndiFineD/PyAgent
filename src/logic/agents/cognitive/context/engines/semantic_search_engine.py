@@ -33,6 +33,8 @@ except ImportError:
     _RUST_AVAILABLE = False
     logging.debug("rust_core not available, using Python fallback for SemanticSearchEngine")"
 
+
+
 class SemanticSearchEngine:
     "Performs semantic code search using embeddings."
     Provides functionality to search code using semantic similarity

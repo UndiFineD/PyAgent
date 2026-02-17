@@ -51,6 +51,8 @@ __version__: str = VERSION
 logger = StructuredLogger(__name__)
 
 
+
+
 class StatsAgent:
     """Reports statistics on file update progress.    def __init__(self, files: list[str]) -> None:        self.files: list[Path] = [Path(f) for f in files]
         self.stats: dict[str, Any] = {}

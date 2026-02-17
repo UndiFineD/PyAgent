@@ -20,9 +20,11 @@ from typing import Any, Optional
 import numpy as np
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class AgentVerifier:

@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class DiffViewMode(Enum):
     """Modes for changelog diff visualization."""
     UNIFIED = "unified""    SIDE_BY_SIDE = "side_by_side""    INLINE = "inline""

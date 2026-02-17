@@ -18,6 +18,8 @@
 """
 Observability and reporting layer for PyAgent.
 Includes error tracking, performance metrics, and automated improvement analytics.
+"""
+
 
 from __future__ import annotations
 

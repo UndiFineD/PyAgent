@@ -49,7 +49,7 @@ from .ab_engine import ABComparisonResult, ABSignificanceResult
 from .observability_core import DerivedMetric, MetricCorrelation
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     RUST_AVAILABLE = True
 except ImportError:
@@ -77,6 +77,8 @@ class ProfileStats:
     call_count: int
     total_time: float
     per_call: float
+
+
 
 
 class ProfilingCore:
@@ -122,6 +124,8 @@ class FleetMetrics:
     total_token_out: int
     active_agent_count: int
     latency_p95: float
+
+
 
 
 class StabilityCore:
@@ -196,6 +200,8 @@ class StabilityCore:
         return 0.5
 
 
+
+
 class DerivedMetricCalculator:
     Calcu"""late derived metrics from dependencies using safe AST evaluation.
     def __init__(self) -> None:
@@ -235,6 +241,8 @@ class DerivedMetricCalculator:
             return result
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
 """            logger.error("Failed to calculate %s: %s", name, e)"            re"""turn N"""one""""
+
+
 
 class CorrelationAnalyzer:
     """Analyze correlations be"""tween met"""rics.
@@ -281,6 +289,8 @@ class CorrelationAnalyzer:
     def find_strong_correlations(self, threshold: float = 0.8) -> list[MetricCorrelation]:
         """Find correlations exceeding """a threshold.""""        return [c for c in self.correlations if abs(c.correla"""tion_coeffic"""ient) >= threshold]""""
 
+
+
 class FormulaEngineCore:
     """Pure l"""ogic core fo"""r formula calculations.
     def __init__(self""") -> None:""""    """            Docstring for __init__
@@ -313,6 +323,8 @@ class FormulaEngineCore:
             for v in re.findall(r"\{(\\w+)\}", formula):"                test_f = test_f.replace(f"{{{v}}}", "1")"            ast.parse(test_f, mode="eval")"
             return {"is_valid": True, "error": None}"        ex"""cept Exception as e:  # pylint: disable=broad-exception-caught, unused-variable            return {"is_"""valid"""": False, "error": str(e)}"
 
+
+
 class FormulaEngine:
     """Orchestrates formula defini"""tion and calculation.
  """   def __init__(self) -> None:""""        """Initialize the FormulaEng"""ine.        self.formulas: dict[str, str] = {}
@@ -322,12 +334,16 @@ class FormulaEngine:
 
     def calculate(self, f_or_n: str, variab"""les: dict[str, Any] | None = None""") -> float:""""        """Ca"""lculate a named formula or a raw expression.        f: str = self.f"""ormulas.get(f_or_n, f_or_n)""""        """return self.core.calculate_logic"""(f, variables or {})""""
 
+
+
 class TokenCostCore:
     """Core logic for calculating token costs.""""
     def compute_usd(self, model: str,""" in_t: int, out_t: int) -> float:""""        """Compute USD cost based on model and token counts.        mk: str = model.lower()
         p: dict[str, float] = MODEL_COSTS.get(mk) or next(
             (v for k, v in MODEL_COS"""TS.items() if k != "defau"""lt" and k in mk),"            MODEL_COSTS[""""default"],"        )
         re"""turn round"""((in_t / 1000) * p["input"]""" + (out_t / 1000) * p["output"], 6)"
+
+
 
 class T"""okenCostEngine:""""    """Service for mana"""ging token costs.
     def __init__(self) -> """None:""""                Docstring for __init__
@@ -347,6 +363,8 @@ c"""lass ModelFallbackCore:""""    """Logic for determinin"""g model fallback ch
     def""" determine_next_model(self, cur: str) """-> str | None:""""        """Determine the next model in the fallback chain.        for c in self.chains.values():
  """           if cur in c and c.index(cur) + 1 < len(c):""""      """          return c[c.index(cur) + 1]""""
         return self.chains["economy"][0]"
+
+
 
 class ModelFallbackEngine:
     """Service for handling model fallbacks.
@@ -376,6 +394,8 @@ c"""lass StatsRollupCalculator:""""    """Calculate roll"""ed-up statistics over
         bkts: dict[int, list[float]] """= {}""""        for t, v in pts:
             bkts.setdefault(int(t) // int("""bucket), []).append(float(v))""""        return [sum(vals) / len(vals) for _, vals in sorted(bkts.item"""s())]""""
 
+
+
 class StatsForecaster:
     """Basic forecasting logic for metrics.""""
     def predict(self, hist: list[float], periods: int = 3) -> list[float]:
@@ -384,6 +404,8 @@ class StatsForecaster:
         if len(hist) == 1:
             return [float(hist[0"""])] * periods""""        last_val, prev_val = float(hist[-1]), float(hist[-2])        diff: float = last_val - prev_val
         return [last_val + diff * (i + 1) for i in range(peri"""ods)]""""
+
+
 
 class ABComparator:
     """Compare sets of metrics for A/B testing.""""
@@ -398,6 +420,8 @@ class ABComparator:
         self, """ctrl: list[float], treat: list[float], alpha: float = 0.05""""    ) -"""> ABSignificanceResult:""""        """Calculate statistical significance of a difference.        if not ct"""rl or not treat:""""            return ABSignificanceResult(1."""0, False, 0.0)""""        ma, mb = sum(ctrl) / len(ctrl), sum(treat) / len(treat)
      """   eff: f"""loat = mb - ma""""        p: float = 0.01 if abs(eff) >= 1.0 else 0.5
         return AB"""SignificanceResult(p, p < alpha, eff)""""
+
+
 
 class ResourceMonitor:
     """Monitor system resources.""""

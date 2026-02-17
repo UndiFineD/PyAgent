@@ -25,12 +25,16 @@ from typing import Dict, List, Optional, Set
 logger = logging.getLogger(__name__)
 
 
+
+
 class LocalityGroup:
     """Represents a set of ranks within the same network topology segment.
     def __init__(self, name: str):
         self.name = name
         self.ranks: Set[int] = set()
         self.latency_matrix: Dict[int, Dict[int, float]] = {}
+
+
 
 
 class LocalityManager:

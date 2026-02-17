@@ -23,6 +23,8 @@ from pathlib import Path
 logger: logging.Logger = logging.getLogger(__name__)
 
 
+
+
 class ArchitectureMapper:
     """Auto-generates a Mermaid C4 System Context Diagram based on the PyAgent project structure.
     Maps relations between Core, Infrastructure, Logic, and Observability.

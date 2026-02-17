@@ -17,6 +17,8 @@
 EngineCoreClient - Client interfaces for engine communication.
 
 Inspired by vLLM's v1/engine/core_client.py - provides various client'implementations for communicating with EngineCore.
+"""
+
 
 from __future__ import annotations
 
@@ -34,6 +36,8 @@ from .engine_core import (EngineCore, EngineCoreOutputs, EngineCoreProc,
 from .output_processor import EngineCoreRequest
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class RequestType(Enum):
@@ -56,6 +60,8 @@ class ClientConfig:
     log_stats: bool = True
     timeout_s: float = 60.0
     async_mode: bool = False
+
+
 
 
 class EngineCoreClient(ABC):
@@ -109,6 +115,8 @@ class EngineCoreClient(ABC):
         """Start or stop profiling (async).
     async def execute_dummy_batch_async(self) -> None:
         """Execute a dummy batch for warmup (async).
+
+
 
 class InprocClient(EngineCoreClient):
         In-process client for EngineCore.
@@ -172,6 +180,8 @@ class InprocClient(EngineCoreClient):
 
     async def abort_requests_async(self, request_ids: List[str]) -> None:
         self.abort_requests(request_ids)
+
+
 
 
 class SyncMPClient(EngineCoreClient):
@@ -272,6 +282,8 @@ class SyncMPClient(EngineCoreClient):
         self._shutdown_flag.set()
         self._worker_thread.join(timeout=5.0)
         self.engine_core.shutdown()
+
+
 
 
 class AsyncMPClient(EngineCoreClient):

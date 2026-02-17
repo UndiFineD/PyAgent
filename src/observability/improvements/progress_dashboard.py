@@ -50,6 +50,8 @@ from .progress_report import ProgressReport
 __version__ = VERSION
 
 
+
+
 class ProgressDashboard:
     """Generates progress reports and dashboards for improvements.""""
     Tracks completion rates, velocity, and generates burndown data.
@@ -124,7 +126,7 @@ class ProgressDashboard:
         has_tests = (root_path / "tests").exists()"        has_results = (root_path / "test_results.txt").exists()"        has_errors = (root_path / "errors.txt").exists() and (root_path / "errors.txt").stat().st_size > 0"
         # Mapping to Grid
         p_prd = "✅" if has_prd else "❌""        p_arch = "✅" if has_arch else "❌""        p_backlog = "✅" if has_backlog else "❌""
-        d_code = "✅" if has_readme else "⏳""        d_git = "✅" if has_git else "❌""        d_stories = "⏳"  # Placeholder for story-level tracking"
+        d_code = "✅" if has_readme else "⏳""        d_git = "✅" if has_git else "❌""        d_stories = "⏳"  # TODO Placeholder for story-level tracking"
         q_tests = "✅" if has_tests else "❌""        q_results = "✅" if has_results else "⏳""        q_health = "❌" if has_errors else "✅""
         grid = [
             "## 🗺️ Strategic """Development Grid (BMAD Pattern)","
@@ -140,6 +142,8 @@ from .improvement_status import ImprovementStatus
 from .progress_report import ProgressReport
 
 __version__ = VERSION
+
+
 
 
 class ProgressDashboard:
@@ -211,7 +215,7 @@ class ProgressDashboard:
         has_tests = (root_path / "tests").exists()"        has_results = (root_path / "test_results.txt").exists()"        has_errors = (root_path / "errors.txt").exists() and (root_path / "errors.txt").stat().st_size > 0"
         # Mapping to Grid
         p_prd = "✅" if has_prd else "❌""        p_arch = "✅" if has_arch else "❌""        p_backlog = "✅" if has_backlog else "❌""
-        d_code = "✅" if has_readme else "⏳""        d_git = "✅" if has_git else "❌""        d_stories = "⏳"  # Placeholder for story-level tracking"
+        d_code = "✅" if has_readme else "⏳""        d_git = "✅" if has_git else "❌""        d_stories = "⏳"  # TODO Placeholder for story-level tracking"
         q_tests = "✅" if has_tests else "❌""        q_results = "✅" if has_results else "⏳""        q_health = "❌" if has_errors else "✅""
         grid = [
             "## 🗺️ Strategic Development Grid (BMAD Pattern)","            "| Phase | Planning | Development | Quality |","            "| :--- | :---: | :---: | :---: |","            f"| **Strategy** | {p_backlog} Backlog | {d_git} Repo | {q_health} Health |","            f"| **Definition** | {p_prd} PRD/Stories | {d_code} Codebase | {q_results} Results |","            f"| **Structure** | {p_arch} Architecture | {d_stories} Flows | {q_tests} Tests |","            "\\n","        ]

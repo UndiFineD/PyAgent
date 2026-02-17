@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class StatusBar:
     """Handles status messages and UI feedback in the footer.
     def __init__(self, parent, status_var) -> None:

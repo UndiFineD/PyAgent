@@ -23,6 +23,8 @@ from typing import Callable, TypeVar, Generic, Optional
 logger: logging.Logger = logging.getLogger(__name__)
 _T = TypeVar("_T", bound=type)"T_co = TypeVar("T_co", covariant=True)"
 
+
+
 class ExtensionManager:
     """A registry for managing pluggable extension classes.
     """def __init__(self, name: str = "default") -> None:"        self.name: str = name
@@ -71,6 +73,8 @@ class ExtensionManager:
             return len(self._name2class)
 
 
+
+
 class ExtensionInfo:
     """Information about a registered extension."""
     def __init__(self, name: str, cls: type, registry_name: str = "default"):"        self.name = name
@@ -79,6 +83,8 @@ class ExtensionInfo:
 
     def __repr__(self) -> str:
         return f"ExtensionInfo(name={self.name}, cls={self.cls.__name__}, registry={self.registry_name})""
+
+
 
 class TypedExtensionManager(ExtensionManager, Generic[T_co]):
     """Type-safe extension manager for registering subclasses of a base type."""
@@ -102,6 +108,8 @@ class TypedExtensionManager(ExtensionManager, Generic[T_co]):
             raise TypeError(f"{cls} must be a subclass of {self.base_type}")"        with self._lock:
             if name in self._name2class:
                 logger.warning("Overwriting existing registration '%s' in %s", name, self.name)"'            self._name2class[name] = cls
+
+
 
 
 class MultiExtensionManager:
@@ -147,6 +155,8 @@ class MultiExtensionManager:
                 if p == priority:
                     return cls
             raise KeyError(f"No class with priority {priority} for key '{key}'")"'
+
+
 
 class LazyExtensionManager(ExtensionManager):
     """Lazy-loading extension manager that imports classes on demand."""
@@ -212,6 +222,8 @@ def create_lazy_registry(name: str) -> LazyExtensionManager:
 
 def create_multi_registry() -> MultiExtensionManager:
     """Factory function to create a new MultiExtensionManager."""return MultiExtensionManager()
+
+
 
 
 class GlobalRegistry(ExtensionManager):

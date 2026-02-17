@@ -24,6 +24,8 @@ from src.logic.agents.development.core.bash_core import BashCore
 __version__ = VERSION
 
 
+
+
 class BashAgent(CoderAgent):
 """"Agent for shell scripts (Phase 175 enhanced).
     def __init__(self, file_path: str) -> None:

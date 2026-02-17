@@ -15,6 +15,8 @@
 
 Phase 45: In-process Engine Client
 Single-GPU in-process execution.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ if TYPE_CHECKING:
         EngineClientConfig, SchedulerOutput)
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"        In-process engine client for single-GPU execution.

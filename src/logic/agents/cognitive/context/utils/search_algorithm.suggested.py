@@ -23,6 +23,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class SearchAlgorithm(Enum):
 """"Algorithms for semantic search.
 #     KEYWORD = "keyword"#     FUZZY = "fuzzy"#     SEMANTIC = "semantic"#     HYBRID = "hybrid"

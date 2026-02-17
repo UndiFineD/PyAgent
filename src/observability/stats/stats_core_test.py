@@ -40,6 +40,8 @@ from src.observability.stats import (
 )
 
 
+
+
 class TestMetricType:
     """Tests for MetricType enum.
     def test_metric_type_values(self) -> None:
@@ -47,6 +49,8 @@ class TestMetricType:
     def test_all_metric_types_exist(self) -> None:
         """Test all metric types exist.        types: List[Any] = list(MetricType)
         assert len(types) == 4
+
+
 
 
 class TestAlertSeverity:
@@ -59,6 +63,8 @@ class TestAlertSeverity:
         assert AlertSeverity.INFO.value == 1
 
 
+
+
 class TestSession7Enums:
     """Tests for Session 7 enums.
     def test_streaming_protocol_enum(self) -> None:
@@ -69,6 +75,8 @@ class TestSession7Enums:
         """Test AggregationType enum values.        assert AggregationType.SUM.value == "sum""        assert AggregationType.AVG.value == "average""        assert AggregationType.P95.value == "percentile_95""
     def test_federation_mode_enum(self) -> None:
         """Test FederationMode enum values.        assert FederationMode.PULL.value == "pull""        assert FederationMode.PUSH.value == "push""        assert FederationMode.HYBRID.value == "hybrid""
+
+
 
 class TestSession7Dataclasses:
     """Tests for Session 7 dataclasses.
@@ -120,11 +128,15 @@ class TestSession7Dataclasses:
         """Test APIEndpoint dataclass.        endpoint = APIEndpoint(path="/api/stats")"        assert endpoint.method == "GET""        assert endpoint.rate_limit == 100
 
 
+
+
 class TestRetentionPolicyCreation:
     """Tests for retention policy creation.
     def test_retention_policy_creation(self) -> None:
         """Test retention policy creation.        policy = RetentionPolicy(name="short_term", retention_days=7, resolution="1m")"
         assert policy.retention_days == 7
+
+
 
 
 class TestNamespaceCreation:

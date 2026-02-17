@@ -21,6 +21,8 @@ from typing import Protocol, Set
 # [BATCHFIX] Commented metadata/non-Python
 """ DOMAIN_REGEX = r"(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}"  # [BATCHFIX] closed string"
 
+
+
 class LLMInterface(Protocol):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -39,6 +41,8 @@ class DomainGenerationResult:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     generated_domains: Set[str]""""    model_used: str
+
+
 
 
 class DomainGenerator:
@@ -81,6 +85,8 @@ class DomainGenerator:
             # Fallback or error logging
 # [BATCHFIX] Commented metadata/non-Python
 #             print(fError generating domains: {e}")"  # [BATCHFIX] closed string"            return DomainGenerationResult(seed_domain, set(), "error")"
+
+
 
 class MockLLM:
 # [BATCHFIX] Commented metadata/non-Python

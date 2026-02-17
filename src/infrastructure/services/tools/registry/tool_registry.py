@@ -17,6 +17,8 @@
 # Phase 41: Tool Parser Framework - Tool Registry
 
 Tool parser registry for managing parser types and model mappings.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from typing import Dict, List, Optional, Pattern, Tuple, Type
 from ..parser import (GraniteToolParser, HermesToolParser, JsonToolParser,
                       Llama3ToolParser, MistralToolParser, StreamingToolState,
                       ToolCall, ToolParser, ToolParseResult, ToolParserType)
+
+
 
 
 class ToolParserRegistry:
@@ -105,6 +109,8 @@ class ToolParserRegistry:
             return ToolParserType.GRANITE
 
         return ToolParserType.GENERIC_JSON
+
+
 
 
 class StreamingToolParser:

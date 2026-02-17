@@ -44,6 +44,8 @@ def default_config(strategy=PoolingStrategy.MEAN, normalize=True, truncate_dim=N
     return PoolingConfig(strategy=strategy, normalize=normalize, truncate_dim=truncate_dim)
 
 
+
+
 class TestEnums:
     """Test enum values.
     def test_pooling_task_values(self):
@@ -58,6 +60,8 @@ class TestEnums:
         assert PoolingStrategy.LAST is not None
         assert PoolingStrategy.MAX is not None
         assert PoolingStrategy.ATTENTION is not None
+
+
 
 
 class TestPoolingConfig:
@@ -79,6 +83,8 @@ class TestPoolingConfig:
         assert config.normalize is True
 
 
+
+
 class TestEmbeddingOutput:
     """Test EmbeddingOutput dataclass.
     def test_create_embedding_output(self):
@@ -96,6 +102,8 @@ class TestEmbeddingOutput:
             tokens_used=2,
         )
         assert output.to_list() == [0.1, 0.2]
+
+
 
 
 class TestMeanPooler:
@@ -134,6 +142,8 @@ class TestMeanPooler:
         np.testing.assert_array_almost_equal(result, expected)
 
 
+
+
 class TestCLSPooler:
     """Test CLS token pooling.
     def test_cls_pool(self):
@@ -150,6 +160,8 @@ class TestCLSPooler:
 
         expected = np.array([[1.0, 2.0, 3.0]])
         np.testing.assert_array_almost_equal(result, expected)
+
+
 
 
 class TestLastTokenPooler:
@@ -189,6 +201,8 @@ class TestLastTokenPooler:
         np.testing.assert_array_almost_equal(result, expected)
 
 
+
+
 class TestMaxPooler:
     """Test max pooling.
     def test_max_pool(self):
@@ -206,6 +220,8 @@ class TestMaxPooler:
 
         expected = np.array([[3.0, 5.0]])
         np.testing.assert_array_almost_equal(result, expected)
+
+
 
 
 class TestAttentionPooler:
@@ -228,6 +244,8 @@ class TestAttentionPooler:
         assert result.shape == (1, 2)
 
 
+
+
 class TestWeightedMeanPooler:
     """Test weighted mean pooling.
     def test_weighted_mean_pool(self):
@@ -247,6 +265,8 @@ class TestWeightedMeanPooler:
         # Result should be weighted mean
         assert result is not None
         assert result.shape == (1, 2)
+
+
 
 
 class TestMatryoshkaPooler:
@@ -277,6 +297,8 @@ class TestMatryoshkaPooler:
         np.testing.assert_almost_equal(norm, 1.0)
 
 
+
+
 class TestMultiVectorPooler:
     """Test ColBERT-style multi-vector pooling.
     def test_multi_vector_pool(self):
@@ -304,6 +326,8 @@ class TestMultiVectorPooler:
         assert isinstance(score, float)
 
 
+
+
 class TestStepPooler:
     """Test step-based pooling.
     def test_step_pool(self):
@@ -325,6 +349,8 @@ class TestStepPooler:
 
         # Should pool at step token positions
         assert result.shape[0] == 1  # batch size
+
+
 
 
 class TestPoolingEngine:
@@ -379,6 +405,8 @@ class TestPoolingEngine:
         result = engine.pool(embeddings)
         assert result is not None
         assert result is not None
+
+
 
 
 class TestFactoryFunction:

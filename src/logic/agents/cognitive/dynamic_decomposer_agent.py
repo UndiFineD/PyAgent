@@ -31,7 +31,7 @@ WHAT IT DOES:
 WHAT IT SHOULD DO BETTER:
 - Replace the current static, example-based decomposition with an LLM-driven reasoning pipeline that factors capability profiles, real-time workload metrics, agent affinity, and data locality before assigning sub-tasks.
 - Integrate with the agent_state_manager's StateTransaction for any filesystem or stateful modifications and use CascadeContext to preserve task lineage when spawning sub-tasks.'- Surface real workload telemetry (CPU, queue lengths, estimated completion times) and implement a pluggable strategy interface so scheduling policies (fair-share, priority, cost-aware) can be swapped without changing core logic.
-- Improve typing and error handling (avoid unused-underscore placeholders), make balance_swarm_load async and stateful, and add robust unit tests and integration tests validating routing decisions under varied simulated loads.
+- Improve typing and error handling (avoid unused-underscore TODO Placeholders), make balance_swarm_load async and stateful, and add robust unit tests and integration tests validating routing decisions under varied simulated loads.
 - Consider exposing granular decomposition metadata (estimated effort, dependencies, required capabilities, retry policy) and a machine-readable assignment plan rather than only human-readable JSON blocks.
 
 FILE CONTENT SUMMARY:

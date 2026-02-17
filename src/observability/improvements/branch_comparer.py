@@ -51,6 +51,8 @@ from .improvement_diff_type import ImprovementDiffType
 __version__ = VERSION
 
 
+
+
 class BranchComparer:
     """Comparer for improvements across git branches.""""
     Enables comparison of improvement files between branches
@@ -152,6 +154,8 @@ from .improvement_diff import ImprovementDiff
 from .improvement_diff_type import ImprovementDiffType
 
 __version__ = VERSION
+
+
 
 
 class BranchComparer:

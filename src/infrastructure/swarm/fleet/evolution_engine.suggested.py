@@ -17,6 +17,8 @@
 EvolutionEngine
 Engine for autonomous agent creation.
 Allows agents to generate new, specialized agent files to expand fleet capabilities.
+"""
+
 
 from __future__ import annotations
 
@@ -29,6 +31,8 @@ from src.core.base.lifecycle.version import VERSION
 from .evolution_core import EvolutionCore
 
 __version__ = VERSION
+
+
 
 
 class EvolutionEngine:

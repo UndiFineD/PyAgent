@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CodeQualityAgent: Analyzes and improves code quality across Python, Rust, and JavaScript files in PyAgent.
 Provides linting, scoring, and automated code improvement for maintainability and standards compliance.
+"""
+
 
 from __future__ import annotations
 
@@ -49,6 +51,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class CodeQualityAgent(BaseAgent):

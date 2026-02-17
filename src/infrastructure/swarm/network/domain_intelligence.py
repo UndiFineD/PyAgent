@@ -35,6 +35,8 @@ class BugBountyProgram:
     last_updated: str
 
 
+
+
 class DomainIntelligence:
         Asynchronous Domain Intelligence gathering.
     Integrates with ProjectDiscovery Chaos dataset.

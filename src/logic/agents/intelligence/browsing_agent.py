@@ -38,12 +38,16 @@ Browsing agent.py module.
 from .web_intelligence_agent import WebIntelligenceAgent
 
 
+
+
 class BrowsingAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
 """"Agent specialized in web browsing and high-level information retrieval.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the BrowsingAgent (via WebIntelligence core)."
 from .web_intelligence_agent import WebIntelligenceAgent
+
+
 
 
 class BrowsingAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors

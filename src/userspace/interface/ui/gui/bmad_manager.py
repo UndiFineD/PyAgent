@@ -28,6 +28,8 @@ from .constants import (BMAD_AGENTS, BMAD_PHASES, BMAD_TRACKS,
 __version__ = VERSION
 
 
+
+
 class BmadManager:
     """Manages the BMAD workflow for deploying agents at scale across the project.
     def __init__(self, parent, callbacks) -> None:

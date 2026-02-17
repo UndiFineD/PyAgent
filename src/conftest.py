@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
 
 """Pytest configuration for PyAgent tests."""
 
@@ -31,13 +26,11 @@ from pathlib import Path
 # Normalize Windows-style absolute paths embedded in generated tests when running on non-Windows CI
 _orig_spec_from_file_location = importlib.util.spec_from_file_location
 # Robustly determine repo root (handles shallow nesting)
-try:
-    _repo_root = Path(__file__).resolve().parents[1]
-except IndexError:
-    _repo_root = Path(__file__).resolve().parent
+_repo_root = Path(__file__).resolve().parents[1]
 
 
 def _spec_from_file_location(name, location, *args, **kwargs):
+    """Custom importlib hook to rewrite Windows absolute paths in test modules to point to the correct location in the repo."""
     try:
         loc = str(location)
         # Detect Windows absolute path like C:\\Dev\\PyAgent\\... or C:/Dev/PyAgent/...
@@ -82,16 +75,15 @@ def pytest_ignore_collect(collection_path, config):
     return False
 
 
-from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: E402
-from src.core.base.logic.circuit_breaker import CircuitBreaker  # noqa: E402
-from src.core.base.logic.agent_plugin_base import AgentPluginBase  # noqa: E402
-from src.core.base.common.models.core_enums import HealthStatus  # noqa: E402
-from src.core.base.agent_state_manager import StateTransaction  # noqa: E402
-
-
 @pytest.fixture
 def agent_module():
     """Provides a mock module with Agent and CircuitBreaker classes."""
+    # Lazy imports to avoid circular dependencies
+    from src.core.base.lifecycle.base_agent import BaseAgent
+    from src.core.base.logic.circuit_breaker import CircuitBreaker
+    from src.core.base.logic.agent_plugin_base import AgentPluginBase
+    from src.core.base.common.models.core_enums import HealthStatus
+    
     mod = types.SimpleNamespace()
     mod.Agent = BaseAgent
     mod.CircuitBreaker = CircuitBreaker
@@ -121,7 +113,7 @@ def agent_backend_module():
         mod.LoadBalancer = LoadBalancer
         mod.RequestTracer = RequestTracer
         mod.AuditLogger = AuditLogger
-    except ImportError:
+    except (ImportError, SyntaxError):
         pass
     return mod
 
@@ -135,7 +127,7 @@ def base_agent_module():
 
         mod.BatchRequest = BatchRequest
         mod.RequestBatcher = RequestBatcher
-    except ImportError:
+    except (ImportError, SyntaxError):
         pass
     return mod
 
@@ -160,6 +152,9 @@ def transactional_test_env(agent_sandbox):
     """Provides a transactional wrapper around the sandbox.
     Ensures that file modifications are tracked and can be rolled back on failure.
     """
+    # Lazy import to avoid circular dependencies
+    from src.core.base.state.agent_state_manager import StateTransaction
+    
     # Track core files in the sandbox
     target_files = list(agent_sandbox.glob("**/*.py"))
     with StateTransaction(target_files) as txn:

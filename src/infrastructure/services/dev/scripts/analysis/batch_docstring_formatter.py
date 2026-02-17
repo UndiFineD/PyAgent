@@ -15,6 +15,8 @@
 
 Batch Docstring Formatter for PyAgent.
 Systematically checks and fixes docstring formatting across all Python files.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List
+
+
 
 
 class DocstringStandards:
@@ -111,6 +115,8 @@ class DocstringStandards:
         return content.strip()
 
 
+
+
 class DocstringAnalyzer:
     """Analyzes Python files for docstring issues.
     def __init__(self, standards: DocstringStandards):
@@ -191,6 +197,8 @@ class DocstringAnalyzer:
         has_control_flow = any(isinstance(n, (ast.If, ast.For, ast.While, ast.Try)) for n in ast.walk(node))
 
         return has_params or is_long or has_control_flow
+
+
 
 
 class DocstringFixer:

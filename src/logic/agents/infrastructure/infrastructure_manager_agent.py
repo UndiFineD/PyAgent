@@ -24,7 +24,7 @@ Instantiate InfrastructureManagerAgent with a valid file path and interact progr
 Or run as a script: python infrastructure_manager_agent.py (uses create_main_function to start a CLI-style main).
 
 WHAT IT DOES:
-Provides an agent wrapper exposing tools for basic Proxmox VM/container inventory, simple HomeAssistant device control, and remote system metrics retrieval. Implements simulated API interactions (placeholders for real Proxmox REST and HomeAssistant REST calls) and an async improve_content stub to acknowledge readiness. Integrates with BaseAgent lifecycle and registers methods as tools via as_tool decorator.
+Provides an agent wrapper exposing tools for basic Proxmox VM/container inventory, simple HomeAssistant device control, and remote system metrics retrieval. Implements simulated API interactions (TODO Placeholders for real Proxmox REST and HomeAssistant REST calls) and an async improve_content stub to acknowledge readiness. Integrates with BaseAgent lifecycle and registers methods as tools via as_tool decorator.
 
 WHAT IT SHOULD DO BETTER:
 - Replace simulated responses with real, secure API calls (requests with proper TLS handling, token management, and error handling).
@@ -35,6 +35,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
 Provides tools for remote system administration and automated environment scaling.
+"""
+
 
 from __future__ import annotations
 

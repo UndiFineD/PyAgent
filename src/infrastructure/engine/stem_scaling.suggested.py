@@ -21,6 +21,8 @@ import torch
 from torch import nn
 
 
+
+
 class STEMScalingLayer(nn.Module):
         Implements the STEM (Dynamic Embedding Expansion) logic.
     Optimizes embeddings for ultra-long contexts (1M+ tokens).
@@ -51,6 +53,8 @@ class STEMScalingLayer(nn.Module):
             x = self.contraction_proj(expanded)
 
         return x
+
+
 
 
 class STEMManager:

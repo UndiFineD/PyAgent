@@ -32,6 +32,8 @@ from src.core.base.logic.task_prioritization import (
     create_agent_capability
 )
 
+
+
 class TestTask:
     """Test Task model functionality."""def test_task_creation(self):
         """Test creating a task."""task = Task(
@@ -73,6 +75,8 @@ class TestTask:
             title="Dependent Task","            description="Depends on others","            type=TaskType.CODE_GENERATION,
             dependencies=["task-1", "task-2"]"        )
         assert "task-1" in task.dependencies"        assert len(task.dependencies) == 2
+
+
 
 class TestAgentCapability:
     """Test AgentCapability model."""def test_agent_creation(self):
@@ -121,6 +125,8 @@ class TestAgentCapability:
         )
         score = agent.suitability_score(research_task)
         assert score == 0.0
+
+
 
 class TestTaskManager:
     """Test TaskManager functionality."""@pytest.fixture
@@ -229,6 +235,8 @@ class TestTaskScheduler:
         ]
         assert len(assigned_tasks) >= 1
         await scheduler.stop()
+
+
 
 class TestConvenienceFunctions:
     """Test convenience functions."""def test_create_task(self):

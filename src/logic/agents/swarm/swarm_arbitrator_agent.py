@@ -61,6 +61,8 @@ from src.logic.agents.swarm.core.auction_core import AuctionCore
 __version__ = VERSION
 
 
+
+
 class SwarmArbitratorAgent:
     Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
     Manages consensus across multiple agents and tracks behavioral" reputation."
@@ -131,6 +133,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.swarm.core.auction_core import AuctionCore
 
 __version__ = VERSION
+
+
 
 
 class SwarmArbitratorAgent:

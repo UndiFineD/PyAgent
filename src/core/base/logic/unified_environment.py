@@ -25,6 +25,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+
+
 class EnvironmentStatus(Enum):
     """Environment lifecycle status"""CREATED = "created""    INITIALIZING = "initializing""    READY = "ready""    RUNNING = "running""    ERROR = "error""    TERMINATED = "terminated""
 
@@ -42,6 +44,8 @@ class EnvironmentCapabilities:
     agents: List[str] = field(default_factory=list)
     resources: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+
 
 
 class EnvironmentProtocol(Protocol):
@@ -65,6 +69,8 @@ class EnvironmentProtocol(Protocol):
 
     async def terminate(self):
         ...
+
+
 
 
 class BaseEnvironment(ABC):
@@ -121,6 +127,8 @@ class BaseEnvironment(ABC):
         """Record execution for metrics"""self._execution_count += 1
 
 
+
+
 class ToolEnvironment(BaseEnvironment):
     """Environment that wraps a tool/function
     Treats individual tools as environments
@@ -167,6 +175,8 @@ class ToolEnvironment(BaseEnvironment):
 
     async def terminate(self):
         self._update_status(EnvironmentStatus.TERMINATED)
+
+
 
 
 class AgentEnvironment(BaseEnvironment):
@@ -218,6 +228,8 @@ class AgentEnvironment(BaseEnvironment):
         # Assume agent cleanup if available
         if hasattr(self.agent, 'cleanup'):'            await self.agent.cleanup()
         self._update_status(EnvironmentStatus.TERMINATED)
+
+
 
 
 class CompositeEnvironment(BaseEnvironment):
@@ -306,6 +318,8 @@ class CompositeEnvironment(BaseEnvironment):
         term_tasks = [env.terminate() for env in self.sub_environments]
         await asyncio.gather(*term_tasks, return_exceptions=True)
         self._update_status(EnvironmentStatus.TERMINATED)
+
+
 
 
 class EnvironmentRegistry:

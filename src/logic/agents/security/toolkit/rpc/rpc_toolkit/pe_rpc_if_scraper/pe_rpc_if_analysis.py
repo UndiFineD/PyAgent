@@ -40,6 +40,8 @@ def sym_help_dummy(pe_path: str) -> None:
     yield
 
 
+
+
 class PeRpcInterfaceScraper:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

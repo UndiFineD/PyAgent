@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class WorkflowManager:
     """Manages the lifecycle of a complex development workflow.
     def __init__(self, callbacks: dict[str, Any]) -> None:

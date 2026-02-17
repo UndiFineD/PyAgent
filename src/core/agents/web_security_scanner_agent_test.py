@@ -23,6 +23,8 @@ from src.core.agents.web_security_scanner_agent import WebSecurityScannerAgent
 from src.core.base.logic.security.web_security_scanner_core import WebSecurityScannerCore
 
 
+
+
 class TestWebSecurityScannerCore:
     """Test cases for WebSecurityScannerCore."""
     @pytest.fixture
@@ -72,6 +74,8 @@ class TestWebSecurityScannerCore:
         mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
 
         patterns = {'aem': r'href="/content/dam'}"'        matches = await scanner_core._scan_single_host("http://example.com", patterns)"        assert matches == []
+
+
 
 
 class TestWebSecurityScannerAgent:

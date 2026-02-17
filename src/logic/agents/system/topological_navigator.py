@@ -35,6 +35,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Topological Context Navigation.
 Builds a semantic map of the codebase for graph-based dependency exploration.
+"""
+
 
 from __future__ import annotations
 
@@ -49,6 +51,8 @@ from .mixins.graph_analysis_mixin import GraphAnalysisMixin
 from .mixins.map_builder_mixin import MapBuilderMixin
 
 __version__ = VERSION
+
+
 
 
 class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin):
@@ -77,6 +81,8 @@ from .mixins.graph_analysis_mixin import GraphAnalysisMixin
 from .mixins.map_builder_mixin import MapBuilderMixin
 
 __version__ = VERSION
+
+
 
 
 class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin):

@@ -23,6 +23,8 @@ from src.core.base.logic.reconnaissance_core import (
 )
 
 
+
+
 class TestReconnaissanceCore:
     """Test cases for ReconnaissanceCore"""
     @pytest.fixture
@@ -106,6 +108,8 @@ class TestReconnaissanceCore:
 
             assert len(results) == 1
             assert results[0].subdomain == "www.example.com""            assert results[0].source == "crtsh""
+
+
 
 class MockARecord:
     """Mock DNS A record"""def __init__(self, ip):

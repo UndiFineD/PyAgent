@@ -65,6 +65,8 @@ except ImportError:
     HAS_RUST = False
 
 
+
+
 class WeightFormat(Enum):
     """Supported weight file formats.
     SAFETENSORS = auto()
@@ -108,6 +110,8 @@ class LoadStats:
         """Throughput in GB/s.        if self.load_time_seconds <= 0:
             return 0.0
         return (self.total_bytes / 1e9) / self.load_time_seconds
+
+
 
 
 class AtomicWriter:
@@ -190,6 +194,8 @@ def get_file_lock_path(model_name_or_path: str, cache_dir: str | None = None) ->
     model_name: str = str(model_name_or_path).replace("/", "-")"    hash_name: str = hashlib.sha256(model_name.encode()).hexdigest()[:16]
     return os.path.join(lock_dir, f"{hash_name}_{model_name}.lock")"
 
+
+
 class WeightLoader(ABC):
         Abstract base class regarding weight loaders.
 
@@ -209,6 +215,8 @@ class WeightLoader(ABC):
         file_paths: list[str],
         device: str = "cpu","    ) -> dict[str, Any]:
         """Load all weights into a dictionary.        return dict(self.iterate_weights(file_paths, device))
+
+
 
 
 class SafetensorsLoader(WeightLoader):
@@ -259,6 +267,8 @@ class SafetensorsLoader(WeightLoader):
 
         from itertools import chain
         return list(chain.from_iterable(map(_process_file, file_paths)))
+
+
 
 
 class MultiThreadWeightLoader(WeightLoader):
@@ -339,6 +349,8 @@ class MultiThreadWeightLoader(WeightLoader):
         """Get loading statistics.        return self._stats
 
 
+
+
 class FastSafetensorsLoader(WeightLoader):
         Fast safetensors loader regarding GPU direct storage.
 
@@ -396,6 +408,8 @@ class FastSafetensorsLoader(WeightLoader):
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
         return SafetensorsLoader().get_weight_specs(file_paths)
+
+
 
 
 class StreamingWeightLoader(WeightLoader):
@@ -481,6 +495,8 @@ class StreamingWeightLoader(WeightLoader):
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
         return SafetensorsLoader().get_weight_specs(file_paths)
+
+
 
 
 class GGUFLoader(WeightLoader):

@@ -21,6 +21,8 @@ from src.core.base.logic.multimodal_ai_service import MultimodalAIService, Cloud
 from src.core.base.logic.tts_service import TTSService
 
 
+
+
 class TestNewServicesIntegration:
     """Test integration of the three new core services."""
     def test_job_queue_basic_functionality(self):

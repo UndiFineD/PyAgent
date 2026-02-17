@@ -21,7 +21,7 @@ USAGE:
 Used as a specialized BaseAgent to compress large text/code contexts into dense semantic blocks, run relevance queries across those compressed blocks (optionally using rust acceleration), export a JSON knowledge graph, and provide an async hook for memory optimization; intended to be invoked programmatically (as an as_tool-enabled agent) or via an agent CLI integration.
 
 WHAT IT DOES:
-Manages and caches hierarchical compressed context blocks to enable million-token reasoning by (1) compressing raw text into dense summaries and tracking them in an in-memory pool, (2) searching and selectively hydrating only relevant compressed blocks for downstream reasoning, (3) exporting the compressed pool as a JSON knowledge graph, and (4) offering a placeholder async optimization method for further memory quantization and retrieval tuning.
+Manages and caches hierarchical compressed context blocks to enable million-token reasoning by (1) compressing raw text into dense summaries and tracking them in an in-memory pool, (2) searching and selectively hydrating only relevant compressed blocks for downstream reasoning, (3) exporting the compressed pool as a JSON knowledge graph, and (4) offering a TODO Placeholder async optimization method for further memory quantization and retrieval tuning.
 
 WHAT IT SHOULD DO BETTER:
 Replace the simulated compression with an actual quantized summarization pipeline (small local model or vector encoder), store and index vector embeddings for fast nearest-neighbor retrieval (and persist an index on disk), add robust serialization/versioning for blocks, improve relevance scoring (TF‑IDF / semantic similarity) and pagination for very large pools, add unit tests for rust fallback and rust-accelerated search, and complete the CLI main guard and graceful shutdown/eviction policies.
@@ -32,6 +32,8 @@ FILE CONTENT SUMMARY:
 - export_context_knowledge_graph() -> str: as_tool-wrapped, writes active_context_blocks to data/logs/quantum_context/knowledge_graph.json and returns the export path.
 - async improve_content(prompt: str, target_file: str | None = None) -> str: stub that returns an optimization-status string.
 Module ends with an incomplete __main__ guard that imports create_main_function and begins to construct a main for QuantumMemoryAgent (truncated in file).
+"""
+
 
 from __future__ import annotations
 
@@ -51,6 +53,8 @@ except ImportError:
     _RUST_ACCEL = False
 
 __version__ = VERSION
+
+
 
 
 class QuantumMemoryAgent(BaseAgent):

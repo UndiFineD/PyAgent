@@ -27,6 +27,8 @@ from .improvement_category import ImprovementCategory
 __version__ = VERSION
 
 
+
+
 class EffortEstimator:
     """Estimates effort for improvements.    def __init__(self) -> None:        self.base_rates: dict[str, float] = {
             "low": 2.0,"            "medium": 6.0,"            "high": 16.0,"        }

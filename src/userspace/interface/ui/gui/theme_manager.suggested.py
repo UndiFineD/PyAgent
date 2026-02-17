@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ThemeManager:
     """Handles switching between light and dark themes for the GUI.
     def __init__(self, root: tk.Tk) -> None:

@@ -17,8 +17,12 @@ import json
 from pathlib import Path
 
 
+
+
 class SessionSignal(enum.Enum):
     """Signals for agent session lifecycle control."""RUNNING = "running""    PAUSE = "pause""    STOP = "stop""    RESUME = "resume""
+
+
 
 class SessionControlCore:
     """Manages session interrupt signals and shared state flags for long-running agent tasks.

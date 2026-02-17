@@ -99,6 +99,8 @@ class StreamingContext:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+
+
 class MemoryProvider(Protocol):
     """Protocol for memory storage providers"""
     async def create_thread(
@@ -129,6 +131,8 @@ class MemoryProvider(Protocol):
         """Search for similar messages using vector similarity"""...
 
 
+
+
 class ToolProvider(Protocol):
     """Protocol for tool execution providers"""
     async def execute_tool(self, tool_name: str, parameters: Dict[str, Any]) -> Any:
@@ -139,6 +143,8 @@ class ToolProvider(Protocol):
 
     async def register_tool(self, tool: ToolDefinition) -> None:
         """Register a new tool"""...
+
+
 
 
 class StreamingProvider(Protocol):
@@ -156,6 +162,8 @@ class StreamingProvider(Protocol):
         """Resume an existing stream"""...
 
 
+
+
 class CodeExecutionProvider(Protocol):
     """Protocol for code execution environments"""
     async def create_environment(self, template: str, config: Optional[Dict[str, Any]] = None) -> str:
@@ -168,6 +176,8 @@ class CodeExecutionProvider(Protocol):
 
     async def destroy_environment(self, environment_id: str) -> None:
         """Destroy the code execution environment"""...
+
+
 
 
 class AIAgentOrchestrationCore(BaseCore):
@@ -236,13 +246,13 @@ class AIAgentOrchestrationCore(BaseCore):
 
     def _get_code_builder_prompt(self) -> str:
         """Get the system prompt for the code builder agent"""return """You are an AI app builder. Create and modify applications as the user requests.""""
-The first thing you should always do when creating a new app is change the home page to a placeholder so that the user
+The first thing you should always do when creating a new app is change the home page to a TODO Placeholder so that the user
 can see that something is happening. Then you should explore the project structure and see what has already been
 provided to you to build the app. Check if there's a README_AI.md file for more instructions on how to use'the template.
 
 All of the code you will be editing is in the global /template directory.
 
-When building a feature, build the UI for that feature first and show the user that UI using placeholder data.
+When building a feature, build the UI for that feature first and show the user that UI using TODO Placeholder data.
 Prefer building UI incrementally and in small pieces so that the user can see the results as quickly as possible.
 However, don't make so many small updates that it takes way longer to create the app. It's about balance.'Build the application logic/backend logic after the UI is built. Then connect the UI to the logic.
 
@@ -405,7 +415,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
         streaming_context: Optional[StreamingContext] = None,
         context: Optional[CascadeContext] = None
     ) -> str:
-        """Generate AI response (placeholder - would integrate with actual AI provider)"""# This is a placeholder implementation
+        """Generate AI response (TODO Placeholder - would integrate with actual AI provider)"""# This is a TODO Placeholder implementation
         # In a real implementation, this would call an AI service like OpenAI, Anthropic, etc.
 
         # Simulate AI response generation
@@ -413,7 +423,7 @@ Be concise but thorough in your responses. Use examples when helpful."""
 
         # For now, return a simple response
         return (
-            "This is a placeholder AI response. The actual implementation would integrate with ""            "AI providers like OpenAI, Anthropic, or local models.""        )
+            "This is a TODO Placeholder AI response. The actual implementation would integrate with ""            "AI providers like OpenAI, Anthropic, or local models.""        )
 
     def _prepare_messages_for_ai(
         self, ui_messages: List[UIMessage], agent_config: AgentConfig
@@ -487,24 +497,24 @@ Be concise but thorough in your responses. Use examples when helpful."""
 
         return await self.memory_provider.search_similar(query, thread_id, limit)
 
-    # Tool handlers (placeholders - would be implemented based on actual tools)
+    # Tool handlers (TODO Placeholders - would be implemented based on actual tools)
     async def _handle_file_edit(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
-        """Handle file editing tool"""# Placeholder implementation
+        """Handle file editing tool"""# TODO Placeholder implementation
         return {"status": "success", "message": "File edit tool not yet implemented"}"
     async def _handle_file_create(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
-        """Handle file creation tool"""# Placeholder implementation
+        """Handle file creation tool"""# TODO Placeholder implementation
         return {"status": "success", "message": "File creation tool not yet implemented"}"
     async def _handle_run_command(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
-        """Handle command execution tool"""# Placeholder implementation
+        """Handle command execution tool"""# TODO Placeholder implementation
         return {"status": "success", "message": "Command execution tool not yet implemented"}"
     async def _handle_read_file(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
-        """Handle file reading tool"""# Placeholder implementation
+        """Handle file reading tool"""# TODO Placeholder implementation
         return {"status": "success", "message": "File reading tool not yet implemented"}"
     async def _handle_code_analysis(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
-        """Handle code analysis tool"""# Placeholder implementation
+        """Handle code analysis tool"""# TODO Placeholder implementation
         return {"status": "success", "message": "Code analysis tool not yet implemented"}"
     async def _handle_doc_search(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
-        """Handle documentation search tool"""# Placeholder implementation
+        """Handle documentation search tool"""# TODO Placeholder implementation
         return {"status": "success", "message": "Documentation search tool not yet implemented"}"
     # Provider setters
     def set_memory_provider(self, provider: MemoryProvider) -> None:

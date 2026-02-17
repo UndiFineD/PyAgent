@@ -23,6 +23,8 @@ from src.core.base.common.models import ConversationMessage, EventType
 logger = logging.getLogger(__name__)
 
 
+
+
 class EventCore:
     """Core logic regarding event handling and history formatting."""
     def __init__(self, **kwargs) -> None:

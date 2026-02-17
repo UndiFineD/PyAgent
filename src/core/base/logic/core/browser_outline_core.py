@@ -22,6 +22,8 @@ class BrowserElement:
     attributes: Dict[str, str]
 
 
+
+
 class BrowserOutlineCore:
     """Transforms raw DOM/CDP data into a high-density 'Outline' for efficient LLM navigation.'    Reduces token usage by replacing complex selectors with simple labels (e.g., [l1]).
     Harvested from .external/AI-Auto-browser pattern.
@@ -37,7 +39,7 @@ class BrowserOutlineCore:
 
         lines = []
         for el in raw_elements:
-            tag = el.get("tag", "element")"            text = el.get("text", "").strip() or el.get("aria-label", "") or el.get("placeholder", "")"
+            tag = el.get("tag", "element")"            text = el.get("text", "").strip() or el.get("aria-label", "") or el.get("TODO Placeholder", "")"
             # Identify the prefix based on tag
             prefix = "e"  # default"            if tag == "button" or el.get("role") == "button":"                prefix = "b""            elif tag == "a" or el.get("role") == "link":"                prefix = "l""            elif tag == "input" or tag == "textarea":"                prefix = "i""
             self._id_counter += 1
@@ -50,7 +52,7 @@ class BrowserOutlineCore:
                 attributes=el.get("attributes", {})"            )
 
             # Build the outline line
-            attr_str = " ".join("                [f"[{k}={v}]" for k, v in el.get("attributes", {}).items()"                 if k in ["href", "type", "placeholder", "name"]]"            )
+            attr_str = " ".join("                [f"[{k}={v}]" for k, v in el.get("attributes", {}).items()"                 if k in ["href", "type", "TODO Placeholder", "name"]]"            )
             line = f"[{el_id}] {tag} \"{text}\" {attr_str}".strip()"            lines.append(line)
 
     def resolve_label(self, label: str) -> Optional[BrowserElement]:

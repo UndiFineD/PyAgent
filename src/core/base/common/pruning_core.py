@@ -26,7 +26,7 @@ from typing import Any
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
@@ -40,6 +40,8 @@ class SynapticWeight:
     last_fired: float = field(default_factory=time.time)
     last_fired_cycle: int = 0
     refractory_until: float = 0.0
+
+
 
 
 class PruningCore(BaseCore):

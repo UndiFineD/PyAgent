@@ -28,6 +28,8 @@ from .storage_base import KnowledgeStore
 __version__ = VERSION
 
 
+
+
 class GraphKnowledgeStore(KnowledgeStore):
     """Sharded Graph storage for relational and ontological knowledge.
     Scales to trillions of triples by sharding nodes across the filesystem.

@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class CircuitState(Enum):
     """Circuit breaker states.
     CLOSED = "closed""    OPEN = "open""    HALF_OPEN = "half_open""

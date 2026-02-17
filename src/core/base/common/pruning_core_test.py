@@ -20,6 +20,8 @@ import time
 from src.core.base.common.pruning_core import PruningCore, SynapticWeight
 
 
+
+
 class TestPruningCore(unittest.TestCase):
     def setUp(self):
         self.core = PruningCore()

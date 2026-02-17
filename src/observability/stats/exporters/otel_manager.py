@@ -41,6 +41,8 @@ WHAT IT SHOULD DO BETTER:
      handling/validation of SDK vs mock spans.
   3) Record and expose latency breakdowns via TracingCore and include tests
      for end-to-end propagation and exporter behavior.
+"""
+
 
 from __future__ import annotations
 
@@ -82,6 +84,8 @@ class Span:
     end_time: float | None = None
     attributes: dict[str, Any] = field(default_factory=dict)
     status: str = "unset""
+
+
 
 class OTelManager:
     """Manages OTel-compatible spans and traces for cross-fleet observability.""""    Integrated with TracingCore for latency analysis and OTel formatting.

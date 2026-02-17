@@ -40,14 +40,22 @@ except Exception:  # pragma: no cover - optional dependency for XML handling
 import secrets
 
 
+
+
 class SAMLVersion(Enum):
     """SAML protocol versions"""SAML_1_1 = "1.1""    SAML_2_0 = "2.0""
+
+
 
 class FederationProvider(Enum):
     """Supported federation providers"""OFFICE_365 = "office365""    DROPBOX = "dropbox""    GENERIC_SAML2 = "saml2""    AZURE_AD = "azure_ad""    AWS_SAML = "aws_saml""
 
+
+
 class SignatureAlgorithm(Enum):
     """SAML signature algorithms"""RSA_SHA256 = "rsa-sha256""    RSA_SHA384 = "rsa-sha384""    RSA_SHA512 = "rsa-sha512""
+
+
 
 class DigestAlgorithm(Enum):
     """SAML digest algorithms"""SHA256 = "sha256""    SHA384 = "sha384""    SHA512 = "sha512""
@@ -111,6 +119,8 @@ class TokenGenerationRequest:
     service: FederationService
     custom_assertions: Optional[List[Dict[str, Any]]] = None
     validity_minutes: int = 60
+
+
 
 
 class FederationServicesCore:

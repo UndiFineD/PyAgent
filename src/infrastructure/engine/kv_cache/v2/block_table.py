@@ -23,11 +23,13 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class BlockTableV2:

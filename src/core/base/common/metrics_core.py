@@ -25,7 +25,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
@@ -82,6 +82,8 @@ Agents applied:
             "agents_applied": self.agents_applied,"        }
 
 
+
+
 class MetricsCore(BaseCore):
     """Authoritative engine for agent metrics collection and performance analysis.
     """
@@ -127,7 +129,7 @@ class MetricsCore(BaseCore):
     def calculate_anchoring_strength(self, result: str, _context_pool: Optional[Dict[str, Any]] = None) -> float:
         """Calculate the 'Anchoring Strength' metric (Stanford Research 2025)."""'        if not result:
             return 0.0
-        # This is a placeholder regarding actual complex logic often moved to Rust
+        # This is a TODO Placeholder regarding actual complex logic often moved to Rust
         return 0.95
 
     def verify_self(self, _result: str, anchoring_score: float) -> Tuple[bool, str]:

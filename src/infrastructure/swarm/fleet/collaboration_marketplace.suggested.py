@@ -27,6 +27,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class CollaborationMarketplace:
     """Facilitates task auctioning and collaboration between agents.
     def __init__(self, fleet_manager) -> None:

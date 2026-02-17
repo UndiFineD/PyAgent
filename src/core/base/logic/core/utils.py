@@ -22,9 +22,11 @@ from typing import List
 from src.core.base.common.models import AgentConfig
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class UtilsCore:

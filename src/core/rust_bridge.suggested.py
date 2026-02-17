@@ -46,7 +46,7 @@ import logging
 from typing import Dict, List, Any, Optional, Callable
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     RUST_AVAILABLE = True
 except ImportError:
@@ -58,6 +58,8 @@ logger = logging.getLogger(__name__)
 
 def get_bridge() -> RustBridge:
     """Singleton-like accessor for the Rust bridge."""return RustBridge()
+
+
 
 
 class RustBridge:

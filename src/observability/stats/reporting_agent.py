@@ -27,6 +27,8 @@ if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
+
+
 class ReportingAgent(BaseAgent):
         Observer agent that generates executive dashboards and reports    by orchestrating multiple specialist agents.    
     def __init__(self, fleet: FleetManager) -> None:

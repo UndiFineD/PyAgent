@@ -15,6 +15,8 @@
 
 # "MetacognitiveCore logic for PyAgent."Pure logic for evaluating reasoning certainty and consistency. Provides tools
 for confidence calibration and intent prediction using Rust acceleration.
+"""
+
 
 from __future__ import annotations
 import logging
@@ -27,11 +29,13 @@ __version__ = VERSION
 logger = logging.getLogger(__name__)
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
     RUST_AVAILABLE = False
+
+
 
 
 class MetacognitiveCore:

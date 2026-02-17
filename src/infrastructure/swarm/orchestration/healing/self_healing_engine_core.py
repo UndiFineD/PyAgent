@@ -15,6 +15,7 @@
 
 """
 Self healing engine core.py module.
+"""
 
 
 from __future__ import annotations
@@ -24,7 +25,7 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
@@ -33,8 +34,12 @@ except ImportError:
 __version__ = VERSION
 
 
+
+
 class FailureType:
     """Enumeration of swarm failure types.    SYNTAX_ERROR = "fix_syntax""    DEPENDENCY_ERROR = "install_dependency""    CONFIG_ERROR = "check_config""    API_MISMATCH = "verify_api_compatibility""    STATE_CORRUPTION = "fix_state_corruption""    CONTEXT_LOSS = "restore_context""    UNKNOWN = "manual_review""
+
+
 
 class SelfHealingEngineCore:
         Pure logic for self-healing analysis.

@@ -29,6 +29,8 @@ from .models import CrossBrowserConfig, ScheduleSlot
 __version__ = VERSION
 
 
+
+
 class CrossBrowserRunner:
     """Cross-browser testing configuration and execution.
     def __init__(self, config: CrossBrowserConfig) -> None:
@@ -69,6 +71,8 @@ class CrossBrowserRunner:
                 "total": len(results),"                "passed": passed,"                "failed": len(results) - passed,"            }
             summary["browsers"][browser.value] = browser_summary"
         return summary
+
+
 
 
 class TestScheduler:

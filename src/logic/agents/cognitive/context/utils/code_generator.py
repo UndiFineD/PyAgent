@@ -20,6 +20,8 @@ from src.logic.agents.cognitive.context.models.generated_code import GeneratedCo
 __version__ = VERSION
 
 
+
+
 class CodeGenerator:
     "Generates code based on context."
     Uses context information to generate relevant code.

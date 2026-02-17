@@ -16,6 +16,8 @@
 IncrementalDetokenizer - Fast streaming token-to-text conversion.
 
 Inspired by vLLM's v1/engine/detokenizer.py - provides fast and slow paths'for incremental detokenization with stop string detection.
+"""
+
 
 from __future__ import annotations
 
@@ -90,6 +92,8 @@ def check_stop_strings_rust(
         return check_stop_strings(output_text, new_char_count, stop, include_in_output)
 
 
+
+
 class IncrementalDetokenizer(ABC):
         Base class for incremental detokenization.
 
@@ -146,6 +150,8 @@ class IncrementalDetokenizer(ABC):
         return SlowIncrementalDetokenizer(tokenizer, request)
 
 
+
+
 class NoOpDetokenizer(IncrementalDetokenizer):
     """No-op detokenizer when tokenizer is not available.
     def update(self, new_token_ids: list[int], _stop_terminated: bool) -> str | None:
@@ -154,6 +160,8 @@ class NoOpDetokenizer(IncrementalDetokenizer):
 
     def get_next_output_text(self, _finished: bool, _delta: bool) -> str:
         return """
+
+
 
 class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         Base class with common functionality for incremental detokenizers.
@@ -238,6 +246,8 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
             return self.output_text[last_offset:length]
 
         return """
+
+
 
 class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         Fast incremental detokenizer using tokenizers library's DecodeStream.'
@@ -326,6 +336,8 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
             self.last_special = is_special
 
         return token or """
+
+
 
 class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         Slow incremental detokenizer using Python-based approach.

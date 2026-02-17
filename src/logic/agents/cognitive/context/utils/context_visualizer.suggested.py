@@ -15,6 +15,8 @@
 
 # "Context visualization tools for Cognitive agents."This module provides functionality to generate dependency graphs and hierarchy
 visualizations for agent contexts and their inter-relationships.
+"""
+
 
 from __future__ import annotations
 import json
@@ -30,6 +32,8 @@ from src.logic.agents.cognitive.context.models.visualization_type import (
 )
 
 __version__ = VERSION
+
+
 
 
 class ContextVisualizer:

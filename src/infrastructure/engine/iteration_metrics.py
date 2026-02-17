@@ -35,6 +35,8 @@ from enum import Enum, auto
 from typing import Any, Deque, Dict, List, Optional, Tuple
 
 
+
+
 class MetricType(Enum):
     """Type of metric.
     COUNTER = auto()  # Monotonically increasing
@@ -98,6 +100,8 @@ class KVCacheEvictionEvent:
     idle_seconds: float
     access_count: int
     timestamp: float = field(default_factory=time.time)
+
+
 
 
 class CachingMetrics:
@@ -348,6 +352,8 @@ class PercentileTracker:
         return statistics.stdev(self._values)
 
 
+
+
 class TrendAnalyzer:
         Analyze trends in metrics over time.
 
@@ -384,6 +390,8 @@ class TrendAnalyzer:
         if slope > threshold:
             return "increasing", slope"        if slope < -threshold:
             return "decreasing", slope"        return "stable", slope"
+
+
 
 class AnomalyDetector:
         Detect anomalies in metric values using z-score.
@@ -434,6 +442,8 @@ class AnomalyDetector:
         """Get standard deviation.        if self._count < 2:
             return 0.0
         return (self._m2 / self._count) ** 0.5
+
+
 
 
 class MetricsCollector:

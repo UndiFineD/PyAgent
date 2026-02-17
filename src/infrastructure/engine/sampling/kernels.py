@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Core sampling kernels and strategies regarding production inference.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ except ImportError:
     pass
 
 
+
+
 class TemperatureSampler(Sampler):
     """Temperature scaling sampler.
     def forward(
@@ -47,6 +51,8 @@ class TemperatureSampler(Sampler):
         if params.temperature == 1.0:
             return logits
         return logits / params.temperature
+
+
 
 
 class TopKSampler(Sampler):
@@ -67,6 +73,8 @@ class TopKSampler(Sampler):
         threshold = np.min(top_k_values, axis=-1, keepdims=True)
         mask = logits < threshold
         return np.where(mask, -float("inf"), logits)"
+
+
 
 class TopPSampler(Sampler):
     """Top-P (nucleus) sampling.
@@ -101,6 +109,8 @@ class TopPSampler(Sampler):
         list(map(_apply_one, range(batch_size)))
 
         return result.squeeze(0) if was_1d else result
+
+
 
 
 class TopKTopPSampler(Sampler):
@@ -150,6 +160,8 @@ class TopKTopPSampler(Sampler):
         return result.squeeze(0) if was_1d else result
 
 
+
+
 class GumbelSampler(Sampler):
     """Gumbel-max trick sampler.
     def forward(
@@ -181,6 +193,8 @@ class GumbelSampler(Sampler):
         return np.argmax(perturbed, axis=-1)
 
 
+
+
 class RepetitionPenaltySampler(Sampler):
     """Repetition penalty sampler.
     def forward(
@@ -206,6 +220,8 @@ class RepetitionPenaltySampler(Sampler):
         result[0, valid_tokens[~pos_mask]] *= params.repetition_penalty
 
         return result
+
+
 
 
 class PenaltySampler(Sampler):

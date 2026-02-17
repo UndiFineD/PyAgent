@@ -17,12 +17,12 @@ Processor package.
 
 from .audio import AudioProcessor  # noqa: F401
 from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,  # noqa: F401
-                   MultiModalData, MultiModalInputs, PlaceholderInfo)
+                   MultiModalData, MultiModalInputs, TODO PlaceholderInfo)
 from .embed import TextEmbedProcessor  # noqa: F401
 from .image import ImageProcessor  # noqa: F401
 from .registry import (MULTIMODAL_REGISTRY, MultiModalRegistry,  # noqa: F401
-                       get_placeholder_tokens, process_multimodal_inputs)
+                       get_TODO Placeholder_tokens, process_multimodal_inputs)
 from .video import VideoProcessor  # noqa: F401
 
 __all__ = [
-    "ModalityType","    "MultiModalConfig","    "PlaceholderInfo","    "MultiModalData","    "MultiModalInputs","    "BaseMultiModalProcessor","    "ImageProcessor","    "VideoProcessor","    "AudioProcessor","    "TextEmbedProcessor","    "MultiModalRegistry","    "MULTIMODAL_REGISTRY","    "process_multimodal_inputs","    "get_placeholder_tokens","]
+    "ModalityType","    "MultiModalConfig","    "TODO PlaceholderInfo","    "MultiModalData","    "MultiModalInputs","    "BaseMultiModalProcessor","    "ImageProcessor","    "VideoProcessor","    "AudioProcessor","    "TextEmbedProcessor","    "MultiModalRegistry","    "MULTIMODAL_REGISTRY","    "process_multimodal_inputs","    "get_TODO Placeholder_tokens","]

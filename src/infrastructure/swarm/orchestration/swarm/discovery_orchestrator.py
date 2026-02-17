@@ -16,6 +16,7 @@
 
 """
 Discovery orchestrator.py module.
+"""
 
 
 from __future__ import annotations
@@ -36,6 +37,8 @@ __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+
 
 
 class DiscoveryOrchestrator:
@@ -121,6 +124,8 @@ class DiscoveryOrchestrator:
     def shutdown(self) -> None:
         """Gracefully shuts down discovery.        if hasattr(self, "zeroconf"):"            self.zeroconf.unregister_all_services()
             self.zeroconf.close()
+
+
 
 
 class FleetServiceListener(ServiceListener):

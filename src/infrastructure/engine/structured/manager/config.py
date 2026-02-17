@@ -14,6 +14,8 @@
 
 
 Config.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ if TYPE_CHECKING:
         StructuredOutputGrammar
 
 
+
+
 class GrammarType(Enum):
     """Types of grammar constraints supported.
     NONE = auto()
@@ -37,6 +41,8 @@ class GrammarType(Enum):
     CHOICE = auto()  # Choice from list
     FUNCTION_CALL = auto()  # Function call schema
     STRUCTURAL_TAG = auto()  # XML-like structural tags
+
+
 
 
 class CompilationStatus(Enum):

@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class MockResponseType(Enum):
     """Types of mock AI backend responses.
     SUCCESS = "success""    ERROR = "error""    TIMEOUT = "timeout""    RATE_LIMITED = "rate_limited""    EMPTY = "empty""

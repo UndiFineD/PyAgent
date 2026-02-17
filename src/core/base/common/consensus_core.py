@@ -16,6 +16,7 @@
 """Core logic for multi-agent voting and consensus.
 Supports weighted voting and tie-breaking algorithms.
 """
+
 from __future__ import annotations
 
 from typing import Dict, List, Optional
@@ -23,26 +24,43 @@ from typing import Dict, List, Optional
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class ConsensusCore(BaseCore):
     """Standardized logic for multi-agent voting and consensus.
     Supports weighted voting and tie-breaking.
     """
-    def __init__(self, name: str = "ConsensusCore", repo_root: Optional[str] = None) -> None:"        super().__init__(name=name, repo_root=repo_root)
+
+    def __init__(self, name: str = "ConsensusCore", repo_root: Optional[str] = None) -> None:
+        super().__init__(name=name, repo_root=repo_root)
+
 
     def calculate_winner(self, proposals: List[str], weights: Optional[List[float]] = None) -> str:
-        """Determines the winning proposal based on voting rules."""if rc and hasattr(rc, "calculate_consensus_winner"):  # pylint: disable=no-member"            try:
-                # pylint: disable=no-member
+        """Determines the winning proposal based on voting rules."""
+        if rc and hasattr(rc, "calculate_consensus_winner"):
+            try:
                 return rc.calculate_consensus_winner(proposals, weights)  # type: ignore
             except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
         if not proposals:
-            return """
+            return ""
+        if weights and len(weights) != len(proposals):
+            weights = None
+
+        if rc and hasattr(rc, "calculate_consensus_winner"):
+            try:
+                return rc.calculate_consensus_winner(proposals, weights)  # type: ignore
+            except Exception:
+                pass
+
+        if not proposals:
+            return ""
         if weights and len(weights) != len(proposals):
             weights = None
 
@@ -55,8 +73,10 @@ class ConsensusCore(BaseCore):
         winner = sorted(counts.keys(), key=lambda x: (counts[x], len(x)), reverse=True)[0]
         return winner
 
+
     def get_agreement_score(self, proposals: List[str], winner: str) -> float:
-        """Calculates the percentage of agents that agreed with the winner."""if not proposals:
+        """Calculates the percentage of agents that agreed with the winner."""
+        if not proposals:
             return 0.0
         match_count = sum(1 for p in proposals if p == winner)
         return match_count / len(proposals)

@@ -28,6 +28,8 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 
+
+
 class TTSEngine(ABC):
     """Abstract base class for TTS engines."""
     def __init__(self, config: Optional[Dict[str, Any]] = None):
@@ -51,6 +53,8 @@ class TTSEngine(ABC):
     @abstractmethod
     def get_languages(self) -> list[str]:
         """Get available languages."""return []
+
+
 
 
 class CoquiTTSEngine(TTSEngine):
@@ -119,7 +123,7 @@ class CoquiTTSEngine(TTSEngine):
             self.logger.error(f"TTS synthesis failed: {e}")"            return self._mock_synthesize(text)
 
     def _mock_synthesize(self, text: str) -> bytes:
-        """Mock TTS synthesis for when real TTS is not available."""# Generate a simple sine wave as placeholder
+        """Mock TTS synthesis for when real TTS is not available."""# Generate a simple sine wave as TODO Placeholder
         sample_rate = 22050
         duration = min(len(text) * 0.1, 3.0)  # 0.1 seconds per character, max 3 seconds
 
@@ -150,6 +154,8 @@ class CoquiTTSEngine(TTSEngine):
         if self._tts and hasattr(self._tts, 'languages'):'            return self._tts.languages or []
 
         return ["en"]"
+
+
 
 class TTSService:
     """Unified Text-to-Speech service.
@@ -217,7 +223,7 @@ class TTSService:
         engine: Optional[str] = None,
         **kwargs
     ) -> bytes:
-        """Streaming synthesis (placeholder for future implementation).
+        """Streaming synthesis (TODO Placeholder for future implementation).
 
         For now, just calls regular synthesize. In a real implementation,
         this would stream audio chunks as they're generated.'        """# In a real implementation, this would yield audio chunks

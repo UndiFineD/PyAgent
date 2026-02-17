@@ -35,6 +35,8 @@ from pydantic import BaseModel, Field
 logger = logging.getLogger(__name__)
 
 
+
+
 class ReflectionResult(BaseModel):
     """Result of a reflection iteration."""iteration: int
     content: Any
@@ -42,6 +44,8 @@ class ReflectionResult(BaseModel):
     is_satisfactory: bool
     timestamp: datetime = Field(default_factory=datetime.now)
     metadata: Dict[str, Any] = Field(default_factory=dict)
+
+
 
 
 class ReflectionLoopConfig(BaseModel):
@@ -64,6 +68,8 @@ class ReflectionContext:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+
+
 class ReflectionAgent(ABC):
     """Abstract base class for agents that can participate in reflection loops."""
     @abstractmethod
@@ -73,6 +79,8 @@ class ReflectionAgent(ABC):
     @abstractmethod
     async def critique(self, context: ReflectionContext, content: Any) -> str:
         """Provide critique of the given content."""pass
+
+
 
 
 class LLMReflectionAgent(ReflectionAgent):
@@ -100,6 +108,8 @@ class LLMReflectionAgent(ReflectionAgent):
         loop = asyncio.get_event_loop()
         critique = await loop.run_in_executor(None, self.llm_callable, prompt)
         return critique
+
+
 
 
 class CodeReflectionAgent(LLMReflectionAgent):
@@ -151,6 +161,8 @@ If the code is perfect and meets all requirements, respond with 'CODE_IS_PERFECT
         loop = asyncio.get_event_loop()
         critique = await loop.run_in_executor(None, self.llm_callable, prompt)
         return critique
+
+
 
 
 class ReflectionLoopOrchestrator:

@@ -19,6 +19,8 @@ from hypothesis import given, strategies as st, settings, HealthCheck
 from src.logic.agents.security.core.byzantine_core import ByzantineCore
 
 
+
+
 class TestByzantineCore:
     @pytest.fixture
     def core(self):

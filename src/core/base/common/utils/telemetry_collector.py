@@ -30,6 +30,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class TelemetryCollector:
     """Collect telemetry data for observability.""""
     Provides OpenTelemetry - compatible span collection.

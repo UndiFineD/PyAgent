@@ -18,6 +18,8 @@ from unittest.mock import patch
 from src.core.agents.security_scanner_agent import SecurityScannerAgent
 
 
+
+
 class TestSecurityScannerAgent:
     """Test cases for SecurityScannerAgent.
     def setup_method(self):

@@ -21,8 +21,12 @@ from dataclasses import dataclass
 from enum import Enum
 
 
+
+
 class SecurityLevel(Enum):
     """Security levels for tool execution."""HIGH = "high""    MEDIUM = "medium""    LOW = "low""    TRUSTED = "trusted""
+
+
 
 class ThreatCategory(Enum):
     """Categories of security threats."""MALWARE = "malware""    DATA_EXFILTRATION = "data_exfiltration""    CODE_INJECTION = "code_injection""    PRIVILEGE_ESCALATION = "privilege_escalation""    DENIAL_OF_SERVICE = "denial_of_service""
@@ -45,6 +49,8 @@ class ToolSignature:
     hash_sha256: str
     signature: Optional[str] = None
     verified: bool = False
+
+
 
 
 class ExternalToolSecurity:

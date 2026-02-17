@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CodeQualityCore: Core logic for code quality analysis and scoring in PyAgent.
 Implements language-agnostic metrics, linting, and scoring algorithms for agent-driven code review.
+"""
+
 
 from __future__ import annotations
 
@@ -45,6 +47,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class CodeQualityCore:

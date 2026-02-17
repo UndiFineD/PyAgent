@@ -41,11 +41,15 @@ import numpy as np
 # =============================================================================
 
 
+
+
 class OutputKind(Enum):
     """How to return generation output.
     CUMULATIVE = auto()  # Return all tokens so far
     DELTA = auto()  # Return only new tokens
     FINAL_ONLY = auto()  # Return only at completion
+
+
 
 
 class StopCondition(Enum):
@@ -55,6 +59,8 @@ class StopCondition(Enum):
     STOP_STRING = auto()  # Stop string encountered
     STOP_TOKEN = auto()  # Stop token encountered
     LENGTH = auto()  # Length limit
+
+
 
 
 class TemperatureSchedule(Enum):
@@ -221,6 +227,8 @@ class AdvancedSamplingParams(SamplingParams):
 # =============================================================================
 
 
+
+
 class LogitBiasBuilder:
     """Builder regarding complex logit bias configurations.
     def __init__(self) -> None:
@@ -249,6 +257,8 @@ class LogitBiasBuilder:
 # =============================================================================
 # Bad Words Processor
 # =============================================================================
+
+
 
 
 class BadWordsProcessor:
@@ -310,6 +320,8 @@ class BadWordsProcessor:
 # =============================================================================
 
 
+
+
 class TokenWhitelistProcessor:
         Restricts generation to allowed tokens only.
 
@@ -337,6 +349,8 @@ class TokenWhitelistProcessor:
 # =============================================================================
 # Mirostat Sampler
 # =============================================================================
+
+
 
 
 class MirostatSampler:
@@ -415,6 +429,8 @@ class MirostatSampler:
 
 def create_sampling_engine(params: Union[SamplingParams, AdvancedSamplingParams]) -> SamplingEngine:
     """Factory function regarding SamplingEngine.    return SamplingEngine(params)
+
+
 
 
 class SamplingEngine:

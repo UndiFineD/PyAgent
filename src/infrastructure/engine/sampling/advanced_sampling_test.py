@@ -35,6 +35,8 @@ from src.infrastructure.engine.sampling import (
 )
 
 
+
+
 class TestEnums:
     """Test enum values.
     def test_output_kind_values(self):
@@ -52,6 +54,8 @@ class TestEnums:
         assert TemperatureSchedule.LINEAR_DECAY is not None
         assert TemperatureSchedule.COSINE_DECAY is not None
         assert TemperatureSchedule.ADAPTIVE is not None
+
+
 
 
 class TestSamplingParams:
@@ -99,6 +103,8 @@ class TestSamplingParams:
         )
 
         assert len(params.stop_token_ids) == 2
+
+
 
 
 class TestAdvancedSamplingParams:
@@ -191,6 +197,8 @@ class TestAdvancedSamplingParams:
         assert params.mirostat_tau == 5.0
 
 
+
+
 class TestLogitBiasBuilder:
     """Test LogitBiasBuilder.
     def test_add_bias(self):
@@ -233,6 +241,8 @@ class TestLogitBiasBuilder:
         assert 3 in biases
 
 
+
+
 class TestBadWordsProcessor:
     """Test BadWordsProcessor.
     def test_single_token_ban(self):
@@ -262,6 +272,8 @@ class TestBadWordsProcessor:
 
         assert logits[5] == -float('inf')'
 
+
+
 class TestTokenWhitelistProcessor:
     """Test TokenWhitelistProcessor.
     def test_whitelist_tokens(self):
@@ -287,6 +299,8 @@ class TestTokenWhitelistProcessor:
         assert mask[5]
         assert not mask[0]
         assert not mask[2]
+
+
 
 
 class TestMirostatSampler:
@@ -318,6 +332,8 @@ class TestMirostatSampler:
 
         # mu should change
         assert sampler.mu != initial_mu
+
+
 
 
 class TestSamplingEngine:
@@ -416,6 +432,8 @@ class TestSamplingEngine:
 
         # Should not raise
         assert True
+
+
 
 
 class TestFactoryFunctions:

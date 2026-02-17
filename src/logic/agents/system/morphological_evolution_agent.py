@@ -36,6 +36,7 @@ WHAT IT SHOULD DO BETTER:
 - Support model and prompt configuration injection (avoid hardcoding "gpt-4.1"), and include richer telemetry (examples, confidence metrics, counterfactual analyses)."
 FILE CONTENT SUMMARY:
 Morphological evolution agent.py module.
+"""
 
 
 from __future__ import annotations
@@ -49,6 +50,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.system.core.morphology_core import MorphologyCore
 
 __version__ = VERSION
+
+
 
 
 class MorphologicalEvolutionAgent(BaseAgent):

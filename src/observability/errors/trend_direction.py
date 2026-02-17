@@ -18,6 +18,7 @@ trend_direction.py - TrendDirection Enum
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
+
 USAGE:
 - Minimal import: from trend_direction import TrendDirection
 - When used inside package: from src.core.base.agent_errors.trend_direction import TrendDirection
@@ -31,6 +32,7 @@ WHAT IT SHOULD DO BETTER:
 - Provide helper constructors/parsers (e.g., from_delta, from_string, and a normalization function) to map numeric changes or free-form text into these enum values.
 - Add explicit __all__ export, unit tests covering string round-trips and parsing, and richer member docstrings or comments explaining when to use VOLATILE vs STABLE.
 - Consider making it pluggable/configurable (thresholds for STABLE vs VOLATILE) rather than fixed labels, and include typing stubs or pydantic models when used in public APIs.
+"""
 
 from __future__ import annotations
 
@@ -40,7 +42,11 @@ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-
 class TrendDirection(Enum):
-    """Trend direction indicators.
-    INCREASING = "increasing""    DECREASING = "decreasing""    STABLE = "stable""    VOLATILE = "volatile""
+    """
+    Trend direction indicators.
+    """
+    INCREASING = "increasing"
+    DECREASING = "decreasing"
+    STABLE = "stable"
+    VOLATILE = "volatile"

@@ -27,6 +27,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__: str = VERSION
 
 
+
+
 class AgentRegistry(RegistryCore["BaseAgent"]):"    """Singleton registry to track all active agents.
     Uses RegistryCore for thread-safe storage and hooks.
     """

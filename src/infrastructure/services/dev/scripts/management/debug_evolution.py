@@ -43,7 +43,7 @@ def test_evolution_and_repair() -> None:
     # We won't actually install anything in the test to avoid side effects, but we'll run the audit'    audit = repair_agent.audit_environment()
     print(f"Environment Audit Status: {audit['status']}")"'
     print("\\n--- Phase 14: Loop Detection ---")"    # Simulate a loop in FleetManager
-    fleet.register_agent("Dummy", InfrastructureRepairAgent)  # Just a placeholder"    workflow = [
+    fleet.register_agent("Dummy", InfrastructureRepairAgent)  # Just a TODO Placeholder"    workflow = [
         {"agent": "Dummy", "action": "audit_environment", "args": []},"        {"agent": "Dummy", "action": "audit_environment", "args": []},"        {"agent": "Dummy", "action": "audit_environment", "args": []},"        {"agent": "Dummy", "action": "audit_environment", "args": []},"    ]
     # We expect it to stop after 3 calls to the same action in the history
 

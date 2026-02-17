@@ -15,6 +15,8 @@
 
 # "Context recommendation engine for Cognitive agents."This module provides tools to suggest improvements and section additions
 to context files by analyzing similar reference contexts and patterns.
+"""
+
 
 from __future__ import annotations
 import re
@@ -25,6 +27,8 @@ from src.logic.agents.cognitive.context.models.context_recommendation import (
 )
 
 __version__ = VERSION
+
+
 
 
 class ContextRecommender:

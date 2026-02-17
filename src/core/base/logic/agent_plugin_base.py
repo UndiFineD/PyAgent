@@ -15,6 +15,9 @@
 
 """
 Auto-extracted class from agent.py
+"""
+
+
 from __future__ import annotations
 
 import logging
@@ -29,9 +32,11 @@ from src.core.base.lifecycle.version import VERSION
 __version__: str = VERSION
 
 
+
+
 class AgentPluginBase(ABC):
-    """Abstract base class for agent plugins.""""
-    Provides interface for third - party agents to integrate with
+    """Abstract base class for agent plugins.
+    Provides interface for third-party agents to integrate with
     the agent orchestrator without modifying core code.
 
     Attributes:
@@ -45,36 +50,52 @@ class AgentPluginBase(ABC):
         priority: AgentPriority = AgentPriority.NORMAL,
         config: dict[str, Any] | None = None,
     ) -> None:
-        """Initialize the plugin.""""
+        """
+        Initialize the plugin.
         Args:
             name: Unique plugin name.
             priority: Execution priority.
-            config: Plugin - specific configuration.
-        """self.name: str = name
+            config: Plugin-specific configuration.
+        """
+        self.name: str = name
         self.priority: AgentPriority = priority
         self.config: dict[str, Any] = config or {}
-        self.logger: logging.Logger = logging.getLogger(f"plugin.{name}")"
+        self.logger: logging.Logger = logging.getLogger(f"plugin.{name}")
     @abstractmethod
     def run(self, file_path: Path, context: dict[str, Any]) -> bool:
-        """Execute the plugin on a file.""""
+        """
+        Execute the plugin on a file.
         Args:
             file_path: Path to the file to process.
             context: Execution context with agent state.
 
         Returns:
             bool: True if changes were made, False otherwise.
-        """raise NotImplementedError()
+        """
+        raise NotImplementedError()
 
     def setup(self) -> None:
-        """Called once when plugin is loaded. Override for initialization."""
+        """
+        Called once when plugin is loaded. Override for initialization.
+        """
     @abstractmethod
     def shutdown(self) -> None:
-        """Handle graceful shutdown, cleanup resources, and terminate processes."""raise NotImplementedError()
+        """
+        Handle graceful shutdown, cleanup resources, and terminate processes.
+        """
+        raise NotImplementedError()
+
 
     def teardown(self) -> None:
-        """Called once when plugin is unloaded. Override for cleanup."""
+        """
+        Called once when plugin is unloaded. Override for cleanup.
+        """
+
     def health_check(self) -> AgentHealthCheck:
-        """Check plugin health status.""""
+        """
+        Check plugin health status.
         Returns:
             AgentHealthCheck: Health check result.
-        """return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)
+        """
+        return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)
+

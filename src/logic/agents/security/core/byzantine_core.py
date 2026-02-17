@@ -15,6 +15,8 @@
 
 """
 Byzantine core for handling byzantine faults and consensus in distributed deployments.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ try:
     import rust_core as rc  # type: ignore
 except ImportError:  # type: ignore[assignment]
     rc = None  # type: ignore[assignment]
+
+
 
 
 class ByzantineCore:

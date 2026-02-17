@@ -15,6 +15,8 @@
 
 # "Merge conflict resolution engine for Cognitive agents."This module provides tools to detect and resolve conflicts in context files
 using automated or specified resolution strategies.
+"""
+
 
 from __future__ import annotations
 import re
@@ -26,6 +28,8 @@ from src.logic.agents.cognitive.context.utils.conflict_resolution import (
 from src.logic.agents.cognitive.context.models.merge_conflict import MergeConflict
 
 __version__ = VERSION
+
+
 
 
 class MergeConflictResolver:

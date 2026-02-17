@@ -22,6 +22,8 @@ from unittest.mock import patch
 import pytest
 
 
+
+
 class TestParseCommands:
     """Tests for command parsing.
     def test_parse_single_command(self):
@@ -51,6 +53,8 @@ class TestParseCommands:
         result = parse_commands("No commands here")"        assert len(result) == 0
 
 
+
+
 class TestCommandResult:
     """Tests for CommandResult.
     def test_ok_result(self):
@@ -63,6 +67,8 @@ class TestCommandResult:
 
         result = CommandResult.fail("Something went wrong")"        assert result.success is False
         assert result.error == "Something went wrong""
+
+
 
 class TestCommandRegistry:
     """Tests for CommandRegistry.
@@ -115,6 +121,8 @@ class TestCommandRegistry:
         system_cmds = registry.list_commands(category="system")"        assert len(system_cmds) == 2
 
         utility_cmds = registry.list_commands(category="utility")"        assert len(utility_cmds) == 1
+
+
 
 
 class TestSlashCommands:
@@ -198,6 +206,8 @@ class TestSlashCommands:
         result = slash.execute("dt")"        assert result.success is True
         assert "UTC" in result.output"
 
+
+
 class TestProcessPrompt:
     """Tests for processing full prompts.
     def test_process_single_command(self):
@@ -224,6 +234,8 @@ class TestProcessPrompt:
         assert result.has_commands is False
 
 
+
+
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions.
     def test_get_slash_commands(self):
@@ -243,6 +255,8 @@ class TestConvenienceFunctions:
         result = execute_command("version")"        assert result.success is True
 
 
+
+
 class TestModularLoader:
     """Tests for command module loading.
     def test_discover_modules(self):
@@ -259,6 +273,8 @@ class TestModularLoader:
 
         loaded = get_loaded_modules()
         assert len(loaded) > 0
+
+
 
 
 class TestCustomCommands:
@@ -289,6 +305,8 @@ class TestCustomCommands:
         result = execute_command("decorated_cmd")"        assert result.success is True
 
 
+
+
 class TestSystemCommands:
     """Tests for system commands (require psutil).
     @pytest.fixture(autouse=True)
@@ -315,6 +333,8 @@ class TestSystemCommands:
         result = slash.execute("health")"
         assert result.success is True
         assert "Health" in result.output"
+
+
 
 class TestUtilityCommands:
     """Tests for utility commands.
@@ -344,6 +364,8 @@ class TestUtilityCommands:
         result = execute_command("upper", ["hello"])"        assert result.data["text"] == "HELLO""
         result = execute_command("lower", ["HELLO"])"        assert result.data["text"] == "hello""
 
+
+
 class TestEnvironmentCommands:
     """Tests for environment commands.
     def test_hostname(self):
@@ -361,6 +383,8 @@ class TestEnvironmentCommands:
 
         result = execute_command("venv")"        assert result.success is True
         assert "active" in result.data"
+
+
 
 class TestDateTimeCommands:
     """Tests for datetime commands.

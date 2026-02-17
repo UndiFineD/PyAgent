@@ -36,6 +36,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Legal audit agent.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -46,6 +48,8 @@ from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
+
+
 
 
 class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -115,6 +119,8 @@ from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
+
+
 
 
 class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors

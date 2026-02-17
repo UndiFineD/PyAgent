@@ -16,6 +16,8 @@ import json
 from typing import List
 
 
+
+
 class PayloadFormatter:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

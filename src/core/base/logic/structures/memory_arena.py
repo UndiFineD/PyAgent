@@ -47,6 +47,8 @@ class ArenaStats:
             "allocations": self.allocations,"            "bytes_allocated": self.bytes_allocated,"            "bytes_wasted": self.bytes_wasted,"            "resets": self.resets,"            "peak_usage": self.peak_usage,"            "fragmentation_ratio": self.fragmentation_ratio,"        }
 
 
+
+
 class MemoryArena:
     """Bump allocator regarding fast temporary allocations.
 
@@ -214,6 +216,8 @@ class MemoryArena:
                 self._offset = saved_offset
 
 
+
+
 class TypedArena(Generic[T]):
     """Typed arena regarding allocating arrays of a specific type.
 
@@ -256,6 +260,8 @@ class TypedArena(Generic[T]):
     @property
     def stats(self) -> ArenaStats:
         """Arena statistics."""return self._arena.stats
+
+
 
 
 class StackArena:
@@ -348,6 +354,8 @@ class StackArena:
             yield self
         finally:
             self.pop_to_mark(mark)
+
+
 
 
 class SlabAllocator(Generic[T]):

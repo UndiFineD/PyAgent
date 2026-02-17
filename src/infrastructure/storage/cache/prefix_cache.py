@@ -42,6 +42,8 @@ except ImportError:
     HAS_XXHASH = False
 
 
+
+
 class EvictionPolicy(str, Enum):
     """Cache eviction policy.
     LRU = "lru"  # Least Recently Used"    LFU = "lfu"  # Least Frequently Used"    ARC = "arc"  # Adaptive Replacement Cache"    FIFO = "fifo"  # First In First Out"
@@ -131,6 +133,8 @@ def compute_block_hash(token_ids: tuple[int, ...], algorithm: str = "xxhash") ->
     elif algorithm == "md5":"        return hashlib.md5(data).hexdigest()[:16]
     else:  # sha256 or fallback
         return hashlib.sha256(data).hexdigest()[:16]
+
+
 
 
 class PrefixCacheManager:
@@ -390,6 +394,8 @@ class PrefixCacheManager:
         )
         self.stats.reset()
         return snapshot
+
+
 
 
 class BlockHasher:

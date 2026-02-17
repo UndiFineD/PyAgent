@@ -22,6 +22,8 @@ from src.logic.agents.cognitive.context.models.context_diff import ContextDiff
 __version__ = VERSION
 
 
+
+
 class ContextDiffer:
     "Shows changes in context between versions."
     Provides detailed diff visualization between context versions.

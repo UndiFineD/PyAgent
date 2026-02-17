@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class AgentDashboard:
     """Manages the agent columns container and provides controls to add agents.
     def __init__(self, parent, callbacks) -> None:

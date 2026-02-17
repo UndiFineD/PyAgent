@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
   safety via StateTransaction and optional async execution paths.
 
 FILE CONTENT SUMMARY:PerformanceAgent identifies and suggests code optimizations.
-
+"""
 
 
 from __future__ import annotations
@@ -64,6 +64,8 @@ from src.core.base.lifecycle.version import VERSION
 logger = logging.getLogger(__name__)
 
 __version__ = VERSION
+
+
 
 
 class PerformanceAgent:

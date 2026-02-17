@@ -26,7 +26,7 @@ WHAT IT DOES:
 - Exposes two tools: generate_component(name, description) which returns a React/Next.js component boilerplate string, and update_dashboard_layout(active_agents) which returns a short status message and is intended to update layout configuration.
 - Integrates with the project's BaseAgent tooling (as_tool decorator) and includes a simple main entry for CLI usage.'
 WHAT IT SHOULD DO BETTER:
-- Persist generated components to disk and integrate with the project's file-state transaction system (use StateTransaction) rather than returning raw strings.'- Produce type-safe, production-ready Next.js/TSX output (current output is plain JS and contains placeholders like __version__ and VERSION).
+- Persist generated components to disk and integrate with the project's file-state transaction system (use StateTransaction) rather than returning raw strings.'- Produce type-safe, production-ready Next.js/TSX output (current output is plain JS and contains TODO Placeholders like __version__ and VERSION).
 - Validate and sanitize inputs, add template rendering (e.g., Jinja or proper React/TSX templates), support component testing scaffolding, and emit/update a JSON layout config consumed by the frontend.
 - Add logging levels, error handling, and asynchronous I/O (asyncio) for non-blocking file and network operations per project conventions.
 - Replace hardcoded preferences with configurable templates and add unit tests under tests/specialists for DashboardAgent behavior.
@@ -34,6 +34,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in UI generation and Dashboard management.
 Helps create Next.js or React interfaces for the fleet.
+"""
+
 
 from __future__ import annotations
 
@@ -41,6 +43,8 @@ import logging
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
+
+
 
 
 class DashboardAgent(BaseAgent):
@@ -98,6 +102,8 @@ import logging
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
+
+
 
 
 class DashboardAgent(BaseAgent):

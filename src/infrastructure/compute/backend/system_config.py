@@ -14,7 +14,8 @@
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -28,7 +29,7 @@ __version__ = VERSION
 
 @dataclass
 class SystemConfig:
-    """Configuration for a single backend.""""
+    """Configuration for a single backend.
     Attributes:
         name: Backend identifier.
         backend_type: Type of backend.
@@ -37,7 +38,7 @@ class SystemConfig:
         timeout_s: Request timeout in seconds.
         max_retries: Maximum retry attempts.
         rate_limit_rpm: Requests per minute limit.
-    
+    """
     name: str
     backend_type: ProviderType
     enabled: bool = True

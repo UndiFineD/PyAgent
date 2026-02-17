@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ReviewCategory(Enum):
     """Categories for code review feedback."""
     STYLE = "style""    PERFORMANCE = "performance""    SECURITY = "security""    MAINTAINABILITY = "maintainability""    CORRECTNESS = "correctness""    DOCUMENTATION = "documentation""

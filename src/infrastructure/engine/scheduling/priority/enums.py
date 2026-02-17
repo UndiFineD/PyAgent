@@ -21,6 +21,8 @@ Enums.py module.
 from enum import Enum, auto
 
 
+
+
 class TaskPriority(Enum):
     """Task priority levels.
     CRITICAL = 0  # Immediate execution
@@ -28,6 +30,8 @@ class TaskPriority(Enum):
     NORMAL = 2  # Default
     LOW = 3  # Background
     IDLE = 4  # When nothing else to do
+
+
 
 
 class TaskState(Enum):

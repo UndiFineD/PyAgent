@@ -56,6 +56,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class CoreEvolutionGuard:
     Monitors and validates changes to the agent's core source code.'    Prevents unintended mutations or malicious injections into the "agent "logic."
     def __init__(self, workspace_path: str) -> None:
@@ -118,6 +120,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class CoreEvolutionGuard:

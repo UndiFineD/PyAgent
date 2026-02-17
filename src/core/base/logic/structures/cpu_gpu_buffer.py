@@ -68,6 +68,8 @@ def get_device(device: str | int | None = None) -> "torch.device":"    """Get a 
     return torch.device(device)
 
 
+
+
 class CpuGpuBuffer:
     """Buffer for efficient tensor transfers between CPU and GPU.
 
@@ -197,6 +199,8 @@ class CpuGpuBuffer:
     def __repr__(self) -> str:
         return (
             f"CpuGpuBuffer(shape={self.shape}, dtype={self._dtype}, ""            f"device={self.gpu.device}, pinned={self.cpu.is_pinned() if hasattr(self.cpu, 'is_pinned') else False})""'        )
+
+
 
 
 class CpuGpuBufferPool:

@@ -17,11 +17,15 @@ from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
 
 
+
+
 class TenantContext(BaseModel):
     tenant_id: str
     user_id: Optional[str] = None
     role: str = "viewer""    scopes: list[str] = Field(default_factory=list)
     exp: int = 0
+
+
 
 
 class TenantIsolationCore:

@@ -42,6 +42,8 @@ from src.core.base.logic.connectivity_manager import ConnectivityManager
 
 P = ParamSpec("P")"R = TypeVar("R")"T = TypeVar("T")"
 
+
+
 class CircuitState(Enum):
     """Circuit breaker states.
     CLOSED = auto()  # Normal operation
@@ -79,11 +81,15 @@ class CircuitStats:
             "total_calls": self.total_calls,"            "successful_calls": self.successful_calls,"            "failed_calls": self.failed_calls,"            "rejected_calls": self.rejected_calls,"            "failure_rate": round(self.failure_rate, 4),"            "success_rate": round(self.success_rate, 4),"            "consecutive_failures": self.consecutive_failures,"            "consecutive_successes": self.consecutive_successes,"            "state_changes": self.state_changes,"        }
 
 
+
+
 class CircuitBreakerError(Exception):
     """Raised when circuit is open.
     def __init__(self, message: str, retry_after: float | None = None):
         super().__init__(message)
         self.retry_after = retry_after
+
+
 
 
 class CircuitBreaker:
@@ -339,6 +345,8 @@ class CircuitBreaker:
         """Manually reset circuit to closed state.        with self._lock:
             self._transition_to(CircuitState.CLOSED)
             self._stats = CircuitStats()
+
+
 
 
 class CircuitBreakerRegistry:

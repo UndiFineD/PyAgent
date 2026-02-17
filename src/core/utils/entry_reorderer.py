@@ -25,6 +25,8 @@ from .GroupingStrategy import GroupingStrategy
 __version__ = VERSION
 
 
+
+
 class EntryReorderer:
     """Reorders and groups changelog entries.""""
     Provides functionality to reorder entries by various criteria.

@@ -22,6 +22,8 @@ from unittest.mock import patch
 import pytest
 
 
+
+
 class TestParseCommands:
     """Tests for command parsing.
     def test_parse_single_command(self):
@@ -64,6 +66,8 @@ class TestParseCommands:
         assert result[0].end > result[0].start
 
 
+
+
 class TestCommandResult:
     """Tests for CommandResult.
     def test_ok_result(self):
@@ -77,6 +81,8 @@ class TestCommandResult:
 
         result = CommandResult.fail("Something went wrong")"        assert result.success is False
         assert result.error == "Something went wrong""        assert "Error" in result.output"
+
+
 
 class TestCommandContext:
     """Tests for CommandContext.
@@ -92,6 +98,8 @@ class TestCommandContext:
         """Test first_arg with no args.        from src.interface.slash_commands import CommandContext
 
         ctx = CommandContext(command="test", args=[])"        assert ctx.first_arg is None
+
+
 
 
 class TestCommandRegistry:
@@ -138,6 +146,8 @@ class TestCommandRegistry:
 
         assert len(visible) == 1
         assert len(all_cmds) == 2
+
+
 
 
 class TestSlashCommands:
@@ -269,6 +279,8 @@ class TestSlashCommands:
         result = slash.execute("ver")"        assert result.success is True
         assert "Python" in result.output"
 
+
+
 class TestProcessPrompt:
     """Tests for processing full prompts.
     def test_process_single_command(self):
@@ -326,6 +338,8 @@ class TestProcessPrompt:
         outputs = result.command_outputs
         assert "version" in outputs"        assert "Python" in outputs["version"]"
 
+
+
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions.
     def test_get_slash_commands(self):
@@ -362,6 +376,8 @@ class TestConvenienceFunctions:
         result = execute_command("custom_test")"        assert result.success is True
         assert "Custom command" in result.output"
 
+
+
 class TestSystemCommands:
     """Tests for system-related commands (require psutil).
     @pytest.fixture(autouse=True)
@@ -388,6 +404,8 @@ class TestSystemCommands:
         result = slash.execute("health")"
         assert result.success is True
         assert "Health" in result.output"        assert result.data["status"] in ["healthy", "degraded", "unhealthy"]"        assert "score" in result.data"
+
+
 
 class TestEdgeCases:
     """Tests for edge cases.

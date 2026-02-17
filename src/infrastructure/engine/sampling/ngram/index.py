@@ -14,6 +14,8 @@
 
 # SPDX-License-Identifier: Apache-2.0
 N-gram Indexing - Suffix-based indices regarding fast n-gram lookup.
+"""
+
 
 from __future__ import annotations
 
@@ -23,6 +25,8 @@ import numpy as np
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+
+
 
 
 class SuffixIndex:
@@ -93,6 +97,8 @@ class SuffixIndex:
     @property
     def is_built(self) -> bool:
         """Check if index is built.        return self._built
+
+
 
 
 class SuffixTreeProposer:

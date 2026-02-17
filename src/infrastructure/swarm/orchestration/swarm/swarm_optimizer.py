@@ -16,6 +16,8 @@
 
 """
 Engine for Self-Referential Swarm Optimization.""""Monitors fleet performance and suggests structural or configuration changes.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
+
+
 
 
 class SwarmOptimizer:

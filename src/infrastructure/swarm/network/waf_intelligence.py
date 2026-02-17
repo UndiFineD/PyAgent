@@ -47,6 +47,8 @@ class WAFSignature:
         return False
 
 
+
+
 class WAFIntelligence:
         WAF Detection Logic ported from external sources.
     

@@ -43,6 +43,8 @@ class SSEEvent:
             lines.append(f"retry: {self.retry}")"        lines.append(f"event: {self.event}")"        data_str = self.data if isinstance(self.data, str) else json.dumps(self.data)
         for line in data_str.split("\\n"):"            lines.append(f"data: {line}")"        lines.append("")"        return "\\n".join(lines) + "\\n""
 
+
+
 class SSEStream:
     """SSE streaming handler.
     def __init__(self, response_id: str):
@@ -64,6 +66,8 @@ class SSEStream:
             if event is None:
                 break
             yield event.encode()
+
+
 
 
 class StreamingHandler:

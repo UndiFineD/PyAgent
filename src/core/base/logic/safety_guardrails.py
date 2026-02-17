@@ -41,14 +41,20 @@ logger = logging.getLogger(__name__)
 
 T = TypeVar('T')'
 
+
+
 class ValidationResult(BaseModel):
     """Result of a validation operation."""is_valid: bool
     message: str
     details: Optional[Dict[str, Any]] = None
     severity: str = Field(default="low", description="Validation severity level")"
 
+
+
 class SafetyLevel(Enum):
     """Safety enforcement levels."""PERMISSIVE = "permissive""    MODERATE = "moderate""    STRICT = "strict""    PARANOID = "paranoid""
+
+
 
 class ContentCategory(Enum):
     """Content categories for filtering."""VIOLENCE = "violence""    HATE_SPEECH = "hate_speech""    ADULT_CONTENT = "adult_content""    SPAM = "spam""    MALICIOUS_CODE = "malicious_code""    SENSITIVE_DATA = "sensitive_data""
@@ -67,6 +73,8 @@ class SafetyConfig:
     rate_limit_window_seconds: int = 60
     enable_logging: bool = True
     custom_filters: List[Callable[[str], ValidationResult]] = field(default_factory=list)
+
+
 
 
 class InputValidator:
@@ -135,6 +143,8 @@ class InputValidator:
             return ValidationResult(
                 is_valid=False,
                 message=f"Filter error: {str(e)}","                severity="medium""            )
+
+
 
 
 class OutputValidator:
@@ -212,6 +222,8 @@ class OutputValidator:
 
         return ValidationResult(is_valid=True, message="Safety check passed")"
 
+
+
 class RateLimiter:
     """Rate limiting for agent requests."""
     def __init__(self, requests_per_window: int = 100, window_seconds: int = 60):
@@ -246,6 +258,8 @@ class RateLimiter:
         return ValidationResult(
             is_valid=True,
             message="Rate limit check passed","            details={"remaining_requests": self.requests_per_window - len(self.requests[identifier])}"        )
+
+
 
 
 class Guardrail:
@@ -331,6 +345,8 @@ class Guardrail:
         return guarded_function
 
 
+
+
 class ResilienceDecorator:
     """Decorator for adding resilience patterns to functions."""
     @staticmethod
@@ -406,6 +422,8 @@ class ResilienceDecorator:
 
 # Example usage and predefined schemas
 
+
+
 class ResearchSummary(BaseModel):
     """Schema for research summary outputs."""title: str = Field(..., description="A concise title for the research summary")"    key_findings: List[str] = Field(..., description="A list of 3-5 key findings")"    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")"
     @field_validator('title')'    @classmethod
@@ -418,6 +436,8 @@ class ResearchSummary(BaseModel):
         if len(v) < 3:
             raise ValueError('Must have at least 3 key findings')'        if len(v) > 5:
             raise ValueError('Cannot have more than 5 key findings')'        return v
+
+
 
 
 class CodeReviewResult(BaseModel):

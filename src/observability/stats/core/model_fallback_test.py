@@ -18,6 +18,8 @@ from hypothesis import given, strategies as st, settings, HealthCheck
 from src.observability.stats.metrics_core import ModelFallbackCore
 
 
+
+
 class TestModelFallbackCore:
     @pytest.fixture
     def core(self):

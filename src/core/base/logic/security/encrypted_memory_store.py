@@ -26,6 +26,8 @@ from src.core.base.logic.security.e2e_encryption_core import E2EEncryptionCore
 
 logger = logging.getLogger("pyagent.encrypted_memory")"
 
+
+
 class EncryptedMemoryStore:
     """Encrypted wrapper for MemoryStore.
 

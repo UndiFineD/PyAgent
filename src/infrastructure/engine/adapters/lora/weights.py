@@ -30,7 +30,7 @@ except ImportError:
     NDArray = Any
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 

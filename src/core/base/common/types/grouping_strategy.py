@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class GroupingStrategy(Enum):
     """Strategies for entry grouping."""
     BY_DATE = "by_date""    BY_VERSION = "by_version""    BY_CATEGORY = "by_category""    BY_AUTHOR = "by_author""

@@ -25,6 +25,8 @@ import logging
 
 logger = logging.getLogger("pyagent.connectors")"
 
+
+
 class BaseConnector(ABC):
     """Base class for all infrastructure connectors.
     def __init__(self, name: str, config: Optional[Dict[str, Any]] = None):
@@ -57,6 +59,8 @@ class BaseConnector(ABC):
                     raise e
                 wait_time = 2 ** attempt
                 logger.warning(f"Operation failed, retrying in {wait_time}s: {e}")"                time.sleep(wait_time)
+
+
 
 
 class DatabaseConnector(BaseConnector):
@@ -107,6 +111,8 @@ class DatabaseConnector(BaseConnector):
             if re.search(pattern, query_upper):
                 return False
         return True
+
+
 
 
 class APIConnector(BaseConnector):
@@ -199,6 +205,8 @@ class APIConnector(BaseConnector):
         return headers
 
 
+
+
 class CloudStorageConnector(BaseConnector):
     """Enhanced cloud storage connector with multi-provider support.
     def __init__(self, config: Optional[Dict[str, Any]] = None):
@@ -264,6 +272,8 @@ class CloudStorageConnector(BaseConnector):
         return result
 
 
+
+
 class AWS3Connector(BaseConnector):
     """AWS S3 storage connector.    def __init__(self, config: Optional[Dict[str, Any]] = None):
         super().__init__("aws_s3", config)"
@@ -279,6 +289,8 @@ class AWS3Connector(BaseConnector):
         """Upload file to AWS S3 bucket.        return {"result": f"Uploaded {filename} to S3 bucket {bucket}", "status": "success", "provider": "aws"}"
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
         """Download file from AWS S3 bucket.        return {"result": f"Downloaded {filename} from S3 bucket {bucket}", "status": "success", "provider": "aws"}"
+
+
 
 class GCPStorageConnector(BaseConnector):
     """Google Cloud Storage connector.    def __init__(self, config: Optional[Dict[str, Any]] = None):
@@ -296,6 +308,8 @@ class GCPStorageConnector(BaseConnector):
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
         """Download file from Google Cloud Storage bucket.        return {"result": f"Downloaded {filename} from GCS bucket {bucket}", "status": "success", "provider": "gcp"}"
 
+
+
 class AzureBlobConnector(BaseConnector):
     """Azure Blob Storage connector.    def __init__(self, config: Optional[Dict[str, Any]] = None):
         super().__init__("azure_blob", config)"
@@ -311,6 +325,8 @@ class AzureBlobConnector(BaseConnector):
         """Upload file to Azure Blob Storage container.        return {"result": f"Uploaded {filename} to Azure container {bucket}", "status": "success", "provider": "azure"}"
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
         """Download file from Azure Blob Storage container.        return {"result": f"Downloaded {filename} from Azure container {bucket}", "status": "success", "provider": "azure"}"
+
+
 
 class MessageQueueConnector(BaseConnector):
     """Message queue connector for async communication.

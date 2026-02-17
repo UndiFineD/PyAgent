@@ -14,6 +14,8 @@
 
 
 Analyzer.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -23,6 +25,8 @@ import numpy as np
 
 from .config import LogprobEntry
 from .storage import FlatLogprobs
+
+
 
 
 class LogprobsAnalyzer:

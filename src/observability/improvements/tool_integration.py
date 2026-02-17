@@ -51,6 +51,8 @@ from .tool_suggestion import ToolSuggestion
 __version__ = VERSION
 
 
+
+
 class ToolIntegration:
     """Integrates with code analysis tools for suggestions.""""
     Parses output from linters, type checkers, and other tools.
@@ -119,6 +121,8 @@ from .improvement_category import ImprovementCategory
 from .tool_suggestion import ToolSuggestion
 
 __version__ = VERSION
+
+
 
 
 class ToolIntegration:

@@ -22,6 +22,8 @@ from typing import Dict, Optional, Set
 # so form part of the external API (matches vLLM).
 FINISH_REASON_STRINGS = ("stop", "length", "abort", "error")"
 
+
+
 class FinishReason(enum.IntEnum):
         Reason a request finished - stop, length, abort, or error.
 
@@ -41,6 +43,8 @@ class FinishReason(enum.IntEnum):
 
     def __repr__(self) -> str:
         return f"FinishReason.{self.name}""
+
+
 
 class RequestStatus(enum.IntEnum):
         Status of a request in the engine.
@@ -124,6 +128,8 @@ _VALID_TRANSITIONS: Dict[RequestStatus, Set[RequestStatus]] = {
 def is_valid_transition(from_status: RequestStatus, to_status: RequestStatus) -> bool:
     """Check if a state transition is valid.    valid_targets = _VALID_TRANSITIONS.get(from_status, set())
     return to_status in valid_targets
+
+
 
 
 class RequestEventType(enum.Enum):

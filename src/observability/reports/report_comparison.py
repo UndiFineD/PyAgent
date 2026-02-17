@@ -12,24 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
 
+"""
 ReportComparison - Data model for comparing two reports
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
+
 USAGE:
-- Instantiate ReportComparison to represent differences between two reports:
-  comparison = ReportComparison(
-      old_path="old_report.md","      new_path="new_report.md","      added=["- New section"],"      removed=["- Old section"],"      changed=[("- Old content", "- New content")],"      unchanged_count=10
-  )
-- Use for report diffing and change tracking.
+    Instantiate ReportComparison to represent differences between two reports:
+        comparison = ReportComparison(
+            old_path="old_report.md",
+            new_path="new_report.md",
+            added=["- New section"],
+            removed=["- Old section"],
+            changed=[("- Old content", "- New content")],
+            unchanged_count=10
+        )
+    Use for report diffing and change tracking.
 
 WHAT IT DOES:
-Provides a dataclass to capture the differences between two reports, including added/removed/changed content and counts.
+    Provides a dataclass to capture the differences between two reports, including added/removed/changed content and counts.
 
 WHAT IT SHOULD DO BETTER:
-Add methods for generating diff summaries, calculating change percentages, and serializing to/from JSON.
+    Add methods for generating diff summaries, calculating change percentages, and serializing to/from JSON.
+"""
+
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import List
@@ -41,7 +50,8 @@ __version__ = VERSION
 
 @dataclass
 class ReportComparison:
-    """Comparison between two reports.""""
+    """
+    Comparison between two reports.
     Attributes:
         old_path: Path to the old report.
         new_path: Path to the new report.
@@ -49,8 +59,13 @@ class ReportComparison:
         removed: List of removed content.
         changed: List of changed content pairs (old, new).
         unchanged_count: Number of unchanged items.
-    
+    """
     old_path: str
+    new_path: str
+    added: list[str] = field(default_factory=list)
+    removed: list[str] = field(default_factory=list)
+    changed: list[tuple[str, str]] = field(default_factory=list)
+    unchanged_count: int = 0
     new_path: str
     added: List[str] = field(default_factory=list)
     removed: List[str] = field(default_factory=list)

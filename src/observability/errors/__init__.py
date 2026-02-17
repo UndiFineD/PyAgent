@@ -15,6 +15,8 @@
 # ruff: noqa: F401
 
 # Lazy-loading entry point for observability.errors.
+"""
+
 
 from __future__ import annotations
 from typing import Any, TYPE_CHECKING

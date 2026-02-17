@@ -26,6 +26,8 @@ else:
     torch = None  # pylint: disable=invalid-name
 
 
+
+
 class MRotaryEmbedding(RotaryEmbeddingBase):
     """Multimodal Rotary Position Embedding.""""
     Applies separate rotary embeddings for different modality sections:

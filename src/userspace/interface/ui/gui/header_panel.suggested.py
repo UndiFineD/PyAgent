@@ -27,6 +27,8 @@ from .template_manager import TemplateManager
 __version__ = VERSION
 
 
+
+
 class HeaderPanel:
     """Handles project root selection and global context input.
     def __init__(self, parent, project_root_var, callbacks) -> None:

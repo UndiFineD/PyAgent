@@ -32,6 +32,8 @@ from src.core.base.logic.reflection_loop import (
 )
 
 
+
+
 class TestReflectionLoopConfig:
     """Test ReflectionLoopConfig functionality."""
     def test_default_config(self):
@@ -48,6 +50,8 @@ class TestReflectionLoopConfig:
         assert config.max_iterations == 5
         assert config.early_stopping is False
         assert config.timeout_seconds == 10.0
+
+
 
 
 class TestLLMReflectionAgent:
@@ -76,6 +80,8 @@ class TestLLMReflectionAgent:
         result = asyncio.run(agent.critique(context, "Test content"))"        assert result == "This content needs improvement.""        mock_llm.assert_called_once()
 
 
+
+
 class TestCodeReflectionAgent:
     """Test CodeReflectionAgent functionality."""
     def test_code_generation(self):
@@ -90,6 +96,8 @@ class TestCodeReflectionAgent:
 
         context = ReflectionContext(task_description="Write factorial function")"
         result = asyncio.run(agent.critique(context, "def factorial(n): return n * factorial(n-1) if n > 0 else 1"))"        assert result == "CODE_IS_PERFECT""
+
+
 
 class TestReflectionLoopOrchestrator:
     """Test ReflectionLoopOrchestrator functionality."""
@@ -146,6 +154,8 @@ class TestReflectionLoopOrchestrator:
 
         assert summary["task_description"] == "Test task""        assert summary["total_iterations"] == 1"        assert summary["final_content"] == "Content 1""        assert summary["is_satisfactory"] is True"
 
+
+
 class TestConvenienceFunctions:
     """Test convenience functions."""
     def test_reflect_on_code(self):
@@ -176,6 +186,8 @@ class TestConvenienceFunctions:
 
         assert result["total_iterations"] == 1"        assert "summary" in result["final_content"]"
 
+
+
 class TestReflectionResult:
     """Test ReflectionResult model."""
     def test_result_creation(self):
@@ -187,6 +199,8 @@ class TestReflectionResult:
         assert result.iteration == 1
         assert result.content == "Test content""        assert result.critique == "Good work""        assert result.is_satisfactory is True
         assert isinstance(result.timestamp, datetime)
+
+
 
 
 class TestReflectionContext:

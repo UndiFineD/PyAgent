@@ -85,6 +85,8 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
 ]
 
 
+
+
 class ImprovementManager:
     """Manages improvement lifecycle, templates, and impact scoring.
     def __init__(
@@ -176,6 +178,8 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
         default_effort=EffortEstimate.MEDIUM,
     ),
 ]
+
+
 
 
 class ImprovementManager:
@@ -335,4 +339,4 @@ class ImprovementManager:
 
     def export_markdown(self) -> str:
         """Export improvements to markdown format.        # Simple export logic for """now""", derived from agent implementation if needed""""        # (Usually the agent has more specific export logic)
-        return ""  # Placeholder as the agent likely has its own complex exporter"
+        return ""  # TODO Placeholder as the agent likely has its own complex exporter"

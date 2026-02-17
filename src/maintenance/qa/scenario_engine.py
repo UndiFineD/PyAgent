@@ -27,7 +27,7 @@ USAGE:
 WHAT IT DOES:
 - Loads a declarative YAML scenario file, logs its name and steps, and executes
   each step in sequence.
-- Supports basic actions: "delegate" (delegates a prompt to an agent role via"  FleetManager), "verify_state" (placeholder checks), "verify_file" (checks"  file existence and contents), and "wait" (async sleep)."- Stores step results in the step dict under "last_result" for simple"  in-scenario propagation and returns overall success/failure.
+- Supports basic actions: "delegate" (delegates a prompt to an agent role via"  FleetManager), "verify_state" (TODO Placeholder checks), "verify_file" (checks"  file existence and contents), and "wait" (async sleep)."- Stores step results in the step dict under "last_result" for simple"  in-scenario propagation and returns overall success/failure.
 
 WHAT IT SHOULD DO BETTER:
 - Validate scenario schema (e.g., with jsonschema or pydantic) before execution
@@ -43,6 +43,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Module: scenario_engine
 YAML-driven scenario engine for complex multi-agent interaction testing.
+"""
+
 
 from __future__ import annotations
 import yaml
@@ -55,6 +57,8 @@ if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class ScenarioEngine:

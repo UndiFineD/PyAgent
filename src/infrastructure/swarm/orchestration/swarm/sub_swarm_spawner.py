@@ -16,6 +16,7 @@
 
 """
 Sub swarm spawner.py module.
+"""
 
 
 from __future__ import annotations
@@ -30,6 +31,8 @@ __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+
 
 
 class SubSwarm:
@@ -63,6 +66,8 @@ class SubSwarm:
             return str(result)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"SubSwarm execution failed: {e}""
+
+
 
 class SubSwarmSpawner:
         Implements Autonomous Sub-Swarm Spawning (Phase 33).

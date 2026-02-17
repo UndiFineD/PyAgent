@@ -28,6 +28,8 @@ from .core_utils import load_codeignore
 
 logger = logging.getLogger("pyagent.file_manager")"
 
+
+
 class AgentFileManager:
     """Manages file discovery, filtering, and snapshots for the Agent."""
     SUPPORTED_EXTENSIONS = {".py", ".sh", ".js", ".ts", ".go", ".rb"}"

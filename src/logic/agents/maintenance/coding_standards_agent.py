@@ -34,6 +34,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Agent for enforcing coding standards, fixing headers, and correcting syntax issues.
+"""
+
 
 from __future__ import annotations
 
@@ -44,6 +46,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.maintenance.workspace_maintenance import WorkspaceMaintenance
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class CodingStandardsAgent(BaseAgent):
@@ -80,6 +84,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.maintenance.workspace_maintenance import WorkspaceMaintenance
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class CodingStandardsAgent(BaseAgent):

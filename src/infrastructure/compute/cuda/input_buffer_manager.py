@@ -42,6 +42,8 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 T = TypeVar("T")"
 
+
+
 class BufferState(Enum):
     """State of a buffer.
     FREE = auto()
@@ -90,6 +92,8 @@ class BufferEntry:
         """Release buffer back to pool.        self.state = BufferState.FREE
 
 
+
+
 class BufferPool(ABC):
     """Abstract buffer pool interface.
     @abstractmethod
@@ -101,6 +105,8 @@ class BufferPool(ABC):
     @abstractmethod
     def clear(self) -> None:
         """Clear all buffers.
+
+
 
 class SimpleBufferPool(BufferPool):
     """Simple buffer pool implementation.
@@ -199,6 +205,8 @@ class InputSlot:
             import numpy as np
 
             np.copyto(self.tensor, data)
+
+
 
 
 class InputBufferManager:
@@ -305,6 +313,8 @@ class InputBufferManager:
             self._slots.clear()
 
 
+
+
 class HierarchicalBufferPool(BufferPool):
         Hierarchical buffer pool.
 
@@ -334,6 +344,8 @@ class HierarchicalBufferPool(BufferPool):
         """Clear all pools.        self._gpu_pool.clear()
         self._cpu_pool.clear()
         self._pinned_pool.clear()
+
+
 
 
 class PredictiveBufferManager(InputBufferManager):

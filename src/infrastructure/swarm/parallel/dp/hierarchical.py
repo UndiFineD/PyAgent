@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Hierarchical DP coordinator with locality awareness.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from src.infrastructure.swarm.parallel.dp.engine import DPEngineCoreProc
 from src.infrastructure.swarm.parallel.dp.types import DPConfig, DPRole
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class HierarchicalDPCoordinator:

@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 EBNF grammar constraint logic for structured output decoding.
+"""
+
 
 from __future__ import annotations
 
@@ -114,7 +116,7 @@ class EBNFGrammar(StructuredOutputGrammar):
 
     def _is_valid_grammar_prefix(self, text: str) -> bool:
         """Check if text is a valid prefix according to grammar.        # Simplified check - real impl would use parser
-        return len(text) < 1000  # Placeholder
+        return len(text) < 1000  # TODO Placeholder
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
         """Validate tokens without advancing state.        valid = []

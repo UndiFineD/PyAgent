@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Base class for tokenizers.
+"""
+
 
 from __future__ import annotations
 
@@ -22,6 +24,8 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Sequence
 
 from .models import TokenizerConfig, TokenizeResult, TokenizerInfo
+
+
 
 
 class BaseTokenizer(ABC):

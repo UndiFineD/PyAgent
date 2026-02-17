@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Models for guided decoding.
+"""
+
 
 from __future__ import annotations
 
@@ -22,6 +24,8 @@ import re
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
+
+
 
 
 class GuidedMode(Enum):

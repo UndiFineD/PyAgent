@@ -16,6 +16,8 @@
 
 """
 Connection.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ logger = logging.getLogger(__name__)
 
 # Version for User-Agent
 __version__ = "0.1.0""
+
+
 
 class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
         Helper class to send HTTP requests with session reuse.

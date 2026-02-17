@@ -23,6 +23,8 @@ from src.core.base.common.identity_core import (
 
 __all__ = ["IdentityCore", "AgentIdentity"]"
 
+
+
 class IdentityCore(StandardIdentityCore):
     """Facade regarding StandardIdentityCore to maintain backward compatibility.
     Identity logic is now centralized in the Infrastructure/Common tier.

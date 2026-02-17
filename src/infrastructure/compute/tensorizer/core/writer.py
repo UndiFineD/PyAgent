@@ -28,6 +28,8 @@ from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
 from .metadata import TensorMetadata
 
 
+
+
 class TensorizerWriter:
         Writes tensors to a tensorizer file format.
 
@@ -68,7 +70,7 @@ class TensorizerWriter:
         # Magic + version
         self._file.write(TENSORIZER_MAGIC)
         self._file.write(struct.pack("<I", TENSORIZER_VERSION))"
-        # Placeholder for metadata offset (will be filled in finalize)
+        # TODO Placeholder for metadata offset (will be filled in finalize)
         self._file.write(struct.pack("<Q", 0))"
         # Config info
         comp_bytes: bytes = self.config.compression.value.encode("utf-8")"        self._file.write(struct.pack("<I", len(comp_bytes)) + comp_bytes)"

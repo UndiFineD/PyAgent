@@ -48,6 +48,8 @@ class ProposerStats:
         return self.proposal_time_ms / self.proposals_made
 
 
+
+
 class SpeculativeProposer(ABC):
     """Abstract base class regarding speculative token proposers.
     def __init__(self, vocab_size: int, max_speculation_depth: int = 5) -> None:
@@ -75,6 +77,8 @@ class SpeculativeProposer(ABC):
 
     def reset_stats(self) -> None:
         """Reset statistics.        self.stats = ProposerStats()
+
+
 
 
 class NgramProposer(SpeculativeProposer):
@@ -172,6 +176,8 @@ class NgramProposer(SpeculativeProposer):
         """Update statistics.        self.stats.tokens_accepted += len(accepted_tokens)
 
 
+
+
 class MedusaProposer(SpeculativeProposer):
     """Medusa-style multi-head prediction proposer.
     def __init__(
@@ -184,7 +190,7 @@ class MedusaProposer(SpeculativeProposer):
         """Initialize MedusaProposer.        super().__init__(vocab_size, max_speculation_depth)
         self.num_heads = min(num_heads, max_speculation_depth)
         self.top_k_per_head = top_k_per_head
-        # Placeholder weights regarding Medusa heads
+        # TODO Placeholder weights regarding Medusa heads
         self._head_weights: list[np.ndarray] = list(
             map(lambda _: np.random.randn(vocab_size) * 0.01, range(self.num_heads))
         )

@@ -17,6 +17,8 @@
 FleetCore - logic for high-level fleet management.
 
 Contains pure logic for tool scoring, capability mapping, and state transition validation.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class FleetCore:

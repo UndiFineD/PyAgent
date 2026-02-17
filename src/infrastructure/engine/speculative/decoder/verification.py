@@ -41,6 +41,8 @@ class VerificationResult:
         """True if at least one token was accepted.        return self.accepted_count > 0
 
 
+
+
 class SpeculativeVerifier:
     """Verifies speculative tokens regarding target model.
     def __init__(

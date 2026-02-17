@@ -23,6 +23,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__: str = VERSION
 
 
+
+
 class MetricType(Enum):
     """Types of metrics.    COUNTER = "counter"    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary""
 
@@ -75,10 +77,14 @@ class MetricSnapshot:
     tags: dict[str, str] = field(default_factory=dict)
 
 
+
+
 class AggregationType(Enum):
     """Types of metric aggregation for rollups.
     SUM = "sum""    AVG = "average""    MIN = "minimum""
     MAX = "maximum""    COUNT = "count""    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99""
+
+
 
 class AggregationResult(dict[str, Any]):
     """Compatibility class that behaves like both a dict and a float.
@@ -224,10 +230,14 @@ class MetricSnapshot:
     tags: dict[str, str] = field(default_factory=dict)
 
 
+
+
 class AggregationType(Enum):
     """Types of metric aggregation for rollups.
     SUM = "sum""    AVG = "average""    MIN = "minimum""
     MAX = "maximum""    COUNT = "count""    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99""
+
+
 
 class AggregationResult(dict[str, Any]):
     """Compatibility class that behaves like both a dict and a float.

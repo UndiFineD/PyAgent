@@ -18,6 +18,8 @@ Assistant for managing the knowledge graph and impact radius.
 from typing import Set
 
 
+
+class
 class KnowledgeGraphAssistant:
 """"Handles backlinks, dependency tracking, and graph visualization.
     def __init__(self, workspace_root: str) -> None:

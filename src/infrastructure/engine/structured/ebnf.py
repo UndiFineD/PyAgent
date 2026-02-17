@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 EBNF grammar engine.
+"""
+
 
 from __future__ import annotations
 
@@ -24,6 +26,8 @@ from typing import Dict, Optional
 from .base import GrammarEngine
 from .models import FSMTransitionTable
 from .regex import RegexGrammar
+
+
 
 
 class EBNFGrammar(GrammarEngine):

@@ -37,6 +37,8 @@ _factory = {IDA: IdaProRpcRegistrationExtractor, RADARE: Radare2RpcRegistrationE
 disassemblers = list(_factory.keys())
 
 
+
+
 class UnsupportedDisassemblerTypeException(Exception):
     def __init__(self, dism_name: str) -> None:
 # [BATCHFIX] Commented metadata/non-Python

@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 GPU-resident input buffers for batch management.
+"""
+
 
 from __future__ import annotations
 
@@ -34,6 +36,8 @@ try:
 except ImportError:
     HAS_TORCH = False
     torch = None  # type: ignore
+
+
 
 
 class InputBuffers:

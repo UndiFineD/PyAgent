@@ -42,6 +42,8 @@ class ModifiedResponse:
     timestamp: float
 
 
+
+
 class ResponseModifierCore(BaseCore):
     """HTTP Response Modifier Core for security testing and analysis.
 

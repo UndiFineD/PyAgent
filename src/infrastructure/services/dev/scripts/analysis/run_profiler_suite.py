@@ -57,7 +57,7 @@ async def main():
 
     # Verify that calling it manually works
     # pylint: disable=import-outside-toplevel
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
     print("DEBUG: Calling estimate_tokens_rust...")"    try:
         rc.estimate_tokens_rust("test")"    except (AttributeError, RuntimeError) as e:
         print(f"DEBUG: Manual call failed: {e}")"

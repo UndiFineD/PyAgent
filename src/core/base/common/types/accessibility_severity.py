@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class AccessibilitySeverity(Enum):
     """Severity levels for accessibility issues."""
     CRITICAL = 4  # Blocks access for users with disabilities

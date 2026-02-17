@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 FlashInfer backend for decode-focused attention.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ from .models import AttentionCapabilities, AttentionMetadata
 from .sdpa import TorchSDPABackend
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class FlashInferBackend(AttentionBackend[None]):

@@ -13,12 +13,15 @@
 # limitations under the License.
 
 
+"""
 Advanced vLLM Integration Module.
 
-Phase 31: Extends PyAgent's vLLM integration with:'- AsyncLLMEngine for high-throughput async inference
+Phase 31: Extends PyAgent's vLLM integration with:
+- AsyncLLMEngine for high-throughput async inference
 - Streaming responses for real-time token output
 - LoRA adapter management for efficient fine-tuned models
 - Guided decoding for structured output (JSON, regex)
+"""
 
 from .async_vllm_engine import (AsyncEngineConfig, AsyncRequestHandle,  # noqa: F401
                                 AsyncVllmEngine)
@@ -30,7 +33,11 @@ from .streaming_engine import (StreamCallback, StreamingConfig,  # noqa: F401
 
 __all__ = [
     # Async Engine
-    "AsyncVllmEngine","    "AsyncEngineConfig","    "AsyncRequestHandle","    # Streaming
-    "StreamingVllmEngine","    "StreamingConfig","    "StreamCallback","    "TokenStreamIterator","    # LoRA
-    "LoraManager","    "LoraAdapter","    "LoraConfig","    "LoraRegistry","    # Guided Decoding
-    "GuidedDecoder","    "GuidedConfig","    "JsonSchema","    "RegexPattern","    "ChoiceConstraint","]
+    "AsyncVllmEngine", "AsyncEngineConfig", "AsyncRequestHandle",
+    # Streaming
+    "StreamingVllmEngine", "StreamingConfig", "StreamCallback", "TokenStreamIterator",
+    # LoRA
+    "LoraManager", "LoraAdapter", "LoraConfig", "LoraRegistry",
+    # Guided Decoding
+    "GuidedDecoder", "GuidedConfig", "JsonSchema", "RegexPattern", "ChoiceConstraint",
+]

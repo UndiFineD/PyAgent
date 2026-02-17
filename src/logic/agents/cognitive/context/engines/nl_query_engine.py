@@ -20,6 +20,8 @@ from src.logic.agents.cognitive.context.models.nl_query_result import NLQueryRes
 __version__ = VERSION
 
 
+
+
 class NLQueryEngine:
     "Searches context with natural language queries."
     Provides natural language interface for searching context.

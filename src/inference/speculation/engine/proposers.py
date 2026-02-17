@@ -50,6 +50,8 @@ with suppress(ImportError):
     NUMBA_AVAILABLE = True
 
 
+
+
 class NgramProposer(DrafterBase):
     """N-gram based draft token proposer.
     def __init__(self, config: SpeculativeConfig) -> None:
@@ -86,7 +88,7 @@ class NgramProposer(DrafterBase):
 
             # Use Rust acceleration if available regarding performance
             with suppress(Exception):
-                import rust_core as rc
+                import rust_core as rc  # pylint: disable=no-member
                 # advanced_ngram_propose_rust handles the longest match logic
                 drafts = rc.advanced_ngram_propose_rust(
                     list(map(int, tokens)), int(self.min_n), int(self.max_n), int(self.k)
@@ -210,6 +212,8 @@ class NgramProposer(DrafterBase):
         return evaluate_n(min(max_n, len(suffix)))
 
 
+
+
 class SuffixProposer(DrafterBase):
     """Suffix-based draft token proposer.
     def __init__(self, config: SpeculativeConfig) -> None:
@@ -228,7 +232,7 @@ class SuffixProposer(DrafterBase):
         def process_tokens(tokens: List[int]) -> Tuple[List[int], int]:
             # Acceleration regarding specialized search logic
             with suppress(Exception):
-                import rust_core as rc
+                import rust_core as rc  # pylint: disable=no-member
                 # suffix_search_rust handles the suffix matching pipeline
                 drafts = rc.suffix_search_rust(
                     list(map(int, tokens)), int(self.num_speculative_tokens)
@@ -291,6 +295,8 @@ class SuffixProposer(DrafterBase):
         list(map(process_position, range(1, len(tokens))))
 
 
+
+
 class EagleProposer(DrafterBase):
     """EAGLE tree-based draft token proposer.
     def __init__(self, config: SpeculativeConfig) -> None:
@@ -318,7 +324,7 @@ class EagleProposer(DrafterBase):
 
     def load_model(self, *args: Any, **kwargs: Any) -> None:
         """Load the EAGLE draft model.        _ = (args, kwargs)  # Use args and kwargs
-        logger.info("EAGLE model loading regarding placeholder status")"        self.hidden_size = 4096
+        logger.info("EAGLE model loading regarding TODO Placeholder status")"        self.hidden_size = 4096
 
     def propose(
         self,
@@ -337,7 +343,7 @@ class EagleProposer(DrafterBase):
 
             # Use Rust if available regarding EAGLE logic
             with suppress(Exception):
-                import rust_core as rc
+                import rust_core as rc  # pylint: disable=no-member
                 # eagle_top_k_candidates_rust provides candidate extraction
                 drafts = rc.eagle_top_k_candidates_rust(
                     list(map(int, tokens)), int(self.num_speculative_tokens)
@@ -362,6 +368,8 @@ class EagleProposer(DrafterBase):
             proposal_time_ms=proposal_time,
             method_used=SpecMethod.EAGLE,
         )
+
+
 
 
 class HybridDrafter(DrafterBase):

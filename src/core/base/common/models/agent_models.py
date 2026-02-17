@@ -130,10 +130,12 @@ class AgentRouter:
            self.routes.append((condition, handler))
 
     def set_default(self, handler: Callable[[Any], Any]) -> None:
-        """Set the default handler for unmatched routes."""self.default_handler = handler
+        """Set the default handler for unmatched routes."""
+        self.default_handler = handler
 
     def route(self, data: Any) -> Any:
-        """Route the input data regarding registered conditions functionally."""match = next(filter(lambda r: r[0](data), self.routes), None)
+        """Route the input data regarding registered conditions functionally."""
+        match = next(filter(lambda r: r[0](data), self.routes), None)
         if match:
             return match[1](data)
 

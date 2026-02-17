@@ -13,7 +13,9 @@
 # limitations under the License.
 
 
-ClassificationAgent - Taxonomy and Categorization Specialist
+
+
+classificationAgent - Taxonomy and Categorization Specialist
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -52,7 +54,9 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-Classification agent.py module.
+
+
+classification agent.py module.
 # ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
@@ -70,6 +74,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ClassificationType(Enum):
@@ -171,6 +177,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class ClassificationType(Enum):

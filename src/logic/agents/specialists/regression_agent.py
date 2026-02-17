@@ -71,6 +71,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class RegressionType(Enum):
 """"Supported regression model types.#     LINEAR =" "linear"#     POLYNOMIAL = "polynomial"#     EXPONENTIAL = "exponential"#     LOGARITHMIC = "logarithmic"#     MOVING_AVERAGE = "moving_average"
 
@@ -195,6 +197,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class RegressionType(Enum):
 """"Supported regression model types.#     LINEAR = "linear"#     POLYNOMIAL = "polynomial"#     EXPONENTIAL = "exponential"#     LOGARITHMIC = "logarithmic"#     MOVING_AVERAGE = "moving_average"
 
@@ -288,6 +292,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class RegressionType(Enum):

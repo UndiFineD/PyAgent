@@ -36,6 +36,8 @@ class RAGShard:
     last_updated: float
 
 
+
+
 class LocalRAGCore:
     "Pure logic for hyper-localized RAG and vector sharding."
     Handles shard selection, path-based routing, and context relevance.

@@ -22,6 +22,8 @@ from typing import Any, Dict, List, Optional
 from .config import RenderOptions, TemplateConfig, TemplateInfo, TemplateType
 
 
+
+
 class ChatTemplate(ABC):
     """Abstract base class for chat templates.
     def __init__(self, config: TemplateConfig) -> None:

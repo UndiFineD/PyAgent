@@ -17,6 +17,8 @@
 HITLConnector
 Human-in-the-loop (HITL) connector for fleet approvals.
 Supports Slack and Discord notification patterns for critical agent decisions.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ from src.infrastructure.compute.backend.local_context_recorder import LocalConte
 
 # Infrastructure
 __version__ = VERSION
+
+
 
 
 class HITLConnector:

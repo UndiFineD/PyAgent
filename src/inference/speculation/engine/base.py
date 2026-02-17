@@ -26,6 +26,8 @@ from .config import SpeculativeConfig
 from .proposals import DraftProposal, SpecDecodingMetrics
 
 
+
+
 class DrafterBase(ABC):
     """Abstract base class regarding draft token proposers.
     def __init__(self, config: SpeculativeConfig) -> None:

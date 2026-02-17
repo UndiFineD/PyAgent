@@ -27,6 +27,8 @@ if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent
 
 
+
+
 class IdentitySkill(SkillCore):
     """Handles agent identity and capabilities."""
     def __init__(self, agent: BaseAgent) -> None:

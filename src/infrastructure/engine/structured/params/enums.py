@@ -16,6 +16,8 @@
 from enum import Enum, auto
 
 
+
+
 class StructuredOutputType(Enum):
     """Type of structured output constraint."""
     JSON_SCHEMA = auto()  # JSON Schema constraint
@@ -26,12 +28,16 @@ class StructuredOutputType(Enum):
     COMPOSITE = auto()  # Combined constraints
 
 
+
+
 class ConstraintType(Enum):
     """Internal constraint type."""
     INCLUDE = auto()  # Must match
     EXCLUDE = auto()  # Must not match
     PREFIX = auto()  # Prefix constraint
     SUFFIX = auto()  # Suffix constraint
+
+
 
 
 class SchemaFormat(Enum):
@@ -42,6 +48,8 @@ class SchemaFormat(Enum):
     OPENAPI_3_1 = "openapi-3.1"
 
 
+
+
 class GuidedDecodingBackend(Enum):
     """Guided decoding backend."""
     AUTO = auto()  # Auto-select best backend
@@ -49,6 +57,8 @@ class GuidedDecodingBackend(Enum):
     LMFE = auto()  # lm-format-enforcer
     XGRAMMAR = auto()  # xgrammar
     PYAGENT = auto()  # Native PyAgent engine
+
+
 
 
 class WhitespacePattern(Enum):

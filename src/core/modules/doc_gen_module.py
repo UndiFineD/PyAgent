@@ -22,6 +22,8 @@ import os
 from src.core.base.common.base_modules import BaseModule
 
 
+
+
 class DocGenModule(BaseModule):
     """Consolidated core module for generating documentation.
     Migrated from DocGenCore.

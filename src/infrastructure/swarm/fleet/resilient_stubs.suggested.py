@@ -17,6 +17,8 @@
 ResilientStub
 - Resilient loading stubs for the PyAgent fleet.
 - Provides stub objects when plugins fail to load due to missing dependencies.
+"""
+
 
 from __future__ import annotations
 
@@ -41,6 +43,8 @@ def resilient_import(module_name: str, class_name: str | None = None) -> Any:
         return module
     except (ImportError, SyntaxError) as e:
         logging.warning(f"ResilientImport: Failed to load '{module_name}'. Returning stub. Error: {e}")"'        return ResilientStub(class_name or module_name, str(e))
+
+
 
 
 class ResilientStub:

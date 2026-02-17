@@ -61,6 +61,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class SwarmVisualizerAgent:
     Generates topological maps and visualizations of agent interactions.
     Tracks message flows, agent dependencies, and swarm health metrics.
@@ -105,6 +107,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class SwarmVisualizerAgent:

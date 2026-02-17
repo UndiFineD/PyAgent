@@ -22,6 +22,8 @@ from enum import Enum, Flag, auto
 from typing import Any, Dict, List, Optional
 
 
+
+
 class ModelCapability(Flag):
     """Model capability flags.
     TEXT = auto()
@@ -34,6 +36,8 @@ class ModelCapability(Flag):
     TOOL_USE = auto()
     THINKING = auto()
     MULTIMODAL = VISION | AUDIO
+
+
 
 
 class ModelArchitecture(Enum):
@@ -86,6 +90,8 @@ class ModelArchitecture(Enum):
     CUSTOM = auto()
 
 
+
+
 class QuantizationType(Enum):
     """Quantization types.
     NONE = auto()
@@ -98,6 +104,8 @@ class QuantizationType(Enum):
     GGUF = auto()
     EXLLAMA = auto()
     MARLIN = auto()
+
+
 
 
 class ModelFormat(Enum):

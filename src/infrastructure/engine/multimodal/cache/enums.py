@@ -18,6 +18,8 @@
 from enum import Enum, auto
 
 
+
+
 class MediaType(Enum):
     """Types of media content.
     IMAGE = auto()
@@ -28,6 +30,8 @@ class MediaType(Enum):
     UNKNOWN = auto()
 
 
+
+
 class CacheBackend(Enum):
     """Cache storage backend types.
     MEMORY = auto()  # In-memory dictionary
@@ -35,6 +39,8 @@ class CacheBackend(Enum):
     SHARED = auto()  # Shared memory (IPC)
     DISK = auto()  # Disk-based persistence
     HYBRID = auto()  # Multi-tier caching
+
+
 
 
 class HashAlgorithm(Enum):

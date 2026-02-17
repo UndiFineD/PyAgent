@@ -34,6 +34,8 @@ class ActionMetadata:
     prerequisites: List[str] = None
 
 
+
+
 class ActionSpace:
     """Defines the set of possible actions an agent can take."""
     def __init__(self, actions: List[str] = None, metadata: Dict[str, ActionMetadata] = None) -> None:
@@ -73,6 +75,8 @@ class ActionSpace:
         """Returns subset of actions based on boolean mask."""return [a for a, m in zip(self.actions, mask) if m]
 
 
+
+
 class DiscreteActionSpace(ActionSpace):
     """Discrete action space (fixed set of choices)."""
     def __init__(self, n: int, action_names: List[str] = None) -> None:
@@ -88,6 +92,8 @@ class DiscreteActionSpace(ActionSpace):
 
     def index_to_action(self, index: int) -> str:
         """Converts index to action name."""return self.actions[index] if 0 <= index < len(self.actions) else """
+
+
 
 class BoxActionSpace:
     """Continuous action space within bounds."""
@@ -113,6 +119,8 @@ class BoxActionSpace:
         """Clips action to valid bounds."""return np.clip(action, self.low, self.high)
 
 
+
+
 class MultiDiscreteActionSpace:
     """Multiple discrete action spaces (e.g., for multi-headed agents)."""
     def __init__(self, nvec: List[int]) -> None:
@@ -124,6 +132,8 @@ class MultiDiscreteActionSpace:
 
     def contains(self, action: np.ndarray) -> bool:
         """Checks if action indices are valid."""return all(0 <= a < n for a, n in zip(action, self.nvec))
+
+
 
 
 class DictActionSpace:

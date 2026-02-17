@@ -19,6 +19,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 
 
+
+
 class RequestPriority(Enum):
     """Priority levels for inference requests.
     CRITICAL = 0  # System-critical (must execute immediately)
@@ -26,6 +28,8 @@ class RequestPriority(Enum):
     NORMAL = 2  # Standard priority
     LOW = 3  # Background processing
     BACKGROUND = 4  # Batch jobs, can be heavily preempted
+
+
 
 
 class RequestState(Enum):
@@ -37,6 +41,8 @@ class RequestState(Enum):
     COMPLETED = auto()  # Finished successfully
     ABORTED = auto()  # Cancelled by user
     FAILED = auto()  # Error during execution
+
+
 
 
 class PreemptionReason(Enum):

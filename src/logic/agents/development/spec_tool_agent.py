@@ -52,6 +52,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class SpecToolAgent(BaseAgent):
 """"Generates Python tool wrappers from specifications and manages OpenSpec SDD workflows.
     def __init__(self, file_path: str) -> None:
@@ -107,6 +109,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class SpecToolAgent(BaseAgent):

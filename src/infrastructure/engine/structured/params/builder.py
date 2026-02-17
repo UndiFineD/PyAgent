@@ -24,6 +24,8 @@ from .enums import (GuidedDecodingBackend, StructuredOutputType,
                     WhitespacePattern)
 
 
+
+
 class ConstraintBuilder:
         Fluent builder for structured output constraints.
     

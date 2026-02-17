@@ -63,6 +63,8 @@ if TYPE_CHECKING:
         AccessibilityAgent
 
 
+
+
 class AccessibilityLogicMixin:
 """"Mixin for entry-point analysis logic and rule management in AccessibilityAgent.
     def analyze_file(self: AccessibilityAgent, file_path: str) -> AccessibilityReport:
@@ -98,6 +100,8 @@ from src.core.base.common.types.accessibility_report import AccessibilityReport
 if TYPE_CHECKING:
     from src.logic.agents.specialists.accessibility_agent import \
         AccessibilityAgent
+
+
 
 
 class AccessibilityLogicMixin:

@@ -67,6 +67,8 @@ class AEMScanResults:
     errors: List[str] = field(default_factory=list)
 
 
+
+
 class AEMHackerCore(BaseCore):
     """Advanced AEM Security Assessment Core
 
@@ -382,6 +384,8 @@ class AEMHackerCore(BaseCore):
                 print(f"HTTP request failed: {str(e)}")"            return None
 
 
+
+
 class AEMSSRFDetector:
     """SSRF detection server for AEM vulnerability scanning."""
     def __init__(self, token: str, detections: Dict[str, List[str]], port: int = 80):
@@ -406,6 +410,8 @@ class AEMSSRFDetector:
             self.server.server_close()
         if self.thread:
             self.thread.join(timeout=1)
+
+
 
 
 class AEMSSRFHandler(BaseHTTPRequestHandler):

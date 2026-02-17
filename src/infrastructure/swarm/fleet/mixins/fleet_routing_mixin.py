@@ -28,6 +28,8 @@ if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
+
+
 class FleetRoutingMixin:
     """Mixin for task routing and remote node registration in FleetManager.
     def register_remote_node(

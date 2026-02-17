@@ -31,6 +31,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated benchmarking of other agents.
 Measures latency, accuracy, and cost.
+"""
+
 
 from __future__ import annotations
 
@@ -45,6 +47,8 @@ from src.infrastructure.services.benchmarks.models import BenchmarkResult
 from src.logic.agents.analysis.core.benchmark_core import BenchmarkCore
 
 __version__ = VERSION
+
+
 
 
 class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors

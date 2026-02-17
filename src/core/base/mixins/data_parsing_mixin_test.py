@@ -19,6 +19,8 @@
 from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
 
 
+
+
 class TestDataParsingMixin:
     """Test cases for DataParsingMixin."""
     def test_init(self):

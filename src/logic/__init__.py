@@ -15,7 +15,7 @@
 
 """
 Logic package.
-
+"""
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -28,6 +28,4 @@ __version__ = VERSION
 # limitations under the License.
 
 
-"""
-
-"""Logic namespace containing core agent behaviors and business rules.
+"""Logic namespace containing core agent behaviors and business rules."""

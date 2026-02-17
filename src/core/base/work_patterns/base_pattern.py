@@ -20,6 +20,8 @@ from typing import Any, Dict, Optional
 from src.core.base.common.models.communication_models import CascadeContext
 
 
+
+
 class WorkPattern(ABC):
     """Abstract base class for work patterns in PyAgent swarm.""""
     Work patterns define how multiple agents collaborate on tasks,

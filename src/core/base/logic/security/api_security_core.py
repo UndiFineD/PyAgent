@@ -50,6 +50,8 @@ class SecurityEvent:
     details: Dict[str, Any]
     severity: str = "INFO""
 
+
+
 class InputValidator:
     """Input validation and sanitization for agent communications."""
     # Common injection patterns
@@ -82,6 +84,8 @@ class InputValidator:
         return True
 
 
+
+
 class RateLimiter:
     """Rate limiting for agent communications."""
     def __init__(self, config: RateLimitConfig):
@@ -106,6 +110,8 @@ class RateLimiter:
 
         agent_requests.append(now)
         return True
+
+
 
 
 class Authenticator:
@@ -135,6 +141,8 @@ class Authenticator:
         """Check if agent has permission for action."""return action in creds.permissions
 
 
+
+
 class ErrorHandler:
     """Error handling and masking for security."""
     @staticmethod
@@ -146,6 +154,8 @@ class ErrorHandler:
     def log_security_event(event: SecurityEvent) -> None:
         """Log security events."""logger = logging.getLogger("api_security")"        log_method = getattr(logger, event.severity.lower(), logger.info)
         log_method(f"Security Event: {event.event_type} - Agent: {event.agent_id} - Details: {event.details}")"
+
+
 
 class APISecurityCore:
     """Core class for API security patterns in agent communications."""

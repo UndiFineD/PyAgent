@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Registry for attention backends with capability-based selection.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ from .packkv import PackKVAttentionBackend
 from .sdpa import HAS_TORCH, TorchSDPABackend, torch
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class AttentionBackendRegistry:

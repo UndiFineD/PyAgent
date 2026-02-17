@@ -28,6 +28,8 @@ Key Features Beyond vLLM:
 - Async batch operations
 
 Based on vLLM v1 patterns with PyAgent innovations.
+"""
+
 
 from __future__ import annotations
 
@@ -64,6 +66,8 @@ class LRUEntry:
         """Calculate eviction priority (lower = evict first).        # Combine recency and frequency
         age = time.time() - self.access_time
         return self.access_count / max(1.0, age) * self.size_weight
+
+
 
 
 class LRUOffloadManager(OffloadingManager):
@@ -198,6 +202,8 @@ class LRUOffloadManager(OffloadingManager):
             self._evictions = 0
 
 
+
+
 class WeightedLRUManager(LRUOffloadManager):
         Weighted LRU with access frequency consideration.
 
@@ -278,6 +284,8 @@ class WeightedLRUManager(LRUOffloadManager):
                 store_spec=self.backend.get_load_store_spec(to_store, new_blocks),
                 block_hashes_evicted=evicted,
             )
+
+
 
 
 class TieredLRUManager:
@@ -369,6 +377,8 @@ class TieredLRUManager:
             stats["cold"] = self.cold_manager.get_stats()"        return stats
 
 
+
+
 class PrefetchingLRUManager(LRUOffloadManager):
         LRU manager with prefetching support.
 
@@ -405,6 +415,8 @@ class PrefetchingLRUManager(LRUOffloadManager):
                 self._prefetch_in_progress.discard(block_hash)
 
 
+
+
 class AsyncLRUManager:
     """Async wrapper for LRU offloading manager.
     def __init__(self, manager: LRUOffloadManager):
@@ -433,6 +445,8 @@ class AsyncLRUManager:
 
         loop = asyncio.get_event_loop()
         await loop.run_in_executor(None, self.manager.touch, block_hashes)
+
+
 
 
 class LRUManagerFactory:

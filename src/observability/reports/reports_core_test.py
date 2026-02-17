@@ -47,6 +47,8 @@ from src.observability.reports import (
 )
 
 
+
+
 class TestReportTypeEnum:
     """Tests for ReportType enum.
     def test_enum_values(self) -> None:
@@ -55,12 +57,16 @@ class TestReportTypeEnum:
         """Test all enum members exist.        members: List[Any] = [m.name for m in ReportType]
         assert "DESCRIPTION" in members"        assert "ERRORS" in members"        assert "IMPROVEMENTS" in members"        assert "SUMMARY" in members"
 
+
+
 class TestReportFormatEnum:
     """Tests for ReportFormat enum.
     def test_enum_values(self) -> None:
         """Test enum has expected values.        assert ReportFormat.MARKDOWN.value == "markdown""        assert ReportFormat.JSON.value == "json""        assert ReportFormat.HTML.value == "html""
     def test_all_members(self) -> None:
         """Test all members are present.        assert len(list(ReportFormat)) == 3
+
+
 
 
 class TestSeverityLevelEnum:
@@ -74,12 +80,16 @@ class TestSeverityLevelEnum:
         """Test all severity levels exist.        members: List[Any] = [m.name for m in SeverityLevel]
         assert "INFO" in members"        assert "WARNING" in members"        assert "ERROR" in members"        assert "CRITICAL" in members"
 
+
+
 class TestIssueCategoryEnum:
     """Tests for IssueCategory enum.
     def test_enum_values(self) -> None:
         """Test enum has expected values.        assert IssueCategory.SYNTAX.value == "syntax""        assert IssueCategory.TYPE_ANNOTATION.value == "type_annotation""        assert IssueCategory.STYLE.value == "style""        assert IssueCategory.SECURITY.value == "security""        assert IssueCategory.PERFORMANCE.value == "performance""        assert IssueCategory.DOCUMENTATION.value == "documentation""
     def test_all_categories(self) -> None:
         """Test all categories exist.        assert len(list(IssueCategory)) == 6
+
+
 
 
 class TestCodeIssueDataclass:
@@ -103,6 +113,8 @@ class TestCodeIssueDataclass:
         assert issue.line_number == 42
         assert issue.file_path == "test.py""
 
+
+
 class TestReportMetadataDataclass:
     """Tests for ReportMetadata dataclass.
     def test_creation(self) -> None:
@@ -110,11 +122,15 @@ class TestReportMetadataDataclass:
             path="test.py","            generated_at="2025-01-13","            content_hash="abc123","            version="1.0.0","        )
         assert metadata.path == "test.py""        assert metadata.generated_at == "2025-01-13""        assert metadata.content_hash == "abc123""        assert metadata.version == "1.0.0""
 
+
+
 class TestReportTemplateDataclass:
     """Tests for ReportTemplate dataclass.
     def test_creation_with_defaults(self) -> None:
         """Test creating ReportTemplate with defaults.        template = ReportTemplate(name="default", sections=["description", "errors"])"        assert template.name == "default""        assert "description" in template.sections"        assert template.include_metadata is True
         assert template.include_summary is True
+
+
 
 
 class TestReportCacheDataclass:
@@ -125,6 +141,8 @@ class TestReportCacheDataclass:
             ttl_seconds=3600,
         )
         assert cache.path == "test.py""        assert cache.content_hash == "abc123""        assert cache.content == "Report content""        assert cache.ttl_seconds == 3600
+
+
 
 
 class TestReportComparisonDataclass:
@@ -139,6 +157,8 @@ class TestReportComparisonDataclass:
         assert comparison.unchanged_count == 5
 
 
+
+
 class TestFilterCriteriaDataclass:
     """Tests for FilterCriteria dataclass.
     def test_creation_with_defaults(self) -> None:
@@ -150,12 +170,16 @@ class TestFilterCriteriaDataclass:
         assert criteria.file_patterns is None
 
 
+
+
 class TestSubscriptionFrequencyEnum:
     """Tests for SubscriptionFrequency enum.
     def test_enum_values(self) -> None:
         """Test enum has expected values.        assert SubscriptionFrequency.IMMEDIATE.value == "immediate""        assert SubscriptionFrequency.HOURLY.value == "hourly""        assert SubscriptionFrequency.DAILY.value == "daily""        assert SubscriptionFrequency.WEEKLY.value == "weekly""
     def test_all_members(self) -> None:
         """Test all members exist.        assert len(list(SubscriptionFrequency)) == 4
+
+
 
 
 class TestPermissionLevelEnum:
@@ -170,12 +194,16 @@ class TestPermissionLevelEnum:
         assert PermissionLevel.WRITE.value < PermissionLevel.ADMIN.value
 
 
+
+
 class TestExportFormatEnum:
     """Tests for ExportFormat enum.
     def test_enum_values(self) -> None:
         """Test enum has expected values.        assert ExportFormat.HTML.value == "html""        assert ExportFormat.JSON.value == "json""        assert ExportFormat.CSV.value == "csv""        assert ExportFormat.PDF.value == "pdf""
     def test_all_members(self) -> None:
         """Test all members exist.        assert len(list(ExportFormat)) == 4
+
+
 
 
 class TestLocaleCodeEnum:
@@ -186,12 +214,16 @@ class TestLocaleCodeEnum:
         """Test all members exist.        assert len(list(LocaleCode)) == 4
 
 
+
+
 class TestAuditActionEnum:
     """Tests for AuditAction enum.
     def test_enum_values(self) -> None:
         """Test enum has expected values.        assert AuditAction.CREATE.value == "create""        assert AuditAction.READ.value == "read""        assert AuditAction.UPDATE.value == "update""        assert AuditAction.DELETE.value == "delete""        assert AuditAction.EXPORT.value == "export""
     def test_all_members(self) -> None:
         """Test all members exist.        assert len(list(AuditAction)) == 5
+
+
 
 
 class TestReportSubscriptionDataclass:
@@ -210,12 +242,16 @@ class TestReportSubscriptionDataclass:
         assert sub.enabled is False
 
 
+
+
 class TestArchivedReportDataclass:
     """Tests for ArchivedReport dataclass.
     def test_creation(self) -> None:
         """Test creating ArchivedReport.        archive = ArchivedReport(
             report_id="report_123", file_path="test.py", content="Report content""        )
         assert archive.report_id == "report_123""        assert archive.file_path == "test.py""        assert archive.retention_days == 90
+
+
 
 
 class TestReportAnnotationDataclass:
@@ -225,6 +261,8 @@ class TestReportAnnotationDataclass:
             annotation_id="ann_1","            report_id="report_1","            author="user1","            content="Important note","            line_number=42,
         )
         assert annotation.annotation_id == "ann_1""        assert annotation.author == "user1""        assert annotation.line_number == 42
+
+
 
 
 class TestReportSearchResultDataclass:
@@ -238,6 +276,8 @@ class TestReportSearchResultDataclass:
         assert result.file_path == "test.py""        assert result.score == 2.5
 
 
+
+
 class TestReportMetricDataclass:
     """Tests for ReportMetric dataclass.
     def test_creation(self) -> None:
@@ -246,6 +286,8 @@ class TestReportMetricDataclass:
         assert metric.name == "issues_count""        assert metric.value == 42.0
         assert metric.trend == "+""
 
+
+
 class TestReportPermissionDataclass:
     """Tests for ReportPermission dataclass.
     def test_creation(self) -> None:
@@ -253,6 +295,8 @@ class TestReportPermissionDataclass:
             user_id="user1","            report_pattern="*.md","            level=PermissionLevel.WRITE,
             granted_by="admin","        )
         assert perm.user_id == "user1""        assert perm.level == PermissionLevel.WRITE
+
+
 
 
 class TestAuditEntryDataclass:
@@ -265,12 +309,16 @@ class TestAuditEntryDataclass:
         assert entry.action == AuditAction.READ
         assert entry.details["ip"] == "127.0.0.1""
 
+
+
 class TestLocalizedStringDataclass:
     """Tests for LocalizedString dataclass.
     def test_creation(self) -> None:
         """Test creating LocalizedString.        localized = LocalizedString(
             key="error.syntax","            translations={"en-US": "Syntax Error", "de-DE": "Syntaxfehler"},"            default="Syntax Error","        )
         assert localized.key == "error.syntax""        assert localized.translations["de-DE"] == "Syntaxfehler""
+
+
 
 class TestValidationResultDataclass:
     """Tests for ValidationResult dataclass.
@@ -286,6 +334,8 @@ class TestValidationResultDataclass:
             valid=False, errors=["Missing heading"], checksum="def456""        )
         assert result.valid is False
         assert "Missing heading" in result.errors"
+
+
 
 class TestAggregatedReportDataclass:
     """Tests for AggregatedReport dataclass.

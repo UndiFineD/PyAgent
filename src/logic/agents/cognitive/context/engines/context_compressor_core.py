@@ -31,6 +31,8 @@ except ImportError:
 __version__ = VERSION
 
 
+
+class
 class ContextCompressorCore:
     """
     Pure logic core for code and document compression.

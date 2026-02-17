@@ -35,6 +35,8 @@ CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
 }
 
 
+
+
 class CoderSmellMixin:
 """"Mixin for detecting code smells.
     def detect_code_smells(self, content: str) -> List[CodeSmell]:

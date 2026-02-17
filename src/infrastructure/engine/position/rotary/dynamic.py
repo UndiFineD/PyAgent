@@ -26,6 +26,8 @@ if HAS_NUMPY:
     import numpy as np
 
 
+
+
 class XDRotaryEmbedding(RotaryEmbeddingBase):
     """Extended Dynamic Rotary Position Embedding.""""
     Implements dynamic NTK-aware scaling for extended context lengths.

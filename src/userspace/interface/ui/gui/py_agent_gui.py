@@ -15,6 +15,8 @@
 
 """
 GUI Agent: Provides a graphical user interface for PyAgent.
+"""
+
 
 from __future__ import annotations
 

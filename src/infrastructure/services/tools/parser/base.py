@@ -17,6 +17,8 @@
 # Phase 41: Tool Parser Framework - Base Classes
 
 Base classes and data structures for tool parsing.
+"""
+
 
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ from typing import Any, Dict, List, Optional, Tuple
 # =============================================================================
 
 
+
+
 class ToolParserType(Enum):
     """Supported tool parser types.
     GENERIC_JSON = auto()  # Generic JSON parsing
@@ -43,6 +47,8 @@ class ToolParserType(Enum):
     DEEPSEEKV3 = auto()  # DeepSeek V3 format
     INTERNLM = auto()  # InternLM format
     PYTHONIC = auto()  # Python-style function calls
+
+
 
 
 class ToolCallStatus(Enum):
@@ -117,6 +123,8 @@ class StreamingToolState:
 # =============================================================================
 # Base Tool Parser
 # =============================================================================
+
+
 
 
 class ToolParser(ABC):

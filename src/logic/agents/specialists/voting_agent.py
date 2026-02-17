@@ -69,8 +69,12 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class VotingMethod(Enum):
 """"Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
+
+
 
 class VoteStatus(Enum):
 """"Current state of a voting session.#     PENDING" = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE = "inconclusive"
@@ -166,8 +170,12 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class VotingMethod(Enum):
 """"Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
+
+
 
 class VoteStatus(Enum):
 """"Current state of a voting session.#     PENDING = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE" = "inconclusive"

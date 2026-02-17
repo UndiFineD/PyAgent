@@ -16,6 +16,8 @@
 """
 Unified Benchmark Suite for PyAgent.
 Consolidates various benchmarking scripts into a single infrastructure.
+"""
+
 
 from __future__ import annotations
 
@@ -26,13 +28,15 @@ from typing import Any, Callable, Dict, List, Optional
 
 # Try to import rust_core if available
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 from src.infrastructure.engine.tokenization.tokenizer_registry import \
     estimate_token_count
 from src.infrastructure.services.benchmarks.models import BenchmarkResult
+
+
 
 
 class BenchmarkSuite:

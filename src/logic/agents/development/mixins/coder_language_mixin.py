@@ -18,6 +18,8 @@ from __future__ import annotations
 from src.core.base.common.types.code_language import CodeLanguage
 
 
+
+
 class CoderLanguageMixin:
 """"Mixin for code language detection and syntax validation.
     def _detect_language(self) -> CodeLanguage:

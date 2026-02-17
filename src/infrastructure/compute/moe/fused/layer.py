@@ -14,6 +14,8 @@
 
 
 Layer.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ from .config import FusedMoEConfig, FusedMoEParallelConfig, FusedMoEQuantConfig
 from .dispatcher import SparseDispatcher
 from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
 from .utils import determine_expert_map
+
+
 
 
 class FusedMoELayer:

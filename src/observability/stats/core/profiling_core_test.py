@@ -19,6 +19,8 @@ from unittest.mock import MagicMock
 from src.observability.stats.core.profiling_core import ProfilingCore, ProfileStats
 
 
+
+
 class TestProfilingCore(unittest.TestCase):
     def setUp(self):
         self.core = ProfilingCore()

@@ -16,6 +16,8 @@
 
 """
 Testing utils.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -40,6 +42,8 @@ __version__ = VERSION
 """
 
 """Testing utilities for visual regression, contract testing, and results aggregation.
+
+
 
 class VisualRegressionTester:
     """Visual regression testing for UI components.
@@ -79,6 +83,8 @@ class VisualRegressionTester:
                 "browser": browser.value,"                "component_id": component_id,"                "passed": True,"            }
             results.append(result)
         return results
+
+
 
 
 class ContractTestRunner:
@@ -138,6 +144,8 @@ class ContractTestRunner:
             "consumer": {"name": consumer},"            "provider": {"name": contracts[0].provider if contracts else ""},"            "interactions": ["                {"request": {"path": c.endpoint}, "response": {"status": c.status_code}} for c in contracts"            ],
         }
         return json.dumps(pact, indent=2)
+
+
 
 
 class ResultAggregator:
@@ -252,6 +260,8 @@ class ResultAggregator:
             trend = "declining""        else:
             trend = "stable""
         return {"pass_rate_trend": trend}"
+
+
 
 class TestMetricsCollector:
     """Collect test execution metrics.

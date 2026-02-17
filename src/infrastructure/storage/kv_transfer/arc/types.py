@@ -17,6 +17,8 @@
 """
 Phase 45: ARC Offload Types
 Data structures and enums for ARC offloading.
+"""
+
 
 from __future__ import annotations
 
@@ -29,12 +31,16 @@ from typing import Union
 BlockHash = Union[bytes, str, int]
 
 
+
+
 class OffloadMedium(Enum):
     """Storage medium for offloaded blocks.
     GPU = auto()
     CPU = auto()
     DISK = auto()
     REMOTE = auto()
+
+
 
 
 class BlockState(Enum):

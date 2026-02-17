@@ -16,8 +16,12 @@
 """
 EvolutionCore logic for agent fleet adaptation.
 Contains pure logic for template generation and hyperparameter optimization.
+"""
+
 
 from __future__ import annotations
+
+
 
 
 class EvolutionCore:
@@ -32,6 +36,8 @@ class EvolutionCore:
         from src.core.base.lifecycle.base_agent import BaseAgent
 import logging
 __version__ = VERSION
+
+
 
 class {name}Agent(BaseAgent):
         Generated Agent: {name}

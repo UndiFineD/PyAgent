@@ -22,15 +22,27 @@ from src.core.base.common.validation_core import ValidationCore
 from src.observability.reports.validation_result import ValidationResult
 
 
+
+
 class ReportValidator(ValidationCore):
-    """Facade for ValidationCore specialized for reports.    def validate_report(self, report_data: dict[str, Any]) -> list[str]:        """Validates report structure.        content = report_data.get("summary", "")"        errors = []
-        if not content or not content.strip().startswith("# "):"            errors.append("Missing main heading")"        return errors
+    """Facade for ValidationCore specialized for reports."""
+
+    def validate_report(self, report_data: dict[str, Any]) -> list[str]:
+        """Validates report structure."""
+        content = report_data.get("summary", "")
+        errors = []
+        if not content or not content.strip().startswith("# "):
+            errors.append("Missing main heading")
+        return errors
+
 
     def validate(self, content: str, rule_name: str | None = None) -> ValidationResult:
-        """Main entry point for report validation.        del rule_name  # Unused in this facade
-        errors = self.validate_report({"summary": content, "agent_name": "unknown", "timestamp": 0})"
+        """Main entry point for report validation."""
+        del rule_name  # Unused in this facade
+        errors = self.validate_report({"summary": content, "agent_name": "unknown", "timestamp": 0})
         warnings = []
-        if "]()" in content:"            warnings.append("Contains empty link targets")"
+        if "]()" in content:
+            warnings.append("Contains empty link targets")
         checksum = hashlib.sha256(content.encode()).hexdigest()[:16]
 
         return ValidationResult(
@@ -40,9 +52,13 @@ class ReportValidator(ValidationCore):
             checksum=checksum
         )
 
+
     def verify_hash(self, content: str, expected: str) -> bool:
-        """Verifies content matches expected hash.        actual = hashlib.sha256(content.encode()).hexdigest()[:16]
+        """Verifies content matches expected hash."""
+        actual = hashlib.sha256(content.encode()).hexdigest()[:16]
         return actual == expected
 
+
     def verify_checksum(self, content: str, expected: str) -> bool:
-        """Alias for verify_hash to match test expectations.        return self.verify_hash(content, expected)
+        """Alias for verify_hash to match test expectations."""
+        return self.verify_hash(content, expected)

@@ -69,6 +69,8 @@ try:
     BRIDGE = None
 
 
+
+
 class WritePolicy(Enum):
     """Policy regarding handling conflicting writes."""
     LAST_WRITE_WINS = auto()  # Later writes overwrite earlier
@@ -76,6 +78,8 @@ class WritePolicy(Enum):
     AGGREGATE_SUM = auto()  # Sum conflicting values
     AGGREGATE_MAX = auto()  # Keep maximum value
     AGGREGATE_MIN = auto()  # Keep minimum value
+
+
 
 
 class CoalesceStrategy(Enum):
@@ -115,6 +119,8 @@ class WriteStats:
         """Ratio of coalesced writes."""if self.total_writes == 0:
             return 0.0
         return self.writes_coalesced / self.total_writes
+
+
 
 
 class StagedBatchWriter:
@@ -442,6 +448,8 @@ class StagedBatchWriter:
             n,
             BLOCK_SIZE=block_size,
         )
+
+
 
 
 class StagedWriteTensor:

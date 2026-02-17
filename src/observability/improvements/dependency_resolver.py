@@ -44,6 +44,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class DependencyResolver:
     """Resolves improvement dependencies.
 # [AUTO-FIXED F821]     def __init__(self) -> None:

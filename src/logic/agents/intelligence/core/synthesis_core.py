@@ -15,6 +15,8 @@
 
 SynthesisCore handles synthetic data generation for fine-tuning.
 # It also implements the Feature Store logic for vectorized insights.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ try:
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
+
 
 
 class SynthesisCore:

@@ -28,6 +28,8 @@ except ImportError:
 __version__ = VERSION
 
 
+
+class
 class ContextCompressor:
     """
     Reduces the size of source files while preserving structural context.

@@ -26,15 +26,21 @@ from abc import abstractmethod, ABCMeta
 """ INTERFACE_HAS_DESCRIPTOR = "has_security_descriptor"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ INTERFACE_ADDRESS = "interface_address"  # [BATCHFIX] closed string"
 
+
+
 class UnknownRpcServerRegistrationFunctionException(Exception):
     def __init__(self, func_name: str) -> None:
 # [BATCHFIX] Commented metadata/non-Python
 #         super().__init__(fUnknown RpcServerRegister function {func_name}")"  # [BATCHFIX] closed string"
 
+
+
 class DismExtractorFailue(Exception):
     def __init__(self, return_code: int) -> None:
 # [BATCHFIX] Commented metadata/non-Python
 #         super().__init__(fRunning the dism failed, return code {return_code}")"  # [BATCHFIX] closed string"
+
+
 
 class BaseRpcRegistrationExtractor(metaclass=ABCMeta):
     _default_dism_path: str = None

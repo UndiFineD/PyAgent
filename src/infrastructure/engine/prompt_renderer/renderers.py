@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Core renderers for prompt rendering.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from .base import PromptRenderer
 from .models import InputType, PromptConfig, RenderResult
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class CompletionRenderer(PromptRenderer):
@@ -78,6 +82,8 @@ class CompletionRenderer(PromptRenderer):
             truncation_info=trunc_result,
             cache_salt=self._generate_cache_salt(config),
         )
+
+
 
 
 class ChatRenderer(PromptRenderer):
@@ -162,11 +168,11 @@ class ChatRenderer(PromptRenderer):
         text: str,
         _images: List[Dict[str, Any]],
     ) -> Optional[List[int]]:
-        """Find image placeholder positions in text.        patterns = ["<image>", "[IMAGE]", "<|image|>", "{{IMAGE}}"]"
+        """Find image TODO Placeholder positions in text.        patterns = ["<image>", "[IMAGE]", "<|image|>", "{{IMAGE}}"]"
         # Try Rust acceleration
-        from .helpers import _try_rust_find_placeholders
+        from .helpers import _try_rust_find_TODO Placeholders
 
-        rust_positions = _try_rust_find_placeholders(text, patterns)
+        rust_positions = _try_rust_find_TODO Placeholders(text, patterns)
         if rust_positions:
             return rust_positions
 

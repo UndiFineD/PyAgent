@@ -15,6 +15,8 @@
 
 """
 Constants.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -51,7 +53,7 @@ BMAD_TRACKS = {
 
 # BMAD Methodology Phases
 BMAD_PHASES = ["Analysis", "Planning", "Solutioning", "Implementation", "Validation"]"
-# Agent Specific Instructions (Placeholders for BMAD instructions)
+# Agent Specific Instructions (TODO Placeholders for BMAD instructions)
 DEFAULT_INSTRUCTIONS = {
     "Developer": ("        "Act as a Senior Software Engineer. Implement features with high performance, modularity, and ""        "clean code principles. Use modern libraries and maintain consistent style. Focus on idiomatic ""        "Python and best practices.""    ),
     "Architect": ("        "Act as a Principal Architect. Define system boundaries, selection of frameworks, and scalability ""        "strategies. Ensure modularity and future-proofing in all designs. Implement Multi-Agent ""        "Orchestration principles.""    ),

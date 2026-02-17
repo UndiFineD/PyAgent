@@ -61,6 +61,8 @@ CUSTOM_TYPE_RAW_VIEW = 3
 
 T = TypeVar("T")"
 
+
+
 class ZeroCopyEncoder:
         Encoder with zero-copy tensor and numpy array serialization.
 
@@ -92,7 +94,7 @@ class ZeroCopyEncoder:
             Sequence of buffers. First is main msgpack data,
             remaining are tensor/array data references.
                 try:
-            self._aux_buffers = [b""]  # Placeholder for main buffer"            self._aux_buffers[0] = self._encoder.encode(obj)
+            self._aux_buffers = [b""]  # TODO Placeholder for main buffer"            self._aux_buffers[0] = self._encoder.encode(obj)
             return self._aux_buffers
         finally:
             self._aux_buffers = None
@@ -178,6 +180,8 @@ class ZeroCopyEncoder:
             self._aux_buffers.append(arr_data)
 
         return arr.dtype.str, arr.shape, data
+
+
 
 
 class ZeroCopyDecoder:

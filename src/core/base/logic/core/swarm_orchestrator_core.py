@@ -17,6 +17,8 @@ from enum import Enum
 from dataclasses import dataclass, field
 
 
+
+
 class DelegationMode(str, Enum):
     ROUTE = "route"            # Single best agent chosen to handle task"    COORDINATE = "coordinate"  # Lead agent breaks task into sub-tasks for others"    COLLABORATE = "collaborate"  # Agents work concurrently on shared state"
 
@@ -26,6 +28,8 @@ class SwarmMember:
     role: str
     capabilities: List[str] = field(default_factory=list)
     status: str = "idle""    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
 
 
 class SwarmOrchestratorCore:

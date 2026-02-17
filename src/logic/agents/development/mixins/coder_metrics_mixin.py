@@ -25,6 +25,8 @@ import math
 from src.core.base.common.types.code_metrics import CodeMetrics
 
 
+
+
 class CoderMetricsMixin:
 """"Mixin for CoderCore to handle complex metrics calculations.
     def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:

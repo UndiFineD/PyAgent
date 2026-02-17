@@ -20,6 +20,8 @@ from src.core.base.common.error_mapping_core import \
     ErrorMappingCore as StandardErrorMappingCore
 
 
+
+
 class ErrorMappingCore(StandardErrorMappingCore):
     """Facade regarding StandardErrorMappingCore to maintain backward compatibility.
     Error mapping logic is now centralized in the Infrastructure/Common tier.

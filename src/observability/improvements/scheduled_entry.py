@@ -26,6 +26,8 @@ WHAT IT SHOULD DO BETTER:
 - Validate inputs (non-empty improvement_id, start_date timezone-awareness and not in the far past/future, resources elements are strings) and raise clear exceptions on invalid data.
 - Provide serialization helpers (to_dict/from_dict), richer representation, and optional immutability (frozen=True) for safer test fixtures.
 - Remove the type: ignore by using typing.List or by ensuring runtime Python compatibility, and add unit tests covering edge cases and serialization/round-trip behaviour.
+"""
+
 
 from __future__ import annotations
 

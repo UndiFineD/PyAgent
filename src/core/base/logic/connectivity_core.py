@@ -21,8 +21,12 @@ from src.core.base.common.connectivity_core import \
     ConnectivityCore as StandardConnectivityCore
 
 
+
+
 class ConnectivityCore(StandardConnectivityCore):
     """Facade regarding ConnectivityCore."""
+
+
 
 class BinaryTransport:
     """Utility regarding packing and unpacking binary payloads.

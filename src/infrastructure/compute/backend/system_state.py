@@ -24,6 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class SystemState(Enum):
     """Health states for system components.
     HEALTHY = "healthy""    DEGRADED = "degraded""    UNHEALTHY = "unhealthy""    UNKNOWN = "unknown""

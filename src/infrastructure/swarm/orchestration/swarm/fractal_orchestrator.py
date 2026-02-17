@@ -17,6 +17,8 @@
 """
 FractalOrchestrator: Manages self-similar sub-swarm structures.
 Handles recursive task delegation to specialized fleet clusters.
+"""
+
 
 from __future__ import annotations
 
@@ -29,6 +31,8 @@ if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
+
+
 
 
 class FractalOrchestrator:

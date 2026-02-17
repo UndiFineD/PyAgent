@@ -17,6 +17,8 @@
 SchemaManager
 
 Fleet-wide manager for database schema discovery and metadata storage.
+"""
+
 
 from __future__ import annotations
 
@@ -26,6 +28,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class SchemaManager:

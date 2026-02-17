@@ -26,6 +26,8 @@ except ImportError:
     HAS_RUST = False
 
 
+
+
 class SearchMeshCore:
     SearchMeshCore implements federated search result aggregation and ranking.
 #     It synthesizes results from multiple providers (Google, Bing, Perplexity, Tavily).
@@ -71,7 +73,7 @@ class SearchMeshCore:
     def filter_redundant(self, results: list[dict[str, Any]], remembered_urls: set[str]) -> list[dict[str, Any]]:
         Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
         return [res for res in results if res["url"] not in remembered_urls]"
-    async def parallel_search_placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
+    async def parallel_search_TODO Placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
         Generic structure for the Mesh agent to invoke search providers in parallel.
         (The Shell agent will provide the actual API implementation callbacks).
         # This logic stays in the shell, but the core defines" the expected structure."        return {}

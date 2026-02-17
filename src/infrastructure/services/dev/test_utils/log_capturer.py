@@ -26,6 +26,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class LogCapturer:
     """Captures logging output for testing.
     def __init__(self, level: int = logging.INFO) -> None:

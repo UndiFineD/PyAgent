@@ -33,6 +33,8 @@ from src.tools.security.fuzzing import (
 )
 
 
+
+
 class SecurityFuzzingMixin:
     """Mixin for security fuzzing capabilities.
 
@@ -201,6 +203,8 @@ class SecurityFuzzingMixin:
         if len(findings) > 0:
             recommendations.append("Implement comprehensive input validation")"            recommendations.append("Use security headers (HSTS, X-Frame-Options, etc.)")"            recommendations.append("Regular security testing and code reviews")"
         return recommendations
+
+
 
 
 class SecurityFuzzingAgent(BaseAgent, SecurityFuzzingMixin):

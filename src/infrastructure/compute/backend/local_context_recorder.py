@@ -12,7 +12,7 @@
 # limitations under the License.
 
 
-Local context recorder.py module.
+"""Local context recorder module."""
 
 
 from __future__ import annotations
@@ -30,25 +30,37 @@ __version__ = VERSION
 
 
 class LocalContextRecorder(ContextRecorderInterface):
-        Records LLM prompts and results for future training/fine-tuning.
+    """Records LLM prompts and results for future training/fine-tuning.
     Stores data in JSONL format with monthly and hash-based sharding.
     Optimized for trillion-parameter data harvesting (Phase 105).
+    """
     
     def __init__(
         self,
         workspace_root: Path | None = None,
-        user_context: str = "System","        fleet: Any = None,
+        user_context: str = "System",
+        fleet: Any = None,
     ) -> None:
-        if fleet and hasattr(fleet, "workspace_root"):"            self.workspace_root = Path(fleet.workspace_root)
+        """Initialize the local context recorder.
+        Args:
+            workspace_root: Optional path to the workspace root.
+            user_context: Context identifier for the user.
+            fleet: Optional fleet object containing workspace information.
+        """
+        if fleet and hasattr(fleet, "workspace_root"):
+            self.workspace_root = Path(fleet.workspace_root)
         elif workspace_root:
             self.workspace_root = Path(workspace_root)
         else:
-            self.workspace_root = Path(".")"
+            self.workspace_root = Path(".")
         self.user_context = user_context
-        self.log_dir = self.workspace_root / "data/logs" / "external_ai_learning""        self.log_dir.mkdir(parents=True, exist_ok=True)
+        self.log_dir = self.workspace_root / "data/logs" / "external_ai_learning"
+        self.log_dir.mkdir(parents=True, exist_ok=True)
         # Phase 319: Global sharding scale (1,024 shards)
         self.shard_count = 1024
-        self.current_month = datetime.now().strftime("%Y%m")"        self.use_compression = True  # Save 70-80% space for massive datasets
+        self.current_month = datetime.now().strftime("%Y%m")        
+        self.use_compression = True  # Save 70-80% space for massive datasets
+
 
     def record_interaction(
         self,
@@ -58,23 +70,33 @@ class LocalContextRecorder(ContextRecorderInterface):
         result: str,
         meta: dict[str, Any] | None = None,
     ) -> None:
-                Appends a new interaction record.
-        Includes unique context hashing for future deduplication and sharded storage.
-        Optimized for high-throughput and low-latency disk writes.
-                import gzip
+        # Appends a new interaction record.
+        # Includes unique context hashing for future deduplication and sharded storage.
+        # Optimized for high-throughput and low-latency disk writes.
+        import gzip
         import hashlib
 
         # Stability: generate a stable hash for the prompt to allow O(1) deduplication
-        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()"
+        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
         # Phase 318: Audited Rust MD5 Sharding
         from src.core.rust_bridge import RustBridge
 
         shard_id = RustBridge.calculate_shard_id(prompt_hash, self.shard_count)
 
         # Use .jsonl.gz if compression is enabled
-        ext = ".jsonl.gz" if self.use_compression else ".jsonl""        log_file = self.log_dir / f"shard_{self.current_month}_{shard_id:03d}{ext}""
+        ext = ".jsonl.gz" if self.use_compression else ".jsonl"
+        log_file = self.log_dir / f"shard_{self.current_month}_{shard_id:03d}{ext}"
         record = {
-            "timestamp": datetime.now().isoformat(),"            "user_context": self.user_context,"            "provider": provider,"            "model": model,"            "prompt_hash": prompt_hash,"            "prompt": prompt,"            "result": result,"            "meta": meta or {},"        }
+            "timestamp": datetime.now().isoformat(),
+            "user_context": self.user_context,
+            "provider": provider,
+            "model": model,
+            "prompt_hash": prompt_hash,
+            "prompt": prompt,
+            "result": result,
+            "meta": meta or {},
+        }
+
 
         # Handle non-serializable objects (like MagicMocks in tests)
         def _safe_serialize(obj: Any) -> Any:
@@ -83,26 +105,41 @@ class LocalContextRecorder(ContextRecorderInterface):
                     return obj
                 return str(obj)
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-                return f"<unserializable {type(obj).__name__}>""
+                return f"<unserializable {type(obj).__name__}>"
         try:
             if self.use_compression:
-                line = (json.dumps(record, default=_safe_serialize) + "\\n").encode("utf-8")"                with gzip.open(log_file, 'ab') as f:'                    f.write(line)
+                line = (json.dumps(record, default=_safe_serialize) + "\n").encode("utf-8")
+                with gzip.open(log_file, 'ab') as f:
+                    f.write(line)
             else:
-                line_str = json.dumps(record, default=_safe_serialize) + "\\n""                with open(log_file, "a", encoding="utf-8") as f:"                    f.write(line_str)
+                line_str = json.dumps(record, default=_safe_serialize) + "\n"
+                with open(log_file, "a", encoding="utf-8") as f:
+                    f.write(line_str)
 
             # Update a centralized index for fast semantic lookup in the future (Phase 106)
             self._update_index(prompt_hash, str(log_file.name))
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Failed to record interaction to shard {shard_id}: {e}")"
+            logging.error(f"Failed to record interaction to shard {shard_id}: {e}")
+
+
     def record_lesson(self, tag: str, data: dict[str, Any]) -> None:
-        """Alias for general logic harvesting to satisfy intelligence scanners.        self.record_interaction(
-            provider="Internal","            model=tag,
+        """Alias for general logic harvesting to satisfy intelligence scanners."""        
+        self.record_interaction(
+            provider="Internal",
+            model=tag,
             prompt=json.dumps(data),
-            result="Harvested","            meta={"tag": tag},"        )
+            result="Harvested",
+            meta={"tag": tag},
+        )
+
 
     def _update_index(self, prompt_hash: str, filename: str) -> None:
-        """Simple index updates to avoid scanning all shards for a specific query.        index_file = self.log_dir / "shards_lookup.index""        try:
+        """Simple index updates to avoid scanning all shards for a specific query."""
+        index_file = self.log_dir / "shards_lookup.index"
+        try:
             # Atomic append for the index
-            with open(index_file, "a", encoding="utf-8") as f:"                f.write(f"{prompt_hash}:{filename}\\n")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Failed to update shard index: {e}")"
+            with open(index_file, "a", encoding="utf-8") as f:
+                f.write(f"{prompt_hash}:{filename}\n")
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.error(f"Failed to update shard index: {e}")

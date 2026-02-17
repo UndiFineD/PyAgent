@@ -16,6 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Message types for coordinator-worker communication.
+"""
+
 
 from __future__ import annotations
 

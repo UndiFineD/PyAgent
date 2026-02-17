@@ -42,6 +42,8 @@ from src.core.specialists.analyst_core import AnalystCore
 from src.core.base.common.models.communication_models import CascadeContext
 
 
+
+
 class AnalystAgent(BaseAgent):
 """Specialized agent for code analysis, performance profiling, and dependency management.
     def __init__(self, **kwargs: Any):

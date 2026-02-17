@@ -22,6 +22,8 @@ Implementation Stub for PyAgent (Sequential Head Dependencies)
 import torch
 import torch.nn as nn
 
+
+
 class HydraHead(nn.Module):
     def __init__(self, hidden_dim: int, embed_dim: int, vocab_size: int, head_index: int):
         super().__init__()
@@ -41,6 +43,8 @@ class HydraHead(nn.Module):
         # Concatenate base hidden state with previous token embeddings
         x = torch.cat([h_t, prev_embeds.flatten(start_dim=1)], dim=-1)
         return self.mlp(x)
+
+
 
 class HydraModel(nn.Module):
     def __init__(self, base_model, num_heads=4):

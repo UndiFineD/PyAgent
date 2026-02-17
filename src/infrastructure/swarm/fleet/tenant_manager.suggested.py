@@ -18,6 +18,8 @@ TenantManager
 
 Manager for multi-tenant workspace isolation.
 Simulates Docker-based environment isolation by managing restricted root paths.
+"""
+
 
 from __future__ import annotations
 
@@ -29,6 +31,8 @@ from src.core.base.lifecycle.version import VERSION
 from .tenant_core import TenantCore
 
 __version__ = VERSION
+
+
 
 
 class TenantManager:

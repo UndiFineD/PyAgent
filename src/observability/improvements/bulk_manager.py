@@ -46,6 +46,8 @@ from .bulk_operation_result import BulkOperationResult
 __version__ = VERSION
 
 
+
+
 class BulkManager:
     """Applies bulk operations to improvement IDs.
     def bulk_update_status(self, improvement_ids: list[str], new_status: str) -> BulkOperationResult:

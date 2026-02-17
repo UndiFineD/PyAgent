@@ -26,7 +26,7 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models.core_enums import FailureClassification
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except (ImportError, AttributeError):
     rc = None  # type: ignore[assignment]
 
@@ -46,6 +46,8 @@ class SwarmInsight:
 
     def format_for_pool(self) -> str:
         """Format the insight for the synthesis prompt.        return f"- {self.agent} ({self.confidence:.2f}): {self.insight}""
+
+
 
 class IntelligenceCore:
     """Logic-only core for swarm intelligence synthesis.

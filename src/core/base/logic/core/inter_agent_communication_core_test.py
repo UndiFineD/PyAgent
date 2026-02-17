@@ -27,6 +27,8 @@ from src.core.base.logic.core.inter_agent_communication_core import (
 )
 
 
+
+
 class TestInterAgentCommunicationCore:
     """Test suite for inter-agent communication core."""
     def test_agent_card_creation(self):

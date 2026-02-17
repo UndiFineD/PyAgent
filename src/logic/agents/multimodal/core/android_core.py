@@ -17,6 +17,8 @@
 Core logic for Android ADB integration (Phase 175).
 # Encapsulates ADB commands for UI testing.
 Optimized for eventual Rust migration (Phase 3).
+"""
+
 
 from __future__ import annotations
 
@@ -27,12 +29,16 @@ from typing import Optional, TypedDict
 from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
+
+
 class ADBResult(TypedDict):
 """"Result of an ADB command execution.
     success: bool
     output: str
     error: Optional[str]
     command: str
+
+
 
 
 class AndroidCore:

@@ -28,6 +28,8 @@ Persist clearance and configuration (use StateTransaction and durable storage in
 FILE CONTENT SUMMARY:
 FirewallAgent: Agent for enforcing network security, access control, and traffic filtering in the PyAgent swarm.
 Implements distributed firewall rules and adaptive threat response.
+"""
+
 
 from __future__ import annotations
 
@@ -44,6 +46,8 @@ try:
     import rust_core  # type: ignore
 except ImportError:
     rust_core = None
+
+
 
 
 class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-return-statements

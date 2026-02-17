@@ -49,6 +49,8 @@ from .improvement_category import ImprovementCategory
 __version__ = VERSION
 
 
+
+
 class ImprovementArchive:
     """Archives old or completed improvements.""""
     Maintains history of archived improvements.
@@ -127,6 +129,8 @@ from .improvement import Improvement
 from .improvement_category import ImprovementCategory
 
 __version__ = VERSION
+
+
 
 
 class ImprovementArchive:

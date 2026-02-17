@@ -24,11 +24,13 @@ from enum import Enum
 from typing import Dict
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class SyncState(Enum):
@@ -36,6 +38,8 @@ class SyncState(Enum):
     WAVE_RUNNING = 1
     WAVE_COMPLETE = 2
     PAUSED = 3
+
+
 
 
 class DPEngineSync:

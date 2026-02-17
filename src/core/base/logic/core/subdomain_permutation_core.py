@@ -44,6 +44,8 @@ class PermutationConfig:
     custom_payloads: Optional[Dict[str, List[str]]] = None
 
 
+
+
 class SubdomainPermutationCore(BaseCore):
     """Subdomain Permutation Core implementing intelligent wordlist generation.
 

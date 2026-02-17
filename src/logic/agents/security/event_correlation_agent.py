@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class EventCorrelator:
     """Core event correlation logic.
     def __init__(self):
@@ -68,6 +70,8 @@ class EventCorrelator:
             if event1.get(key) == value and event2.get(key) == value:
                 return True
         return False
+
+
 
 
 class EventCorrelationAgent(BaseAgent):  # pylint: disable=too-many-ancestors

@@ -31,6 +31,8 @@ from .rollup_engine import StatsQueryEngine, StatsRollupCalculator
 logger = logging.getLogger(__name__)
 
 
+
+
 class ObservabilityCore:
     """Pure logic for processing agent telemetry data.    def __init__(self) -> None:        self.metrics_history: list[AgentMetric] = []
 
@@ -53,6 +55,8 @@ class ObservabilityCore:
         count = len(self.metrics_history)
         return {
             "total_count": count,"            "avg_duration_ms": total_d / count,"            "total_cost_usd": round(total_c, 6),"        }
+
+
 
 
 class ObservabilityEngine:
@@ -117,6 +121,8 @@ class ObservabilityEngine:
         self.core.process_metric(metric)
         self.metrics_exporter.record_agent_call(agent, duration, status == "success")"
 
+
+
 class StatsCore:
     """Core logic for statistics processing.
     def __init__(self) -> None:
@@ -137,6 +143,8 @@ class StatsCore:
         self.rollup.add_point(metric.name, time.time(), metric.value)
         self.query.add_metric(metric.name, metric)
         self.alerts.check(metric.name, metric.value)
+
+
 
 
 class StatsNamespaceManager:

@@ -37,6 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Resilience agent.py module.
+"""
 
 
 from __future__ import annotations
@@ -54,6 +55,8 @@ from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
 
 __version__ = VERSION
+
+
 
 
 class ResilienceAgent(BaseAgent):
@@ -102,6 +105,8 @@ from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
 
 __version__ = VERSION
+
+
 
 
 class ResilienceAgent(BaseAgent):

@@ -53,6 +53,8 @@ from src.logic.agents.cognitive.context.models.context_priority import ContextPr
 from src.logic.agents.cognitive.context.models.file_category import FileCategory
 
 
+
+
 class ContextCategorizationMixin:
 """"Categorization, priority, and metadata methods for ContextAgent.
     def set_priority(self, priority: ContextPriority) -> None:
@@ -125,6 +127,8 @@ import json
 from typing import Any
 from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
 from src.logic.agents.cognitive.context.models.file_category import FileCategory
+
+
 
 
 class ContextCategorizationMixin:

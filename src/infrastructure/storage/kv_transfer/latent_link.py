@@ -23,6 +23,8 @@ import torch
 import torch.nn as nn
 
 
+
+
 class SynapticAdapter(nn.Module):
         Projector layer to align KV caches between different agents/models.
     Enables 'SynapticLink' communication for 10x bandwidth reduction.'    
@@ -33,6 +35,8 @@ class SynapticAdapter(nn.Module):
     def forward(self, source_kv: torch.Tensor) -> torch.Tensor:
         # project source KV to target latent space
         return self.projector(source_kv)
+
+
 
 
 class LatentLinkManager:
@@ -52,6 +56,8 @@ class LatentLinkManager:
             raise ValueError(f"No LatentLink registered from {source_id} to {target_id}")"
         with torch.no_grad():
             return adapter(source_kv)
+
+
 
 
 class SynapticLink:

@@ -28,6 +28,8 @@ Improve sandboxing of exec to avoid side effects (use subprocessed interpreter o
 
 FILE CONTENT SUMMARY:
 # Agent specializing in profiling and performance analysis.
+"""
+
 
 from __future__ import annotations
 
@@ -46,6 +48,8 @@ from src.observability.stats.core.profiling_core import (ProfileStats,
                                                          ProfilingCore)
 
 __version__ = VERSION
+
+
 
 
 class ProfilingAgent(BaseAgent):
@@ -135,6 +139,8 @@ from src.observability.stats.core.profiling_core import (ProfileStats,
                                                          ProfilingCore)
 
 __version__ = VERSION
+
+
 
 
 class ProfilingAgent(BaseAgent):

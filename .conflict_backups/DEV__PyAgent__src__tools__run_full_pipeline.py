@@ -695,7 +695,7 @@ def main():
     if changed_files:
 <<<<<<< HEAD
         # Instead of the previous AST pipeline, ask "Copilot" to refactor files.
-        # We implement a small, safe placeholder refactor step here: prepend a marker
+        # We implement a small, safe TODO Placeholder refactor step here: prepend a marker
         # and write an AST-style patch file under .external/patches_ast/. This will
         # then be applied by copying the refactored file into `src/external_candidates`.
         patches_ast_dir = ROOT / '.external' / 'patches_ast'
@@ -710,9 +710,9 @@ def main():
             if not work_file.exists():
                 work_file.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(rep, work_file)
-            # perform simple placeholder "refactor" — prepend a marker line
+            # perform simple TODO Placeholder "refactor" — prepend a marker line
             orig_text = work_file.read_text(encoding='utf-8', errors='ignore')
-            new_text = '# Refactored by Copilot placeholder\n' + orig_text
+            new_text = '# Refactored by Copilot TODO Placeholder\n' + orig_text
             if new_text != orig_text:
                 # write patch file (simple full-file replacement)
                 pname = str(rel).replace("/", "_")
@@ -726,7 +726,7 @@ def main():
                         shutil.copy2(target_path, backup)
                 target_path.parent.mkdir(parents=True, exist_ok=True)
                 target_path.write_text(new_text, encoding='utf-8')
-                print('Applied copilot-placeholder refactor to', target_path)
+                print('Applied copilot-TODO Placeholder refactor to', target_path)
 =======
         try:
             from src.tools import apply_patch_proposals as _apply

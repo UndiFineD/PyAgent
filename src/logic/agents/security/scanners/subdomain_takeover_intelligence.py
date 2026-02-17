@@ -18,6 +18,8 @@ import dns.resolver
 from typing import List, Dict, Any, Optional, cast
 
 
+
+
 class SubdomainTakeoverIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class

@@ -47,6 +47,8 @@ from .improvement import Improvement
 __version__ = VERSION
 
 
+
+
 class DocGenerator:
     """Generates simple documentation text for improvements.
     def __init__(self) -> None:
@@ -68,6 +70,8 @@ from src.core.base.lifecycle.version import VERSION
 from .improvement import Improvement
 
 __version__ = VERSION
+
+
 
 
 class DocGenerator:

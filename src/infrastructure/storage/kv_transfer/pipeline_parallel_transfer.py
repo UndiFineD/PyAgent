@@ -22,6 +22,8 @@ This module provides orchestration for KV cache transfers when Pipeline Parallel
 is enabled. In PP scenarios, different layers of the model reside on different pipeline
 stages (processes/nodes). KV transfer must be coordinated such that each stage's'respective KV blocks are transferred to the correct corresponding stages in the
 destination (prefill -> decode) group.
+"""
+
 
 from __future__ import annotations
 
@@ -35,6 +37,8 @@ if TYPE_CHECKING:
         KVConnectorBase
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class PipelineParallelTransfer:

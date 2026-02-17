@@ -28,6 +28,8 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 
+
+
 class DistributedBackup:
         Manages distributed redundancy for agent state and memory.
     Ensures that no single node failure leads to data loss.
@@ -62,7 +64,7 @@ class DistributedBackup:
 
             for mirror_idx in range(mirror_factor):
                 shards.append({
-                    "origin_node": self.node_id,"                    "shard_id": f"{data_hash}_p{part_idx}_m{mirror_idx}","                    "part_index": part_idx,"                    "mirror_index": mirror_idx,"                    "data_b64": self._encode(part),"                    "part_hash": part_hash,"                    "full_hash": data_hash,"                    "total_parts": num_parts,"                    "timestamp": 0  # Placeholder for time"                })
+                    "origin_node": self.node_id,"                    "shard_id": f"{data_hash}_p{part_idx}_m{mirror_idx}","                    "part_index": part_idx,"                    "mirror_index": mirror_idx,"                    "data_b64": self._encode(part),"                    "part_hash": part_hash,"                    "full_hash": data_hash,"                    "total_parts": num_parts,"                    "timestamp": 0  # TODO Placeholder for time"                })
 
         logger.info(f"DistributedBackup: Created {len(shards)} RAID-10 shards for state {data_hash[:8]}")"        return shards
 

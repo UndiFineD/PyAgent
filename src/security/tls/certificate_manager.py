@@ -17,6 +17,8 @@ TLS Certificate Manager
 
 Handles automatic certificate generation, rotation, and validation for secure
 inter-machine communication in the PyAgent swarm.
+"""
+
 
 from __future__ import annotations
 
@@ -39,6 +41,8 @@ from cryptography.x509.oid import NameOID
 from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
+
+
 
 
 class CertificateManager:

@@ -43,6 +43,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class BranchComparisonStatus(Enum):
     """Status of branch comparison.
     PENDING = "pending""    IN_PROGRESS = "in_progress""    COMPLETED = "completed""    FAILED = "failed""

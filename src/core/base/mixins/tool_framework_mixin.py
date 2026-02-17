@@ -70,12 +70,18 @@ class ToolDefinition:
             "id": self.id,"            "description": self.description,"            "parameters": [p.to_dict() for p in self.parameters],"            "category": self.category,"            "version": self.version"        }
 
 
+
+
 class ToolExecutionError(Exception):
     """Exception raised when tool execution fails."""pass
 
 
+
+
 class ToolValidationError(Exception):
     """Exception raised when tool parameters are invalid."""pass
+
+
 
 
 class ToolFrameworkMixin:
@@ -251,7 +257,7 @@ class ToolFrameworkMixin:
 
     def _auto_discover_tools(self) -> None:
         """Auto-discover tools from methods decorated with @tool."""# This would scan the class for methods with tool decorators
-        # For now, it's a placeholder for future implementation'        pass
+        # For now, it's a TODO Placeholder for future implementation'        pass
 
     def _validate_tool_parameters(self, tool_def: ToolDefinition, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Validate tool parameters against the schema."""errors = []

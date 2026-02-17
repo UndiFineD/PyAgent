@@ -16,12 +16,16 @@
 
 """
 Quality and robustness analysis logic for SelfImprovementCore.
+"""
+
 
 from __future__ import annotations
 
 import ast
 import re
 from typing import Any, Dict, List
+
+
 
 
 class SelfImprovementQualityMixin:
@@ -106,6 +110,6 @@ class SelfImprovementQualityMixin:
                     "type": "Intelligence Gap","                    "line": 1,"                    "message": "Component performs AI/IO or Shell operations without recording context to shards.","                    "file": file_path_rel,"                }
             )
 
-        # Triton compatibility warning (placeholder for actual check location)
+        # Triton compatibility warning (TODO Placeholder for actual check location)
         # If Triton check is not allowed, skip any Triton-related warnings/checks
         return findings

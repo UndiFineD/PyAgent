@@ -36,7 +36,7 @@ from typing import Callable, Union
 
 # Rust acceleration
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     RUST_AVAILABLE = True
 except ImportError:
@@ -49,6 +49,8 @@ try:
     XXHASH_AVAILABLE = True
 except ImportError:
     XXHASH_AVAILABLE = False
+
+
 
 
 class HashAlgorithm(Enum):
@@ -211,6 +213,8 @@ def hash_with(data: Union[str, bytes], algorithm: str = "safe") -> str:"    """H
     Returns:
         Hex hash string
     """return get_hash_fn_by_name(algorithm)(data)
+
+
 
 
 class ContentHasher:

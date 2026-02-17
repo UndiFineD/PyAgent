@@ -49,6 +49,8 @@ from .improvement import Improvement
 __version__ = VERSION
 
 
+
+
 class ImprovementDashboard:
     """Renders a lightweight dashboard and emits update callbacks.
     def __init__(self) -> None:

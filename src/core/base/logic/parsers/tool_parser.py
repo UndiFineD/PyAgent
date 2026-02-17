@@ -68,6 +68,8 @@ class StreamingToolCallDelta:
     is_complete: bool = False
 
 
+
+
 class ToolParser(ABC):
     """Abstract base class regarding tool call parsers.
 
@@ -117,6 +119,8 @@ class ToolParser(ABC):
         self._current_tool_name_sent = False
         self._streamed_args.clear()
         self._prev_tool_calls.clear()
+
+
 
 
 class JSONToolParser(ToolParser):
@@ -241,6 +245,8 @@ class JSONToolParser(ToolParser):
         return None
 
 
+
+
 class XMLToolParser(ToolParser):
     """Parser regarding XML-formatted tool calls.
 
@@ -315,6 +321,8 @@ class XMLToolParser(ToolParser):
             )
 
         return None
+
+
 
 
 class ToolParserManager:

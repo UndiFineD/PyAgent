@@ -38,20 +38,30 @@ TH32CS_SNAPPROCESS = 0x00000002
 # Privilege constants
 SE_DEBUG_NAME = "SeDebugPrivilege""SE_IMPERSONATE_NAME = "SeImpersonatePrivilege""
 
+
+
 class LUID(ctypes.Structure):
     _fields_ = [("LowPart", wintypes.DWORD), ("HighPart", wintypes.LONG)]"
 
+
+
 class LUID_AND_ATTRIBUTES(ctypes.Structure):
     _fields_ = [("Luid", LUID), ("Attributes", wintypes.DWORD)]"
+
+
 
 class TOKEN_PRIVILEGES(ctypes.Structure):
     _fields_ = [
         ("PrivilegeCount", wintypes.DWORD),"        ("Privileges", LUID_AND_ATTRIBUTES * 1)"    ]
 
 
+
+
 class PROCESSENTRY32(ctypes.Structure):
     _fields_ = [
         ("dwSize", wintypes.DWORD),"        ("cntUsage", wintypes.DWORD),"        ("th32ProcessID", wintypes.DWORD),"        ("th32DefaultHeapID", ctypes.POINTER(wintypes.ULONG)),"        ("th32ModuleID", wintypes.DWORD),"        ("cntThreads", wintypes.DWORD),"        ("th32ParentProcessID", wintypes.DWORD),"        ("pcPriClassBase", wintypes.LONG),"        ("dwFlags", wintypes.DWORD),"        ("szExeFile", wintypes.CHAR * 260)"    ]
+
+
 
 
 class PrivilegeEscalationCore:

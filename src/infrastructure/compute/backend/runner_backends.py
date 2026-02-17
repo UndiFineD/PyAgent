@@ -29,6 +29,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__: str = VERSION
 
 
+
+
 class BackendHandlers:
     """Namespace for backend execution logic.
     @staticmethod

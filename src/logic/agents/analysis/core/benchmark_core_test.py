@@ -23,6 +23,8 @@ from src.logic.agents.analysis.core.benchmark_core import (
 )
 
 
+
+
 class TestBenchmarkCoreBasics:
     """Basic functionality tests.
     def test_calculate_baseline_empty_list(self) -> None:
@@ -67,6 +69,8 @@ class TestBenchmarkCoreBasics:
         """Test efficiency scoring with zero tokens.        core = BenchmarkCore()
         result = BenchmarkResult(name="agent1", duration=100.0, total_tokens=0, success=True)"        score = core.score_efficiency(result)
         assert score == 0.0
+
+
 
 
 class TestBenchmarkCorePropertyBased:
@@ -115,6 +119,8 @@ class TestBenchmarkCorePropertyBased:
         assert abs(score - expected) < 1e-9
 
 
+
+
 class TestBenchmarkCoreEdgeCases:
     """Test edge cases and boundary conditions.
     def test_calculate_baseline_very_large_latencies(self) -> None:
@@ -153,6 +159,8 @@ class TestBenchmarkCoreEdgeCases:
         # Just above threshold
         result = core.check_regression(110.1, 100.0, threshold=0.10)
         assert result["regression"]"
+
+
 
 class TestBenchmarkCoreConsistency:
     """Test consistency and determinism.

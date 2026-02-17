@@ -59,6 +59,8 @@ from src.core.base.common.types.accessibility_severity import \
 from src.core.base.common.types.wcag_level import WCAGLevel
 
 
+
+
 class PythonAccessibilityMixin:
 """"Mixin for Python UI accessibility analysis.
     def _analyze_python_ui(self, content: str) -> None:
@@ -92,6 +94,8 @@ from src.core.base.common.types.accessibility_issue_type import \
 from src.core.base.common.types.accessibility_severity import \
     AccessibilitySeverity
 from src.core.base.common.types.wcag_level import WCAGLevel
+
+
 
 
 class PythonAccessibilityMixin:

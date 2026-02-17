@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Guided decoding engine for structured output generation.
+"""
+
 
 from __future__ import annotations
 
@@ -56,6 +58,8 @@ from .models import ChoiceConstraint, GuidedConfig, GuidedMode, RegexPattern
 from .schema import JsonSchema
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class GuidedDecoder:

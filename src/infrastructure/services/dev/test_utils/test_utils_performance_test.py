@@ -23,6 +23,8 @@ import time
 # Import from src if needed
 
 
+
+
 class TestPerformanceMetricDataclass:
     """Tests for PerformanceMetric dataclass.
     def test_creation(self, utils_module: Any) -> None:
@@ -35,6 +37,8 @@ class TestPerformanceMetricDataclass:
             unit="ms","            test_name="test_example","        )
         assert metric.value == 100.5
         assert metric.unit == "ms""
+
+
 
 class TestPerformanceTracker:
     """Tests for PerformanceTracker class.
@@ -66,6 +70,8 @@ class TestPerformanceTracker:
 # =============================================================================
 # Phase 6: SnapshotManager Tests
 # =============================================================================
+
+
 
 
 class TestTestTimingAndBenchmarkingUtilities:

@@ -25,6 +25,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class WidgetLogger(logging.Handler):
     """Logging handler that redirects formatted log records to a Tkinter Text widget.
     def __init__(self, widget: tk.Text, thread_id: int | None = None) -> None:

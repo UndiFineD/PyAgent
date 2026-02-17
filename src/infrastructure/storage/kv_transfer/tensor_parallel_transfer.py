@@ -19,6 +19,8 @@ Tensor-Parallel Aware KV Transfer.
 In Tensor Parallelism (TP), KV heads (and thus KV cache blocks) are partitioned
 across multiple GPUs within a single node or across nodes. This module ensures
 that KV transfer logic correctly handles partitioned blocks.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ if TYPE_CHECKING:
         KVConnectorBase
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class TensorParallelTransfer:

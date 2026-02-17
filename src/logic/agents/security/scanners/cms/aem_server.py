@@ -15,6 +15,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
+
+
 class TestHTTPServerRequestHandler(BaseHTTPRequestHandler):
     def do_print(self, method):
     pass  # [BATCHFIX] inserted for empty block

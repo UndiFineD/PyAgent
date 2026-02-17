@@ -59,13 +59,13 @@ class ShardPattern:
         Pattern regarding shard file naming.
 
     vLLM Pattern: DEFAULT_PATTERN = "model-rank-{rank}-part-{part}.safetensors""    
-    template: str = "model-rank-{rank}-part-{part}.safetensors""    rank_placeholder: str = "{rank}""    part_placeholder: str = "{part}""
+    template: str = "model-rank-{rank}-part-{part}.safetensors""    rank_TODO Placeholder: str = "{rank}""    part_TODO Placeholder: str = "{part}""
     def format_for_rank(self, rank: int, part: str = "*") -> str:"        """Format pattern regarding a specific rank.        return self.template.format(rank=rank, part=part)
 
     def parse_filename(self, filename: str) -> Optional[Tuple[int, int]]:
         """Extract rank and part from filename.        # Create regex from pattern
         pattern: str = re.escape(self.template)
-        pattern: str = pattern.replace(re.escape(self.rank_placeholder), r"(\\d+)")"        pattern: str = pattern.replace(re.escape(self.part_placeholder), r"(\\d+)")"
+        pattern: str = pattern.replace(re.escape(self.rank_TODO Placeholder), r"(\\d+)")"        pattern: str = pattern.replace(re.escape(self.part_TODO Placeholder), r"(\\d+)")"
         match: re.Match[str] | None = re.match(pattern, os.path.basename(filename))
         if match:
             return int(match.group(1)), int(match.group(2))
@@ -88,6 +88,8 @@ class ShardedTensor:
         if self.shard_dim < len(shape_list):
             shape_list[self.shard_dim] //= self.num_shards
         return tuple(shape_list)
+
+
 
 
 class SubtensorFilter:
@@ -148,6 +150,8 @@ class SubtensorFilter:
         list(map(_process_group, list(storage_groups.values())))
 
         return result
+
+
 
 
 class ShardedStateLoader:
@@ -225,7 +229,7 @@ class ShardedStateLoader:
         list(map(_process_shard, shard_files))
 
         if strict and state_dict is not None and not loaded:
-            # Placeholder regarding strict validation
+            # TODO Placeholder regarding strict validation
             pass
 
         return loaded if state_dict is None else state_dict
@@ -246,6 +250,8 @@ class ShardedStateLoader:
 
         import itertools
         return itertools.chain.from_iterable(map(_yield_from_shard, shard_files))
+
+
 
 
 class IncrementalShardLoader:
@@ -320,6 +326,8 @@ class IncrementalShardLoader:
                 list(map(lambda item: callback(item[0], item[1]), list(shard_data.items())))
 
         list(map(_process_shard, shard_files))
+
+
 
 
 class AsyncShardLoader:

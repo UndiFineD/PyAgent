@@ -76,6 +76,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Mcp server.py module.
+"""
 
 
 from __future__ import annotations

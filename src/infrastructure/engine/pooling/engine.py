@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Core Pooling Engine implementation.
+"""
+
 
 from __future__ import annotations
 
@@ -30,6 +32,8 @@ from .strategies import (AttentionPooler, BasePooler, CLSPooler,
                          WeightedMeanPooler)
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class PoolingEngine:

@@ -35,6 +35,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in messaging platform integration (WhatsApp, Slack, Discord).
 Provides a unified interface for external communications.
+"""
+
 
 from __future__ import annotations
 
@@ -46,6 +48,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class MessagingAgent(BaseAgent):
@@ -87,6 +91,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class MessagingAgent(BaseAgent):

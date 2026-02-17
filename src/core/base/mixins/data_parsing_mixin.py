@@ -24,6 +24,8 @@ from typing import Any, Optional
 from src.core.base.logic.processing.data_parsing_core import DataParsingCore
 
 
+
+
 class DataParsingMixin:
     """Mixin providing data parsing features for structured data."""
     def __init__(self, **kwargs: Any) -> None:

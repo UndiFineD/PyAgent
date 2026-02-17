@@ -40,6 +40,8 @@ SQL_C_GUID = -11
 SQL_C_LONG = 4
 
 
+
+
 class DatabaseAccessCore:
     """Core class for ODBC database operations."""
     def __init__(self) -> None:

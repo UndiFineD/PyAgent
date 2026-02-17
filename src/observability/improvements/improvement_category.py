@@ -42,6 +42,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ImprovementCategory(Enum):
     """Categories for improvements.
     PERFORMANCE = "performance""    SECURITY = "security""    MAINTAINABILITY = "maintainability""    READABILITY = "readability""    TESTING = "testing""    DOCUMENTATION = "documentation""    REFACTORING = "refactoring""    OTHER = "other""

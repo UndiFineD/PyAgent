@@ -21,9 +21,11 @@ from typing import Any, Dict, List
 from .base_core import BaseCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
+
+
 
 
 class AuctionCore(BaseCore):

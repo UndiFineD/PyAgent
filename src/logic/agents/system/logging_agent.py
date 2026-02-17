@@ -21,7 +21,7 @@ USAGE:
 Instantiate the agent with a path to its configuration/state file, call configure_aggregator to set an HTTP or SysLog destination, then use broadcast_log to forward entries and get_buffer_summary/get_aggregated_logs to inspect local buffer.
 
 WHAT IT DOES:
-Manages distributed logging for a fleet by buffering log entries locally, forwarding to a configured SysLog server and (placeholder) HTTP aggregator, and exposing simple tools for configuration and buffer inspection.
+Manages distributed logging for a fleet by buffering log entries locally, forwarding to a configured SysLog server and (TODO Placeholder) HTTP aggregator, and exposing simple tools for configuration and buffer inspection.
 
 WHAT IT SHOULD DO BETTER:
 - Implement robust HTTP forwarding with retries, auth, and backoff instead of only logging a debug message.
@@ -31,6 +31,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in distributed logging and log aggregation.
 Supports forwarding logs to central aggregators via syslog or HTTP.
+"""
+
 
 from __future__ import annotations
 
@@ -45,6 +47,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class LoggingAgent(BaseAgent):
@@ -142,6 +146,8 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class LoggingAgent(BaseAgent):

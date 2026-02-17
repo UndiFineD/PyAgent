@@ -27,6 +27,8 @@ Defines a compact Enum, ErrorCategory, enumerating common error classifications 
 
 WHAT IT SHOULD DO BETTER:
 Add richer documentation for each category, provide mappings to severity/HTTP codes or remediation guidance, include unit tests and type hints for consumers, and consider localization or extensibility (custom categories) and conversion helpers (from string, to human-friendly label).
+"""
+
 
 from __future__ import annotations
 
@@ -37,6 +39,18 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ErrorCategory(Enum):
-    """Error categories.
-    SYNTAX = "syntax""    RUNTIME = "runtime""    LOGIC = "logic""    TYPE = "type""    SECURITY = "security""    PERFORMANCE = "performance""    STYLE = "style""    DEPRECATION = "deprecation""    VALUE = "value""    IMPORT = "import""    OTHER = "other""
+    """Error categories."""
+    SYNTAX = "syntax"
+    RUNTIME = "runtime"
+    LOGIC = "logic"
+    TYPE = "type"
+    SECURITY = "security"
+    PERFORMANCE = "performance"
+    STYLE = "style"
+    DEPRECATION = "deprecation"
+    VALUE = "value"
+    IMPORT = "import"
+    OTHER = "other"

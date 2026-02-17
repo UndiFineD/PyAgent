@@ -46,6 +46,8 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Chain of thought strategy.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -60,6 +62,8 @@ if TYPE_CHECKING:
     pass
 
 __version__ = VERSION
+
+
 
 
 class ChainOfThoughtStrategy(AgentStrategy):

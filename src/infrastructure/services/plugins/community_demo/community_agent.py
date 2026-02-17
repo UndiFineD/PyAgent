@@ -17,6 +17,8 @@
 """
 CommunityAgent: A mock community-submitted agent.
 Demonstrates the Core/Shell pattern.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from src.core.base.lifecycle.version import VERSION
 from .community_core import CommunityCore
 
 __version__ = VERSION
+
+
 
 
 class CommunityAgent(BaseAgent):

@@ -26,6 +26,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 
+
+
 class AgentStore:
     """Marketplace for agent templates and specialized configurations.
     def __init__(self, store_path: str) -> None:

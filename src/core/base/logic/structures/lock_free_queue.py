@@ -48,6 +48,8 @@ class QueueStats:
             "enqueued": self.enqueued,"            "dequeued": self.dequeued,"            "failed_enqueue": self.failed_enqueue,"            "failed_dequeue": self.failed_dequeue,"            "peak_size": self.peak_size,"            "current_size": self.current_size,"        }
 
 
+
+
 class MPMCQueue(Generic[T]):
     """Multi-Producer Multi-Consumer bounded queue.
 
@@ -247,6 +249,8 @@ class MPMCQueue(Generic[T]):
         """Queue statistics."""return self._stats
 
 
+
+
 class SPSCQueue(Generic[T]):
     """Single-Producer Single-Consumer lock-free queue.
 
@@ -331,6 +335,8 @@ class PriorityItem(Generic[T]):
     priority: float
     sequence: int = field(compare=True)
     item: T = field(compare=False)
+
+
 
 
 class PriorityQueue(Generic[T]):
@@ -443,6 +449,8 @@ class PriorityQueue(Generic[T]):
         """Queue statistics."""return self._stats
 
 
+
+
 class WorkStealingDeque(Generic[T]):
     """Work-stealing deque regarding task scheduling.
 
@@ -511,6 +519,8 @@ class WorkStealingDeque(Generic[T]):
     @property
     def stats(self) -> QueueStats:
         """Deque statistics."""return self._stats
+
+
 
 
 class BatchingQueue(Generic[T]):

@@ -55,6 +55,8 @@ except ImportError:
     HAS_PYPDF = False
 
 
+
+
 class DocInferenceAgent(BaseAgent):
 """"Manages high-accuracy OCR and document layout reconstruction.
     def __init__(self, file_path: str) -> None:
@@ -88,7 +90,7 @@ class DocInferenceAgent(BaseAgent):
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
         logging.info(fDocInference: Ingesting {doc_path}" into Knowledge.")"        content = (
-#             self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."        )
+#             self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw TODO Placeholder."        )
 
         # Here we would typically interface with KnowledgeAgent or save to a known export path
         export_dir = Path("data/memory/knowledge_exports")"        export_dir.mkdir(exist_ok=True)
@@ -138,6 +140,8 @@ except ImportError:
     HAS_PYPDF = False
 
 
+
+
 class DocInferenceAgent(BaseAgent):
 """"Manages high-accuracy OCR and document layout reconstruction.
     def __init__(self, file_path: str) -> None:
@@ -171,7 +175,7 @@ class DocInferenceAgent(BaseAgent):
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
         logging.info(fDocInference: Ingesting {doc_path} into Knowledge.")"        content = (
-#             self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."        )
+#             self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw TODO Placeholder."        )
 
         # Here we would typically interface with KnowledgeAgent or save to a known export path
         export_dir = Path("data/memory/knowledge_exports")"        export_dir.mkdir(exist_ok=True)

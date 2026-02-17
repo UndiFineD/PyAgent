@@ -27,6 +27,8 @@ from src.interface.ui.gui.widget_logger import WidgetLogger
 __version__ = VERSION
 
 
+
+
 class AgentRunner:
     """Manages background threads and execution lifecycle for agents.
     def __init__(self, callbacks) -> None:

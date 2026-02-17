@@ -23,7 +23,9 @@ from .base_interfaces import Component, Loadable, Saveable
 from .storage_core import StorageCore
 from .workspace_core import WorkspaceCore
 
-logger = logging.getLogger("pyagent.core")"
+logger = logging.getLogger("pyagent.core")
+
+
 
 class BaseCore(Loadable, Saveable, Component):
     """Standardized base regarding all Core/Service classes.
@@ -37,11 +39,16 @@ class BaseCore(Loadable, Saveable, Component):
         self._storage = StorageCore()
         self._state: Dict[str, Any] = {}
 
-    def get_state_path(self, suffix: str = ".json") -> Path:"        """Helper to get a standard path for storage based on the class name."""data_dir = self.repo_root / "data" / "core""        data_dir.mkdir(parents=True, exist_ok=True)
-        return data_dir / f"{self.name.lower().replace(' ', '_')}{suffix}""'
+    def get_state_path(self, suffix: str = ".json") -> Path:
+        """Helper to get a standard path for storage based on the class name."""
+        data_dir = self.repo_root / "data" / "core"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        return data_dir / f"{self.name.lower().replace(' ', '_')}{suffix}"
     def load(self, path: Optional[Path] = None) -> bool:
-        """Standard loading logic."""load_path = path or self.get_state_path()
-        if load_path.suffix == ".yaml":"            data = self._storage.load_yaml(load_path)
+        """Standard loading logic."""
+        load_path = path or self.get_state_path()
+        if load_path.suffix == ".yaml":
+            data = self._storage.load_yaml(load_path)
         else:
             data = self._storage.load_json(load_path)
 
@@ -51,14 +58,17 @@ class BaseCore(Loadable, Saveable, Component):
         return False
 
     def save(self, path: Optional[Path] = None) -> bool:
-        """Standard saving logic."""save_path = path or self.get_state_path()
+        """Standard saving logic."""
+        save_path = path or self.get_state_path()
         try:
-            if save_path.suffix == ".yaml":"                self._storage.save_yaml(save_path, self._state)
+            if save_path.suffix == ".yaml":
+                self._storage.save_yaml(save_path, self._state)
             else:
                 self._storage.save_json(save_path, self._state)
             return True
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error("[%s] Failed to save state to %s: %s", self.name, save_path, e)"            return False
+            logger.error("[%s] Failed to save state to %s: %s", self.name, save_path, e)
+            return False
 
     def __repr__(self) -> str:
-        return f"<{self.name} Core (v{self.version})>""
+        return f"<{self.name} Core (v{self.version})>"

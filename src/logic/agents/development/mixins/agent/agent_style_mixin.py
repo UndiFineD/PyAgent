@@ -20,6 +20,8 @@ from typing import Any
 from src.core.base.common.types.style_rule import StyleRule
 
 
+
+
 class AgentStyleMixin:
 """"Mixin for managing and checking code style rules.
     def add_style_rule(self, rule: StyleRule) -> None:

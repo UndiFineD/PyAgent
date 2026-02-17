@@ -24,8 +24,12 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 
+
+
 class ObjectiveStatus(Enum):
     NOT_STARTED = "not_started""    IN_PROGRESS = "in_progress""    ACHIEVED = "achieved""    FAILED = "failed""    STALLED = "stalled""
+
+
 
 class ObjectiveType(Enum):
     MAXIMIZE = "maximize""    MINIMIZE = "minimize""    TARGET = "target""    THRESHOLD = "threshold""
@@ -95,6 +99,8 @@ class ObjectiveConstraint:
         if self.max_value is not None and value > self.max_value:
             return False
         return True
+
+
 
 
 class ObjectiveTracker:

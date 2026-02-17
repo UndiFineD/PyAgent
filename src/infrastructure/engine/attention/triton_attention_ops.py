@@ -44,6 +44,8 @@ except ImportError:
     HAS_TRITON = False
 
 
+
+
 class AttentionBackend(Enum):
     """Available attention backends.
     TRITON = auto()  # Triton kernel
@@ -51,6 +53,8 @@ class AttentionBackend(Enum):
     XFORMERS = auto()  # xFormers memory efficient
     SDPA = auto()  # PyTorch SDPA
     NAIVE = auto()  # Reference implementation
+
+
 
 
 class PrecisionMode(Enum):
@@ -123,11 +127,13 @@ class AttentionMetadata:
     seq_start_loc: Optional[Any] = None  # torch.Tensor
 
     # Multi-modal positions regarding cross-modal attention
-    multi_modal_placeholder_index_maps: Optional[Dict] = None
+    multi_modal_TODO Placeholder_index_maps: Optional[Dict] = None
 
     @property
     def total_tokens(self) -> int:
         """Get total tokens regarding both prefill and decode.        return self.num_prefill_tokens + self.num_decode_tokens
+
+
 
 
 class AttentionKernel(ABC):
@@ -250,6 +256,8 @@ if HAS_TRITON and HAS_TORCH:
         tl.store(output_ptr + out_offset + dim_offsets * stride_output_dim, acc)
 
 
+
+
 class TritonPagedAttention(AttentionKernel):
     """Triton-based paged attention kernel.""""
     Implements efficient paged attention using Triton JIT compilation.
@@ -313,6 +321,8 @@ class TritonPagedAttention(AttentionKernel):
         return context_len <= self.config.max_seq_len
 
 
+
+
 class NaiveAttention(AttentionKernel):
     """Reference implementation of attention (CPU/GPU compatible).
     def __init__(self, config: AttentionConfig) -> None:
@@ -359,6 +369,8 @@ class NaiveAttention(AttentionKernel):
 
     def supports_context_length(self, context_len: int) -> bool:
         return True  # No limit set in naive implementation
+
+
 
 
 class SlidingWindowAttention(AttentionKernel):
@@ -413,6 +425,8 @@ class KVSplitConfig:
     split_overlap: int = 0  # To maintain context continuity
     use_parallel_reduction: bool = True
     max_context_per_split: int = 1024
+
+
 
 
 class TritonAttentionOps:

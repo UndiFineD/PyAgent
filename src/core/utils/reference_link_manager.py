@@ -23,6 +23,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ReferenceLinkManager:
     """Manages links to commits and issues in changelog entries.""""
     Provides functionality to add, validate, and format references

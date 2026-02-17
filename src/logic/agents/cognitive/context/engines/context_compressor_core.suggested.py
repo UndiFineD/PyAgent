@@ -16,6 +16,8 @@
 # ContextCompressorCore logic for PyAgent.
 # Pure logic for reducing the size of source files while preserving structural context.
 No I/O or side effects.
+"""
+
 
 from __future__ import annotations
 import re
@@ -31,6 +33,8 @@ except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
+
+
 
 
 class ContextCompressorCore:

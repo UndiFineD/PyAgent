@@ -14,6 +14,8 @@
 
 
 Adaptive.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -21,6 +23,8 @@ import numpy as np
 
 from .config import FusedMoEConfig
 from .layer import FusedMoELayer
+
+
 
 
 class AdaptiveMoELayer(FusedMoELayer):
@@ -57,6 +61,8 @@ class AdaptiveMoELayer(FusedMoELayer):
             return super().forward(x, router_logits)
         finally:
             self.config.top_k = original_top_k
+
+
 
 
 class HierarchicalMoELayer:

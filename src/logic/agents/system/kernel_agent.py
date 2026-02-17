@@ -39,6 +39,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in OS-level operations, environment management, and system diagnosis.
 Inspired by Open Interpreter and Openator.
+"""
+
 
 from __future__ import annotations
 
@@ -56,6 +58,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
+
+
 
 
 class KernelAgent(BaseAgent):
@@ -133,6 +137,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
+
+
 
 
 class KernelAgent(BaseAgent):

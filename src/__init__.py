@@ -19,9 +19,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 try:
     from src.core.base.lifecycle.version import VERSION
 except ImportError:
-    try:
-        from core.base.lifecycle.version import VERSION
-    except ImportError:
-        VERSION = "unknown"
+    VERSION = "unknown"
 
 __version__ = VERSION

@@ -16,6 +16,8 @@
 Formula Engine - Formula processing and calculationProvides safe AST-based formula parsing, variable substitution for tokens like {var},
 a simple AVG aggregate handler, optional Rust acceleration via rust_core, and a small
 facade for defining and computing named formulas.
+"""
+
 
 from __future__ import annotations
 
@@ -39,6 +41,8 @@ class FormulaValidation:
     """Result of a formula validation check.
     is_valid: bool
     error: Optional[str] = None
+
+
 
 
 class FormulaEngineCore(FormulaCore):
@@ -90,6 +94,8 @@ class FormulaEngineCore(FormulaCore):
             # Ensure the expression parses as a Python expression
             ast.parse(test_formula, mode="eval")"            return {"is_valid": True, "error": None}"        except Exception as exc:  # pylint: disable=broad-exception-caught
             return {"is_valid": False, "error": str(exc)}"
+
+
 
 class FormulaEngine:
     """Processes metric formulas and calculations using safe AST evaluation.

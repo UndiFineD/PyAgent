@@ -21,6 +21,8 @@ from src.core.base.lifecycle.base_agent_core import BaseAgentCore
 from src.core.base.common.models import AgentConfig, AgentPriority
 
 
+
+
 class TestBaseAgentCoreValidation:
     """Test validation methods."""
     def test_validate_config_valid(self) -> None:
@@ -71,6 +73,8 @@ class TestBaseAgentCoreValidation:
         is_valid, reason = core.is_response_valid("This is a valid response")"        assert is_valid
         assert reason == """
 
+
+
 class TestBaseAgentCoreCalculations:
     """Test calculation methods."""
     def test_calculate_priority_score_critical(self) -> None:
@@ -102,6 +106,8 @@ class TestBaseAgentCoreCalculations:
         assert quality in [member for member in type(quality)]
 
 
+
+
 class TestBaseAgentCoreDataOperations:
     """Test data manipulation methods."""
     def test_filter_events_no_filter(self) -> None:
@@ -121,6 +127,8 @@ class TestBaseAgentCoreDataOperations:
         """Test response normalization."""core = BaseAgentCore()
         response = "  Multiple   spaces\\r\\nand   line\\nendings  ""        normalized = core.normalize_response(response)
         assert "  " not in normalized"        assert "\\r\\n" not in normalized"
+
+
 
 class TestBaseAgentCorePropertyBased:
     """Property-based tests using Hypothesis."""
@@ -193,6 +201,8 @@ class TestBaseAgentCorePropertyBased:
         assert all(e in events for e in filtered)
 
 
+
+
 class TestBaseAgentCoreConfigMerging:
     """Test configuration merging logic."""
     def test_merge_configurations_override_all(self) -> None:
@@ -221,6 +231,8 @@ class TestBaseAgentCoreConfigMerging:
         assert merged.backend == "openai"  # Base value"        assert merged.model == "gpt-4"  # Base value"        assert merged.max_tokens == 2000  # Override value
 
 
+
+
 class TestBaseAgentCoreStrategyValidation:
     """Test strategy validation."""
     def test_set_strategy_none(self) -> None:
@@ -244,6 +256,8 @@ class TestBaseAgentCoreStrategyValidation:
 
         result = core.set_strategy(ValidStrategy())
         assert "ERROR" not in result"        assert "ValidStrategy" in result"
+
+
 
 class TestBaseAgentCoreEdgeCases:
     """Test edge cases and boundary conditions."""

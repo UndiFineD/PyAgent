@@ -34,6 +34,8 @@ from src.core.base.logic.a2a_communication import (
 )
 
 
+
+
 class TestAgentCard:
     """Test AgentCard model."""
     def test_valid_agent_card(self):
@@ -47,6 +49,8 @@ class TestAgentCard:
         """Test invalid URL validation."""with pytest.raises(ValueError):
             AgentCard(
                 name="test_agent","                description="A test agent","                url="invalid-url""            )
+
+
 
 
 class TestA2AMessage:
@@ -66,6 +70,8 @@ class TestA2AMessage:
             from_agent="response_agent","            correlation_id="corr-123","            payload={"result": "success"}"        )
 
         assert message.correlation_id == "corr-123""
+
+
 
 class TestMessageRouter:
     """Test MessageRouter functionality."""
@@ -125,6 +131,8 @@ class TestMessageRouter:
 
         assert response.status == "success""        assert "broadcast_responses" in response.result"        assert len(response.result["broadcast_responses"]) == 2"
 
+
+
 class TestA2ACommunicationMixin:
     """Test A2ACommunicationMixin functionality."""
     @pytest.fixture
@@ -153,6 +161,8 @@ class TestA2ACommunicationMixin:
     def test_broadcast_without_router(self, agent):
         """Test broadcasting without router."""with pytest.raises(RuntimeError):
             asyncio.run(agent.broadcast_message({"test": "data"}))"
+
+
 
 class TestSimpleA2AAgent:
     """Test SimpleA2AAgent functionality."""
@@ -199,6 +209,8 @@ class TestSimpleA2AAgent:
 
         assert response.status == "success""        assert response.result == "Message acknowledged""
 
+
+
 class TestA2ANetwork:
     """Test A2A network creation and management."""
     @pytest.mark.asyncio
@@ -219,6 +231,8 @@ class TestA2ANetwork:
         response = await agent1.send_request("agent2", {"action": "greet", "name": "Agent1"})"
         assert response.status == "success""        assert "Hello, Agent1!" in response.result"
         await router.stop_routing()
+
+
 
 
 class TestAgentSkill:

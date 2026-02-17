@@ -22,6 +22,8 @@ from typing import Any, Dict, TypeVar
 
 T = TypeVar("T")"
 
+
+
 class Registry:
     """Thread-safe registry for mapping string keys to callables or classes.
     Useful for plugin systems, factories, and dynamic dispatch.

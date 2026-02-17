@@ -40,6 +40,8 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 StructuredLogger: JSON-based logging for Phase 144 observability.
 Ensures machine-readable logs with mandatory AgentID and TraceID fields.
+"""
+
 
 from __future__ import annotations
 
@@ -66,6 +68,8 @@ except ImportError:
     _RUST_ACCEL = False
 
 __version__: str = VERSION
+
+
 
 
 class StructuredLogger:

@@ -48,6 +48,8 @@ from .logits_processor_v2 import (BatchUpdate, LogitsProcessor,
 
 _SMALLEST_LOGIT = float("-inf")"
 
+
+
 class BadWordsPenaltyMode(Enum):
     """Penalty mode regarding bad words.
     HARD = auto()  # Set to -inf
@@ -111,6 +113,8 @@ class TrieNode:
 
         list(map(check_suffix, range(len(past_tokens) + 1)))
         return blocked
+
+
 
 
 class BadWordsProcessorV2(LogitsProcessor):
@@ -399,6 +403,8 @@ def apply_bad_words_with_drafts(
         return num_draft_tokens[req_idx]
 
     list(map(process_request_drafts, bad_words_token_ids.items()))
+
+
 
 
 class BadPhrasesProcessor(BadWordsProcessorV2):

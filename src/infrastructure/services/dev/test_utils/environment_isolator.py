@@ -26,6 +26,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class EnvironmentIsolator:
     """Context manager that restores environment variables on exit.
     def __init__(self) -> None:

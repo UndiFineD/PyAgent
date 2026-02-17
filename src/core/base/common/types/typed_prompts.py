@@ -30,6 +30,8 @@ from typing_extensions import NotRequired, TypedDict, TypeIs
 # ============================================================================
 
 
+
+
 class TextPrompt(TypedDict):
     """Schema for a text prompt.
 
@@ -43,6 +45,8 @@ class TextPrompt(TypedDict):
     """Optional processor kwargs for multi-modal handling."""
     cache_salt: NotRequired[str]
     """Optional cache salt for prefix caching."""
+
+
 
 class TokensPrompt(TypedDict):
     """Schema for a pre-tokenized prompt.
@@ -62,6 +66,8 @@ class TokensPrompt(TypedDict):
     cache_salt: NotRequired[str]
     """Optional cache salt for prefix caching."""
 
+
+
 class EmbedsPrompt(TypedDict):
     """Schema for a prompt provided via embeddings.
 
@@ -71,6 +77,8 @@ class EmbedsPrompt(TypedDict):
     """The embeddings of the prompt."""
     cache_salt: NotRequired[str]
     """Optional cache salt for prefix caching."""
+
+
 
 class DataPrompt(TypedDict):
     """Schema for generic data prompts.
@@ -95,6 +103,8 @@ SingletonPrompt: TypeAlias = str | TextPrompt | TokensPrompt | EmbedsPrompt
 """
 # TypeVar without default for Python 3.12 compatibility
 T1 = TypeVar("T1", bound=SingletonPrompt)  # pylint: disable=invalid-name"T2 = TypeVar("T2", bound=SingletonPrompt)  # pylint: disable=invalid-name"
+
+
 
 class ExplicitEncoderDecoderPrompt(TypedDict, Generic[T1, T2]):
     """Schema for encoder/decoder model prompts.

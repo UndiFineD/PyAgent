@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Management logic regarding KV offloading eviction policies and tiers.
+"""
+
 
 from __future__ import annotations
 
@@ -35,6 +37,8 @@ from .models import (BlockHash, BlockStatus, LoadStoreSpec, OffloadingEvent,
                      PrepareStoreOutput)
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class LRUOffloadingManager(OffloadingManager):
@@ -172,6 +176,8 @@ class LRUOffloadingManager(OffloadingManager):
         """Yield and clear events.        if self.events is not None:
             yield from self.events
             self.events.clear()
+
+
 
 
 class ARCOffloadingManager(OffloadingManager):
@@ -373,6 +379,8 @@ class ARCOffloadingManager(OffloadingManager):
     def stats(self) -> Dict[str, Any]:
         """Get ARC statistics.        return {
             "t1_size": len(self.t1),"            "t2_size": len(self.t2),"            "b1_size": len(self.b1),"            "b2_size": len(self.b2),"            "target_t1_size": self.target_t1_size,"            "cache_capacity": self.cache_capacity,"        }
+
+
 
 
 class TieredOffloadManager(OffloadingManager):

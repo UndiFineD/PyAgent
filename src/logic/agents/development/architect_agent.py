@@ -30,6 +30,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ArchitectAgent(BaseAgent):
     Agent responsible for autonomous core structural evolution (Swarm Singularity v1).
 #     Analyzes performance telemetry and refactors core components to improve architecture.

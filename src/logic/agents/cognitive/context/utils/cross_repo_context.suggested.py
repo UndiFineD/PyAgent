@@ -15,6 +15,8 @@
 
 # "Cross-repository context analysis for Cognitive agents."This module provides data structures to store and manage context information
 derived from multiple repositories.
+"""
+
 
 from __future__ import annotations
 from dataclasses import dataclass, field

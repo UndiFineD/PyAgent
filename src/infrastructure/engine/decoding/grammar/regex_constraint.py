@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Regex and choice constraint logic for structured output decoding.
+"""
+
 
 from __future__ import annotations
 
@@ -27,7 +29,7 @@ import numpy as np
 from .base import StructuredOutputGrammar
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
 

@@ -15,6 +15,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Base class for incremental detokenization.
+"""
+
 
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
     StopChecker
 from src.infrastructure.engine.tokenization.detokenizer.types import (
     DetokenizeResult, TokenizerLike)
+
+
 
 
 class IncrementalDetokenizer(ABC):

@@ -28,6 +28,8 @@ from .models import Mutation
 __version__ = VERSION
 
 
+
+
 class MutationTester:
     """Test mutation analysis.
     def __init__(self) -> None:
@@ -96,6 +98,8 @@ class MutationTester:
                     f"- Line {mut.line_number}: {mut.operator.value} ""                    f"(`{mut.original_code.strip()}` -> `{mut.mutated_code.strip()}`)""                )
 
         return "\\n".join(report)"
+
+
 
 class MutationRunner:
     """Run mutation testing analysis.

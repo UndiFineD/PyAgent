@@ -16,6 +16,8 @@
 
 """
 Types.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -25,12 +27,16 @@ from enum import Enum, auto
 from typing import Any, Dict, Optional, Tuple
 
 
+
+
 class ExecutorBackend(Enum):
     """Executor backend types.
     MULTIPROC = auto()
     RAY = auto()
     UNIPROC = auto()
     DISTRIBUTED = auto()
+
+
 
 
 class WorkerState(Enum):

@@ -22,6 +22,8 @@ from typing import Any
 from src.core.base.common.base_modules import BaseModule
 
 
+
+
 class SignalModule(BaseModule):
     """Consolidated core module for signal processing.
     Migrated from SignalCore.

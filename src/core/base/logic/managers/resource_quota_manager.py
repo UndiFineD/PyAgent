@@ -39,6 +39,8 @@ except ImportError:
     CIRCUIT_BREAKER_AVAILABLE = False
 
 
+
+
 class LocalTokenBucket:
     """Local in-memory token bucket implementation for fallback."""
     def __init__(self, capacity: int, refill_rate: float):
@@ -113,6 +115,8 @@ else
     redis.call('HMSET', key, 'tokens', tokens, 'last_refill', now)'    redis.call('EXPIRE', key, 3600)'    return 0
 end
 """
+
+
 
 class DistributedTokenBucket:
     """Distributed token bucket rate limiter with Redis backend.
@@ -276,6 +280,8 @@ class DistributedTokenBucket:
             await self._redis_client.aclose()
             self._redis_client = None
             self._redis_connected = False
+
+
 
 
 class ResourceQuotaManager(StandardResourceQuotaManager):

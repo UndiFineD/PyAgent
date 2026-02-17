@@ -31,6 +31,8 @@ from src.core.base.mixins.security_mixin import SecurityMixin
 from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
+
+
 class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, TaskQueueMixin):
     """Agent for web security scanning using patterns from aem-eye."""
     def __init__(self, **kwargs: Any) -> None:

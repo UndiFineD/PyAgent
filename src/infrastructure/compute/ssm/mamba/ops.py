@@ -24,6 +24,8 @@ import math
 import numpy as np
 
 
+
+
 class CausalConv1d:
         Causal 1D convolution layer.
     
@@ -91,6 +93,8 @@ class CausalConv1d:
             output = output + self.bias
 
         return output, new_state
+
+
 
 
 class SelectiveScan:

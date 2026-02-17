@@ -34,6 +34,8 @@ from .core_mixins.core_summary_mixin import CoreSummaryMixin
 __version__ = VERSION
 
 
+
+
 class GlobalContextCore(CorePartitionMixin, CoreResolutionMixin, CoreSummaryMixin):
     Pure logic for GlobalContext.
     Handles data merging, pruning, and summary formatting.

@@ -27,6 +27,8 @@ WHAT IT SHOULD DO BETTER:
 - Add validation for section names and a factory/helper to produce canonical templates (e.g., from_dict, validate).
 - Provide serialization (to_dict/from_dict), equality/merge helpers, and richer docstrings/examples for downstream authors.
 - Consider integrating templating backends (Jinja2) or schema enforcement to prevent silent incorrect templates.
+"""
+
 
 from __future__ import annotations
 

@@ -35,6 +35,8 @@ from .imported_entry import ImportedEntry
 __version__ = VERSION
 
 
+
+
 class ExternalImporter:
     """Imports changelog entries from external sources.""""
     Supports importing from GitHub releases, JIRA, and other sources.

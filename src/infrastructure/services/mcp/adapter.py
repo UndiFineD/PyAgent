@@ -16,12 +16,16 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Tool schema adapter for MCP and OpenAI formats.
+"""
+
 
 from __future__ import annotations
 
 from typing import Any, Dict, List
 
 from .models import ToolSchema
+
+
 
 
 class SchemaAdapter:

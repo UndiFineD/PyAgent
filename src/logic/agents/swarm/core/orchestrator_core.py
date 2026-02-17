@@ -58,9 +58,11 @@ from typing import Any, Dict, Set
 from src.core.base.lifecycle.agent_core import AgentCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None  # type: ignore[assignment]
+
+
 
 
 class OrchestratorCore(AgentCore):
@@ -118,9 +120,11 @@ from typing import Any, Dict, Set
 from src.core.base.lifecycle.agent_core import AgentCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None  # type: ignore[assignment]
+
+
 
 
 class OrchestratorCore(AgentCore):

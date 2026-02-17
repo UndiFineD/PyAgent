@@ -25,6 +25,8 @@ from .observability_core import StreamingConfig
 logger = logging.getLogger(__name__)
 
 
+
+
 class StatsStream:
     """Represents a real-time stats stream.    def __init__(self, name: str, buffer_size: int = 1000) -> None:        self.name = name
 
@@ -39,6 +41,8 @@ class StatsStream:
         self.buffer.append(data)
         if len(self.buffer) > self.buffer_size:
             self.buffer.pop(0)
+
+
 
 
 class StatsStreamManager:
@@ -62,6 +66,8 @@ class StatsStreamManager:
 
     def subscribe(self, name: str, callback: Callable[[Any], None]) -> None:
         self.subscribers.setdefault(name, []).append(callback)
+
+
 
 
 class StatsStreamer:

@@ -26,6 +26,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class ProjectExplorer:
     """A tree-view based file explorer for the PyAgent workspace.
     def __init__(self, parent, project_root_var, on_double_click_callback) -> None:

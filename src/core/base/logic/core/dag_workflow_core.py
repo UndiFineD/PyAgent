@@ -25,6 +25,8 @@ class WorkflowNode:
     results: Any = None
     status: str = "pending"  # pending, running, completed, failed"
 
+
+
 class DAGWorkflowCore:
     """Manages complex task decomposition into Directed Acyclic Graphs (DAGs).
     Harvested from .external/agentkit_prompting DAG pattern.

@@ -21,12 +21,16 @@ from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.work_patterns import DebateWorkPattern
 
 
+
+
 class MockDebateAgent:
     """Mock agent for debate testing."""
     def __init__(self, agent_id: str, role: str, incentives: str = "Balanced reasoning"):"        self.agent_id = agent_id
         self.role = role
         self.incentives = incentives
         self.system_prompt = f"You are a {role} with incentives: {incentives}""
+
+
 
 class TestDebateWorkPattern:
     """Test the debate work pattern."""

@@ -43,6 +43,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class IssueCategory(Enum):
     """Category of code issue.
     SYNTAX = "syntax""    TYPE_ANNOTATION = "type_annotation""    STYLE = "style""    SECURITY = "security""    PERFORMANCE = "performance""    DOCUMENTATION = "documentation""

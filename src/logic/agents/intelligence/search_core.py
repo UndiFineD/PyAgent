@@ -45,12 +45,14 @@ from typing import Any
 from src.core.base.common.search_core import SearchCore as StandardSearchCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
     rc = None
     HAS_RUST = False
+
+
 
 
 class SearchCore(StandardSearchCore):
@@ -95,12 +97,14 @@ from typing import Any
 from src.core.base.common.search_core import SearchCore as StandardSearchCore
 
 try:
-    import rust_core as rc
+    import rust_core as rc  # pylint: disable=no-member
 
     HAS_RUST = True
 except ImportError:
     rc = None
     HAS_RUST = False
+
+
 
 
 class SearchCore(StandardSearchCore):

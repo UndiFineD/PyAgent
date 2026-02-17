@@ -18,6 +18,8 @@ Tests for CanaryAgent.
 from src.logic.agents.security.canary_agent import CanaryAgent
 
 
+
+
 class TestCanaryAgent:
     """Test cases for CanaryAgent.
     def test_deploy_canary(self):

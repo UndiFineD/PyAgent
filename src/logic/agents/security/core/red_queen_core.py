@@ -15,6 +15,8 @@
 
 """
 Red queen core.py module.
+"""
+
 
 from __future__ import annotations
 
@@ -34,6 +36,8 @@ class AttackVector:
     pattern: str
     target_guardrail: str
     success_rate: float
+
+
 
 
 class RedQueenCore:

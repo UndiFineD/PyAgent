@@ -37,6 +37,8 @@ PyAgent MCP Server Ecosystem Integration.
 
 Based on awesome-mcp-servers repository with 500+ MCP servers.
 Implements standardized protocol abstraction for 10x tool expansion.
+"""
+
 
 from __future__ import annotations
 
@@ -63,8 +65,12 @@ class MCPServerInfo:
     meta: Dict[str, Any]
 
 
+
+
 class MCPServerType(Enum):
     """Types of MCP servers.    LOCAL = "local""    REMOTE = "remote""    DOCKER = "docker""    NATIVE = "native""
+
+
 
 class MCPCategory(Enum):
     """MCP server categories.    DATABASE = "database""    API = "api""    FILESYSTEM = "filesystem""    BROWSER = "browser""    COMMUNICATION = "communication""    DEVELOPMENT = "development""    SECURITY = "security""    PRODUCTIVITY = "productivity""    MULTIMEDIA = "multimedia""    OTHER = "other""
@@ -94,6 +100,8 @@ class MCPTool:
     server_name: str
     category: str
     tags: List[str] = field(default_factory=list)
+
+
 
 
 class MCPServerRegistry:
@@ -183,6 +191,8 @@ class MCPServerRegistry:
         self.logger.warning("ecosystem_populator module not found; discovery stubbed.")"
         self._save_registry()
         self.logger.info(f"Ecosystem expanded to {len(self.servers)} MCP servers")"        return discovered
+
+
 
 
 class MCPServerInstance:
@@ -293,7 +303,7 @@ class MCPServerInstance:
             self.logger.error(f"Failed to initialize tools for {self.config.name}: {e}")"
     async def _query_tools(self) -> List[Dict[str, Any]]:
         """Query the server for available tools.        # This would implement the MCP protocol to query tools
-        # Placeholder implementation
+        # TODO Placeholder implementation
         return [
             {
                 'name': f"{self.config.name}_tool","'                'description': f"Tool from {self.config.name} server","'                'inputSchema': {'                    'type': 'object','                    'properties': {}'                }
@@ -320,13 +330,15 @@ class MCPServerInstance:
             return {
                 "error": f"Missing required arguments: {', '.join(missing_fields)}","'                "tool_name": tool.name"            }
         try:
-            # Placeholder for MCP protocol implementation
+            # TODO Placeholder for MCP protocol implementation
             # This would send JSON-RPC requests to the server
             return {
                 "result": "Tool executed successfully","                "tool_name": tool.name"            }
         except Exception as e:
             return {
                 "error": f"Execution failed: {str(e)}","                "tool_name": tool.name"            }
+
+
 
 
 class MCPBridge:
@@ -408,6 +420,8 @@ class MCPBridge:
     def get_servers_by_capability(self, capability: str) -> List[str]:
         """Get server names by capability.        return [name for name, config in self.registry.servers.items()
                 if capability in config.capabilities and config.enabled]
+
+
 
 
 class MCPToolOrchestrator:

@@ -19,6 +19,8 @@ Intelligent routing for multi-cloud AI providers.
 
 Routes requests to the optimal provider based on model availability,
 latency requirements, budget constraints, and provider health.
+"""
+
 
 from __future__ import annotations
 
@@ -32,6 +34,8 @@ from typing import Any, Dict, List, Never, NoReturn, Optional
 from .base import CloudProviderBase, InferenceRequest
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+
 
 
 class RoutingStrategy(Enum):
@@ -58,6 +62,8 @@ class RoutingConstraints:
     preferred_providers: List[str] = field(default_factory=list)
     excluded_providers: List[str] = field(default_factory=list)
     require_streaming: bool = False
+
+
 
 
 class IntelligentRouter:

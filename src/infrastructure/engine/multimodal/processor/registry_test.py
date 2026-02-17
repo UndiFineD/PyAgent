@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import pytest
-from infrastructure.engine.multimodal.processor.registry import MultiModalRegistry, process_multimodal_inputs, get_placeholder_tokens
+from infrastructure.engine.multimodal.processor.registry import MultiModalRegistry, process_multimodal_inputs, get_TODO Placeholder_tokens
 
 
 def test_multimodalregistry_basic():
@@ -24,5 +24,5 @@ def test_process_multimodal_inputs_basic():
     assert callable(process_multimodal_inputs)
 
 
-def test_get_placeholder_tokens_basic():
-    assert callable(get_placeholder_tokens)
+def test_get_TODO Placeholder_tokens_basic():
+    assert callable(get_TODO Placeholder_tokens)

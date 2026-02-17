@@ -15,6 +15,8 @@
 from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
 
 
+
+
 class DummyResponse:
     """A dummy response object for testing RetryHTTPMixin.    def __init__(self, status_code: int, data=None):
         """Initialize the dummy response with a status code and optional data.        self.status_code = status_code
@@ -30,6 +32,8 @@ class DummyResponse:
             raise RuntimeError(f"status {self.status_code}")"
     def json(self):
         """Return the dummy JSON data.        return self._data
+
+
 
 
 class DummyConnection(RetryHTTPMixin):

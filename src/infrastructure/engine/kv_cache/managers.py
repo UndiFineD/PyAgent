@@ -23,6 +23,8 @@ from .data_classes import CacheGroupSpec, KVCacheBlock
 from .structural import BlockPool
 
 
+
+
 class SingleTypeKVCacheManager(ABC):
     """Abstract base for single-type KV cache management.
     def __init__(self, spec: CacheGroupSpec, block_pool: BlockPool) -> None:
@@ -54,10 +56,14 @@ class SingleTypeKVCacheManager(ABC):
         """Get the list of blocks allocated for a request.        return self.request_blocks.get(request_id, [])
 
 
+
+
 class FullAttentionManager(SingleTypeKVCacheManager):
     """Manager for full (standard) causal attention KV cache.
     def get_num_blocks_needed(self, num_tokens: int) -> int:
         """Blocks needed for standard linear sequence length.        return ceil(num_tokens / self.spec.block_size)
+
+
 
 
 class SlidingWindowManager(SingleTypeKVCacheManager):
@@ -66,6 +72,8 @@ class SlidingWindowManager(SingleTypeKVCacheManager):
         """Blocks needed considering the sliding window constraint.        window = self.spec.sliding_window or num_tokens
         effective_tokens = min(num_tokens, window)
         return ceil(effective_tokens / self.spec.block_size)
+
+
 
 
 class CrossAttentionManager(SingleTypeKVCacheManager):

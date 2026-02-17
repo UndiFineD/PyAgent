@@ -50,6 +50,8 @@ HAS_RUST = False
 logger = logging.getLogger(__name__)
 
 
+
+
 class StructuredOutputBackendType(Enum):
     """Types of structured output backends.
     XGRAMMAR = auto()
@@ -57,6 +59,8 @@ class StructuredOutputBackendType(Enum):
     LM_FORMAT_ENFORCER = auto()
     OUTLINES = auto()
     CUSTOM = auto()
+
+
 
 
 class ConstraintType(Enum):
@@ -122,6 +126,8 @@ class OrchestratorConfig:
     enable_streaming: bool = True
 
 
+
+
 class BackendWrapper:
         Wrapper regarding structured output backend.
 
@@ -183,6 +189,8 @@ class BackendWrapper:
             "backend": backend_stats,"        }
 
 
+
+
 class CompiledGrammarHandle:
         Handle to compiled grammar.
 
@@ -228,6 +236,8 @@ class CompiledGrammarHandle:
     @property
     def tokens_accepted(self) -> int:
         """Get count of accepted tokens.        return self._tokens_accepted
+
+
 
 
 class StructuredOutputOrchestrator:
@@ -407,6 +417,8 @@ class StructuredOutputOrchestrator:
             self._cache.clear()
 
 
+
+
 class AsyncStructuredOutputOrchestrator(StructuredOutputOrchestrator):
         Async-enabled orchestrator.
 
@@ -433,6 +445,8 @@ class AsyncStructuredOutputOrchestrator(StructuredOutputOrchestrator):
             self.compile_json_schema,
             schema,
         )
+
+
 
 
 class BatchProcessor:

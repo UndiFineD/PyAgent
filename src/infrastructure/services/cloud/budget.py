@@ -18,6 +18,8 @@
 Budget management for cloud AI spending.
 
 Provides thread-safe cost tracking with daily/monthly limits and alerts.
+"""
+
 
 from __future__ import annotations
 
@@ -50,6 +52,8 @@ class BudgetAlert:
     current_spend: float
     limit: float
     timestamp: datetime = field(default_factory=datetime.now)
+
+
 
 
 class BudgetManager:

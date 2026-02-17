@@ -34,6 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Research synthesis agent.py module.
+"""
 
 
 from __future__ import annotations
@@ -45,6 +46,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
+
+
 
 
 class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
@@ -96,6 +99,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
+
+
 
 
 class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors

@@ -37,6 +37,8 @@ from src.core.agents.change_monitoring_agent import (  # noqa: E402
 """Tests for ChangeMonitoringAgent."""
 
 
+
+
 class TestHistoryManager(unittest.TestCase):
     """Test cases for HistoryManager."""
 
@@ -76,6 +78,8 @@ class TestHistoryManager(unittest.TestCase):
             self.assertEqual(new_manager.history[0]['object'], 'test_obj')
         finally:
             Path(temp_file).unlink()
+
+
 
 
 class TestFileSystemDataSource(unittest.TestCase):
@@ -123,6 +127,8 @@ class TestFileSystemDataSource(unittest.TestCase):
 
         # Should detect the directory change
         self.assertTrue(len(changes) > 0)
+
+
 
 
 class TestChangeMonitoringAgent(unittest.TestCase):

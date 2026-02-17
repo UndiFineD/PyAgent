@@ -42,6 +42,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
+
+
 class EffortEstimate(Enum):
     """Effort estimation levels.    TRIVIAL = 1
     SMALL = 3

@@ -18,6 +18,8 @@ GPUScalingManager
 - Monitors GPU memory pressure and triggers scaling actions for agent pools.
 GPU scaling manager for specialized agents.
 Scales agent pools based on GPU memory pressure and latency.
+"""
+
 
 from __future__ import annotations
 
@@ -28,6 +30,8 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+
 
 
 class GPUScalingManager:

@@ -15,6 +15,8 @@
 
 Core logic for Python Linting analysis.
 # Integrates ruff, flake8, and pylint for comprehensive code quality checks.
+"""
+
 
 from __future__ import annotations
 
@@ -27,6 +29,8 @@ from typing import Optional, TypedDict
 from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
+
+
 class LintIssue(TypedDict):
 """"Represents a single issue found by a linter.
     file: str
@@ -36,11 +40,15 @@ class LintIssue(TypedDict):
     message: str
     linter: str  # 'ruff', 'flake8', 'pylint''    type: str    # 'error', 'warning', 'convention', 'refactor''
 
+
+
 class LintResult(TypedDict):
 """"Result of a linting session.
     valid: bool
     issues: list[LintIssue]
     error: Optional[str]
+
+
 
 
 class LinterCore:
