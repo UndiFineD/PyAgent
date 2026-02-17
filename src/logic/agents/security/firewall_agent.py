@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FirewallAgent - Gatekeeper for agent actions
+
+"""
+FirewallAgent - Gatekeeper for agent actions
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -24,7 +28,7 @@ Persist clearance and configuration (use StateTransaction and durable storage in
 FILE CONTENT SUMMARY:
 FirewallAgent: Agent for enforcing network security, access control, and traffic filtering in the PyAgent swarm.
 Implements distributed firewall rules and adaptive threat response.
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -43,9 +47,9 @@ except ImportError:
 
 
 class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-return-statements
-    """""""    Firewall Agent: Gatekeeper for agent actions.
+        Firewall Agent: Gatekeeper for agent actions.
     Ensures 'thought_stream' signals are analyzed and clearance is granted'    before agents act on their reasoning.
-    """""""
+    
     def __init__(self, workspace_path: str = ".") -> None:"        # Initialize as a BaseAgent (Mock path if none provided)
         super().__init__(workspace_path)
         self.signal_registry = SignalRegistry()
@@ -59,14 +63,14 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
         self.whitelist_path = Path("data/config/whitelist-domains.json")"        self.whitelisted_domains = self._load_whitelist()
 
     def _load_whitelist(self) -> list[str]:
-        """Loads whitelisted domains from config."""""""        try:
+        """Loads whitelisted domains from config.        try:
             if self.whitelist_path.exists():
                 with open(self.whitelist_path, "r", encoding="utf-8") as f:"                    data = json.load(f)
                     return data.get("whitelisted_domains", [])"        except (IOError, json.JSONDecodeError) as e:
             logging.error(f"[FirewallAgent] Failed to load whitelist: {e}")"        return []
 
     async def _analyze_thought(self, event: dict[str, Any]) -> None:  # pylint: disable=too-many-return-statements
-        """Inform the fleet and perform security analysis on the thought."""""""        data = event.get("data", {})"        agent_name = data.get("agent", "Unknown")"        thought = data.get("thought", "")"
+        """Inform the fleet and perform security analysis on the thought.        data = event.get("data", {})"        agent_name = data.get("agent", "Unknown")"        thought = data.get("thought", "")"
         if not thought:
             return
 
@@ -125,17 +129,17 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
         self.clearance_registry[cid] = False
 
     def _generate_cid(self, agent_name: str, thought: str) -> str:
-        """Generates a unique clearance ID."""""""        return f"{agent_name}:{thought[:200]}""    
+        """Generates a unique clearance ID.        return f"{agent_name}:{thought[:200]}""    
     async def _process_task(self, task: dict) -> None:
-        """""""        Required by TaskQueueMixin. Not used in FirewallAgent.
-        """""""        # TODO: implement async task queue
+                Required by TaskQueueMixin. Not used in FirewallAgent.
+                # TODO: implement async task queue
         raise NotImplementedError("FirewallAgent does not implement task queue processing.")"
 
     def has_clearance(self, agent_name: str, thought: str) -> bool:
-        """""""        Interrogated by other agents or the orchestrator before execution.
-        """""""        cid = self._generate_cid(agent_name, thought)
+                Interrogated by other agents or the orchestrator before execution.
+                cid = self._generate_cid(agent_name, thought)
         return self.clearance_registry.get(cid, False)
 
     async def request_clearance_blocking(self, agent_name: str, thought: str) -> bool:
-        """""""        A synchronous-like awaitable call for agents that need immediate clearance.
-        """""""        # Trigger analysis if it wasn't already caught by signal'        await self._analyze_thought({"data": {"agent": agent_name, "thought": thought}})"        return self.has_clearance(agent_name, thought)
+                A synchronous-like awaitable call for agents that need immediate clearance.
+                # Trigger analysis if it wasn't already caught by signal'        await self._analyze_thought({"data": {"agent": agent_name, "thought": thought}})"        return self.has_clearance(agent_name, thought)

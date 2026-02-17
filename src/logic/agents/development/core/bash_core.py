@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Core logic for Bash script analysis (Phase 175).
+
+"""
+Core logic for Bash script analysis (Phase 175).
 # Integrates shellcheck for linting generated scripts.
 Optimized for eventual Rust migration (Phase 3).
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -27,7 +31,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ShellCheckIssue(TypedDict):
-""""Represents a single issue found by shellcheck."""""""
+""""Represents a single issue found by shellcheck.
     file: str
 
     line: int
@@ -42,17 +46,17 @@ class ShellCheckIssue(TypedDict):
 
 
 class BashLintResult(TypedDict):
-""""Result of a bash script linting session."""""""
+""""Result of a bash script linting session.
     valid: bool
     issues: list[ShellCheckIssue]
     error: Optional[str]
 
 
 class BashCore:
-""""Core logic for Bash script analysis and "linting."""""""
+""""Core logic for Bash script analysis and "linting.
     @staticmethod
     def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
-        Runs shellcheck on" a bash script.""""""""        if not os.path.exists(script_path):
+        Runs shellcheck on" a bash script."        if not os.path.exists(script_path):
             result: BashLintResult = {
                 "valid": False,"                "issues": [],"                "error": "File not found","            }
             if recorder:
@@ -97,7 +101,7 @@ class BashCore:
     @staticmethod
     def wrap_with_safety_flags(content: str) -> str:
         Ensures script starts with common safety flags (`set -euo pipefail`) if not present.
-"""""""        try:
+        try:
             import rust_core
 
             return rust_core.ensure_safety_flags_rust(content)  # type: ignore[attr-defined]

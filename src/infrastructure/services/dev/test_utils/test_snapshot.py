@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py"""""""""""
+
+"""
+Auto-extracted class from agent_test_utils.py""""
 from __future__ import annotations
 
 import hashlib
@@ -32,7 +36,7 @@ class TestSnapshot:
         content_hash: Hash of content.
         created_at: Creation timestamp.
         updated_at: Last update timestamp.
-    """""""
+    
     name: str
     content: str
     content_hash: str = """    created_at: float = field(default_factory=time.time)
@@ -40,7 +44,7 @@ class TestSnapshot:
     __test__ = False
 
     def __post_init__(self) -> None:
-        """Compute content hash if not provided."""""""        # Convert content to string if it's a dict or other type'        if isinstance(self.content, dict):
+        """Compute content hash if not provided.        # Convert content to string if it's a dict or other type'        if isinstance(self.content, dict):
             content_str = json.dumps(self.content)
         else:
             content_str = str(self.content)

@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Agent for voice-based interaction and thought-to-speech conversion.""""""""# from __future__ import annotations
+# "Agent for voice-based interaction and thought-to-speech conversion."# from __future__ import annotations
 
 import logging
 from pathlib import Path
@@ -25,14 +27,14 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VoiceInteractionAgent(BaseAgent):
-""""Voice interface for the swarm, supporting STT and TTS."""""""
+""""Voice interface for the swarm, supporting STT and TTS.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
 #             "You are the Voice Interaction Agent."#             "You process audio streams into text and convert agent thoughts into speech."#             "Your goal is to provide a seamless natural language audio interface."        )
 
     @as_tool
-    def synthesize_speech(self, text: str, voice_profile: str = "neutral") -> str:"""""Converts text into an audio file path (Simulation/gTTS)."""""""        logging.info(fVoiceAgent: Synthesizing speech with profile {voice_profile"}...")"        audio_dir = Path("data/audio")"        audio_dir.mkdir(parents=True, exist_ok=True)
+    def synthesize_speech(self, text: str, voice_profile: str = "neutral") -> str:"""""Converts text into an audio file path (Simulation/gTTS).        logging.info(fVoiceAgent: Synthesizing speech with profile {voice_profile"}...")"        audio_dir = Path("data/audio")"        audio_dir.mkdir(parents=True, exist_ok=True)
 
 #         target_path = audio_dir / fspeech_{abs(hash(text))}.mp3
 
@@ -46,7 +48,7 @@ class VoiceInteractionAgent(BaseAgent):
 
     @as_tool
     def transcribe_audio(self, audio_path: str) -> str:
-""""Transcribes audio file to text using speech recognition."""""""        logging.info(fVoiceAgent: Transcribing {audio_path}...")"
+""""Transcribes audio file to text using speech recognition.        logging.info(fVoiceAgent: Transcribing {audio_path}...")"
         try:
             import speech_recognition as sr
 
@@ -58,15 +60,15 @@ class VoiceInteractionAgent(BaseAgent):
         except (ImportError, RuntimeError, OSError) as e:
             logging.error(fTranscription failed: {str(e)}")"#             return "### Transcription Unavailable (Check dependencies)"
     def think_aloud(self, thought: str) -> str:
-""""Standard Swarm UX: Agents can broadcast their 'internal' monologue via voice."""""""'        audio_file = self.synthesize_speech(thought)
+""""Standard Swarm UX: Agents can broadcast their 'internal' monologue via voice.'        audio_file = self.synthesize_speech(thought)
         logging.info(
 #             fAgent {self.id} Thinking Aloud: '{thought}' (Audio: {audio_file})'        )
         return audio_file
 
     @as_tool
     async def run_omni_pipeline(self, audio_input_path: str) -> dict[str, str]:
-"""""""        Executes the full 'See-While-Hear' pipeline: hiding latency" by pipelining."'        Audio -> Transcribe -> LLM Think -> Synthesize -> Output Audio.
-"""""""        #" 1. Speech to Text"        transcription = self.transcribe_audio(audio_input_path)
+        Executes the full 'See-While-Hear' pipeline: hiding latency" by pipelining."'        Audio -> Transcribe -> LLM Think -> Synthesize -> Output Audio.
+        #" 1. Speech to Text"        transcription = self.transcribe_audio(audio_input_path)
         if transcription.startswith("###"):"            return {"error": transcription}"
         # 2. Cognitive Processing (LLM)
         response_text = await self.think(fUser said: '{transcription}'. Respond naturally.")"'

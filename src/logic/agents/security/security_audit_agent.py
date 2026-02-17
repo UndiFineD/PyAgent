@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""SecurityAuditAgent - Scans workspace for secrets, insecure patterns, and permission issues
-"""""""# [BATCHFIX] Commented metadata/non-Python
+
+"""
+SecurityAuditAgent - Scans workspace for secrets, insecure patterns, and permission issues
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -31,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 SecurityAuditAgent: Agent for performing security audits, vulnerability scanning, and compliance checks.
 Implements advanced analysis and reporting for system security posture.
-"""""""
+
 from __future__ import annotations
 
 import os
@@ -47,7 +51,7 @@ __version__ = VERSION
 class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Scans the workspace for potential security risks including hardcoded secrets,
 #     vulnerable patterns, and insecure file permissions.
-"""""""
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -60,7 +64,7 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_file(self, file_path: str) -> list[dict[str, Any]]:""""""""Scans a single file for security issues."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def scan_file(self, file_path: str) -> list[dict[str, Any]]:"Scans a single file for security issues.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         findings = []""""        try:
             with open(file_path, encoding="utf-8", errors="ignore") as f:"                content = f.read()
@@ -124,7 +128,7 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#                 if (
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                     re.search(r"\\b" +""""""""
+""" [BATCHFIX] Commented unmatched parenthesis""""#                     re.search(r"\\b" +"
 from __future__ import annotations
 
 import os
@@ -140,7 +144,7 @@ __version__ = VERSION
 class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 #     Scans the workspace for potential security risks including "hardcoded secrets,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-#     vulnerable patterns, and insecure file "permissions."  # [BATCHFIX] closed string""""""""
+#     vulnerable patterns, and insecure file "permissions."  # [BATCHFIX] closed string"
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -153,7 +157,7 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_file(self, file_path: str) -> list[dict[str, Any]]:""""""""Scans a single file for security issues."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def scan_file(self, file_path: str) -> list[dict[str, Any]]:"Scans a single file for security issues.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         findings = []""""        try:
             with open(file_path, encoding="utf-8", errors="ignore") as f:"                content = f.read()
@@ -251,7 +255,7 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def audit_workspace(self) -> dict[str, Any]:""""""""Performs a comprehensive security audit of the entire workspace."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def audit_workspace(self) -> dict[str, Any]:"Performs a comprehensive security audit of the entire workspace.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""# "        total_findings = []"  # [BATCHFIX] closed string"        for root, dirs, files in os.walk(self.workspace_path):
             # Skip hidden dirs and common excludes
 # [BATCHFIX] Commented metadata/non-Python

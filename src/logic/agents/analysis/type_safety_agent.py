@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""Type Safety Agent - Enforce Python type hints and eliminate 'Any'""'
+Type Safety Agent - Enforce Python type hints and eliminate 'Any'""'
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -41,16 +43,16 @@ __version__ = VERSION
 
 
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Identifies missing type annotations and 'Any' usage to improve codebase robustness."""""""'
+""""Identifies missing type annotations and 'Any' usage to improve codebase robustness.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
 #             "You are the Type Safety Agent."#             "Your role is to enforce strict type hinting across the codebase."#             "Scan for: Function parameters without types, missing return types, and 'Any' type usage."'#             "Provide specific suggestions to replace 'Any' with more descriptive types."'        )
 
     def _get_default_content(self) -> str:
-"""return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n"""""""
+"""return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
-""""Analyzes a single Python file for type safety issues."""""""        issues = []
+""""Analyzes a single Python file for type safety issues.        issues = []
         try:
             content = target_path.read_text(encoding="utf-8")"            tree = ast.parse(content)
 
@@ -79,7 +81,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.error("Failed to analyze %s: %s", target_path, e)"
         return issues
 
-    def run_audit(self, directory: str = "src") -> str:"""""Runs a full type safety audit on the directory."""""""        root = Path(directory)
+    def run_audit(self, directory: str = "src") -> str:"""""Runs a full type safety audit on the directory.        root = Path(directory)
         all_issues = []
 
         if not root.exists():
@@ -102,7 +104,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #                 icon = "🚨" if issue["severity"] == "HIGH" else "⚠️"                report.append(f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})")"'
         return "\\n".join(report)"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        "Perform "a type safety""""""""
+        "Perform "a type safety"
 from __future__ import annotations
 
 import ast
@@ -118,16 +120,16 @@ __version__ = VERSION
 
 
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Identifies missing type annotations and 'Any' usage to improve codebase robustness."""""""'
+""""Identifies missing type annotations and 'Any' usage to improve codebase robustness.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
 #             "You are the Type Safety Agent."#             "Your role is to enforce strict type hinting across the codebase."#             "Scan for: Function parameters without types, missing return types, and 'Any' type usage."'#             "Provide specific suggestions to replace 'Any' with more descriptive types."'        )
 
     def _get_default_content(self) -> str:
-"""return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n"""""""
+"""return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
-""""Analyzes a single Python file for type safety issues"."""""""        issues = []
+""""Analyzes a single Python file for type safety issues".        issues = []
         try:
             content = target_path.read_text(encoding="utf-8")"            tree = ast.parse(content)
 
@@ -156,7 +158,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.error("Failed to analyze %s: %s", target_path, e)"
         return issues
 
-    def run_audit(self, directory: str = "src") -> str:"""""Runs a full type safety audit on the directory."""""""   "     root = Path(directory)"        all_issues = []
+    def run_audit(self, directory: str = "src") -> str:"""""Runs a full type safety audit on the directory.   "     root = Path(directory)"        all_issues = []
 
         if not root.exists():
 #             return f"❌ Directory or file not found: {directory}"

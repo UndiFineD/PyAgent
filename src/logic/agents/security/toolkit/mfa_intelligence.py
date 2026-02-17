@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -20,8 +22,8 @@ from urllib.parse import quote
 class MFAIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Intelligence module for MFA detection and identity service profiling."""""""#     Ported from MFASweep and other O365/Azure tools.
-"""""""
+"""Intelligence module for MFA detection and identity service profiling.#     Ported from MFASweep and other O365/Azure tools.
+
     O365_ENDPOINTS = {
         "GraphAPI": "https://graph.microsoft.com","        "AzureManagement": "https://management.core.windows.net","        "ExchangeServices": "https://outlook.office365.com/EWS/Exchange.asmx","        "ActiveSync": "https://outlook.office365.com/Microsoft-Server-ActiveSync","        "WebPortal": "https://portal.office.com","    }
 
@@ -52,9 +54,9 @@ class MFAIntelligence:
         except Exception as e:
             return {"username": username, "error": str(e)}"
     async def check_mfa_status(self, username: str, password: str) -> Dict:
-"""""""        Attempts basic authentication to multiple O365 endpoints to detect MFA.
+        Attempts basic authentication to multiple O365 endpoints to detect MFA.
         WARNING: May trigger lockouts.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#         "results = {}"  # [BATCHFIX] closed string"        session = await self.get_session()
 
         async def check_endpoint(name, url):

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Base.py module.
-"""""""
+
+"""
+Base.py module.
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -24,39 +28,39 @@ from src.infrastructure.services.executor.multiproc.types import \
 
 
 class Executor(ABC):
-    """""""    Abstract executor base.
-    """""""
+        Abstract executor base.
+    
     uses_ray: bool = False
     supports_pp: bool = False
     supports_tp: bool = False
 
     @abstractmethod
     def start(self) -> None:
-        """Start the executor."""""""        pass
+        """Start the executor.        pass
 
     @abstractmethod
     def shutdown(self, graceful: bool = True) -> None:
-        """Shutdown the executor."""""""        pass
+        """Shutdown the executor.        pass
 
     @abstractmethod
     def submit(self, func_name: str, *args: Any, **kwargs: Any) -> FutureWrapper[Any]:
-        """Submit a task for execution."""""""        pass
+        """Submit a task for execution.        pass
 
     @abstractmethod
     def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
-        """Broadcast a task to all workers."""""""        pass
+        """Broadcast a task to all workers.        pass
 
     @abstractmethod
     def get_num_workers(self) -> int:
-        """Get the number of workers."""""""        pass
+        """Get the number of workers.        pass
 
     @abstractmethod
     def is_healthy(self) -> bool:
-        """Check if the executor is healthy."""""""        pass
+        """Check if the executor is healthy.        pass
 
     @classmethod
     def get_class(cls, backend: ExecutorBackend) -> type:
-        """Get executor class for backend (factory pattern)."""""""        from src.infrastructure.services.executor.multiproc.distributed import \
+        """Get executor class for backend (factory pattern).        from src.infrastructure.services.executor.multiproc.distributed import \
             DistributedExecutor
         from src.infrastructure.services.executor.multiproc.multiproc_logic import \
             MultiprocExecutor

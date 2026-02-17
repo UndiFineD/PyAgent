@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Orchestrator scan mixin.py module.
-"""""""# Licensed under the Apache License, Version 2.0 (the "License");"
+
+"""
+Orchestrator scan mixin.py module.
+# Licensed under the Apache License, Version 2.0 (the "License");"
 import logging
 import os
 import time
@@ -20,7 +24,7 @@ from typing import Any
 
 
 class OrchestratorScanMixin:
-    """Methods for scanning files and analyzing contents."""""""
+    """Methods for scanning files and analyzing contents.
     workspace_root: str
     fleet: Any
     analysis: Any
@@ -30,7 +34,7 @@ class OrchestratorScanMixin:
     def _scan_and_repair_files(
         self, target_dir: str, results: dict[str, Any], allow_triton_check: bool = True
     ) -> list[tuple[str, str, str, int, float]]:
-        """Iterates through files, analyzes them, and applies fixes. Stops on first error and triggers coding swarm."""""""        debt_records: list[tuple[str, str, str, int, float]] = []
+        """Iterates through files, analyzes them, and applies fixes. Stops on first error and triggers coding swarm.        debt_records: list[tuple[str, str, str, int, float]] = []
         current_time = time.time()
         src_path = os.path.join(self.workspace_root, target_dir)
 
@@ -52,7 +56,7 @@ class OrchestratorScanMixin:
     def _process_single_file(
         self, file_path: str, results: dict[str, Any], debt_records: list, current_time: float, allow_triton_check: bool
     ) -> list[tuple[str, str, str, int, float]] | None:
-        """Process a single Python file and return early if swarm is triggered."""""""        results["files_scanned"] += 1"        file_issues = self._analyze_and_fix(file_path, allow_triton_check=allow_triton_check)
+        """Process a single Python file and return early if swarm is triggered.        results["files_scanned"] += 1"        file_issues = self._analyze_and_fix(file_path, allow_triton_check=allow_triton_check)
 
         if not file_issues:
             return None
@@ -70,7 +74,7 @@ class OrchestratorScanMixin:
         results["details"].append({"file": rel_path, "issues": file_issues})"        return None
 
     def _record_file_issues(self, rel_path: str, file_issues: list, results: dict, debt_records: list, current_time: float) -> None:
-        """Record file issues to debt records and update results."""""""        for issue in file_issues:
+        """Record file issues to debt records and update results.        for issue in file_issues:
             if issue.get("fixed"):"                results["fixes_applied"] += 1"            debt_records.append(
                 (
                     rel_path,
@@ -79,14 +83,14 @@ class OrchestratorScanMixin:
             )
 
     def _trigger_coding_swarm(self, file_path: str, rel_path: str, unfixed_issues: list[dict[str, Any]]) -> None:
-        """Triggers a coding swarm to fix unfixed issues in a file."""""""        # Format the issues for the coding task
+        """Triggers a coding swarm to fix unfixed issues in a file.        # Format the issues for the coding task
         issues_description = "\\n".join(["            f"- {issue.get('type', 'Issue')}: {issue.get('message', 'No description')}""'            for issue in unfixed_issues
         ])
         
         prompt = f"""Fix the following issues in file {rel_path}:""""
 {issues_description}
 
-Please analyze the file and apply appropriate fixes for these issues. Focus on code quality, security, and best practices."""""""
+Please analyze the file and apply appropriate fixes for these issues. Focus on code quality, security, and best practices.
         try:
             if self.fleet:
                 # Use fleet delegation if available
@@ -116,13 +120,13 @@ Please analyze the file and apply appropriate fixes for these issues. Focus on c
                 logging.info(f"Self-Improvement: Coding swarm triggered for {rel_path}. Result: {result}")"        except Exception as e:
             logging.error(f"Self-Improvement: Failed to trigger coding swarm for {rel_path}: {e}")"
     def _record_debt_to_sql(self, debt_records: list[tuple]) -> None:
-        """Batch records technical debt to the SQL metadata store."""""""        if debt_records:
+        """Batch records technical debt to the SQL metadata store.        if debt_records:
             try:
                 if self.fleet and hasattr(self.fleet, "sql_metadata"):"                    self.fleet.sql_metadata.bulk_record_debt(debt_records)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to bulk record debt to SQL: {e}")"
     def _analyze_and_fix(self, file_path: str, allow_triton_check: bool = True) -> list[dict[str, Any]]:
-        """Uses specialized assistant classes to analyze and fix a file."""""""        # 0. Delegate Analysis tasks
+        """Uses specialized assistant classes to analyze and fix a file.        # 0. Delegate Analysis tasks
         versioning_issue = self.analysis.check_versioning()
         if versioning_issue:
             return [versioning_issue | {"file": file_path}]"

@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -21,16 +23,16 @@ logger = logging.getLogger(__name__)
 
 
 class RedditCollector:
-    """""""    Reddit OSINT collector.
+        Reddit OSINT collector.
     Async implementation refactored from auto-news RedditAgent.
-    """""""
+    
     AUTH_URL = 'https://www.reddit.com/api/v1/access_token''    SUBREDDIT_NEW_URL = "https://oauth.reddit.com/r/{}/new""
     def __init__(self, client_id: Optional[str] = None, client_secret: Optional[str] = None):
         self.client_id = client_id or os.getenv("REDDIT_CLIENT_ID")"        self.client_secret = client_secret or os.getenv("REDDIT_CLIENT_SECRET")"        self.user_agent = os.getenv("REDDIT_USER_AGENT", "PyAgent:v1.0.0 (by /u/unknown)")"        self._token = None
         self._token_expires = 0
 
     async def _get_token(self) -> Optional[str]:
-        """Obtain OAuth2 token from Reddit."""""""        if self._token and datetime.now().timestamp() < self._token_expires:
+        """Obtain OAuth2 token from Reddit.        if self._token and datetime.now().timestamp() < self._token_expires:
             return self._token
 
         if not self.client_id or not self.client_secret:
@@ -51,7 +53,7 @@ class RedditCollector:
                 logger.error(f"Reddit Auth Error: {e}")"                return None
 
     async def fetch_subreddit(self, subreddit: str, limit: int = 10) -> List[Dict]:
-        """Fetch 'new' posts from a subreddit."""""""'        token = await self._get_token()
+        """Fetch 'new' posts from a subreddit.'        token = await self._get_token()
         if not token:
             return []
 

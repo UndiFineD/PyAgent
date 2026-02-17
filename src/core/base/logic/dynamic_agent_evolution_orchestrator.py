@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Dynamic Agent Evolution Orchestrator
+
+"""Dynamic Agent Evolution Orchestrator
 =====================================
 
 Inspired by agent-orchestrator-self-evolving-subagent's autonomous evolution system,'this orchestrator dynamically creates, integrates, and evolves agents based on task requirements.
@@ -30,7 +33,7 @@ Evolution Workflow:
 4. Dynamic Creation/Integration → Generate specialized or merged agents
 5. Execution & Metrics → Track performance and update skill sheets
 6. Evolution → Promote high-performers to elite status
-"""""""
+"""
 import yaml
 import uuid
 from datetime import datetime, timezone
@@ -44,11 +47,11 @@ from src.core.base.state.agent_state_manager import StateTransaction
 
 
 class AgentTier(Enum):
-    """Agent evolution tiers."""""""    SPECIALIZED = "specialized""    INTEGRATED = "integrated""    ELITE = "elite""
+    """Agent evolution tiers."""SPECIALIZED = "specialized""    INTEGRATED = "integrated""    ELITE = "elite""
 
 @dataclass
 class AgentSkillSheet:
-    """Skill sheet metadata for dynamic agents."""""""    name: str
+    """Skill sheet metadata for dynamic agents."""name: str
     version: str = "1.0""    created: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     tier: AgentTier = AgentTier.SPECIALIZED
     domain: str = """    capabilities: List[str] = field(default_factory=list)
@@ -68,19 +71,19 @@ class AgentSkillSheet:
 
 @dataclass
 class TaskAnalysis:
-    """Analysis of task requirements."""""""    capabilities: Set[str]
+    """Analysis of task requirements."""capabilities: Set[str]
     domain: str
     complexity: str  # "simple", "moderate", "complex""    estimated_effort: int  # 1-10 scale
 
 
 class DynamicAgentEvolutionOrchestrator:
-    """""""    Self-evolving agent orchestrator that creates agents based on task requirements.
+    """Self-evolving agent orchestrator that creates agents based on task requirements.
 
     This system implements the infinite evolution cycle:
     Task Requirements → Agent Creation/Integration → Performance Tracking → Evolution
-    """""""
+    """
     def __init__(self, base_dir: Optional[Path] = None):
-        """Initialize the dynamic agent evolution orchestrator."""""""        self.base_dir = base_dir or Path.cwd() / "dynamic_agents""        self.base_dir.mkdir(parents=True, exist_ok=True)
+        """Initialize the dynamic agent evolution orchestrator."""self.base_dir = base_dir or Path.cwd() / "dynamic_agents""        self.base_dir.mkdir(parents=True, exist_ok=True)
 
         # Agent storage structure
         self.pool_dir = self.base_dir / "pool""        self.specialized_dir = self.pool_dir / "specialized""        self.integrated_dir = self.pool_dir / "integrated""        self.elite_dir = self.pool_dir / "elite""        self.skill_sheets_dir = self.base_dir / "skill_sheets""
@@ -93,7 +96,7 @@ class DynamicAgentEvolutionOrchestrator:
         self._load_skill_sheets()
 
     def _load_skill_sheets(self):
-        """Load all skill sheets from disk."""""""        for yaml_file in self.skill_sheets_dir.glob("*.yaml"):"            try:
+        """Load all skill sheets from disk."""for yaml_file in self.skill_sheets_dir.glob("*.yaml"):"            try:
                 with open(yaml_file, 'r', encoding='utf-8') as f:'                    data = yaml.safe_load(f)
                     if data:
                         # Convert tier string back to enum
@@ -102,7 +105,7 @@ class DynamicAgentEvolutionOrchestrator:
             except Exception as e:
                 print(f"Warning: Failed to load skill sheet {yaml_file}: {e}")"
     def _save_skill_sheet(self, sheet: AgentSkillSheet):
-        """Save skill sheet to disk."""""""        sheet_file = self.skill_sheets_dir / f"{sheet.name}.yaml""
+        """Save skill sheet to disk."""sheet_file = self.skill_sheets_dir / f"{sheet.name}.yaml""
         # Convert to dict for YAML serialization
         data = {
             'name': sheet.name,'            'version': sheet.version,'            'created': sheet.created,'            'tier': sheet.tier.value,  # Convert enum to string'            'domain': sheet.domain,'            'capabilities': sheet.capabilities,'            'constraints': sheet.constraints,'            'parent_agents': sheet.parent_agents,'            'synergy_hints': sheet.synergy_hints,'            'usage_count': sheet.usage_count,'            'success_rate': sheet.success_rate,'            'last_used': sheet.last_used,'            'promotion_candidate': sheet.promotion_candidate,'            'task_history': sheet.task_history,'        }
@@ -111,10 +114,10 @@ class DynamicAgentEvolutionOrchestrator:
             with open(sheet_file, 'w', encoding='utf-8') as f:'                yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
     def analyze_task(self, task_description: str) -> TaskAnalysis:
-        """""""        Analyze task requirements to extract capabilities and domain.
+        """Analyze task requirements to extract capabilities and domain.
 
         This is a simplified analysis - in production, this would use LLM analysis.
-        """""""        task_lower = task_description.lower()
+        """task_lower = task_description.lower()
 
         # Extract capabilities based on keywords
         capabilities = set()
@@ -138,10 +141,10 @@ class DynamicAgentEvolutionOrchestrator:
         )
 
     def calculate_coverage(self, task_analysis: TaskAnalysis, agent_sheet: AgentSkillSheet) -> float:
-        """""""        Calculate how well an agent covers the task requirements.
+        """Calculate how well an agent covers the task requirements.
 
         Returns coverage percentage (0.0 to 1.0).
-        """""""        if not task_analysis.capabilities:
+        """if not task_analysis.capabilities:
             return 0.0
 
         agent_capabilities = set(agent_sheet.capabilities)
@@ -164,10 +167,10 @@ class DynamicAgentEvolutionOrchestrator:
         return min(coverage, 1.0)
 
     def scan_agent_pool(self, task_analysis: TaskAnalysis) -> List[Tuple[AgentSkillSheet, float]]:
-        """""""        Scan all agents and calculate their coverage for the task.
+        """Scan all agents and calculate their coverage for the task.
 
         Returns list of (agent_sheet, coverage) tuples, sorted by coverage descending.
-        """""""        candidates = []
+        """candidates = []
 
         for sheet in self.skill_sheets.values():
             coverage = self.calculate_coverage(task_analysis, sheet)
@@ -183,13 +186,13 @@ class DynamicAgentEvolutionOrchestrator:
         task_analysis: TaskAnalysis,
         context: Optional[CascadeContext] = None
     ) -> AgentSkillSheet:
-        """""""        Select existing agent or create new one based on coverage analysis.
+        """Select existing agent or create new one based on coverage analysis.
 
         Decision Matrix:
         - Coverage 90%+: Use existing agent
         - Coverage 60-90%: Create integrated agent
         - Coverage <60%: Create new specialized agent
-        """""""        candidates = self.scan_agent_pool(task_analysis)
+        """candidates = self.scan_agent_pool(task_analysis)
 
         if not candidates:
             # No existing agents, create new specialized
@@ -212,7 +215,7 @@ class DynamicAgentEvolutionOrchestrator:
             return self._create_specialized_agent(task_analysis)
 
     def _create_specialized_agent(self, task_analysis: TaskAnalysis) -> AgentSkillSheet:
-        """Create a new specialized agent for the task requirements."""""""        agent_name = f"{task_analysis.domain}_specialist_{uuid.uuid4().hex[:8]}""
+        """Create a new specialized agent for the task requirements."""agent_name = f"{task_analysis.domain}_specialist_{uuid.uuid4().hex[:8]}""
         # Create skill sheet
         sheet = AgentSkillSheet(
             name=agent_name,
@@ -236,7 +239,7 @@ class DynamicAgentEvolutionOrchestrator:
         task_analysis: TaskAnalysis,
         parent_sheets: List[AgentSkillSheet]
     ) -> AgentSkillSheet:
-        """Create an integrated agent by merging multiple parent agents."""""""        parent_names = [s.name for s in parent_sheets]
+        """Create an integrated agent by merging multiple parent agents."""parent_names = [s.name for s in parent_sheets]
         agent_name = f"integrated_{'_'.join(parent_names[:2])}_{uuid.uuid4().hex[:8]}""'
         # Combine capabilities from parents
         all_capabilities = set()
@@ -270,7 +273,7 @@ class DynamicAgentEvolutionOrchestrator:
         return sheet
 
     def _generate_constraints(self, task_analysis: TaskAnalysis) -> List[str]:
-        """Generate appropriate constraints based on task analysis."""""""        constraints = []
+        """Generate appropriate constraints based on task analysis."""constraints = []
 
         if task_analysis.complexity == "simple":"            constraints.append("Avoid over-engineering simple solutions")"        elif task_analysis.complexity == "complex":"            constraints.append("Ensure solution is maintainable and well-documented")"
         if "security" in task_analysis.capabilities:"            constraints.append("Always prioritize security best practices")"        if "api" in task_analysis.capabilities:"            constraints.append("Follow REST API design principles")"
@@ -282,7 +285,7 @@ class DynamicAgentEvolutionOrchestrator:
         task_analysis: TaskAnalysis,
         parent_sheets: Optional[List[AgentSkillSheet]] = None
     ):
-        """Create the agent definition markdown file."""""""        if sheet.tier == AgentTier.SPECIALIZED:
+        """Create the agent definition markdown file."""if sheet.tier == AgentTier.SPECIALIZED:
             dir_path = self.specialized_dir
         elif sheet.tier == AgentTier.INTEGRATED:
             dir_path = self.integrated_dir
@@ -322,26 +325,26 @@ When handling tasks, this agent:
 This agent works well with:
 - Other {sheet.domain} specialists for complex projects
 - Quality assurance agents for validation
-"""""""
+"""
         with StateTransaction([file_path]) as _:
             file_path.write_text(content, encoding='utf-8')'
     def _generate_description(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis) -> str:
-        """Generate a one-line description for the agent."""""""        if sheet.tier == AgentTier.SPECIALIZED:
+        """Generate a one-line description for the agent."""if sheet.tier == AgentTier.SPECIALIZED:
             caps = ", ".join(sheet.capabilities)"            return f"Specialized agent for {task_analysis.domain} tasks with {caps} capabilities""        else:
             parents = ", ".join(sheet.parent_agents)"            return f"Integrated agent combining expertise from {parents} for {task_analysis.domain} tasks""
     def _generate_detailed_description(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis,
                                        parent_sheets: Optional[List[AgentSkillSheet]] = None) -> str:
-        """Generate detailed description for the agent."""""""        if sheet.tier == AgentTier.SPECIALIZED:
+        """Generate detailed description for the agent."""if sheet.tier == AgentTier.SPECIALIZED:
             caps = ", ".join(sheet.capabilities)"            domain = task_analysis.domain
             return f"""This specialized agent was created to handle {domain} tasks requiring {caps} capabilities.""""
-It was born from the need to address {task_analysis.complexity} complexity tasks in the {domain} domain."""""""        else:
+It was born from the need to address {task_analysis.complexity} complexity tasks in the {domain} domain."""else:
             parent_names = [s.name for s in parent_sheets] if parent_sheets else []
             parents = ", ".join(parent_names)"            domain = task_analysis.domain
             return f"""This integrated agent combines the expertise of {parents} to provide \""""comprehensive coverage for {domain} tasks.
 
-Created through agent integration to achieve synergy between specialized capabilities."""""""
+Created through agent integration to achieve synergy between specialized capabilities."""
     def update_agent_metrics(self, agent_name: str, success: bool, task_description: str):
-        """Update agent performance metrics after task completion."""""""        if agent_name not in self.skill_sheets:
+        """Update agent performance metrics after task completion."""if agent_name not in self.skill_sheets:
             return
 
         sheet = self.skill_sheets[agent_name]
@@ -375,7 +378,7 @@ Created through agent integration to achieve synergy between specialized capabil
         self._save_skill_sheet(sheet)
 
     def promote_to_elite(self, agent_name: str) -> bool:
-        """Promote an agent to elite status if qualified."""""""        if agent_name not in self.skill_sheets:
+        """Promote an agent to elite status if qualified."""if agent_name not in self.skill_sheets:
             return False
 
         sheet = self.skill_sheets[agent_name]
@@ -400,7 +403,7 @@ Created through agent integration to achieve synergy between specialized capabil
         return False
 
     def _get_agent_file_path(self, sheet: AgentSkillSheet) -> Path:
-        """Get the file path for an agent's definition."""""""'        if sheet.tier == AgentTier.SPECIALIZED:
+        """Get the file path for an agent's definition."""'        if sheet.tier == AgentTier.SPECIALIZED:
             dir_path = self.specialized_dir
         elif sheet.tier == AgentTier.INTEGRATED:
             dir_path = self.integrated_dir
@@ -409,7 +412,7 @@ Created through agent integration to achieve synergy between specialized capabil
 
         return dir_path / f"{sheet.name}.md""
     def get_agent_pool_stats(self) -> Dict[str, Any]:
-        """Get statistics about the agent pool."""""""        stats = {
+        """Get statistics about the agent pool."""stats = {
             'total_agents': len(self.skill_sheets),'            'by_tier': {'                'specialized': 0,'                'integrated': 0,'                'elite': 0'            },
             'by_domain': {},'            'promotion_candidates': 0,'            'avg_success_rate': 0.0'        }
 

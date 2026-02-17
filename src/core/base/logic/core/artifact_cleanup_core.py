@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -20,9 +22,9 @@ logger = logging.getLogger(__name__)
 
 
 class ArtifactCleanupCore:
-    """""""    Background worker for disk maintenance of modality artifacts (images/test logs).
+    """Background worker for disk maintenance of modality artifacts (images/test logs).
     Pattern harvested from 4o-ghibli-at-home.
-    """""""
+    """
     def __init__(
         self,
         base_dir: str,
@@ -37,13 +39,13 @@ class ArtifactCleanupCore:
         self._task: Optional[asyncio.Task] = None
 
     async def start(self):
-        """Starts the background cleanup loop."""""""        if self.is_running:
+        """Starts the background cleanup loop."""if self.is_running:
             return
         self.is_running = True
         self._task = asyncio.create_task(self._cleanup_loop())
         logger.info(f"ArtifactCleanupCore started for {self.base_dir} (TTL: {self.ttl}s)")"
     async def stop(self):
-        """Stops the background cleanup loop."""""""        self.is_running = False
+        """Stops the background cleanup loop."""self.is_running = False
         if self._task:
             self._task.cancel()
             try:
@@ -59,9 +61,9 @@ class ArtifactCleanupCore:
                 logger.error(f"Error during artifact cleanup: {e}")"            await asyncio.sleep(self.interval)
 
     async def perform_cleanup(self) -> int:
-        """""""        Scans binary artifact directories and removes old files.
+        """Scans binary artifact directories and removes old files.
         Returns the count of deleted files.
-        """""""        if not self.base_dir.exists():
+        """if not self.base_dir.exists():
             return 0
 
         current_time = time.time()
@@ -82,7 +84,7 @@ class ArtifactCleanupCore:
         return deleted_count
 
     def force_purge(self):
-        """Immediately deletes all artifacts matching patterns, regardless of TTL."""""""        for pattern in self.patterns:
+        """Immediately deletes all artifacts matching patterns, regardless of TTL."""for pattern in self.patterns:
             for file_path in self.base_dir.rglob(pattern):
                 try:
                     file_path.unlink()

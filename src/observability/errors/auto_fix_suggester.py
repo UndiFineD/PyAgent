@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""AutoFixSuggester - Generate automated fix suggestions for runtime errors
+
+"""
+AutoFixSuggester - Generate automated fix suggestions for runtime errors
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_errors.py
-"""""""
+
 from __future__ import annotations
 
 import re
@@ -52,9 +56,9 @@ class AutoFixSuggester:
 
     Attributes:
         fix_patterns: Map of error patterns to fix templates.
-    """""""
+    
     def __init__(self) -> None:
-        """Initialize the auto-fix suggester."""""""        self.fix_patterns: dict[str, str] = {
+        """Initialize the auto-fix suggester.        self.fix_patterns: dict[str, str] = {
             r"NameError: name '(\\w+)' is not defined": "Define variable '{0}' before use or import it","'            r"ImportError: No module named '(\\w+)'": "Install module with: pip install {0}","'            r"TypeError: unsupported operand type": "Check operand types and convert if necessary","            r"AttributeError: '(\\w+)' object has no attribute '(\\w+)'": ("'                "Check if '{1}' exists on {0} object or use hasattr()""'            ),
             r"IndexError: list index out of range": "Check list bounds before accessing index","            r"KeyError: '(\\w+)'": "Use .get('{0}', default) or check key existence","'        }
 
@@ -63,7 +67,7 @@ class AutoFixSuggester:
         Args:
             pattern: Regex pattern to match errors.
             fix_template: Template for the fix suggestion.
-        """""""        self.fix_patterns[pattern] = fix_template
+                self.fix_patterns[pattern] = fix_template
 
     def suggest(self, error: ErrorEntry) -> FixSuggestion | None:
         """Generate a fix suggestion for an error.""""
@@ -72,7 +76,7 @@ class AutoFixSuggester:
 
         Returns:
             FixSuggestion if a fix is available, None otherwise.
-        """""""        for pattern, template in self.fix_patterns.items():
+                for pattern, template in self.fix_patterns.items():
             match = re.search(pattern, error.message)
             if match:
                 groups = match.groups()
@@ -85,7 +89,7 @@ class AutoFixSuggester:
         return None
 
     def suggest_all(self, errors: list[ErrorEntry]) -> list[FixSuggestion]:
-        """Generate suggestions for multiple errors."""""""        suggestions: list[FixSuggestion] = []
+        """Generate suggestions for multiple errors.        suggestions: list[FixSuggestion] = []
         for error in errors:
             sugg = self.suggest(error)
             if sugg:

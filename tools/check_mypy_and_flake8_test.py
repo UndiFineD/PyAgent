@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """Re-run mypy and flake8 for files listed in lint_results.json and update results."""
 import json
 import subprocess

@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""MathAgent - Specialized mathematical reasoning and safe expression evaluation
+MathAgent - Specialized mathematical reasoning and safe expression evaluation
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -34,24 +32,22 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""MathAgent: Specialized Mathematical Reasoning Agent.
+MathAgent: Specialized Mathematical Reasoning Agent.
 Provides support for symbolic math, numerical computation, and logical proofs.
-"""""""# MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
+# MathAgent: Specialized Mathematical Reasoning Agent - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -75,7 +71,7 @@ SAFE_MATH_NAMESPACE = {
 class MathAgent(BaseAgent):
     Agent specializing in symbolic math, numerical computation, and logical proofs.
     Utilizes Rust-accelerated evaluation where available.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -111,7 +107,7 @@ class MathAgent(BaseAgent):
         match = re.search(rf"{variable}\\\\s*=\\\\s*([-\\\\d.]+)", result)"        extracted = float(match.group(1)) if match else None
 
         return {
-            "equation": equation,"            "variable": variable,"            "solution": extracted,"            "reasoning": result,"            "status":""""""""# MathAgent: Specialized Mathematical Reasoning Agent" - Phase 319 Enhanced"
+            "equation": equation,"            "variable": variable,"            "solution": extracted,"            "reasoning": result,"            "status":"# MathAgent: Specialized Mathematical Reasoning Agent" - Phase 319 Enhanced"
 from __future__ import annotations
 
 import logging
@@ -133,7 +129,7 @@ SAFE_MATH_NAMESPACE = {
 # pylint: disable=too-many-ancestors
 class MathAgent(BaseAgent):
     Agent specializing in symbolic math, numerical computation, and logical proofs.
-    Utilizes Rust-accelerated "evaluation where available.""""""""
+    Utilizes Rust-accelerated "evaluation where available."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -210,7 +206,7 @@ class MathAgent(BaseAgent):
             return {"operation": operation, "error": str(e), "status": "failed"}"
         return {"operation": operation, "status": "unsupported"}"
     def _sanitize_expression(self, expr: str) -> str:
-""""Removes potentially dangerous constructs."""""""        # Remove anything that" looks like function calls to non-math functions"        sanitized = re.sub(r"\\b(import|exec|eval|compile|open|__\\w+__)\\b", ", expr)"        return sanitized.strip()
+""""Removes potentially dangerous constructs.        # Remove anything that" looks like function calls to non-math functions"        sanitized = re.sub(r"\\b(import|exec|eval|compile|open|__\\w+__)\\b", ", expr)"        return sanitized.strip()
 
     def _record_calculation(self, expression: str, result: Any, engine: str) -> None:
         import time

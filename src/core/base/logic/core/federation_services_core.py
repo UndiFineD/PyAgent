@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -39,20 +41,20 @@ import secrets
 
 
 class SAMLVersion(Enum):
-    """SAML protocol versions"""""""    SAML_1_1 = "1.1""    SAML_2_0 = "2.0""
+    """SAML protocol versions"""SAML_1_1 = "1.1""    SAML_2_0 = "2.0""
 
 class FederationProvider(Enum):
-    """Supported federation providers"""""""    OFFICE_365 = "office365""    DROPBOX = "dropbox""    GENERIC_SAML2 = "saml2""    AZURE_AD = "azure_ad""    AWS_SAML = "aws_saml""
+    """Supported federation providers"""OFFICE_365 = "office365""    DROPBOX = "dropbox""    GENERIC_SAML2 = "saml2""    AZURE_AD = "azure_ad""    AWS_SAML = "aws_saml""
 
 class SignatureAlgorithm(Enum):
-    """SAML signature algorithms"""""""    RSA_SHA256 = "rsa-sha256""    RSA_SHA384 = "rsa-sha384""    RSA_SHA512 = "rsa-sha512""
+    """SAML signature algorithms"""RSA_SHA256 = "rsa-sha256""    RSA_SHA384 = "rsa-sha384""    RSA_SHA512 = "rsa-sha512""
 
 class DigestAlgorithm(Enum):
-    """SAML digest algorithms"""""""    SHA256 = "sha256""    SHA384 = "sha384""    SHA512 = "sha512""
+    """SAML digest algorithms"""SHA256 = "sha256""    SHA384 = "sha384""    SHA512 = "sha512""
 
 @dataclass
 class FederationService:
-    """AD FS federation service configuration"""""""    service_id: str
+    """AD FS federation service configuration"""service_id: str
     name: str
     server_fqdn: str
     signing_certificate: Optional[bytes] = None
@@ -66,7 +68,7 @@ class FederationService:
 
 @dataclass
 class SAMLToken:
-    """SAML security token"""""""    token_id: str
+    """SAML security token"""token_id: str
     version: SAMLVersion
     issuer: str
     subject: str
@@ -82,7 +84,7 @@ class SAMLToken:
 
 @dataclass
 class RelyingParty:
-    """Relying party configuration"""""""    identifier: str
+    """Relying party configuration"""identifier: str
     name: str
     endpoint: str
     name_id_format: str
@@ -93,7 +95,7 @@ class RelyingParty:
 
 @dataclass
 class FederationUser:
-    """Federated user information"""""""    upn: str
+    """Federated user information"""upn: str
     object_guid: Optional[str] = None
     sam_account_name: Optional[str] = None
     email: Optional[str] = None
@@ -103,7 +105,7 @@ class FederationUser:
 
 @dataclass
 class TokenGenerationRequest:
-    """Request to generate a SAML token"""""""    provider: FederationProvider
+    """Request to generate a SAML token"""provider: FederationProvider
     user: FederationUser
     relying_party: RelyingParty
     service: FederationService
@@ -112,11 +114,11 @@ class TokenGenerationRequest:
 
 
 class FederationServicesCore:
-    """""""    Federation Services Core for AD FS token forgery and SAML management.
+    """Federation Services Core for AD FS token forgery and SAML management.
 
     Provides comprehensive SAML token generation, signing, and federation
     service management based on ADFSpoof methodologies.
-    """""""
+    """
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.services: Dict[str, FederationService] = {}
@@ -125,14 +127,14 @@ class FederationServicesCore:
         self.templates: Dict[str, str] = {}
 
     async def initialize(self) -> bool:
-        """Initialize the federation services core"""""""        try:
+        """Initialize the federation services core"""try:
             await self.load_saml_templates()
             self.logger.info("Federation Services Core initialized successfully")"            return True
         except Exception as e:
             self.logger.error(f"Failed to initialize Federation Services Core: {e}")"            return False
 
     async def load_saml_templates(self) -> None:
-        """Load SAML token templates"""""""        # Mock SAML templates - in real implementation would load from files
+        """Load SAML token templates"""# Mock SAML templates - in real implementation would load from files
         self.templates = {
             "saml1.1_office365": """<?xml version="1.0" encoding="UTF-8"?>"<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion""                AssertionID="{AssertionID}""                IssueInstant="{IssueInstant}""                Issuer="{Issuer}""                MajorVersion="1""                MinorVersion="1">"    <saml:Conditions NotBefore="{NotBefore}" NotOnOrAfter="{NotOnOrAfter}">"        <saml:AudienceRestrictionCondition>
             <saml:Audience>urn:federation:MicrosoftOnline</saml:Audience>
@@ -168,7 +170,7 @@ class FederationServicesCore:
         </saml2:AuthnContext>
     </saml2:AuthnStatement>
     {Assertions}
-</saml2:Assertion>"""""""        }
+</saml2:Assertion>"""}
 
         self.logger.info(f"Loaded {len(self.templates)} SAML templates")"
     async def create_federation_service(
@@ -179,7 +181,7 @@ class FederationServicesCore:
         private_key_path: Optional[str] = None,
         cert_password: Optional[str] = None
     ) -> Optional[str]:
-        """Create a new federation service"""""""        service_id = str(uuid.uuid4())
+        """Create a new federation service"""service_id = str(uuid.uuid4())
 
         service = FederationService(
             service_id=service_id,
@@ -211,7 +213,7 @@ class FederationServicesCore:
         endpoint: str,
         name_id_format: str = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress","        claim_rules: Optional[List[Dict[str, Any]]] = None
     ) -> str:
-        """Add a relying party configuration"""""""        rp = RelyingParty(
+        """Add a relying party configuration"""rp = RelyingParty(
             identifier=identifier,
             name=name,
             endpoint=endpoint,
@@ -226,7 +228,7 @@ class FederationServicesCore:
         self,
         request: TokenGenerationRequest
     ) -> Optional[SAMLToken]:
-        """Generate a SAML security token"""""""        try:
+        """Generate a SAML security token"""try:
             token_id = str(uuid.uuid4())
             now = datetime.now(timezone.utc)
             expires = now + timedelta(minutes=request.validity_minutes)
@@ -258,7 +260,7 @@ class FederationServicesCore:
         now: datetime,
         expires: datetime
     ) -> SAMLToken:
-        """Generate Office 365 SAML 1.1 token"""""""        token = SAMLToken(
+        """Generate Office 365 SAML 1.1 token"""token = SAMLToken(
             token_id=token_id,
             version=SAMLVersion.SAML_1_1,
             issuer=request.service.server_fqdn,
@@ -284,7 +286,7 @@ class FederationServicesCore:
         now: datetime,
         expires: datetime
     ) -> SAMLToken:
-        """Generate Dropbox SAML 2.0 token"""""""        token = SAMLToken(
+        """Generate Dropbox SAML 2.0 token"""token = SAMLToken(
             token_id=token_id,
             version=SAMLVersion.SAML_2_0,
             issuer=request.service.server_fqdn,
@@ -313,7 +315,7 @@ class FederationServicesCore:
         now: datetime,
         expires: datetime
     ) -> SAMLToken:
-        """Generate generic SAML 2.0 token"""""""        token = SAMLToken(
+        """Generate generic SAML 2.0 token"""token = SAMLToken(
             token_id=token_id,
             version=SAMLVersion.SAML_2_0,
             issuer=request.service.server_fqdn,
@@ -340,7 +342,7 @@ class FederationServicesCore:
         token: SAMLToken,
         service: FederationService
     ) -> str:
-        """Sign a SAML token with the service's private key"""""""'        try:
+        """Sign a SAML token with the service's private key"""'        try:
             # Mock signing - in real implementation would use cryptography library
             # to properly sign the XML with the private key
 
@@ -352,7 +354,7 @@ class FederationServicesCore:
     <Assertions>
         {json.dumps(token.assertions)}
     </Assertions>
-</Token>"""""""
+</Token>"""
             return signed_token
 
         except Exception as e:
@@ -363,7 +365,7 @@ class FederationServicesCore:
         dkm_key: bytes,
         output_path: str
     ) -> bool:
-        """""""        Decrypt an EncryptedPFX blob using DKM key
+        """Decrypt an EncryptedPFX blob using DKM key
 
         Args:
             encrypted_blob: The encrypted PFX blob
@@ -372,7 +374,7 @@ class FederationServicesCore:
 
         Returns:
             True if successful, False otherwise
-        """""""        try:
+        """try:
             # Mock decryption - in real implementation would use custom cryptography
             # to decrypt the PFX blob using the DKM key
 
@@ -391,7 +393,7 @@ class FederationServicesCore:
         pfx_path: str,
         password: Optional[str] = None
     ) -> Tuple[Optional[bytes], Optional[bytes]]:
-        """""""        Load certificate and private key from PFX file
+        """Load certificate and private key from PFX file
 
         Args:
             pfx_path: Path to PFX file
@@ -399,7 +401,7 @@ class FederationServicesCore:
 
         Returns:
             Tuple of (certificate_bytes, private_key_bytes)
-        """""""        try:
+        """try:
             with open(pfx_path, 'rb'):'                pass
 
             # Mock loading - in real implementation would use cryptography library
@@ -418,7 +420,7 @@ class FederationServicesCore:
         common_name: str,
         organization: str = "Example Corp","        validity_days: int = 365
     ) -> Tuple[bytes, bytes]:
-        """""""        Generate a self-signed certificate for testing
+        """Generate a self-signed certificate for testing
 
         Args:
             common_name: Certificate common name
@@ -427,7 +429,7 @@ class FederationServicesCore:
 
         Returns:
             Tuple of (certificate_pem, private_key_pem)
-        """""""        try:
+        """try:
             # Generate private key
             private_key = rsa.generate_private_key(
                 public_exponent=65537,
@@ -472,13 +474,13 @@ class FederationServicesCore:
         token: SAMLToken,
         filepath: str,
         output_format: str = "xml""    ) -> None:
-        """""""        Export SAML token to file
+        """Export SAML token to file
 
         Args:
             token: Token to export
             filepath: Output file path
             output_format: Export format (xml, json)
-        """""""        if output_format == "xml":"            content = token.signed_xml or f"<!-- Unsigned SAML Token -->\\n{token.token_id}""        elif output_format == "json":"            content = json.dumps({
+        """if output_format == "xml":"            content = token.signed_xml or f"<!-- Unsigned SAML Token -->\\n{token.token_id}""        elif output_format == "json":"            content = json.dumps({
                 "token_id": token.token_id,"                "version": token.version.value,"                "issuer": token.issuer,"                "subject": token.subject,"                "audience": token.audience,"                "assertions": token.assertions,"                "conditions": token.conditions,"                "created_at": token.created_at.isoformat(),"                "expires_at": token.expires_at.isoformat() if token.expires_at else None"            }, indent=2)
         else:
             raise ValueError(f"Unsupported format: {format}")"
@@ -486,7 +488,7 @@ class FederationServicesCore:
 
         self.logger.info(f"Exported SAML token to {filepath}")"
     async def get_federation_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive federation statistics"""""""        stats = {
+        """Get comprehensive federation statistics"""stats = {
             "total_services": len(self.services),"            "total_relying_parties": len(self.relying_parties),"            "total_tokens": len(self.tokens),"            "active_services": len([s for s in self.services.values() if s.signing_certificate]),"            "tokens_by_version": {},"            "tokens_by_provider": {},"            "recent_tokens": []"        }
 
         # Token statistics
@@ -508,7 +510,7 @@ class FederationServicesCore:
         return stats
 
     async def cleanup(self) -> None:
-        """Cleanup resources"""""""        self.services.clear()
+        """Cleanup resources"""self.services.clear()
         self.relying_parties.clear()
         self.tokens.clear()
         self.templates.clear()

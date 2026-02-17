@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -18,8 +20,8 @@ from typing import List, Dict, Any, Optional
 class CloudIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets)."""""""#     Ported logic from s3crets_scanner and other cloud-focused tools.
-"""""""
+"""Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets).#     Ported logic from s3crets_scanner and other cloud-focused tools.
+
     # Common patterns for cloud bucket discovery
     BUCKET_PATTERNS = [
         r"{target}.s3.amazonaws.com","        r"{target}.s3-external-1.amazonaws.com","        r"{target}.s3.dualstack.{region}.amazonaws.com","# [BATCHFIX] Commented metadata/non-Python
@@ -79,19 +81,19 @@ class CloudIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_gcp_audit_targets() -> List[str]:""""""""GCP services to audit for security misconfigurations (Ported from gcp_scanner)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_gcp_audit_targets() -> List[str]:"GCP services to audit for security misconfigurations (Ported from gcp_scanner).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#  "       return ["  # [BATCHFIX] closed string"            "bigquery","            "bigtable","            "cloud_functions","            "compute_disks","            "compute_firewalls","            "compute_instances","            "dns_managed_zones","            "iam_policies","            "kms_keys","            "service_accounts","            "sql_instances","            "storage_buckets","            "pubsub_subscriptions","        ]
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_dangling_resource_indicators() -> Dict[str, str]:""""""""Indicators of dangling or orphaned cloud resources (Ported from ghostbuster)."""""""        return {
+"""     def get_dangling_resource_indicators() -> Dict[str, str]:"Indicators of dangling or orphaned cloud resources (Ported from ghostbuster).        return {
             "danging_elastic_ip": "DNS records pointing to Elastic IPs not associated with any instance","            "orphaned_dns_record": "Route53/CloudDNS entries pointing to deleted load balancers or S3 buckets","            "unused_network_interface": "ENIs with 'available' status potentially incurring costs or security risks","'        }
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_cspm_misconfigurations() -> Dict[str, Dict[str, Any]]:""""""""Common cloud misconfigurations across AWS, Azure, and GCP (Ported from fixinventory)"."""""""        return {
+"""     def get_cspm_misconfigurations() -> Dict[str, Dict[str, Any]]:"Common cloud misconfigurations across AWS, Azure, and GCP (Ported from fixinventory)".        return {
             "unencrypted_storage": {"                "desc": "Storage volumes (EBS, Managed Disks) not encrypted at rest","                "severity": "HIGH","            },
             "public_buckets": {"                "desc": "S3 buckets or Azure Blobs with public read/write access","                "severity": "CRITICAL","            },
             "exposed_management_ports": {"                "desc": "Security groups allowing 22 (SSH) or 3389 (RDP) from 0.0.0.0/0","                "severity": "HIGH","            },
@@ -102,11 +104,11 @@ class CloudIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_ciem_path_finding_logic() -> Dict[str, str]:""""""""Techniques for identifying lateral movement paths in cloud "IAM."""""""        return {
+"""     def get_ciem_path_finding_logic() -> Dict[str, str]:"Techniques for identifying lateral movement paths in cloud "IAM.        return {
             "role_assumption_chain": "Tracing 'AssumeRole' permissions to find escalation paths to AdministratorAccess","'            "cross_account_trust": "Identifying external accounts with trust relationships to internal roles","            "overprivileged_service_accounts": "Finding compute instances with attached roles exceeding required scope","            "identity_bridging_vulnerabilities": "Exploiting misconfigured SAML/OIDC providers for identity takeover","        }
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_ai_spm_indicators() -> Dict[str, str]:""""""""Indicators for AI service exposure and data leakage."""""""        return {
+"""     def get_ai_spm_indicators() -> Dict[str, str]:"Indicators for AI service exposure and data leakage.        return {
             "exposed_llm_endpoints": "Identifying public-facing SageMaker, Vertex AI, or OpenAI-proxy endpoints","            "unprotected_vector_stores": "Public unauthenticated access to Pinecone, Qdrant, or Milvus instances","            "sensitive_data_in_training": "Identification of PII within datasets used for fine-tuning or RAG","            "model_inversion_potential": "API configurations allowing prompts that could leak training set data","        }

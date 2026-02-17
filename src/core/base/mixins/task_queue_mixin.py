@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Task Queue Mixin for BaseAgent.
+
+"""Task Queue Mixin for BaseAgent.
 Provides asynchronous task processing with job queue, inspired by 4o-ghibli-at-home.
-"""""""
+"""
 from __future__ import annotations
 
 import asyncio
@@ -22,9 +25,9 @@ from typing import Any, Dict, Optional
 
 
 class TaskQueueMixin:
-    """""""    Mixin to provide asynchronous task queue capabilities to agents.
+    """Mixin to provide asynchronous task queue capabilities to agents.
     Enables background processing of heavy tasks like model inference.
-    """""""
+    """
     def __init__(self, **kwargs: Any) -> None:
         self.task_queue: asyncio.Queue[str] = asyncio.Queue()
         self.task_results: Dict[str, Dict[str, Any]] = {}
@@ -32,13 +35,13 @@ class TaskQueueMixin:
         self._worker_task: Optional[asyncio.Task[None]] = None
 
     async def start_task_processing(self) -> None:
-        """Start the background task processor and cleanup worker."""""""        if self._worker_task is None:
+        """Start the background task processor and cleanup worker."""if self._worker_task is None:
             self._worker_task = asyncio.create_task(self._task_worker())
         if self._cleanup_task is None:
             self._cleanup_task = asyncio.create_task(self._cleanup_worker())
 
     async def stop_task_processing(self) -> None:
-        """Stop the background tasks."""""""        if self._worker_task:
+        """Stop the background tasks."""if self._worker_task:
             self._worker_task.cancel()
             try:
                 await self._worker_task
@@ -55,7 +58,7 @@ class TaskQueueMixin:
             self._cleanup_task = None
 
     async def submit_task(self, task_data: Dict[str, Any]) -> str:
-        """Submit a task to the queue. Returns job_id."""""""        if self.task_queue.qsize() >= self.max_queue_size:
+        """Submit a task to the queue. Returns job_id."""if self.task_queue.qsize() >= self.max_queue_size:
             raise ValueError("Task queue is full. Please try again later.")"
         job_id = str(uuid.uuid4())
         task_data.update({
@@ -65,10 +68,10 @@ class TaskQueueMixin:
         return job_id
 
     async def get_task_status(self, job_id: str) -> Optional[Dict[str, Any]]:
-        """Get the status of a task."""""""        return self.task_results.get(job_id)
+        """Get the status of a task."""return self.task_results.get(job_id)
 
     async def _task_worker(self) -> None:
-        """Background worker to process tasks."""""""        while True:
+        """Background worker to process tasks."""while True:
             try:
                 job_id = await self.task_queue.get()
                 task_data = self.task_results.get(job_id)
@@ -93,9 +96,9 @@ class TaskQueueMixin:
                 # Log error
                 print(f"Task worker error: {e}")"
     async def _process_task(self, task_data: Dict[str, Any]) -> Any:
-        """Override this method to implement task processing logic."""""""        raise NotImplementedError("Subclasses must implement _process_task")"
+        """Override this method to implement task processing logic."""raise NotImplementedError("Subclasses must implement _process_task")"
     async def _cleanup_worker(self) -> None:
-        """Background worker to clean up old completed tasks."""""""        while True:
+        """Background worker to clean up old completed tasks."""while True:
             try:
                 await asyncio.sleep(self.cleanup_interval)
                 current_time = time.time()

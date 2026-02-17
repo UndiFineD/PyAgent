@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -17,8 +19,8 @@ from typing import List, Dict, Union
 class MobileIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Handles discovery of vulnerabilities in mobile applications (Android/iOS)."""""""#     Ported logic from ScanAndroidXML and other static analyzers.
-"""""""
+"""Handles discovery of vulnerabilities in mobile applications (Android/iOS).#     Ported logic from ScanAndroidXML and other static analyzers.
+
     # Android manifest and resource patterns
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -51,17 +53,17 @@ class MobileIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_mobile_pentest_toolkit(self) -> List[str]:""""""""Essential Android/iOS pentesting tools (Ported from Garuda)."""""""        return [
+"""     def get_mobile_pentest_toolkit(self) -> List[str]:"Essential Android/iOS pentesting tools (Ported from Garuda).        return [
             "frida","            "objection","            "drozer","            "busybox","            "apktool","            "apkleaks","            "apkingo","            "quark-engine","            "inspeckage","            "SSLunpin","            "rms-runtime-mobile-security","            "dexcalibur","        ]
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_fuzzing_mutations(self) -> Dict[str, str]:""""""""URI/IPC mutators for mobile fuzzing (Ported from furlzz)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_fuzzing_mutations(self) -> Dict[str, str]:"URI/IPC mutators for mobile fuzzing (Ported from furlzz).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#        " return {"  # [BATCHFIX] closed string"            "insert": "Inject random char at random position","            "delete": "Remove random byte","            "substitute": "Replace byte with random ASCII/Unicode","            "bitflip": "XOR byte with 0x01, 0x02, 0xFF","            "byte_op": "Arithmetic ops (+, -, *, /) on target byte","            "duplicate": "Repeat a range of bytes to test buffer overflows","        }
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_ios_protection_bypass_primitives(self) -> Dict[str, str]:""""""""iOS specific security bypasses (Ported from grapefruit-iOS)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_ios_protection_bypass_primitives(self) -> Dict[str, str]:"iOS specific security bypasses (Ported from grapefruit-iOS).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#     "    return {"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             "touchid_faceid": ("# [BATCHFIX] Commented metadata/non-Python
 """                 "Hooking -[LAContext evaluatePolicy:localizedReason:reply:] and calling callback with success=1"  # [BATCHFIX] closed string"            ),
@@ -71,7 +73,7 @@ class MobileIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_mobile_surveillance_hooks(self) -> Dict[str, List[str]]:""""""""Common Android surveillance and info-leak points for Frida tracing."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_mobile_surveillance_hooks(self) -> Dict[str, List[str]]:"Common Android surveillance and info-leak points for Frida tracing.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#  "       return {"  # [BATCHFIX] closed string"            "identity_leak": ["                "android.telephony.TelephonyManager.getDeviceId","                "android.telephony.TelephonyManager.getImei","                "android.telephony.TelephonyManager.getSimSerialNumber","                "android.net.wifi.WifiInfo.getMacAddress","            ],
             "location_tracking": ["                "android.location.LocationManager.requestLocationUpdates","                "android.location.LocationManager.getLastKnownLocation","                "com.google.android.gms.location.FusedLocationProviderClient.getLastLocation","            ],
 # [BATCHFIX] Commented metadata/non-Python
@@ -82,7 +84,7 @@ class MobileIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_frida_bypass_gadgets(self) -> Dict[str, Dict[str, str]]:""""""""Specific Frida bypass gadgets for various security controls."""""""        return {
+"""     def get_frida_bypass_gadgets(self) -> Dict[str, Dict[str, str]]:"Specific Frida bypass gadgets for various security controls.        return {
             "ssl_pinning": {"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#                 "okhttp4": ("# [BATCHFIX] Commented metadata/non-Python
 """                     "var CertificatePinner = Java.use('okhttp3.CertificatePinner');"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
@@ -125,7 +127,7 @@ class MobileIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_frida_hooking_strategies(self) -> Dict[str, str]:""""""""dynamic instrumentation strategies using Frida (Ported from Frida-Script-Runner)"."""""""        return {
+"""     def get_frida_hooking_strategies(self) -> Dict[str, str]:"dynamic instrumentation strategies using Frida (Ported from Frida-Script-Runner)".        return {
             "ssl_pinning_bypass_okhttp": "Hooking okhttp3.CertificatePinner.check to return void","            "ssl_pinning_bypass_flutter": "Patching ssl_verify_result in libflutter.so to always return valid","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             "root_detection_bypass_android": ("# [BATCHFIX] Commented metadata/non-Python
 """                 "Hooking java.io.File.exists to return false for common SU paths (/system/bin/su, etc.)"  # [BATCHFIX] closed string"            ),
@@ -138,15 +140,15 @@ class MobileIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_android_manifest_checks(self) -> Dict[str, Union[str, Dict[str, str]]]:""""""""Returns regexes for AndroidManifest.xml auditing."""""""        return self.ANDROID_VULN_PATTERNS
+"""     def get_android_manifest_checks(self) -> Dict[str, Union[str, Dict[str, str]]]:"Returns regexes for AndroidManifest.xml auditing.        return self.ANDROID_VULN_PATTERNS
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_ios_plist_checks(self) -> Dict[str, str]:""""""""Returns regexes for Info.plist auditing."""""""        return self.IOS_VULN_PATTERNS
+"""     def get_ios_plist_checks(self) -> Dict[str, str]:"Returns regexes for Info.plist auditing.        return self.IOS_VULN_PATTERNS
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_deeplink_patterns(self) -> List[str]:""""""""Returns regexes for extracting deep links from "manifests."""""""        return [
+"""     def get_deeplink_patterns(self) -> List[str]:"Returns regexes for extracting deep links from "manifests.        return [
 # [BATCHFIX] Commented metadata/non-Python
 #             r'<data\\\\s+android:scheme="([^"]+)"',"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
 #             r'<data\\\\s+android:host="([^"]+)"',"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
@@ -157,7 +159,7 @@ class MobileIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def audit_strings(self, content: str) -> List[Dict[str, str]]:""""""""Scans strings for common secrets and endpoints."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def audit_strings(self, content: str) -> List[Dict[str, str]]:"Scans strings for common secrets and endpoints.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         findings = []""""        # Check for Firebase
 # [BATCHFIX] Commented metadata/non-Python

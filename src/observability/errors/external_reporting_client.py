@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ExternalReportingClient - Report errors to external monitoring services
+
+"""
+ExternalReportingClient - Report errors to external monitoring services
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -33,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 - Add secure DSN handling (avoid storing raw keys), validation, and provider-specific payload adaptations.
 - Improve observability (return rich result details or errors), add asynchronous reporting option, rate limiting, batching optimizations, and unit/integration tests for provider integrations.
 - Validate input ErrorEntry fields and handle partial failures in batch reporting (currently treats all as succeed on logging).
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -55,12 +59,12 @@ class ExternalReportingClient:
     Attributes:
         system: The external system to report to.
         dsn: Data source name or API key.
-    """""""
+    
     def __init__(self, system: ExternalReporter, dsn: str = "") -> None:"        """Initialize the external reporting client.""""
         Args:
             system: The external system type.
             dsn: Data source name or API key.
-        """""""        self.system = system
+                self.system = system
         self.dsn = dsn
         self.enabled = bool(dsn)
 
@@ -71,7 +75,7 @@ class ExternalReportingClient:
 
         Returns:
             True if reported successfully.
-        """""""        if not self.enabled:
+                if not self.enabled:
             return False
         self._build_payload(error)
         logging.info(f"Reporting to {self.system.value}: {error.id}")"        # Actual implementation would send to the service
@@ -84,14 +88,14 @@ class ExternalReportingClient:
 
         Returns:
             Number of errors successfully reported.
-        """""""        count = 0
+                count = 0
         for error in errors:
             if self.report(error):
                 count += 1
         return count
 
     def _build_payload(self, error: ErrorEntry) -> dict[str, Any]:
-        """Build the payload for the external system."""""""        return {
+        """Build the payload for the external system.        return {
             "message": error.message,"            "level": error.severity.name.lower(),"            "tags": {"                "category": error.category.value,"                "file": error.file_path,"                "line": error.line_number,"            },
             "extra": {"                "stack_trace": error.stack_trace,"                "suggested_fix": error.suggested_fix,"            },
         }

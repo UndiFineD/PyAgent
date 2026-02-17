@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""stability_core.py - Fleet stability scoring and healing thresholds
+
+"""
+stability_core.py - Fleet stability scoring and healing thresholds
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -52,7 +56,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Stability core.py module.
-"""""""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -73,9 +77,9 @@ class FleetMetrics:
 
 class StabilityCore:
     """Pure logic for calculating fleet stability and reasoning coherence.""""    Integrates SAE activation metrics and error trends into a unified score.
-    """""""
+    
     def calculate_stability_score(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
-        """Calculates a stability score from 0.0 to 1.0."""""""        if rc:
+        """Calculates a stability score from 0.0 to 1.0.        if rc:
             try:
                 # Passing dataclass fields manually or as dict
                 m_dict = {
@@ -97,7 +101,7 @@ class StabilityCore:
         return min(max(score, 0.0), 1.0)
 
     def is_in_stasis(self, score_history: list[float]) -> bool:
-        """Determines if the swarm is in 'Digital Stasis' (too rigid)."""""""'        if rc:
+        """Determines if the swarm is in 'Digital Stasis' (too rigid).'        if rc:
             try:
                 variance: float = rc.calculate_variance_rust(score_history)  # type: ignore[attr-defined]
                 return len(score_history) >= 10 and variance < 0.0001
@@ -110,7 +114,7 @@ class StabilityCore:
         return variance < 0.0001  # Minimal change indicates stasis
 
     def get_healing_threshold(self, stability_score: float) -> float:
-        """Returns the threshold for triggering self-healing subroutines."""""""        if rc:
+        """Returns the threshold for triggering self-healing subroutines.        if rc:
             try:
                 return rc.get_healing_threshold(stability_score)  # type: ignore[attr-defined]
             except Exception:  # pylint: disable=broad-exception-caught

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Identity Agent - Manages Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs)
+
+"""
+Identity Agent - Manages Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs)
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -42,7 +46,7 @@ __version__ = VERSION
 
 class IdentityAgent(BaseAgent):
     Manages Decentralized Identifiers (DIDs) and Verifiable Credentials" (VCs)"#     for agents within the Swarm and across fleet boundaries.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.identity_registry: dict[Any, Any] = {}  # agent_id -> DID document
@@ -55,7 +59,7 @@ class IdentityAgent(BaseAgent):
 
     def create_agent_did(self, agent_name: str, fleet_id: str = "fleet-01") -> str:"        Creates a new DID for an agent.
         Format: did:pyagent:<fleet_id>:<unique_hash>
-"""""""        unique_id = str(uuid.uuid4())
+        unique_id = str(uuid.uuid4())
         did_hash = hashlib.sha256(unique_id.encode()).hexdigest()[:16]
 #         did = fdid:pyagent:{fleet_id}:{did_hash}
 
@@ -71,8 +75,8 @@ class IdentityAgent(BaseAgent):
     def issue_verifiable_credential(
         self, issuer_name: str, subject_did: str, claim_type: str, claim_value: Any
     ) -> dict[str, Any]:
-"""""""        Issues a simulated VC for an agent.
-"""""""        # Resolve issuer_name to DID if possible
+        Issues a simulated VC for an agent.
+        # Resolve issuer_name to DID if possible
         issuer_did = self.identity_registry.get(issuer_name, {}).get(
 #             "id", fdid:pyagent:fleet-01:{issuer_name.lower()}"        )
 
@@ -84,7 +88,7 @@ class IdentityAgent(BaseAgent):
 
     def verify_credential(self, vc: dict[str, Any]) -> dict[str, Any]:
         Verifies the integrity of a credential.
-"""""""        if "proof" not in vc or "jws" not in vc["proof"]:"            return {"status": "error", "reason": "Missing proof or signature"}"
+        if "proof" not in vc or "jws" not in vc["proof"]:"            return {"status": "error", "reason": "Missing proof or signature"}"
         # Copy and remove proof to verify hash
         vc_to_verify = json.loads(json.dumps(vc))
         signature = vc_to_verify.pop("proof")["jws"]"
@@ -92,7 +96,7 @@ class IdentityAgent(BaseAgent):
 
         if signature == expected_signature:
             return {"status": "verified", "issuer": vc.get("issuer")}"        else:
-            return {"status": "error", "reason": "Signature mismatch (tampered)"}""""""""
+            return {"status": "error", "reason": "Signature mismatch (tampered)"}"
 from __future__ import annotations
 
 import hashlib
@@ -110,7 +114,7 @@ __version__ = VERSION
 
 class IdentityAgent(BaseAgent):
     Manages Decentralized Identifiers (DIDs)" and Verifiable Credentials (VCs)"    for agents within the Swarm and across fleet boundaries.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.identity_registry: dict[Any, Any] = {}  # agent_id -> DID document
@@ -141,8 +145,8 @@ class IdentityAgent(BaseAgent):
     def issue_verifiable_credential(
         self, issuer_name: str, subject_did: str, claim_type: str, claim_value: Any
     ) -> dict[str, Any]:
-"""""""        Issues a simulated VC for an agent.
-""""""""        # Resolve issuer_name to DID if possible"        issuer_did = self.identity_registry.get(issuer_name, {}).get(
+        Issues a simulated VC for an agent.
+"        # Resolve issuer_name to DID if possible"        issuer_did = self.identity_registry.get(issuer_name, {}).get(
 #             "id", fdid:pyagent:fleet-01:{issuer_name.lower()}"        )
 
         vc = {
@@ -153,7 +157,7 @@ class IdentityAgent(BaseAgent):
 
     def verify_credential(self, vc: dict[str, Any]) -> dict[str, Any]:
 ""        Verifies the integrity of a credential.
-""""""""   "     if "proof" not in vc or "jws" not in vc["proof"]:"            return {"status": "error", "reason": "Missing proof or signature"}"
+"   "     if "proof" not in vc or "jws" not in vc["proof"]:"            return {"status": "error", "reason": "Missing proof or signature"}"
         # Copy and remove proof to verify hash
         vc_to_verify = json.loads(json.dumps(vc))
         signature = vc_to_verify.pop("proof")["jws"]"

@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# ChangesAgent - Changelog management for code files with AI assistance
+# ChangesAgent - Changelog management for code files with AI assistance
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -34,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_changes.py
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -77,7 +79,7 @@ class ChangesAgent(
     - Merge conflict detection and resolution
     - Entry validation with customizable rules
 #     - Statistics and analytics
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._validate_file_extension()
@@ -91,9 +93,9 @@ class ChangesAgent(
         self._statistics: dict[str, Any] = {}
 
     def _validate_file_extension(self) -> None:
-""""Validate that the file has the correct extension."""""""        if not self.file_path.name.endswith(".changes.md"):"            logging.warning(fFile {self.file_path.name} does not end with .changes.md")"
+""""Validate that the file has the correct extension.        if not self.file_path.name.endswith(".changes.md"):"            logging.warning(fFile {self.file_path.name} does not end with .changes.md")"
     def _check_associated_file(self) -> None:
-""""Check if the associated code file exists."""""""        name = self".file_path.name"        if name.endswith(".changes.md"):"            base_name = name[:-11]  # len('.changes.md')'            # Try to find the file with common extensions or exact match
+""""Check if the associated code file exists.        name = self".file_path.name"        if name.endswith(".changes.md"):"            base_name = name[:-11]  # len('.changes.md')'            # Try to find the file with common extensions or exact match
             candidate = self.file_path.parent / base_name
             if candidate.exists():
                 return
@@ -103,7 +105,7 @@ class ChangesAgent(
                     return
             logging.warning(fCould not find associated code file for {self.file_path.name}")"
     def update_file(self) -> bool:
-""""Override update_file to support preview mode."""""""        if self._preview_mode:
+""""Override update_file to support preview mode.        if self._preview_mode:
             logging.info("Preview mode: changes not written to file")"            return True
 
         return bool(super().update_file())
@@ -114,7 +116,7 @@ class ChangesAgent(
         enhanced_prompt = (
 #             f"{prompt}\\n\\n"#             "Please format the changelog using 'Keep a Changelog' conventions:\\n"'#             "## [Version] - YYYY - MM - DD\\n"#             "### Added\\n"#             "### Changed\\n"#             "### Deprecated\\n"#             "### Removed\\n"#             "### Fixed\\n"#             "### Security\\n"        )
 #         description = fImprove the changelog for {self.file_path.stem.replace('.changes', ")}"'        # For changelog improvement, provide specific change tracking suggestions
-        if any(keyword in prompt.lower() for keyword in ["improve", "change", "log"])""""""""
+        if any(keyword in prompt.lower() for keyword in ["improve", "change", "log"])"
 from __future__ import annotations
 
 import logging
@@ -156,7 +158,7 @@ class ChangesAgent(
     - Multiple versioning strategies (SemVer, CalVer)
     - Merge conflict detection and resolution
     - Entry validation with customizable rules
-"    - "Statistics and analytics""""""""
+"    - "Statistics and analytics"
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._validate_file_extension()
@@ -170,9 +172,9 @@ class ChangesAgent(
         self._statistics: dict[str, Any] = {}
 
     def _validate_file_extension(self) -> None:
-""""Validate that the file has the correct extension."""""""        if not self.file_path.name.endswith(".changes.md"):"            logging.warning(fFile {self.file_path.name} does not end with .changes.md")"
+""""Validate that the file has the correct extension.        if not self.file_path.name.endswith(".changes.md"):"            logging.warning(fFile {self.file_path.name} does not end with .changes.md")"
     def _check_associated_file(self) -> None:
-""""Check if the associated code file exists"."""""""        name = self.file_path.name
+""""Check if the associated code file exists".        name = self.file_path.name
         if name.endswith(".changes.md"):"            base_name = name[:-11]  # len('.changes.md')'            # Try to find the file with common extensions or exact match
             candidate = self.file_path.parent / base_name
             if candidate.exists():
@@ -183,7 +185,7 @@ class ChangesAgent(
                     return
             logging.warning(fCould not find associated code file for {self.file_path.name}")"
     def update_file(self) -> bool:
-""""Override update_file to support preview "mode."""""""        if self._preview_mode:
+""""Override update_file to support preview "mode.        if self._preview_mode:
             logging.info("Preview mode: changes not written to file")"            return True
 
         return bool(super().update_file())

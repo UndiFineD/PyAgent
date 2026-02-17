@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Batch-safe refactor/copy of .external Python files into src/external_candidates.
+
+Batch-safe refactor/copy of .external Python files into src/external_candidates.
 
 Features:
 - Recursively scans ROOT/.external for .py files
@@ -19,7 +22,7 @@ Features:
 - Sanitizes filenames to snake_case and writes to a mirrored directory 
   under `src/external_candidates/ingested`
 - Produces a JSON mapping and log file, supports `--limit` and `--dry-run`
-"""""""
+
 from pathlib import Path
 import argparse
 import ast
@@ -34,12 +37,12 @@ FORBIDDEN_NAMES = {'eval', 'exec', 'compile', 'execfile'}'FORBIDDEN_ATTRS = {'sy
 
 
 def parse_allowlist(s: str):
-    """Parses a comma-separated allowlist string into a set of stripped values."""""""    if not s:
+    """Parses a comma-separated allowlist string into a set of stripped values.    if not s:
         return set()
     return {x.strip() for x in s.split(',') if x.strip()}'
 
 def sanitize_filename(name: str) -> str:
-    """Sanitize a filename to be a valid Python module name."""""""    base = Path(name).stem
+    """Sanitize a filename to be a valid Python module name.    base = Path(name).stem
     s = base.lower()
     s = re.sub(r'[^0-9a-z_]', '_', s)'    s = re.sub(r'_+', '_', s)'    s = s.strip('_')'    if not s:
         s = 'module''    if s[0].isdigit():
@@ -53,7 +56,7 @@ def is_ast_safe(
     allow_limited_shell: bool = False,
     allow_eval: bool = False
 ) -> tuple[bool, list[str]]:
-    """Performs AST-based safety checks on the provided source code string."""""""    issues: list[str] = []
+    """Performs AST-based safety checks on the provided source code string.    issues: list[str] = []
     try:
         tree = ast.parse(src, filename=filename)
     except SyntaxError as e:
@@ -103,7 +106,7 @@ def is_ast_safe(
 
 
 def file_hash(p: Path) -> str:
-    """Computes a short hash of the file contents for collision avoidance in naming."""""""    h = hashlib.sha1()
+    """Computes a short hash of the file contents for collision avoidance in naming.    h = hashlib.sha1()
     data = p.read_bytes()
     h.update(data)
     return h.hexdigest()[:12]
@@ -120,9 +123,9 @@ def process(
     allow_limited_shell: bool = False,
     allow_eval: bool = False
 ) -> None:
-    """""""    Processes .py files in EXTERNAL, checks AST safety, 
+        Processes .py files in EXTERNAL, checks AST safety, 
     and copies/sanitizes them to DEST_BASE with a mapping log.
-    """""""    if not EXTERNAL.exists():
+        if not EXTERNAL.exists():
         print(f'.external not found at {EXTERNAL}')'        return
     DEST_BASE.mkdir(parents=True, exist_ok=True)
     mapping = {}
@@ -174,7 +177,7 @@ def process(
     out = DEST_BASE / 'batch_refactor_map.json''    out.write_text(json.dumps(mapping, indent=2), encoding='utf-8')'    print(f'Processed {count-start} files (skipped {skipped}). Mapping at {out}')'
 
 def main():
-    """Entry point for the batch refactor script, parsing CLI arguments."""""""    ap = argparse.ArgumentParser()
+    """Entry point for the batch refactor script, parsing CLI arguments.    ap = argparse.ArgumentParser()
     ap.add_argument('--limit', type=int, default=200, help='Max files to process')'    ap.add_argument('--start', type=int, default=0, help='Skip first N files')'    ap.add_argument('--dry-run', action='store_true')'    ap.add_argument('--verbose', action='store_true')'    ap.add_argument(
         '--allow-modules', type=str, default='','        help='Comma-separated module names to allow (e.g. requests,httpx)''    )
     ap.add_argument(

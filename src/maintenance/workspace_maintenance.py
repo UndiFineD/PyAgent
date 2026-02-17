@@ -3,17 +3,21 @@
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Workspace Maintenance - Consolidated workspace auditing and cleanup
+
+"""
+Workspace Maintenance - Consolidated workspace auditing and cleanup
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -48,7 +52,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Workspace maintenance module for auditing and cleanup.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -66,21 +70,23 @@ from src.maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin
 logger: logging.Logger = logging.getLogger(__name__)
 
 class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin):
-    """Consolidation of file system auditing, naming convention enforcement, and cleanup."""""""
+    """Consolidation of file system auditing, naming convention enforcement, and cleanup.
     DEFAULT_EXCLUSIONS: set[str] = {
         ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache","        ".ruff_cache", ".agent_cache", "target", "node_modules","        ".hypothesis", "__pycache__", "reports", "archive""    }
 
     STANDARD_HEADER = """#!/usr/bin/env python3""""# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""""""
+
     def __init__(self, workspace_root: str | Path = ".") -> None:"        self.workspace_root: Path = Path(workspace_root).resolve()
 
     def _is_excluded(self, path: str | Path) -> bool:
@@ -92,13 +98,13 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
         return False
 
     def run_standard_cycle(self) -> None:
-        """Executes a standard maintenance cycle."""""""        logger.info("Starting standard maintenance cycle...")"        self.apply_header_compliance()
+        """Executes a standard maintenance cycle.        logger.info("Starting standard maintenance cycle...")"        self.apply_header_compliance()
         self.apply_docstring_compliance()
         self.fix_pylint_violations()
         self.apply_syntax_fixes()
         logger.info("Cycle complete.")"
     def apply_syntax_fixes(self) -> None:
-        """Applies generic syntax and pattern fixes across the workspace."""""""        for root, _, files in os.walk(self.workspace_root):
+        """Applies generic syntax and pattern fixes across the workspace.        for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:
@@ -107,7 +113,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                     self.check_unmatched_triple_quotes(path)
 
     def find_large_files(self, threshold_kb: int = 100) -> List[Tuple[int, Path]]:
-        """Identifies files exceeding the specified size threshold."""""""        results = []
+        """Identifies files exceeding the specified size threshold.        results = []
         for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
@@ -122,7 +128,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
         return sorted(results, key=lambda x: x[0], reverse=True)
 
     def audit_naming_conventions(self) -> List[str]:
-        """Checks for files or directories not following snake_case naming."""""""        violations = []
+        """Checks for files or directories not following snake_case naming.        violations = []
         for root, dirs, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
@@ -132,7 +138,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
         return violations
 
     def audit_headers(self) -> List[Path]:
-        """Identifies Python files missing the standard license header."""""""        missing = []
+        """Identifies Python files missing the standard license header.        missing = []
         for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
@@ -145,7 +151,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
         return missing
 
     def find_long_lines(self, max_len: int = 120) -> List[str]:
-        """Identifies lines exceeding max_len characters."""""""        violations = []
+        """Identifies lines exceeding max_len characters.        violations = []
         for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
@@ -160,7 +166,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
         return violations
 
     def fix_whitespace(self) -> None:
-        """Removes trailing whitespace and tabs from all Python files."""""""        for root, _, files in os.walk(self.workspace_root):
+        """Removes trailing whitespace and tabs from all Python files.        for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:
@@ -172,7 +178,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                         continue
 
     def apply_header_compliance(self) -> None:
-        """Ensures all Python files have the standard license header."""""""        for root, _, files in os.walk(self.workspace_root):
+        """Ensures all Python files have the standard license header.        for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:
@@ -189,7 +195,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                     content = "\\n".join(lines[1:])"                path.write_text(self.STANDARD_HEADER + "\\n" + content, encoding="utf-8")"        except (IOError, OSError, UnicodeDecodeError, UnicodeEncodeError) as e:
             logger.error(f"Error applying header to {path}: {e}")"
     def apply_docstring_compliance(self) -> None:
-        """Ensures all Python files have a module docstring."""""""        for root, _, files in os.walk(self.workspace_root):
+        """Ensures all Python files have a module docstring.        for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:
@@ -208,7 +214,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                 module_name: str = path.stem.replace("_", " ").title()"                docstring: str = f'\\n"""\\n{module_name} module.\\n"""\\n'""""'                new_content: str = "\\n".join(lines[:header_end_idx]) + docstring + "\\n".join(lines[header_end_idx:])"                path.write_text(new_content, encoding="utf-8")"        except (IOError, OSError, UnicodeEncodeError) as e:
             logger.error(f"Error applying docstring to {path}: {e}")"
     def fix_pylint_violations(self) -> None:
-        """Walks through the workspace and applies available Pylint fixes."""""""        for root, _, files in os.walk(self.workspace_root):
+        """Walks through the workspace and applies available Pylint fixes.        for root, _, files in os.walk(self.workspace_root):
             if self._is_excluded(root):
                 continue
             for file in files:

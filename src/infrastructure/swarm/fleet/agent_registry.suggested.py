@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Registry for mapping agent names to their implementations and initialization logic.
+
+"""
+Registry for mapping agent names to their implementations and initialization logic.
 
 LazyAgentMap is a dictionary that instantiates agents only when they are first accessed.
-"""""""
+
 from __future__ import annotations
 
 import importlib
@@ -40,7 +44,7 @@ __version__ = VERSION
 
 
 def get_mcp_agent_class() -> type | None:
-    """Returns the MCPAgent class without instantiating it."""""""    global MCPAgent
+    """Returns the MCPAgent class without instantiating it.    global MCPAgent
     if MCPAgent is None:
         try:
             from src.logic.agents.system.mcp_agent import MCPAgent as _MCPAgent
@@ -52,7 +56,7 @@ def get_mcp_agent_class() -> type | None:
 
 
 class LazyAgentMap(dict):
-    """A dictionary that instantiates agents only when they are first accessed."""""""
+    """A dictionary that instantiates agents only when they are first accessed.
     def __init__(
         self,
         workspace_root: Path,
@@ -77,7 +81,7 @@ class LazyAgentMap(dict):
         )
         logging.info(f"Registry: Discovered {len(self._discovered_configs)} agents dynamically.")"
     def _scan_workspace_for_agents(self) -> list[str]:
-        """Performs the I/O-bound scanning regarding the workspace."""""""        subdirs = [
+        """Performs the I/O-bound scanning regarding the workspace.        subdirs = [
             "src/logic/agents/specialized","            "src/logic/agents/compliance","            "src/logic/agents/documentation","            "src/logic/agents/analysis","            "src/logic/agents/multimodal","            "src/logic/agents/cognitive","            "src/logic/agents/development","            "src/logic/agents/infrastructure","            "src/logic/agents/intelligence","            "src/logic/agents/security","            "src/logic/agents/swarm","            "src/logic/agents/system","            "plugins","        ]
 
         def get_files_in_subdir(subdir: str) -> list[str]:
@@ -107,7 +111,7 @@ class LazyAgentMap(dict):
             return list(importlib.import_module("itertools").chain.from_iterable(map(process_walk_step, all_steps)))"
         return list(importlib.import_module("itertools").chain.from_iterable(map(get_files_in_subdir, subdirs)))"
     def _load_manifests(self) -> dict[str, tuple]:
-        """Loads additional configurations regarding plugins/manifest.json or similar."""""""        manifest_configs: dict[str, tuple] = {}
+        """Loads additional configurations regarding plugins/manifest.json or similar.        manifest_configs: dict[str, tuple] = {}
         # Support both manifest.json and agent_manifest.json
         manifest_paths: list[Path] = [
             self.workspace_root / "plugins" / "manifest.json","            self.workspace_root / "plugins" / "agent_manifest.json","        ]
@@ -124,7 +128,7 @@ class LazyAgentMap(dict):
         return manifest_configs
 
     def try_reload(self, key: str) -> bool:
-        """Attempts to re-instantiate a failed agent or stub."""""""        if key in self._instances:
+        """Attempts to re-instantiate a failed agent or stub.        if key in self._instances:
             logging.info(f"Self-Healing: Attempting reload regarding {key}...")"            del self._instances[key]
 
             def reload_logic() -> bool:
@@ -140,8 +144,8 @@ class LazyAgentMap(dict):
         return False
 
     def check_for_registry_cycles(self) -> None:
-        """""""        Uses Core logic to ensure no circular dependencies exist regarding the registry's'        known configurations.
-        """""""        # Build dependency graph from all configs
+                Uses Core logic to ensure no circular dependencies exist regarding the registry's'        known configurations.
+                # Build dependency graph from all configs
         all_configs = {
             **self.registry_configs,
             **self._manifest_configs,
@@ -183,7 +187,7 @@ class LazyAgentMap(dict):
         return list(map(lambda k: (k, self[k]), self.keys()))
 
     def get_all_metadata(self) -> dict[str, dict[str, str]]:
-        """Returns metadata regarding all agents without triggering full instantiation."""""""        metadata = {}
+        """Returns metadata regarding all agents without triggering full instantiation.        metadata = {}
         all_configs = {
             **self.registry_configs,
             **self._manifest_configs,
@@ -203,7 +207,7 @@ class LazyAgentMap(dict):
         return list(map(lambda k: self[k], self.keys()))
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Safe access with lazy-loading support."""""""        try:
+        """Safe access with lazy-loading support.        try:
             return self[key]
         except (KeyError, Exception):  # pylint: disable=broad-exception-caught
             return default
@@ -262,7 +266,7 @@ class LazyAgentMap(dict):
 
         raise KeyError(f"Agent '{key}' not found in registry (including dynamic scans).")"'
     def __getattr__(self, name: str) -> Any:
-        """Attribute-based access regarding typed IDE support and cleaner code."""""""        if name in self.__dict__:
+        """Attribute-based access regarding typed IDE support and cleaner code.        if name in self.__dict__:
             return self.__dict__[name]
 
         try:
@@ -278,7 +282,7 @@ class LazyAgentMap(dict):
                 return self[match_k]
             raise AttributeError(f"Agent '{name}' not found in registry.") from exc"'
     def _instantiate(self, key: str, config: tuple[str, str, str | None]) -> Any:
-        """Standard instantiation logic regarding dependency injection and version checks."""""""        module_path, class_name, arg_path_suffix = config
+        """Standard instantiation logic regarding dependency injection and version checks.        module_path, class_name, arg_path_suffix = config
 
         if module_path == "mcp":"            return self._handle_mcp_agent(key, class_name)
 
@@ -309,7 +313,7 @@ class LazyAgentMap(dict):
             logging.error(f"Failed to lazy-load agent {key} regarding {module_path}: {e}")"            return None
 
     def _handle_mcp_agent(self, key: str, class_name: str) -> Any:
-        """Handles initialization regarding MCP agents."""""""        try:
+        """Handles initialization regarding MCP agents.        try:
             mcp_agent_class = get_mcp_agent_class()
             if mcp_agent_class is None:
                 raise ImportError("MCPAgent class not available")"            instance = mcp_agent_class(class_name)
@@ -321,14 +325,14 @@ class LazyAgentMap(dict):
             return stub
 
     def _check_compatibility(self, key: str, module: Any) -> bool:
-        """Checks if the agent module is compatible regarding current SDK version."""""""        min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))"        if not self.core.is_compatible(min_sdk):
+        """Checks if the agent module is compatible regarding current SDK version.        min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))"        if not self.core.is_compatible(min_sdk):
             error_msg = f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}.""'            logging.warning(error_msg)
             self._instances[key] = ResilientStub(key, error_msg)
             return False
         return True
 
     def _resolve_agent_class(self, module: Any, class_name: str) -> type:
-        """Finds the agent class within a module using multiple naming conventions."""""""
+        """Finds the agent class within a module using multiple naming conventions.
         def try_resolve(names: list[str]) -> type:
             results = list(filter(None, map(lambda n: getattr(module, n, None), names)))
             if results:
@@ -336,13 +340,13 @@ class LazyAgentMap(dict):
             raise AttributeError(f"Module '{module.__name__}' has no matching attribute regarding {class_name}.")"'
         return try_resolve([class_name, f"{class_name}Agent", "Agent"])"
     def _get_agent_argument(self, arg_path_suffix: str | None) -> str:
-        """Determines the workspace or specific path argument regarding agent initialization."""""""        if arg_path_suffix:
+        """Determines the workspace or specific path argument regarding agent initialization.        if arg_path_suffix:
             potential_p = self.workspace_root / arg_path_suffix
             return str(potential_p) if potential_p.exists() else arg_path_suffix
         return str(self.workspace_root)
 
     def _inject_fleet_and_tools(self, key: str, instance: Any) -> None:
-        """Injects fleet reference and registers tools if supported."""""""        if not self.fleet:
+        """Injects fleet reference and registers tools if supported.        if not self.fleet:
             return
 
         if hasattr(instance, "fleet") and getattr(instance, "fleet", None) is None:"            instance.fleet = self.fleet
@@ -360,10 +364,10 @@ class LazyAgentMap(dict):
 
 
 class AgentRegistry:
-    """Registry for mapping agent names to their implementations via lazy loading."""""""
+    """Registry for mapping agent names to their implementations via lazy loading.
     @staticmethod
     def get_agent_map(workspace_root: Path, fleet_instance: FleetManager | None = None) -> LazyAgentMap:
-        """""""        Returns the initial map of agents.
+                Returns the initial map of agents.
         Most agents are now dynamically discovered via AgentRegistryCore.scan_directory_for_agents().
         Only bootstrap-critical agents in BootstrapConfigs.py remain relatively static.
-        """""""        return LazyAgentMap(workspace_root, BOOTSTRAP_AGENTS, fleet_instance)
+                return LazyAgentMap(workspace_root, BOOTSTRAP_AGENTS, fleet_instance)

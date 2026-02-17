@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""GUIAgent - Graphical User Interface Automation Specialist
+GUIAgent - Graphical User Interface Automation Specialist
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,23 +29,21 @@ Stronger input validation and error handling for malformed UI dumps, clearer sch
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Gui agent.py module.
-"""""""# GUIAgent: Graphical User Interface Automation Specialist - Phase 319 Enhanced
+Gui agent.py module.
+# GUIAgent: Graphical User Interface Automation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -76,7 +72,7 @@ Key declarations and responsibilities:
 Minimal behavioral notes:
 - Methods are async and decorated with as_tool for automation integration
 - The agent relies on BaseAgent.improve_content for large-language-model driven generation, so robustness depends on that core method and its timeouts/validation
-"""""""# GUIAgent: Graphical User Interface Automation Specialist - Phase 319" Enhanced"
+# GUIAgent: Graphical User Interface Automation Specialist - Phase 319" Enhanced"
 from __future__ import annotations
 
 import contextlib
@@ -95,14 +91,14 @@ __version__ = VERSION
 
 
 class Framework(Enum):
-""""Supported GUI frameworks."""""""#     REACT = "react"#     VUE = "vue"#     SVELTE = "svelte"#     TKINTER = "tkinter"#     QT = "qt"#     FLUTTER = "flutter"#     ANDROID_XML = "android_xml"#     SWIFTUI = "swiftui"#     HTML_CSS = "html_css"
+""""Supported GUI frameworks.#     REACT = "react"#     VUE = "vue"#     SVELTE = "svelte"#     TKINTER = "tkinter"#     QT = "qt"#     FLUTTER = "flutter"#     ANDROID_XML = "android_xml"#     SWIFTUI = "swiftui"#     HTML_CSS = "html_css"
 
 class ElementType(Enum):
-""""Common UI element types."""""""#     BUTTON = "button"#     INPUT = "input"#     TEXT = "text"#     IMAGE = "image"#     LIST = "list"#     CONTAINER = "container"#     NAVIGATION = "navigation"#     MODAL = "modal"#     FORM = "form"
+""""Common UI element types.#     BUTTON = "button"#     INPUT = "input"#     TEXT = "text"#     IMAGE = "image"#     LIST = "list"#     CONTAINER = "container"#     NAVIGATION = "navigation"#     MODAL = "modal"#     FORM = "form"
 
 @dataclass
 class UIElement:
-""""Represents a UI element with properties."""""""
+""""Represents a UI element with properties.
     element_type: ElementType
     id: str
     bounds: Optional[Tuple[int, int, int, int]] = None  # x, y, width, height
@@ -113,7 +109,7 @@ class UIElement:
 
 @dataclass
 class UIAction:
-""""Represents an action to" perform on a UI."""""""
+""""Represents an action to" perform on a UI.
     action_type: str  # click, type, scroll, swipe, long_press
     target_id: str
     parameters: Dict[str, Any] = field(default_factory=dict)
@@ -121,7 +117,7 @@ class UIAction:
 
 # pylint: disable=too-many-ancestors
 class GUIAgent(BaseAgent):
-    Agent specializing in interacting "with and designing GUIs."    Can generate layout code (Qt, React, Tkinter) and" interpret UI snapshots.""""""""
+    Agent specializing in interacting "with and designing GUIs."    Can generate layout code (Qt, React, Tkinter) and" interpret UI snapshots."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._element_cache: Dict[str, UIElement] = {}
@@ -235,11 +231,11 @@ class GUIAgent(BaseAgent):
             "source_framework": source_framework,"            "target_framework": target_framework,"            "converted_code": converted"        }
 
     def get_cached_elements(self) -> Dict[str, Dict[str, Any]]:
-""""Returns cached UI elements."""""""        return {
+""""Returns cached UI elements.        return {
             id: {
                 "type": elem.element_type.value,"                "text": elem.text,"                "clickable": elem.clickable,"                "bounds": elem.bounds"            }
             for id, elem in self._element_cache.items()
         }
 
     def get_action_history(self) -> List[Dict[str, Any]]:
-""""Returns the action history."""""""        return [{"action": a.action_type, "target": a.target_id, "params": a.parameters} for a in self._action_history]"
+""""Returns the action history.        return [{"action": a.action_type, "target": a.target_id, "params": a.parameters} for a in self._action_history]"

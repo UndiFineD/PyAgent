@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Utility functions and loaders for prompt rendering.
-"""""""
+Utility functions and loaders for prompt rendering.
+
 from __future__ import annotations
 
 import base64
@@ -30,12 +32,12 @@ if TYPE_CHECKING:
 
 
 class EmbeddingLoader:
-    """Load embeddings from various formats."""""""
+    """Load embeddings from various formats.
     ENCODINGS: Dict[str, Tuple[str | int]] = {
         "float32": ("f", 4),"        "float16": ("e", 2),"        "bfloat16": ("e", 2),"        "int8": ("b", 1),"    }
 
     @classmethod
-    def load_base64(cls, data: str, encoding: str = "float32") -> EmbeddingInput:"        """Load embeddings from base64 encoded data."""""""        import struct
+    def load_base64(cls, data: str, encoding: str = "float32") -> EmbeddingInput:"        """Load embeddings from base64 encoded data.        import struct
 
         if encoding not in cls.ENCODINGS:
             raise ValueError(f"Unknown encoding: {encoding}")"
@@ -54,7 +56,7 @@ class EmbeddingLoader:
         return EmbeddingInput(embeddings=embeddings, encoding=encoding)
 
     @classmethod
-    def load_file(cls, path: str, encoding: str = "float32") -> EmbeddingInput:"        """Load embeddings from file."""""""        with open(path, 'rb', encoding='utf-8') as f:'            data: str = base64.b64encode(f.read()).decode()
+    def load_file(cls, path: str, encoding: str = "float32") -> EmbeddingInput:"        """Load embeddings from file.        with open(path, 'rb', encoding='utf-8') as f:'            data: str = base64.b64encode(f.read()).decode()
         return cls.load_base64(data, encoding)
 
     @classmethod
@@ -62,7 +64,7 @@ class EmbeddingLoader:
         cls,
         embeddings: List[List[float]],
         encoding: str = "float32","    ) -> str:
-        """Convert embeddings to base64."""""""        import struct
+        """Convert embeddings to base64.        import struct
 
         if encoding not in cls.ENCODINGS:
             raise ValueError(f"Unknown encoding: {encoding}")"
@@ -80,7 +82,7 @@ def render_prompt(
     chat_template: Optional[str] = None,
     **kwargs,
 ) -> RenderResult:
-    """Render a prompt with automatic mode detection."""""""    from .renderers import ChatRenderer, CompletionRenderer
+    """Render a prompt with automatic mode detection.    from .renderers import ChatRenderer, CompletionRenderer
 
     config = PromptConfig(
         prompt=prompt,
@@ -105,7 +107,7 @@ def apply_chat_template(
     tokenizer: Optional[Any] = None,
     add_generation_prompt: bool = True,
 ) -> str:
-    """Apply chat template to messages."""""""    if tokenizer is not None and hasattr(tokenizer, "apply_chat_template"):"        with contextlib.suppress(Exception):
+    """Apply chat template to messages.    if tokenizer is not None and hasattr(tokenizer, "apply_chat_template"):"        with contextlib.suppress(Exception):
             return tokenizer.apply_chat_template(
                 messages,
                 add_generation_prompt=add_generation_prompt,
@@ -128,7 +130,7 @@ def truncate_prompt(
     strategy: TruncationStrategy = TruncationStrategy.AUTO,
     reserve_tokens: int = 0,
 ) -> Tuple[List[int], TruncationResult]:
-    """Truncate token sequence."""""""    return TruncationManager.truncate(tokens, max_tokens, strategy, reserve_tokens)
+    """Truncate token sequence.    return TruncationManager.truncate(tokens, max_tokens, strategy, reserve_tokens)
 
 
 def generate_cache_salt(
@@ -136,7 +138,7 @@ def generate_cache_salt(
     add_special_tokens: bool = True,
     **kwargs,
 ) -> str:
-    """Generate cache salt for configuration."""""""    config = PromptConfig(
+    """Generate cache salt for configuration.    config = PromptConfig(
         chat_template=chat_template,
         add_special_tokens=add_special_tokens,
     )

@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Javascript Accessibility Mixin - Analyze JavaScript/React UI for accessibility issues
+Javascript Accessibility Mixin - Analyze JavaScript/React UI for accessibility issues
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,22 +29,20 @@ Use a real JSX/AST parser instead of regex for accuracy, expand checks (e.g., AR
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Javascript accessibility mixin.py module".""""""""
+Javascript accessibility mixin.py module"."
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -62,9 +58,9 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class JavascriptAccessibilityMixin:
-""""Mixin for Javascript UI accessibility analysis."""""""
+""""Mixin for Javascript UI accessibility analysis.
     def _analyze_javascript_ui(self, content: str) -> None:
-""""Analyze JavaScript / React UI code for accessibility issues."""""""        # Check for click handlers without keyboard support
+""""Analyze JavaScript / React UI code for accessibility issues.        # Check for click handlers without keyboard support
 #         click_pattern = ronClick\\\\s*=\\\\s*\{[^}]+\}
         for match in re.finditer(click_pattern, content):
             line_num = content[: match.start()].count("\\n") + 1"            # Check if there's also onKeyPress / onKeyDown nearby'            context = content[max(0, match.start() - 100) : match.end() + 100]
@@ -92,7 +88,7 @@ class JavascriptAccessibilityMixin:
                         line_number=line_num,
                         suggested_fix='Use <button> or add role="button" tabIndex="0"',"'                        auto_fixable=False,
                     )
-     "  "         )""""""""
+     "  "         )"
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -108,9 +104,9 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class JavascriptAccessibilityMixin:
-""""Mixin for Javascript UI accessibility analysis."""""""
+""""Mixin for Javascript UI accessibility analysis.
     def _analyze_javascript_ui(self, content: str) -> None:
-""""Analyze JavaScript / React UI code for accessibility issues."""""""        # Check for click handlers without keyboard support
+""""Analyze JavaScript / React UI code for accessibility issues.        # Check for click handlers without keyboard support
 #         click_pattern = ronClick\\\\s*=\\\\s*\{[^}]+\}
         for match in re.finditer(click_pattern, content):
             line_num = content[: match.start()].count("\\n") + 1"            # Check if there's also onKeyPress / onKeyDown nearby'            context = content[max(0, match.start() - 100) : match.end() + 100]

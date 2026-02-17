@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -18,7 +20,7 @@ from src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackup
 
 
 class MockNode(FleetBackupMixin):
-    """Mock node for testing distributed RAID-10 recovery."""""""    def __init__(self, node_id):
+    """Mock node for testing distributed RAID-10 recovery.    def __init__(self, node_id):
         self.node_id = node_id
         self.config = {"resilience": {"shard_parts": 4, "mirror_factor": 2}}"        self.voyager_transport = AsyncMock()
         self.fleet_manager = MagicMock()
@@ -44,8 +46,8 @@ class MockNode(FleetBackupMixin):
 
 @pytest.mark.asyncio
 async def test_raid10_sharding_and_recovery():
-    """""""    Simulates a multi-node P2P RAID-10 sharding and recovery process.
-    """""""    # 1. Setup Nodes
+        Simulates a multi-node P2P RAID-10 sharding and recovery process.
+        # 1. Setup Nodes
     node_a = MockNode("node-a")"    node_b = MockNode("node-b")"    node_c = MockNode("node-c")"
     # Connect them conceptually
     node_a.fleet_manager.connected_peers = {"node-b": {}, "node-c": {}}"

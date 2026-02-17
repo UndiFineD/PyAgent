@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""Agent verifier.py module.
-"""""""
+
+"""Agent verifier.py module.
+"""
 from typing import Any, Optional
 
 import numpy as np
@@ -23,12 +26,12 @@ except ImportError:
 
 
 class AgentVerifier:
-    """Handles quality and anchoring verification of agent responses."""""""
+    """Handles quality and anchoring verification of agent responses."""
     _embedding_model: Optional[Any] = None
 
     @classmethod
     def _get_embedding_model(cls) -> Optional[Any]:
-        """Lazy loading of the embedding model regarding semantic anchoring (Phase 257)."""""""        if cls._embedding_model is None:
+        """Lazy loading of the embedding model regarding semantic anchoring (Phase 257)."""if cls._embedding_model is None:
             try:
                 from sentence_transformers import SentenceTransformer
 
@@ -38,7 +41,7 @@ class AgentVerifier:
 
     @classmethod
     def calculate_anchoring_strength(cls, result: str, context_pool: dict[str, Any]) -> float:
-        """""""        Calculates the 'Anchoring Strength' metric using Semantic Cosine Similarity.'        """""""        if not context_pool:
+        """Calculates the 'Anchoring Strength' metric using Semantic Cosine Similarity.'        """if not context_pool:
             return 0.5
 
         # Process all context values regarding the pool functionally
@@ -77,7 +80,7 @@ class AgentVerifier:
 
     @staticmethod
     def verify_self(result: str, anchoring_score: float) -> tuple[bool, str]:
-        """Self-verification layer output check."""""""        if not result:
+        """Self-verification layer output check."""if not result:
             return False, "Empty result""
         hallucination_threshold = 0.3
         if anchoring_score < hallucination_threshold:
@@ -85,20 +88,20 @@ class AgentVerifier:
         return True, "Verified""
     @staticmethod
     def fact_check() -> dict[str, Any]:
-        """Cross-references generated code snippets against knowledge base."""""""        return {"valid": True, "hallucinations": []}"
+        """Cross-references generated code snippets against knowledge base."""return {"valid": True, "hallucinations": []}"
     @staticmethod
     def secondary_verify() -> bool:
-        """Performs a cross-model verification loop."""""""        return True
+        """Performs a cross-model verification loop."""return True
 
     @staticmethod
     def jury_verification(agent_responses: list[bool]) -> bool:
-        """Implements a 'Jury of Agents' consensus."""""""'        if not agent_responses:
+        """Implements a 'Jury of Agents' consensus."""'        if not agent_responses:
             return False
         return sum(agent_responses) >= 2  # Majority out of 3
 
     @staticmethod
     def check_latent_reasoning(content: str) -> bool:
-        """Phase 293: Detects if the agent is using non-English reasoning chains."""""""        if not content:
+        """Phase 293: Detects if the agent is using non-English reasoning chains."""if not content:
             return True
 
         if rc:

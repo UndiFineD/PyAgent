@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -22,12 +24,12 @@ __version__ = VERSION
 
 
 class GrafanaDashboardGenerator:
-    """""""    Generates Grafana JSON dashboard configurations for PyAgent swarm observability."""""""    Supports monitoring fleet metrics, agent health, and shard performance."""""""    """""""
+        Generates Grafana JSON dashboard configurations for PyAgent swarm observability.    Supports monitoring fleet metrics, agent health, and shard performance.    
     def __init__(self, output_dir: str = "deploy/grafana/dashboards") -> None:"        self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def generate_fleet_summary(self) -> str:
-        """Generates a summary dashboard for the entire fleet."""""""        dashboard = {
+        """Generates a summary dashboard for the entire fleet.        dashboard = {
             "title": "PyAgent Fleet Summary","            "panels": ["                {
                     "title": "Agent Count","                    "type": "stat","                    "targets": [{"expr": "count(agent_up)"}],"                },
                 {
@@ -39,7 +41,7 @@ class GrafanaDashboardGenerator:
         return str(output_path)
 
     def generate_shard_obs(self, shard_name: str) -> str:
-        """Generates a dashboard for a specific swarm shard."""""""        dashboard = {
+        """Generates a dashboard for a specific swarm shard.        dashboard = {
             "title": f"PyAgent Shard: {shard_name}","            "panels": ["                {
                     "title": "Shard Load","                    "type": "gauge","                    "targets": [{"expr": f"shard_load{{shard='{shard_name}'}} "}],"'                }
             ],

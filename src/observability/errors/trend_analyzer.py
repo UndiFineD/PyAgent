@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""TrendAnalyzer - Error trend analysis and prediction
+
+"""
+TrendAnalyzer - Error trend analysis and prediction
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -25,7 +29,7 @@ WHAT IT SHOULD DO BETTER:
 - Persist timestamps as datetime objects (not ISO strings) and normalize time deltas in prediction.
 - Use configurable windowing, weighting (e.g., EMA) and robust outlier handling instead of a fixed recent slice and fixed ±0.1 thresholds.
 - Add input validation, concurrency protection, configurable thresholds, error handling, and unit-tested prediction accuracy; consider statistical or ML-based forecasting for better long-range predictions.
-"""""""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -45,16 +49,16 @@ class TrendAnalyzer:
 
     Attributes:
         data_points: Map of metric names to TrendData.
-    """""""
+    
     def __init__(self) -> None:
-        """Initialize the trend analyzer."""""""        self.data_points: dict[str, TrendData] = {}
+        """Initialize the trend analyzer.        self.data_points: dict[str, TrendData] = {}
 
     def record(self, metric: str, value: float) -> None:
         """Record a data point.""""
         Args:
             metric: Metric name.
             value: Value to record.
-        """""""        if metric not in self.data_points:
+                if metric not in self.data_points:
             self.data_points[metric] = TrendData(metric_name=metric)
         data = self.data_points[metric]
         data.values.append(value)
@@ -67,7 +71,7 @@ class TrendAnalyzer:
 
         Returns:
             TrendData with direction and prediction.
-        """""""        if metric not in self.data_points:
+                if metric not in self.data_points:
             return TrendData(metric_name=metric)
         data = self.data_points[metric]
         if len(data.values) < 2:
@@ -94,7 +98,7 @@ class TrendAnalyzer:
 
         Returns:
             List of predicted values.
-        """""""        data = self.analyze(metric)
+                data = self.analyze(metric)
         if not data.values:
             return []
         predictions: list[float] = []

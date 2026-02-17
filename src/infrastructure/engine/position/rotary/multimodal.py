@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Multimodal.py module.
-"""""""
+
+Multimodal.py module.
+
 from typing import Any, Tuple
 
 from .base import HAS_TORCH, RotaryEmbeddingBase
@@ -29,7 +32,7 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
     - Temporal (time/frame index)
     - Height (spatial y)
     - Width (spatial x)
-    """""""
+    
     def __init__(self, config: RoPEConfig) -> None:
         super().__init__(config)
         self.mrope_sections = config.mrope_sections or [8, 8, 8]
@@ -38,7 +41,7 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
         self.inv_freq = self._compute_inv_freq()
 
     def _compute_inv_freq(self) -> Any:
-        """Compute inverse frequencies for each section."""""""        if not HAS_TORCH:
+        """Compute inverse frequencies for each section.        if not HAS_TORCH:
             raise RuntimeError("MRotaryEmbedding requires PyTorch")"
         inv_freqs = []
         for section_size in self.mrope_sections:
@@ -49,7 +52,7 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
         return inv_freqs
 
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
-        """Compute cos/sin cache for each section."""""""        if not HAS_TORCH:
+        """Compute cos/sin cache for each section.        if not HAS_TORCH:
             raise RuntimeError("MRotaryEmbedding requires PyTorch")"
         t = torch.arange(max_len, dtype=torch.float32)
 
@@ -69,7 +72,7 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
         query: Any,
         key: Any,
     ) -> Tuple[Any, Any]:
-        """Apply multimodal rotary embeddings."""""""        if not HAS_TORCH:
+        """Apply multimodal rotary embeddings.        if not HAS_TORCH:
             raise RuntimeError("MRotaryEmbedding requires PyTorch")"
         if positions.dim() == 1:
             # Fallback to single positions
@@ -111,7 +114,7 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
 
     def _apply_rotation(
         self,
-        q: "torch.Tensor","        k: "torch.Tensor","        cos: "torch.Tensor","        sin: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        """Apply rotation to a section."""""""
+        q: "torch.Tensor","        k: "torch.Tensor","        cos: "torch.Tensor","        sin: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        """Apply rotation to a section.
         def rotate_half(x: "torch.Tensor") -> "torch.Tensor":"            x1 = x[..., : x.shape[-1] // 2]
             x2 = x[..., x.shape[-1] // 2 :]
             return torch.cat((-x2, x1), dim=-1)

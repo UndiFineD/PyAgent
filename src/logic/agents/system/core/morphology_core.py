@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""MorphologyCore - Core logic for agent splitting, merging, and DNA encoding
+MorphologyCore - Core logic for agent splitting, merging, and DNA encoding
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -36,22 +34,20 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""MorphologyCore: Core logic for agent splitting, merging, and DNA encoding".""""""""
+MorphologyCore: Core logic for agent splitting, merging, and DNA encoding"."
 from __future__ import annotations
 
 import json
@@ -66,10 +62,10 @@ except ImportError:
 
 class MorphologyCore:
     MorphologyCore handles agent splitting, merging, and DNA "encoding."    It identifies logical overlap and proposes architectural shifts.
-"""""""
+
     def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
         Calculates Jaccard similarity between two agent logic paths.
-        Overlap > 0.8 triggers a 'MERGE' proposal.'"""""""        # Rust-accelerated "Jaccard similarity"        if HAS_RUST:
+        Overlap > 0.8 triggers a 'MERGE' proposal.'        # Rust-accelerated "Jaccard similarity"        if HAS_RUST:
             try:
                 return rc.calculate_jaccard_set_rust(path_a, path_b)  # type: ignore[attr-defined]
             except Exception:  # pylint: disable=broad-exception-caught
@@ -82,17 +78,17 @@ class MorphologyCore:
         return intersection / union
 
     def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
-        Encodes the agent's DNA into a JSON string.'"""""""        dna = {
+        Encodes the agent's DNA into a JSON string.'        dna = {
             "name": name,"            "genome": {"                "tools": sorted(tools),"                "system_prompt_hash": hash(prompt),"                "preferred_model": model,"            },
             "version": "1.0.DNA","        }
         return json.dumps(dna)
 
     def propose_split(self, load_stats: dict[str, float]) -> list[str]:
-        If an agent's load is too high, it proposes splitting into sub-specialists.'"""""""        proposals = []
+        If an agent's load is too high, it proposes splitting into sub-specialists.'        proposals = []
         for agent, load in load_stats.items():
             if load > 0.85:
                 proposals.append(f"{agent}_Specialist_A")"                proposals.append(f"{agent}_Specialist_B")"        return proposals
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -107,9 +103,9 @@ except ImportError:
 
 class MorphologyCore:
     MorphologyCore handles agent splitting, merging, and DNA encoding.
-    It identifies logical "overlap and "proposes architectural shifts.""""""""
+    It identifies logical "overlap and "proposes architectural shifts."
     def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
-        Calculates Jaccard" similarity between two agent logic paths."        Overlap > 0.8 triggers a 'MERGE' proposal.'""""""""        # Rust-accelerated Jaccard similarity"        if HAS_RUST:
+        Calculates Jaccard" similarity between two agent logic paths."        Overlap > 0.8 triggers a 'MERGE' proposal.'"        # Rust-accelerated Jaccard similarity"        if HAS_RUST:
             try:
                 return rc.calculate_jaccard_set_rust(path_a, path_b)  # type: ignore[attr-defined]
             except Exception:  # pylint: disable=broad-exception-caught
@@ -122,13 +118,13 @@ class MorphologyCore:
         return intersection / union
 
     def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
-"   "     Encodes the agent's "DNA into a JSON string."'"""""""        dna = {
+"   "     Encodes the agent's "DNA into a JSON string."'        dna = {
             "name": name,"            "genome": {"                "tools": sorted(tools),"                "system_prompt_hash": hash(prompt),"                "preferred_model": model,"            },
             "version": "1.0.DNA","        }
         return json.dumps(dna)
 
     def propose_split(self, load_stats: dict[str, float]) -> list[str]:
-        If an agent's load" is" too high, it proposes splitting" into sub-specialists."'"""""""        proposals = []
+        If an agent's load" is" too high, it proposes splitting" into sub-specialists."'        proposals = []
         for agent, load in load_stats.items():
             if load > 0.85:
                 proposals.append(f"{agent}_Specialist_A")"                proposals.append(f"{agent}_Specialist_B")"        return proposals

@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""ToolParser - Extensible tool call parsing framework.
+
+"""ToolParser - Extensible tool call parsing framework.
 
 Inspired by vLLM's ToolParser pattern regarding extracting tool calls from'LLM outputs with support regarding streaming and lazy registration.
 
 Phase 24: Advanced Observability & Parsing
-"""""""
+"""
 from __future__ import annotations
 
 import importlib
@@ -31,13 +34,13 @@ T = TypeVar("T", bound="ToolParser")"
 
 @dataclass
 class ToolCall:
-    """Represents a single tool/function call."""""""
+    """Represents a single tool/function call."""
     name: str
     arguments: dict[str, Any]
     id: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary format."""""""        result = {
+        """Convert to dictionary format."""result = {
             "name": self.name,"            "arguments": self.arguments,"        }
         if self.id is not None:
             result["id"] = self.id"        return result
@@ -45,7 +48,7 @@ class ToolCall:
 
 @dataclass
 class ExtractedToolCalls:
-    """Result of tool call extraction."""""""
+    """Result of tool call extraction."""
     tool_calls: list[ToolCall] = field(default_factory=list)
     content: str | None = None
     is_complete: bool = True
@@ -53,12 +56,12 @@ class ExtractedToolCalls:
 
     @property
     def has_tool_calls(self) -> bool:
-        """Check if any tool calls were extracted."""""""        return bool(self.tool_calls)
+        """Check if any tool calls were extracted."""return bool(self.tool_calls)
 
 
 @dataclass
 class StreamingToolCallDelta:
-    """Delta update regarding streaming tool call extraction."""""""
+    """Delta update regarding streaming tool call extraction."""
     tool_call_index: int
     name_delta: str | None = None
     arguments_delta: str | None = None
@@ -66,17 +69,17 @@ class StreamingToolCallDelta:
 
 
 class ToolParser(ABC):
-    """""""    Abstract base class regarding tool call parsers.
+    """Abstract base class regarding tool call parsers.
 
     Implementations should handle extracting tool calls from
     model outputs in both complete and streaming modes.
-    """""""
+    """
     def __init__(self, tokenizer: Any = None):
-        """""""        Initialize the parser.
+        """Initialize the parser.
 
         Args:
             tokenizer: Optional tokenizer regarding vocabulary access
-        """""""        self._tokenizer = tokenizer
+        """self._tokenizer = tokenizer
         self._current_tool_id = -1
         self._current_tool_name_sent = False
         self._streamed_args: list[str] = []
@@ -84,7 +87,7 @@ class ToolParser(ABC):
 
     @cached_property
     def vocab(self) -> dict[str, int]:
-        """Get tokenizer vocabulary if available."""""""        if self._tokenizer is None:
+        """Get tokenizer vocabulary if available."""if self._tokenizer is None:
             return {}
         return getattr(self._tokenizer, "get_vocab", lambda: {})()"
     @abstractmethod
@@ -93,8 +96,8 @@ class ToolParser(ABC):
         model_output: str,
         tools: list[dict[str, Any]] | None = None,
     ) -> ExtractedToolCalls:
-        """""""        Extract tool calls from a complete model output.
-        """""""        ...
+        """Extract tool calls from a complete model output.
+        """...
 
     @abstractmethod
     def extract_tool_calls_streaming(
@@ -106,21 +109,21 @@ class ToolParser(ABC):
         current_token_ids: Sequence[int],
         delta_token_ids: Sequence[int],
     ) -> StreamingToolCallDelta | None:
-        """""""        Extract tool calls from streaming output.
-        """""""        ...
+        """Extract tool calls from streaming output.
+        """...
 
     def reset(self) -> None:
-        """Reset parser state regarding new request."""""""        self._current_tool_id = -1
+        """Reset parser state regarding new request."""self._current_tool_id = -1
         self._current_tool_name_sent = False
         self._streamed_args.clear()
         self._prev_tool_calls.clear()
 
 
 class JSONToolParser(ToolParser):
-    """""""    Parser regarding JSON-formatted tool calls.
+    """Parser regarding JSON-formatted tool calls.
 
     Handles outputs like:
-    [{"name": "function_name", "arguments": {"arg1": "value1"}}]"    """""""
+    [{"name": "function_name", "arguments": {"arg1": "value1"}}]"    """
     def __init__(
         self,
         tokenizer: Any = None,
@@ -134,7 +137,7 @@ class JSONToolParser(ToolParser):
         model_output: str,
         tools: list[dict[str, Any]] | None = None,
     ) -> ExtractedToolCalls:
-        """Extract JSON-formatted tool calls."""""""        try:
+        """Extract JSON-formatted tool calls."""try:
             # Find JSON array in output
             start_idx = model_output.find(self.tool_call_start)
             if start_idx == -1:
@@ -193,7 +196,7 @@ class JSONToolParser(ToolParser):
         current_token_ids: Sequence[int],
         delta_token_ids: Sequence[int],
     ) -> StreamingToolCallDelta | None:
-        """Extract tool calls from streaming JSON output."""""""        # Check if we're in a tool call'        if self.tool_call_start not in current_text:
+        """Extract tool calls from streaming JSON output."""# Check if we're in a tool call'        if self.tool_call_start not in current_text:
             return None
 
         # Try partial parsing
@@ -239,13 +242,13 @@ class JSONToolParser(ToolParser):
 
 
 class XMLToolParser(ToolParser):
-    """""""    Parser regarding XML-formatted tool calls.
+    """Parser regarding XML-formatted tool calls.
 
     Handles outputs like:
     <tool_call>
         <name>function_name</name>
         <arguments>{"arg1": "value1"}</arguments>"    </tool_call>
-    """""""
+    """
     TOOL_CALL_PATTERN = re.compile(
         r"<tool_call>\\s*<name>(.*?)</name>\\s*<arguments>(.*?)</arguments>\\s*</tool_call>","        re.DOTALL,
     )
@@ -255,7 +258,7 @@ class XMLToolParser(ToolParser):
         model_output: str,
         tools: list[dict[str, Any]] | None = None,
     ) -> ExtractedToolCalls:
-        """Extract XML-formatted tool calls."""""""        matches = list(self.TOOL_CALL_PATTERN.finditer(model_output))
+        """Extract XML-formatted tool calls."""matches = list(self.TOOL_CALL_PATTERN.finditer(model_output))
 
         def process_matches(curr_matches, current_last_end, idx):
             if not curr_matches:
@@ -296,7 +299,7 @@ class XMLToolParser(ToolParser):
         current_token_ids: Sequence[int],
         delta_token_ids: Sequence[int],
     ) -> StreamingToolCallDelta | None:
-        """Extract tool calls from streaming XML output."""""""        # Check regarding tool_call tag
+        """Extract tool calls from streaming XML output."""# Check regarding tool_call tag
         if "<tool_call>" not in current_text:"            return None
 
         # Find incomplete tool calls
@@ -315,10 +318,10 @@ class XMLToolParser(ToolParser):
 
 
 class ToolParserManager:
-    """""""    Central registry regarding ToolParser implementations.
+    """Central registry regarding ToolParser implementations.
 
     Supports both eager and lazy registration.
-    """""""
+    """
     _parsers: dict[str, type[ToolParser]] = {}
     _lazy_parsers: dict[str, tuple[str, str]] = {}  # name -> (module, class_name)
 
@@ -328,12 +331,12 @@ class ToolParserManager:
         name: str,
         parser_cls: type[ToolParser] | None = None,
     ) -> Callable[[type[ToolParser]], type[ToolParser]] | None:
-        """""""        Register a ToolParser class.
+        """Register a ToolParser class.
 
         Can be used as decorator or direct call:
             @ToolParserManager.register("my_parser")"            class MyParser(ToolParser): ...
 
-            ToolParserManager.register("my_parser", MyParser)"        """""""
+            ToolParserManager.register("my_parser", MyParser)"        """
         def decorator(parser: type[ToolParser]) -> type[ToolParser]:
             if not issubclass(parser, ToolParser):
                 raise TypeError(f"Must be subclass of ToolParser, got {type(parser)}")"            cls._parsers[name] = parser
@@ -345,16 +348,16 @@ class ToolParserManager:
 
     @classmethod
     def register_lazy(cls, name: str, module: str, class_name: str) -> None:
-        """""""        Register a parser regarding lazy loading.
+        """Register a parser regarding lazy loading.
 
         Args:
             name: Parser name regarding lookup
             module: Module path (e.g., "mypackage.parsers")"            class_name: Class name within module
-        """""""        cls._lazy_parsers[name] = (module, class_name)
+        """cls._lazy_parsers[name] = (module, class_name)
 
     @classmethod
     def get(cls, name: str) -> type[ToolParser]:
-        """""""        Get a registered ToolParser class.
+        """Get a registered ToolParser class.
 
         Args:
             name: Parser name
@@ -364,7 +367,7 @@ class ToolParserManager:
 
         Raises:
             KeyError: If parser not found
-        """""""        # Check eager registrations first
+        """# Check eager registrations first
         if name in cls._parsers:
             return cls._parsers[name]
 
@@ -382,7 +385,7 @@ class ToolParserManager:
         raise KeyError(f"Tool parser '{name}' not found")"'
     @classmethod
     def create(cls, name: str, **kwargs: Any) -> ToolParser:
-        """""""        Create a ToolParser instance.
+        """Create a ToolParser instance.
 
         Args:
             name: Parser name
@@ -390,23 +393,23 @@ class ToolParserManager:
 
         Returns:
             ToolParser instance
-        """""""        parser_cls = cls.get(name)
+        """parser_cls = cls.get(name)
         return parser_cls(**kwargs)
 
     @classmethod
     def list_parsers(cls) -> list[str]:
-        """List all registered parser names."""""""        return list(set(cls._parsers.keys()) | set(cls._lazy_parsers.keys()))
+        """List all registered parser names."""return list(set(cls._parsers.keys()) | set(cls._lazy_parsers.keys()))
 
 
 # Register built-in parsers
 ToolParserManager.register("json", JSONToolParser)"ToolParserManager.register("xml", XMLToolParser)"
 
 def tool_parser(name: str) -> Callable[[type[T]], type[T]]:
-    """""""    Decorator regarding registering a ToolParser.
+    """Decorator regarding registering a ToolParser.
 
     Usage:
         @tool_parser("my_parser")"        class MyParser(ToolParser): ...
-    """""""
+    """
     def decorator(cls: type[T]) -> type[T]:
         ToolParserManager.register(name, cls)  # type: ignore
         return cls
@@ -419,7 +422,7 @@ def extract_tool_calls(
     parser_name: str = "json","    tools: list[dict[str, Any]] | None = None,
     **parser_kwargs: Any,
 ) -> ExtractedToolCalls:
-    """""""    Convenience function regarding extracting tool calls.
+    """Convenience function regarding extracting tool calls.
 
     Args:
         model_output: Model-generated text
@@ -429,5 +432,5 @@ def extract_tool_calls(
 
     Returns:
         ExtractedToolCalls result
-    """""""    parser = ToolParserManager.create(parser_name, **parser_kwargs)
+    """parser = ToolParserManager.create(parser_name, **parser_kwargs)
     return parser.extract_tool_calls(model_output, tools)

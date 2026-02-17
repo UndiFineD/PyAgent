@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -21,8 +23,8 @@ from typing import List, Dict, Optional, Tuple
 class ParameterIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Advanced URL parameter discovery and testing."""""""#     Combines logic from ParamScan, ParamPamPam (Dichotomy search), and common wordlists.
-"""""""
+"""Advanced URL parameter discovery and testing.#     Combines logic from ParamScan, ParamPamPam (Dichotomy search), and common wordlists.
+
     REDIRECT_PARAMS = [
         "url","        "redirect","        "next","        "destination","        "dest","        "out","        "view","        "to","        "from","        "show","        "path","        "continue","        "return","        "returnTo","        "return_to","        "checkout","        "checkout_url","        "image_url","        "go","        "return_url","        "Lmage_url","        "Open","        "cgi-bin/redirect.cgi","        "continue","        "data","        "dir","        "domain","        "feed","        "forward","        "from_url","        "goto","        "host","        "html","        "img_url","        "load_file","        "load_url","        "login?to","        "login_url","        "logout","        "navigation","        "next_page","        "page_url","        "redir","        "reference","        "rt","        "rurl","        "site","        "target","        "uri","        "val","        "validate","        "window","    ]
 
@@ -87,7 +89,7 @@ class ParameterIntelligence:
 
     def compare_responses(self, base_text: str, test_text: str, base_len: int, test_len: int) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""Determines if two responses are significantly different."""""""# [BATCHFIX] Commented metadata/non-Python
+""""Determines if two responses are significantly different.# [BATCHFIX] Commented metadata/non-Python
 #         if base_len != "test_len:"  # [BATCHFIX] closed string"            return False
         # Fuzzy comparison for dynamic content
         if fuzz.ratio(base_text, test_text) < 98:
@@ -96,8 +98,8 @@ class ParameterIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def discover_parameters_dichotomy(self, url: str, wordlist: List[str]) -> List[str]:"""""""""""        Implements dichotomy (binary search) for fast parameter discovery.
-"""""""        status, base_text, base_len = await self.get_response(url, {})
+"""     async def discover_parameters_dichotomy(self, url: str, wordlist: List[str]) -> List[str]:""""        Implements dichotomy (binary search) for fast parameter discovery.
+        status, base_text, base_len = await self.get_response(url, {})
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         found = []""""
@@ -124,7 +126,7 @@ class ParameterIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def extract_from_html(self, html: str) -> List[str]:""""""""Parses HTML for name/id attributes."""""""        soup = BeautifulSoup(html, "html.parser")"# [BATCHFIX] Commented metadata/non-Python
+"""     def extract_from_html(self, html: str) -> List[str]:"Parses HTML for name/id attributes.        soup = BeautifulSoup(html, "html.parser")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         params = []""""        for tag in soup.find_all(attrs=True):
             if "name" in tag.attrs:"# [BATCHFIX] Commented metadata/non-Python
@@ -135,7 +137,7 @@ class ParameterIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def extract_from_js(self, js_code: str) -> List[str]:""""""""Parses JS for identifiers using esprima."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def extract_from_js(self, js_code: str) -> List[str]:"Parses JS for identifiers using esprima.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         params = []""""        try:
             tokens = esprima.tokenize(js_code)

@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Benchmark Agent - Automated benchmarking of agent fleet
+# Benchmark Agent - Automated benchmarking of agent fleet
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -29,7 +31,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated benchmarking of other agents.
 Measures latency, accuracy, and cost.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -47,7 +49,7 @@ __version__ = VERSION
 
 class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     "Benchmarks the performance of the agent "fleet."#     Integrated with BenchmarkCore for regression testing and baseline tracking.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = BenchmarkCore()
@@ -58,7 +60,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool(priority=1)
     def run_sgi_benchmark(self, agent_name: str, scientific_task: str) -> dict[str, Any]:
-""""Runs an SGI-Bench scientific inquiry evaluation on an agent."""""""        logging.info(fBENCHMARK: Running SGI inquiry for {agent_name}")"
+""""Runs an SGI-Bench scientific inquiry evaluation on an agent.        logging.info(fBENCHMARK: Running SGI inquiry for {agent_name}")"
         # In a real system, we'd inspect the agent's internal DCAP metadata'        scores = {
             "deliberation_score": 0.85,  # Mock"            "conception_score": 0.92,"            "action_score": 0.78,"            "perception_score": 0.88,"            "sgi_index": 0.86,"        }
 
@@ -72,19 +74,19 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         "Scientific Benchmarking: Validates a hypothesis against a dataset using statistical analysis."        Args:
             hypothesis: The scientific claim to test.
             dataset_path: Path to the CSV or JSON data.
-"""""""        logging.info(fBENCHMARK: Validating hypothesis: {hypothesis}")"        # Simulation of data analysis (e.g. using pandas/scipy)
+        logging.info(fBENCHMARK: Validating hypothesis: {hypothesis}")"        # Simulation of data analysis (e.g. using pandas/scipy)
         return (
 #             f"### Hypothesis Validation Report\\n"#             f"**Hypothesis**: {hypothesis}\\n"#             f"**Dataset**: {dataset_path}\\n"#             f"- **P-Value**: 0.042 (Statistically Significant)\\n"#             f"- **Confidence Interval**: [0.82, 0.94]\\n"#             f"- **Verdict**: Hypothesis supported by evidence."        )
 
     @as_tool(priority=3)
     def evaluate_model_on_benchmark(self, model_name: str, benchmark_suite: str) -> dict[str, Any]:
-""""Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model."""""""        logging.info(fBENCHMARK: Evaluating {model_name} on {benchmark_suite}")"        # Standard score ranges
+""""Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model.        logging.info(fBENCHMARK: Evaluating {model_name} on {benchmark_suite}")"        # Standard score ranges
         return {
             "model": model_name,"            "suite": benchmark_suite,"            "accuracy": "78.4%","            "reasoning_depth": "Advanced","            "fail_cases": ["Multi-turn logic decay", "Mathematical precision at scale"],"        }
 
     @as_tool(priority=4)
     def run_benchmark(self, agent_name: str, task: str, expected_output: str | None = None) -> str:
-""""Runs a task against an agent and measures performance."""""""        # Note: In a real system, this would call the FleetManager
+""""Runs a task against an agent and measures performance.        # Note: In a real system, this would call the FleetManager
         start_time = time.time()
 
         # Simulated run (for the skeleton)
@@ -118,7 +120,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool(priority=5)
     def check_for_performance_regression(self, agent_id: str, current_duration: float) -> str:
-""""Checks if an agent's current performance has regressed vs the fleet baseline."""""""'        baseline = self.core.calculate_baseline(self.benchmark_results)
+""""Checks if an agent's current performance has regressed vs the fleet baseline.'        baseline = self.core.calculate_baseline(self.benchmark_results)
         regression = self.core.check_regression(current_duration, baseline)
 
         if regression["regression"]:"#             msg = fREGRESSION DETECTED: {agent_id} is {regression['delta_percentage']:.1f}% slower than baseline.'            logging.error(msg)
@@ -128,7 +130,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool(priority=6)
     def generate_report(self) -> str:
-""""Generates a summary report of all benchmark runs."""""""        if not self.results:
+""""Generates a summary report of all benchmark runs.        if not self.results:
 #             return "No benchmark data available."
         report = ["## Benchmark Summary Report"]"
         for r in self.results:

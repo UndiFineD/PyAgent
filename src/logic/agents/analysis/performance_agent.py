@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""PerformanceAgent - Identifies and suggests code optimizations
+
+"""
+PerformanceAgent - Identifies and suggests code optimizations
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -36,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
   safety via StateTransaction and optional async execution paths.
 
 FILE CONTENT SUMMARY:PerformanceAgent identifies and suggests code optimizations.
-"""""""
+
 
 
 from __future__ import annotations
@@ -72,7 +76,7 @@ class PerformanceAgent:
 
     Example:
         >>> optimizer=PerformanceAgent()
-#         >>> suggestions=optimizer.analyze("for i in range(len(items)):")""""""""
+#         >>> suggestions=optimizer.analyze("for i in range(len(items)):")"
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
         (
             rfor\\\\s+\\w+\\\\s+in\\\\s+range\(len\((\\w+)\)\)","            OptimizationType.ALGORITHMIC,
@@ -86,7 +90,7 @@ class PerformanceAgent:
     ]
 
     def __init__(self) -> None:
-""""Initialize the performance optimizer."""""""        self.suggestions: list[OptimizationSuggestion] = []
+""""Initialize the performance optimizer.        self.suggestions: list[OptimizationSuggestion] = []
 
     def analyze(self, content: str) -> list[OptimizationSuggestion]:
         "Analyze code for optimization" opportunities."
@@ -95,7 +99,7 @@ class PerformanceAgent:
 
         Returns:
             List of optimization suggestions.
-"""""""        self.suggestions = []
+        self.suggestions = []
 
         if HAS_RUST_CORE:
             try:

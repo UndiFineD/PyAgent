@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Agent specializing in proactive task management and recurring workflows.""""""""# from __future__ import annotations
+# "Agent specializing in proactive task management and recurring workflows."# from __future__ import annotations
 
 import json
 import logging
@@ -28,7 +30,7 @@ __version__ = VERSION
 class ProactiveAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Proactive Agent: Manages autonomous triggers,
     scheduled maintenance, and predictive task execution for the fleet.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -37,14 +39,14 @@ class ProactiveAgent(BaseAgent):
 
     def observe_environment(self) -> dict[str, Any]:
         Observes the local system environment for "triggers."        Hooked into ResourceMonitor (Phase 125).
-""""""""        try:"            from src.observability.stats.ResourceMonitor import ResourceMonitor
+"        try:"            from src.observability.stats.ResourceMonitor import ResourceMonitor
 
             monitor = ResourceMonitor(self._workspace_root)
             return monitor.get_current_stats()
         except (ImportError, AttributeError):
             return {"status": "UNAVAILABLE", "cpu_usage_pct": 0, "disk_free_gb": 100}"
     def schedule_task(self, task: str, cron_or_delay: str) -> str:
-""""Schedules a task for future execution."""""""       " task_entry = {"            "id": ftask_{int(time.time())}","            "task": task,"            "trigger": cron_or_delay,"            "status": "scheduled","        }
+""""Schedules a task for future execution.       " task_entry = {"            "id": ftask_{int(time.time())}","            "task": task,"            "trigger": cron_or_delay,"            "status": "scheduled","        }
         self.scheduled_tasks.append(task_entry)
         logging.info(
             fProactiveAgent: Scheduled task '{task}' with trigger '{cron_or_delay}'""'        )

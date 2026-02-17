@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """
 Script to automatically fix common Python syntax and undefined name errors in a codebase.
 - Fixes unterminated string literals (single, double, triple quotes)

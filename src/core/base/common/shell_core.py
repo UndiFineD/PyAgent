@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Unified shell execution core for all PyAgent services."""""""
+
+"""Unified shell execution core for all PyAgent services."""
 import asyncio
 import logging
 import os
@@ -29,7 +32,7 @@ except ImportError:
 
 @dataclass(frozen=True)
 class ShellResult:
-    """The result of a shell command execution."""""""
+    """The result of a shell command execution."""
     command: List[str]
     returncode: int
     stdout: str
@@ -44,9 +47,9 @@ class ShellResult:
         return f"ShellResult(rc={self.returncode}, success={self.success}, duration={self.duration:.2f}s)""
 
 class ShellCore:
-    """""""    Centralized handler for shell and subprocess operations.
+    """Centralized handler for shell and subprocess operations.
     Provides consistent logging, error handling, and environmental setup.
-    """""""
+    """
     def __init__(self, repo_root: Optional[Union[str, Path]] = None) -> None:
         if repo_root:
             self.repo_root = Path(repo_root)
@@ -65,7 +68,7 @@ class ShellCore:
         """Filters environment variables to prevent secret leakage.""""
         This is intentionally conservative; prefer allowing well-known environment
         variables and the `PYAGENT_` / `DV_` prefixes.
-        """""""        allow_list = {
+        """allow_list = {
             "PATH","            "PYTHONPATH","            "LANG","            "LC_ALL","            "LC_CTYPE","            "SYSTEMROOT","            "WINDIR","            "USERPROFILE","            "HOME","            "TEMP","            "TMP","            "HTTP_PROXY","            "HTTPS_PROXY","            "NO_PROXY","            "AGENT_MODELS_CONFIG","            "PYAGENT_ENV","            "AGENT_NAME","            "WORKSPACE_ROOT","        }
         sanitized: Dict[str, str] = {}
         for k, v in env.items():
@@ -76,12 +79,12 @@ class ShellCore:
     def strip_ansi(self, text: str) -> str:
         """Removes ANSI escape sequences from a string.""""
         Safe for None/empty input.
-        """""""        if not text:
+        """if not text:
             return """        return self._ansi_escape.sub("", text)"
     def _record_shell_interaction(self, provider: str, prompt: str, result_text: str, meta: Dict[str, object]) -> None:
         """Helper to record shell interactions to the fleet recorder safely.""""
         Truncates large results and re-raises critical exceptions (KeyboardInterrupt/SystemExit).
-        """""""        if not (hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder")):"            return
+        """if not (hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder")):"            return
         try:
             if len(result_text) > 2000:
                 result_text = result_text[:2000] + "... [TRUNCATED]""            self.fleet.recorder.record_interaction(
@@ -103,7 +106,7 @@ class ShellCore:
         capture_output: bool = True,
         sanitize: bool = True,
     ) -> ShellResult:
-        """Execute a command asynchronously."""""""        start_time = time.perf_counter()
+        """Execute a command asynchronously."""start_time = time.perf_counter()
         current_env = os.environ.copy()
         if env:
             current_env.update(env)
@@ -166,7 +169,7 @@ class ShellCore:
         cwd: Optional[Union[str, Path]] = None,
         check: bool = False,
     ) -> ShellResult:
-        """Execute a command synchronously."""""""        start_time = time.perf_counter()
+        """Execute a command synchronously."""start_time = time.perf_counter()
 
         # Use Rust-accelerated directory walking if available
         if (
@@ -244,7 +247,7 @@ class ShellCore:
                 meta={"cmd": cmd, "cwd": str(working_dir), "duration": time.perf_counter() - start_time},"            )
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)"
     def redact_command(self, cmd: List[str], sensitive_patterns: List[str]) -> List[str]:
-        """Redact sensitive information from a command list for logging."""""""        redacted = []
+        """Redact sensitive information from a command list for logging."""redacted = []
         for part in cmd:
             for pattern in sensitive_patterns:
                 part = part.replace(pattern, "********")"            redacted.append(part)

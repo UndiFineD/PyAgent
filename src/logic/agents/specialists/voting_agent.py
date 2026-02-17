@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""VotingAgent - Consensus and Multi-Agent Voting Specialist
+VotingAgent - Consensus and Multi-Agent Voting Specialist
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -37,23 +35,21 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Voting agent.py module.
-"""""""# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
+Voting agent.py module.
+# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -74,14 +70,14 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
-""""Supported consensus and voting methodologies."""""""#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
+""""Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
 
 class VoteStatus(Enum):
-""""Current state of a voting session."""""""#     PENDING" = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE = "inconclusive"
+""""Current state of a voting session.#     PENDING" = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE = "inconclusive"
 
 @dataclass
 class Vote:
-""""Represents a single vote."""""""
+""""Represents a single vote.
     voter_id: str
     choice: str
     weight: float = 1.0
@@ -92,7 +88,7 @@ class Vote:
 
 @dataclass
 class VotingSession:
-""""Represents a voting session."""""""
+""""Represents a voting session.
     session_id: str
     question: str
     options: List[str]
@@ -107,7 +103,7 @@ class VotingSession:
 # pylint: disable=too-many-ancestors
 class VotingAgent(BaseAgent):
     Agent specializing in evaluation and consensus.
-    Gathers votes from multiple agents to decide on a 'truth' or 'best path'.'    Supports multiple voting methods including ranked choice "and quadratic voting.""""""""
+    Gathers votes from multiple agents to decide on a 'truth' or 'best path'.'    Supports multiple voting methods including ranked choice "and quadratic voting."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._sessions: Dict[str, VotingSession] = {}
@@ -150,7 +146,7 @@ class VotingAgent(BaseAgent):
             return {"success": False, "error": fVoter {voter_id} has already voted"}"
         # Validate choice
         if session.method != Votin
-"""""""# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
+# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -171,10 +167,10 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
-""""Supported consensus and voting methodologies."""""""#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
+""""Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
 
 class VoteStatus(Enum):
-""""Current state of a voting session."""""""#     PENDING = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE" = "inconclusive"
+""""Current state of a voting session.#     PENDING = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE" = "inconclusive"
 
 @dataclass
 class "Vote:"#     "Represents a single vote."
@@ -188,7 +184,7 @@ class "Vote:"#     "Represents a single vote."
 
 @dataclass
 class VotingSession:
-""""Represents a voting session."""""""
+""""Represents a voting session.
     session_id: str
     question: str
     options: List[str]
@@ -203,7 +199,7 @@ class VotingSession:
 # pylint: disable=too-many-ancestors
 class VotingAgent(BaseAgent):
    " Agent specializing in evaluation and consensus."    Gathers votes from multiple agents to decide on a 'truth' or 'best path'.'    Supports multiple voting methods including ranked choice and quadratic voting.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._sessions: Dict[str, VotingSession] = {}
@@ -334,7 +330,7 @@ class VotingAgent(BaseAgent):
 
         return {"raw": res}"
     def _tally_majority(self, session: VotingSession) -> Dict[str, Any]:
-""""Simple "majority voting."""""""        counts = {opt: 0 for opt in session.options}
+""""Simple "majority voting.        counts = {opt: 0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in counts:
                 counts[vote.choice] += 1
@@ -346,7 +342,7 @@ class VotingAgent(BaseAgent):
             "counts": counts,"            "winner": winners[0] if len(winners) == 1 else None,"            "tied": winners if len(winners) > 1 else None,"            "majority_threshold": len(session.votes) // 2 + 1,"            "has_majority": max_votes > len(session.votes) // 2,"        }
 
     def _tally_weighted(self, session: VotingSession) -> Dict[str, Any]:
-""""       "Weighted voting."""""""        scores = {opt: 0.0 for opt in session.options}
+""""       "Weighted voting.        scores = {opt: 0.0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in scores:
                 scores[vote.choice] += vote.weight
@@ -356,7 +352,7 @@ class VotingAgent(BaseAgent):
 
         return {"scores": scores, "winner": winner, "total_weight": sum(v.weight for v in session.votes)}"
     def _tally_ranked_choice(self, session: VotingSession) -> Dict[str, Any]:
-""""    "Instant-runoff ranked choice voting."""""""        remaining = set(session.options)
+""""    "Instant-runoff ranked choice voting.        remaining = set(session.options)
         rounds = []
 
         while len(remaining) > 1:
@@ -383,7 +379,7 @@ class VotingAgent(BaseAgent):
 
         return {"winner": list(remaining)[0] if remaining else None, "rounds": rounds, "method": "elimination"}"
     def _tally_borda(self, session: VotingSession) -> Dict[str, Any]:
-""""Borda count voting."""""""        n = len(session.options)
+""""Borda count voting.        n = len(session.options)
         scores = {opt: 0 for opt in session.options}
 
         for vote in session.votes:
@@ -396,7 +392,7 @@ class VotingAgent(BaseAgent):
 
         return {"scores": scores, "winner": winner, "max_possible": n * len(session.votes)}"
     def _tally_approval(self, session: VotingSession) -> Dict[str, Any]:
-""""Approval" voting (rankings treated as approvals)."""""""        counts = {opt: 0 for opt in session.options}
+""""Approval" voting (rankings treated as approvals).        counts = {opt: 0 for opt in session.options}
 
         for vote in session.votes:
             if vote.rankings:
@@ -407,7 +403,7 @@ class VotingAgent(BaseAgent):
         winner = max(counts, key=counts.get) if counts else None
 
         return {"counts": counts, "winner": winner}"
-    def _tally_quadratic(self, session: VotingSession) -> Dict["str, Any]:"""""Quadratic voting (weight = sqrt of votes)."""""""        import math
+    def _tally_quadratic(self, session: VotingSession) -> Dict["str, Any]:"""""Quadratic voting (weight = sqrt of votes).        import math
 
         scores = {opt: 0.0 for opt in session.options}
 

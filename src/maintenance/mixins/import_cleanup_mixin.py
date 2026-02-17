@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ImportCleanupMixin - Automated import resolution and normalization
+
+"""
+ImportCleanupMixin - Automated import resolution and normalization
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -32,7 +36,7 @@ add dry-run/backup and logging levels for safe mass edits.
 FILE CONTENT SUMMARY:
 Mixin providing automated import cleanup and optimization for the Maintenance
 Agent.
-"""""""
+
 import re
 import logging
 from pathlib import Path
@@ -42,11 +46,11 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ImportCleanupMixin:
-    """Provides utilities for resolving and fixing Python imports after refactors."""""""
+    """Provides utilities for resolving and fixing Python imports after refactors.
     def build_module_map(self, root_dir: Path, dirs: List[str]) -> Dict[Tuple[str, str], str]:
-        """""""        Builds a map from (parent_path_lower, name_lower) to actual_case_name.
+                Builds a map from (parent_path_lower, name_lower) to actual_case_name.
         Useful for fixing imports after snake_case renaming.
-        """""""        name_map = {}
+                name_map = {}
         for d in dirs:
             dp: Path = root_dir / d
             if not dp.exists():
@@ -66,7 +70,7 @@ class ImportCleanupMixin:
         root_dir: Path,
         search_dirs: List[str]
     ) -> str:
-        """Resolves a module string to its correct casing and path."""""""        parts: List[str] = mod_str.split(".")"        if mod_str.startswith("."):"            # Relative import
+        """Resolves a module string to its correct casing and path.        parts: List[str] = mod_str.split(".")"        if mod_str.startswith("."):"            # Relative import
             m: re.Match[str] | None = re.match(r"^(\\.+)", mod_str)"            if not m:
                 return mod_str
             dots: int = len(m.group(1))
@@ -120,7 +124,7 @@ class ImportCleanupMixin:
         root_dir: Path,
         search_dirs: List[str]
     ) -> bool:
-        """Updates imports in a file to match the actual filesystem casing/naming."""""""        try:
+        """Updates imports in a file to match the actual filesystem casing/naming.        try:
             content: str = file_path.read_text(encoding="utf-8")"
             def replacer(match) -> str:
                 mod = match.group(2)

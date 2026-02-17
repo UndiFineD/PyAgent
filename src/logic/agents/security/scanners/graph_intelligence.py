@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -16,12 +18,12 @@ from typing import Dict
 class GraphIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Intelligence module for Graph-based security analysis and AD relationships."""""""#     Ported from FalconHound & FalkorDB.
-"""""""
+""""Intelligence module for Graph-based security analysis and AD relationships.#     Ported from FalconHound & FalkorDB.
+
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_ad_graph_queries() -> Dict[str, str]:""""""""Cypher queries for Active Directory graph analysis."""""""        return {
+"""     def get_ad_graph_queries() -> Dict[str, str]:"Cypher queries for Active Directory graph analysis.        return {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             "unroll_group_members": ("MATCH (g:Group)-[:MemberOf*0..]->(u:User) RETURN g.name, u.name"),"# [BATCHFIX] Commented metadata/non-Python
@@ -43,7 +45,7 @@ class GraphIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_graph_performance_primitives() -> Dict[str, str]:""""""""Techniques for high-performance graph querying (Ported from FalkorDB)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_graph_performance_primitives() -> Dict[str, str]:"Techniques for high-performance graph querying (Ported from FalkorDB).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#        " return {"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             "sparse_matrix_adjacency": ("# [BATCHFIX] Commented metadata/non-Python
 """                 "Representing graph relationships as sparse matrices for linear algebra operations"  # [BATCHFIX] closed string"            ),

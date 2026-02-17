@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Loop Analysis Utility for PyAgent Fleet
+
+"""Loop Analysis Utility for PyAgent Fleet
 
 This module provides reusable utilities for analyzing and detecting
 anti-patterns related to for/while loops across the PyAgent codebase.
 Used for performance profiling and code quality assessment.
-"""""""
+"""
 import os
 import subprocess
 import re
@@ -26,7 +29,7 @@ from pathlib import Path
 
 @dataclass
 class LoopAnalysisResult:
-    """Result of loop analysis for a single file."""""""    file_path: str
+    """Result of loop analysis for a single file."""file_path: str
     lines_of_code: int
     loop_count: int
     complexity_score: float
@@ -38,7 +41,7 @@ class LoopAnalysisResult:
 
 @dataclass
 class LoopAnalysisConfig:
-    """Configuration for loop analysis."""""""    min_loc_threshold: int = 200
+    """Configuration for loop analysis."""min_loc_threshold: int = 200
     min_loop_threshold: int = 3
     max_nesting_threshold: int = 3
     large_loop_threshold: int = 50
@@ -54,12 +57,12 @@ class LoopAnalysisConfig:
 
 
 class LoopAnalyzer:
-    """Reusable analyzer for detecting loop anti-patterns."""""""
+    """Reusable analyzer for detecting loop anti-patterns."""
     def __init__(self, config: Optional[LoopAnalysisConfig] = None):
         self.config = config or LoopAnalysisConfig()
 
     def count_loops_ripgrep(self, file_path: str) -> int:
-        """Count for/while loops using ripgrep for speed."""""""        try:
+        """Count for/while loops using ripgrep for speed."""try:
             # Count explicit for/while statements (not in strings/comments)
             result = subprocess.run(
                 ['rg', '-c', r'\\b(for|while)\\s+', file_path],'                capture_output=True,
@@ -74,7 +77,7 @@ class LoopAnalyzer:
             return self._count_loops_regex(file_path)
 
     def _count_loops_regex(self, file_path: str) -> int:
-        """Fallback loop counting using regex."""""""        try:
+        """Fallback loop counting using regex."""try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:'                content = f.read()
 
             # Simple regex to count for/while statements
@@ -92,13 +95,13 @@ class LoopAnalyzer:
             return 0
 
     def count_lines(self, file_path: str) -> int:
-        """Count lines of code in a file."""""""        try:
+        """Count lines of code in a file."""try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:'                return sum(1 for _ in f)
         except Exception:
             return 0
 
     def analyze_nesting(self, file_path: str) -> Tuple[bool, bool]:
-        """Analyze loop nesting patterns."""""""        try:
+        """Analyze loop nesting patterns."""try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:'                content = f.read()
 
             # Simple nesting analysis - count indentation levels
@@ -124,7 +127,7 @@ class LoopAnalyzer:
             return False, False
 
     def analyze_loop_sizes(self, file_path: str) -> bool:
-        """Check for unusually large loops."""""""        try:
+        """Check for unusually large loops."""try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:'                content = f.read()
 
             # Very basic loop size analysis
@@ -154,7 +157,7 @@ class LoopAnalyzer:
         has_deep: bool,
         has_large: bool
     ) -> float:
-        """Calculate a complexity score for prioritization."""""""        score = (loops * 2) + (loc / 100)
+        """Calculate a complexity score for prioritization."""score = (loops * 2) + (loc / 100)
 
         if has_nested:
             score *= 1.5
@@ -166,7 +169,7 @@ class LoopAnalyzer:
         return round(score, 2)
 
     def analyze_file(self, file_path: str) -> LoopAnalysisResult:
-        """Analyze a single file for loop anti-patterns."""""""        loc = self.count_lines(file_path)
+        """Analyze a single file for loop anti-patterns."""loc = self.count_lines(file_path)
         loops = self.count_loops_ripgrep(file_path)
         has_nested, has_deep = self.analyze_nesting(file_path)
         has_large = self.analyze_loop_sizes(file_path)
@@ -188,7 +191,7 @@ class LoopAnalyzer:
         )
 
     def should_analyze_file(self, file_path: str) -> bool:
-        """Check if a file should be analyzed based on config."""""""        # Check exclude directories
+        """Check if a file should be analyzed based on config."""# Check exclude directories
         path_parts = Path(file_path).parts
         if any(excl_dir in path_parts for excl_dir in self.config.exclude_dirs):
             return False
@@ -208,7 +211,7 @@ class LoopAnalyzer:
         return True
 
     def find_candidates(self, root_dir: str) -> List[LoopAnalysisResult]:
-        """Find files that are candidates for loop optimization."""""""        candidates = []
+        """Find files that are candidates for loop optimization."""candidates = []
 
         for root, dirs, files in os.walk(root_dir):
             # Remove excluded directories
@@ -233,7 +236,7 @@ class LoopAnalyzer:
         return sorted(candidates, key=lambda x: x.complexity_score, reverse=True)
 
     def analyze_directory(self, root_dir: str) -> Dict[str, List[LoopAnalysisResult]]:
-        """Comprehensive analysis of a directory."""""""        all_files = []
+        """Comprehensive analysis of a directory."""all_files = []
         candidates = []
 
         for root, dirs, files in os.walk(root_dir):
@@ -258,7 +261,7 @@ class LoopAnalyzer:
             'all_files': sorted(all_files, key=lambda x: x.complexity_score, reverse=True),'            'candidates': sorted(candidates, key=lambda x: x.complexity_score, reverse=True)'        }
 
 
-def print_analysis_report(results: List[LoopAnalysisResult], title: str = "Loop Analysis Report"):"    """Print a formatted analysis report."""""""    print(f"\\n{title}")"    print("=" * len(title))"
+def print_analysis_report(results: List[LoopAnalysisResult], title: str = "Loop Analysis Report"):"    """Print a formatted analysis report."""print(f"\\n{title}")"    print("=" * len(title))"
     if not results:
         print("No files found matching criteria.")"        return
 

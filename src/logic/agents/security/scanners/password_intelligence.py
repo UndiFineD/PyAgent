@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -16,7 +18,7 @@ from typing import List, Dict
 class PasswordIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Intelligence engine for password generation, cracking, and analysis.""""""""""""""# [BATCHFIX] Commented metadata/non-Python
+""""Intelligence engine for password generation, cracking, and analysis.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ #     COMMON_PADDING = ["!", "!!", "!!!", "123", "@", "#", "$", "2023", "2024", "2025", "2026"]"
 # [BATCHFIX] Commented metadata/non-Python
@@ -38,7 +40,7 @@ class PasswordIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def generate_mutations(base_word: str) -> List[str]:""""""""Generate common password mutations based on a base word (psudohash style)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def generate_mutations(base_word: str) -> List[str]:"Generate common password mutations based on a base word (psudohash style).# [BATCHFIX] Commented metadata/non-Python
 #         mutations = [base_word, base_word.capitalize(), base_word.upper(), base_word.lower"()]"  # [BATCHFIX] closed string"
         # Add padding
         for pad in PasswordIntelligence.COMMON_PADDING:
@@ -48,13 +50,13 @@ class PasswordIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_common_hash_algorithms() -> List[str]:""""""""Registry of common hash algorithms for cracking."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_common_hash_algorithms() -> List[str]:"Registry of common hash algorithms for cracking.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         return ["md5", "sha1", "sha256", "sha512", "bcrypt", "ntlm", "netntlmv2"]"
     @staticmethod
     def identify_hash_type(hash_str: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""Heuristic identification of hash type based on length/format."""""""# [BATCHFIX] Commented metadata/non-Python
+""""Heuristic identification of hash type based on length/format.# [BATCHFIX] Commented metadata/non-Python
 #         length = len("hash_str)"  # [BATCHFIX] closed string"        if length == 32:
 # [BATCHFIX] Commented metadata/non-Python
 """             return "MD5"  # [BATCHFIX] closed string"        if length == 40:
@@ -67,7 +69,7 @@ class PasswordIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def generate_se_wordlist(name: str, dob: str = ", year: str = ") -> List[str]:"""""Generate social engineering wordlist based on targets information."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def generate_se_wordlist(name: str, dob: str = ", year: str = ") -> List[str]:"""""Generate social engineering wordlist based on targets information.# [BATCHFIX] Commented metadata/non-Python
 #         base = "name.lower()"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         words = [base, base.capitalize()]""""

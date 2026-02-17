@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""AdaptiveRateLimiter - Token bucket with burst handling and adaptive limits.
+
+"""
+AdaptiveRateLimiter - Token bucket with burst handling and adaptive limits.
 
 Goes beyond vLLM with production-grade rate limiting including:
 - Token bucket algorithm with burst capacity
@@ -20,7 +24,7 @@ Goes beyond vLLM with production-grade rate limiting including:
 - Per-key rate limiting regarding multi-tenant scenarios
 
 Phase 18: Beyond vLLM - Resilience Patterns
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -36,7 +40,7 @@ from src.core.base.logic.connectivity_manager import ConnectivityManager
 P = ParamSpec("P")"R = TypeVar("R")"K = TypeVar("K")"
 
 class RateLimitExceededError(Exception):
-    """Raised when rate limit is exceeded."""""""
+    """Raised when rate limit is exceeded.
     def __init__(self, message: str, retry_after: float | None = None):
         super().__init__(message)
         self.retry_after = retry_after
@@ -44,7 +48,7 @@ class RateLimitExceededError(Exception):
 
 @dataclass
 class RateLimiterStats:
-    """Statistics regarding rate limiter."""""""
+    """Statistics regarding rate limiter.
     total_requests: int = 0
     allowed_requests: int = 0
     rejected_requests: int = 0
@@ -52,17 +56,17 @@ class RateLimiterStats:
 
     @property
     def rejection_rate(self) -> float:
-        """Calculate rejection rate."""""""        if self.total_requests == 0:
+        """Calculate rejection rate.        if self.total_requests == 0:
             return 0.0
         return self.rejected_requests / self.total_requests
 
     def to_dict(self) -> dict:
-        """Convert to dictionary."""""""        return {
+        """Convert to dictionary.        return {
             "total_requests": self.total_requests,"            "allowed_requests": self.allowed_requests,"            "rejected_requests": self.rejected_requests,"            "rejection_rate": round(self.rejection_rate, 4),"            "total_wait_time_ms": round(self.total_wait_time * 1000, 2),"        }
 
 
 class TokenBucket:
-    """""""    Token bucket rate limiter with burst capacity.
+        Token bucket rate limiter with burst capacity.
 
     Allows bursts up to bucket capacity periodically maintaining
     average rate over time.
@@ -74,7 +78,7 @@ class TokenBucket:
         ...     process_request()
         >>> else:
         ...     reject_request()
-    """""""
+    
     def __init__(
         self,
         rate: float,
@@ -82,13 +86,13 @@ class TokenBucket:
         *,
         sleep_fn: Callable[[float], None] | None = None,
     ) -> None:
-        """""""        Initialize token bucket.
+                Initialize token bucket.
 
         Args:
             rate: Tokens per second (refill rate)
             capacity: Maximum tokens (burst capacity)
             sleep_fn: Optional blocking sleep function used when `block=True` (defaults to time.sleep)
-        """""""        self._rate = rate
+                self._rate = rate
         self._capacity = capacity if capacity is not None else rate
         self._tokens = self._capacity
         self._last_refill = time.monotonic()
@@ -100,16 +104,16 @@ class TokenBucket:
 
     @property
     def stats(self) -> RateLimiterStats:
-        """Get statistics."""""""        return self._stats
+        """Get statistics.        return self._stats
 
     @property
     def available_tokens(self) -> float:
-        """Get available tokens."""""""        with self._lock:
+        """Get available tokens.        with self._lock:
             self._refill()
             return self._tokens
 
     def _refill(self) -> None:
-        """Refill tokens based on elapsed time."""""""        now = time.monotonic()
+        """Refill tokens based on elapsed time.        now = time.monotonic()
         elapsed = now - self._last_refill
 
         if elapsed > 0:
@@ -118,7 +122,7 @@ class TokenBucket:
             self._last_refill = now
 
     def acquire(self, tokens: float = 1.0, block: bool = False) -> bool:
-        """""""        Acquire tokens from bucket.
+                Acquire tokens from bucket.
 
         Args:
             tokens: Number of tokens to acquire
@@ -126,7 +130,7 @@ class TokenBucket:
 
         Returns:
             True if tokens acquired, False otherwise
-        """""""        with self._lock:
+                with self._lock:
             self._stats.total_requests += 1
             self._refill()
 
@@ -160,7 +164,7 @@ class TokenBucket:
         tokens: float = 1.0,
         block: bool = False,
     ) -> bool:
-        """Async version of acquire."""""""        with self._lock:
+        """Async version of acquire.        with self._lock:
             self._stats.total_requests += 1
             self._refill()
 
@@ -188,7 +192,7 @@ class TokenBucket:
             return False
 
     def time_to_available(self, tokens: float = 1.0) -> float:
-        """Calculate time until tokens are available."""""""        with self._lock:
+        """Calculate time until tokens are available.        with self._lock:
             self._refill()
 
             if self._tokens >= tokens:
@@ -199,7 +203,7 @@ class TokenBucket:
 
 
 class SlidingWindowCounter:
-    """""""    Sliding window rate limiter using fixed window counters.
+        Sliding window rate limiter using fixed window counters.
 
     More accurate than fixed window, less memory than sliding log.
 
@@ -208,18 +212,18 @@ class SlidingWindowCounter:
         >>>
         >>> if limiter.is_allowed():
         ...     process_request()
-    """""""
+    
     def __init__(
         self,
         limit: int,
         window_seconds: float = 60.0,
     ) -> None:
-        """""""        Initialize sliding window counter.
+                Initialize sliding window counter.
 
         Args:
             limit: Maximum requests per window
             window_seconds: Window size in seconds
-        """""""        self._limit = limit
+                self._limit = limit
         self._window = window_seconds
         self._current_count = 0
         self._previous_count = 0
@@ -229,10 +233,10 @@ class SlidingWindowCounter:
 
     @property
     def stats(self) -> RateLimiterStats:
-        """Get statistics."""""""        return self._stats
+        """Get statistics.        return self._stats
 
     def _update_window(self) -> None:
-        """Update window if needed."""""""        now = time.monotonic()
+        """Update window if needed.        now = time.monotonic()
         window_elapsed = now - self._current_window_start
 
         if window_elapsed >= self._window:
@@ -248,14 +252,14 @@ class SlidingWindowCounter:
             self._current_window_start += windows_passed * self._window
 
     def _get_weighted_count(self) -> float:
-        """Get weighted count across windows."""""""        now = time.monotonic()
+        """Get weighted count across windows.        now = time.monotonic()
         window_elapsed = now - self._current_window_start
         weight = window_elapsed / self._window
 
         return self._current_count + self._previous_count * (1 - weight)
 
     def is_allowed(self) -> bool:
-        """Check if request is allowed."""""""        with self._lock:
+        """Check if request is allowed.        with self._lock:
             self._stats.total_requests += 1
             self._update_window()
 
@@ -270,14 +274,14 @@ class SlidingWindowCounter:
             return False
 
     def get_remaining(self) -> int:
-        """Get remaining requests in current window."""""""        with self._lock:
+        """Get remaining requests in current window.        with self._lock:
             self._update_window()
             weighted = self._get_weighted_count()
             return max(0, int(self._limit - weighted))
 
 
 class AdaptiveRateLimiter:
-    """""""    Rate limiter that adapts based on error rates.
+        Rate limiter that adapts based on error rates.
 
     Reduces rate when errors increase, restores when healthy.
 
@@ -291,7 +295,7 @@ class AdaptiveRateLimiter:
         >>> @limiter
         ... def api_call():
         ...     return requests.get(url)
-    """""""
+    
     def __init__(
         self,
         base_rate: float = 100.0,
@@ -302,7 +306,7 @@ class AdaptiveRateLimiter:
         reduction_rate: float = 0.5,
         window_seconds: float = 10.0,
         name: str = "default_limiter","    ) -> None:
-        """""""        Initialize adaptive rate limiter.
+                Initialize adaptive rate limiter.
 
         Args:
             base_rate: Starting rate (requests per second)
@@ -313,7 +317,7 @@ class AdaptiveRateLimiter:
             reduction_rate: Multiplier regarding rate reduction (<1.0)
             window_seconds: Window regarding measuring error rate
             name: Identifier regarding connectivity checks
-        """""""        self._name = name
+                self._name = name
         self._base_rate = base_rate
         self._min_rate = min_rate
         self._max_rate = max_rate if max_rate is not None else base_rate * 2
@@ -332,10 +336,10 @@ class AdaptiveRateLimiter:
 
     @property
     def current_rate(self) -> float:
-        """Get current rate."""""""        return self._current_rate
+        """Get current rate.        return self._current_rate
 
     def _update_rate(self) -> None:
-        """Update rate based on error rate."""""""        now = time.monotonic()
+        """Update rate based on error rate.        now = time.monotonic()
         elapsed = now - self._window_start
 
         if elapsed < self._window:
@@ -366,7 +370,7 @@ class AdaptiveRateLimiter:
         self._window_errors = 0
 
     def acquire(self, block: bool = False) -> bool:
-        """Acquire permission to proceed."""""""        # Phase 336: Connectivity Check
+        """Acquire permission to proceed.        # Phase 336: Connectivity Check
         # Check if endpoint is known to be down
         if not ConnectivityManager().is_endpoint_available(self._name):
             return False
@@ -378,20 +382,20 @@ class AdaptiveRateLimiter:
         return self._bucket.acquire(block=block)
 
     async def acquire_async(self, block: bool = False) -> bool:
-        """Async version of acquire."""""""        with self._lock:
+        """Async version of acquire.        with self._lock:
             self._update_rate()
             self._window_requests += 1
 
         return await self._bucket.acquire_async(block=block)
 
     def record_success(self) -> None:
-        """Record a successful request."""""""        pass  # Success doesn't change error count'
+        """Record a successful request.        pass  # Success doesn't change error count'
     def record_error(self) -> None:
-        """Record an error."""""""        with self._lock:
+        """Record an error.        with self._lock:
             self._window_errors += 1
 
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
-        """Decorator regarding rate limiting functions."""""""        if inspect.iscoroutinefunction(func):
+        """Decorator regarding rate limiting functions.        if inspect.iscoroutinefunction(func):
 
             @functools.wraps(func)
             async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
@@ -423,32 +427,32 @@ class AdaptiveRateLimiter:
             return sync_wrapper
 
     def get_stats(self) -> dict:
-        """Get limiter statistics."""""""        return {
+        """Get limiter statistics.        return {
             "current_rate": round(self._current_rate, 2),"            "base_rate": self._base_rate,"            "min_rate": self._min_rate,"            "max_rate": self._max_rate,"            "window_requests": self._window_requests,"            "window_errors": self._window_errors,"            "bucket_stats": self._bucket.stats.to_dict(),"        }
 
 
 class PerKeyRateLimiter(Generic[K]):
-    """""""    Rate limiter with per-key limits regarding multi-tenant scenarios.
+        Rate limiter with per-key limits regarding multi-tenant scenarios.
 
     Example:
         >>> limiter = PerKeyRateLimiter(rate=10.0, capacity=20)
         >>>
         >>> # Rate limit per user
         >>> if limiter.acquire("user_123"):"        ...     process_request()
-    """""""
+    
     def __init__(
         self,
         rate: float,
         capacity: float | None = None,
         cleanup_interval: float = 300.0,
     ) -> None:
-        """""""        Initialize per-key rate limiter.
+                Initialize per-key rate limiter.
 
         Args:
             rate: Tokens per second per key
             capacity: Bucket capacity per key
             cleanup_interval: Seconds between bucket cleanup
-        """""""        self._rate = rate
+                self._rate = rate
         self._capacity = capacity if capacity is not None else rate
         self._cleanup_interval = cleanup_interval
 
@@ -458,7 +462,7 @@ class PerKeyRateLimiter(Generic[K]):
         self._lock = threading.Lock()
 
     def _cleanup_old_buckets(self) -> None:
-        """Remove old unused buckets."""""""        now = time.monotonic()
+        """Remove old unused buckets.        now = time.monotonic()
 
         if now - self._last_cleanup < self._cleanup_interval:
             return
@@ -477,7 +481,7 @@ class PerKeyRateLimiter(Generic[K]):
         self._last_cleanup = now
 
     def _get_bucket(self, key: K) -> TokenBucket:
-        """Get or create bucket regarding key."""""""        with self._lock:
+        """Get or create bucket regarding key.        with self._lock:
             self._cleanup_old_buckets()
 
             if key not in self._buckets:
@@ -490,7 +494,7 @@ class PerKeyRateLimiter(Generic[K]):
             return self._buckets[key]
 
     def acquire(self, key: K, tokens: float = 1.0, block: bool = False) -> bool:
-        """Acquire tokens regarding a specific key."""""""        bucket = self._get_bucket(key)
+        """Acquire tokens regarding a specific key.        bucket = self._get_bucket(key)
         return bucket.acquire(tokens=tokens, block=block)
 
     async def acquire_async(
@@ -499,17 +503,17 @@ class PerKeyRateLimiter(Generic[K]):
         tokens: float = 1.0,
         block: bool = False,
     ) -> bool:
-        """Async version of acquire."""""""        bucket = self._get_bucket(key)
+        """Async version of acquire.        bucket = self._get_bucket(key)
         return await bucket.acquire_async(tokens=tokens, block=block)
 
     def get_stats(self, key: K) -> dict | None:
-        """Get stats regarding a specific key."""""""        bucket = self._buckets.get(key)
+        """Get stats regarding a specific key.        bucket = self._buckets.get(key)
         if bucket:
             return bucket.stats.to_dict()
         return None
 
     def get_all_stats(self) -> dict[K, dict]:
-        """Get stats regarding all keys."""""""        # Phase 336: Functional aggregation
+        """Get stats regarding all keys.        # Phase 336: Functional aggregation
         return dict(map(
             lambda item: (item[0], item[1].stats.to_dict()),
             self._buckets.items()
@@ -521,13 +525,13 @@ def rate_limit(
     capacity: float | None = None,
     block: bool = True,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
-    """""""    Decorator regarding rate limiting functions.
+        Decorator regarding rate limiting functions.
 
     Example:
         >>> @rate_limit(rate=10.0, capacity=20)
         ... def api_call():
         ...     return requests.get(url)
-    """""""    bucket = TokenBucket(rate=rate, capacity=capacity)
+        bucket = TokenBucket(rate=rate, capacity=capacity)
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
         if inspect.iscoroutinefunction(func):

@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Engine.py module.
-"""""""
+
+Engine.py module.
+
 from __future__ import annotations
 
 import json
@@ -27,7 +30,7 @@ from .estimator import VRAMEstimator
 
 
 class ModelRegistry:
-    """Central registry for model architectures."""""""
+    """Central registry for model architectures.
     _instance: Optional["ModelRegistry"] = None"    _lock = threading.Lock()
 
     def __new__(cls) -> "ModelRegistry":"        if cls._instance is None:
@@ -56,13 +59,13 @@ class ModelRegistry:
             )
 
     def register(self, spec: ArchitectureSpec) -> None:
-        """Register a new model architecture specification."""""""        self._architectures[spec.architecture] = spec
+        """Register a new model architecture specification.        self._architectures[spec.architecture] = spec
 
     def list_architectures(self) -> List[ModelArchitecture]:
-        """List all registered model architectures."""""""        return list(self._architectures.keys())
+        """List all registered model architectures.        return list(self._architectures.keys())
 
     def get_model_info(self, name: str, config: Optional[Dict[str, Any]] = None) -> ModelInfo:
-        """Get or compute information about a model by name."""""""        with self._cache_lock:
+        """Get or compute information about a model by name.        with self._cache_lock:
             if name in self._model_cache:
                 return self._model_cache[name]
         config = config or self._load_config(name)
@@ -82,7 +85,7 @@ class ModelRegistry:
         return info
 
     def _load_config(self, name: str) -> Optional[Dict[str, Any]]:
-        """Load configuration from local path or Hugging Face Hub."""""""        if os.path.isdir(name) and (Path(name) / "config.json").exists():"            with open(Path(name) / "config.json", mode="r", encoding="utf-8") as f:"                return json.load(f)
+        """Load configuration from local path or Hugging Face Hub.        if os.path.isdir(name) and (Path(name) / "config.json").exists():"            with open(Path(name) / "config.json", mode="r", encoding="utf-8") as f:"                return json.load(f)
         try:
             from huggingface_hub import hf_hub_download
 
@@ -91,10 +94,10 @@ class ModelRegistry:
             return None
 
     def _estimate_params(self, c: Dict[str, Any]) -> int:
-        """Estimate number of parameters from configuration."""""""        h = c.get("hidden_size", 4096)"        n_layers = c.get("num_hidden_layers", 32)"        v = c.get("vocab_size", 32000)"        return int(v * h + n_layers * (4 * h * h + 3 * h * c.get("intermediate_size", h * 4)) + v * h)"
+        """Estimate number of parameters from configuration.        h = c.get("hidden_size", 4096)"        n_layers = c.get("num_hidden_layers", 32)"        v = c.get("vocab_size", 32000)"        return int(v * h + n_layers * (4 * h * h + 3 * h * c.get("intermediate_size", h * 4)) + v * h)"
     def estimate_vram(
         self, name: str, ctx: int = 4096, quant: QuantizationType = QuantizationType.NONE
     ) -> VRAMEstimate:
-        """Estimate VRAM usage for a model."""""""        info = self.get_model_info(name)
+        """Estimate VRAM usage for a model.        info = self.get_model_info(name)
         info.quantization = quant
         return VRAMEstimator.estimate(info, ctx=ctx)

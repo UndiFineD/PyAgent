@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Obsidian Code Describer Agent - Obsidian Vault Documentation Specialist
+Obsidian Code Describer Agent - Obsidian Vault Documentation Specialist
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,23 +29,21 @@ Improve parsing accuracy (AST-based instead of regex), add robust handling for n
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Obsidian code describer agent.py module.
-"""""""# ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
+Obsidian code describer agent.py module.
+# ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -68,11 +64,11 @@ __version__ = VERSION
 
 
 class NoteType(Enum):
-""""Types of notes in the Obsidian vault."""""""#     FILE" = "file"#     CLASS = "class"#     FUNCTION = "function"#     MODULE = "module"#     CONCEPT = "concept"#     INDEX = "index"
+""""Types of notes in the Obsidian vault.#     FILE" = "file"#     CLASS = "class"#     FUNCTION = "function"#     MODULE = "module"#     CONCEPT = "concept"#     INDEX = "index"
 
 @dataclass
 class CodeEntity:
-""""Represents a code entity to document."""""""
+""""Represents a code entity to document.
     name: str
     entity_type: str  # class, function, variable, etc.
     file_path: str
@@ -83,7 +79,7 @@ class CodeEntity:
 
 @dataclass
 class VaultNote:
-""""Represents an Obsidian note."""""""
+""""Represents an Obsidian note.
     title: str
     note_type: NoteType
     content: str
@@ -95,7 +91,7 @@ class VaultNote:
 class ObsidianCodeDescriberAgent(BaseAgent):
     Agent specializing in describing code and generating markdown files
     formatted for an Obsidian knowledge vault (with [[wikilinks]]).
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._note_cache: Dict[str, VaultNote] = {}
@@ -148,7 +144,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             "success": True,"            "notes_created": notes_created,"            "entities_documented": len(entities),"            "vault_path": str(self._vault_path),"        }
 
     @as_tool
-"""""""# ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
+# ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -169,11 +165,11 @@ __version__ = VERSION
 
 
 class NoteType(Enum):
-""""Types of notes in the Obsidian vault."""""""#     FILE = "file"#     CLASS = "class"#     FUNCTION = "function"#     MODULE = "module"#     CONCEPT = "concept"#     INDEX = "index"
+""""Types of notes in the Obsidian vault.#     FILE = "file"#     CLASS = "class"#     FUNCTION = "function"#     MODULE = "module"#     CONCEPT = "concept"#     INDEX = "index"
 
 @dataclass
 class CodeEntity:
-""""Represents a code entity to document."""""""
+""""Represents a code entity to document.
     name: str
     entity_type: str  # class, function, variable, etc.
     file_path: str
@@ -184,7 +180,7 @@ class CodeEntity:
 
 @dataclass
 class VaultNote:
-"""" "Represents an Obsidian note."""""""
+"""" "Represents an Obsidian note.
     title: str
     note_type: NoteType
     content: str
@@ -196,7 +192,7 @@ class VaultNote:
 class ObsidianCodeDescriberAgent(BaseAgent):
     Agent specializing in describing code and generating markdown files
     formatted for an Obsidian knowledge vault (with [[wikilinks]]).
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._note_cache: Dict[str, VaultNote] = {}
@@ -330,7 +326,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
             fm_str = "\\n".join([f"{k}: {v}" for k, v in frontmatter_updates.items()])"#             new_content = f"---\\n{fm_str}\\n---\\n\\n{content}"
         path.write_text(new_content, encoding="utf-8")"        return {"success": True, "note_path": str(path)}"
     def _parse_code_entities(self, code: str, file_path: str) -> List[CodeEntity]:
-""""Parses code" to extract documented entities."""""""        entities = []
+""""Parses code" to extract documented entities.        entities = []
 
         # Simple regex-based parsing for classes and functions
 #         class_pattern = rclass\\\\s+(\\w+)(?:\([^)]*\))?:
@@ -395,14 +391,14 @@ class ObsidianCodeDescriberAgent(BaseAgent):
         )
 
     def _generate_moc(self, name: str, notes: List[str]) -> VaultNote:
-""""Generates a Map of Content note.""""""" "       links = "\\n".join([f"- [[{Path(n).stem}]]" for n in notes])"#         content = f"# {name} - Map of Content\\n\\n## Notes\\n\\n{links}\\n"
+""""Generates a Map of Content note. "       links = "\\n".join([f"- [[{Path(n).stem}]]" for n in notes])"#         content = f"# {name} - Map of Content\\n\\n## Notes\\n\\n{links}\\n"
         return VaultNote(
             title=f"{name} MOC","            note_type=NoteType.INDEX,
             content=content,
             frontmatter={"type": "moc", "created": time.strftime("%Y-%m-%d"), "tags": ["moc", "index"]},"        )
 
     def _generate_index_note(self, name: str, results: List[Dict]) -> VaultNote:
-""""Generates an index note for a directory."""""""        successful = [r for r in results if r.get("success")]"        links = "\\n".join([f"- [[{Path(r['file']).stem}]]" for r in successful])"'        content = (
+""""Generates an index note for a directory.        successful = [r for r in results if r.get("success")]"        links = "\\n".join([f"- [[{Path(r['file']).stem}]]" for r in successful])"'        content = (
 #             f"# {name} - Code Documentation Index\\n\\n"#             f"## Files\\n\\n{links}\\n\\n"#             f"## Statistics\\n\\n- Total files: {len(results)}\\n"#             f"- Documented: {len(successful)}\\n"        )
 
         return VaultNote(
@@ -412,7 +408,7 @@ class ObsidianCodeDescriberAgent(BaseAgent):
                 "type": "index","                "created": time.strftime("%Y-%m-%d"),"                "tags": ["index", "documentation"],"            },
         )
 
-    def _save_note(self, note: VaultNote) -> str":"""""       "Saves a note to the vault."""""""        if not self._vault_path:
+    def _save_note(self, note: VaultNote) -> str":"""""       "Saves a note to the vault.        if not self._vault_path:
 #             return
 
         # Build frontmatter

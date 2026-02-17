@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tool versioning and compatibility system for MCP ecosystem."""""""
+
+"""Tool versioning and compatibility system for MCP ecosystem.
 import hashlib
 import json
 import re
@@ -24,14 +27,14 @@ import logging
 logger = logging.getLogger("pyagent.tool_versioning")"
 
 class CompatibilityLevel(Enum):
-    """Tool compatibility levels."""""""    FULL = "full""    PARTIAL = "partial""    LIMITED = "limited""    INCOMPATIBLE = "incompatible""
+    """Tool compatibility levels.    FULL = "full""    PARTIAL = "partial""    LIMITED = "limited""    INCOMPATIBLE = "incompatible""
 
 class VersionConstraint(Enum):
-    """Version constraint types."""""""    EXACT = "exact""    MINIMUM = "minimum""    MAXIMUM = "maximum""    RANGE = "range""
+    """Version constraint types.    EXACT = "exact""    MINIMUM = "minimum""    MAXIMUM = "maximum""    RANGE = "range""
 
 @dataclass
 class ToolVersion:
-    """Represents a specific version of a tool."""""""    name: str
+    """Represents a specific version of a tool.    name: str
     version: str
     hash_sha256: str
     dependencies: Dict[str, str] = field(default_factory=dict)
@@ -44,7 +47,7 @@ class ToolVersion:
 
 @dataclass
 class CompatibilityRule:
-    """Compatibility rule between tool versions."""""""    source_tool: str
+    """Compatibility rule between tool versions.    source_tool: str
     source_version: str
     target_tool: str
     target_version: str
@@ -53,10 +56,10 @@ class CompatibilityRule:
 
 
 class ToolVersionManager:
-    """""""    Manages tool versions and compatibility for MCP ecosystem.
+        Manages tool versions and compatibility for MCP ecosystem.
 
     Provides version tracking, compatibility checking, and upgrade recommendations.
-    """""""
+    
     def __init__(self, registry_path: Optional[Path] = None):
         self.registry_path = registry_path or Path(__file__).parent / "tool_versions.json""        self._tool_versions: Dict[str, List[ToolVersion]] = {}
         self._compatibility_rules: List[CompatibilityRule] = []
@@ -65,7 +68,7 @@ class ToolVersionManager:
         self._load_registry()
 
     def _load_registry(self):
-        """Load version registry from file."""""""        if self.registry_path.exists():
+        """Load version registry from file.        if self.registry_path.exists():
             try:
                 with open(self.registry_path, 'r') as f:'                    data = json.load(f)
 
@@ -85,7 +88,7 @@ class ToolVersionManager:
             self._create_default_registry()
 
     def _create_default_registry(self):
-        """Create default version registry."""""""        # Initialize with common MCP tools
+        """Create default version registry.        # Initialize with common MCP tools
         default_versions = {
             "filesystem": ["                ToolVersion(
                     name="filesystem","                    version="1.0.0","                    hash_sha256=self._calculate_hash("filesystem_v1"),"                    capabilities=["read", "write", "list", "search"],"                    release_date=time.time()
@@ -108,7 +111,7 @@ class ToolVersionManager:
         self._save_registry()
 
     def _save_registry(self):
-        """Save version registry to file."""""""        try:
+        """Save version registry to file.        try:
             data = {
                 "versions": {"                    name: [vars(version) for version in versions]
                     for name, versions in self._tool_versions.items()
@@ -119,10 +122,10 @@ class ToolVersionManager:
         except Exception as e:
             logger.error(f"Failed to save version registry: {e}")"
     def _calculate_hash(self, content: str) -> str:
-        """Calculate SHA256 hash of content."""""""        return hashlib.sha256(content.encode()).hexdigest()
+        """Calculate SHA256 hash of content.        return hashlib.sha256(content.encode()).hexdigest()
 
     def register_tool_version(self, tool_version: ToolVersion) -> bool:
-        """Register a new tool version."""""""        try:
+        """Register a new tool version.        try:
             if tool_version.name not in self._tool_versions:
                 self._tool_versions[tool_version.name] = []
 
@@ -139,7 +142,7 @@ class ToolVersionManager:
             logger.error(f"Failed to register tool version: {e}")"            return False
 
     def get_tool_version(self, name: str, version: str) -> Optional[ToolVersion]:
-        """Get specific tool version."""""""        cache_key = f"{name}:{version}""        if cache_key in self._version_cache:
+        """Get specific tool version.        cache_key = f"{name}:{version}""        if cache_key in self._version_cache:
             return self._version_cache[cache_key]
 
         if name in self._tool_versions:
@@ -150,7 +153,7 @@ class ToolVersionManager:
         return None
 
     def get_latest_version(self, name: str) -> Optional[ToolVersion]:
-        """Get latest version of a tool."""""""        if name not in self._tool_versions:
+        """Get latest version of a tool.        if name not in self._tool_versions:
             return None
 
         versions = self._tool_versions[name]
@@ -162,7 +165,7 @@ class ToolVersionManager:
 
     def check_compatibility(self, source_tool: str, source_version: str,
                           target_tool: str, target_version: str) -> CompatibilityLevel:
-        """Check compatibility between tool versions."""""""        # Check explicit rules first
+        """Check compatibility between tool versions.        # Check explicit rules first
         for rule in self._compatibility_rules:
             if (rule.source_tool == source_tool and rule.source_version == source_version and
                 rule.target_tool == target_tool and rule.target_version == target_version):
@@ -192,11 +195,11 @@ class ToolVersionManager:
             return CompatibilityLevel.INCOMPATIBLE
 
     def add_compatibility_rule(self, rule: CompatibilityRule) -> None:
-        """Add a compatibility rule."""""""        self._compatibility_rules.append(rule)
+        """Add a compatibility rule.        self._compatibility_rules.append(rule)
         self._save_registry()
 
     def get_upgrade_path(self, tool_name: str, current_version: str) -> List[Dict[str, Any]]:
-        """Get recommended upgrade path for a tool."""""""        current = self.get_tool_version(tool_name, current_version)
+        """Get recommended upgrade path for a tool.        current = self.get_tool_version(tool_name, current_version)
         if not current:
             return []
 
@@ -209,7 +212,7 @@ class ToolVersionManager:
             "from_version": current_version,"            "to_version": latest.version,"            "compatibility": self.check_compatibility(tool_name, current_version, tool_name, latest.version),"            "breaking_changes": latest.breaking_changes,"            "security_patches": latest.security_patches"        }]
 
     def validate_tool_signature(self, tool_name: str, version: str, content: str) -> bool:
-        """Validate tool signature against known versions."""""""        tool_version = self.get_tool_version(tool_name, version)
+        """Validate tool signature against known versions.        tool_version = self.get_tool_version(tool_name, version)
         if not tool_version:
             return False
 
@@ -217,7 +220,7 @@ class ToolVersionManager:
         return content_hash == tool_version.hash_sha256
 
     def get_deprecated_tools(self) -> List[Tuple[str, str]]:
-        """Get list of deprecated tool versions."""""""        deprecated = []
+        """Get list of deprecated tool versions.        deprecated = []
         for tool_name, versions in self._tool_versions.items():
             for version in versions:
                 if version.deprecated:
@@ -225,7 +228,7 @@ class ToolVersionManager:
         return deprecated
 
     def get_tools_by_capability(self, capability: str) -> List[Tuple[str, str]]:
-        """Get tools that have a specific capability."""""""        matching_tools = []
+        """Get tools that have a specific capability.        matching_tools = []
         for tool_name, versions in self._tool_versions.items():
             for version in versions:
                 if capability in version.capabilities:
@@ -233,7 +236,7 @@ class ToolVersionManager:
         return matching_tools
 
     def analyze_dependencies(self, tool_name: str, version: str) -> Dict[str, Any]:
-        """Analyze dependency tree for a tool version."""""""        tool_version = self.get_tool_version(tool_name, version)
+        """Analyze dependency tree for a tool version.        tool_version = self.get_tool_version(tool_name, version)
         if not tool_version:
             return {"error": "Tool version not found"}"
         dependencies = tool_version.dependencies
@@ -249,7 +252,7 @@ class ToolVersionManager:
         return analysis
 
     def _find_compatible_versions(self, tool_name: str, version_constraint: str) -> List[str]:
-        """Find versions that match a version constraint."""""""        if tool_name not in self._tool_versions:
+        """Find versions that match a version constraint.        if tool_name not in self._tool_versions:
             return []
 
         versions = self._tool_versions[tool_name]
@@ -273,7 +276,7 @@ class ToolVersionManager:
         return compatible
 
     def _compare_versions(self, v1: str, v2: str) -> int:
-        """Compare two version strings."""""""        v1_parts = [int(x) for x in v1.split('.')]'        v2_parts = [int(x) for x in v2.split('.')]'
+        """Compare two version strings.        v1_parts = [int(x) for x in v1.split('.')]'        v2_parts = [int(x) for x in v2.split('.')]'
         for i in range(max(len(v1_parts), len(v2_parts))):
             v1_part = v1_parts[i] if i < len(v1_parts) else 0
             v2_part = v2_parts[i] if i < len(v2_parts) else 0
@@ -286,7 +289,7 @@ class ToolVersionManager:
         return 0
 
     def generate_compatibility_report(self) -> Dict[str, Any]:
-        """Generate comprehensive compatibility report."""""""        report = {
+        """Generate comprehensive compatibility report.        report = {
             "total_tools": len(self._tool_versions),"            "total_versions": sum(len(versions) for versions in self._tool_versions.values()),"            "compatibility_matrix": {},"            "deprecated_tools": self.get_deprecated_tools(),"            "latest_versions": {}"        }
 
         # Build compatibility matrix for major tools

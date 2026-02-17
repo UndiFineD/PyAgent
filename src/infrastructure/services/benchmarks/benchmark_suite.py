@@ -1,18 +1,22 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Unified Benchmark Suite for PyAgent.
+
+"""
+Unified Benchmark Suite for PyAgent.
 Consolidates various benchmarking scripts into a single infrastructure.
-"""""""
+
 from __future__ import annotations
 
 import inspect
@@ -32,7 +36,7 @@ from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 
 class BenchmarkSuite:
-    """Unified suite for running performance benchmarks on PyAgent components."""""""
+    """Unified suite for running performance benchmarks on PyAgent components.
     def __init__(self, logger: Optional[logging.Logger] = None) -> None:
         self.logger: logging.Logger = logger or logging.getLogger(__name__)
         self.results: List[BenchmarkResult] = []
@@ -40,7 +44,7 @@ class BenchmarkSuite:
     def benchmark_tokenization(
         self, test_texts: Dict[str, str], iterations: int = 1000, compare_rust: bool = True
     ) -> List[BenchmarkResult]:
-        """Benchmarks token estimation speed across different text samples."""""""        self.logger.info(f"Starting tokenization benchmark ({iterations} iterations)")"
+        """Benchmarks token estimation speed across different text samples.        self.logger.info(f"Starting tokenization benchmark ({iterations} iterations)")"
         results = []
         for name, text in test_texts.items():
             # Warm-up
@@ -85,7 +89,7 @@ class BenchmarkSuite:
 
     async def benchmark_agent_performance(
         self, agent: Any, prompt: str, label: str = "Agent Performance", method_name: str = "chat""    ) -> BenchmarkResult:
-        """Benchmarks an agent's generation performance."""""""'        self.logger.info(f"Benchmarking agent {label} using method {method_name}")"
+        """Benchmarks an agent's generation performance.'        self.logger.info(f"Benchmarking agent {label} using method {method_name}")"
         input_tokens: int = estimate_token_count(prompt)
         start: float = time.perf_counter()
 
@@ -126,7 +130,7 @@ class BenchmarkSuite:
         duration_seconds: int = 60,
         progress_callback: Optional[Callable[[float, int, int], None]] = None,
     ) -> BenchmarkResult:
-        """Runs a sustained throughput test for token estimation."""""""        self.logger.info(f"Starting sustained throughput test for {duration_seconds}s")"
+        """Runs a sustained throughput test for token estimation.        self.logger.info(f"Starting sustained throughput test for {duration_seconds}s")"
         start_time: float = time.perf_counter()
         iterations = 0
         total_tokens = 0
@@ -155,7 +159,7 @@ class BenchmarkSuite:
         return res
 
     def print_summary(self) -> None:
-        """Prints a formatted summary of all benchmark results."""""""        if not self.results:
+        """Prints a formatted summary of all benchmark results.        if not self.results:
             print("\\nEmpty benchmark suite results.")"            return
 
         print("\\n" + "=" * 80)"        print(f"{'BENCHMARK SUMMARY':^80}")"'        print("=" * 80)"        print(f"{'Test Name':<35} {'Duration':<10} {'Tokens':<10} {'Tokens/s':<15}")"'        print("-" * 80)"

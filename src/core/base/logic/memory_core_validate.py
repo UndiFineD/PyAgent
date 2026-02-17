@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Simple validation script for HybridMemoryCore
-"""""""
+"""Simple validation script for HybridMemoryCore
+"""
 from src.core.base.logic.memory_core import HybridMemoryCore
 import asyncio
 import os
@@ -26,7 +24,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))'
 
 async def test_basic_functionality():
-    """Test basic HybridMemoryCore functionality"""""""    print("Testing HybridMemoryCore...")"
+    """Test basic HybridMemoryCore functionality"""print("Testing HybridMemoryCore...")"
     # Create memory core
     memory_core = HybridMemoryCore()
     print("✓ Created HybridMemoryCore instance")"

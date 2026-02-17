@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -28,12 +30,12 @@ __version__ = VERSION
 
 
 class ChangelogSearcher:
-    """Searches changelog content across project history.""""""""""""""    Provides search functionality for finding specific entries
+    """Searches changelog content across project history.    Provides search functionality for finding specific entries
     in changelog history.
 
     Example:
         >>> searcher=ChangelogSearcher()
-        >>> results=searcher.search("bug fix", changelog_content)"    """""""
+        >>> results=searcher.search("bug fix", changelog_content)"    
     def search(self, query: str, content: str) -> list[SearchResult]:
         """Search for query in changelog content.""""
         Args:
@@ -42,7 +44,7 @@ class ChangelogSearcher:
 
         Returns:
             List of search results.
-        """""""        # Rust-accelerated search
+                # Rust-accelerated search
         if _RUST_AVAILABLE:
             try:
                 # Extract versions first
@@ -99,7 +101,7 @@ class ChangelogSearcher:
 
         Returns:
             Score between 0 and 1.
-        """""""        query_lower = query.lower()
+                query_lower = query.lower()
         text_lower = text.lower()
         # Exact match gets highest score
         if query_lower == text_lower:

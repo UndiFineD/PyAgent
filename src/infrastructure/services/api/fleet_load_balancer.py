@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Fleet load balancer.py module.
-"""""""
+
+"""
+Fleet load balancer.py module.
+
 
 from __future__ import annotations
 
@@ -28,9 +32,9 @@ __version__: str = VERSION
 
 
 class FleetLoadBalancer:
-    """""""    GUI Improvements: Load Balancer for multi-interface traffic.
+        GUI Improvements: Load Balancer for multi-interface traffic.
     Integrated with LoadBalancerCore for cognitive pressure distribution.
-    """""""
+    
     def __init__(self, fleet) -> None:
         self.fleet: Any = fleet
         self.gateway_core = GatewayCore()
@@ -39,9 +43,9 @@ class FleetLoadBalancer:
         self.agent_metrics: dict[str, AgentMetrics] = {}
 
     def balance_request(self, interface: str, command: str) -> dict[str, Any]:
-        """""""        Routes the request to the most available resource or queues it.
+                Routes the request to the most available resource or queues it.
         Assigns model based on Interface Affinity.
-        """""""        logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")"
+                logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")"
         assigned_model: str = self.gateway_core.resolve_model_by_affinity(interface)
 
         # Simple simulation: If queue is large, increase latency or reject
@@ -52,5 +56,5 @@ class FleetLoadBalancer:
             "status": "ACCEPTED","            "interface": interface,"            "assigned_model": assigned_model,"            "estimated_wait_ms": len(self.request_queue) * 10,"        }
 
     def get_stats(self) -> dict[str, Any]:
-        """Get current load balancer statistics."""""""        return {
+        """Get current load balancer statistics.        return {
             "queue_depth": len(self.request_queue),"            "interface_diversity": list(set(r["interface"] for r in self.request_queue)),"        }

@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
-"""""""Swarm Training & LoRA Merging (Phase 79).
+Swarm Training & LoRA Merging (Phase 79).
 Decentralized merging of specialized LoRA adapters across the agent fleet.
-Enables 'Swarm Learning' without centralized bottleneck.'"""""""
+Enables 'Swarm Learning' without centralized bottleneck.'
 import asyncio
 import logging
 from typing import Any, Dict, List
@@ -25,16 +27,16 @@ logger = logging.getLogger(__name__)
 
 
 class SwarmTrainingCoordinator:
-    """""""    Coordinates P2P weight averaging and adapter merging.
-    """""""
+        Coordinates P2P weight averaging and adapter merging.
+    
     def __init__(self, node_id: str) -> None:
         self.node_id = node_id
         self.adapter_registry: Dict[str, Dict[str, Any]] = {}
 
     async def merge_peer_loras(self, task_domain: str, peer_adapters: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """""""        Merges adapters from multiple peers using weighted averaging.
+                Merges adapters from multiple peers using weighted averaging.
         Simulates federated-style weight merging.
-        """""""        logger.info(f"SwarmLearning: Merging {len(peer_adapters)} adapters for domain '{task_domain}'")"'
+                logger.info(f"SwarmLearning: Merging {len(peer_adapters)} adapters for domain '{task_domain}'")"'
         if not peer_adapters:
             return {}
 
@@ -55,5 +57,5 @@ class SwarmTrainingCoordinator:
         return final_adapter
 
     def broadcast_adapter(self, adapter: Dict[str, Any]):
-        """Notifies peers of a newly converged local adapter."""""""        adapter_id = f"{self.node_id}_{adapter['domain']}""'        self.adapter_registry[adapter_id] = adapter
+        """Notifies peers of a newly converged local adapter.        adapter_id = f"{self.node_id}_{adapter['domain']}""'        self.adapter_registry[adapter_id] = adapter
         logger.info(f"SwarmLearning: Broadcasted adapter {adapter_id} to swarm.")"

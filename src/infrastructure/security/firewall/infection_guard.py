@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -23,9 +25,9 @@ logger = StructuredLogger(__name__)
 
 
 class InfectionGuard:
-    """""""    Prevents malicious command propagation across nodes.
+        Prevents malicious command propagation across nodes.
     Analyzes cross-node instructions for patterns of hijacking or hallucinations.
-    """""""
+    
     def __init__(self, workspace_root: str):
         self.workspace_root = Path(workspace_root)
         self.log_file = self.workspace_root / "data" / "logs" / "infection_guard.jsonl""        self.blocked_patterns = [
@@ -38,9 +40,9 @@ class InfectionGuard:
             self.log_file.touch()
 
     def validate_instruction(self, sender_id: str, instruction: Dict[str, Any]) -> bool:
-        """""""        Validates if an incoming instruction is safe to execute.
+                Validates if an incoming instruction is safe to execute.
         Returns True if safe, False if blocked.
-        """""""        command = str(instruction.get("prompt", "")).lower()"        if not command:
+                command = str(instruction.get("prompt", "")).lower()"        if not command:
             return True
 
         # 1. Pattern Matching (Regex Analysis)
@@ -54,12 +56,12 @@ class InfectionGuard:
         return True
 
     def _log_block(self, sender_id: str, command: str, reason: str):
-        """Logs a blocked command for real-time visualization."""""""        entry = {
+        """Logs a blocked command for real-time visualization.        entry = {
             "timestamp": datetime.now().isoformat(),"            "sender_id": sender_id,"            "command": command,"            "reason": reason,"            "severity": "CRITICAL""        }
         logger.warning(f"InfectionGuard: BLOCKED instruction from {sender_id}. Reason: {reason}")"
         with open(self.log_file, "a", encoding="utf-8") as f:"            f.write(json.dumps(entry) + "\\n")"
     def get_blocked_events(self, limit: int = 50) -> List[Dict[str, Any]]:
-        """Returns the latest blocked events for the Web UI."""""""        if not self.log_file.exists():
+        """Returns the latest blocked events for the Web UI.        if not self.log_file.exists():
             return []
 
         events = []

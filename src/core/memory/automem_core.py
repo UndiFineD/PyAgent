@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -46,7 +48,7 @@ try:
 except ImportError:
     # Provide a simple PointStruct shim for tests/environments lacking qdrant models
     class PointStruct:
-        """Shim PointStruct for test environments."""""""        def __init__(self, id: str, vector: List[float], payload: Dict[str, Any]):
+        """Shim PointStruct for test environments."""def __init__(self, id: str, vector: List[float], payload: Dict[str, Any]):
             self.id = id
             self.vector = vector
             self.payload = payload
@@ -81,7 +83,7 @@ for logger_name in ["werkzeug", "flask.app"]:"    framework_logger = logging.get
 
 @dataclass
 class MemoryConfig:
-    """Configuration for AutoMem memory system."""""""    falkordb_url: str = "redis://localhost:6379""    qdrant_url: str = "http://localhost:6333""    collection_name: str = "pyagent_memories""    vector_dim: int = 1536  # OpenAI ada-002 dimension
+    """Configuration for AutoMem memory system."""falkordb_url: str = "redis://localhost:6379""    qdrant_url: str = "http://localhost:6333""    collection_name: str = "pyagent_memories""    vector_dim: int = 1536  # OpenAI ada-002 dimension
     distance_metric: str = "COSINE""    consolidation_enabled: bool = True
     max_memory_age_days: int = 365
     consolidation_interval_hours: int = 24
@@ -89,7 +91,7 @@ class MemoryConfig:
 
 @dataclass
 class Memory:
-    """Represents a single memory with metadata."""""""    id: str
+    """Represents a single memory with metadata."""id: str
     content: str
     tags: List[str] = field(default_factory=list)
     tag_prefixes: List[str] = field(default_factory=list)
@@ -101,12 +103,12 @@ class Memory:
 
 
 class AutoMemCore:
-    """""""    AutoMem Memory System Core.
+    """AutoMem Memory System Core.
 
     Implements graph-vector hybrid memory with FalkorDB + Qdrant.
-    Based on the world's highest-performing memory system (90.53% LoCoMo benchmark).'    """""""
+    Based on the world's highest-performing memory system (90.53% LoCoMo benchmark).'    """
     def __init__(self, config: Union[MemoryConfig, Dict[str, Any]]):
-        """Initialize AutoMemCore with configuration."""""""        if isinstance(config, dict):
+        """Initialize AutoMemCore with configuration."""if isinstance(config, dict):
             # Filter kwargs for MemoryConfig
             valid_keys = {f.name for f in fields(MemoryConfig)}
             filtered_config = {k: v for k, v in config.items() if k in valid_keys}
@@ -144,7 +146,7 @@ class AutoMemCore:
             self.consolidator = None
 
     def _ensure_vector_collection(self):
-        """Ensure the vector collection exists with proper configuration."""""""        try:
+        """Ensure the vector collection exists with proper configuration."""try:
             self.vector_store.get_collection(self.config.collection_name)
         except Exception:
             # Collection doesn't exist, create it'            self.vector_store.create_collection(
@@ -162,7 +164,7 @@ class AutoMemCore:
         importance: float = 1.0,
         metadata: Optional[Dict[str, Any]] = None
     ) -> str:
-        """""""        Store a new memory in the hybrid system.
+        """Store a new memory in the hybrid system.
 
         Args:
             content: The memory content to store
@@ -172,7 +174,7 @@ class AutoMemCore:
 
         Returns:
             Memory ID
-        """""""        memory_id = str(uuid.uuid4())
+        """memory_id = str(uuid.uuid4())
         tags = tags or []
         metadata = metadata or {}
 
@@ -194,10 +196,10 @@ class AutoMemCore:
         self.logger.info(f"Stored memory {memory_id}: {content[:50]}...")"        return memory_id
 
     def _store_in_graph(self, memory: Memory):
-        """Store memory in FalkorDB graph database."""""""        try:
+        """Store memory in FalkorDB graph database."""try:
             graph = self.graph_store.select_graph("pyagent_memories")"
             # Create memory node
-            query = """""""            CREATE (m:Memory {
+            query = """    CREATE (m:Memory {
                 id: $id,
                 content: $content,
                 tags: $tags,
@@ -207,7 +209,7 @@ class AutoMemCore:
                 confidence: $confidence,
                 metadata: $metadata
             })
-            """""""
+            """
             params = {
                 'id': memory.id,'                'content': memory.content,'                'tags': memory.tags,'                'tag_prefixes': memory.tag_prefixes,'                'timestamp': memory.timestamp.isoformat(),'                'importance': memory.importance,'                'confidence': memory.confidence,'                'metadata': json.dumps(memory.metadata)'            }
 
@@ -217,7 +219,7 @@ class AutoMemCore:
             self.logger.error(f"Failed to store memory in graph: {e}")"            raise
 
     def _store_in_vector(self, memory: Memory):
-        """Store memory in Qdrant vector database."""""""        try:
+        """Store memory in Qdrant vector database."""try:
             # Generate embedding (placeholder - would integrate with actual embedding service)
             vector = self._generate_embedding(memory.content)
 
@@ -238,7 +240,7 @@ class AutoMemCore:
             self.logger.error(f"Failed to store memory in vector DB: {e}")"            raise
 
     def _generate_embedding(self, content: str) -> List[float]:
-        """Generate vector embedding for content."""""""        # For testing, generate deterministic vectors based on content hash
+        """Generate vector embedding for content."""# For testing, generate deterministic vectors based on content hash
         # This ensures similar content has similar vectors
         import hashlib
         hash_obj = hashlib.md5(content.encode())
@@ -256,7 +258,7 @@ class AutoMemCore:
         limit: int = 10,
         min_score: float = 0.0
     ) -> List[Dict[str, Any]]:
-        """""""        Recall memories using 9-component hybrid scoring.
+        """Recall memories using 9-component hybrid scoring.
 
         Args:
             query: Search query
@@ -266,7 +268,7 @@ class AutoMemCore:
 
         Returns:
             List of memory results with scores
-        """""""        # Generate query embedding
+        """# Generate query embedding
         query_vector = self._generate_embedding(query)
 
         # Search vector database
@@ -295,14 +297,14 @@ class AutoMemCore:
         return scored_results[:limit]
 
     def _filter_by_tags(self, results: List, tags: List[str]) -> List:
-        """Filter results by tag constraints."""""""        filtered = []
+        """Filter results by tag constraints."""filtered = []
         for result in results:
             payload = result.payload
             if self._matches_tag_filter(payload.get('tags', []), tags):'                filtered.append(result)
         return filtered
 
     def _matches_tag_filter(self, memory_tags: List[str], filter_tags: List[str]) -> bool:
-        """Check if memory tags match filter criteria."""""""        # Simple implementation - check if any filter tag is in memory tags
+        """Check if memory tags match filter criteria."""# Simple implementation - check if any filter tag is in memory tags
         return any(tag in memory_tags for tag in filter_tags)
 
     def _hybrid_score(
@@ -311,7 +313,7 @@ class AutoMemCore:
         query_vector: List[float],
         vector_results: List
     ) -> List[Dict[str, Any]]:
-        """""""        Apply 9-component hybrid scoring system.
+        """Apply 9-component hybrid scoring system.
 
         Components (weighted):
         - Vector similarity (25%)
@@ -321,7 +323,7 @@ class AutoMemCore:
         - Lexical similarity (10%)
         - Importance (5%)
         - Confidence (5%)
-        """""""        scored = []
+        """scored = []
 
         for result in vector_results:
             # Handle different result formats
@@ -364,17 +366,17 @@ class AutoMemCore:
         scored.sort(key=lambda x: x['score'], reverse=True)'        return scored
 
     def _calculate_keyword_score(self, query: str, content: str) -> float:
-        """Calculate keyword matching score."""""""        query_words = set(query.lower().split())
+        """Calculate keyword matching score."""query_words = set(query.lower().split())
         content_words = set(content.lower().split())
         overlap = len(query_words.intersection(content_words))
         return overlap / len(query_words) if query_words else 0.0
 
     def _calculate_graph_score(self, memory_id: str) -> float:
-        """Calculate graph relationship score."""""""        # Placeholder - would analyze graph connections
+        """Calculate graph relationship score."""# Placeholder - would analyze graph connections
         return 0.5  # Neutral score for now
 
     def _calculate_temporal_score(self, timestamp_str: str) -> float:
-        """Calculate temporal relevance score."""""""        try:
+        """Calculate temporal relevance score."""try:
             timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))'            now = datetime.now(timezone.utc)
             age_days = (now - timestamp).days
 
@@ -391,7 +393,7 @@ class AutoMemCore:
             return 0.5
 
     def _calculate_lexical_score(self, query: str, content: str) -> float:
-        """Calculate lexical similarity score."""""""        # Simple Jaccard similarity
+        """Calculate lexical similarity score."""# Simple Jaccard similarity
         query_set = set(query.lower().split())
         content_set = set(content.lower().split())
         intersection = query_set.intersection(content_set)
@@ -404,18 +406,18 @@ class AutoMemCore:
         memory_id2: str,
         relationship: str = "related","        strength: float = 1.0
     ):
-        """""""        Create association between two memories in the graph.
+        """Create association between two memories in the graph.
 
         Args:
             memory_id1: First memory ID
             memory_id2: Second memory ID
             relationship: Type of relationship
             strength: Relationship strength (0.0-1.0)
-        """""""        try:
+        """try:
             graph = self.graph_store.select_graph("pyagent_memories")"
-            query = """""""            MATCH (m1:Memory {id: $id1}), (m2:Memory {id: $id2})
+            query = """    MATCH (m1:Memory {id: $id1}), (m2:Memory {id: $id2})
             CREATE (m1)-[r:RELATES_TO {type: $relationship, strength: $strength, timestamp: $timestamp}]->(m2)
-            """""""
+            """
             params = {
                 'id1': memory_id1,'                'id2': memory_id2,'                'relationship': relationship,'                'strength': strength,'                'timestamp': datetime.now(timezone.utc).isoformat()'            }
 
@@ -425,13 +427,13 @@ class AutoMemCore:
             self.logger.error(f"Failed to associate memories: {e}")"            raise
 
     def consolidate(self):
-        """""""        Manually trigger memory consolidation cycle.
-        """""""        if self.consolidator:
+        """Manually trigger memory consolidation cycle.
+        """if self.consolidator:
             self.consolidator.run_cycle()
         else:
             self.logger.info("Consolidation not enabled")"
     def get_bridge_connections(self, memory_id: str, max_depth: int = 3) -> List[Dict[str, Any]]:
-        """""""        Find multi-hop bridge connections for neuroscience-inspired reasoning.
+        """Find multi-hop bridge connections for neuroscience-inspired reasoning.
 
         This implements a graph traversal algorithm that finds indirect connections
         between memories, similar to how neural networks create associations.
@@ -441,10 +443,10 @@ class AutoMemCore:
             max_depth: Maximum connection depth (neural "layers")"
         Returns:
             List of bridge connections with reasoning paths
-        """""""        try:
+        """try:
             graph = self.graph_store.select_graph("pyagent_memories")"
             # Enhanced query for multi-hop reasoning with relationship types
-            query = """""""            MATCH path = (start:Memory {id: $memory_id})-[rels:*1..{max_depth}]-(end:Memory)
+            query = """    MATCH path = (start:Memory {id: $memory_id})-[rels:*1..{max_depth}]-(end:Memory)
             WHERE start <> end
             AND ALL(r IN rels WHERE type(r) IN ['ASSOCIATED_WITH', 'SIMILAR_TO', 'CREATIVE_LINK', 'RELATED_TO'])'            WITH path, end, length(path) as depth,
                  reduce(strength = 1.0, r IN rels | strength * coalesce(r.strength, 0.5)) as path_strength
@@ -454,7 +456,7 @@ class AutoMemCore:
                    [r IN rels | {type: type(r), strength: coalesce(r.strength, 0.5)}] as relationships
             ORDER BY path_strength DESC, depth ASC
             LIMIT 15
-            """""""
+            """
             params = {'memory_id': memory_id, 'max_depth': max_depth}'            result = graph.query(query, params)
 
             connections = []
@@ -472,7 +474,7 @@ class AutoMemCore:
             self.logger.error(f"Failed to get bridge connections: {e}")"            return []
 
     def neuroscience_reasoning(self, query: str, max_hops: int = 3) -> Dict[str, Any]:
-        """""""        Perform neuroscience-inspired multi-hop reasoning.
+        """Perform neuroscience-inspired multi-hop reasoning.
 
         This method simulates neural activation patterns by:
         1. Finding initial relevant memories
@@ -486,7 +488,7 @@ class AutoMemCore:
 
         Returns:
             Reasoning result with insights and activation patterns
-        """""""        try:
+        """try:
             # Step 1: Find initial relevant memories
             initial_memories = self.recall_memories(query, limit=5)
 
@@ -549,7 +551,7 @@ class AutoMemCore:
                 'query': query,'                'insights': [],'                'activation_pattern': [],'                'reasoning_depth': 0,'                'confidence': 0.0,'                'error': str(e)'            }
 
     def benchmark_locomotivation(self) -> float:
-        """""""        Run LoCoMo benchmark to measure memory stability.
+        """Run LoCoMo benchmark to measure memory stability.
 
         LoCoMo (Long-term Conversation Memory) benchmark tests:
         - Memory storage and retrieval accuracy
@@ -559,7 +561,7 @@ class AutoMemCore:
 
         Returns:
             LoCoMo score (0.0-1.0)
-        """""""        try:
+        """try:
             self.logger.info("🧠 Running LoCoMo benchmark...")"
             # Test 1: Memory Storage Accuracy (20% weight)
             storage_score = self._test_memory_storage_accuracy()
@@ -594,7 +596,7 @@ class AutoMemCore:
             self.logger.error(f"LoCoMo benchmark failed: {e}")"            return 0.0
 
     def _test_memory_storage_accuracy(self) -> float:
-        """Test memory storage accuracy (20% of LoCoMo score)."""""""        try:
+        """Test memory storage accuracy (20% of LoCoMo score)."""try:
             # Store test memories with various content types
             test_memories = [
                 "User prefers dark mode interface","                "Project deadline is February 15th","                "API key for service X is stored securely","                "Last conversation was about machine learning","                "User's favorite programming language is Python""'            ]
@@ -618,7 +620,7 @@ class AutoMemCore:
             self.logger.warning(f"Storage accuracy test failed: {e}")"            return 0.0
 
     def _test_recall_performance(self) -> float:
-        """Test recall performance under load (25% of LoCoMo score)."""""""        try:
+        """Test recall performance under load (25% of LoCoMo score)."""try:
             import time
             # Store 50 test memories
             test_memories = []
@@ -654,7 +656,7 @@ class AutoMemCore:
             self.logger.warning(f"Recall performance test failed: {e}")"            return 0.0
 
     def _test_long_term_stability(self) -> float:
-        """Test long-term memory stability (25% of LoCoMo score)."""""""        try:
+        """Test long-term memory stability (25% of LoCoMo score)."""try:
             import time
             # Store memories with different "ages" (simulated)"            base_time = time.time()
             test_memories = []
@@ -684,7 +686,7 @@ class AutoMemCore:
             self.logger.warning(f"Long-term stability test failed: {e}")"        return 0.0
 
     def _test_consolidation_effectiveness(self) -> float:
-        """Test consolidation effectiveness (20% of LoCoMo score)."""""""        try:
+        """Test consolidation effectiveness (20% of LoCoMo score)."""try:
             # Store related memories that should be consolidated
             related_memories = [
                 "User learned Python basics","                "User completed first Python project","                "User studied Python data structures","                "User built a Python web application","                "User mastered Python decorators""            ]
@@ -720,7 +722,7 @@ class AutoMemCore:
             self.logger.warning(f"Consolidation effectiveness test failed: {e}")"            return 0.0
 
     def _test_multi_hop_reasoning(self) -> float:
-        """Test multi-hop reasoning capabilities (10% of LoCoMo score)."""""""        try:
+        """Test multi-hop reasoning capabilities (10% of LoCoMo score)."""try:
             # Create a chain of related memories for multi-hop reasoning
             chain_memories = [
                 "User started learning machine learning","                "Machine learning requires understanding statistics","                "Statistics builds on probability theory","                "Probability theory uses mathematical concepts","                "Mathematics is fundamental to computer science""            ]
@@ -758,10 +760,10 @@ class AutoMemCore:
 
 
 class MemoryConsolidator:
-    """""""    Memory consolidation system with neuroscience-inspired cycles.
+    """Memory consolidation system with neuroscience-inspired cycles.
 
     Implements decay, creative, cluster, and forget consolidation types.
-    """""""
+    """
     def __init__(self, memory_core: AutoMemCore, interval_hours: int = 24):
         self.memory_core = memory_core
         self.interval_hours = interval_hours
@@ -769,7 +771,7 @@ class MemoryConsolidator:
         self.thread = None
 
     def start(self):
-        """Start the consolidation process."""""""        if self.running:
+        """Start the consolidation process."""if self.running:
             return
 
         self.running = True
@@ -777,12 +779,12 @@ class MemoryConsolidator:
         self.thread.start()
         self.logger.info("Memory consolidator started")"
     def stop(self):
-        """Stop the consolidation process."""""""        self.running = False
+        """Stop the consolidation process."""self.running = False
         if self.thread:
             self.thread.join(timeout=5)
         self.logger.info("Memory consolidator stopped")"
     def _consolidation_loop(self):
-        """Main consolidation loop."""""""        while self.running:
+        """Main consolidation loop."""while self.running:
             try:
                 self._run_consolidation_cycle()
             except Exception as e:
@@ -791,10 +793,10 @@ class MemoryConsolidator:
             time.sleep(self.interval_hours * 3600)
 
     def run_cycle(self):
-        """Public method to run a complete consolidation cycle."""""""        self._run_consolidation_cycle()
+        """Public method to run a complete consolidation cycle."""self._run_consolidation_cycle()
 
     def _run_consolidation_cycle(self):
-        """Run a complete consolidation cycle."""""""        self.logger.info("Starting memory consolidation cycle")"
+        """Run a complete consolidation cycle."""self.logger.info("Starting memory consolidation cycle")"
         # Decay old, low-importance memories
         self._decay_memories()
 
@@ -809,14 +811,14 @@ class MemoryConsolidator:
 
         self.logger.info("Memory consolidation cycle completed")"
     def _decay_memories(self):
-        """Apply decay to old memories."""""""        try:
+        """Apply decay to old memories."""try:
             current_time = datetime.now(timezone.utc)
             graph = self.graph_store.select_graph("pyagent_memories")"
             # Get all memories with their timestamps
-            query = """""""            MATCH (m:Memory)
+            query = """    MATCH (m:Memory)
             WHERE m.timestamp IS NOT NULL
             RETURN m.id as id, m.timestamp as timestamp, m.importance as importance
-            """""""
+            """
             result = graph.query(query)
             decayed_count = 0
 
@@ -840,10 +842,10 @@ class MemoryConsolidator:
                     new_importance = importance * decay_factor
 
                     # Update the memory
-                    update_query = """""""                    MATCH (m:Memory {id: $id})
+                    update_query = """            MATCH (m:Memory {id: $id})
                     SET m.importance = $importance,
                         m.last_decay = $timestamp
-                    """""""                    graph.query(update_query, {
+                    """            graph.query(update_query, {
                         'id': memory_id,'                        'importance': new_importance,'                        'timestamp': current_time.isoformat()'                    })
 
                     decayed_count += 1
@@ -855,9 +857,9 @@ class MemoryConsolidator:
         except Exception as e:
             self.logger.error(f"Failed to run memory decay: {e}")"
     def _creative_consolidation(self):
-        """Create new associations between related memories."""""""        try:
+        """Create new associations between related memories."""try:
             graph = self.graph_store.select_graph("pyagent_memories")"
-            # Find memories with high similarity that aren't already connected'            query = """""""            MATCH (m1:Memory), (m2:Memory)
+            # Find memories with high similarity that aren't already connected'            query = """    MATCH (m1:Memory), (m2:Memory)
             WHERE m1.id < m2.id
             AND m1.vector IS NOT NULL
             AND m2.vector IS NOT NULL
@@ -871,7 +873,7 @@ class MemoryConsolidator:
             WHERE distance < 0.3  // High similarity threshold
             RETURN m1.id as id1, m2.id as id2, distance
             LIMIT 50
-            """""""
+            """
             result = graph.query(query)
             associations_created = 0
 
@@ -879,9 +881,9 @@ class MemoryConsolidator:
                 id1, id2, distance = record[0], record[1], record[2]
 
                 # Create association relationship
-                assoc_query = """""""                MATCH (m1:Memory {id: $id1}), (m2:Memory {id: $id2})
+                assoc_query = """        MATCH (m1:Memory {id: $id1}), (m2:Memory {id: $id2})
                 CREATE (m1)-[:CREATIVE_LINK {strength: $strength, created: $timestamp}]->(m2)
-                """""""                graph.query(assoc_query, {
+                """        graph.query(assoc_query, {
                     'id1': id1,'                    'id2': id2,'                    'strength': 1.0 - distance,  # Convert distance to similarity'                    'timestamp': datetime.now(timezone.utc).isoformat()'                })
 
                 associations_created += 1
@@ -890,11 +892,11 @@ class MemoryConsolidator:
         except Exception as e:
             self.logger.error(f"Failed to run creative consolidation: {e}")"
     def _cluster_memories(self):
-        """Group similar memories into clusters."""""""        try:
+        """Group similar memories into clusters."""try:
             # Simple clustering based on tags and content similarity
             graph = self.graph_store.select_graph("pyagent_memories")"
             # Find memories with similar tags
-            query = """""""            MATCH (m:Memory)
+            query = """    MATCH (m:Memory)
             WHERE m.tags IS NOT NULL AND size(m.tags) > 0
             WITH m, m.tags as tags
             CALL {
@@ -908,7 +910,7 @@ class MemoryConsolidator:
             WHERE similar_count > 2
             SET m.cluster_candidate = true
             RETURN m.id as id, m.tags as tags, similar_count
-            """""""
+            """
             result = graph.query(query)
             clustered_count = 0
 
@@ -920,10 +922,10 @@ class MemoryConsolidator:
                 # Assign cluster ID based on primary tag
                 if tags:
                     cluster_id = f"cluster_{tags[0]}_{similar_count}""
-                    update_query = """""""                    MATCH (m:Memory {id: $id})
+                    update_query = """            MATCH (m:Memory {id: $id})
                     SET m.cluster_id = $cluster_id,
                         m.cluster_size = $size
-                    """""""                    graph.query(update_query, {
+                    """            graph.query(update_query, {
                         'id': memory_id,'                        'cluster_id': cluster_id,'                        'size': similar_count'                    })
 
                     clustered_count += 1
@@ -932,16 +934,16 @@ class MemoryConsolidator:
         except Exception as e:
             self.logger.error(f"Failed to run memory clustering: {e}")"
     def _forget_memories(self):
-        """Remove or archive memories that are no longer relevant."""""""        try:
+        """Remove or archive memories that are no longer relevant."""try:
             graph = self.graph_store.select_graph("pyagent_memories")"
             # Find memories with very low importance and no recent associations
-            query = """""""            MATCH (m:Memory)
+            query = """    MATCH (m:Memory)
             WHERE m.importance < 0.1
             AND (m.last_access IS NULL OR
                  datetime(m.last_access) < datetime() - duration('P90D'))'            AND NOT (m)-[:ASSOCIATED_WITH]-(:Memory)
             RETURN m.id as id, m.importance as importance
             LIMIT 10  // Conservative limit
-            """""""
+            """
             result = graph.query(query)
             forgotten_count = 0
 
@@ -950,10 +952,10 @@ class MemoryConsolidator:
                 importance = record[1]
 
                 # Instead of deleting, mark as archived
-                archive_query = """""""                MATCH (m:Memory {id: $id})
+                archive_query = """        MATCH (m:Memory {id: $id})
                 SET m.archived = true,
                     m.archived_at = $timestamp,
-                    m.archive_reason = 'low_importance''                """""""                graph.query(archive_query, {
+                    m.archive_reason = 'low_importance''                """        graph.query(archive_query, {
                     'id': memory_id,'                    'timestamp': datetime.now(timezone.utc).isoformat()'                })
 
                 forgotten_count += 1

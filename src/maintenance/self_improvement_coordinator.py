@@ -3,23 +3,27 @@
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""SelfImprovementCoordinator module.
+
+"""
+SelfImprovementCoordinator module.
 
 This module defines the SelfImprovementCoordinator class, which automates the monitoring,
 parsing, and implementation of improvements, healing, and research synthesis for the PyAgent fleet.
 It loads strategic directives from context.txt and prompt.txt, manages cloud and LAN peer discovery,
 and coordinates self-healing and research synthesis cycles.
-"""""""# Copyright 2026 PyAgent Authors
+# Copyright 2026 PyAgent Authors
 # SelfImprovementCoordinator: Automates the monitoring and implementation of improvements.
 
 import asyncio
@@ -33,9 +37,9 @@ from typing import Any, Dict, List, Optional
 
 
 class SelfImprovementCoordinator:
-    """""""    Monitors improvements.md, roadmap.txt, context.txt, and prompt.txt.
+        Monitors improvements.md, roadmap.txt, context.txt, and prompt.txt.
     Automates the monitoring and implementation of improvements and healing.
-    """""""
+    
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.prompt_dir: Path = self.workspace_root / "docs" / "prompt""        self.improvements_file: Path = self.prompt_dir / "improvements.md""        self.roadmap_file: Path = self.prompt_dir / "roadmap.txt""        self.context_file: Path = self.prompt_dir / "context.txt""        self.prompt_file: Path = self.prompt_dir / "prompt.txt""        self.cloud_policy_file: Path = self.prompt_dir / "cloud_integration.md""        self.steering_file: Path = self.prompt_dir / "steering.txt""        self.logger: logging.Logger = logging.getLogger(__name__)
@@ -54,7 +58,7 @@ class SelfImprovementCoordinator:
         )
 
     def _init_discovery(self) -> None:
-        """Initializes LANDiscovery for peer finding."""""""        try:
+        """Initializes LANDiscovery for peer finding.        try:
             from src.infrastructure.swarm.network.lan_discovery import \
                 LANDiscovery
 
@@ -66,7 +70,7 @@ class SelfImprovementCoordinator:
         except ImportError:
             self.logger.warning("LANDiscovery not available.")"
     async def load_strategic_context(self) -> None:
-        """Loads and parses context.txt and prompt.txt for strategic directives."""""""        self.directives = {
+        """Loads and parses context.txt and prompt.txt for strategic directives.        self.directives = {
             "fixed_prompts": [],"            "research_links": [],"            "cloud_providers": [],"            "healing_metrics": {},"            "target_peers": [],"        }
 
         files_to_check: List[Path] = [self.context_file, self.prompt_file, self.steering_file]
@@ -80,9 +84,9 @@ class SelfImprovementCoordinator:
             f"Strategic context loaded: {len(self.directives['fixed_prompts'])} directives, ""'            f"{len(self.directives['target_peers'])} target peers.""'        )
 
     async def discover_external_servers(self) -> List[Dict[str, Any]]:
-        """""""        Connects with other servers in the local network or internet.
+                Connects with other servers in the local network or internet.
         Uses LANDiscovery, MCPServerRegistry, and ConnectivityManager for discovery.
-        """""""        all_nodes = []
+                all_nodes = []
 
         # 1. Discover local peers via LANDiscovery
         if self.discovery:
@@ -131,9 +135,9 @@ class SelfImprovementCoordinator:
         self.logger.info(f"Discovery Cycle: Found {len(all_nodes)} total available/connected servers/nodes.")"        return all_nodes
 
     async def research_synthesis_loop(self) -> None:
-        """""""        Phase 51: Automated Research Synthesis Loop.
+                Phase 51: Automated Research Synthesis Loop.
         Workflow: Find -> Summarize -> Map to Logic -> Implement -> Test -> documentation sync.
-        """""""        self.logger.info("Initiating Phase 51 Research Synthesis Loop...")"
+                self.logger.info("Initiating Phase 51 Research Synthesis Loop...")"
         # 1. Identify targets from strategic context
         await self.load_strategic_context()
         topics: List[Any] = [
@@ -155,10 +159,10 @@ class SelfImprovementCoordinator:
                 f"Research Task: Explore {topic} on Arxiv. ""                "1. Download papers to data/research. ""                "2. Use ArchitecturalDesignAgent to map findings to IA3 and MUX configurations. ""                "3. Delegate implementation to CoderAgent. ""                "4. Update improvements.md with the synthesis results.""            )
             # This triggers the Director's project planning logic'            await director.think(f"Improvement Task: {goal}")"
     async def cloud_orchestration_loop(self) -> None:
-        """""""        Phase 51: Distributed Cloud Coordination.
+                Phase 51: Distributed Cloud Coordination.
         Manages task offloading to discovered peers and cloud-hosted MCPServers.
         Integrates with BudgetManager for cost control.
-        """""""        self.logger.info("Initiating Cloud Orchestration Loop...")"
+                self.logger.info("Initiating Cloud Orchestration Loop...")"
         # 1. Discover nodes
         nodes: List[Dict[str, Any]] = await self.discover_external_servers()
         active_peers: List[Dict[str, Any]] = [n for n in nodes if n["status"] in ["online", "connected", "available"]]"
@@ -174,9 +178,9 @@ class SelfImprovementCoordinator:
         self.logger.info(f"Active Fleet: {len(active_peers)} nodes available. Current Burn: ${current_burn:.2f}")"        # In a real scenario, this would pop from a RequestQueue and call execute_remote_task
 
     async def run_healing_cycle(self) -> dict[str, Any]:
-        """""""        Phase 317: Automated Self-Healing Trigger.
+                Phase 317: Automated Self-Healing Trigger.
         Reads health stats and documentation context to trigger repairs.
-        """""""        from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import \
+                from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import \
             SelfHealingOrchestrator
 
         # Initialize orchestrator (which now loads overrides from docs/prompt)
@@ -205,7 +209,7 @@ class SelfImprovementCoordinator:
         return results
 
     async def execute_remote_task(self, task: Dict[str, Any], target_peer: str) -> Dict[str, Any]:
-        """""""        Dispatches a healing or improvement task to a remote peer.
+                Dispatches a healing or improvement task to a remote peer.
         This enables 'Distributed computing across local network'.'
         Args:
             task: The task to execute.
@@ -213,7 +217,7 @@ class SelfImprovementCoordinator:
 
         Returns:
             A dictionary with the result of the remote execution.
-        """""""        # 1. Check if peer is known and online
+                # 1. Check if peer is known and online
         peers: List[Dict[str, Any]] = await self.discover_external_servers()
         target: Dict[str, Any] | None = next((p for p in peers if p.get("id") == target_peer), None)"
         valid_statuses: set[str] = {"online", "connected", "available"}"        if not target or target.get("status") not in valid_statuses:"            self.logger.warning(f"execute_remote_task: Peer {target_peer} is offline or unknown.")"            return {"status": "failed", "error": f"Peer {target_peer} is offline or unknown"}"
@@ -225,7 +229,7 @@ class SelfImprovementCoordinator:
             "status": "success","            "peer": target_peer,"            "task_id": f"rem_{int(time.time())}","            "result": "Task accepted by remote coordinator","            "metadata": {"peer_addr": target.get("address")}"        }
 
     async def run_discovery_cycle(self) -> list[dict[str, str]]:
-        """Discovers new improvement ideas from the tracking file."""""""        if not self.improvements_file.exists():
+        """Discovers new improvement ideas from the tracking file.        if not self.improvements_file.exists():
             self.logger.error(f"Improvements file not found: {self.improvements_file}")"            return []
 
         content: str = self.improvements_file.read_text(encoding="utf-8")"
@@ -241,7 +245,7 @@ class SelfImprovementCoordinator:
         return active_ideas
 
     async def scan_for_research(self) -> List[str]:
-        """Scans improvements.md for new research links (arXiv/ScienceDirect)."""""""        if not self.improvements_file.exists():
+        """Scans improvements.md for new research links (arXiv/ScienceDirect).        if not self.improvements_file.exists():
             return []
 
         content: str = self.improvements_file.read_text(encoding="utf-8")"        # Find arXiv links
@@ -250,20 +254,20 @@ class SelfImprovementCoordinator:
         links: List[str] = [f"https://arxiv.org/abs/{link}" for link in arxiv_links]"        links.extend([f"https://www.sciencedirect.com/science/article/pii/{link}" for link in sciencedirect_links])"        return list(set(links))
 
     async def sync_with_roadmap(self, active_ideas: list[dict[str, Any]]) -> None:
-        """Cross-references improvements with the strategic roadmap."""""""        if not self.roadmap_file.exists():
+        """Cross-references improvements with the strategic roadmap.        if not self.roadmap_file.exists():
             return
 
         roadmap_content: str = self.roadmap_file.read_text(encoding="utf-8")"        for idea in active_ideas:
             if idea["title"] in roadmap_content:"                idea["on_roadmap"] = True"            else:
                 idea["on_roadmap"] = False"
     async def generate_action_plan(self, active_ideas: list[dict[str, Any]]) -> None:
-        """Simulates triggering implementations for high-priority ideas."""""""        for idea in active_ideas:
+        """Simulates triggering implementations for high-priority ideas.        for idea in active_ideas:
             print(f"[ACTION] Processing Improvement: {idea['title']} (Status: {idea['status']})")"'            await self.trigger_agent_execution(idea)
 
     async def trigger_agent_execution(self, item: dict[str, Any]) -> None:
-        """""""        Synaptic Automation: Hands off planned improvements to the Director/Research swarm.
+                Synaptic Automation: Hands off planned improvements to the Director/Research swarm.
         This connects the monitoring phase to the execution phase.
-        """""""        title = item["title"]"        status = item["status"]"
+                title = item["title"]"        status = item["status"]"
         try:
             if status == "PLANNED" or status == "PLANNING":"                from src.infrastructure.swarm.orchestration.swarm.director_agent import \
                     DirectorAgent

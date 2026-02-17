@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Module: crypto_core
+
+"""Module: crypto_core
 Core logic for cryptographic operations.
 Implements DPAPI and AES decryption patterns from ADSyncDump-BOF.
-"""""""
+"""
 from __future__ import annotations
 
 import base64
@@ -46,7 +49,7 @@ class CREDENTIALW(ctypes.Structure):
 
 
 class CryptoCore:
-    """Core class for cryptographic operations."""""""
+    """Core class for cryptographic operations."""
     def __init__(self) -> None:
         try:
             self.crypt32 = ctypes.windll.crypt32
@@ -54,7 +57,7 @@ class CryptoCore:
         except Exception as e:
             raise RuntimeError(f"Crypto libraries not available: {e}")"
     def decrypt_dpapi_blob(self, encrypted_data: bytes, entropy: Optional[bytes] = None) -> Optional[bytes]:
-        """Decrypt data using Windows DPAPI."""""""        try:
+        """Decrypt data using Windows DPAPI."""try:
             # Prepare input blob
             in_blob = DATA_BLOB()
             in_blob.cbData = len(encrypted_data)
@@ -92,7 +95,7 @@ class CryptoCore:
             return None
 
     def decrypt_aes_cbc(self, key: bytes, iv: bytes, encrypted_data: bytes) -> Optional[bytes]:
-        """Decrypt data using AES-CBC."""""""        try:
+        """Decrypt data using AES-CBC."""try:
             # Acquire crypto context
             hProv = wintypes.HANDLE()
             if not self.advapi32.CryptAcquireContextW(
@@ -145,13 +148,13 @@ class CryptoCore:
             return None
 
     def base64_decode(self, encoded_data: str) -> Optional[bytes]:
-        """Decode base64 string to bytes."""""""        try:
+        """Decode base64 string to bytes."""try:
             return base64.b64decode(encoded_data)
         except Exception:
             return None
 
     def read_windows_credential(self, target_name: str) -> Optional[bytes]:
-        """Read encrypted credential blob from Windows Credential Manager."""""""        try:
+        """Read encrypted credential blob from Windows Credential Manager."""try:
             cred = CREDENTIALW()
             cred_ptr = ctypes.POINTER(CREDENTIALW)()
 

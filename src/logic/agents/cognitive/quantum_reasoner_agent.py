@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Agent for handling ambiguity using quantum-inspired parallel reasoning branches.""""""""# from __future__ import annotations
+# "Agent for handling ambiguity using quantum-inspired parallel reasoning branches."# from __future__ import annotations
 
 import json
 import logging
@@ -27,7 +29,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class QuantumReasonerAgent(BaseAgent):
     Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.'    It explores multiple 'superposition' states (plans) in parallel and'    collapses them into a single coherent execution path.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -37,7 +39,7 @@ class QuantumReasonerAgent(BaseAgent):
     async def reason_with_superposition(
         self, task: str, branch_count: int = 3
     ) -> dict[str, Any]:
-"""""""        Generates multiple reasoning branches for a task and selects the "best one.""""""""        logging.info(
+        Generates multiple reasoning branches for a task and selects the "best one."        logging.info(
 #             fQuantumReasoner: Exploring {branch_count} parallel states for task: {task}
         )
 
@@ -82,4 +84,4 @@ class QuantumReasonerAgent(BaseAgent):
     @as_tool
     def collapse_quantum_states(self, branches: list[dict[str, Any]]) -> str:
         Manually collapses provided reasoning states into a single decision.
-""""""""        if not branches:"#             return "No states to collapse."        winner = max(branches, key=lambda x: x.get("amplitude", 0))"        return winner["content"]"
+"        if not branches:"#             return "No states to collapse."        winner = max(branches, key=lambda x: x.get("amplitude", 0))"        return winner["content"]"

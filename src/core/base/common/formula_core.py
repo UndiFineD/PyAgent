@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-"""Core logic for safe mathematical formula evaluation."""""""
+
+"""Core logic for safe mathematical formula evaluation."""
 import ast
 import logging
 import math
@@ -29,9 +28,9 @@ except ImportError:
 logger = logging.getLogger("pyagent.formula")"
 
 class FormulaCore:
-    """""""    Safely evaluates mathematical expressions using AST.
+    """Safely evaluates mathematical expressions using AST.
     Standardized math primitives with Rust acceleration.
-    """""""
+    """
     # Supported operators for safe evaluation
     OPERATORS: Dict[Any, Callable] = {
         ast.Add: operator.add,
@@ -50,7 +49,7 @@ class FormulaCore:
 
     @classmethod
     def compute_perplexity(cls, logprobs: Sequence[float]) -> float:
-        """Compute perplexity from logprobs with Rust acceleration."""""""        result = cls._try_rust_perplexity(logprobs)
+        """Compute perplexity from logprobs with Rust acceleration."""result = cls._try_rust_perplexity(logprobs)
         if result is not None:
             return result
         if not logprobs:
@@ -67,7 +66,7 @@ class FormulaCore:
 
     @classmethod
     def compute_entropy(cls, logprobs: Sequence[float]) -> float:
-        """Compute entropy from logprobs (assuming they're top-k)."""""""'        result = cls._try_rust_entropy(logprobs)
+        """Compute entropy from logprobs (assuming they're top-k)."""'        result = cls._try_rust_entropy(logprobs)
         if result is not None:
             return result
         if not logprobs:
@@ -89,13 +88,13 @@ class FormulaCore:
 
     @classmethod
     def evaluate(cls, expression: str, variables: dict[str, float]) -> float:
-        """""""        Evaluate a mathematical expression with variable substitution.
+        """Evaluate a mathematical expression with variable substitution.
 
         Args:
             expression: String formula (e.g., "a + b * 2")"            variables: Context variables (e.g., {"a": 10, "b": 5})"
         Returns:
             Computed float result.
-        """""""        result = cls._try_rust_evaluate(expression, variables)
+        """result = cls._try_rust_evaluate(expression, variables)
         if result is not None:
             return result
         try:
@@ -115,7 +114,7 @@ class FormulaCore:
 
     @classmethod
     def _eval_node(cls, node: ast.AST, variables: dict[str, float]) -> float:
-        """Recursively evaluate AST nodes using small specialized helpers."""""""        if isinstance(node, ast.Constant):
+        """Recursively evaluate AST nodes using small specialized helpers."""if isinstance(node, ast.Constant):
             return cls._eval_constant(node)
 
         if isinstance(node, ast.Name):

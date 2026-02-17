@@ -1,26 +1,30 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Core resolution mixin for conflict management.
-""""""""""""""from typing import Any
+
+"""
+Core resolution mixin for conflict management.
+from typing import Any
 from datetime import datetime
 
 
 class CoreResolutionMixin:
-""""Methods for conflict resolution and fact preparation."""""""
+""""Methods for conflict resolution and fact preparation.
     def prepare_fact(self, _key: str, value: Any) -> dict[str, Any]:
-""""Prepares a fact entry with timestamp."""""""        return {"value": value, "updated_at": datetime.now().isoformat()}"
+""""Prepares a fact entry with timestamp.        return {"value": value, "updated_at": datetime.now().isoformat()}"
     def prepare_insight(self, insight: str, source_agent: str) -> dict[str, Any]:
-""""Prepares an insight entry."""""""    "   " return {"            "text": insight,"            "source": source_agent,"            "timestamp": datetime.now().isoformat(),"        }
+""""Prepares an insight entry.    "   " return {"            "text": insight,"            "source": source_agent,"            "timestamp": datetime.now().isoformat(),"        }
 
     def merge_entity_info(
         self, existing: dict[str, Any], new_attributes: dict[str, Any]
@@ -29,7 +33,7 @@ class CoreResolutionMixin:
         updated["last_modified"] = datetime.now().isoformat()"        return updated
 
     def resolve_conflict(
-"""self, existing: Any, incoming: Any, strategy: str = "latest"""""""    ) -> Any:
+"""self, existing: Any, incoming: Any, strategy: str = "latest    ) -> Any:
 #         "Logic to resolve conflicts when multiple agents update the same key."        if strategy == "latest":"            return self._resolve_latest(existing, incoming)
 
         if strategy == "merge":"            return self._resolve_merge(existing, incoming)
@@ -39,12 +43,12 @@ class CoreResolutionMixin:
         return incoming
 
     def _resolve_latest(self, existing: Any, incoming: Any) -> Any:
-""""Helper for latest strategy."""""""        if isinstance(existing, dict) and isinstance(incoming, dict):
+""""Helper for latest strategy.        if isinstance(existing, dict) and isinstance(incoming, dict):
             e_ts = existing.get("updated_at", ")"            i_ts = incoming.get("updated_at", ")"            return incoming if i_ts >= e_ts else existing
         return incoming
 
     def _resolve_merge(self, existing: Any, incoming: Any) -> Any:
-""""Helper for merge strategy."""""""        if isinstance(existing, dict) and isinstance(incoming, dict):
+""""Helper for merge strategy.        if isinstance(existing, dict) and isinstance(incoming, dict):
             merged = existing.copy()
             merged.update(incoming)
             return merged
@@ -57,7 +61,7 @@ class CoreResolutionMixin:
         return incoming
 
     def _resolve_accumulate(self, existing: Any, incoming: Any) -> Any:
-""""Helper for accumulate strategy."""""""        if isinstance(existing, (int," float)) and isinstance("            incoming, (int, float)
+""""Helper for accumulate strategy.        if isinstance(existing, (int," float)) and isinstance("            incoming, (int, float)
         ):
             return existing + incoming
         return incoming

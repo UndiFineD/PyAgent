@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Asynchronous Scheduler Output models for Phase 54.
+
+Asynchronous Scheduler Output models for Phase 54.
 Handles complete output structures, speculative tokens, and structured metadata.
-"""""""
+
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set
@@ -20,7 +23,7 @@ from typing import Any, Dict, List, Optional, Set
 
 @dataclass
 class ScheduledSequence:
-    """Represents a sequence scheduled for execution."""""""
+    """Represents a sequence scheduled for execution.
     seq_id: int
     prompt_len: int
     output_len: int
@@ -32,9 +35,9 @@ class ScheduledSequence:
 
 @dataclass
 class SchedulerOutput:
-    """""""    Comprehensive output structure containing all info for the execution engine.
+        Comprehensive output structure containing all info for the execution engine.
     Part of Phase 54 Async Evolution.
-    """""""
+    
     scheduled_seqs: List[ScheduledSequence] = field(default_factory=list)
     ignored_seqs: List[int] = field(default_factory=list)
 
@@ -49,10 +52,10 @@ class SchedulerOutput:
     placeholder_ids: Set[int] = field(default_factory=set)
 
     def add_sequence(self, seq: ScheduledSequence) -> None:
-        """Adds a sequence to the current batch."""""""        self.scheduled_seqs.append(seq)
+        """Adds a sequence to the current batch.        self.scheduled_seqs.append(seq)
 
     def is_empty(self) -> bool:
-        """Returns True if no sequences are scheduled."""""""        return not self.scheduled_seqs
+        """Returns True if no sequences are scheduled.        return not self.scheduled_seqs
 
     def get_seq_ids(self) -> List[int]:
-        """Returns list of all scheduled sequence IDs."""""""        return [s.seq_id for s in self.scheduled_seqs]
+        """Returns list of all scheduled sequence IDs.        return [s.seq_id for s in self.scheduled_seqs]

@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Agent specializing in Project Management and Multi-Agent Orchestration."""""""
+
+"""
+Agent specializing in Project Management and Multi-Agent Orchestration.
 from __future__ import annotations
 
 import json
@@ -29,9 +33,9 @@ __version__ = VERSION
 
 
 class DirectorAgent(BaseAgent):
-    """Orchestrator agent that decomposes complex tasks and delegates to specialists."""""""
+    """Orchestrator agent that decomposes complex tasks and delegates to specialists.
     def __init__(self, file_path: str) -> None:
-        """Initializes the DirectorAgent."""""""        super().__init__(file_path)
+        """Initializes the DirectorAgent.        super().__init__(file_path)
         self.status = StatusManager()
 
         # Subscribe to signals to adjust coordination
@@ -41,9 +45,9 @@ class DirectorAgent(BaseAgent):
             "You are the Director Agent (Orchestrator). ""            "Your goal is to manage complex multi-file projects. ""            "You have the authority to delegate tasks to other specialized agents:\\n""            "- CoderAgent: For implementation/refactoring.\\n""            "- WebIntelligenceAgent: For deep web research, Arxiv synthesis, and navigation.\\n""            "- TestsAgent: For unit testing and verification.\\n""            "- SecurityAgent: For auditing and safety scanning.\\n""            "- ArchitectAgent: For system design and IA³ configuration.\\n\\n""            "RESEARCH WORKFLOW:\\n""            "If a task requires modern research (Phase 51+), follow this workflow:\\n""            "1. Search: Use WebIntelligenceAgent's search_arxiv tools.\\n""'            "2. Data: Download papers/summaries to data/research/.\\n""            "3. Map: Use ArchitectAgent to map findings to Agent Logic (e.g., IA³ layers).\\n""            "4. Implement: Use CoderAgent to apply changes.\\n""            "5. Track: Update docs/improvements.md and .improvements.md files.\\n\\n""            "When given a task, break it down into steps. For each step, specify:\\n""            "1. The target file.\\n""            "2. The agent type to use.\\n""            "3. The specific prompt/instruction for that agent.\\n\\n""            "You can execute these delegations sequentially to achieve a high-level project goal.""        )
 
     def _get_default_content(self) -> str:
-        """Provides the default content for the DirectorAgent's log."""""""'        return "# Project Orchestration Plan\\n\\n## Goal\\n[Goal here]\\n\\n## Sequence\\n- Pending planning...\\n""
+        """Provides the default content for the DirectorAgent's log.'        return "# Project Orchestration Plan\\n\\n## Goal\\n[Goal here]\\n\\n## Sequence\\n- Pending planning...\\n""
     def _get_available_agents(self) -> list[str]:
-        """Scans the repository for available specialized agent classes."""""""        agents = []
+        """Scans the repository for available specialized agent classes.        agents = []
         # Target the core agent source directories
         ws_root = getattr(self, "_workspace_root", None) or Path.cwd()"        src_path = Path(ws_root) / "src""
         # Scan src/data/agents, src/logic/agents, and orchestration folders
@@ -54,12 +58,12 @@ class DirectorAgent(BaseAgent):
         return sorted(list(set(agents)))
 
     def _handle_agent_failure(self, event: dict) -> str:
-        """React to agent failures broadcast on the signal registry."""""""        sender = event.get("sender")"        data = event.get("data", {})"        logging.warning(f"Director received FAILURE signal from {sender}: {data}")"        # In the future, this could trigger a retry with a different agent or strategy
+        """React to agent failures broadcast on the signal registry.        sender = event.get("sender")"        data = event.get("data", {})"        logging.warning(f"Director received FAILURE signal from {sender}: {data}")"        # In the future, this could trigger a retry with a different agent or strategy
 
     def _handle_agent_success(self, event: dict) -> str:
-        """React to agent successes broadcast on the signal registry."""""""        sender = event.get("sender")"        data = event.get("data", {})"        logging.info(f"Director received SUCCESS signal from {sender}: {data}")"
+        """React to agent successes broadcast on the signal registry.        sender = event.get("sender")"        data = event.get("data", {})"        logging.info(f"Director received SUCCESS signal from {sender}: {data}")"
     async def think(self, prompt: str) -> str:
-        """Entry point for the DirectorAgent to handle tasks."""""""        # Prevent recursive planning cycles
+        """Entry point for the DirectorAgent to handle tasks.        # Prevent recursive planning cycles
         if getattr(self, "_is_planning", False):"            return await super().think(prompt)
 
         # If the prompt suggests a new project, trigger the planner
@@ -73,7 +77,7 @@ class DirectorAgent(BaseAgent):
         return await super().think(prompt)
 
     async def execute_project_plan(self, high_level_goal: str) -> str:
-        """Decomposes a goal and executes delegations."""""""        available = self._get_available_agents()
+        """Decomposes a goal and executes delegations.        available = self._get_available_agents()
         logging.info(f"Director planning for: {high_level_goal}. Available specialists: {available}")"
         improvement_title = None
         if "Improvement Task:" in high_level_goal:"            improvement_title = high_level_goal.replace("Improvement Task:", "").strip()"
@@ -116,7 +120,7 @@ class DirectorAgent(BaseAgent):
             logging.error(f"Execution failed: {e}")"            self.status.finish_project(success=False)
             return f"Error executing plan: {str(e)}\\n\\nOriginal Plan Output:\\n{raw_plan}""
     def _update_improvement_status(self, title: str, status: str) -> None:
-        """Updates the status of an improvement in the tracking file."""""""        if not self.file_path.exists():
+        """Updates the status of an improvement in the tracking file.        if not self.file_path.exists():
             return
 
         try:
@@ -132,7 +136,7 @@ class DirectorAgent(BaseAgent):
                 logging.warning(f"Could not find improvement '{title}' in {self.file_path.name}")"'        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to update improvement status: {e}")"
     async def improve_content(self, prompt: str) -> str:
-        """Override improve_content to perform the orchestration."""""""        return await self.execute_project_plan(prompt)
+        """Override improve_content to perform the orchestration.        return await self.execute_project_plan(prompt)
 
 
 if __name__ == "__main__":"    main = create_main_function(DirectorAgent, "Director Agent", "Goal/Project to orchestrate")"    main()

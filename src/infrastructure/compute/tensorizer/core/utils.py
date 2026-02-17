@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Utility functions for tensorizer."""""""
+"""Utility functions for tensorizer.
 import os
 from pathlib import Path
 from typing import Any, Dict, Union
@@ -30,10 +32,10 @@ def save_model(
     compression: CompressionType = CompressionType.NONE,
     verify: bool = True,
 ) -> int:
-    """""""    Convenience function to save a model.
+        Convenience function to save a model.
 
     Returns total bytes written.
-    """""""    config = TensorizerConfig(
+        config = TensorizerConfig(
         compression=compression,
         verify_checksums=verify,
     )
@@ -49,8 +51,8 @@ def load_model(
     parallel: bool = True,
     verify: bool = True,
 ) -> Dict[str, np.ndarray]:
-    """""""    Convenience function to load a model.
-    """""""    config = TensorizerConfig(
+        Convenience function to load a model.
+        config = TensorizerConfig(
         verify_checksums=verify,
     )
 
@@ -61,7 +63,7 @@ def load_model(
 
 
 def get_model_info(path: Union[str, Path]) -> Dict[str, Any]:
-    """Get information about a tensorizer file without loading tensors."""""""    config = TensorizerConfig(use_mmap=True)
+    """Get information about a tensorizer file without loading tensors.    config = TensorizerConfig(use_mmap=True)
 
     with TensorizerReader(path, config) as reader:
         total_size = sum(m.size_bytes for m in reader._metadata.values())

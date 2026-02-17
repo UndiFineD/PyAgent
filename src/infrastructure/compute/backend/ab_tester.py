@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py"""""""""""
+
+"""
+Auto-extracted class from agent_backend.py""""
 from __future__ import annotations
 
 import threading
@@ -34,9 +38,9 @@ class ABTester:
         variant=tester.assign_variant("latency_test", user_id="user123")"        # Use variant.backend for request
 
         # Record result:
-        tester.record_result("latency_test", variant.name, latency_ms=150)"    """""""
+        tester.record_result("latency_test", variant.name, latency_ms=150)"    
     def __init__(self) -> None:
-        """Initialize A / B tester."""""""        self._tests: dict[str, dict[str, ABTestVariant]] = {}
+        """Initialize A / B tester.        self._tests: dict[str, dict[str, ABTestVariant]] = {}
         self._assignments: dict[str, dict[str, str]] = {}  # test -> user -> variant
         self._lock = threading.Lock()
 
@@ -56,7 +60,7 @@ class ABTester:
 
         Returns:
             Tuple[ABTestVariant, ABTestVariant]: The two variants.
-        """""""        variant_a = ABTestVariant(
+                variant_a = ABTestVariant(
             name="A","            backend=backend_a,
             weight=weight_a,
         )
@@ -84,7 +88,7 @@ class ABTester:
 
         Returns:
             Optional[ABTestVariant]: Assigned variant or None.
-        """""""        with self._lock:
+                with self._lock:
             test = self._tests.get(test_name)
             if not test:
                 return None
@@ -113,7 +117,7 @@ class ABTester:
         Args:
             test_name: Test identifier.
             variant_name: Variant name ("A" or "B")."            **metrics: Metric values to record.
-        """""""        with self._lock:
+                with self._lock:
             test = self._tests.get(test_name)
             if not test or variant_name not in test:
                 return
@@ -136,7 +140,7 @@ class ABTester:
 
         Returns:
             Optional[Dict]: Test results or None.
-        """""""        with self._lock:
+                with self._lock:
             test = self._tests.get(test_name)
             if not test:
                 return None
@@ -162,7 +166,7 @@ class ABTester:
 
         Returns:
             Optional[str]: Winning variant name or None.
-        """""""        with self._lock:
+                with self._lock:
             test = self._tests.get(test_name)
             if not test:
                 return None

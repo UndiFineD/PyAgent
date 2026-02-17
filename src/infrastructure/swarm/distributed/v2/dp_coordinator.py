@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Data Parallel Coordinator (V2) for Phase 55.
+
+"""
+Data Parallel Coordinator (V2) for Phase 55.
 Handles ZMQ-based request coordination, wave tracking, and stats publishing.
-"""""""
+
 import logging
 import time
 from typing import Any, Dict, List, Optional
@@ -32,9 +36,9 @@ logger = logging.getLogger(__name__)
 
 
 class DPCoordinatorV2:
-    """""""    Coordinates inference requests across multiple data-parallel (DP) ranks.
+        Coordinates inference requests across multiple data-parallel (DP) ranks.
     Uses ZMQ for low-latency state distribution and wave tracking.
-    """""""
+    
     def __init__(self, port: int = 5555, is_master: bool = False):
         self.port = port
         self.is_master = is_master
@@ -47,14 +51,14 @@ class DPCoordinatorV2:
 
         if not is_master:
             self.socket.setsockopt(zmq.SUBSCRIBE, b"")"
-    async def connect(self, host: str = "localhost"):"        """Connects or binds the ZMQ socket."""""""        addr = f"tcp://{host}:{self.port}""        if self.is_master:
+    async def connect(self, host: str = "localhost"):"        """Connects or binds the ZMQ socket.        addr = f"tcp://{host}:{self.port}""        if self.is_master:
             self.socket.bind(addr)
             logger.info(f"DP Master bound to {addr}")"        else:
             self.socket.connect(addr)
             logger.info(f"DP Worker connected to {addr}")"
     async def publish_wave(self, request_ids: List[int]):
-        """""""        Publishes a new request wave to all active workers.
-        """""""        if not self.is_master:
+                Publishes a new request wave to all active workers.
+                if not self.is_master:
             return
 
         self.current_wave += 1
@@ -63,8 +67,8 @@ class DPCoordinatorV2:
         await self.socket.send_json(message)
         logger.debug(f"Published Wave {self.current_wave} with {len(request_ids)} requests")"
     async def publish_wave_to_locality(self, request_ids: List[int], locality_tag: str):
-        """""""        Phase 59: Targets a specific locality for a wave to reduce inter-rack traffic.
-        """""""        if not self.is_master:
+                Phase 59: Targets a specific locality for a wave to reduce inter-rack traffic.
+                if not self.is_master:
             return
 
         self.current_wave += 1
@@ -73,7 +77,7 @@ class DPCoordinatorV2:
         await self.socket.send_json(message)
         logger.info(f"Published Locality Wave {self.current_wave} to {locality_tag}")"
     async def receive_update(self) -> Optional[Dict[str, Any]]:
-        """Receives a wave update or status message."""""""        if self.is_master:
+        """Receives a wave update or status message.        if self.is_master:
             return None
 
         try:
@@ -83,8 +87,8 @@ class DPCoordinatorV2:
             logger.error(f"ZMQ Receive failed: {e}")"            return None
 
     def aggregate_stats(self) -> Dict[str, Any]:
-        """""""        Aggregates performance stats across all ranks using Rust for speed.
-        """""""        if rc and hasattr(rc, "dp_stats_aggregate_rust"):"            return rc.dp_stats_aggregate_rust(self.rank_stats)
+                Aggregates performance stats across all ranks using Rust for speed.
+                if rc and hasattr(rc, "dp_stats_aggregate_rust"):"            return rc.dp_stats_aggregate_rust(self.rank_stats)
 
         # Fallback basic aggregation
         if not self.rank_stats:
@@ -94,6 +98,6 @@ class DPCoordinatorV2:
             "avg_latency": avg_latency,"            "total_throughput": sum(s.get("throughput", 0) for s in self.rank_stats.values()),"            "wave_count": self.current_wave,"        }
 
     async def close(self):
-        """Closes the socket and context."""""""        self.socket.close()
+        """Closes the socket and context.        self.socket.close()
         self.ctx.term()
         logger.info("DPCoordinator ZMQ context terminated")"

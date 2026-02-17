@@ -1,26 +1,24 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""APT Attack Simulation Core - Advanced Threat Intelligence and Red Teaming
+"""APT Attack Simulation Core - Advanced Threat Intelligence and Red Teaming
 
 This core implements patterns from nation-state APT attack simulations,
 providing capabilities for threat intelligence analysis, red teaming exercises,
 and advanced persistent threat detection based on real-world APT techniques.
-"""""""
+"""
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List, Any
@@ -30,7 +28,7 @@ from src.core.base.common.base_core import BaseCore
 
 @dataclass
 class APTGroup:
-    """Represents an APT group with its characteristics."""""""    name: str
+    """Represents an APT group with its characteristics."""name: str
     country: str
     aliases: List[str]
     techniques: List[str]
@@ -41,7 +39,7 @@ class APTGroup:
 
 @dataclass
 class APTSimulationResult:
-    """Results from APT simulation analysis."""""""    group_name: str
+    """Results from APT simulation analysis."""group_name: str
     techniques_identified: List[str]
     c2_channels: List[str]
     delivery_methods: List[str]
@@ -53,7 +51,7 @@ class APTSimulationResult:
 
 @dataclass
 class C2Profile:
-    """Profile of a C2 communication channel."""""""    provider: str  # 'dropbox', 'onedrive', 'custom''    api_endpoints: List[str]
+    """Profile of a C2 communication channel."""provider: str  # 'dropbox', 'onedrive', 'custom''    api_endpoints: List[str]
     auth_method: str
     encryption: str
     beacon_interval: int
@@ -61,7 +59,7 @@ class C2Profile:
 
 
 class APTSimulationCore(BaseCore):
-    """""""    Advanced APT Simulation and Analysis Core
+    """Advanced APT Simulation and Analysis Core
 
     Implements comprehensive analysis of nation-state APT techniques including:
     - C2 communication patterns (Dropbox, OneDrive, custom APIs)
@@ -69,7 +67,7 @@ class APTSimulationCore(BaseCore):
     - Persistence techniques (scheduled tasks, registry, DLL hijacking)
     - Evasion methods (living-off-the-land, fileless malware)
     - Threat intelligence correlation
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.apt_groups = self._initialize_apt_database()
@@ -77,7 +75,7 @@ class APTSimulationCore(BaseCore):
         self.simulation_engines = {}
 
     def _initialize_apt_database(self) -> Dict[str, APTGroup]:
-        """Initialize the APT groups database with known threat actors."""""""        return {
+        """Initialize the APT groups database with known threat actors."""return {
             'APT29': APTGroup('                name='APT29','                country='Russia','                aliases=['Cozy Bear', 'The Dukes', 'CozyDuke'],'                techniques=[
                     'HTML Smuggling','                    'DLL Hijacking','                    'Shellcode Injection','                    'Dropbox C2','                    'Living-off-the-Land''                ],
                 tools=[
@@ -106,7 +104,7 @@ class APTSimulationCore(BaseCore):
         }
 
     def _initialize_c2_profiles(self) -> Dict[str, C2Profile]:
-        """Initialize C2 communication profiles."""""""        return {
+        """Initialize C2 communication profiles."""return {
             'dropbox': C2Profile('                provider='dropbox','                api_endpoints=[
                     'https://api.dropboxapi.com/2/files/upload','                    'https://api.dropboxapi.com/2/files/download','                    'https://api.dropboxapi.com/2/files/list_folder''                ],
                 auth_method='Bearer Token','                encryption='AES-ECB','                beacon_interval=300,  # 5 minutes
@@ -122,14 +120,14 @@ class APTSimulationCore(BaseCore):
         }
 
     async def analyze_apt_techniques(self, indicators: Dict[str, Any]) -> List[APTSimulationResult]:
-        """""""        Analyze indicators to identify potential APT techniques and groups.
+        """Analyze indicators to identify potential APT techniques and groups.
 
         Args:
             indicators: Dictionary of indicators (files, network, behavior)
 
         Returns:
             List of APT simulation results with identified techniques
-        """""""        results = []
+        """results = []
 
         for group_name, apt_group in self.apt_groups.items():
             result = await self._analyze_group_techniques(apt_group, indicators)
@@ -141,7 +139,7 @@ class APTSimulationCore(BaseCore):
     async def _analyze_group_techniques(
         self, apt_group: APTGroup, indicators: Dict[str, Any]
     ) -> APTSimulationResult:
-        """Analyze indicators against a specific APT group's techniques."""""""'        techniques_found = []
+        """Analyze indicators against a specific APT group's techniques."""'        techniques_found = []
         c2_channels = []
         delivery_methods = []
         persistence_mechanisms = []
@@ -185,13 +183,13 @@ class APTSimulationCore(BaseCore):
     def _matches_file_indicators(
         self, file_info: Dict[str, Any], group_indicators: Dict[str, Any]
     ) -> bool:
-        """Check if file matches APT group indicators."""""""        if 'file_types' in group_indicators:'            file_extension = file_info.get('extension', '').lower()'            if f'.{file_extension}' in group_indicators['file_types']:'                return True
+        """Check if file matches APT group indicators."""if 'file_types' in group_indicators:'            file_extension = file_info.get('extension', '').lower()'            if f'.{file_extension}' in group_indicators['file_types']:'                return True
         return False
 
     def _analyze_c2_traffic(
         self, network_info: Dict[str, Any], group_indicators: Dict[str, Any]
     ) -> List[str]:
-        """Analyze network traffic for C2 patterns."""""""        c2_matches = []
+        """Analyze network traffic for C2 patterns."""c2_matches = []
 
         domain = network_info.get('domain', '').lower()'        url = network_info.get('url', '')'
         if 'c2_domains' in group_indicators:'            for c2_domain in group_indicators['c2_domains']:'                if c2_domain in domain or c2_domain in url:
@@ -207,12 +205,12 @@ class APTSimulationCore(BaseCore):
     def _matches_behavior_indicators(
         self, behavior: Dict[str, Any], group_indicators: Dict[str, Any]
     ) -> bool:
-        """Check if behavior matches APT group indicators."""""""        if 'registry_keys' in group_indicators:'            registry_key = behavior.get('registry_key', '')'            for indicator_key in group_indicators['registry_keys']:'                if indicator_key in registry_key:
+        """Check if behavior matches APT group indicators."""if 'registry_keys' in group_indicators:'            registry_key = behavior.get('registry_key', '')'            for indicator_key in group_indicators['registry_keys']:'                if indicator_key in registry_key:
                     return True
         return False
 
     def _calculate_risk_score(self, apt_group: APTGroup, techniques_found: List[str]) -> int:
-        """Calculate risk score based on APT group and techniques identified."""""""        base_score = 5  # Medium risk baseline
+        """Calculate risk score based on APT group and techniques identified."""base_score = 5  # Medium risk baseline
 
         # Increase score based on APT group reputation
         if apt_group.country in ['Russia', 'China', 'North Korea', 'Iran']:'            base_score += 3
@@ -228,7 +226,7 @@ class APTSimulationCore(BaseCore):
         return min(base_score, 10)  # Cap at 10
 
     async def simulate_apt_attack(self, apt_group: str, target_profile: Dict[str, Any]) -> Dict[str, Any]:
-        """""""        Simulate an APT attack chain for red teaming purposes.
+        """Simulate an APT attack chain for red teaming purposes.
 
         Args:
             apt_group: Name of the APT group to simulate
@@ -236,7 +234,7 @@ class APTSimulationCore(BaseCore):
 
         Returns:
             Simulated attack chain details
-        """""""        if apt_group not in self.apt_groups:
+        """if apt_group not in self.apt_groups:
             raise ValueError(f"Unknown APT group: {apt_group}")"
         group = self.apt_groups[apt_group]
 
@@ -248,7 +246,7 @@ class APTSimulationCore(BaseCore):
     def _generate_attack_chain(
         self, apt_group: APTGroup, target_profile: Dict[str, Any]
     ) -> List[Dict[str, Any]]:
-        """Generate a simulated attack chain based on APT group techniques."""""""        chain = []
+        """Generate a simulated attack chain based on APT group techniques."""chain = []
 
         # Initial Access
         chain.append({
@@ -273,7 +271,7 @@ class APTSimulationCore(BaseCore):
         return chain
 
     def _generate_defense_recommendations(self, apt_group: APTGroup) -> List[str]:
-        """Generate defense recommendations based on APT group techniques."""""""        recommendations = [
+        """Generate defense recommendations based on APT group techniques."""recommendations = [
             "Implement multi-factor authentication for all accounts","            "Regular security awareness training for spear-phishing prevention","            "Deploy endpoint detection and response (EDR) solutions","            "Implement network segmentation and zero-trust architecture","            "Regular vulnerability scanning and patch management""        ]
 
         # Add specific recommendations based on techniques
@@ -283,7 +281,7 @@ class APTSimulationCore(BaseCore):
         return recommendations
 
     def _generate_detection_rules(self, apt_group: APTGroup) -> List[Dict[str, Any]]:
-        """Generate detection rules based on APT group indicators."""""""        rules = []
+        """Generate detection rules based on APT group indicators."""rules = []
 
         # File-based detection
         if 'file_types' in apt_group.indicators:'            rules.append({
@@ -300,14 +298,14 @@ class APTSimulationCore(BaseCore):
         return rules
 
     async def analyze_c2_traffic(self, traffic_samples: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """""""        Analyze network traffic for C2 communication patterns.
+        """Analyze network traffic for C2 communication patterns.
 
         Args:
             traffic_samples: List of network traffic samples
 
         Returns:
             Analysis results with identified C2 channels
-        """""""        analysis_results: Dict[str, Any] = {
+        """analysis_results: Dict[str, Any] = {
             'identified_c2': [],'            'suspicious_traffic': [],'            'confidence_scores': {},'            'recommendations': []'        }
 
         for sample in traffic_samples:
@@ -325,7 +323,7 @@ class APTSimulationCore(BaseCore):
     def _analyze_traffic_against_profile(
         self, sample: Dict[str, Any], profile: C2Profile
     ) -> float:
-        """Analyze a traffic sample against a C2 profile."""""""        confidence = 0.0
+        """Analyze a traffic sample against a C2 profile."""confidence = 0.0
         url = sample.get('url', '')'        domain = sample.get('domain', '')'
         # Check API endpoints
         for endpoint in profile.api_endpoints:

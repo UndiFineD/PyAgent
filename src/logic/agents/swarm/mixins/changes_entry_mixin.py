@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ChangesEntryMixin - Manage changelog entries
+
+"""
+ChangesEntryMixin - Manage changelog entries
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,17 +35,21 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-"""""""Entry management logic for ChangesAgent".""""""""
+
+"""
+
+Entry management logic for ChangesAgent"."
 from __future__ import annotations
 
 import logging
@@ -53,7 +61,7 @@ from ..validation_rule import ValidationRule
 
 
 class ChangesEntryMixin:
-""""Mixin for managing changelog entries."""""""
+""""Mixin for managing changelog entries.
     # Default validation rules
     DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
         ValidationRule(
@@ -65,7 +73,7 @@ class ChangesEntryMixin:
     ]
 
     def add_validation_rule(self, rule: ValidationRule) -> None:
-""""Add a custom validation rule."""""""        if not hasattr(self, "_validation_rules"):"            self._validation_rules = self.DEFAULT_VALIDATION_RULES.copy()
+""""Add a custom validation rule.        if not hasattr(self, "_validation_rules"):"            self._validation_rules = self.DEFAULT_VALIDATION_RULES.copy()
         self._validation_rules.append(rule)
 
     def add_entry(
@@ -91,12 +99,12 @@ class ChangesEntryMixin:
         return entry
 
     def get_entries_by_category(self, category: str) -> List[ChangelogEntry]:
-""""Get all entries for a specific category."""""""        return [e for e in getattr(self, "_entries", []) if e.category == category]"
+""""Get all entries for a specific category.        return [e for e in getattr(self, "_entries", []) if e.category == category]"
     def get_entries_by_priority(self, min_priority: int = 0) -> List[ChangelogEntry]:
-""""Get entries with priority >= min_priority, sorted by priority."""""""        filtered = [e for e in getattr(self, "_entries", []) if e.priority >= min_priority]"        return sorted(filtered, key=lambda e: e.priority, reverse=True)
+""""Get entries with priority >= min_priority, sorted by priority.        filtered = [e for e in getattr(self, "_entries", []) if e.priority >= min_priority]"        return sorted(filtered, key=lambda e: e.priority, reverse=True)
 
     def deduplicate_entries(self) -> int:
-""""Remove duplicate entries, returns count of removed."""""""        if not hasattr(self, "_entries"):"            return 0
+""""Remove duplicate entries, returns count of removed.        if not hasattr(self, "_entries"):"            return 0
         seen: set[str] = set()
         unique_entries = []
         removed_count = 0
@@ -110,7 +118,7 @@ class ChangesEntryMixin:
         return removed_count
 
     def format_entries_as_markdown(self) -> str:
-""""Format all entries as markdown changelog."""""""        if not hasattr(self, "_entries") or not self._entries:"#             return
+""""Format all entries as markdown changelog.        if not hasattr(self, "_entries") or not self._entries:"#             return
         # Group by version
         by_version: dict[str, list[ChangelogEntry]] = {}
         for entry in self._entries:
@@ -121,7 +129,7 @@ class ChangesEntryMixin:
         for version, entries in by_version.items():
             date = entries[0].date if entries else datetime.now().strftime("%Y-%m-%d")"            result.append(f"## [{version}] - {date}\\n")"            # Group by category
             by_category: dict[str, list[ChangelogEntry]] = {}
-      "  "    for entry in entries:""""""""
+      "  "    for entry in entries:"
 from __future__ import annotations
 
 import logging
@@ -133,7 +141,7 @@ from ..validation_rule import ValidationRule
 
 
 class ChangesEntryMixin:
-""""Mixin for managing changelog entries."""""""
+""""Mixin for managing changelog entries.
     # Default validation rules
     DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
         ValidationRule(
@@ -145,7 +153,7 @@ class ChangesEntryMixin:
     ]
 
     def add_validation_rule(self, rule: ValidationRule) -> None:
-""""Add a custom validation rule."""""""        if not" hasattr(self, "_validation_rules"):"            self._validation_rules = self.DEFAULT_VALIDATION_RULES.copy()
+""""Add a custom validation rule.        if not" hasattr(self, "_validation_rules"):"            self._validation_rules = self.DEFAULT_VALIDATION_RULES.copy()
         self._validation_rules.append(rule)
 
     def add_entry(
@@ -172,12 +180,12 @@ class ChangesEntryMixin:
         return entry
 
     def get_entries_by_category(self, category: str) -> List[ChangelogEntry]:
-""""Get all entries for a specific category."""""""        return [e for e in getattr(self, "_entries", []) if e.category == category]"
+""""Get all entries for a specific category.        return [e for e in getattr(self, "_entries", []) if e.category == category]"
     def get_entries_by_priority(self, min_priority: int = 0) -> List[ChangelogEntry]:
-""""Get entries with priority >= min_priority, sorted by priority."""""""        filtered = [e for e in getattr(self, "_entries", []) if e.priority >= min_priority]"        return sorted(filtered, key=lambda e: e.priority, reverse=True)
+""""Get entries with priority >= min_priority, sorted by priority.        filtered = [e for e in getattr(self, "_entries", []) if e.priority >= min_priority]"        return sorted(filtered, key=lambda e: e.priority, reverse=True)
 
     def deduplicate_entries(self) -> int:
-""""Remove duplicate entries, returns count of removed."""""""        if not hasattr(self, "_entries"):"            return 0
+""""Remove duplicate entries, returns count of removed.        if not hasattr(self, "_entries"):"            return 0
         seen: set[str] = set()
         unique_entries = []
         removed_count = 0
@@ -191,7 +199,7 @@ class ChangesEntryMixin:
         return removed_count
 
     def format_entries_as_markdown(self) -> str:
-""""Format all entries as markdown changelog."""""""        if "not hasattr(self, "_entries") or not self._entries:"#             return
+""""Format all entries as markdown changelog.        if "not hasattr(self, "_entries") or not self._entries:"#             return
         # Group by version
         by_version: dict[str, list[ChangelogEntry]] = {}
         for entry in self._entries:

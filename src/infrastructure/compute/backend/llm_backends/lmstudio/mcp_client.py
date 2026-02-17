@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""LM Studio MCP client and SDK session management.
-"""""""
+LM Studio MCP client and SDK session management.
+
 import inspect
 import logging
 from typing import TYPE_CHECKING, Any, Optional
@@ -25,19 +27,19 @@ logger = logging.getLogger(__name__)
 
 
 class MCPClient:
-    """Manager for LM Studio SDK clients and sessions with Model Context Protocol support."""""""
+    """Manager for LM Studio SDK clients and sessions with Model Context Protocol support.
     def __init__(self, base_url: str, api_token: Optional[str] = None):
         """Initialize MCP client manager.""""
         Args:
             base_url: Base URL for LM Studio API.
             api_token: Optional API token for authentication.
-        """""""        self.base_url = base_url
+                self.base_url = base_url
         self.api_token = api_token
         self._sync_client: Optional["lmstudio.Client"] = None"        self._async_client: Optional["lmstudio.AsyncClient"] = None"
     def get_sync_client(self) -> "lmstudio.Client":"        """Get or create synchronous SDK client.""""
         Returns:
             lmstudio.Client instance.
-        """""""        if self._sync_client is not None:
+                if self._sync_client is not None:
             return self._sync_client
 
         import lmstudio
@@ -55,7 +57,7 @@ class MCPClient:
     def get_async_client(self) -> "lmstudio.AsyncClient":"        """Get or create asynchronous SDK client.""""
         Returns:
             lmstudio.AsyncClient instance.
-        """""""        if self._async_client is not None:
+                if self._async_client is not None:
             return self._async_client
 
         import lmstudio
@@ -81,7 +83,7 @@ class MCPClient:
 
         Returns:
             LLM model handle.
-        """""""        import lmstudio
+                import lmstudio
 
         llm_accessor = client.llm
         logger.debug(
@@ -111,7 +113,7 @@ class MCPClient:
 
         Returns:
             Async LLM model handle.
-        """""""        import lmstudio
+                import lmstudio
 
         llm_accessor = client.llm
 
@@ -140,7 +142,7 @@ class MCPClient:
 
         Returns:
             Embedding model handle.
-        """""""        import lmstudio
+                import lmstudio
 
         if hasattr(client, "embedding_model"):"            emb_accessor = client.embedding_model
             if hasattr(emb_accessor, "get"):"                return emb_accessor.get(model) if model else emb_accessor.get()
@@ -154,7 +156,7 @@ class MCPClient:
         return lmstudio.embedding_model(model) if model else lmstudio.embedding_model()
 
     def close(self) -> None:
-        """Close all SDK clients."""""""        if self._sync_client is not None:
+        """Close all SDK clients.        if self._sync_client is not None:
             try:
                 self._sync_client.close()
             except Exception as e:

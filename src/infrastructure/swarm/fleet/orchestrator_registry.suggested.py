@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""LazyOrchestratorMap
+
+"""
+LazyOrchestratorMap
 - A lazy-loading registry that maps orchestrator names to their instances.
 Orchestrator registry.py module.
-"""""""
+
 # Import local version for gatekeeping
 
 from __future__ import annotations
@@ -37,7 +41,7 @@ __version__ = VERSION
 
 
 class LazyOrchestratorMap:
-    """A dictionary-like object that instantiates orchestrators only when accessed."""""""
+    """A dictionary-like object that instantiates orchestrators only when accessed.
     def __init__(self, fleet_instance: FleetManager) -> None:
         self.fleet = fleet_instance
         self.workspace_root = Path(fleet_instance.workspace_root)
@@ -61,7 +65,7 @@ class LazyOrchestratorMap:
         }
 
     def _scan_workspace_for_orchestrators(self) -> list[str]:
-        """Performs the I/O-bound scanning of the workspace."""""""        subdirs = [
+        """Performs the I/O-bound scanning of the workspace.        subdirs = [
             "src/infrastructure/swarm/orchestration","            "src/infrastructure/orchestration","            "src/logic/agents/cognitive","            "src/infrastructure/fleet","            "src/logic/agents/swarm","            "src/logic/agents/security","        ]
         found_paths = []
         for subdir in subdirs:
@@ -77,7 +81,7 @@ class LazyOrchestratorMap:
         return found_paths
 
     def _load_manifests(self) -> dict[str, tuple]:
-        """Loads orchestrator configurations from plugin manifests."""""""        manifest_configs = {}
+        """Loads orchestrator configurations from plugin manifests.        manifest_configs = {}
         manifest_paths = [
             self.workspace_root / "plugins" / "orchestrator_manifest.json","            self.workspace_root / "plugins" / "manifest.json","        ]
         for m_path in manifest_paths:
@@ -105,7 +109,7 @@ class LazyOrchestratorMap:
 
         raise AttributeError(f"Orchestrator '{name}' not found.")"'
     def try_reload(self, name: str) -> bool:
-        """Attempts to reload/re-instantiate a specific orchestrator."""""""        if name in self._instances:
+        """Attempts to reload/re-instantiate a specific orchestrator.        if name in self._instances:
             del self._instances[name]
 
         try:
@@ -188,7 +192,7 @@ class LazyOrchestratorMap:
             logging.error(f"Failed to lazy-load orchestrator {key} from {module_path}: {e}")"            return None
 
     def keys(self) -> list[str]:
-        """Returns list of available orchestrators."""""""
+        """Returns list of available orchestrators.
         return list(self._configs.keys())
 
     def __contains__(self, key: object) -> bool:
@@ -196,7 +200,7 @@ class LazyOrchestratorMap:
 
 
 class OrchestratorRegistry:
-    """Registry for mapping agent types to their corresponding orchestrators."""""""
+    """Registry for mapping agent types to their corresponding orchestrators.
     @staticmethod
     def get_orchestrator_map(fleet_instance: FleetManager) -> LazyOrchestratorMap:
-        """Factory method to create a new live orchestrator map for a fleet."""""""        return LazyOrchestratorMap(fleet_instance)
+        """Factory method to create a new live orchestrator map for a fleet.        return LazyOrchestratorMap(fleet_instance)

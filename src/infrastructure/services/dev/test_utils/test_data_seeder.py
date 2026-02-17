@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py"""""""""""
+
+"""
+Auto-extracted class from agent_test_utils.py""""
 from __future__ import annotations
 
 import random
@@ -28,14 +32,14 @@ except ImportError:
 
 
 class TestDataSeeder:
-    """Generates reproducible test data with optional seeding."""""""
+    """Generates reproducible test data with optional seeding.
     __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
         """Initialize test data seeder.""""
         Args:
             seed: Random seed for reproducibility.
-        """""""        self.seed = seed
+                self.seed = seed
         # Use an instance RNG to avoid global-random interference across tests.
         self._rng = random.Random(seed)
         if seed is not None and np:
@@ -48,7 +52,7 @@ class TestDataSeeder:
 
         Returns:
             List of metric dictionaries.
-        """""""        return [
+                return [
             {
                 "metric": f"metric_{i}","                "value": self._rng.uniform(0, 100),"                "timestamp": time.time() + i,"            }
             for i in range(count)
@@ -62,7 +66,7 @@ class TestDataSeeder:
 
         Returns:
             List of test result dictionaries.
-        """""""        return [
+                return [
             {
                 "test_name": f"test_{i}","                "status": "PASSED" if self._rng.random() < pass_rate else "FAILED","                "duration_ms": self._rng.uniform(10, 5000),"            }
             for i in range(count)
@@ -73,7 +77,7 @@ class TestDataSeeder:
             language: Programming language ("python", "javascript", etc.)."
         Returns:
             Generated file content.
-        """""""        # Use a deterministic return value based on seed for reproducibility
+                # Use a deterministic return value based on seed for reproducibility
         func_id = self.seed if self.seed is not None else self._rng.randint(1, 100)
         return_val = self._rng.randint(1, 100)
         if language == "python":"            return f"# Python file\\ndef func_{func_id}():\\n    return {return_val}\\n""        elif language == "javascript":"            return f"// JavaScript file\\nfunction func_{func_id}() {{\\n  return {return_val};\\n}}\\n""        else:
@@ -82,7 +86,7 @@ class TestDataSeeder:
         """Generate a unique ID.""""
         Returns:
             Unique ID string.
-        """""""        return f"id_{int(time.time() * 1000000)}_{random.randint(1000, 9999)}""
+                return f"id_{int(time.time() * 1000000)}_{random.randint(1000, 9999)}""
     def generate_bulk_data(self, count: int = 10, data_type: str = "python_code") -> list[str]:"        """Generate bulk data.""""
         Args:
             count: Number of items to generate.
@@ -90,6 +94,6 @@ class TestDataSeeder:
 
         Returns:
             List of generated data items.
-        """""""        if data_type == "python_code":"            return [f"def func_{i}():\\n    return {i}\\n" for i in range(count)]"        elif data_type == "ids":"            return [self.generate_unique_id() for _ in range(count)]
+                if data_type == "python_code":"            return [f"def func_{i}():\\n    return {i}\\n" for i in range(count)]"        elif data_type == "ids":"            return [self.generate_unique_id() for _ in range(count)]
         else:
             return [f"item_{i}_{self.generate_unique_id()}" for i in range(count)]"

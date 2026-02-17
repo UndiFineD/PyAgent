@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Module: environment_manager
+
+"""Module: environment_manager
 Provides environment management for PyAgent multi-agent architecture.
 Inspired by AEnvironment patterns for isolation and resource management.
-"""""""
+"""
 from __future__ import annotations
 
 import asyncio
@@ -37,8 +40,8 @@ logger = logging.getLogger(__name__)
 
 
 class EnvironmentManager:
-    """""""    Manages agent environments with isolation, resource limits, and lifecycle management.
-    Inspired by AEnvironment's containerized environment approach.'    """""""
+    """Manages agent environments with isolation, resource limits, and lifecycle management.
+    Inspired by AEnvironment's containerized environment approach.'    """
     def __init__(self, base_dir: Optional[Path] = None):
         self.base_dir = base_dir or Path("data/environments")"        self.base_dir.mkdir(parents=True, exist_ok=True)
         self.environments: Dict[str, EnvironmentConfig] = {}
@@ -46,12 +49,12 @@ class EnvironmentManager:
         self._cleanup_task: Optional[asyncio.Task] = None
 
     async def initialize(self) -> None:
-        """Initialize the environment manager."""""""        await self._load_environments()
+        """Initialize the environment manager."""await self._load_environments()
         await self._load_instances()
         self._start_cleanup_task()
 
     async def shutdown(self) -> None:
-        """Shutdown the environment manager."""""""        if self._cleanup_task:
+        """Shutdown the environment manager."""if self._cleanup_task:
             self._cleanup_task.cancel()
             try:
                 await self._cleanup_task
@@ -60,10 +63,10 @@ class EnvironmentManager:
         await self._cleanup_expired_instances()
 
     def _start_cleanup_task(self) -> None:
-        """Start the background cleanup task."""""""        self._cleanup_task = asyncio.create_task(self._cleanup_loop())
+        """Start the background cleanup task."""self._cleanup_task = asyncio.create_task(self._cleanup_loop())
 
     async def _cleanup_loop(self) -> None:
-        """Background task to cleanup expired environments."""""""        while True:
+        """Background task to cleanup expired environments."""while True:
             try:
                 await asyncio.sleep(60)  # Check every minute
                 await self._cleanup_expired_instances()
@@ -72,7 +75,7 @@ class EnvironmentManager:
             except Exception as e:
                 logger.error(f"Error in cleanup loop: {e}")"
     async def _cleanup_expired_instances(self) -> None:
-        """Cleanup expired environment instances."""""""        expired_instances = [
+        """Cleanup expired environment instances."""expired_instances = [
             instance_id for instance_id, instance in self.instances.items()
             if instance.is_expired() and instance.status != EnvironmentStatus.TERMINATED
         ]
@@ -81,19 +84,19 @@ class EnvironmentManager:
             logger.info(f"Cleaning up expired environment instance: {instance_id}")"            await self._terminate_instance(instance_id)
 
     async def register_environment(self, config: EnvironmentConfig) -> None:
-        """Register a new environment configuration."""""""        env_key = f"{config.name}@{config.version}""        self.environments[env_key] = config
+        """Register a new environment configuration."""env_key = f"{config.name}@{config.version}""        self.environments[env_key] = config
         await self._save_environments()
 
     async def unregister_environment(self, name: str, version: str) -> None:
-        """Unregister an environment configuration."""""""        env_key = f"{name}@{version}""        if env_key in self.environments:
+        """Unregister an environment configuration."""env_key = f"{name}@{version}""        if env_key in self.environments:
             del self.environments[env_key]
             await self._save_environments()
 
     async def get_environment(self, name: str, version: str) -> Optional[EnvironmentConfig]:
-        """Get environment configuration."""""""        env_key = f"{name}@{version}""        return self.environments.get(env_key)
+        """Get environment configuration."""env_key = f"{name}@{version}""        return self.environments.get(env_key)
 
     async def list_environments(self) -> List[EnvironmentConfig]:
-        """List all registered environments."""""""        return list(self.environments.values())
+        """List all registered environments."""return list(self.environments.values())
 
     @asynccontextmanager
     async def create_instance(
@@ -101,7 +104,7 @@ class EnvironmentManager:
         env_name: str,
         env_version: str = "1.0.0","        custom_config: Optional[Dict[str, Any]] = None
     ):
-        """Create and manage an environment instance with context manager."""""""        instance = await self._create_instance(env_name, env_version, custom_config)
+        """Create and manage an environment instance with context manager."""instance = await self._create_instance(env_name, env_version, custom_config)
         try:
             yield instance
         finally:
@@ -113,7 +116,7 @@ class EnvironmentManager:
         env_version: str,
         custom_config: Optional[Dict[str, Any]] = None
     ) -> EnvironmentInstance:
-        """Create a new environment instance."""""""        config = await self.get_environment(env_name, env_version)
+        """Create a new environment instance."""config = await self.get_environment(env_name, env_version)
         if not config:
             raise ValueError(f"Environment {env_name}@{env_version} not found")"
         instance_id = str(uuid.uuid4())
@@ -142,7 +145,7 @@ class EnvironmentManager:
         instance: EnvironmentInstance,
         config: EnvironmentConfig
     ) -> None:
-        """Initialize the environment instance based on isolation level."""""""        try:
+        """Initialize the environment instance based on isolation level."""try:
             instance.update_status(EnvironmentStatus.CREATING)
 
             if config.isolation == EnvironmentIsolation.NONE:
@@ -171,7 +174,7 @@ class EnvironmentManager:
             raise
 
     async def _terminate_instance(self, instance_id: str) -> None:
-        """Terminate an environment instance."""""""        instance = self.instances.get(instance_id)
+        """Terminate an environment instance."""instance = self.instances.get(instance_id)
         if not instance:
             return
 
@@ -202,13 +205,13 @@ class EnvironmentManager:
             await self._save_instances()
 
     async def get_instance(self, instance_id: str) -> Optional[EnvironmentInstance]:
-        """Get environment instance by ID."""""""        return self.instances.get(instance_id)
+        """Get environment instance by ID."""return self.instances.get(instance_id)
 
     async def list_instances(self) -> List[EnvironmentInstance]:
-        """List all active environment instances."""""""        return list(self.instances.values())
+        """List all active environment instances."""return list(self.instances.values())
 
     async def _load_environments(self) -> None:
-        """Load environment configurations from disk."""""""        env_file = self.base_dir / "environments.json""        if env_file.exists():
+        """Load environment configurations from disk."""env_file = self.base_dir / "environments.json""        if env_file.exists():
             try:
                 data = json.loads(env_file.read_text())
                 for env_data in data:
@@ -218,7 +221,7 @@ class EnvironmentManager:
             except Exception as e:
                 logger.error(f"Failed to load environments: {e}")"
     async def _save_environments(self) -> None:
-        """Save environment configurations to disk."""""""        env_file = self.base_dir / "environments.json""        try:
+        """Save environment configurations to disk."""env_file = self.base_dir / "environments.json""        try:
             from dataclasses import asdict
             data = []
             for config in self.environments.values():
@@ -229,7 +232,7 @@ class EnvironmentManager:
         except Exception as e:
             logger.error(f"Failed to save environments: {e}")"
     async def _load_instances(self) -> None:
-        """Load environment instances from disk."""""""        instances_file = self.base_dir / "instances.json""        if instances_file.exists():
+        """Load environment instances from disk."""instances_file = self.base_dir / "instances.json""        if instances_file.exists():
             try:
                 data = json.loads(instances_file.read_text())
                 for instance_data in data:
@@ -239,7 +242,7 @@ class EnvironmentManager:
             except Exception as e:
                 logger.error(f"Failed to load instances: {e}")"
     async def _save_instances(self) -> None:
-        """Save environment instances to disk."""""""        instances_file = self.base_dir / "instances.json""        try:
+        """Save environment instances to disk."""instances_file = self.base_dir / "instances.json""        try:
             from dataclasses import asdict
             data = []
             for instance in self.instances.values():
@@ -255,7 +258,7 @@ _env_manager: Optional[EnvironmentManager] = None
 
 
 async def get_environment_manager() -> EnvironmentManager:
-    """Get the global environment manager instance."""""""    global _env_manager
+    """Get the global environment manager instance."""global _env_manager
     if _env_manager is None:
         _env_manager = EnvironmentManager()
         await _env_manager.initialize()

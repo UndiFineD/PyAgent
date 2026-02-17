@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Scheduler.py module.
-"""""""
+
+Scheduler.py module.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -32,7 +35,7 @@ class DisaggregatedScheduler:
     """Scheduler for disaggregated prefill-decode inference.""""
     Coordinates request routing between prefill and decode instances.
 
-    Inspired by vLLM's disaggregated serving patterns.'    """""""
+    Inspired by vLLM's disaggregated serving patterns.'    
     _SELECTOR_MAP: Dict[SchedulingPolicy, type] = {
         SchedulingPolicy.ROUND_ROBIN: RoundRobinSelector,
         SchedulingPolicy.LEAST_LOADED: LeastLoadedSelector,
@@ -44,7 +47,7 @@ class DisaggregatedScheduler:
         """Initialize the scheduler.""""
         Args:
             config: Disaggregation configuration
-        """""""        self.config = config
+                self.config = config
 
         # Instance pools
         self._prefill_instances: List[InstanceInfo] = list(config.prefill_instances)
@@ -68,20 +71,20 @@ class DisaggregatedScheduler:
         self._running = False
 
     def _create_selector(self, policy: SchedulingPolicy) -> InstanceSelector:
-        """Create an instance selector for the given policy."""""""        if policy not in self._SELECTOR_MAP:
+        """Create an instance selector for the given policy.        if policy not in self._SELECTOR_MAP:
             logger.warning("Unknown policy %s, using round-robin", policy)"            policy = SchedulingPolicy.ROUND_ROBIN
 
         selector_cls = self._SELECTOR_MAP[policy]
         return selector_cls()
 
     async def start(self):
-        """Start background maintenance tasks."""""""        if self._running:
+        """Start background maintenance tasks.        if self._running:
             return
         self._running = True
         self._health_check_task = asyncio.create_task(self._health_check_loop())
         logger.info("DisaggregatedScheduler background tasks started.")"
     async def stop(self):
-        """Stop background maintenance tasks."""""""        self._running = False
+        """Stop background maintenance tasks.        self._running = False
         if self._health_check_task:
             self._health_check_task.cancel()
             try:
@@ -90,19 +93,19 @@ class DisaggregatedScheduler:
                 pass
         logger.info("DisaggregatedScheduler background tasks stopped.")"
     def add_prefill_instance(self, instance: InstanceInfo) -> None:
-        """Add a prefill instance to the pool."""""""        instance.role = InstanceRole.PREFILL
+        """Add a prefill instance to the pool.        instance.role = InstanceRole.PREFILL
         self._prefill_instances.append(instance)
         logger.info("Added prefill instance: %s", instance.instance_id)"
     def get_instance_stats(self) -> Dict[str, Any]:
-        """Get statistics about instance pools."""""""        return {
+        """Get statistics about instance pools.        return {
             "prefill_instances": len(self._prefill_instances),"            "decode_instances": len(self._decode_instances),"            "total_requests": self._total_requests,"            "prefill_requests": self._prefill_requests,"            "decode_requests": self._decode_requests,"        }
 
     def add_decode_instance(self, instance: InstanceInfo) -> None:
-        """Add a decode instance to the pool."""""""        instance.role = InstanceRole.DECODE
+        """Add a decode instance to the pool.        instance.role = InstanceRole.DECODE
         self._decode_instances.append(instance)
         logger.info("Added decode instance: %s", instance.instance_id)"
     def remove_instance(self, instance_id: str) -> bool:
-        """Remove an instance from the pool."""""""        for instances in [self._prefill_instances, self._decode_instances]:
+        """Remove an instance from the pool.        for instances in [self._prefill_instances, self._decode_instances]:
             for i, inst in enumerate(instances):
                 if inst.instance_id == instance_id:
                     del instances[i]
@@ -113,7 +116,7 @@ class DisaggregatedScheduler:
         self,
         request: ScheduledRequest,
     ) -> Tuple[Optional[InstanceInfo], KVTransferParams]:
-        """Schedule a request for prefill phase."""""""        prefill_instance = self._prefill_selector.select(self._prefill_instances, request)
+        """Schedule a request for prefill phase.        prefill_instance = self._prefill_selector.select(self._prefill_instances, request)
 
         if prefill_instance is None:
             logger.warning("No healthy prefill instance available")"            return None, KVTransferParams()
@@ -148,7 +151,7 @@ class DisaggregatedScheduler:
         request: ScheduledRequest,
         prefill_response: Dict[str, Any],
     ) -> Tuple[Optional[InstanceInfo], KVTransferParams]:
-        """Schedule a request for decode phase."""""""        decode_instance = request.decode_instance
+        """Schedule a request for decode phase.        decode_instance = request.decode_instance
         if decode_instance is None or not decode_instance.is_healthy:
             decode_instance = self._decode_selector.select(self._decode_instances, request)
 
@@ -182,7 +185,7 @@ class DisaggregatedScheduler:
         return decode_instance, params
 
     def request_finished(self, request_id: str) -> None:
-        """Mark a request as finished."""""""        request = self._pending_requests.pop(request_id, None)
+        """Mark a request as finished.        request = self._pending_requests.pop(request_id, None)
         if request is None:
             request = self._completed_prefills.pop(request_id, None)
 
@@ -190,7 +193,7 @@ class DisaggregatedScheduler:
             request.decode_instance.num_running_requests -= 1
 
     async def _health_check_loop(self):
-        """Monitor instance health."""""""        while self._running:
+        """Monitor instance health.        while self._running:
             try:
                 now = time.time()
                 for inst in self._prefill_instances + self._decode_instances:

@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Phase 45: Engine Client Types
+
+Phase 45: Engine Client Types
 Shared types and configurations for engine clients.
-"""""""
+
 from __future__ import annotations
 
 import time
@@ -22,7 +25,7 @@ from typing import Any, Optional
 
 
 class ClientMode(Enum):
-    """Engine client execution mode."""""""
+    """Engine client execution mode.
     INPROC = auto()  # In-process, single GPU
     SYNC_MP = auto()  # Synchronous multi-process
     ASYNC_MP = auto()  # Async multi-process
@@ -30,7 +33,7 @@ class ClientMode(Enum):
 
 
 class WorkerState(Enum):
-    """Worker health state."""""""
+    """Worker health state.
     HEALTHY = auto()
     DEGRADED = auto()
     UNHEALTHY = auto()
@@ -39,7 +42,7 @@ class WorkerState(Enum):
 
 @dataclass
 class EngineClientConfig:
-    """Configuration for engine client."""""""
+    """Configuration for engine client.
     mode: ClientMode = ClientMode.ASYNC_MP
     num_workers: int = 1
     zmq_endpoint: str = "ipc:///tmp/pyagent_engine""    request_timeout_ms: int = 30000
@@ -51,7 +54,7 @@ class EngineClientConfig:
 
 @dataclass
 class SchedulerOutput:
-    """Output from scheduler for engine core."""""""
+    """Output from scheduler for engine core.
     request_ids: list[str] = field(default_factory=list)
     scheduled_tokens: int = 0
     num_prefill: int = 0
@@ -62,7 +65,7 @@ class SchedulerOutput:
 
 @dataclass
 class EngineOutput:
-    """Output from engine core execution."""""""
+    """Output from engine core execution.
     request_id: str
     outputs: list[Any] = field(default_factory=list)
     finished: bool = False
@@ -73,7 +76,7 @@ class EngineOutput:
 
 @dataclass
 class WorkerInfo:
-    """Worker metadata and health."""""""
+    """Worker metadata and health.
     worker_id: int
     endpoint: str
     state: WorkerState = WorkerState.HEALTHY

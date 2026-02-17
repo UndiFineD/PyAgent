@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""namespaces.py - Metric Namespace Management
+
+"""
+namespaces.py - Metric Namespace Management
 
 A small manager class to create, delete, and organize MetricNamespace objects and to assign metrics to namespaces for hierarchical metric organization.
 # DATE: 2026-02-12
@@ -31,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Namespaces.py module.
-"""""""# Metric namespace management engine.
+# Metric namespace management engine.
 
 from __future__ import annotations
 
@@ -41,7 +45,7 @@ from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:
-    """Manage metric namespaces for organizing large metric sets."""""""
+    """Manage metric namespaces for organizing large metric sets.
     def __init__(self) -> None:
         self.namespaces: dict[str, MetricNamespace] = {}
         self.metrics_by_namespace: dict[str, list[str]] = {}
@@ -79,7 +83,7 @@ class MetricNamespaceManager:
             hierarchy.insert(0, current)
             ns: MetricNamespace | None = self.namespaces.get(current)
             current = ns.parent if ns else None
-        return " / ".join(hierarchy)""""""""# Metric namespace management engine.
+        return " / ".join(hierarchy)"# Metric namespace management engine.
 
 from __future__ import annotations
 
@@ -89,7 +93,7 @@ from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:
-    """Manage metric namespaces for organizing large metric sets."""""""
+    """Manage metric namespaces for organizing large metric sets.
     def __init__(self) -> None:
         self.namespaces: dict[str, MetricNamespace] = {}
         self.metrics_by_namespace: dict[str, list[str]] = {}

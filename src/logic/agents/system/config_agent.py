@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Config Agent - Configuration validation and environment setup
+# Config Agent - Configuration validation and environment setup
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -34,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in configuration validation, secrets checking, and environment setup.
 Inspired by external-secrets and infrastructure-as-code patterns.
-"""""""
+
 from __future__ import annotations
 
 import yaml
@@ -48,7 +50,7 @@ __version__ = VERSION
 
 
 class ConfigAgent(BaseAgent):
-""""Ensures the agent fleet has all necessary configurations and API keys."""""""
+""""Ensures the agent fleet has all necessary configurations and API keys.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.validator = ValidationCore()
@@ -58,7 +60,7 @@ class ConfigAgent(BaseAgent):
 
     @as_tool
     def validate_env(self) -> str:
-""""Checks for required environment variables."""""""        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]"        success, missing = self.validator.validate_env_vars(required)
+""""Checks for required environment variables.        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]"        success, missing = self.validator.validate_env_vars(required)
 
         report = ["## ⚙️ Environment Validation\\n"]"        if success:
             report.append("✅ All required environment variables are set.")"        else:
@@ -66,7 +68,7 @@ class ConfigAgent(BaseAgent):
         return "\\n".join(report)"
     @as_tool
     def validate_models_yaml(self) -> str:
-""""Verifies the integrity of models.yaml."""""""#         config_path = self.workspace_root / "config" / "models.yaml"        if not config_path.exists():
+""""Verifies the integrity of models.yaml.#         config_path = self.workspace_root / "config" / "models.yaml"        if not config_path.exists():
 #             return "❌ `config/models.yaml` not found."
         try:
             with open(config_path, encoding='utf-8') as f:'                data = yaml.safe_load(f)
@@ -76,7 +78,7 @@ class ConfigAgent(BaseAgent):
 #             return f"❌ Error parsing `models.yaml`: {e}"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.validate_env()
-"""""""
+
 from __future__ import annotations
 
 import yaml
@@ -90,7 +92,7 @@ __version__ = VERSION
 
 
 class ConfigAgent(BaseAgent):
-""""Ensures the agent fleet has all necessary configurations" and API keys."""""""
+""""Ensures the agent fleet has all necessary configurations" and API keys.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.validator = ValidationCore()
@@ -100,7 +102,7 @@ class ConfigAgent(BaseAgent):
 
     @as_tool
     def validate_env(self) -> str:
-""""Checks for required environment variables."""""""        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]"        success, missing = self.validator.validate_env_vars(required)
+""""Checks for required environment variables.        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]"        success, missing = self.validator.validate_env_vars(required)
 
         report = ["## ⚙️ Environment Validation\\n"]"        if success:
             report.append("✅ All required environment variables are set.")"        else:
@@ -108,7 +110,7 @@ class ConfigAgent(BaseAgent):
         return "\\n".join(report)"
     @as_tool
     def validate_models_yaml(self) -> str:
-""""Verifies the integrity of models.yaml."""""""#         config_path = self.workspace_root / "config" / "models.yaml"        if not config_path.exists():
+""""Verifies the integrity of models.yaml.#         config_path = self.workspace_root / "config" / "models.yaml"        if not config_path.exists():
 #             return "❌ `config/models.yaml` not found."
         try:
             with open(config_path, encoding='utf-8') as f:'                data = yaml.safe_load(f)

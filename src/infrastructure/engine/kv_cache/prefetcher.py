@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Predictive Context Prefetching (Phase 67).
+
+Predictive Context Prefetching (Phase 67).
 Warms up upcoming KV shards before they are requested by experts.
-"""""""
+
 import logging
 from collections import deque
 from typing import Deque, Dict
@@ -26,8 +29,8 @@ logger = logging.getLogger(__name__)
 
 
 class ContextPrefetcher:
-    """""""    Analyzes token-access patterns to predict future context requirements.
-    Works in tandem with AdaptiveSwarmCompressor to 'warm up' cold shards.'    """""""
+        Analyzes token-access patterns to predict future context requirements.
+    Works in tandem with AdaptiveSwarmCompressor to 'warm up' cold shards.'    
     def __init__(
         self, shard_manager: ContextShardManager, compressor: AdaptiveSwarmCompressor, lookahead_shards: int = 2
     ) -> None:
@@ -39,8 +42,8 @@ class ContextPrefetcher:
         self.history_size = 10
 
     def record_access(self, context_id: str, token_index: int) -> None:
-        """""""        Records a context access and triggers predictive prefetching.
-        """""""        if context_id not in self.access_history:
+                Records a context access and triggers predictive prefetching.
+                if context_id not in self.access_history:
             self.access_history[context_id] = deque(maxlen=self.history_size)
 
         history = self.access_history[context_id]
@@ -57,8 +60,8 @@ class ContextPrefetcher:
                 self._prefetch_sequential(context_id, token_index, direction=-1)
 
     def _prefetch_sequential(self, context_id: str, current_token: int, direction: int = 1) -> None:
-        """""""        Predicts and warms up the next few shards in the sequence.
-        """""""        block_size = self.shard_manager.block_size
+                Predicts and warms up the next few shards in the sequence.
+                block_size = self.shard_manager.block_size
 
         for i in range(1, self.lookahead_shards + 1):
             next_token = current_token + (i * block_size * direction)

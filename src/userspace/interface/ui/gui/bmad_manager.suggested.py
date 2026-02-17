@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""BMAD (Bulk Multi-Agent Deployment) component for the PyAgent GUI."""""""
+"""BMAD (Bulk Multi-Agent Deployment) component for the PyAgent GUI.
 from __future__ import annotations
 
 import os
@@ -30,7 +28,7 @@ __version__ = VERSION
 
 
 class BmadManager:
-    """Manages the BMAD workflow for deploying agents at scale across the project."""""""
+    """Manages the BMAD workflow for deploying agents at scale across the project.
     def __init__(self, parent, callbacks) -> None:
         self.parent = parent
         self.callbacks = callbacks
@@ -38,7 +36,7 @@ class BmadManager:
         self.frame = ttk.LabelFrame(parent, text="BMAD - Bulk Multi-Agent Deployment", padding=10)"        self.setup_ui()
 
     def _record(self, action: str, result: str) -> None:
-        """Record BMAD operations."""""""        if self.recorder:
+        """Record BMAD operations.        if self.recorder:
             self.recorder.record_interaction("BMAD", "GUI", action, result)"
     def setup_ui(self) -> None:
         # 1. Methodology Selection
@@ -136,11 +134,11 @@ class BmadManager:
             var.set(value)
 
     def workflow_init(self) -> None:
-        """Analyzes project and recommends track."""""""        messagebox.showinfo(
+        """Analyzes project and recommends track.        messagebox.showinfo(
             "Workflow-Init","            "Analyzing project structure...\\nRecommending 'BMad Method' track based on codebase complexity.","'        )
 
     def start_workflow_action(self) -> None:
-        """Triggers the step-by-step workflow manager."""""""        targets = self.get_targets()
+        """Triggers the step-by-step workflow manager.        targets = self.get_targets()
         if not targets:
             return
 

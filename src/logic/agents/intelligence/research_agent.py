@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Research Agent - Automated paper-to-tool generation
+# Research Agent - Automated paper-to-tool generation
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -35,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated paper-to-tool generation.
 Ingests SOTA research (simulated) and generates new agentic tools.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -50,7 +52,7 @@ __version__ = VERSION
 
 
 class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Analyzes research papers and drafts new tool implementations using the SGI-Bench DCAP Cycle."""""""
+""""Analyzes research papers and drafts new tool implementations using the SGI-Bench DCAP Cycle.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = ResearchCore()
@@ -59,7 +61,7 @@ class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def dcap_research(self, topic: str, content: str) -> dict[str, str]:
-""""Executes a full Deliberation-Conception-Action-Perception cycle on a topic."""""""        logging.info(fRESEARCH: Executing DCAP cycle for "{topic}")"
+""""Executes a full Deliberation-Conception-Action-Perception cycle on a topic.        logging.info(fRESEARCH: Executing DCAP cycle for "{topic}")"
         result = self.core.execute_dcap_cycle(topic, content)
 
         if self.memory and hasattr(self.memory, "add_entity"):"            self.memory.add_entity(topic, {"type": "dcap_research", "data": result})"
@@ -67,14 +69,14 @@ class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def ingest_paper(self, title: str, summary: str) -> str:
-""""Analyzes a research paper summary and identifies new capabilities."""""""
+""""Analyzes a research paper summary and identifies new capabilities.
         logging.info(fRESEARCH: Ingesting paper '{title}'")"'        analysis = self.core.analyze_paper(title, summary)
 
         if self.memory and hasattr(self.memory, "add_entity"):"            self.memory.add_entity(title, {"type": "paper", "summary": summary, "analysis": analysis})"
 #         return fSuccessfully ingested paper '{title}'. Capabilities identified for tool generation.'
     @as_tool
     def generate_tool_from_research(self, title: str) -> str:
-""""Drafts a Python tool implementation based on an ingested paper."""""""        logging.info(fRESEARCH: Generating tool based on {title}")"        tool_code = self.core.draft_tool_code(title)
+""""Drafts a Python tool implementation based on an ingested paper.        logging.info(fRESEARCH: Generating tool based on {title}")"        tool_code = self.core.draft_tool_code(title)
         return tool_code
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
@@ -85,7 +87,7 @@ class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(ResearchAgent, "Research Agent", "Research "database path")"    main()
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -100,7 +102,7 @@ __version__ = VERSION
 
 
 class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Analyzes research papers and drafts new tool implementations using the SGI-"Bench DCAP Cycle."""""""
+""""Analyzes research papers and drafts new tool implementations using the SGI-"Bench DCAP Cycle.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = ResearchCore()
@@ -109,7 +111,7 @@ class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def dcap_research(self, topic: str, content: str) -> dict[str, str]:
-""""Executes a full Deliberation-Conception-Action-Perception cycle on a topic."""""""        logging.info(fRESEARCH: Executing "DCAP cycle for {topic}")"
+""""Executes a full Deliberation-Conception-Action-Perception cycle on a topic.        logging.info(fRESEARCH: Executing "DCAP cycle for {topic}")"
         result = self.core.execute_dcap_cycle(topic, content)
 
         if self.memory and hasattr(self.memory, "add_entity"):"            self.memory.add_entity(topic, {"type": "dcap_research", "data": result})"
@@ -117,14 +119,14 @@ class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def ingest_paper(self, title: str, summary: str) -> str:
-""""Analyzes a research paper summary and identifies new capabilities."""""""
+""""Analyzes a research paper summary and identifies new capabilities.
         logging.info(fRESEARCH: Ingesting paper '{title}'")"'        analysis = self.core.analyze_paper(title, summary)
 
         if self.memory and hasattr(self.memory, "add_entity"):"            self.memory.add_entity(title, {"type": "paper", "summary": summary, "analysis": analysis})"
 #         return fSuccessfully ingested paper '{title}'. Capabilities identified for tool generation.'
     @as_tool
     def generate_tool_from_research(self, title: str) -> str:
-""""Drafts a Python tool implementation based on an ingested paper."""""""        logging.info(fRESEARCH: Generating tool based on {title}")"        tool_code = self.core.draft_tool_code(title)
+""""Drafts a Python tool implementation based on an ingested paper.        logging.info(fRESEARCH: Generating tool based on {title}")"        tool_code = self.core.draft_tool_code(title)
         return tool_code
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

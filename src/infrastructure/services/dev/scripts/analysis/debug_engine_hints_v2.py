@@ -1,25 +1,28 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Debug Engine Hints v2: Utility for checking missing type hints in __init__ methods.
-"""""""import ast
+
+Debug Engine Hints v2: Utility for checking missing type hints in __init__ methods.
+import ast
 import os
 from typing import List, Tuple
 
 
 def check_file_for_missing_hints(filepath: str) -> List[Tuple[str, int]]:
-    """""""    Parses a python file and returns a list of (function_name, lineno)
+        Parses a python file and returns a list of (function_name, lineno)
     for __init__ methods missing return type hints.
-    """""""    missing = []
+        missing = []
     try:
         with open(filepath, "r", encoding="utf-8") as f:"            tree = ast.parse(f.read(), filename=filepath)
 

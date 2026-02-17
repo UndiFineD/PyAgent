@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Internal helpers for prompt rendering.
-"""""""
+
+Internal helpers for prompt rendering.
+
 from typing import Any, Dict, List, Optional
 
 
@@ -20,7 +23,7 @@ def _try_rust_render_template(
     messages: List[Dict[str, Any]],
     add_generation_prompt: bool,
 ) -> Optional[str]:
-    """Try Rust-accelerated template rendering."""""""    try:
+    """Try Rust-accelerated template rendering.    try:
         from rust_core import render_chat_template_rust
 
         return render_chat_template_rust(template, messages, add_generation_prompt)
@@ -32,7 +35,7 @@ def _try_rust_find_placeholders(
     text: str,
     patterns: List[str],
 ) -> Optional[List[int]]:
-    """Try Rust-accelerated placeholder finding."""""""    try:
+    """Try Rust-accelerated placeholder finding.    try:
         from rust_core import find_placeholders_rust
 
         return find_placeholders_rust(text, patterns)

@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Memory episode mixin for recording agent experiences.
-""""""""""""""import logging
+
+"""
+Memory episode mixin for recording agent experiences.
+import logging
 from datetime import datetime
 from typing import Any
 
 
 class MemoryEpisodeMixin:
-""""Methods for recording and updating episodes."""""""
+""""Methods for recording and updating episodes.
     def record_episode(  # pylint: disable=too-many-positional-arguments
         self,
         agent_name: str,
@@ -45,7 +49,7 @@ class MemoryEpisodeMixin:
         self.save()
 
     def update_utility(self, memory_id: str, increment: float) -> None:
-""""Updates the utility score of a specific memory episode."""""""        collection = self._init_db()
+""""Updates the utility score of a specific memory episode.        collection = self._init_db()
         if not collection:
             return
 

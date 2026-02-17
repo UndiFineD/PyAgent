@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Cloud Asset Discovery Core
+
+"""Cloud Asset Discovery Core
 
 Inspired by CloudRecon tool for SSL certificate-based asset discovery.
 Implements certificate inspection and keyword-based cloud asset finding.
-"""""""
+"""
 import asyncio
 import logging
 import ssl
@@ -30,7 +33,7 @@ import sqlite3
 
 @dataclass
 class CertificateInfo:
-    """SSL certificate information"""""""    domain: str
+    """SSL certificate information"""domain: str
     ip_address: str
     port: int
     subject: Dict[str, str]
@@ -45,7 +48,7 @@ class CertificateInfo:
 
 @dataclass
 class AssetFinding:
-    """Discovered cloud asset"""""""    ip_address: str
+    """Discovered cloud asset"""ip_address: str
     domain: str
     certificate_info: CertificateInfo
     matched_keywords: List[str]
@@ -56,7 +59,7 @@ class AssetFinding:
 
 @dataclass
 class DiscoveryResult:
-    """Result from asset discovery scan"""""""    scanned_ips: int
+    """Result from asset discovery scan"""scanned_ips: int
     certificates_found: int
     assets_discovered: List[AssetFinding]
     scan_duration: float
@@ -64,11 +67,11 @@ class DiscoveryResult:
 
 
 class CloudAssetDiscoveryCore:
-    """""""    Core for discovering cloud assets through SSL certificate inspection.
+    """Core for discovering cloud assets through SSL certificate inspection.
 
     Based on CloudRecon patterns for finding ephemeral and development assets
     by inspecting SSL certificates in IP ranges.
-    """""""
+    """
     def __init__(self, max_concurrent: int = 100, timeout: int = 4):
         self.logger = logging.getLogger(__name__)
         self.max_concurrent = max_concurrent
@@ -86,7 +89,7 @@ class CloudAssetDiscoveryCore:
         }
 
     def _init_database(self):
-        """Initialize SQLite database for certificate storage"""""""        conn = sqlite3.connect(self.db_path)
+        """Initialize SQLite database for certificate storage"""conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
 
         cursor.execute('''''''            CREATE TABLE IF NOT EXISTS certificates (
@@ -125,7 +128,7 @@ class CloudAssetDiscoveryCore:
         ports: List[int] = None,
         store_certificates: bool = True
     ) -> DiscoveryResult:
-        """""""        Discover cloud assets by scanning IP ranges for SSL certificates.
+        """Discover cloud assets by scanning IP ranges for SSL certificates.
 
         Args:
             ip_ranges: List of IP ranges in CIDR notation
@@ -135,7 +138,7 @@ class CloudAssetDiscoveryCore:
 
         Returns:
             DiscoveryResult with found assets
-        """""""        if ports is None:
+        """if ports is None:
             ports = [443]
 
         start_time = datetime.now()
@@ -195,7 +198,7 @@ class CloudAssetDiscoveryCore:
         semaphore: asyncio.Semaphore,
         store_certificate: bool
     ) -> Optional[AssetFinding]:
-        """Scan a single IP:port for SSL certificate"""""""        async with semaphore:
+        """Scan a single IP:port for SSL certificate"""async with semaphore:
             try:
                 # Get SSL certificate
                 cert_info = await self._get_certificate_info(ip, port)
@@ -226,7 +229,7 @@ class CloudAssetDiscoveryCore:
                 self.logger.debug(f"Error scanning {ip}:{port}: {e}")"                return None
 
     async def _get_certificate_info(self, ip: str, port: int) -> Optional[CertificateInfo]:
-        """Retrieve SSL certificate information from IP:port"""""""        try:
+        """Retrieve SSL certificate information from IP:port"""try:
             # Create SSL context
             context = ssl.create_default_context()
             context.check_hostname = False
@@ -270,7 +273,7 @@ class CloudAssetDiscoveryCore:
             self.logger.debug(f"Failed to get certificate from {ip}:{port}: {e}")"            return None
 
     def _check_keywords(self, cert_info: CertificateInfo, keywords: List[str]) -> List[str]:
-        """Check if certificate contains any of the specified keywords"""""""        matched = []
+        """Check if certificate contains any of the specified keywords"""matched = []
         search_text = ' '.join(['            cert_info.domain,
             ' '.join(cert_info.subject_alt_names),'            ' '.join(cert_info.organizations),'            ' '.join(cert_info.subject.values()),'        ]).lower()
 
@@ -281,7 +284,7 @@ class CloudAssetDiscoveryCore:
         return matched
 
     def _classify_asset(self, cert_info: CertificateInfo, keywords: List[str]) -> str:
-        """Classify the type of asset based on certificate information"""""""        domain_lower = cert_info.domain.lower()
+        """Classify the type of asset based on certificate information"""domain_lower = cert_info.domain.lower()
 
         # Development/staging indicators
         if any(word in domain_lower for word in ['dev', 'staging', 'test', 'qa', 'internal']):'            return "development""
@@ -294,7 +297,7 @@ class CloudAssetDiscoveryCore:
         # Default classification
         return "web_service""
     def _calculate_confidence(self, cert_info: CertificateInfo, keywords: List[str]) -> str:
-        """Calculate confidence level for asset discovery"""""""        confidence_score = 0
+        """Calculate confidence level for asset discovery"""confidence_score = 0
 
         # Valid certificate
         if cert_info.valid_from <= datetime.now() <= cert_info.valid_until:
@@ -317,7 +320,7 @@ class CloudAssetDiscoveryCore:
             return "medium""        else:
             return "low""
     async def _store_certificate(self, cert_info: CertificateInfo):
-        """Store certificate information in database"""""""        try:
+        """Store certificate information in database"""try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
 
@@ -345,7 +348,7 @@ class CloudAssetDiscoveryCore:
         keywords: List[str],
         organizations: List[str] = None
     ) -> List[CertificateInfo]:
-        """""""        Search stored certificates for keywords and organizations.
+        """Search stored certificates for keywords and organizations.
 
         Args:
             keywords: Keywords to search for
@@ -353,7 +356,7 @@ class CloudAssetDiscoveryCore:
 
         Returns:
             List of matching certificates
-        """""""        try:
+        """try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
 
@@ -397,13 +400,13 @@ class CloudAssetDiscoveryCore:
             self.logger.error(f"Failed to search certificates: {e}")"            return []
 
     def get_cloud_ranges(self, provider: str = None) -> List[str]:
-        """""""        Get IP ranges for cloud providers.
+        """Get IP ranges for cloud providers.
 
         Args:
             provider: Specific provider ("aws", "azure", "gcp") or None for all"
         Returns:
             List of CIDR ranges
-        """""""        if provider and provider in self.cloud_ranges:
+        """if provider and provider in self.cloud_ranges:
             return self.cloud_ranges[provider]
         else:
             # Return all ranges

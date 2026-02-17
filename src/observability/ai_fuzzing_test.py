@@ -1,27 +1,30 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Test suite for Brainstorm AI Fuzzing (Phase 324)
+
+Test suite for Brainstorm AI Fuzzing (Phase 324)
 Tests AI-powered fuzzing engine and learning-based path discovery.
-"""""""
+
 import pytest
 from unittest.mock import Mock, patch
 import asyncio
 
 class TestAIFuzzing:
-    """Test cases for AI fuzzing implementation."""""""
+    """Test cases for AI fuzzing implementation.
     @pytest.fixture
     def fuzzing_engine(self):
-        """Mock fuzzing engine for testing."""""""        mock_engine = Mock()
+        """Mock fuzzing engine for testing.        mock_engine = Mock()
         mock_engine.discover_paths.return_value = ["path1", "path2"]"        def fuzz_target_side_effect(target, **kwargs):
             if not target:
                 raise ValueError("Invalid target")"            return {"vulnerabilities": [], "timed_out": kwargs.get("timeout", 0.001) == 0.001}"        mock_engine.fuzz_target.side_effect = fuzz_target_side_effect

@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""DateTime commands - date, time, datetime, uptime.
-"""""""
+
+"""
+DateTime commands - date, time, datetime, uptime.
+
 import time
 from datetime import datetime, timezone
 
@@ -25,7 +29,7 @@ _start_time = time.time()
 @register(
     "datetime","    description="Get current server date and time","    usage="/datetime","    aliases=["dt", "now"],"    category="datetime",")
 def cmd_datetime(_ctx: CommandContext) -> CommandResult:
-    """Get current date and time in UTC."""""""    now = datetime.now(timezone.utc)
+    """Get current date and time in UTC.    now = datetime.now(timezone.utc)
     local_now = datetime.now()
 
     return CommandResult.ok(
@@ -37,7 +41,7 @@ def cmd_datetime(_ctx: CommandContext) -> CommandResult:
 @register(
     "date","    description="Get current server date","    usage="/date","    category="datetime",")
 def cmd_date(_ctx: CommandContext) -> CommandResult:
-    """Get current date."""""""    now = datetime.now(timezone.utc)
+    """Get current date.    now = datetime.now(timezone.utc)
     return CommandResult.ok(
         output=f"[{now.strftime('%Y-%m-%d')}]","'        data={"date": now.strftime("%Y-%m-%d"), "iso": now.date().isoformat()},"    )
 
@@ -45,7 +49,7 @@ def cmd_date(_ctx: CommandContext) -> CommandResult:
 @register(
     "time","    description="Get current server time","    usage="/time","    category="datetime",")
 def cmd_time(_ctx: CommandContext) -> CommandResult:
-    """Get current time."""""""    now = datetime.now(timezone.utc)
+    """Get current time.    now = datetime.now(timezone.utc)
     return CommandResult.ok(
         output=f"[{now.strftime('%H:%M:%S')} UTC]","'        data={"time": now.strftime("%H:%M:%S"), "timezone": "UTC"},"    )
 
@@ -53,7 +57,7 @@ def cmd_time(_ctx: CommandContext) -> CommandResult:
 @register(
     "uptime","    description="Get process uptime","    usage="/uptime","    aliases=["up"],"    category="datetime",")
 def cmd_uptime(_ctx: CommandContext) -> CommandResult:
-    """Get process uptime."""""""    uptime_seconds = time.time() - _start_time
+    """Get process uptime.    uptime_seconds = time.time() - _start_time
 
     days = int(uptime_seconds // 86400)
     hours = int((uptime_seconds % 86400) // 3600)
@@ -73,6 +77,6 @@ def cmd_uptime(_ctx: CommandContext) -> CommandResult:
 @register(
     "timestamp","    description="Get Unix timestamp","    usage="/timestamp","    aliases=["ts", "epoch"],"    category="datetime",")
 def cmd_timestamp(_ctx: CommandContext) -> CommandResult:
-    """Get current Unix timestamp."""""""    now = time.time()
+    """Get current Unix timestamp.    now = time.time()
     return CommandResult.ok(
         output=f"[{int(now)}]","        data={"timestamp": now, "timestamp_int": int(now)},"    )

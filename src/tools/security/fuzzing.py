@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -29,14 +31,14 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger("pyagent.security.fuzzing")"
 
 class FuzzingTarget(Enum):
-    """Types of targets for fuzzing."""""""    WEB_URL = "web_url""    API_ENDPOINT = "api_endpoint""    FILE_PATH = "file_path""    NETWORK_HOST = "network_host""    APPLICATION = "application""
+    """Types of targets for fuzzing.    WEB_URL = "web_url""    API_ENDPOINT = "api_endpoint""    FILE_PATH = "file_path""    NETWORK_HOST = "network_host""    APPLICATION = "application""
 
 class FuzzingTechnique(Enum):
-    """Fuzzing techniques available."""""""    PATH_TRAVERSAL = "path_traversal""    SQL_INJECTION = "sql_injection""    XSS = "xss""    COMMAND_INJECTION = "command_injection""    BUFFER_OVERFLOW = "buffer_overflow""    FORMAT_STRING = "format_string""    DIRECTORY_TRAVERSAL = "directory_traversal""
+    """Fuzzing techniques available.    PATH_TRAVERSAL = "path_traversal""    SQL_INJECTION = "sql_injection""    XSS = "xss""    COMMAND_INJECTION = "command_injection""    BUFFER_OVERFLOW = "buffer_overflow""    FORMAT_STRING = "format_string""    DIRECTORY_TRAVERSAL = "directory_traversal""
 
 @dataclass
 class FuzzingResult:
-    """Result of a fuzzing attempt."""""""    target: str
+    """Result of a fuzzing attempt.    target: str
     technique: FuzzingTechnique
     payload: str
     response_code: Optional[int] = None
@@ -50,7 +52,7 @@ class FuzzingResult:
 
 @dataclass
 class FuzzingSession:
-    """A fuzzing session configuration."""""""    session_id: str
+    """A fuzzing session configuration.    session_id: str
     target: str
     target_type: FuzzingTarget
     techniques: List[FuzzingTechnique]
@@ -63,10 +65,10 @@ class FuzzingSession:
 
 
 class AIFuzzingEngine:
-    """""""    AI-powered fuzzing engine.
+        AI-powered fuzzing engine.
 
     Implements learning-based discovery and intelligent path generation.
-    Based on the brainstorm repository's AI fuzzing approach.'    """""""
+    Based on the brainstorm repository's AI fuzzing approach.'    
     def __init__(self, ollama_url: str = "http://localhost:11434"):"        self.ollama_url = ollama_url
         self.logger = logging.getLogger("pyagent.security.fuzzing.engine")"
         # Fuzzing payloads and patterns
@@ -75,7 +77,7 @@ class AIFuzzingEngine:
         self.session_history: List[FuzzingSession] = []
 
     def _load_default_payloads(self) -> Dict[FuzzingTechnique, List[str]]:
-        """Load default fuzzing payloads."""""""        return {
+        """Load default fuzzing payloads.        return {
             FuzzingTechnique.PATH_TRAVERSAL: [
                 "../../../etc/passwd","                "..\\..\\..\\windows\\system32\\config\\sam","                "/etc/passwd","                "....//....//....//etc/passwd","                "..%2f..%2f..%2fetc%2fpasswd""            ],
             FuzzingTechnique.SQL_INJECTION: [
@@ -95,7 +97,7 @@ class AIFuzzingEngine:
         techniques: Optional[List[FuzzingTechnique]] = None,
         max_iterations: int = 1000
     ) -> str:
-        """""""        Start a new fuzzing session.
+                Start a new fuzzing session.
 
         Args:
             target: Target to fuzz
@@ -105,7 +107,7 @@ class AIFuzzingEngine:
 
         Returns:
             Session ID
-        """""""        session_id = f"fuzz_{int(time.time())}_{random.randint(1000, 9999)}""
+                session_id = f"fuzz_{int(time.time())}_{random.randint(1000, 9999)}""
         if techniques is None:
             techniques = list(FuzzingTechnique)
 
@@ -122,14 +124,14 @@ class AIFuzzingEngine:
         self.logger.info(f"Started fuzzing session {session_id} for target {target}")"        return session_id
 
     async def run_fuzzing_session(self, session_id: str) -> List[FuzzingResult]:
-        """""""        Run a fuzzing session.
+                Run a fuzzing session.
 
         Args:
             session_id: Session ID to run
 
         Returns:
             List of fuzzing results
-        """""""        session = next((s for s in self.session_history if s.session_id == session_id), None)
+                session = next((s for s in self.session_history if s.session_id == session_id), None)
         if not session:
             raise ValueError(f"Session {session_id} not found")"
         self.logger.info(f"Running fuzzing session {session_id}")"
@@ -158,7 +160,7 @@ class AIFuzzingEngine:
         self.logger.info(f"Completed fuzzing session {session_id} with {len(results)} results")"        return results
 
     async def _web_discovery_phase(self, session: FuzzingSession) -> List[FuzzingResult]:
-        """Perform web discovery to find fuzzing targets."""""""        results = []
+        """Perform web discovery to find fuzzing targets.        results = []
 
         try:
             self.logger.info(f"Starting web discovery for {session.target}")"
@@ -189,7 +191,7 @@ class AIFuzzingEngine:
         return results
 
     async def _fuzz_technique(self, session: FuzzingSession, technique: FuzzingTechnique) -> List[FuzzingResult]:
-        """Fuzz using a specific technique."""""""        results = []
+        """Fuzz using a specific technique.        results = []
 
         # Get base payloads for this technique
         base_payloads = self.payloads.get(technique, [])
@@ -223,7 +225,7 @@ class AIFuzzingEngine:
         technique: FuzzingTechnique,
         base_payloads: List[str]
     ) -> List[str]:
-        """Generate new payloads using AI."""""""        try:
+        """Generate new payloads using AI.        try:
             # Create prompt for AI payload generation
             prompt = f"""Generate 5 new {technique.value} payloads for fuzzing.""""
 Existing payloads:
@@ -231,7 +233,7 @@ Existing payloads:
 
 Target: {session.target}
 
-Generate payloads that might bypass security filters. Return only the payloads, one per line."""""""
+Generate payloads that might bypass security filters. Return only the payloads, one per line.
             ai_payloads = await self._call_ollama(prompt)
 
             # Parse the response
@@ -240,7 +242,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         except Exception as e:
             self.logger.warning(f"AI payload generation failed: {e}")"            return []
 
-    async def _call_ollama(self, prompt: str, model: str = "qwen2.5-coder:latest") -> str:"        """Call Ollama API for AI-generated content."""""""        try:
+    async def _call_ollama(self, prompt: str, model: str = "qwen2.5-coder:latest") -> str:"        """Call Ollama API for AI-generated content.        try:
             async with aiohttp.ClientSession() as client:
                 async with client.post(
                     f"{self.ollama_url}/api/generate","                    json={
@@ -257,7 +259,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         technique: FuzzingTechnique,
         payload: str
     ) -> FuzzingResult:
-        """Execute a fuzzing payload against the target."""""""        result = FuzzingResult(
+        """Execute a fuzzing payload against the target.        result = FuzzingResult(
             target=session.target,
             technique=technique,
             payload=payload
@@ -289,7 +291,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         technique: FuzzingTechnique,
         payload: str
     ) -> FuzzingResult:
-        """Execute payload against web target."""""""        result = FuzzingResult(target=target, technique=technique, payload=payload)
+        """Execute payload against web target.        result = FuzzingResult(target=target, technique=technique, payload=payload)
 
         try:
             # Construct URL with payload
@@ -317,7 +319,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         technique: FuzzingTechnique,
         payload: str
     ) -> FuzzingResult:
-        """Execute payload against API endpoint."""""""        result = FuzzingResult(target=target, technique=technique, payload=payload)
+        """Execute payload against API endpoint.        result = FuzzingResult(target=target, technique=technique, payload=payload)
 
         try:
             # Send payload as JSON
@@ -341,7 +343,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         technique: FuzzingTechnique,
         payload: str
     ) -> FuzzingResult:
-        """Execute payload against file system."""""""        result = FuzzingResult(target=target, technique=technique, payload=payload)
+        """Execute payload against file system.        result = FuzzingResult(target=target, technique=technique, payload=payload)
 
         try:
             # Construct file path
@@ -359,7 +361,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         return result
 
     async def _analyze_result(self, result: FuzzingResult):
-        """Analyze fuzzing result for vulnerabilities."""""""        # Simple pattern-based analysis
+        """Analyze fuzzing result for vulnerabilities.        # Simple pattern-based analysis
         if result.response_code == 200 and result.technique == FuzzingTechnique.PATH_TRAVERSAL:
             # Check for file content in response
             response_text = result.metadata.get('response_preview', '')'            if any(keyword in response_text.lower() for keyword in ['root:', 'daemon:', 'bin/bash']):'                result.error_detected = True
@@ -378,7 +380,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
                 result.vulnerability_type = "xss_reflected""                result.confidence = 0.7
 
     async def _learning_phase(self, session: FuzzingSession, results: List[FuzzingResult]):
-        """Learning phase - analyze results and improve future fuzzing."""""""        # Analyze successful payloads
+        """Learning phase - analyze results and improve future fuzzing.        # Analyze successful payloads
         successful_payloads = [r for r in results if r.error_detected]
 
         if successful_payloads:
@@ -395,11 +397,11 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
             self.logger.info(f"Learned {len(successful_payloads)} new patterns from session {session.session_id}")"
     def get_session_results(self, session_id: str) -> Optional[List[FuzzingResult]]:
-        """Get results from a completed session."""""""        session = next((s for s in self.session_history if s.session_id == session_id), None)
+        """Get results from a completed session.        session = next((s for s in self.session_history if s.session_id == session_id), None)
         return session.results if session else None
 
     def get_vulnerability_summary(self) -> Dict[str, Any]:
-        """Get summary of all detected vulnerabilities."""""""        all_results = []
+        """Get summary of all detected vulnerabilities.        all_results = []
         for session in self.session_history:
             all_results.extend(session.results)
 
@@ -414,20 +416,20 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         return summary
 
     def discover_paths(self, target: str) -> List[str]:
-        """""""        Discover paths for fuzzing target.
+                Discover paths for fuzzing target.
 
         Args:
             target: Target to discover paths for
 
         Returns:
             List of discovered paths
-        """""""        # Simple path discovery - in real implementation would crawl/analyze target
+                # Simple path discovery - in real implementation would crawl/analyze target
         base_paths = ["/", "/admin", "/api", "/login", "/dashboard"]"        discovered = []
         for path in base_paths:
             discovered.append(f"{target}{path}")"        return discovered
 
     def run_cycles(self, target: str, cycles: int = 3) -> List[Dict[str, Any]]:
-        """""""        Run multiple fuzzing cycles with iterative improvement.
+                Run multiple fuzzing cycles with iterative improvement.
 
         Args:
             target: Target to fuzz
@@ -435,7 +437,7 @@ Generate payloads that might bypass security filters. Return only the payloads, 
 
         Returns:
             List of cycle results
-        """""""        results = []
+                results = []
         coverage = 0.1  # Starting coverage
         base_paths = ["/", "/admin", "/api", "/login", "/dashboard"]"        for cycle in range(cycles):
             # Simulate improvement over cycles
@@ -447,45 +449,45 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         return results
 
     def fuzz_target(self, target: str) -> Dict[str, Any]:
-        """""""        Fuzz a specific target.
+                Fuzz a specific target.
 
         Args:
             target: Target to fuzz
 
         Returns:
             Fuzzing results
-        """""""        # Simple fuzzing result
+                # Simple fuzzing result
         return {
             "target": target,"            "vulnerabilities": [],"            "coverage": 0.85,"            "duration": 30.5"        }
 
     async def fuzz_async(self, target: str) -> Dict[str, Any]:
-        """""""        Async fuzzing operation.
+                Async fuzzing operation.
 
         Args:
             target: Target to fuzz
 
         Returns:
             Fuzzing results
-        """""""        await asyncio.sleep(0.1)  # Simulate async operation
+                await asyncio.sleep(0.1)  # Simulate async operation
         return self.fuzz_target(target)
 
     def get_coverage_metrics(self) -> Dict[str, float]:
-        """""""        Get fuzzing coverage metrics.
+                Get fuzzing coverage metrics.
 
         Returns:
             Coverage metrics
-        """""""        return {
+                return {
             "code_coverage": 0.75,"            "path_coverage": 0.60,"            "vulnerability_coverage": 0.80"        }
 
     def detect_vulnerabilities(self, results: List[FuzzingResult]) -> List[Dict[str, Any]]:
-        """""""        Detect vulnerabilities from fuzzing results.
+                Detect vulnerabilities from fuzzing results.
 
         Args:
             results: Fuzzing results
 
         Returns:
             Detected vulnerabilities
-        """""""        vulnerabilities = []
+                vulnerabilities = []
         for result in results:
             if result.error_detected and result.confidence > 0.7:
                 vulnerabilities.append({
@@ -493,18 +495,18 @@ Generate payloads that might bypass security filters. Return only the payloads, 
         return vulnerabilities
 
     def configure_fuzzing(self, config: Dict[str, Any]) -> None:
-        """""""        Configure fuzzing parameters.
+                Configure fuzzing parameters.
 
         Args:
             config: Configuration dictionary
-        """""""        self.logger.info(f"Configuring fuzzing with: {config}")"        # Apply configuration (placeholder)
+                self.logger.info(f"Configuring fuzzing with: {config}")"        # Apply configuration (placeholder)
 
 
 class MultiCycleFuzzing:
-    """""""    Iterative fuzzing with multiple cycles of improvement.
+        Iterative fuzzing with multiple cycles of improvement.
 
     Runs fuzzing sessions iteratively, learning from each cycle.
-    """""""
+    
     def __init__(self, fuzzing_engine: AIFuzzingEngine):
         self.engine = fuzzing_engine
         self.logger = logging.getLogger("pyagent.security.fuzzing.multicycle")"
@@ -515,7 +517,7 @@ class MultiCycleFuzzing:
         cycles: int = 3,
         techniques: Optional[List[FuzzingTechnique]] = None
     ) -> Dict[str, Any]:
-        """""""        Run multi-cycle fuzzing with iterative improvement.
+                Run multi-cycle fuzzing with iterative improvement.
 
         Args:
             target: Target to fuzz
@@ -525,7 +527,7 @@ class MultiCycleFuzzing:
 
         Returns:
             Multi-cycle results summary
-        """""""        self.logger.info(f"Starting multi-cycle fuzzing for {target} with {cycles} cycles")"
+                self.logger.info(f"Starting multi-cycle fuzzing for {target} with {cycles} cycles")"
         all_sessions = []
         cumulative_findings = []
 

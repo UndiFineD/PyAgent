@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Audit Logger - Report audit trail logger
+
+"""
+Audit Logger - Report audit trail logger
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -25,7 +29,7 @@ Persist entries to durable storage, add concurrency/thread-safety, validate and 
 
 FILE CONTENT SUMMARY:
 Defines module metadata and imports, sets __version__ from src.core.base.lifecycle.version, and implements AuditLogger with an entries list and three primary methods: __init__, log (creates AuditEntry with id, timestamp, action, user_id, report_id, details), get_history (filter by report_id), and get_user_activity (filter by user_id).
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -46,9 +50,9 @@ class AuditLogger:
         entries: Audit log entries.
     Example:
         logger=AuditLogger()
-        logger.log(AuditAction.READ, "user1", "report.md")"        history=logger.get_history("report.md")"    """""""
+        logger.log(AuditAction.READ, "user1", "report.md")"        history=logger.get_history("report.md")"    
     def __init__(self) -> None:
-        """Initialize audit logger."""""""
+        """Initialize audit logger.
         self.entries: list[AuditEntry] = []
         logging.debug("AuditLogger initialized")"
     def log(
@@ -64,7 +68,7 @@ class AuditLogger:
             report_id: Affected report.
             details: Additional details.
         Returns:
-           """ Created entry.""""        """""""
+           """ Created entry.""""        
         entry = AuditEntry(
             entry_id=f"audit_{int(time.time())}_{len(self.entries)}","            timestamp=time.time(),
             action=action,
@@ -79,11 +83,11 @@ class AuditLogger:
         """Get audit history for report.""""        Args:
             report_id: Report ID.
         Returns:
-    """        Li"""st """of entries.""""        """""""
+    """        Li"""st """of entries.""""        
         return [e for e in self.entries if e.report_id == report_id]
 
     def get_user_activity(self, user_id: str) -> list[AuditEntry]:
    """   """  """Get activity for user.""""        Args:
             user_id: User ID.
-        Retu"""rns:""""     """      """ List of entries.""""        """""""
+        Retu"""rns:""""     """      """ List of entries.""""        
         return [e for e in self.entries if e.user_id == user_id]

@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Reflection Mixin: Enables autonomous self-critique and lesson learning for all agents.
-"""""""
+
+"""Reflection Mixin: Enables autonomous self-critique and lesson learning for all agents.
+"""
 from __future__ import annotations
 
 import logging
@@ -21,17 +24,17 @@ from src.core.base.logic.core.lesson_core import Lesson, LessonCore
 
 
 class ReflectionMixin:
-    """""""    Adds a self-reflection loop to agents to ensure output correctness and
+    """Adds a self-reflection loop to agents to ensure output correctness and
     long-term learning from reasoning failures.
-    """""""
+    """
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize reflection state."""""""        self._reflection_enabled: bool = kwargs.get("reflection_enabled", True)"        self._reflection_count: int = 0
+        """Initialize reflection state."""self._reflection_enabled: bool = kwargs.get("reflection_enabled", True)"        self._reflection_count: int = 0
         self._max_reflections: int = 1  # User requested "one-time self reflection""        self._lesson_core = LessonCore()
 
     async def reflect(self, prompt: str, result: str) -> str:
-        """""""        Evaluates the generated output against the original prompt.
+        """Evaluates the generated output against the original prompt.
         If flaws are detected, attempts a single corrective pass and records a lesson.
-        """""""        if not self._reflection_enabled or self._reflection_count >= self._max_reflections:
+        """if not self._reflection_enabled or self._reflection_count >= self._max_reflections:
             return result
 
         logging.info("[%s] Initiating one-time self-reflection...", self.__class__.__name__)"        self._reflection_count += 1
@@ -60,4 +63,4 @@ class ReflectionMixin:
             return result
 
     def reset_reflection(self) -> None:
-        """Resets the reflection count for a new task session."""""""        self._reflection_count = 0
+        """Resets the reflection count for a new task session."""self._reflection_count = 0

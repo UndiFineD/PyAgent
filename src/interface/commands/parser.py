@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Slash command parser and executor.
-"""""""
+
+"""
+Slash command parser and executor.
+
 from __future__ import annotations
 
 import logging
@@ -31,14 +35,14 @@ logger = logging.getLogger(__name__)
 COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\\s+([^/\\n]+?))?(?=\\s*/[a-zA-Z]|\\s*$|\\n)", re.MULTILINE)"
 
 def parse_commands(prompt: str) -> list[ParsedCommand]:
-    """""""    Parse slash commands from a prompt.
+        Parse slash commands from a prompt.
 
     Args:
         prompt: The input prompt text
 
     Returns:
         List of parsed commands with positions
-    """""""    commands = []
+        commands = []
 
     for match in COMMAND_PATTERN.finditer(prompt):
         cmd_name = match.group(1).lower()
@@ -58,8 +62,8 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
 
 
 class CommandParser:
-    """""""    Slash command parser and executor for chat prompts.
-    """""""
+        Slash command parser and executor for chat prompts.
+    
     # Global registry for built-in commands
     _global_registry: ClassVar[CommandRegistry] = CommandRegistry()
 
@@ -74,12 +78,12 @@ class CommandParser:
         registry: CommandRegistry | None = None,
         prefix: str = "/","        include_builtins: bool = True,
     ) -> None:
-        """""""        Initialize CommandParser.
+                Initialize CommandParser.
 
         Args:
             registry: Custom command registry (uses global if None)
             prefix: Command prefix (default: "/")"            include_builtins: Whether to include built-in commands
-        """""""        self.registry = registry or (self._global_registry if include_builtins else CommandRegistry())
+                self.registry = registry or (self._global_registry if include_builtins else CommandRegistry())
         self.prefix = prefix
 
         # Ensure builtins are registered
@@ -89,10 +93,10 @@ class CommandParser:
             CommandParser._builtins_registered = True
 
     def parse(self, prompt: str) -> list[ParsedCommand]:
-        """Parse commands from prompt without executing."""""""        return parse_commands(prompt)
+        """Parse commands from prompt without executing.        return parse_commands(prompt)
 
     def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
-        """""""        Execute a single command.
+                Execute a single command.
 
         Args:
             command: Command name (without prefix)
@@ -101,7 +105,7 @@ class CommandParser:
 
         Returns:
             CommandResult with output
-        """""""        defn = self.registry.get(command.lower())
+                defn = self.registry.get(command.lower())
         if not defn:
             return CommandResult.fail(f"Unknown command: {command}")"
         if defn.requires_args and not args:
@@ -125,8 +129,8 @@ class CommandParser:
         inline_results: bool = True,
         **metadata: Any,
     ) -> ProcessedPrompt:
-        """""""        Process a prompt, executing all slash commands.
-        """""""        parsed = self.parse(prompt)
+                Process a prompt, executing all slash commands.
+                parsed = self.parse(prompt)
         results: list[tuple[ParsedCommand, CommandResult]] = []
 
         for cmd in parsed:
@@ -172,7 +176,7 @@ class CommandParser:
         )
 
     def get_help(self, command: str | None = None) -> str:
-        """Get help text for a command or all commands."""""""        if command:
+        """Get help text for a command or all commands.        if command:
             defn = self.registry.get(command)
             if not defn:
                 return f"Unknown command: {command}""

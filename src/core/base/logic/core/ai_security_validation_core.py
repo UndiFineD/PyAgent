@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""AI Security Validation Core
+
+"""AI Security Validation Core
 
 Inspired by ai-security-llm repository patterns for LLM security assessment.
 Implements prompt injection detection, jailbreak prevention, and security validation.
-"""""""
+"""
 import logging
 import re
 from typing import Dict, List, Optional, Any
@@ -24,7 +27,7 @@ from datetime import datetime
 
 @dataclass
 class SecurityIssue:
-    """Security issue found in AI interaction"""""""    issue_type: str
+    """Security issue found in AI interaction"""issue_type: str
     severity: str
     description: str
     evidence: str
@@ -35,7 +38,7 @@ class SecurityIssue:
 
 @dataclass
 class SecurityScanResult:
-    """Result from AI security scan"""""""    input_text: str
+    """Result from AI security scan"""input_text: str
     issues_found: List[SecurityIssue]
     overall_risk: str
     scan_timestamp: datetime
@@ -45,18 +48,18 @@ class SecurityScanResult:
 
 @dataclass
 class JailbreakAttempt:
-    """Detected jailbreak attempt"""""""    technique: str
+    """Detected jailbreak attempt"""technique: str
     pattern: str
     confidence: float
     description: str
 
 
 class AISecurityValidationCore:
-    """""""    Core for AI/LLM security validation and threat detection.
+    """Core for AI/LLM security validation and threat detection.
 
     Based on patterns from ai-security-llm repository, implementing
     prompt injection detection, jailbreak prevention, and security assessment.
-    """""""
+    """
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
@@ -66,7 +69,7 @@ class AISecurityValidationCore:
         self._init_toxic_patterns()
 
     def _init_jailbreak_patterns(self):
-        """Initialize jailbreak detection patterns"""""""        self.jailbreak_patterns = [
+        """Initialize jailbreak detection patterns"""self.jailbreak_patterns = [
             # DAN (Do Anything Now) patterns
             JailbreakAttempt(
                 technique="DAN","                pattern=r"DAN.*mode|Do Anything Now|uncensored.*persona","                confidence=0.9,
@@ -99,7 +102,7 @@ class AISecurityValidationCore:
         ]
 
     def _init_injection_patterns(self):
-        """Initialize prompt injection patterns"""""""        self.injection_patterns = [
+        """Initialize prompt injection patterns"""self.injection_patterns = [
             # Direct injection
             {
                 "name": "direct_injection","                "pattern": r"ignore.*and.*do|forget.*instructions.*and","                "severity": "high","                "description": "Direct prompt injection attempting to override instructions""            },
@@ -118,7 +121,7 @@ class AISecurityValidationCore:
         ]
 
     def _init_toxic_patterns(self):
-        """Initialize toxic content patterns"""""""        self.toxic_patterns = [
+        """Initialize toxic content patterns"""self.toxic_patterns = [
             # Harmful content
             {
                 "name": "harmful_instructions","                "pattern": r"how to.*(bomb|weapon|hack|exploit|poison)","                "severity": "critical","                "description": "Requests for harmful or illegal instructions""            },
@@ -135,7 +138,7 @@ class AISecurityValidationCore:
     async def scan_input_security(
         self, input_text: str, context: Optional[Dict[str, Any]] = None
     ) -> SecurityScanResult:
-        """""""        Perform comprehensive security scan on input text.
+        """Perform comprehensive security scan on input text.
 
         Args:
             input_text: Text to scan for security issues
@@ -143,7 +146,7 @@ class AISecurityValidationCore:
 
         Returns:
             SecurityScanResult with findings and recommendations
-        """""""        start_time = datetime.now()
+        """start_time = datetime.now()
 
         issues_found = []
 
@@ -181,7 +184,7 @@ class AISecurityValidationCore:
         )
 
     def _scan_jailbreaks(self, text: str) -> List[SecurityIssue]:
-        """Scan for jailbreak attempts"""""""        issues = []
+        """Scan for jailbreak attempts"""issues = []
         text_lower = text.lower()
 
         for jailbreak in self.jailbreak_patterns:
@@ -200,7 +203,7 @@ class AISecurityValidationCore:
         return issues
 
     def _scan_injections(self, text: str) -> List[SecurityIssue]:
-        """Scan for prompt injection attempts"""""""        issues = []
+        """Scan for prompt injection attempts"""issues = []
         text_lower = text.lower()
 
         for injection in self.injection_patterns:
@@ -214,7 +217,7 @@ class AISecurityValidationCore:
         return issues
 
     def _scan_toxic_content(self, text: str) -> List[SecurityIssue]:
-        """Scan for toxic or harmful content"""""""        issues = []
+        """Scan for toxic or harmful content"""issues = []
         text_lower = text.lower()
 
         for toxic in self.toxic_patterns:
@@ -230,7 +233,7 @@ class AISecurityValidationCore:
     async def _scan_additional_risks(
         self, text: str, context: Optional[Dict[str, Any]]
     ) -> List[SecurityIssue]:
-        """Scan for additional security risks"""""""        issues = []
+        """Scan for additional security risks"""issues = []
 
         # Check for data exfiltration attempts
         if self._contains_data_exfiltration(text):
@@ -252,21 +255,21 @@ class AISecurityValidationCore:
         return issues
 
     def _contains_data_exfiltration(self, text: str) -> bool:
-        """Check for data exfiltration patterns"""""""        patterns = [
+        """Check for data exfiltration patterns"""patterns = [
             r"dump.*database|export.*data|extract.*information","            r"send.*to.*server|upload.*data|transmit.*information","            r"leak.*data|expose.*secrets|reveal.*credentials""        ]
 
         text_lower = text.lower()
         return any(re.search(pattern, text_lower) for pattern in patterns)
 
     def _contains_api_abuse(self, text: str) -> bool:
-        """Check for API abuse patterns"""""""        patterns = [
+        """Check for API abuse patterns"""patterns = [
             r"bypass.*rate.*limit|circumvent.*restrictions","            r"brute.*force|dictionary.*attack|credential.*stuffing","            r"exploit.*vulnerability|take.*advantage.*of.*bug""        ]
 
         text_lower = text.lower()
         return any(re.search(pattern, text_lower) for pattern in patterns)
 
     def _scan_context_risks(self, text: str, context: Dict[str, Any]) -> List[SecurityIssue]:
-        """Scan for context-aware security risks"""""""        issues = []
+        """Scan for context-aware security risks"""issues = []
 
         # Check for session hijacking attempts
         if context.get("session_id") and "session" in text.lower():"            issues.append(SecurityIssue(
@@ -281,12 +284,12 @@ class AISecurityValidationCore:
         return issues
 
     def _map_confidence_to_severity(self, confidence: float) -> str:
-        """Map confidence score to severity level"""""""        if confidence >= 0.8:
+        """Map confidence score to severity level"""if confidence >= 0.8:
             return "high""        elif confidence >= 0.6:
             return "medium""        else:
             return "low""
     def _calculate_overall_risk(self, issues: List[SecurityIssue]) -> str:
-        """Calculate overall risk level from issues"""""""        if not issues:
+        """Calculate overall risk level from issues"""if not issues:
             return "low""
         # Count by severity
         severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}"        for issue in issues:
@@ -296,7 +299,7 @@ class AISecurityValidationCore:
         if severity_counts["critical"] > 0:"            return "critical""        elif severity_counts["high"] > 2 or (severity_counts["high"] > 0 and severity_counts["medium"] > 2):"            return "high""        elif severity_counts["high"] > 0 or severity_counts["medium"] > 1:"            return "medium""        else:
             return "low""
     def _generate_recommendations(self, issues: List[SecurityIssue], overall_risk: str) -> List[str]:
-        """Generate security recommendations based on findings"""""""        recommendations = []
+        """Generate security recommendations based on findings"""recommendations = []
 
         if overall_risk == "critical":"            recommendations.append("🚨 CRITICAL: Block this request immediately and alert security team")"        elif overall_risk == "high":"            recommendations.append("⚠️ HIGH RISK: Require manual review before processing")"        elif overall_risk == "medium":"            recommendations.append("⚡ MEDIUM RISK: Log this interaction and monitor closely")"
         # Category-specific recommendations
@@ -312,7 +315,7 @@ class AISecurityValidationCore:
     async def validate_output_safety(
         self, output_text: str, input_context: Optional[Dict[str, Any]] = None
     ) -> SecurityScanResult:
-        """""""        Validate safety of AI-generated output.
+        """Validate safety of AI-generated output.
 
         Args:
             output_text: AI-generated text to validate
@@ -320,8 +323,8 @@ class AISecurityValidationCore:
 
         Returns:
             SecurityScanResult for the output
-        """""""        # For outputs, we're mainly concerned with harmful content and data leaks'        return await self.scan_input_security(output_text, input_context)
+        """# For outputs, we're mainly concerned with harmful content and data leaks'        return await self.scan_input_security(output_text, input_context)
 
     def get_security_metrics(self) -> Dict[str, Any]:
-        """Get security scanning metrics"""""""        return {
+        """Get security scanning metrics"""return {
             "jailbreak_patterns": len(self.jailbreak_patterns),"            "injection_patterns": len(self.injection_patterns),"            "toxic_patterns": len(self.toxic_patterns),"            "supported_categories": ["jailbreak", "injection", "content_safety", "data_protection", "api_security"]"        }

@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
-"""""""Unified Benchmarking CLI for PyAgent.
+Unified Benchmarking CLI for PyAgent.
 Uses the BenchmarkSuite to run various performance tests.
-"""""""
+
 import sys
 import asyncio
 from pathlib import Path
@@ -32,7 +34,7 @@ from src.infrastructure.services.benchmarks.benchmark_suite import \
 
 
 async def main():
-    """Main entry point for the benchmarking CLI."""""""    suite = BenchmarkSuite()
+    """Main entry point for the benchmarking CLI.    suite = BenchmarkSuite()
 
     # 1. Tokenization Benchmarks
     test_texts = {

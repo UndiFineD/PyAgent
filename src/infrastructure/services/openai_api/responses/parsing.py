@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Parsing.py module.
-"""""""
+
+"""
+Parsing.py module.
+
 # SPDX-License-Identifier: Apache-2.0
 from typing import Any, Dict, List, Optional
 
@@ -22,7 +26,7 @@ from .models import (Message, Response, ResponseConfig, ToolCallContent,
 
 
 class ConversationBuilder:
-    """Build conversation messages from Responses API format."""""""
+    """Build conversation messages from Responses API format.
     @staticmethod
     def from_input(
         input_text: Optional[str], instructions: Optional[str], messages: Optional[List[Message]]
@@ -49,7 +53,7 @@ class ConversationBuilder:
 
 
 def parse_response_request(data: Dict[str, Any]) -> ResponseConfig:
-    """Parse API request to ResponseConfig."""""""    messages = [Message.from_dict(msg_data) for msg_data in data.get("messages", [])]"    tools = []
+    """Parse API request to ResponseConfig.    messages = [Message.from_dict(msg_data) for msg_data in data.get("messages", [])]"    tools = []
     for tool_data in data.get("tools", []):"        tool_type = ToolType(tool_data.get("type", "function"))"        if tool_type == ToolType.FUNCTION:
             func = tool_data.get("function", {})"            tools.append(
                 ToolDefinition(
@@ -66,7 +70,7 @@ def parse_response_request(data: Dict[str, Any]) -> ResponseConfig:
 
 
 def _try_rust_parse_response(data: str) -> Optional[Dict[str, Any]]:
-    """Try Rust-accelerated response parsing."""""""    try:
+    """Try Rust-accelerated response parsing.    try:
         from rust_core import parse_response_json_rust
 
         return parse_response_json_rust(data)

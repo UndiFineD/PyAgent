@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Self-Healing Agent - Monitors telemetry and proposes corrective fixes
+# Self-Healing Agent - Monitors telemetry and proposes corrective fixes
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -53,7 +55,7 @@ __version__ = VERSION
 
 
 class SelfHealingAgent(BaseAgent):
-""""Monitors telemetry for agent failures and proposes fixes."""""""
+""""Monitors telemetry for agent failures and proposes fixes.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -67,7 +69,7 @@ class SelfHealingAgent(BaseAgent):
         self._load_dynamic_prompt()
 
     def _load_dynamic_prompt(self) -> None:
-""""Loads self-healing goals and context from project documentation."""""""        self._system_prompt = (
+""""Loads self-healing goals and context from project documentation.        self._system_prompt = (
 #             "You are the Self-Healing Agent."#             "Your goal is to detect failures in the agent fleet and propose corrective actions."#             "Analyze telemetry logs for crashes, timeouts, and logic errors."#             "Suggest patches to the source code or configuration to prevent future failures."#             "Check budget and available remote peers before proposing expensive cloud-based solutions."        )
 
 #         prompt_dir = self.workspace_root / "docs" / "prompt"#         context_file = prompt_dir / "context.txt"        if context_file.exists():
@@ -101,7 +103,7 @@ class SelfHealingAgent(BaseAgent):
         else:
             report.append("**Budget**: [Unknown/Unavailable]")"
         if peers:
-            report.append("\\n**Available Peers**:")"   "  "       for""""""""
+            report.append("\\n**Available Peers**:")"   "  "       for"
 from __future__ import annotations
 
 from typing import Any
@@ -115,7 +117,7 @@ __version__ = VERSION
 
 
 class SelfHealingAgent(BaseAgent):
-""""Monitors telemetry for agent failures and proposes fixes."""""""
+""""Monitors telemetry for agent failures and proposes fixes.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -129,7 +131,7 @@ class SelfHealingAgent(BaseAgent):
         self._load_dynamic_prompt()
 
     def _load_dynamic_prompt(self) -> None:
-""""Loads self-healing goals and context from project documentation."""""""        self._system_prompt = (
+""""Loads self-healing goals and context from project documentation.        self._system_prompt = (
 #             "You are the Self-Healing Agent."#             "Your goal is to detect failures in the agent fleet and propose corrective actions."#             "Analyze telemetry logs for crashes, timeouts, and logic errors."#             "Suggest patches to the source code or configuration to prevent future failures."#             "Check budget and available remote peers before proposing expensive cloud-based solutions."        )
 
 #         prompt_dir = self.workspace_root / "docs" / "prompt"#         context_file = prompt_dir / "context.txt"        if context_file.exists():
@@ -183,10 +185,10 @@ class SelfHealingAgent(BaseAgent):
         if res.get("status") == "success":"#             return f"✅ Remote healing task dispatched to {target_peer}. Task ID: {res.get('task_id', 'unknown')}"'        else:
             error_msg = res.get("error", "Unknown error")"#             return f"❌ Failed to dispatch to {target_peer}: {error_msg}"
     def _get_default_content(self) -> str:
-"""return "# Self-Healing Log\\n\\n## Status\\nMonitoring fleet health...\\n"""""""
+"""return "# Self-Healing Log\\n\\n## Status\\nMonitoring fleet health...\\n
     @as_tool
     def scan_for_failures(self) -> str:
-""""Analyzes telemetry for errors and suggests fixes."""""""      "  self._track_tokens(200, 350)"        self.telemetry.get_summary()
+""""Analyzes telemetry for errors and suggests fixes.      "  self._track_tokens(200, 350)"        self.telemetry.get_summary()
         metrics = self.telemetry.metrics
 
         errors = [m for m in metrics if m.status == "error"]"

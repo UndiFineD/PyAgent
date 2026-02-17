@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""ChangelogAnalyticsMixin - Calculate changelog statistics and analytics
+ChangelogAnalyticsMixin - Calculate changelog statistics and analytics
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,22 +29,20 @@ Be more robust in version/date recognition and heading variants, handle multiple
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Changelog analytics mixin.py module".""""""""
+Changelog analytics mixin.py module"."
 from __future__ import annotations
 
 import re
@@ -54,9 +50,9 @@ from typing import Any
 
 
 class ChangelogAnalyticsMixin:
-""""Mixin for calculating statistics and analytics for changelogs."""""""
+""""Mixin for calculating statistics and analytics for changelogs.
     def calculate_statistics(self) -> dict[str, Any]:
-""""Calculate statistics for the changelog."""""""        content = getattr(self, "current_content", ") or getattr(self, "previous_content", ")"        if not content:
+""""Calculate statistics for the changelog.        content = getattr(self, "current_content", ") or getattr(self, "previous_content", ")"        if not content:
             return {}
 
         # Count versions
@@ -73,7 +69,7 @@ class ChangelogAnalyticsMixin:
 
         stats = {
             "version_count": len(versions),"            "latest_version": versions[0] if versions else None,"            "entries_by_category": categories,"            "total_entries": sum(categories.values()) if categories else 0,"            "contributor_count": len(contributors),"            "contributors": list(contributors),"            "line_count": len(content.split("\\n")),"            "character_count": len(content),"        }
-        setattr(self, "_statistics", stats)"        "return stats""""""""
+        setattr(self, "_statistics", stats)"        "return stats"
 from __future__ import annotations
 
 import re
@@ -81,9 +77,9 @@ from typing import Any
 
 
 class ChangelogAnalyticsMixin:
-""""Mixin for calculating statistics and analytics for changelogs."""""""
+""""Mixin for calculating statistics and analytics for changelogs.
     def calculate_statistics(self) -> dict[str, Any]:
-""""Calculate statistics for the changelog."""""""        content = getattr(self, "current_content", ") or getattr(self, "previous_content", ")"        if not content:
+""""Calculate statistics for the changelog.        content = getattr(self, "current_content", ") or getattr(self, "previous_content", ")"        if not content:
             return {}
 
         # Count versions

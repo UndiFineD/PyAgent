@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Refinement Agent - Recursive Self-Refinement
-"""""""Brief Summary
+# Refinement Agent - Recursive Self-Refinement
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -35,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Recursive Self-Refinement.
 Optimizes system prompts, tool descriptions, and agent logic based on performance telemetry.
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -51,7 +53,7 @@ __version__ = VERSION
 
 
 class RefinementAgent(BaseAgent):
-""""Refines the swarm's core logic and instructions through performance feedback."""""""'
+""""Refines the swarm's core logic and instructions through performance feedback.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.refinement_logs = self._workspace_root / "data" / "logs" / "self_refinement"        self.refinement_logs.mkdir(parents=True, exist_ok=True)
@@ -61,7 +63,7 @@ class RefinementAgent(BaseAgent):
 
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
-""""Analyzes failure patterns to identify prompt or tool weaknesses."""""""        _ = failure_logs
+""""Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")"        # Simulated analysis
         analysis = (
 #             "### Refinement Analysis\\n"#             "1. Found recurrent 'hallucination' when searching with BrowsingAgent.\\n"'#             "2. Tool 'execute_sql' in SQLAgent has ambiguous param descriptions.\\n"'#             "3. System prompt for LinguisticAgent is too verbose."        )
@@ -72,7 +74,7 @@ class RefinementAgent(BaseAgent):
         "Generates a new optimized system prompt for an agent."        Args:
             agent_class_name: The name of the agent class to refine.
             performance_feedback: Summary of what the agent is doing wrong.
-"""""""        logging.info(fRefinement: Generating new prompt for {agent_class_name}...")"
+        logging.info(fRefinement: Generating new prompt for {agent_class_name}...")"
         new_prompt = (
 #             fYou are the {agent_class_name}.
 #             fOptimized Instructions: Focus on high-precision outputs.
@@ -88,7 +90,7 @@ class RefinementAgent(BaseAgent):
 
         Args:
             file_path: Absolute path to the agent's Python file.'            new_logic_snippet: The refined code block to inject or update.
-"""""""        # In a real scenario, this would use the edit tools" or AST manipulation."
+        # In a real scenario, this would use the edit tools" or AST manipulation."
         # This implementation logs the proposal for human-governed or orchestrated application.
 #         ref_file = self.refinement_logs / frefine_{os.path.basename(file_path)}.txt
         with open(ref_file, "w", encoding="utf-8") as f:"            f.write(new_logic_snippet)
@@ -96,15 +98,15 @@ class RefinementAgent(BaseAgent):
 #         return fRefinement logic written to {ref_file}. Verification required before merge.
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-"""""""        Specialized content improvement for Refinement.
-"""""""        _ = target_file
+        Specialized content improvement for Refinement.
+        _ = target_file
 #         return fRefinement result mapping for: {prompt[:50]}...
 
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(RefinementAgent, "Refinement Agent", "Autonomous logic optimizer")"    main()
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -120,7 +122,7 @@ __version__ = VERSION
 
 
 class RefinementAgent(BaseAgent):
-""""Refines the swarm's core logic and instructions "through performance feedback."""""""'
+""""Refines the swarm's core logic and instructions "through performance feedback.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.refinement_logs = self._workspace_root / "data" / "logs" / "self_refinement"        self.refinement_logs.mkdir(parents=True, exist_ok=True)
@@ -130,7 +132,7 @@ class RefinementAgent(BaseAgent):
 
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
-""""Analyzes failure patterns to identify prompt or tool weaknesses."""""""        _ = failure_logs
+""""Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")"        # Simulated analysis
         analysis = (
 #             "### Refinement Analysis\\n"#             "1. Found recurrent 'hallucination' when searching with BrowsingAgent.\\n"'#             "2. Tool 'execute_sql' in SQLAgent has ambiguous param descriptions.\\n"'#             "3. System prompt for LinguisticAgent is too verbose."        )
@@ -141,7 +143,7 @@ class RefinementAgent(BaseAgent):
         "Generates a new optimized system prompt for an agent."        Args:
             agent_class_name: The name of the agent class to refine.
             performance_feedback: Summary of what the agent is doing wrong.
-"""""""        logging.info(fRefinement: Generating new prompt for {agent_class_name}...")"
+        logging.info(fRefinement: Generating new prompt for {agent_class_name}...")"
         new_prompt = (
 #             fYou are the {agent_class_name}.
 #             fOptimized Instructions: Focus on high-precision outputs.
@@ -157,7 +159,7 @@ class RefinementAgent(BaseAgent):
 
         Args:
             file_path: Absolute path to the agent's Python file.'            new_logic_snippet: The refined code block to inject or update.
-"""""""        # In a real scenario, this would use the edit tools or AST manipulation.
+        # In a real scenario, this would use the edit tools or AST manipulation.
 
         # This implementation logs the proposal for human-governed or orchestrated application.
 #         ref_file = self.refinement_logs / frefine_{os.path.basename(file_path)}.txt
@@ -166,7 +168,7 @@ class RefinementAgent(BaseAgent):
 #         return fRefinement logic written to {ref_file}. Verification required before merge.
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-"""""""    "    Specialized content improvement for Refinement.""""""""        _ = target_file
+    "    Specialized content improvement for Refinement."        _ = target_file
 #         return fRefinement result mapping for: {prompt[:50]}...
 
 

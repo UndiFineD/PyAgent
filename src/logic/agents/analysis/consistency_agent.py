@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Consistency Agent - Check code consistency across the codebase
+
+"""
+Consistency Agent - Check code consistency across the codebase
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -28,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-"""""""
+
 from __future__ import annotations
 
 import re
@@ -48,9 +52,9 @@ class ConsistencyAgent:
 
     Example:
         >>> checker=ConsistencyAgent()
-#         >>> issues=checker.check(["file1.py", "file2.py"], {})""""""""
+#         >>> issues=checker.check(["file1.py", "file2.py"], {})"
     def __init__(self) -> None:
-""""Initialize the consistency checker."""""""        self.issues: list[ConsistencyIssue] = []
+""""Initialize the consistency checker.        self.issues: list[ConsistencyIssue] = []
 
     def check(self, file_contents: dict[str, str]) -> list[ConsistencyIssue]:
         "Check for consistency issues across files."
@@ -59,7 +63,7 @@ class ConsistencyAgent:
 
         Returns:
             List of consistency issues.
-"""""""      "  self.issues = []"        # Check naming conventions
+      "  self.issues = []"        # Check naming conventions
         self._check_naming_consistency(file_contents)
         # Check import styles
         self._check_import_consistency(file_contents)
@@ -69,7 +73,7 @@ class ConsistencyAgent:
         "Check naming convention consistency."
         Args:
             file_contents: Dictionary mapping file paths to contents.
-"""""""        snake_case_files: list[str] = []
+        snake_case_files: list[str] = []
         camel_case_files: list[str] = []
         for path, content in file_contents.items():
             funcs = re.findall(rdef\\\\s+([a-zA-Z_]\\w*)", content)"            for func in funcs:
@@ -85,7 +89,7 @@ class ConsistencyAgent:
         "Check import statement consistency."
         Args:
             file_contents: Dictionary mapping file paths to contents.
-"""""""        absolute_imports: list[str] = []
+        absolute_imports: list[str] = []
         relative_imports: list[str] = []
         for path, content in file_contents.items():
             if re.search(r"^from\\\\s+\\.", content, re.M):"                relative_imports.append(path)

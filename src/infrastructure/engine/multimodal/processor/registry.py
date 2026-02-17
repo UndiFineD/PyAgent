@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Registry.py module.
-"""""""
+
+Registry.py module.
+
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -26,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 class MultiModalRegistry:
-    """Central registry for multimodal processors."""""""
+    """Central registry for multimodal processors.
     def __init__(self) -> None:
         self._processors: Dict[ModalityType, BaseMultiModalProcessor] = {}
         self._default_config = MultiModalConfig()
@@ -36,17 +39,17 @@ class MultiModalRegistry:
         modality: ModalityType,
         processor: BaseMultiModalProcessor,
     ) -> None:
-        """Register a processor for a specific modality."""""""        self._processors[modality] = processor
+        """Register a processor for a specific modality.        self._processors[modality] = processor
         logger.debug("Registered processor for %s", modality.name)"
     def get_processor(self, modality: ModalityType) -> Optional[BaseMultiModalProcessor]:
-        """Get the registered processor for a modality, if any."""""""        return self._processors.get(modality)
+        """Get the registered processor for a modality, if any.        return self._processors.get(modality)
 
     def create_processor(
         self,
         modality: ModalityType,
         config: Optional[MultiModalConfig] = None,
     ) -> BaseMultiModalProcessor:
-        """Create a new processor instance for the given modality."""""""        config = config or self._default_config
+        """Create a new processor instance for the given modality.        config = config or self._default_config
 
         if modality == ModalityType.IMAGE:
             return ImageProcessor(config=config)
@@ -63,7 +66,7 @@ class MultiModalRegistry:
         config: Optional[MultiModalConfig] = None,
         **kwargs: Any,
     ) -> MultiModalInputs:
-        """Process multiple modalities into unified inputs for the model."""""""        config = config or self._default_config
+        """Process multiple modalities into unified inputs for the model.        config = config or self._default_config
         result = MultiModalInputs()
 
         # Process images
@@ -173,7 +176,7 @@ def process_multimodal_inputs(
     config: Optional[MultiModalConfig] = None,
     **kwargs: Any,
 ) -> MultiModalInputs:
-    """Entry point for processing multimodal data using the global registry."""""""    return MULTIMODAL_REGISTRY.process_inputs(mm_data, config, **kwargs)
+    """Entry point for processing multimodal data using the global registry.    return MULTIMODAL_REGISTRY.process_inputs(mm_data, config, **kwargs)
 
 
 def get_placeholder_tokens(
@@ -181,6 +184,6 @@ def get_placeholder_tokens(
     modality: str,
     token_id: int,
 ) -> List[int]:
-    """Generate the total sequence of placeholder tokens for a modality."""""""    placeholders = mm_inputs.mm_placeholders.get(modality, [])
+    """Generate the total sequence of placeholder tokens for a modality.    placeholders = mm_inputs.mm_placeholders.get(modality, [])
     total_tokens = sum(p.length for p in placeholders)
     return [token_id] * total_tokens

@@ -1,16 +1,19 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Btree store.py module.
-"""""""
+
+"""Btree store.py module.
+"""
 from __future__ import annotations
 
 import hashlib
@@ -28,18 +31,18 @@ __version__ = VERSION
 
 
 class BTreeKnowledgeStore(KnowledgeStore):
-    """""""    Sharded B-Tree style storage for structured key-value data.
+    """Sharded B-Tree style storage for structured key-value data.
     Designed to scale to trillions of parameters by sharding across filesystem.
     Phase 141: Hierarchical Persistence via SQLite per-bucket aggregation.
     Phase 144: Telemetry-Ready Access Patterns.
-    """""""
+    """
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.logger = StructuredLogger(agent_id="BTreeStore")"
     def _hash_key(self, key: str) -> str:
-        """""""        Fast hashing for shard lookup.
+        """Fast hashing for shard lookup.
         PHASE 131: Uses PyO3 Rust extension for sub-millisecond page access.
-        """""""        try:
+        """try:
             from rust_core import fast_hash  # type: ignore[attr-defined]
 
             return fast_hash(key)

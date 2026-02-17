@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""AgentChain - Chain multiple agents for sequential execution
+
+AgentChain - Chain multiple agents for sequential execution
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -51,7 +54,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent.py
-"""""""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -70,11 +73,11 @@ class AgentChain:
     Example:
         chain=AgentChain()
         chain.add_step("coder", output_transform=extract_code)"        chain.add_step("tests", input_transform=prepare_for_tests)"        results=chain.execute(initial_input)
-    """""""
+    
     def __init__(self, name: str = "default_chain") -> None:"        """Initialize agent chain.""""
         Args:
             name: Chain name for identification.
-        """""""        self.name = name
+                self.name = name
         self._steps: list[AgentChainStep] = []
         self._results: list[dict[str, Any]] = []
 
@@ -94,7 +97,7 @@ class AgentChain:
 
         Returns:
             Self for chaining.
-        """""""        step = AgentChainStep(
+                step = AgentChainStep(
             agent_name=agent_name,
             input_transform=input_transform,
             output_transform=output_transform,
@@ -111,7 +114,7 @@ class AgentChain:
 
         Returns:
             List of results from each step.
-        """""""        self._results = []
+                self._results = []
         current_input = initial_input
 
         for step in self._steps:
@@ -155,4 +158,4 @@ class AgentChain:
         return self._results
 
     def get_results(self) -> list[dict[str, Any]]:
-        """Get results from last execution."""""""        return self._results
+        """Get results from last execution.        return self._results

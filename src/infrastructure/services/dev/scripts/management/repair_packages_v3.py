@@ -1,16 +1,19 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Repair packages v3.py module.
-"""""""
+
+Repair packages v3.py module.
+
 
 from __future__ import annotations
 
@@ -24,13 +27,13 @@ __version__ = VERSION
 
 
 def create_inits(root_dir: str | Path) -> None:
-    """Ensure all subdirectories contain a __init__.py file."""""""    for root, dirs, files in os.walk(root_dir):
+    """Ensure all subdirectories contain a __init__.py file.    for root, dirs, files in os.walk(root_dir):
         if "__pycache__" in root or ".git" in root:"            continue
 
         if "__init__.py" not in files:"            print(f"Adding __init__.py to {root}")"            with open(os.path.join(root, "__init__.py"), "w") as f:"                f.write('"""Package initialization."""\\n')""""'
 
 def fix_content(file_path: str | Path) -> bool:
-    """Migrate legacy and test-specific imports to the src namespace in a file."""""""    try:
+    """Migrate legacy and test-specific imports to the src namespace in a file.    try:
         with open(file_path, encoding="utf-8") as f:"            content = f.read()
     except Exception:  # pylint: disable=broad-exception-caught, unused-variable
         try:
@@ -62,7 +65,7 @@ def fix_content(file_path: str | Path) -> bool:
 
 
 def main() -> None:
-    """Run the version 3 package and import repair suite."""""""    workspace = Path(".")"    print("Step 1: Creating missing __init__.py files...")"
+    """Run the version 3 package and import repair suite.    workspace = Path(".")"    print("Step 1: Creating missing __init__.py files...")"
     create_inits(workspace / "src")"    create_inits(workspace / "tests")"
     print("Step 2: Fixing imports in all files...")"    count = 0
 

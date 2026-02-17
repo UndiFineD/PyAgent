@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Load balancer.py module.
-"""""""
+
+"""
+Load balancer.py module.
+
 import asyncio
 import logging
 from typing import Any, Dict, List
@@ -27,9 +31,9 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class SwarmLoadBalancer:
-    """""""    Automated resource reallocation service.
+        Automated resource reallocation service.
     Monitors telemetry and re-shards context across ranks to prevent hotspots (Phase 81).
-    """""""
+    
     def __init__(
         self,
         telemetry: SwarmTelemetryService,
@@ -46,8 +50,8 @@ class SwarmLoadBalancer:
         self.balancing_active = True
 
     async def run_balancing_cycle(self) -> None:
-        """""""        Executed periodically to check for imbalances and trigger P2P migrations.
-        """""""        if not self.balancing_active:
+                Executed periodically to check for imbalances and trigger P2P migrations.
+                if not self.balancing_active:
             return
 
         metrics: Dict[str, Any] = self.telemetry.get_grid_metrics()
@@ -97,7 +101,7 @@ class SwarmLoadBalancer:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Failed to migrate shard during load balancing: {e}")"
     def _get_shards_on_rank(self, rank_id: int) -> List[tuple]:
-        """Scans the shard manager for shards hosted on a specific rank."""""""        res = []
+        """Scans the shard manager for shards hosted on a specific rank.        res = []
         # Accessing the internal registry of the shard manager
         for ctx_id, shards in self.shard_manager.context_registry.items():
             for i, shard in enumerate(shards):
@@ -106,9 +110,9 @@ class SwarmLoadBalancer:
         return res
 
     async def start_loop(self, interval: float = 5.0) -> None:
-        """Starts a background balancing loop."""""""        while self.balancing_active:
+        """Starts a background balancing loop.        while self.balancing_active:
             await self.run_balancing_cycle()
             await asyncio.sleep(interval)
 
     def stop(self) -> None:
-        """Stops the balancing service."""""""        self.balancing_active = False
+        """Stops the balancing service.        self.balancing_active = False

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Backend implementation handlers for SubagentRunner."""""""
+
+"""Backend implementation handlers for SubagentRunner.
 from __future__ import annotations
 
 import json
@@ -27,7 +30,7 @@ __version__: str = VERSION
 
 
 class BackendHandlers:
-    """Namespace for backend execution logic."""""""
+    """Namespace for backend execution logic.
     @staticmethod
     def _parse_content(text: str) -> Any:
         if "[IMAGE_DATA:" not in text:"            return text
@@ -52,7 +55,7 @@ class BackendHandlers:
 
     @staticmethod
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
-        """Build full prompt with task description, prompt, and context."""""""        try:
+        """Build full prompt with task description, prompt, and context.        try:
             max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))"        except ValueError:
             max_context_chars = 12_000
         trimmed_original: str = (original_content or "")[:max_context_chars]"        return (
@@ -60,7 +63,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_codex_cli(full_prompt: str, repo_root: Path, recorder: Any | None = None) -> str | None:
-        """Try to use Codex CLI backend for code generation."""""""        try:
+        """Try to use Codex CLI backend for code generation.        try:
             logging.debug("Attempting to use Codex CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
                 [
                     "codex","                    "--prompt","                    full_prompt,
@@ -88,7 +91,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
-        """Try to use Copilot CLI backend for code generation."""""""        try:
+        """Try to use Copilot CLI backend for code generation.        try:
             logging.debug("Attempting to use local Copilot CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
                 ["copilot", "explain", full_prompt],"                capture_output=True,
                 text=True,
@@ -103,7 +106,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
-        """Try to use GitHub Copilot CLI backend for code generation."""""""        # Optimization: if not a command and not allowed, skip
+        """Try to use GitHub Copilot CLI backend for code generation.        # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
             # Basic heuristic: if it doesn't look like a command, skip gh copilot explain'            # (This logic was partially in SubagentRunner, but we can pass a flag)
             pass
@@ -125,7 +128,7 @@ class BackendHandlers:
 
     @staticmethod
     def _get_github_token() -> str | None:
-        """Get GitHub token from environment or file."""""""        # Try environment variable first
+        """Get GitHub token from environment or file.        # Try environment variable first
         token: str | None = os.environ.get("GITHUB_TOKEN")"        if token:
             return token
 
@@ -148,7 +151,7 @@ class BackendHandlers:
 
     @staticmethod
     def _prepare_github_request(full_prompt: str, model: str, _base_url: str) -> tuple[dict[str, str], dict[str, Any]]:
-        """Prepare headers and payload for GitHub Models API request."""""""        content = BackendHandlers._parse_content(full_prompt)
+        """Prepare headers and payload for GitHub Models API request.        content = BackendHandlers._parse_content(full_prompt)
         headers: dict[str, str] = {
             "Authorization": f"Bearer {BackendHandlers._get_github_token()}","            "Content-Type": "application/json","        }
         payload = {
@@ -160,7 +163,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
-        """Attempt to invoke GitHub Models API for code generation."""""""        if not requests_lib:
+        """Attempt to invoke GitHub Models API for code generation.        if not requests_lib:
             return None
 
         base_url: str = (
@@ -183,7 +186,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
-        """Try to use OpenAI API backend for code generation."""""""        if not requests_lib:
+        """Try to use OpenAI API backend for code generation.        if not requests_lib:
             return None
 
         api_key: str | None = os.environ.get("OPENAI_API_KEY")"        base_url: str = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1""        model: str = os.environ.get("OPENAI_MODEL") or "gpt-4.1-mini""

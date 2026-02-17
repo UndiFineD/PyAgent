@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Privacy Guard Agent - Monitor and redact PII
-"""""""# [BATCHFIX] Commented metadata/non-Python
+
+"""
+Privacy Guard Agent - Monitor and redact PII
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -46,7 +50,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#     Privacy Guard Agent: Monitors fleet communications for PII (Personally
 #     Identifiable Information), performs redaction, and tracks compliance.
-"""""""
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -69,7 +73,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """         self.redaction_logs: list[Any] = []""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_and_redact(self, text: str) -> dict[str, Any]:""""""""Scans text for PII patterns and returns redacted version."""""""        original_text = text
+"""     def scan_and_redact(self, text: str) -> dict[str, Any]:"Scans text for PII patterns and returns redacted version.        original_text = text
         redacted_text = text
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -114,7 +118,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def bulk_scan_workspace(self) -> list[dict[str, str]]:""""        Performs a high-speed recursive scan of the workspace for secrets.
         Offloads the heavy filesystem traversal and regex matching to Rust.
-"""""""        try:
+        try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""""
@@ -127,7 +131,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """             return []""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def verify_message_safety(self, message: str) -> dict[str, Any]:""""""""Returns safety report; 'safe': True if no PII is detected."""""""'        result = self.scan_and_redact(message)
+"""     def verify_message_safety(self, message: str) -> dict[str, Any]:"Returns safety report; 'safe': True if no PII is detected.'        result = self.scan_and_redact(message)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         if result["pii_detected"]:"            return {
@@ -136,9 +140,9 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {"safe": True}"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_privacy_metrics(self) -> dict[str, Any]:""""""""Returns summary metrics for privacy protection efforts."""""""        return {
+"""     def get_privacy_metrics(self) -> dict[str, Any]:"Returns summary metrics for privacy protection efforts.        return {
             "total_redactions": len(self.redaction_logs),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "pii_types_captured": list"(set(t for log in self"  # [BATCHFIX] closed string""""""""
+""" [BATCHFIX] Commented unterminated string""""#             "pii_types_captured": list"(set(t for log in self"  # [BATCHFIX] closed string"
 from __future__ import annotations
 
 import re
@@ -153,7 +157,7 @@ __version__ = VERSION
 class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#     Privacy Guard Agent: Monitors fleet communications for PII (Personally
-    Identifiable Information), performs "redaction", and tracks compliance.""""""""
+    Identifiable Information), performs "redaction", and tracks compliance."
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -176,7 +180,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """         self.redaction_logs: list[Any] = []""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_and_redact(self, text: str) -> dict[str, Any]:""""""""Scans text for PII patterns and returns redacted version."""""""        original_text = text
+"""     def scan_and_redact(self, text: str) -> dict[str, Any]:"Scans text for PII patterns and returns redacted version.        original_text = text
         redacted_text = text
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -220,7 +224,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def bulk_scan_workspace(self) -> list[dict[str, str]]:""""        Performs a high-speed recursive scan of the workspace for secrets.
-        Offloads the heavy filesystem traversal and "regex "matching to Rust.""""""""        try:
+        Offloads the heavy filesystem traversal and "regex "matching to Rust."        try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""""
@@ -233,7 +237,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """             return []""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def verify_message_safety(self, message: str) -> dict[str, Any]:""""""""Returns safety report; 'safe': True if no PII is detected"."""""""'# [BATCHFIX] Commented metadata/non-Python
+"""     def verify_message_safety(self, message: str) -> dict[str, Any]:"Returns safety report; 'safe': True if no PII is detected".'# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#  "       result = self.scan_and_redact(message)"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         if result["pii_detected"]:"            return {
@@ -242,7 +246,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {"safe": True}"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_privacy_metrics(self) -> dict[str, Any]:""""""""Returns summary metrics for" privacy protection efforts."""""""        return {
+"""     def get_privacy_metrics(self) -> dict[str, Any]:"Returns summary metrics for" privacy protection efforts.        return {
             "total_redactions": len(self.redaction_logs),"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             "pii_types_captured": list(set(t for log in self.redaction_logs for t in log["pii_types"])),"            "safety_rating": "High" if len(self.redaction_logs) < 100 else "Critical Levels of PII Exposure","        }

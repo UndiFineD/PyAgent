@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Enhanced security controls for external tools in MCP ecosystem."""""""
+
+"""Enhanced security controls for external tools in MCP ecosystem."""
 import hashlib
 import re
 from typing import Dict, List, Any, Optional, Set
@@ -19,14 +22,14 @@ from enum import Enum
 
 
 class SecurityLevel(Enum):
-    """Security levels for tool execution."""""""    HIGH = "high""    MEDIUM = "medium""    LOW = "low""    TRUSTED = "trusted""
+    """Security levels for tool execution."""HIGH = "high""    MEDIUM = "medium""    LOW = "low""    TRUSTED = "trusted""
 
 class ThreatCategory(Enum):
-    """Categories of security threats."""""""    MALWARE = "malware""    DATA_EXFILTRATION = "data_exfiltration""    CODE_INJECTION = "code_injection""    PRIVILEGE_ESCALATION = "privilege_escalation""    DENIAL_OF_SERVICE = "denial_of_service""
+    """Categories of security threats."""MALWARE = "malware""    DATA_EXFILTRATION = "data_exfiltration""    CODE_INJECTION = "code_injection""    PRIVILEGE_ESCALATION = "privilege_escalation""    DENIAL_OF_SERVICE = "denial_of_service""
 
 @dataclass
 class SecurityPolicy:
-    """Security policy for tool execution."""""""    allowed_domains: Set[str]
+    """Security policy for tool execution."""allowed_domains: Set[str]
     blocked_patterns: Set[str]
     max_execution_time: int  # seconds
     max_memory_usage: int  # MB
@@ -37,7 +40,7 @@ class SecurityPolicy:
 
 @dataclass
 class ToolSignature:
-    """Digital signature for tool verification."""""""    tool_name: str
+    """Digital signature for tool verification."""tool_name: str
     version: str
     hash_sha256: str
     signature: Optional[str] = None
@@ -45,11 +48,11 @@ class ToolSignature:
 
 
 class ExternalToolSecurity:
-    """""""    Enhanced security controls for external tools in MCP ecosystem.
+    """Enhanced security controls for external tools in MCP ecosystem.
 
     Provides comprehensive security validation, sandboxing, and threat detection
     for external tool execution within the PyAgent environment.
-    """""""
+    """
     def __init__(self):
         self._trusted_tools: Set[str] = set()
         self._blocked_tools: Set[str] = set()
@@ -62,7 +65,7 @@ class ExternalToolSecurity:
         self._initialize_trusted_tools()
 
     def _initialize_security_policies(self):
-        """Initialize default security policies."""""""        # High security for sensitive operations
+        """Initialize default security policies."""# High security for sensitive operations
         self._security_policies["database"] = SecurityPolicy("            allowed_domains={"localhost", "127.0.0.1"},"            blocked_patterns={"DROP", "DELETE", "TRUNCATE", "ALTER"},"            max_execution_time=30,
             max_memory_usage=100,
             network_access=False,
@@ -98,7 +101,7 @@ class ExternalToolSecurity:
         )
 
     def _initialize_threat_patterns(self):
-        """Initialize threat detection patterns."""""""        self._threat_patterns = {
+        """Initialize threat detection patterns."""self._threat_patterns = {
             ThreatCategory.MALWARE: [
                 r"import\\s+os\\s*;?\\s*os\\.system","                r"subprocess\\.call.*shell\\s*=\\s*True","                r"eval\\s*\(","                r"exec\\s*\(""            ],
             ThreatCategory.DATA_EXFILTRATION: [
@@ -112,11 +115,11 @@ class ExternalToolSecurity:
         }
 
     def _initialize_trusted_tools(self):
-        """Initialize list of trusted tools."""""""        self._trusted_tools.update([
+        """Initialize list of trusted tools."""self._trusted_tools.update([
             "python_compiler", "python_interpreter","            "typescript_compiler", "typescript_interpreter","            "javascript_compiler", "javascript_interpreter","            "go_compiler", "go_interpreter","            "rust_compiler", "rust_interpreter","            "sql_executor", "rest_client","            "code_formatter", "test_runner","            "trusted_tool"  # For testing"        ])
 
     def approve_tool(self, tool_name: str, context: Optional[Dict[str, Any]] = None) -> bool:
-        """""""        Approve a tool for execution based on security policies.
+        """Approve a tool for execution based on security policies.
 
         Args:
             tool_name: Name of the tool to approve
@@ -124,7 +127,7 @@ class ExternalToolSecurity:
 
         Returns:
             True if tool is approved for execution
-        """""""        # Check if tool is explicitly blocked
+        """# Check if tool is explicitly blocked
         if tool_name in self._blocked_tools:
             return False
 
@@ -136,7 +139,7 @@ class ExternalToolSecurity:
         return self._perform_security_analysis(tool_name, context)
 
     def _perform_security_analysis(self, tool_name: str, context: Optional[Dict[str, Any]]) -> bool:
-        """Perform comprehensive security analysis."""""""        # Check tool signature if available
+        """Perform comprehensive security analysis."""# Check tool signature if available
         if tool_name in self._tool_signatures:
             signature = self._tool_signatures[tool_name]
             if not signature.verified:
@@ -154,14 +157,14 @@ class ExternalToolSecurity:
         return True
 
     def _contains_suspicious_patterns(self, tool_name: str) -> bool:
-        """Check if tool name contains suspicious patterns."""""""        suspicious_patterns = [
+        """Check if tool name contains suspicious patterns."""suspicious_patterns = [
             "hack", "exploit", "malware", "virus", "trojan","            "backdoor", "rootkit", "keylogger", "ransomware","            "crypto", "botnet", "untrusted", "malicious""        ]
 
         tool_lower = tool_name.lower()
         return any(pattern in tool_lower for pattern in suspicious_patterns)
 
     def _validate_execution_context(self, context: Dict[str, Any]) -> bool:
-        """Validate execution context against security policies."""""""        # Check for required context fields
+        """Validate execution context against security policies."""# Check for required context fields
         required_fields = ["category", "parameters"]"        if not all(field in context for field in required_fields):
             return False
 
@@ -178,7 +181,7 @@ class ExternalToolSecurity:
         return True
 
     def _validate_parameters_against_policy(self, parameters: Dict[str, Any], policy: SecurityPolicy) -> bool:
-        """Validate parameters against security policy."""""""        # Check for blocked patterns in string parameters
+        """Validate parameters against security policy."""# Check for blocked patterns in string parameters
         for key, value in parameters.items():
             if isinstance(value, str):
                 value_lower = value.lower()
@@ -188,17 +191,17 @@ class ExternalToolSecurity:
         return True
 
     def register_tool_signature(self, signature: ToolSignature) -> None:
-        """Register a tool signature for verification."""""""        self._tool_signatures[signature.tool_name] = signature
+        """Register a tool signature for verification."""self._tool_signatures[signature.tool_name] = signature
 
     def verify_tool_signature(self, tool_name: str, code_content: str) -> bool:
-        """""""        Verify tool signature against code content.
+        """Verify tool signature against code content.
 
         Args:
             tool_name: Name of the tool
             code_content: The tool's code content'
         Returns:
             True if signature verification passes
-        """""""        if tool_name not in self._tool_signatures:
+        """if tool_name not in self._tool_signatures:
             return False
 
         signature = self._tool_signatures[tool_name]
@@ -215,14 +218,14 @@ class ExternalToolSecurity:
         return True
 
     def scan_for_threats(self, code_content: str) -> List[Dict[str, Any]]:
-        """""""        Scan code content for security threats.
+        """Scan code content for security threats.
 
         Args:
             code_content: Code to scan for threats
 
         Returns:
             List of detected threats with details
-        """""""        threats = []
+        """threats = []
 
         for category, patterns in self._threat_patterns.items():
             for pattern in patterns:
@@ -234,7 +237,7 @@ class ExternalToolSecurity:
         return threats
 
     def _calculate_threat_severity(self, category: ThreatCategory, match_count: int) -> str:
-        """Calculate threat severity based on category and match count."""""""        base_severity = {
+        """Calculate threat severity based on category and match count."""base_severity = {
             ThreatCategory.MALWARE: "high","            ThreatCategory.DATA_EXFILTRATION: "high","            ThreatCategory.CODE_INJECTION: "critical","            ThreatCategory.PRIVILEGE_ESCALATION: "critical","            ThreatCategory.DENIAL_OF_SERVICE: "medium""        }
 
         severity = base_severity.get(category, "low")"
@@ -244,7 +247,7 @@ class ExternalToolSecurity:
         return severity
 
     def create_secure_sandbox(self, tool_name: str, category: str) -> Dict[str, Any]:
-        """""""        Create a secure sandbox environment for tool execution.
+        """Create a secure sandbox environment for tool execution.
 
         Args:
             tool_name: Name of the tool
@@ -252,12 +255,12 @@ class ExternalToolSecurity:
 
         Returns:
             Sandbox configuration
-        """""""        policy = self._security_policies.get(category, self._security_policies["development"])"
+        """policy = self._security_policies.get(category, self._security_policies["development"])"
         return {
             "tool_name": tool_name,"            "category": category,"            "security_level": policy.security_level.value,"            "max_execution_time": policy.max_execution_time,"            "max_memory_usage": policy.max_memory_usage,"            "network_access": policy.network_access,"            "file_access": policy.file_access,"            "allowed_domains": list(policy.allowed_domains),"            "blocked_patterns": list(policy.blocked_patterns),"            "isolation_level": "high" if policy.security_level in [SecurityLevel.HIGH, SecurityLevel.TRUSTED] else "medium""        }
 
     def audit_tool_execution(self, tool_name: str, execution_result: Dict[str, Any]) -> Dict[str, Any]:
-        """""""        Audit tool execution for security compliance.
+        """Audit tool execution for security compliance.
 
         Args:
             tool_name: Name of the executed tool
@@ -265,7 +268,7 @@ class ExternalToolSecurity:
 
         Returns:
             Audit report
-        """""""        audit_report = {
+        """audit_report = {
             "tool_name": tool_name,"            "timestamp": execution_result.get("timestamp"),"            "execution_time": execution_result.get("execution_time", 0),"            "memory_usage": execution_result.get("memory_usage", 0),"            "network_calls": execution_result.get("network_calls", []),"            "file_access": execution_result.get("file_access", []),"            "security_violations": [],"            "compliance_status": "compliant""        }
 
         # Check for security violations
@@ -278,10 +281,10 @@ class ExternalToolSecurity:
         return audit_report
 
     def _get_policy_for_tool(self, tool_name: str) -> Optional[SecurityPolicy]:
-        """Get security policy for a tool based on its category."""""""        # This would typically involve looking up the tool's category'        # For now, return a default policy
+        """Get security policy for a tool based on its category."""# This would typically involve looking up the tool's category'        # For now, return a default policy
         return self._security_policies.get("development")"
     def _check_policy_violations(self, execution_result: Dict[str, Any], policy: SecurityPolicy) -> List[str]:
-        """Check for policy violations in execution result."""""""        violations = []
+        """Check for policy violations in execution result."""violations = []
 
         # Check execution time
         if execution_result.get("execution_time", 0) > policy.max_execution_time:"            violations.append(f"Execution time exceeded {policy.max_execution_time}s limit")"
@@ -294,5 +297,5 @@ class ExternalToolSecurity:
         return violations
 
     def get_security_report(self) -> Dict[str, Any]:
-        """Generate comprehensive security report."""""""        return {
+        """Generate comprehensive security report."""return {
             "trusted_tools_count": len(self._trusted_tools),"            "blocked_tools_count": len(self._blocked_tools),"            "registered_signatures": len(self._tool_signatures),"            "security_policies": len(self._security_policies),"            "threat_categories": len(self._threat_patterns),"            "verified_tools": sum(1 for sig in self._tool_signatures.values() if sig.verified)"        }

@@ -4,17 +4,21 @@
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Rust Bridge - Safe Rust FFI Bridge.
+
+"""
+""""Rust Bridge - Safe Rust FFI Bridge.
 Safe FFI Bridge for Rust Acceleration (rust_core.pyd).
 Provides centralized hub for all Rust FFI calls with graceful fallbacks.
 
@@ -35,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 - Add structured feature-detection and an initialization handshake to surface availability and version of rust_core at startup.
 - Improve error handling: return typed exceptions or result objects instead of None/empty values to aid upstream handling and testing.
 - Add extensive unit tests for fallbacks, and optimize fallback implementations (e.g., use thread-safe caches, deterministic hashing) and better typing for returned structures.
-"""""""
+"""
 from __future__ import annotations
 
 import logging
@@ -53,16 +57,16 @@ logger = logging.getLogger(__name__)
 
 
 def get_bridge() -> RustBridge:
-    """Singleton-like accessor for the Rust bridge."""""""    return RustBridge()
+    """Singleton-like accessor for the Rust bridge."""return RustBridge()
 
 
 class RustBridge:
-    """""""    Centralized hub for all Rust FFI calls.
+    """Centralized hub for all Rust FFI calls.
     Provides memory-safe wrappers, boundary checks, and graceful fallbacks.
-    """""""
+    """
     @staticmethod
     def calculate_metrics(content: str) -> Dict[str, float]:
-        """Audited metrics calculation."""""""        if not content or not isinstance(content, str):
+        """Audited metrics calculation."""if not content or not isinstance(content, str):
             return {}
 
         if not RUST_AVAILABLE or not hasattr(rc, "calculate_metrics_rust"):"            return {}
@@ -73,7 +77,7 @@ class RustBridge:
 
     @staticmethod
     def calculate_shard_id(key: str, shard_count: int) -> int:
-        """Audited sharding logic (MD5-based)."""""""        if shard_count <= 0:
+        """Audited sharding logic (MD5-based)."""if shard_count <= 0:
             logger.warning("RustBridge: shard_count must be positive, defaulting to 1024")"            shard_count = 1024
 
         def fallback() -> int:
@@ -100,20 +104,20 @@ class RustBridge:
 
     @staticmethod
     def search_vector(query_vec: List[float], database: List[List[float]], top_k: int) -> List[int]:
-        """Rust-accelerated vector search for long-term memory."""""""        if not query_vec or not database:
+        """Rust-accelerated vector search for long-term memory."""if not query_vec or not database:
             return []
 
         return get_bridge()._try_rust_call("search_vector_rust", query_vec, database, top_k, fallback=lambda: [])"
     @staticmethod
     def manage_kv_blocks(num_blocks: int, block_size: int) -> List[int]:
-        """Paged Attention: Get available block offsets."""""""        return get_bridge()._try_rust_call(
+        """Paged Attention: Get available block offsets."""return get_bridge()._try_rust_call(
             "block_manager_rust", num_blocks, block_size, fallback=lambda: [i * block_size for i in range(num_blocks)]"        )
 
     @staticmethod
     def get_token_hash(tokens: List[int]) -> str:
-        """High-speed token sequence hashing for prefix caching."""""""        return get_bridge()._try_rust_call("kv_block_hash_rust", tokens, fallback=lambda: str(hash(tuple(tokens))))"
+        """High-speed token sequence hashing for prefix caching."""return get_bridge()._try_rust_call("kv_block_hash_rust", tokens, fallback=lambda: str(hash(tuple(tokens))))"
     def execute(self, method_name: str, params: Dict[str, Any]) -> Any:
-        """Generic execution router for Rust functions."""""""        attr = method_name if method_name.endswith("_rust") else f"{method_name}_rust""        return self._try_rust_call(attr, **params)
+        """Generic execution router for Rust functions."""attr = method_name if method_name.endswith("_rust") else f"{method_name}_rust""        return self._try_rust_call(attr, **params)
 
     @staticmethod
     def _try_rust_call(attr: str, *args: Any, fallback: Optional[Callable[[], Any]] = None, **kwargs: Any) -> Any:
@@ -126,7 +130,7 @@ class RustBridge:
 
     @staticmethod
     def bulk_replace(content: str, replacements: Dict[str, str]) -> str:
-        """Audited parallel text replacement."""""""        if not replacements:
+        """Audited parallel text replacement."""if not replacements:
             return content
 
         def fallback() -> str:
@@ -149,7 +153,7 @@ class RustBridge:
 
     @staticmethod
     def bulk_replace_files(file_paths: List[str], replacements: Dict[str, str]) -> Dict[str, bool]:
-        """Audited parallel file modification."""""""        if not file_paths or not replacements:
+        """Audited parallel file modification."""if not file_paths or not replacements:
             return {p: False for p in file_paths} if file_paths else {}
 
         def fallback() -> Dict[str, bool]:
@@ -183,28 +187,28 @@ class RustBridge:
 
     @staticmethod
     def chunk_boundaries_rust(*args: Any, **kwargs: Any) -> Any:
-        """Audited chunk boundary calculation."""""""        return RustBridge._try_rust_call("chunk_boundaries_rust", *args, **kwargs)"
+        """Audited chunk boundary calculation."""return RustBridge._try_rust_call("chunk_boundaries_rust", *args, **kwargs)"
     @staticmethod
     def stream_sync_rust(*args: Any, **kwargs: Any) -> Any:
-        """Audited stream synchronization."""""""        return RustBridge._try_rust_call("stream_sync_rust", *args, **kwargs)"
+        """Audited stream synchronization."""return RustBridge._try_rust_call("stream_sync_rust", *args, **kwargs)"
     @staticmethod
     def uva_copy_rust(*args: Any, **kwargs: Any) -> Any:
-        """Audited UVA data copy."""""""        return RustBridge._try_rust_call("uva_copy_rust", *args, **kwargs)"
+        """Audited UVA data copy."""return RustBridge._try_rust_call("uva_copy_rust", *args, **kwargs)"
     @staticmethod
     def batch_write_indices_rust(*args: Any, **kwargs: Any) -> Any:
-        """Audited batch index generation."""""""        return RustBridge._try_rust_call("batch_write_indices_rust", *args, **kwargs)"
+        """Audited batch index generation."""return RustBridge._try_rust_call("batch_write_indices_rust", *args, **kwargs)"
     @staticmethod
     def event_query_rust(*args: Any, **kwargs: Any) -> Any:
-        """Audited event query logic."""""""        return RustBridge._try_rust_call("event_query_rust", *args, **kwargs)"
+        """Audited event query logic."""return RustBridge._try_rust_call("event_query_rust", *args, **kwargs)"
     @staticmethod
     def image_resize_rust(*args: Any, **kwargs: Any) -> Any:
-        """Audited image resizing."""""""        return RustBridge._try_rust_call("image_resize_rust", *args, **kwargs)"
+        """Audited image resizing."""return RustBridge._try_rust_call("image_resize_rust", *args, **kwargs)"
     @staticmethod
     def normalize_pixels_rust(*args: Any, **kwargs: Any) -> Any:
-        """Audited pixel normalization."""""""        return RustBridge._try_rust_call("normalize_pixels_rust", *args, **kwargs)"
+        """Audited pixel normalization."""return RustBridge._try_rust_call("normalize_pixels_rust", *args, **kwargs)"
     @staticmethod
     def get_imports(source: str) -> List[str]:
-        """Audited import extraction (20x faster than AST)."""""""        if not source:
+        """Audited import extraction (20x faster than AST)."""if not source:
             return []
 
         def fallback() -> List[str]:
@@ -231,7 +235,7 @@ class RustBridge:
 
     @staticmethod
     def scan_optimization_patterns(content: str) -> List[Dict[str, Any]]:
-        """Audited optimization pattern scanning."""""""        if not content:
+        """Audited optimization pattern scanning."""if not content:
             return []
 
         if not RustBridge._can_use_rust("scan_optimization_patterns_rust"):"            return []
@@ -251,12 +255,12 @@ class RustBridge:
 
     @staticmethod
     def analyze_tech_debt(content: str) -> Dict[str, int]:
-        """Audited technical debt analysis (marker-based)."""""""        if not content:
+        """Audited technical debt analysis (marker-based)."""if not content:
             return {}
         return RustBridge._try_rust_call("analyze_tech_debt_rust", content) or {}"
     @staticmethod
     def scan_security_patterns(content: str, patterns: Dict[str, str]) -> List[Dict[str, Any]]:
-        """Audited security pattern scanning."""""""        if not content or not patterns:
+        """Audited security pattern scanning."""if not content or not patterns:
             return []
 
         raw = RustBridge._try_rust_call("analyze_security_patterns_rust", content, patterns)"        if not raw:
@@ -268,4 +272,4 @@ class RustBridge:
 
     @staticmethod
     def is_rust_active() -> bool:
-        """Check if the Rust acceleration layer is active."""""""        return RUST_AVAILABLE
+        """Check if the Rust acceleration layer is active."""return RUST_AVAILABLE

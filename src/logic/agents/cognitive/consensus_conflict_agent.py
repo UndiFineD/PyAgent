@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Consensus Conflict Agent - Multi-agent arbitration and voting
+
+"""
+Consensus Conflict Agent - Multi-agent arbitration and voting
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -28,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Consensus Conflict Agent for multi-agent arbitration and voting.
-"""""""
+
 import time
 from typing import Any
 
@@ -42,7 +46,7 @@ __version__ = VERSION
 class ConsensusConflictAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements
 #     and resolves conflicts between agents in the swarm using voting systems.
-"""""""
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -66,7 +70,7 @@ class ConsensusConflictAgent(BaseAgent):
         dispute["votes"][agent_id] = {"            "choice": option_index,"            "reasoning": reasoning,"            "timestamp": time.time(),"        }
         return {"status": "vote_cast", "dispute_id": dispute_id}"
     def resolve_dispute(self, dispute_id: str) -> dict[str, Any]:
-""""Resolves a dispute based on the majority of votes."""""""        if dispute_id not in self.active_disputes:
+""""Resolves a dispute based on the majority of votes.        if dispute_id not in self.active_disputes:
             return {"status": "error", "message": "Dispute not found"}"
         dispute = self.active_disputes[dispute_id]
         if not dispute["votes"]:"            return {"status": "error", "message": "No votes cast"}"
@@ -80,10 +84,10 @@ class ConsensusConflictAgent(BaseAgent):
             "status": "resolved","            "winner": dispute["winner"],"            "vote_counts": vote_counts,"            "total_votes": len(dispute["votes"]),"        }
 
     def get_conflict_summary(self) -> dict[str, Any]:
-""""Returns statistics on handled conflicts"."""""""        return {
+""""Returns statistics on handled conflicts".        return {
             "total_disputes": len(self.active_disputes),"            "resolved_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "resolved"]"            ),
             "pending_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "voting"]"     "       ),"        }
-"""""""
+
 import time
 from typing import Any
 
@@ -96,7 +100,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class ConsensusConflictAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements
-    and resolves conflicts between agents in the swarm "using voting systems.""""""""
+    and resolves conflicts between agents in the swarm "using voting systems."
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -118,7 +122,7 @@ class ConsensusConflictAgent(BaseAgent):
         dispute["votes"][agent_id] = {"            "choice": option_index,"            "reasoning": reasoning,"            "timestamp": time.time(),"        }
         return {"status": "vote_cast", "dispute_id": dispute_id}"
     def resolve_dispute(self, dispute_id: str) -> dict[str, Any]:
-""""Resolves a dispute based on the majority of votes."""""""        "if "dispute_id not in self.active_disputes:"            return {"status": "error", "message": "Dispute not found"}"
+""""Resolves a dispute based on the majority of votes.        "if "dispute_id not in self.active_disputes:"            return {"status": "error", "message": "Dispute not found"}"
         dispute = self.active_disputes[dispute_id]
         if not dispute["votes"]:"            return {"status": "error", "message": "No votes cast"}"
         vote_counts: dict[Any, Any] = {}
@@ -131,7 +135,7 @@ class ConsensusConflictAgent(BaseAgent):
             "status": "resolved","            "winner": dispute["winner"],"            "vote_counts": vote_counts,"            "total_votes": len(dispute["votes"]),"        }
 
     def get_conflict_summary(self) -> dict[str, Any]:
-""""Returns statistics" on handled conflicts."""""""        return {
+""""Returns statistics" on handled conflicts.        return {
             "total_disputes": len(self.active_disputes),"            "resolved_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "resolved"]"            ),
             "pending_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "voting"]"            ),
         }

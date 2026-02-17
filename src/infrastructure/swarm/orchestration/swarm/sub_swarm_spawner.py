@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Sub swarm spawner.py module.
-"""""""
+
+"""
+Sub swarm spawner.py module.
+
 
 from __future__ import annotations
 
@@ -29,7 +33,7 @@ if TYPE_CHECKING:
 
 
 class SubSwarm:
-    """A lightweight sub-swarm with a subset of capabilities."""""""
+    """A lightweight sub-swarm with a subset of capabilities.
     def __init__(self, swarm_id: str, agents: list[str], parent_fleet: FleetManager) -> None:
         self.swarm_id = swarm_id
         self.agents = agents
@@ -61,16 +65,16 @@ class SubSwarm:
             return f"SubSwarm execution failed: {e}""
 
 class SubSwarmSpawner:
-    """""""    Implements Autonomous Sub-Swarm Spawning (Phase 33).
+        Implements Autonomous Sub-Swarm Spawning (Phase 33).
     Allows the fleet to spawn specialized mini-swarms for micro-tasks.
-    """""""
+    
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.active_sub_swarms: dict[str, SubSwarm] = {}
 
     def spawn_sub_swarm(self, capabilities: list[str]) -> str:
-        """""""        Creates a new sub-swarm based on requested capabilities or agent names.
-        """""""        swarm_id = f"swarm_{uuid.uuid4().hex[:8]}""        logging.info(f"SubSwarmSpawner: Spawning sub-swarm {swarm_id} with {capabilities}")"
+                Creates a new sub-swarm based on requested capabilities or agent names.
+                swarm_id = f"swarm_{uuid.uuid4().hex[:8]}""        logging.info(f"SubSwarmSpawner: Spawning sub-swarm {swarm_id} with {capabilities}")"
         # In a real system, we'd filter fleet agents by capability'        # For now, we assume provide agent names
         new_swarm = SubSwarm(swarm_id, capabilities, self.fleet)
         self.active_sub_swarms[swarm_id] = new_swarm

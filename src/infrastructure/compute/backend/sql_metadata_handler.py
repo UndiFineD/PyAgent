@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Sql metadata handler.py module.
-"""""""
+
+Sql metadata handler.py module.
+
 
 from __future__ import annotations
 
@@ -29,7 +32,7 @@ __version__ = VERSION
 
 
 class SqlMetadataHandler:
-    """Relational metadata overlay for compressed interaction shards."""""""
+    """Relational metadata overlay for compressed interaction shards.
     def __init__(
         self,
         db_path: str = "data/memory/agent_store/metadata.db","        shards_dir: str = "data/memory/agent_store/memory_shards","        fleet: Any | None = None,
@@ -42,13 +45,13 @@ class SqlMetadataHandler:
         self._init_db()
 
     def _init_db(self) -> None:
-        """Initializes the SQLite schema with Phase 108 high-performance settings."""""""        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        """Initializes the SQLite schema with Phase 108 high-performance settings.        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         with sqlite3.connect(self.db_path) as conn:
             # High-performance PRAGMAs for trillion-parameter scale metadata
             conn.execute("PRAGMA journal_mode = WAL")"            conn.execute("PRAGMA synchronous = NORMAL")"            conn.execute("PRAGMA cache_size = -64000")  # 64MB cache"            conn.execute("PRAGMA temp_store = MEMORY")"
             cursor = conn.cursor()
             # Table for interactions
-            cursor.execute("""""""                CREATE TABLE IF NOT EXISTS interactions (
+            cursor.execute(                CREATE TABLE IF NOT EXISTS interactions (
                     id TEXT PRIMARY KEY,
                     shard_id INTEGER,
                     timestamp REAL,
@@ -57,7 +60,7 @@ class SqlMetadataHandler:
                     success INTEGER
                 )
             """)""""            # Table for technical debt tracking (Phase 107)
-            cursor.execute("""""""                CREATE TABLE IF NOT EXISTS technical_debt (
+            cursor.execute(                CREATE TABLE IF NOT EXISTS technical_debt (
                     file_path TEXT,
                     issue_type TEXT,
                     message TEXT,
@@ -66,14 +69,14 @@ class SqlMetadataHandler:
                 )
             """)""""
             # Table for interaction tags (Phase 106)
-            cursor.execute("""""""                CREATE TABLE IF NOT EXISTS metadata_tags (
+            cursor.execute(                CREATE TABLE IF NOT EXISTS metadata_tags (
                     id TEXT,
                     tag TEXT,
                     PRIMARY KEY (id, tag)
                 )
             """)""""
             # Table for AI Lessons / Extracted Intelligence (Phase 108)
-            cursor.execute("""""""                CREATE TABLE IF NOT EXISTS intelligence_lessons (
+            cursor.execute(                CREATE TABLE IF NOT EXISTS intelligence_lessons (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     source_interaction_id TEXT,
                     lesson_text TEXT,
@@ -83,12 +86,12 @@ class SqlMetadataHandler:
             """)""""
             # Phase 108: Full-Text Search for Trillion-Parameter Scale Intelligence Search
             try:
-                cursor.execute("""""""                    CREATE VIRTUAL TABLE IF NOT EXISTS intelligence_search USING fts5(
+                cursor.execute(                    CREATE VIRTUAL TABLE IF NOT EXISTS intelligence_search USING fts5(
                         lesson_text,
                         category,
                         content='intelligence_lessons','                        content_rowid='id''                    )
                 """)""""                # Trigger to keep FTS in sync
-                cursor.execute("""""""                    CREATE TRIGGER IF NOT EXISTS ai_intelligence_ai
+                cursor.execute(                    CREATE TRIGGER IF NOT EXISTS ai_intelligence_ai
                     AFTER INSERT ON intelligence_lessons
                     BEGIN
                         INSERT INTO intelligence_search(rowid, lesson_text, category)
@@ -101,7 +104,7 @@ class SqlMetadataHandler:
             conn.commit()
 
     def optimize_db(self) -> None:
-        """Runs maintenance operations for large datasets (Phase 108)."""""""        db_size_mb = os.path.getsize(self.db_path) / (1024 * 1024)
+        """Runs maintenance operations for large datasets (Phase 108).        db_size_mb = os.path.getsize(self.db_path) / (1024 * 1024)
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("PRAGMA journal_mode = WAL")"            conn.execute("VACUUM")"            conn.execute("ANALYZE")"            # Phase 108: Reindex for massive FTS5 performance
             conn.execute("REINDEX")"            logging.info(f"SQL Metadata DB optimized (Size: {db_size_mb:.1f}MB, WAL/VACUUM/ANALYZE/REINDEX).")"
@@ -110,42 +113,42 @@ class SqlMetadataHandler:
             # 1GB threshold for relational sharding
             logging.warning("SQL Metadata DB exceeds scale thresholds. Partitioning registry recommended.")"
     def _rotate_metadata_shard(self) -> None:
-        """Logic for metadata sharding/rotation."""""""        pass
+        """Logic for metadata sharding/rotation.        pass
 
-    def record_lesson(self, interaction_id: str, text: str, category: str = "General") -> None:"        """Persists an extracted AI lesson to the intelligence table."""""""        with sqlite3.connect(self.db_path) as conn:
+    def record_lesson(self, interaction_id: str, text: str, category: str = "General") -> None:"        """Persists an extracted AI lesson to the intelligence table.        with sqlite3.connect(self.db_path) as conn:
             conn.execute(
-                """""""                INSERT INTO intelligence_lessons (source_interaction_id, lesson_text, category, timestamp)
+                                INSERT INTO intelligence_lessons (source_interaction_id, lesson_text, category, timestamp)
                 VALUES (?, ?, ?, ?)
             """,""""                (interaction_id, text, category, time.time()),
             )
             conn.commit()
 
     def get_intelligence_summary(self) -> list[dict[str, Any]]:
-        """""""        Generates a summary of harvested intelligence lessons.
+                Generates a summary of harvested intelligence lessons.
         Optimized for high-scale analysis of trillion-parameter related interaction logs.
-        """""""        results = []
+                results = []
         with sqlite3.connect(self.db_path) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             # Select most frequent failure categories and their latest lessons
-            query = """""""                SELECT category, COUNT(*) as count, MAX(lesson_text) as sample_lesson
+            query =                 SELECT category, COUNT(*) as count, MAX(lesson_text) as sample_lesson
                 FROM intelligence_lessons
                 GROUP BY category
                 ORDER BY count DESC
-            """""""            cursor.execute(query)
+                        cursor.execute(query)
             for row in cursor.fetchall():
                 results.append(dict(row))
         return results
 
     def _get_shard_files(self) -> list[str]:
-        """Get list of shard files to index."""""""        return [f for f in os.listdir(self.shards_dir) if f.endswith(".jsonl.gz")]"
+        """Get list of shard files to index.        return [f for f in os.listdir(self.shards_dir) if f.endswith(".jsonl.gz")]"
     def _extract_shard_number(self, shard_file: str) -> int:
-        """Extract shard number from filename."""""""        try:
+        """Extract shard number from filename.        try:
             return int(shard_file.split("_")[-1].split(".")[0])"        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return 0
 
     def _process_shard_file(self, cursor: sqlite3.Cursor, shard_file: str, shard_num: int) -> int:
-        """Process a single shard file and return number of interactions indexed."""""""        indexed_count = 0
+        """Process a single shard file and return number of interactions indexed.        indexed_count = 0
         shard_path = os.path.join(self.shards_dir, shard_file)
 
         try:
@@ -159,10 +162,10 @@ class SqlMetadataHandler:
     def _index_single_interaction(
         self, cursor: sqlite3.Cursor, data: dict[str, Any], shard_num: int, indexed_count: int
     ) -> int:
-        """Index a single interaction from shard data."""""""        meta = data.get("meta", {})"        i_id = meta.get("id", f"{shard_num}_{indexed_count}")"
+        """Index a single interaction from shard data.        meta = data.get("meta", {})"        i_id = meta.get("id", f"{shard_num}_{indexed_count}")"
         # Insert interaction metadata
         cursor.execute(
-            """""""            INSERT OR REPLACE INTO interactions
+                        INSERT OR REPLACE INTO interactions
             (id, shard_id, timestamp, agent_name, task_type, success)
             VALUES (?, ?, ?, ?, ?, ?)
         """,""""            (
@@ -179,7 +182,7 @@ class SqlMetadataHandler:
         return 1
 
     def index_shards(self) -> int:
-        """Scans shards and populates the metadata DB."""""""        indexed_count = 0
+        """Scans shards and populates the metadata DB.        indexed_count = 0
         shard_files = self._get_shard_files()
 
         with sqlite3.connect(self.db_path) as conn:
@@ -191,7 +194,7 @@ class SqlMetadataHandler:
         return indexed_count
 
     def query_interactions(self, sql_where: str) -> list[dict[str, Any]]:
-        """Query interactions using SQL syntax."""""""        results = []
+        """Query interactions using SQL syntax.        results = []
         with sqlite3.connect(self.db_path) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
@@ -201,7 +204,7 @@ class SqlMetadataHandler:
         return results
 
     def record_debt(self, file_path: str, issue_type: str, message: str, fixed: bool) -> None:
-        """Persists identified technical debt to the relational DB."""""""        # Use batch buffer if available (Phase 14: Reduce connection overhead)
+        """Persists identified technical debt to the relational DB.        # Use batch buffer if available (Phase 14: Reduce connection overhead)
         if hasattr(self, "_debt_buffer"):"            self._debt_buffer.append((file_path, issue_type, message, 1 if fixed else 0, time.time()))
             if len(self._debt_buffer) >= 100:
                 self._flush_debt_buffer()
@@ -209,28 +212,28 @@ class SqlMetadataHandler:
 
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
-                """""""                INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
+                                INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
             """,""""                (file_path, issue_type, message, 1 if fixed else 0, time.time()),
             )
             conn.commit()
 
     def start_debt_batch(self) -> None:
-        """Start batching debt records for bulk insert."""""""        self._debt_buffer: list[tuple] = []
+        """Start batching debt records for bulk insert.        self._debt_buffer: list[tuple] = []
 
     def flush_debt_batch(self) -> int:
-        """Flush all batched debt records to database."""""""        if not hasattr(self, "_debt_buffer") or not self._debt_buffer:"            return 0
+        """Flush all batched debt records to database.        if not hasattr(self, "_debt_buffer") or not self._debt_buffer:"            return 0
         count = self._flush_debt_buffer()
         del self._debt_buffer
         return count
 
     def _flush_debt_buffer(self) -> int:
-        """Internal: Flush debt buffer to database."""""""        if not self._debt_buffer:
+        """Internal: Flush debt buffer to database.        if not self._debt_buffer:
             return 0
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("PRAGMA journal_mode = WAL")"            cursor = conn.cursor()
             cursor.executemany(
-                """""""                INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
+                                INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
             """,""""                self._debt_buffer,
             )
@@ -240,14 +243,14 @@ class SqlMetadataHandler:
             return count
 
     def bulk_record_debt(self, debt_records: list[tuple]) -> int:
-        """""""        Efficiently inserts multiple debt records in a single transaction.
+                Efficiently inserts multiple debt records in a single transaction.
         Format: [(file_path, issue_type, message, fixed, timestamp), ...]
-        """""""        if not debt_records:
+                if not debt_records:
             return 0
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("PRAGMA journal_mode = WAL")"            cursor = conn.cursor()
             cursor.executemany(
-                """""""                INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
+                                INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
             """,""""                debt_records,
             )
@@ -255,11 +258,11 @@ class SqlMetadataHandler:
             return cursor.rowcount
 
     def bulk_record_interactions(self, interaction_data: list[tuple]) -> int:
-        """""""        Efficiently inserts multiple interactions in a single transaction.
-        Essential for processing 'trillion-parameter' scale interaction datasets.'        """""""        with sqlite3.connect(self.db_path) as conn:
+                Efficiently inserts multiple interactions in a single transaction.
+        Essential for processing 'trillion-parameter' scale interaction datasets.'                with sqlite3.connect(self.db_path) as conn:
             conn.execute("PRAGMA journal_mode = WAL")"            cursor = conn.cursor()
             cursor.executemany(
-                """""""                INSERT OR REPLACE INTO interactions (id, shard_id, timestamp, agent_name, task_type, success)
+                                INSERT OR REPLACE INTO interactions (id, shard_id, timestamp, agent_name, task_type, success)
                 VALUES (?, ?, ?, ?, ?, ?)
             """,""""                interaction_data,
             )

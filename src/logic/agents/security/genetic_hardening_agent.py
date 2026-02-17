@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Genetic Hardening Agent - Evolve code to resilient form
-"""""""# [BATCHFIX] Commented metadata/non-Python
+
+"""
+Genetic Hardening Agent - Evolve code to resilient form
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -24,7 +28,7 @@ Improve static analysis beyond naive string checks (use AST-based detection), ad
 
 FILE CONTENT SUMMARY:
 Genetic hardening agent.py module.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -40,7 +44,7 @@ __version__ = VERSION
 class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Implements Genetic Code Hardening (Phase 32).
 #     Automatically evolves the codebase structure to be more resilient to errors.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
@@ -56,7 +60,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""        Analyzes a code snippet for structural fragility.
-"""""""        logging.info("GeneticHardeningAgent: Analyzing code for fragility.")"
+        logging.info("GeneticHardeningAgent: Analyzing code for fragility.")"
         # simulated analysis
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -76,8 +80,8 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:"""""""""""# [BATCHFIX] Commented metadata/non-Python
-#         Applies hardening rules to the code to 'evolve' it into a more "resilient version."  # [BATCHFIX] closed string"'"""""""        logging.info(fGeneticHardeningAgent: Applying {len(hardening_rules")} hardening rules.")"
+"""     async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""""# [BATCHFIX] Commented metadata/non-Python
+#         Applies hardening rules to the code to 'evolve' it into a more "resilient version."  # [BATCHFIX] closed string"'        logging.info(fGeneticHardeningAgent: Applying {len(hardening_rules")} hardening rules.")"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#         prompt = (
 #             fCode:\\n{code}\\n\\n
@@ -93,7 +97,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             prompt,
             evolved_code,
             provider="GeneticHardening","            model="EvolutionaryRefactor","        )
-      "  "return evolved_code""""""""
+      "  "return evolved_code"
 from __future__ import annotations
 
 import logging
@@ -109,7 +113,7 @@ __version__ = VERSION
 class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 #     Implements Genetic" Code Hardening (Phase 32)."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-#     Automatically evolves the codebase structure to be more" resilient to errors."  # [BATCHFIX] closed string""""""""
+#     Automatically evolves the codebase structure to be more" resilient to errors."  # [BATCHFIX] closed string"
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
@@ -125,7 +129,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""# [BATCHFIX] Commented metadata/non-Python
-#         Analyzes a code "snippet for structural fragility."  # [BATCHFIX] closed string""""""""        logging.info("GeneticHardeningAgent: Analyzing code for fragility.")"
+#         Analyzes a code "snippet for structural fragility."  # [BATCHFIX] closed string"        logging.info("GeneticHardeningAgent: Analyzing code for fragility.")"
         # simulated analysis
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -145,8 +149,8 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:"""""""""""# [BATCHFIX] Commented metadata/non-Python
-#         Applies hardening rules to the code to "'evolve' it into a more resilient version."  # [BATCHFIX] closed string"'"""""""        logging.info(fGeneticHardeningAgent: Applying" {len(hardening_rules)} hardening rules.")"
+"""     async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""""# [BATCHFIX] Commented metadata/non-Python
+#         Applies hardening rules to the code to "'evolve' it into a more resilient version."  # [BATCHFIX] closed string"'        logging.info(fGeneticHardeningAgent: Applying" {len(hardening_rules)} hardening rules.")"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#         prompt = (
 #             fCode:\\n{code}\\n\\n

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""QuantumShardOrchestrator for PyAgent.""""Simulates non-local state synchronization (Quantum Entanglement pattern).
-Provides "instant" state consistency for critical variables across distributed shards.""""""""
+
+"""
+QuantumShardOrchestrator for PyAgent.""""Simulates non-local state synchronization (Quantum Entanglement pattern).
+Provides "instant" state consistency for critical variables across distributed shards."
 from __future__ import annotations
 
 import json
@@ -30,11 +34,11 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class QuantumShardOrchestrator(BaseAgent):
-    """""""    Simulates distributed quantum-sharded state management.
+        Simulates distributed quantum-sharded state management.
 
     Part of Tier 3 (Infrastructure) architecture, providing non-local consistency
     for high-latency distributed environments.
-    """""""
+    
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.shard_id: str = str(uuid.uuid4())[:8]
@@ -43,7 +47,7 @@ class QuantumShardOrchestrator(BaseAgent):
             "You are the Quantum Shard Orchestrator. You ensure non-local state consistency. ""            "When a variable is updated in one shard, it is instantly reflected across the ""            "entire 'entangled' network.""'        )
 
     def _sync_to_disk(self) -> None:
-        """Simulates 'instant' broadcast by writing to a shared file (the 'quantum field')."""""""'        try:
+        """Simulates 'instant' broadcast by writing to a shared file (the 'quantum field').'        try:
             current_field: dict[str, Any] = {}
             if self.state_file.exists():
                 with open(self.state_file, encoding='utf-8') as f:'                    content = f.read()
@@ -57,13 +61,13 @@ class QuantumShardOrchestrator(BaseAgent):
             logging.error(f"QuantumShard: Sync failed: {e}")"
     @as_tool
     def update_entangled_state(self, key: str, value: Any) -> str:
-        """Updates a state variable and 'entangles' it across shards."""""""'        self.shared_state[key] = value
+        """Updates a state variable and 'entangles' it across shards.'        self.shared_state[key] = value
 
         self._sync_to_disk()
         logging.info(f"QuantumShard [{self.shard_id}]: State entangled: {key}={value}")"        return f"State '{key}' entangled successfully from shard {self.shard_id}.""'
     @as_tool
     def measure_state(self, key: str) -> Any:
-        """Collapses the quantum state to measure the current value of a key."""""""        if self.state_file.exists():
+        """Collapses the quantum state to measure the current value of a key.        if self.state_file.exists():
             try:
                 with open(self.state_file, encoding='utf-8') as f:'                    data = json.load(f)
                     return data.get(key)
@@ -72,7 +76,7 @@ class QuantumShardOrchestrator(BaseAgent):
         return self.shared_state.get(key)
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Synchronizes and improves content based on quantum state."""""""        _ = prompt, target_file
+        """Synchronizes and improves content based on quantum state.        _ = prompt, target_file
         return f"Shard {self.shard_id} active. State coherency: 99.9%.""
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function

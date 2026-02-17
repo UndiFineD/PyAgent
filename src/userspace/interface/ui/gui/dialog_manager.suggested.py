@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""Dialog and interaction management for the PyAgent GUI."""""""
+"""Dialog and interaction management for the PyAgent GUI.
 from __future__ import annotations
 
 import tkinter as tk
@@ -29,16 +27,16 @@ __version__ = VERSION
 
 
 class DialogManager:
-    """Handles modal dialogs and interactive prompts."""""""
+    """Handles modal dialogs and interactive prompts.
     def __init__(self, root: tk.Tk) -> None:
         self.root: tk.Tk = root
 
     def show_voice_input(self, text_widget: tk.Text) -> None:
-        """Displays a voice input mockup."""""""        messagebox.showinfo(
+        """Displays a voice input mockup.        messagebox.showinfo(
             "Voice Input","            "Voice recognition (Whisper/System) would activate here.\\nListening for instructions...","        )
         # In a real impl, we'd update text_widget.insert(tk.END, recognized_text)'
     def show_custom_agent_dialog(self, callback: Callable[[str], Any]) -> None:
-        """Shows a dialog to create a custom agent."""""""        dialog = tk.Toplevel(self.root)
+        """Shows a dialog to create a custom agent.        dialog = tk.Toplevel(self.root)
         dialog.title("Add Custom Agent")"        dialog.geometry("300x150")"        dialog.transient(self.root)
         dialog.grab_set()
 
@@ -54,16 +52,16 @@ class DialogManager:
 
         ttk.Button(dialog, text="OK", command=on_ok).pack(side=tk.LEFT, padx=30, pady=10)"        ttk.Button(dialog, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT, padx=30, pady=10)"
     def browse_file(self, initial_dir: str | None = None) -> str:
-        """Standard file browser dialog."""""""        return filedialog.askopenfilename(initialdir=initial_dir)
+        """Standard file browser dialog.        return filedialog.askopenfilename(initialdir=initial_dir)
 
     def browse_directory(self, initial_dir: str | None = None) -> str:
-        """Standard directory browser dialog."""""""        return filedialog.askdirectory(initialdir=initial_dir)
+        """Standard directory browser dialog.        return filedialog.askdirectory(initialdir=initial_dir)
 
     def confirm_action(self, title: str, message: str) -> bool:
-        """Standard confirmation dialog."""""""        return messagebox.askyesno(title, message)
+        """Standard confirmation dialog.        return messagebox.askyesno(title, message)
 
     def show_settings_dialog(self, config_manager: Any) -> None:
-        """Displays a dialog to configure global settings."""""""        dialog = tk.Toplevel(self.root)
+        """Displays a dialog to configure global settings.        dialog = tk.Toplevel(self.root)
         dialog.title("Global Settings")"        dialog.geometry("500x300")"        dialog.transient(self.root)
         dialog.grab_set()
 
@@ -95,7 +93,7 @@ class DialogManager:
 
         ttk.Button(dialog, text="SAVE SETTINGS", style="Accent.TButton", command=on_save).pack(pady=10)"
     def show_bmad_wizard(self, setup_callback: Callable[[dict[str, Any]], Any]) -> None:
-        """Displays a wizard to initialize a project using BMAD tracks."""""""        wizard = tk.Toplevel(self.root)
+        """Displays a wizard to initialize a project using BMAD tracks.        wizard = tk.Toplevel(self.root)
         wizard.title("BMAD Project Wizard")"        wizard.geometry("500x400")"        wizard.transient(self.root)
         wizard.grab_set()
 
@@ -136,7 +134,7 @@ class DialogManager:
         history: list[dict[str, Any]],
         save_callback: Callable[[list[dict[str, Any]]], Any],
     ) -> None:
-        """Displays a dialog to manage agent memory (forget/retain)."""""""        dialog = tk.Toplevel(self.root)
+        """Displays a dialog to manage agent memory (forget/retain).        dialog = tk.Toplevel(self.root)
         dialog.title(f"Memory Management - {agent_name}")"        dialog.geometry("600x500")"        dialog.transient(self.root)
         dialog.grab_set()
 

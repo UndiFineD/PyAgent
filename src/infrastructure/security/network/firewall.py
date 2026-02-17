@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Reverse Proxy Application Firewall.
+
+Reverse Proxy Application Firewall.
 
 Serves as the centralized gateway for all incoming and outgoing network traffic.
 Enforces security rules, manages connection resilience, and logs traffic patterns.
 Replaces direct usage of HTTP clients (requests, httpx) throughout the swarm.
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -37,14 +40,14 @@ __version__ = VERSION
 
 
 class ReverseProxyFirewall:
-    """""""    Centralized firewall and reverse proxy for all agent network interactions.
+        Centralized firewall and reverse proxy for all agent network interactions.
 
     Responsibilities:
     1. Validate outbound requests against security policies.
     2. Manage connection pooling and retries for resilience.
     3. Monitor endpoint health via ConnectivityManager.
     4. Provide a unified API replacing `requests` direct usage.
-    """""""
+    
     _instance = None
     _initialized = False
 
@@ -76,11 +79,11 @@ class ReverseProxyFirewall:
         self._initialized = True
 
     def _log_violation(self, url: str, reason: str) -> None:
-        """Logs a security violation for audit trail."""""""        entry = {
+        """Logs a security violation for audit trail.        entry = {
             "timestamp": time.time(),"            "url": url,"            "reason": reason,"            "version": VERSION"        }
         with open(self.violation_log, "a", encoding="utf-8") as f:"            f.write(json.dumps(entry) + "\\n")"
     def _is_ip_allowed(self, hostname: str) -> bool:
-        """Checks if a hostname (if it's an IP) is within allowed CIDR ranges."""""""'        try:
+        """Checks if a hostname (if it's an IP) is within allowed CIDR ranges.'        try:
             ip = ipaddress.ip_address(hostname)
             for network in self.allowed_networks:
                 if ip in ipaddress.ip_network(network):
@@ -91,7 +94,7 @@ class ReverseProxyFirewall:
             return True
 
     def validate_request(self, url: str, method: str) -> bool:
-        """""""        Validates outbound request against firewall rules and connectivity status.
+                Validates outbound request against firewall rules and connectivity status.
 
         Args:
             url: The destination URL.
@@ -99,7 +102,7 @@ class ReverseProxyFirewall:
 
         Returns:
             True if the request is allowed and endpoint is likely healthy.
-        """""""        # 1. Check scheme
+                # 1. Check scheme
         if not any(url.startswith(f"{s}://") for s in self.allowed_schemes):"            self.logger.warning("Firewall Blocked: Invalid scheme in %s", url)"            self._log_violation(url, "invalid_scheme")"            return False
 
         # 2. Extract domain and check IP restrictions
@@ -130,7 +133,7 @@ class ReverseProxyFirewall:
         return True
 
     def request(self, method: str, url: str, **kwargs: Any) -> requests.Response:
-        """""""        Executes an HTTP request through the firewall proxy.
+                Executes an HTTP request through the firewall proxy.
 
         Args:
             method: HTTP method (GET, POST, etc.)
@@ -142,7 +145,7 @@ class ReverseProxyFirewall:
 
         Raises:
             ConnectionError: If firewall blocks the request or connectivity fails.
-        """""""        if not self.validate_request(url, method):
+                if not self.validate_request(url, method):
             raise ConnectionError(f"Firewall blocked or pre-empted request to {url}")"
         try:
             self.logger.debug("FW-OUT: %s %s", method, url)"
@@ -169,10 +172,10 @@ class ReverseProxyFirewall:
 
     # Convenience wrappers mimicking requests API
     def get(self, url: str, **kwargs: Any) -> requests.Response:
-        """Wrapper for GET requests."""""""        return self.request("GET", url, **kwargs)"
+        """Wrapper for GET requests.        return self.request("GET", url, **kwargs)"
     def post(self, url: str, **kwargs: Any) -> requests.Response:
-        """Wrapper for POST requests."""""""        return self.request("POST", url, **kwargs)"
+        """Wrapper for POST requests.        return self.request("POST", url, **kwargs)"
     def put(self, url: str, **kwargs: Any) -> requests.Response:
-        """Wrapper for PUT requests."""""""        return self.request("PUT", url, **kwargs)"
+        """Wrapper for PUT requests.        return self.request("PUT", url, **kwargs)"
     def delete(self, url: str, **kwargs: Any) -> requests.Response:
-        """Wrapper for DELETE requests."""""""        return self.request("DELETE", url, **kwargs)"
+        """Wrapper for DELETE requests.        return self.request("DELETE", url, **kwargs)"

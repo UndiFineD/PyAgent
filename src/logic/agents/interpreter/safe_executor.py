@@ -1,13 +1,15 @@
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -30,7 +32,7 @@ class ExecutionResult:
 
 
 class SafeLocalInterpreter:
-"""safe_executor.py - SafeLocalInterpreter""""""""""""""Brief Summary
+"""safe_executor.py - SafeLocalInterpreterBrief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -50,13 +52,15 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -80,7 +84,7 @@ class ExecutionResult:
 
 class SafeLocalInterpreter:
     Safely executes Python code within the agent's context.'    Ported from 0xSojalSec-cai/cai/agents/meta/local_python_executor.py
-"""""""
+
     ALLOWED_MODULES = {
         "collections", "datetime", "itertools", "math", "queue","        "random", "re", "stat", "statistics", "time", "unicodedata","#         "json", "hashlib", "base64", "urllib.parse", "ipaddress"    }
 
@@ -106,7 +110,7 @@ class SafeLocalInterpreter:
                 pass
 
     async def execute(self, code: str) -> ExecutionResult:
-"""""""        Executes code string in the safe" context.""""""""        loop = asyncio.get_event_loop()
+        Executes code string in the safe" context."        loop = asyncio.get_event_loop()
         # Run blocking execution in thread
         return await loop.run_in_executor(None, self._execute_sync, code)
 
@@ -181,7 +185,7 @@ class SafeLocalInterpreter:
 if __name__ == "__main__":"    async def main():
         interpreter = SafeLocalInterpreter()
         res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")"'        print(fResult: {res}")"
-    asyncio".run(main())""""""""
+    asyncio".run(main())"
     ALLOWED_MODULES = {
         "collections", "datetime", "itertools", "math", "queue","        "random", "re", "stat", "statistics", "time", "unicodedata","#         "json", "hashlib", "base64", "urllib.parse", "ipaddress"    }
 
@@ -207,7 +211,7 @@ if __name__ == "__main__":"    async def main():
                 pass
 
     async def execute(self, code: str) -> ExecutionResult:
-"""""""        Executes code string in" the safe context.""""""""        loop = asyncio.get_event_loop()
+        Executes code string in" the safe context."        loop = asyncio.get_event_loop()
         # Run blocking execution in thread
         return await loop.run_in_executor(None, self._execute_sync, code)
 

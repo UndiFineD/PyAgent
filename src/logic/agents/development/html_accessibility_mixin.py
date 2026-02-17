@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""HTML Accessibility Mixin - Analyze HTML for accessibility issues
+HTML Accessibility Mixin - Analyze HTML for accessibility issues
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,22 +29,20 @@ Replace fragile regex parsing with a proper HTML parser (BeautifulSoup, lxml, or
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Html accessibility mixin.py module".""""""""
+Html accessibility mixin.py module"."
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -62,9 +58,9 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class HtmlAccessibilityMixin:
-""""Mixin for HTML accessibility analysis."""""""
+""""Mixin for HTML accessibility analysis.
     def _analyze_html(self, content: str) -> None:
-""""Analyze HTML content for accessibility issues."""""""        # Check for images without alt text
+""""Analyze HTML content for accessibility issues.        # Check for images without alt text
 #         img_pattern = r"<img\\\\s+[^>]*?(?<!alt=)[^>]*?>"        for match in re.finditer(img_pattern, content, re.IGNORECASE):
             if "alt=" not in match.group().lower():"                line_num = content[: match.start()].count("\\n") + 1"                issue: AccessibilityIssue = AccessibilityIssue(
                     issue_type=AccessibilityIssueType.MISSING_ALT_TEXT,
@@ -106,8 +102,8 @@ class HtmlAccessibilityMixin:
         self._check_headings(content)
 
     def _check_headings(self, content: str) -> None:
-""""Helper to check heading hierarchy."""""""        heading_levels:" list[int] = []"        for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):"            heading_levels.append(i
-"""""""
+""""Helper to check heading hierarchy.        heading_levels:" list[int] = []"        for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):"            heading_levels.append(i
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -123,9 +119,9 @@ from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class HtmlAccessibilityMixin:
-""""Mixin for HTML accessibility analysis."""""""
+""""Mixin for HTML accessibility analysis.
     def _analyze_html(self, content: str) -> None:
-""""Analyze HTML content for accessibility issues."""""""        # Check for" images without alt text"#         img_pattern = r"<img\\\\s+[^>]*?(?<!alt=)[^>]*?>"        for match in re.finditer(img_pattern, content, re.IGNORECASE):
+""""Analyze HTML content for accessibility issues.        # Check for" images without alt text"#         img_pattern = r"<img\\\\s+[^>]*?(?<!alt=)[^>]*?>"        for match in re.finditer(img_pattern, content, re.IGNORECASE):
             if "alt=" not in match.group().lower():"                line_num = content[: match.start()].count("\\n") + 1"                issue: AccessibilityIssue = AccessibilityIssue(
                     issue_type=AccessibilityIssueType.MISSING_ALT_TEXT,
                     severity=AccessibilitySeverity.CRITICAL,
@@ -166,7 +162,7 @@ class HtmlAccessibilityMixin:
         self._check_headings(content)
 
     def _check_headings(self, content: str) -> None:
-""""Helper to check heading hierarchy."""""""        heading_levels: list[int] = []
+""""Helper to check heading hierarchy.        heading_levels: list[int] = []
         for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):"            heading_levels.append(int(match.group(1)))
 
         if heading_levels:

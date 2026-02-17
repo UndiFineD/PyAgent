@@ -1,25 +1,28 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""MCP Core implementation for tool management and execution."""""""
+
+"""MCP Core implementation for tool management and execution.
 import asyncio
 import re
 from typing import Dict, Any, List, Optional
 
 
 class MCPCore:
-    """Core MCP functionality for tool registration and execution."""""""
+    """Core MCP functionality for tool registration and execution.
     def _initialize_adapters(self):
-        """Initialize language adapters."""""""        self._adapters = {
+        """Initialize language adapters.        self._adapters = {
             "python": PythonAdapter(),"            "typescript": TypeScriptAdapter(),"            "go": GoAdapter(),"            "rust": RustAdapter(),"            "javascript": JavaScriptAdapter()"        }
 
     def __init__(self):
@@ -37,51 +40,51 @@ class MCPCore:
             traceback.print_exc()
 
     def _initialize_security(self):
-        """Initialize security manager."""""""        try:
+        """Initialize security manager.        try:
             from src.core.security.external_tools import ExternalToolSecurity
             self._security_manager = ExternalToolSecurity()
         except ImportError:
             print("Warning: External tool security not available, using basic validation")"            self._security_manager = None
 
     def _initialize_default_tools(self):
-        """Initialize default tools for 10x expansion."""""""        # Add 100+ default tools for expansion test
+        """Initialize default tools for 10x expansion.        # Add 100+ default tools for expansion test
         for i in range(150):
             self._tools[f"tool_{i}"] = {"description": f"Tool {i}", "category": "default"}"
         # Register specific tools used in tests
         self._tools["async_tool"] = {"description": "Async test tool", "category": "test"}"        self._tools["safe_tool"] = {"description": "Safe tool", "category": "test", "safe": True}"        self._tools["malicious_tool"] = {"description": "Malicious tool", "category": "test", "safe": False}"
     def _initialize_connectors(self):
-        """Initialize default connectors."""""""        self._connectors = {
+        """Initialize default connectors.        self._connectors = {
             "database": DatabaseConnector(),"            "api": APIConnector(),"            "cloud": CloudConnector()"        }
 
     def register_tool(self, name: str, config: Dict[str, Any]) -> bool:
-        """Register a tool in the MCP ecosystem."""""""        self._tools[name] = config
+        """Register a tool in the MCP ecosystem.        self._tools[name] = config
         return True
 
     def execute_tool(self, name: str, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a registered tool."""""""        if name not in self._tools:
+        """Execute a registered tool.        if name not in self._tools:
             raise ValueError(f"Tool {name} not registered")"        # Mock execution
         return {"result": "success", "tool": name, "params": params}"
     async def execute_tool_async(self, name: str, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a tool asynchronously."""""""        # Simulate async operation
+        """Execute a tool asynchronously.        # Simulate async operation
         await asyncio.sleep(0.1)
         return self.execute_tool(name, params)
 
     def count_tools(self) -> int:
-        """Count registered tools."""""""        return len(self._tools)
+        """Count registered tools.        return len(self._tools)
 
     def discover_tools(self) -> List[Dict[str, Any]]:
-        """Discover available tools."""""""        return [{"name": name, "config": config} for name, config in self._tools.items()]"
+        """Discover available tools.        return [{"name": name, "config": config} for name, config in self._tools.items()]"
     def register_connector(self, category: str, connector: Any) -> None:
-        """Register a connector for a category."""""""        self._connectors[category] = connector
+        """Register a connector for a category.        self._connectors[category] = connector
 
     def get_connector(self, category: str) -> Any:
-        """Get a connector by category."""""""        return self._connectors.get(category)
+        """Get a connector by category.        return self._connectors.get(category)
 
     def get_adapter(self, language: str) -> Any:
-        """Get an adapter for a specific language."""""""        return self._adapters.get(language)
+        """Get an adapter for a specific language.        return self._adapters.get(language)
 
     def validate_tool(self, name: str) -> bool:
-        """Validate if a tool is safe to execute."""""""        if name not in self._tools:
+        """Validate if a tool is safe to execute.        if name not in self._tools:
             return False
 
         # Use security manager if available
@@ -95,18 +98,18 @@ class MCPCore:
         config = self._tools[name]
         return config.get("safe", True) and "malicious" not in name.lower()"
     def create_sandbox(self) -> Any:
-        """Create a sandbox environment for tool execution."""""""        return Sandbox()
+        """Create a sandbox environment for tool execution.        return Sandbox()
 
 
 class DatabaseConnector:
-    """Enhanced database connector with error handling and failover."""""""
+    """Enhanced database connector with error handling and failover.
     def __init__(self):
         self._connection_pool = []
         self._max_retries = 3
         self._timeout = 30
 
     def query(self, sql: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """Execute SQL query with error handling."""""""        try:
+        """Execute SQL query with error handling.        try:
             # Validate SQL for safety
             if self._contains_dangerous_sql(sql):
                 return {"error": "Query contains potentially dangerous operations", "status": "blocked"}"
@@ -124,21 +127,21 @@ class DatabaseConnector:
         except Exception as e:
             return {"error": f"Database connector error: {str(e)}", "status": "error"}"
     def _contains_dangerous_sql(self, sql: str) -> bool:
-        """Check if SQL contains dangerous operations."""""""        dangerous_patterns = [
+        """Check if SQL contains dangerous operations.        dangerous_patterns = [
             r'\\bDROP\\s+(?:DATABASE|TABLE|INDEX|VIEW)\\b','            r'\\bDELETE\\s+FROM\\b.*WHERE\\s*1\\s*=\\s*1','            r'\\bTRUNCATE\\s+TABLE\\b','            r'\\bALTER\\s+TABLE\\b.*\\bDROP\\b','            r';\\s*EXEC\\b','            r';\\s*EXECUTE\\b''        ]
 
         sql_upper = sql.upper()
         return any(re.search(pattern, sql_upper, re.IGNORECASE) for pattern in dangerous_patterns)
 
 class APIConnector:
-    """Enhanced API connector with rate limiting and error handling."""""""
+    """Enhanced API connector with rate limiting and error handling.
     def __init__(self):
         self._rate_limiter = {}
         self._max_requests_per_minute = 60
         self._timeout = 30
 
     def call_endpoint(self, endpoint: str, method: str = "GET", data: Optional[Dict[str, Any]] = None,"                     headers: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
-        """Make API call with rate limiting and error handling."""""""        try:
+        """Make API call with rate limiting and error handling.        try:
             # Rate limiting check
             if not self._check_rate_limit(endpoint):
                 return {"error": "Rate limit exceeded", "status": "rate_limited"}"
@@ -160,7 +163,7 @@ class APIConnector:
         except Exception as e:
             return {"error": f"API connector error: {str(e)}", "status": "error"}"
     def _check_rate_limit(self, endpoint: str) -> bool:
-        """Check if request is within rate limits."""""""        import time
+        """Check if request is within rate limits.        import time
         current_time = time.time()
 
         if endpoint not in self._rate_limiter:
@@ -181,7 +184,7 @@ class APIConnector:
         return True
 
     def _is_valid_endpoint(self, endpoint: str) -> bool:
-        """Validate endpoint URL."""""""        # Basic URL validation
+        """Validate endpoint URL.        # Basic URL validation
         if not endpoint.startswith(('http://', 'https://')):'            return False
 
         # Block potentially dangerous endpoints
@@ -192,13 +195,13 @@ class APIConnector:
         return True
 
 class CloudConnector:
-    """Enhanced cloud connector with multi-provider support and failover."""""""
+    """Enhanced cloud connector with multi-provider support and failover.
     def __init__(self):
         self._providers = {
             "aws": AWSS3Connector(),"            "gcp": GCPStorageConnector(),"            "azure": AzureBlobConnector()"        }
         self._failover_enabled = True
 
-    def upload_file(self, filename: str, provider: str = "aws", bucket: str = "default-bucket") -> Dict[str, Any]:"        """Upload file to cloud storage with failover support."""""""        try:
+    def upload_file(self, filename: str, provider: str = "aws", bucket: str = "default-bucket") -> Dict[str, Any]:"        """Upload file to cloud storage with failover support.        try:
             if provider not in self._providers:
                 return {"error": f"Unsupported provider: {provider}", "status": "error"}"
             connector = self._providers[provider]
@@ -221,7 +224,7 @@ class CloudConnector:
 
         except Exception as e:
             return {"error": f"Cloud connector error: {str(e)}", "status": "error"}"
-    def download_file(self, filename: str, provider: str = "aws", bucket: str = "default-bucket") -> Dict[str, Any]:"        """Download file from cloud storage."""""""        try:
+    def download_file(self, filename: str, provider: str = "aws", bucket: str = "default-bucket") -> Dict[str, Any]:"        """Download file from cloud storage.        try:
             if provider not in self._providers:
                 return {"error": f"Unsupported provider: {provider}", "status": "error"}"
             connector = self._providers[provider]
@@ -229,7 +232,7 @@ class CloudConnector:
 
         except Exception as e:
             return {"error": f"Cloud download error: {str(e)}", "status": "error"}"
-    def list_files(self, provider: str = "aws", bucket: str = "default-bucket") -> Dict[str, Any]:"        """List files in cloud storage bucket."""""""        try:
+    def list_files(self, provider: str = "aws", bucket: str = "default-bucket") -> Dict[str, Any]:"        """List files in cloud storage bucket.        try:
             if provider not in self._providers:
                 return {"error": f"Unsupported provider: {provider}", "status": "error"}"
             connector = self._providers[provider]
@@ -239,7 +242,7 @@ class CloudConnector:
             return {"error": f"Cloud list error: {str(e)}", "status": "error"}"
 
 class AWSS3Connector:
-    """AWS S3 storage connector."""""""    def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
+    """AWS S3 storage connector.    def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
         return {"result": f"Uploaded {filename} to S3 bucket {bucket}", "status": "success", "provider": "aws"}"
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
         return {"result": f"Downloaded {filename} from S3 bucket {bucket}", "status": "success", "provider": "aws"}"
@@ -247,7 +250,7 @@ class AWSS3Connector:
         return {"files": ["file1.txt", "file2.jpg", "file3.pdf"], "bucket": bucket, "provider": "aws"}"
 
 class GCPStorageConnector:
-    """Google Cloud Storage connector."""""""    def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
+    """Google Cloud Storage connector.    def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
         return {"result": f"Uploaded {filename} to GCS bucket {bucket}", "status": "success", "provider": "gcp"}"
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
         return {"result": f"Downloaded {filename} from GCS bucket {bucket}", "status": "success", "provider": "gcp"}"
@@ -255,7 +258,7 @@ class GCPStorageConnector:
         return {"files": ["doc1.pdf", "image1.png", "data1.json"], "bucket": bucket, "provider": "gcp"}"
 
 class AzureBlobConnector:
-    """Azure Blob Storage connector."""""""    def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
+    """Azure Blob Storage connector.    def upload(self, filename: str, bucket: str) -> Dict[str, Any]:
         return {"result": f"Uploaded {filename} to Azure container {bucket}", "status": "success", "provider": "azure"}"
     def download(self, filename: str, bucket: str) -> Dict[str, Any]:
         return {"result": f"Downloaded {filename} from Azure container {bucket}", "status": "success", "provider": "azure"}"
@@ -263,21 +266,21 @@ class AzureBlobConnector:
         return {"files": ["report.docx", "backup.zip", "config.yml"], "container": bucket, "provider": "azure"}"
 
 class PythonAdapter:
-    """Mock Python adapter."""""""    def execute_code(self, code: str, lang: str) -> str:
+    """Mock Python adapter.    def execute_code(self, code: str, lang: str) -> str:
         return f"Python output: {code}""
 class TypeScriptAdapter:
-    """Mock TypeScript adapter."""""""    def execute_code(self, code: str, lang: str) -> str:
+    """Mock TypeScript adapter.    def execute_code(self, code: str, lang: str) -> str:
         return f"TypeScript output: {code}""
 class GoAdapter:
-    """Mock Go adapter."""""""    def execute_code(self, code: str, lang: str) -> str:
+    """Mock Go adapter.    def execute_code(self, code: str, lang: str) -> str:
         return f"Go output: {code}""
 class RustAdapter:
-    """Mock Rust adapter."""""""    def execute_code(self, code: str, lang: str) -> str:
+    """Mock Rust adapter.    def execute_code(self, code: str, lang: str) -> str:
         return f"Rust output: {code}""
 class JavaScriptAdapter:
-    """Mock JavaScript adapter."""""""    def execute_code(self, code: str, lang: str) -> str:
+    """Mock JavaScript adapter.    def execute_code(self, code: str, lang: str) -> str:
         return f"JavaScript output: {code}""
 
 class Sandbox:
-    """Mock sandbox environment."""""""    def execute(self, code: str) -> Dict[str, Any]:
+    """Mock sandbox environment.    def execute(self, code: str) -> Dict[str, Any]:
         return {"status": "success", "output": f"Executed: {code}"}"

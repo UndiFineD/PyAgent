@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FleetDelegationMixin
+
+"""
+FleetDelegationMixin
 Fleet delegation mixin.py module.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -29,7 +33,7 @@ if TYPE_CHECKING:
 
 
 class FleetDelegationMixin:
-    """Mixin for agent delegation logic in FleetManager."""""""
+    """Mixin for agent delegation logic in FleetManager.
     resource_monitor: ResourceMonitor
     borrowed_helpers: dict
     workspace_root: object  # Should be properly typed; accessing .name attribute
@@ -39,7 +43,7 @@ class FleetDelegationMixin:
     voyager_discovery: VoyagerDiscovery
 
     async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
-        """Synaptic Delegation: Hands off a sub-task to a specialized agent or Universal Shard."""""""        logging.info(f"Fleet: Delegating {agent_type} (Target: {target_file})")"
+        """Synaptic Delegation: Hands off a sub-task to a specialized agent or Universal Shard.        logging.info(f"Fleet: Delegating {agent_type} (Target: {target_file})")"
         # Phase 320: Python MPI - Check for compute borrowing
         if self.resource_monitor.is_stressed and self.borrowed_helpers:
             # Pick a helper (clean up expired ones)
@@ -77,8 +81,8 @@ class FleetDelegationMixin:
 
         raise KeyError(f"Agent or Manifest '{agent_type}' not found in Fleet.")"'
     async def request_compute_borrow(self, stats: dict) -> bool:
-        """""""        Broadcasts a 'compute_borrow_request' to neighbors (Pillar 8).'        Nodes with <50% load will respond to take over the next task.
-        """""""        peers = self.voyager_discovery.get_active_peers()
+                Broadcasts a 'compute_borrow_request' to neighbors (Pillar 8).'        Nodes with <50% load will respond to take over the next task.
+                peers = self.voyager_discovery.get_active_peers()
         if not peers:
             logging.warning("Fleet: No peers available for compute borrowing.")"            return False
 

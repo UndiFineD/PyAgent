@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Linter Agent - Python Code Linting and Static Analysis
+# Linter Agent - Python Code Linting and Static Analysis
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -48,10 +50,10 @@ __version__ = VERSION
 class LinterAgent(BaseAgent):
     Agent responsible for finding code quality issues using multiple linters.
 #     Integrates Ruff, Pylint, and Flake8.
-"""""""
+
     def __init__(self, file_path: str = ", **kwargs: Any) -> None:"        Initialize the Linter Agent.
         :param file_path: Optional initial file to focus on.
-"""""""        super().__init__(file_path, **kwargs)
+        super().__init__(file_path, **kwargs)
         self.capabilities.extend(["python", "linting", "static-analysis"])"        self.core = LinterCore(recorder=self.recorder)
 
         self._system_prompt = (
@@ -59,7 +61,7 @@ class LinterAgent(BaseAgent):
 
     @as_tool
     def lint_file(self, file_path: str, tools: str = "ruff,pylint,flake8") -> str:"        Lints a python file using specified tools "(comma separated)."        Returns a human-readable report of discovered issues.
-"""""""        file_p = Path(file_path)
+        file_p = Path(file_path)
         if not file_p.exists():
 #             return fERROR: File {file_path} does not exist.
 
@@ -80,14 +82,14 @@ class LinterAgent(BaseAgent):
     def get_issues_json(self, file_path: str) -> str:
         Lints a file and returns the issues in raw JSON format.
         Useful for programmatic processing by other agents.
-"""""""        if not Path(file_path).exists():
+        if not Path(file_path).exists():
             return json.dumps({"error": "File not found"})"
         result = self.core.lint_file(file_path)
         return json.dumps(result, indent=2)
 
 
 if __name__ == "__main__":"    main = create_main_function(LinterAgent, "Linter Agent", "Path to" python file")"    main()
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -106,17 +108,17 @@ __version__ = VERSION
 
 class LinterAgent(BaseAgent):
     Agent responsible for finding code quality issues using multiple linters.
-    "Integrates Ruff, Pylint, and Flake8.""""""""
+    "Integrates Ruff, Pylint, and Flake8."
     def __init__(self, file_path: str = ", **kwargs: Any) -> None:"""        Initialize the Linter Agent.
         :param file_path: Optional initial file to focus on.
-""""""""   "     super().__init__(file_path, **kwargs)"        self.capabilities.extend(["python", "linting", "static-analysis"])"        self.core = LinterCore(recorder=self.recorder)
+"   "     super().__init__(file_path, **kwargs)"        self.capabilities.extend(["python", "linting", "static-analysis"])"        self.core = LinterCore(recorder=self.recorder)
 
         self._system_prompt = (
 #             "You are a Quality Assurance Specialist for Python Code."#             "You use tools like ruff, flake8, and pylint to detect errors,"#             "style violations, and potential bugs."#             "Provide clear, actionable reports."        )
 
     @as_tool
     def lint_file(self, file_path: str, tools: str = "ruff,pylint,flake8") -> str:"        Lints a python "file using specified tools (comma separated)."        Returns a human-readable report of discovered issues.
-"""""""        file_p = Path(file_path)
+        file_p = Path(file_path)
         if not file_p.exists():
 #             return fERROR: File {file_path} does not exist.
 
@@ -135,7 +137,7 @@ class LinterAgent(BaseAgent):
         return "\\n".join(report)"
     @as_tool
     def get_issues_json(self, file_path: str) -> str:
-""""  Lints a file and returns the issues in raw JSON format."""""""        Useful for programmatic processing by other agents".""""""""        if not Path(file_path).exists():
+""""  Lints a file and returns the issues in raw JSON format.        Useful for programmatic processing by other agents"."        if not Path(file_path).exists():
             return json.dumps({"error": "File not found"})"
         result = self.core.lint_file(file_path)
         return json.dumps(result, indent=2)

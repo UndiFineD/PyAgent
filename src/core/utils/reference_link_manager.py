@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_changes.py"""""""""""
+
+"""
+Auto-extracted class from agent_changes.py
 from __future__ import annotations
 
 from src.core.base.common.types.linked_reference import LinkedReference
@@ -29,9 +33,9 @@ class ReferenceLinkManager:
 
     Example:
         >>> manager=ReferenceLinkManager()
-        >>> manager.add_commit_reference("entry1", "abc123", "https://github.com/...")"    """""""
+        >>> manager.add_commit_reference("entry1", "abc123", "https://github.com/...")"    """
     def __init__(self) -> None:
-        """Initialize the reference link manager."""""""        self.references: dict[str, list[LinkedReference]] = {}
+        """Initialize the reference link manager."""self.references: dict[str, list[LinkedReference]] = {}
 
     def add_commit_reference(self, entry_id: str, commit_sha: str, url: str = "", title: str = "") -> LinkedReference:"        """Add a commit reference to an entry.""""
         Args:
@@ -42,7 +46,7 @@ class ReferenceLinkManager:
 
         Returns:
             The created LinkedReference.
-        """""""        ref = LinkedReference(ref_type="commit", ref_id=commit_sha[:7], url=url, title=title)"        if entry_id not in self.references:
+        """ref = LinkedReference(ref_type="commit", ref_id=commit_sha[:7], url=url, title=title)"        if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
         return ref
@@ -56,7 +60,7 @@ class ReferenceLinkManager:
 
         Returns:
             The created LinkedReference.
-        """""""        ref = LinkedReference(ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title)"        if entry_id not in self.references:
+        """ref = LinkedReference(ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title)"        if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
         return ref
@@ -68,6 +72,6 @@ class ReferenceLinkManager:
 
         Returns:
             Formatted string of references.
-        """""""        refs = self.references.get(entry_id, [])
+        """refs = self.references.get(entry_id, [])
         if not refs:
             return """        return " (" + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs) + ")""

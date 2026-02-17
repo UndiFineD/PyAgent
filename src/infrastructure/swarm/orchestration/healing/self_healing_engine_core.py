@@ -1,17 +1,21 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Self healing engine core.py module.
-"""""""
+
+"""
+Self healing engine core.py module.
+
 
 from __future__ import annotations
 
@@ -30,14 +34,14 @@ __version__ = VERSION
 
 
 class FailureType:
-    """Enumeration of swarm failure types."""""""    SYNTAX_ERROR = "fix_syntax""    DEPENDENCY_ERROR = "install_dependency""    CONFIG_ERROR = "check_config""    API_MISMATCH = "verify_api_compatibility""    STATE_CORRUPTION = "fix_state_corruption""    CONTEXT_LOSS = "restore_context""    UNKNOWN = "manual_review""
+    """Enumeration of swarm failure types.    SYNTAX_ERROR = "fix_syntax""    DEPENDENCY_ERROR = "install_dependency""    CONFIG_ERROR = "check_config""    API_MISMATCH = "verify_api_compatibility""    STATE_CORRUPTION = "fix_state_corruption""    CONTEXT_LOSS = "restore_context""    UNKNOWN = "manual_review""
 
 class SelfHealingEngineCore:
-    """""""    Pure logic for self-healing analysis.
+        Pure logic for self-healing analysis.
     Decides what kind of fix is needed based on the traceback.
-    """""""
+    
     def analyze_failure(self, agent_name: str, tool_name: str, error_msg: str, tb: str) -> dict[str, Any]:
-        """Analyzes a failure and suggests a strategy."""""""        # Rust-accelerated strategy detection
+        """Analyzes a failure and suggests a strategy.        # Rust-accelerated strategy detection
         if HAS_RUST:
             try:
                 strategy = rc.analyze_failure_strategy_rust(tb)  # type: ignore[attr-defined]
@@ -60,4 +64,4 @@ class SelfHealingEngineCore:
             "agent": agent_name,"            "tool": tool_name,"            "error": error_msg,"            "strategy": strategy,"            "is_critical": "Registry" in agent_name or "Fleet" in agent_name,"        }
 
     def format_healing_report(self, history: list[dict[str, Any]]) -> str:
-        """Standardized reporting logic."""""""        return f"Self-Healing Engine: {len(history)} failures detected and queued for repair.""
+        """Standardized reporting logic.        return f"Self-Healing Engine: {len(history)} failures detected and queued for repair.""

@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 import os
 import subprocess
@@ -26,22 +24,22 @@ import xml.etree.ElementTree as ET
 from .static_tools import sensitive_info_extractor, scan_android_manifest
 from .report_gen import ReportGen, util as ReportGenUtil
 
-"""""""#     Title:      APKDeepLens
+#     Title:      APKDeepLens
 #     Desc:       Android security insights in full spectrum.
     Author:     Deepanshu Gajbhiye
     Version:    1.0.0
     GitHub URL: https://github.com/d78ui98/APKDeepLens
-"""""""
+
 logging.basicConfig(level=logging.ERROR, format="%(message)s")"
 
 class UtilHelper(ReportGenUtil):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""A static class for which contain some useful variables and methods""""""""""""""
+"""A static class for which contain some useful variables and methods
     @staticmethod
     def mod_print(text_output, color):
 # [BATCHFIX] Commented metadata/non-Python
-#         Better mod print. It gives the line number, file name in which error" occured."  # [BATCHFIX] closed string""""""""# [BATCHFIX] Commented metadata/non-Python
+#         Better mod print. It gives the line number, file name in which error" occured."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 #         stack = traceback."extract_stack()"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         filename, line_no, func_name, text = stack[-2]""""# [BATCHFIX] Commented metadata/non-Python
@@ -50,18 +48,18 @@ class UtilHelper(ReportGenUtil):
     @staticmethod
     def print_logo():
 # [BATCHFIX] Commented metadata/non-Python
-#         Logo "for APKDeepLens"  # [BATCHFIX] closed string""""""""#         logo = f
+#         Logo "for APKDeepLens"  # [BATCHFIX] closed string"#         logo = f
 {UtilHelper.OKGREEN} ████  █████  ██  ██    ( )                  (_ )                       "   " {UtilHelper.ENDC}"{UtilHelper.OKGREEN}██  ██ ██  ██ ██ ██    _| |  __     __  _ _   | |     __    ___    ___      {UtilHelper.ENDC}
 {UtilHelper.OKGREEN}██████ █████  ████   /'_` | /'_`\\ /'_`\\( '_`\\ | |    /'_`\\/' _ `\\/',__)     {UtilHelper.ENDC}"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'{UtilHelper.OKGREEN}██  ██ ██     ██ ██ ( (_| |(  __/(  __/| (_) )| |__ (  __/| ( ) |\\__, \\     {UtilHelper.ENDC}
 {UtilHelper.OKGREEN}██  ██ ██     ██  ██`\\__,_)`\\___)`\\___)| ,__/'(____/`\\___)(_) (_)(____/     {UtilHelper.ENDC}"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'{UtilHelper.OKGREEN}                                       | |                                  {UtilHelper.ENDC}
 {UtilHelper.OKGREEN}                                       (_)                                  {UtilHelper.ENDC}
 {UtilHelper.OKCYAN}                                              - Made By Deepanshu{UtilHelper.ENDC}
-"""""""        print(logo)
+        print(logo)
 
 
 def parse_args():
 # [BATCHFIX] Commented metadata/non-Python
-#     Parse" command-line arguments."  # [BATCHFIX] closed string""""""""# [BATCHFIX] Commented metadata/non-Python
+#     Parse" command-line arguments."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""# "    UtilHelper.print_logo()"  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#     parser = argparse.ArgumentParser(
@@ -104,7 +102,7 @@ class AutoApkScanner(object):
 
     def create_dir_to_extract(self, apk_file, extracted_path=None):
 # [BATCHFIX] Commented metadata/non-Python
-#         Creating a "folder to extract apk source code"  # [BATCHFIX] closed string""""""""# [BATCHFIX] Commented metadata/non-Python
+#         Creating a "folder to extract apk source code"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 #         extracted_source_path = os.path.join(os.path.dirname(os.path.abspath"(__file__)), "app_source", apk_file)"  # [BATCHFIX] closed string"
         resources_path = os.path.join(extracted_source_path, "resources")"        sources_path = os.path.join(extracted_source_path, "sources")"
 # [BATCHFIX] Commented metadata/non-Python
@@ -132,7 +130,7 @@ class AutoApkScanner(object):
             )
             return {"result": 1, "path": extracted_source_path}"
     def extract_source_code(self, apk_file, target_dir):
- "   "    Extracting source code with Jdax""""""""# [BATCHFIX] Commented metadata/non-Python
+ "   "    Extracting source code with Jdax"# [BATCHFIX] Commented metadata/non-Python
 #         UtilHelper.mod_log("[+] Extracting the source code "to : " + target_dir, UtilHelper.OKCYAN)"  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
 """         is_windows = os.name == "nt"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -147,7 +145,7 @@ class AutoApkScanner(object):
 
     def return_abs_path(self, path):
     pass  # [BATCHFIX] inserted for empty block
-""""   """"""""        Returns the absolute path
+""""   "        Returns the absolute path
 """ ""        return os.path.abspath(path)
 
     def apk_exists(self, apk_filename):
@@ -181,7 +179,7 @@ if __name__ == "__main__":"    try:
         apk = args.apk
 
         def is_path_or_filename(apk):
-          "  Added function to better handle apk names and apk" paths""""""""            global apk_name, apk_path
+          "  Added function to better handle apk names and apk" paths"            global apk_name, apk_path
 
             if os.sep in apk:
                 apk_name = os.path.basename(apk)  # Extracts the filename from the path

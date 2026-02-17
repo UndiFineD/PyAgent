@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Consensus orchestrator.py module.
-"""""""
+
+"""
+Consensus orchestrator.py module.
+
 
 from __future__ import annotations
 
@@ -28,16 +32,16 @@ if TYPE_CHECKING:
 
 
 class ConsensusOrchestrator:
-    """""""    Advanced orchestrator for resolving conflicts between agents using weighted voting
+        Advanced orchestrator for resolving conflicts between agents using weighted voting
     and a multi-turn debate system.
-    """""""
+    
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.reputation_scores: dict[str, float] = {}  # Agent name -> score (0.0 to 1.0)
 
     def resolve_conflict(self, task: str, agents: list[str]) -> str:
-        """""""        Orchestrates a debate and weighted vote to reach consensus on a task.
-        """""""        logging.info(f"ConsensusOrchestrator: Resolving conflict for task: {task} using {agents}")"
+                Orchestrates a debate and weighted vote to reach consensus on a task.
+                logging.info(f"ConsensusOrchestrator: Resolving conflict for task: {task} using {agents}")"
         # 1. Gather initial proposals
         proposals = self._collect_proposals(task, agents)
 
@@ -54,10 +58,10 @@ class ConsensusOrchestrator:
         return final_decision
 
     def verify_state_block(self, task: str, decision: str) -> None:
-        """""""        Phase 55: Distributed Byzantine Fault Tolerance (DBFT).
+                Phase 55: Distributed Byzantine Fault Tolerance (DBFT).
         Simulates signing a state block after consensus to ensure data integrity
         across a distributed agent network.
-        """""""        import hashlib
+                import hashlib
 
         block_content = f"{task}:{decision}""        block_hash = hashlib.sha256(block_content.encode()).hexdigest()
 
@@ -93,7 +97,7 @@ class ConsensusOrchestrator:
                 logging.error(f"Agent {agent_name} failed to propose: {e}")"        return proposals
 
     def _conduct_debate(self, task: str, proposals: list[dict[str, Any]], rounds: int = 2) -> list[dict[str, Any]]:
-        """""""        Agents review each other's proposals and refine their own.'        """""""        import asyncio
+                Agents review each other's proposals and refine their own.'                import asyncio
 
         loop: asyncio.AbstractEventLoop
         try:
@@ -128,7 +132,7 @@ class ConsensusOrchestrator:
         # For simplicity in this implementation, we pick the one with highest weight.
         # In a real system, we'd use semantic similarity to group proposals and sum weights.'        best_proposal = max(proposals, key=lambda x: x["weight"])"        logging.info(f"Consensus reached. Winner: {best_proposal['agent']} with weight {best_proposal['weight']}")"'        return best_proposal["content"]"
     def update_reputation(self, agent_name: str, feedback_score: float) -> None:
-        """""""        Updates agent reputation based on external feedback (0.0 to 1.0).
-        """""""        current = self.reputation_scores.get(agent_name, 0.5)
+                Updates agent reputation based on external feedback (0.0 to 1.0).
+                current = self.reputation_scores.get(agent_name, 0.5)
         # Moving average update
         self.reputation_scores[agent_name] = (current * 0.7) + (feedback_score * 0.3)

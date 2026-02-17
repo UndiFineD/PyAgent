@@ -1,23 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Core logic for Python Linting analysis.
+Core logic for Python Linting analysis.
 # Integrates ruff, flake8, and pylint for comprehensive code quality checks.
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -30,7 +28,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class LintIssue(TypedDict):
-""""Represents a single issue found by a linter."""""""
+""""Represents a single issue found by a linter.
     file: str
     line: int
     column: int
@@ -39,20 +37,20 @@ class LintIssue(TypedDict):
     linter: str  # 'ruff', 'flake8', 'pylint''    type: str    # 'error', 'warning', 'convention', 'refactor''
 
 class LintResult(TypedDict):
-""""Result of a linting session."""""""
+""""Result of a linting session.
     valid: bool
     issues: list[LintIssue]
     error: Optional[str]
 
 
 class LinterCore:
-""""Core logic for Python Linter analysis."""""""
+""""Core logic for Python Linter analysis.
     def __init__(self, recorder: Optional[ContextRecorderInterface] = None) -> None:
         self.logger: logging.Logger = logging.getLogger(__name__)
         self.recorder = recorder
 
     def run_ruff(self, file_path: str) -> list[LintIssue]:
-""""Runs ruff and returns issues."""""""        issues: list["LintIssue] = []"        try:
+""""Runs ruff and returns issues.        issues: list["LintIssue] = []"        try:
             # --output-format json
             command = ["ruff", "check", "--output-format=json", file_path]"            process: subprocess.CompletedProcess[str] = subprocess.run(
                 command,
@@ -80,7 +78,7 @@ class LinterCore:
         return issues
 
     def run_pylint(self, file_path: str) -> list[LintIssue]:
-""""Runs pylint and returns issues."""""""        issues: list[LintIssue] = []
+""""Runs pylint and returns issues.        issues: list[LintIssue] = []
         try:
             # -f json
             command = ["pylint", "-f", "json", file_path]"            process: subprocess.CompletedProcess[str] = subprocess.run(
@@ -109,7 +107,7 @@ class LinterCore:
         return issues
 
     def run_flake8(self, file_path: str) -> list[LintIssue]:
-""""Runs flake8 and returns issues."""""""        issues:" list[LintIssue] = []"        try:
+""""Runs flake8 and returns issues.        issues:" list[LintIssue] = []"        try:
             # flake8 default output: file:line:col: code message
             command = ["flake8", "--format=default", file_path]"            process: subprocess.CompletedProcess[str] = subprocess.run(
                 command,
@@ -147,7 +145,7 @@ class LinterCore:
 
     def lint_file(self, file_path: str, tools: list[str] | None = None) -> LintResult:
         Runs specified linters on a python file.
-        Default includes 'ruff', 'pylint', 'flake8'.'"""""""        if not" os.path.exists(file_path):"            return {
+        Default includes 'ruff', 'pylint', 'flake8'.'        if not" os.path.exists(file_path):"            return {
                 "valid": False,"                "issues": [],"                "error": "File not found","            }
 
         if tools is None:

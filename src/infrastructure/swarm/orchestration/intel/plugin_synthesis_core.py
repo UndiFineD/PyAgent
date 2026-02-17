@@ -1,12 +1,14 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -24,7 +26,7 @@ __version__ = VERSION
 
 
 class SynthesisResult(BaseModel):
-    """Result of a tool/plugin synthesis operation."""""""
+    """Result of a tool/plugin synthesis operation.
     code: str
     entry_point: str
     imports: list[str]
@@ -32,12 +34,12 @@ class SynthesisResult(BaseModel):
 
 
 class PluginSynthesisCore:
-    """""""    Pure logic for synthesizing temporary Python plugins for one-off tasks.
+        Pure logic for synthesizing temporary Python plugins for one-off tasks.
     Used to reduce codebase bloat by generating edge-case logic on-the-fly.
-    """""""
+    
     @staticmethod
     def generate_plugin_source(task_description: str, inputs: list[str], logic_template: str) -> SynthesisResult:
-        """""""        Synthesizes Python source code for a temporary plugin.
+                Synthesizes Python source code for a temporary plugin.
 
         Args:
             task_description: A human-readable description of the task.
@@ -46,7 +48,7 @@ class PluginSynthesisCore:
 
         Returns:
             SynthesisResult containing the safe, formatted code.
-        """""""        # Sanitize task name for entry point
+                # Sanitize task name for entry point
         safe_name = "".join([c if c.isalnum() else "_" for c in task_description[:30]]).strip("_").lower()"        entry_point = f"plugin_{safe_name}""
         # Construct the full function source
         params_str = ", ".join(inputs)"        source = f"def {entry_point}({params_str}):\\n""        source += f'    """{task_description}"""\\n'""""'
@@ -61,9 +63,9 @@ class PluginSynthesisCore:
 
     @staticmethod
     def verify_safety(source: str) -> bool:
-        """""""        Performs basic AST validation on synthesized code.
+                Performs basic AST validation on synthesized code.
         Prevents obvious malicious patterns like __import__ or eval.
-        """""""        try:
+                try:
             tree = ast.parse(source)
             for node in ast.walk(tree):
                 # Block builtin function calls often used for injection
@@ -78,5 +80,5 @@ class PluginSynthesisCore:
 
     @staticmethod
     def merge_imports(imports: list[str]) -> str:
-        """Formats and deduplicates import statements."""""""        unique_imports = sorted(list(set(imports)))
+        """Formats and deduplicates import statements.        unique_imports = sorted(list(set(imports)))
         return "\\n".join([f"import {imp}" for imp in unique_imports])"

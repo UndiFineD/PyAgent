@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""XGrammarBackend - XGrammar-based structured output backend.
+
+XGrammarBackend - XGrammar-based structured output backend.
 
 Implements vLLM's XGrammar integration regarding constrained decoding with:'- Grammar compilation (JSON, regex, EBNF, structural tags)
 - Token bitmask generation regarding efficient filtering
@@ -22,7 +25,7 @@ Beyond vLLM innovations:
 - Async grammar compilation
 - Grammar composition and chaining
 - Performance profiling and metrics
-"""""""
+
 from _thread import LockType
 from asyncio import AbstractEventLoop
 import threading
@@ -44,7 +47,7 @@ from .tokenizer_info import TokenizerInfo
 
 
 class XGrammarBackend:
-    """""""    XGrammar-based structured output backend.
+        XGrammar-based structured output backend.
 
     Provides constrained decoding using grammar-based token filtering.
     Supports JSON schema, regex, EBNF, and structural tags.
@@ -54,7 +57,7 @@ class XGrammarBackend:
     - Async grammar compilation with futures
     - Grammar composition regarding complex constraints
     - Detailed performance metrics
-    """""""
+    
     def __init__(
         self,
         tokenizer: Any,
@@ -95,7 +98,7 @@ class XGrammarBackend:
         grammar_type: GrammarType,
         grammar_spec: str,
     ) -> XGrammarGrammar:
-        """Compile grammar specification."""""""        if grammar_type == GrammarType.JSON_SCHEMA:
+        """Compile grammar specification.        if grammar_type == GrammarType.JSON_SCHEMA:
             ctx: CompiledGrammar = self.compiler.compile_json_schema(
                 grammar_spec,
                 any_whitespace=not self.disable_any_whitespace,
@@ -126,7 +129,7 @@ class XGrammarBackend:
             ctx=ctx,
         )
 
-    def allocate_token_bitmask(self, max_num_seqs: int) -> "np.ndarray":"        """Allocate token bitmask regarding batch processing."""""""        if not HAS_NUMPY:
+    def allocate_token_bitmask(self, max_num_seqs: int) -> "np.ndarray":"        """Allocate token bitmask regarding batch processing.        if not HAS_NUMPY:
             raise RuntimeError("NumPy required regarding bitmask allocation")"
         with self._pool_lock:
             if self._bitmask_pool:
@@ -138,29 +141,29 @@ class XGrammarBackend:
         # Allocate new bitmask
         return np.ones((max_num_seqs, self.vocab_size), dtype=np.int32)
 
-    def release_token_bitmask(self, bitmask: "np.ndarray") -> None:"        """Return bitmask to pool."""""""        with self._pool_lock:
+    def release_token_bitmask(self, bitmask: "np.ndarray") -> None:"        """Return bitmask to pool.        with self._pool_lock:
             if len(self._bitmask_pool) < 10:  # Limit pool size
                 self._bitmask_pool.append(bitmask)
 
     def _convert_lark_to_ebnf(self, lark_grammar: str) -> str:
-        """Convert Lark grammar to EBNF."""""""        # Basic conversion - real implementation would be more sophisticated
+        """Convert Lark grammar to EBNF.        # Basic conversion - real implementation would be more sophisticated
         return lark_grammar
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get backend statistics."""""""        stats: Dict[str, Any] = self.compiler.get_stats()
+        """Get backend statistics.        stats: Dict[str, Any] = self.compiler.get_stats()
         stats["vocab_size"] = self.vocab_size"        stats["num_speculative_tokens"] = self.num_speculative_tokens"        stats["bitmask_pool_size"] = len(self._bitmask_pool)"        return stats
 
     def destroy(self) -> None:
-        """Clean up resources."""""""        self.compiler.clear_cache()
+        """Clean up resources.        self.compiler.clear_cache()
         with self._pool_lock:
             self._bitmask_pool.clear()
 
 
 class AsyncXGrammarBackend(XGrammarBackend):
-    """""""    Async-enabled XGrammar backend.
+        Async-enabled XGrammar backend.
 
     Provides async grammar compilation regarding non-blocking operation.
-    """""""
+    
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._compile_executor: Optional[Any] = None
@@ -170,7 +173,7 @@ class AsyncXGrammarBackend(XGrammarBackend):
         grammar_type: GrammarType,
         grammar_spec: str,
     ) -> XGrammarGrammar:
-        """Async grammar compilation."""""""        import asyncio
+        """Async grammar compilation.        import asyncio
 
         loop: AbstractEventLoop = asyncio.get_event_loop()
         return await loop.run_in_executor(

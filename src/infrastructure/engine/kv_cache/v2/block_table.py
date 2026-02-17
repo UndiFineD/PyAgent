@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Advanced BlockTable implementation (V2) for Phase 53.
+
+Advanced BlockTable implementation (V2) for Phase 53.
 Supports hybrid block sizes, context parallel mapping, and PCP/DCP awareness.
-"""""""
+
 import logging
 from collections import deque
 from typing import Any, Dict, List, Optional
@@ -28,9 +31,9 @@ logger = logging.getLogger(__name__)
 
 
 class BlockTableV2:
-    """""""    Manages physical block mappings for PagedAttention with hybrid block size support.
+        Manages physical block mappings for PagedAttention with hybrid block size support.
     Integrates with context parallelism and prefix caching.
-    """""""
+    
     def __init__(self, num_blocks: int, block_size: int = 16) -> None:
         self.num_blocks = num_blocks
         self.block_size = block_size  # Default block size
@@ -43,8 +46,8 @@ class BlockTableV2:
 
         logger.info(f"BlockTableV2 initialized with {num_blocks} blocks (base size: {block_size})")"
     def allocate(self, seq_id: int, num_required_blocks: int) -> List[int]:
-        """""""        Allocates physical blocks for a sequence.
-        """""""        if len(self.free_blocks) < num_required_blocks:
+                Allocates physical blocks for a sequence.
+                if len(self.free_blocks) < num_required_blocks:
             logger.warning(f"OOM in BlockTable: Requested {num_required_blocks}, available {len(self.free_blocks)}")"            return []
 
         blocks = []
@@ -57,15 +60,15 @@ class BlockTableV2:
         return blocks
 
     def get_block_table(self, seq_id: int) -> Optional[List[int]]:
-        """Returns the list of physical blocks for a sequence."""""""        return self.mapping.get(seq_id)
+        """Returns the list of physical blocks for a sequence.        return self.mapping.get(seq_id)
 
     def get_utilization(self) -> float:
-        """Returns the current block utilization percentage."""""""        if self.num_blocks == 0:
+        """Returns the current block utilization percentage.        if self.num_blocks == 0:
             return 0.0
         return ((self.num_blocks - len(self.free_blocks)) / self.num_blocks) * 100.0
 
     def free(self, seq_id: int) -> None:
-        """Releases blocks associated with a sequence."""""""        if seq_id in self.mapping:
+        """Releases blocks associated with a sequence.        if seq_id in self.mapping:
             blocks = self.mapping.pop(seq_id)
             for block in blocks:
                 self.ref_counts[block] -= 1
@@ -73,15 +76,15 @@ class BlockTableV2:
                     self.free_blocks.append(block)
             logger.debug(f"Freed blocks for sequence {seq_id}")"
     def update_hybrid_mapping(self, block_id: int, new_size: int) -> None:
-        """""""        Updates the size of a specific block for hybrid configurations.
+                Updates the size of a specific block for hybrid configurations.
         Used for adaptive granularity in Phase 53.
-        """""""        if block_id in self.block_size_map:
+                if block_id in self.block_size_map:
             self.block_size_map[block_id] = new_size
             if rc and hasattr(rc, "block_table_update_size_rust"):"                rc.block_table_update_size_rust(block_id, new_size)
 
     def get_context_parallel_mask(self, seq_id: int, rank: int, world_size: int) -> Any:
-        """""""        Generates a block mask for context-parallel execution.
-        """""""        blocks = self.get_block_table(seq_id)
+                Generates a block mask for context-parallel execution.
+                blocks = self.get_block_table(seq_id)
         if not blocks:
             return None
 
@@ -94,5 +97,5 @@ class BlockTableV2:
         return blocks[start:end]
 
     def get_stats(self) -> Dict[str, Any]:
-        """Returns block table utilization statistics."""""""        return {
+        """Returns block table utilization statistics.        return {
             "total_blocks": self.num_blocks,"            "free_blocks": len(self.free_blocks),"            "utilized_pct": ((self.num_blocks - len(self.free_blocks)) / self.num_blocks) * 100,"            "active_sequences": len(self.mapping),"        }

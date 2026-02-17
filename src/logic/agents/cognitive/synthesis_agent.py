@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Agent responsible for merging specialized agent capabilities.""""""""# from __future__ import annotations
+# "Agent responsible for merging specialized agent capabilities."# from __future__ import annotations
 
 import logging
 import os
@@ -28,7 +30,7 @@ __version__ = VERSION
 class SynthesisAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
     merging specialized agent capabilities into optimized super-agent architectures.
-"""""""
+
     def __init__(self, workspace_root: str) -> None:
         # Initialize with a dummy path as base_agent needs a file path
         dummy_path = os.path.join(
@@ -43,12 +45,12 @@ class SynthesisAgent(BaseAgent):
     async def fuse_agents(
         self, agent_names: list[str], new_agent_name: str
     ) -> dict[str, Any]:
-"""""""        Creates a new agent that combines functionalities of multiple source agents.
+        Creates a new agent that combines functionalities of multiple source agents.
 
         Args:
             agent_names: List of existing agent class names to fuse.
             new_agent_name: The name of the new fused agent class.
-"""""""        logging.info(fSynthesisAgent: Fusing {agent_names} into {new_agent_name}")"
+        logging.info(fSynthesisAgent: Fusing {agent_names} into {new_agent_name}")"
         # Step 1: Analyze the source agents (simulated)
         # We would normally read their files and extract tools.
 
@@ -84,7 +86,7 @@ class SynthesisAgent(BaseAgent):
     def analyze_fusion_candidates(
         self, fleet_agents: list[str]
     ) -> list[dict[str, Any]]:
-"""""""        Analyzes the fleet to suggest which agents should be fused based on "usage patterns.""""""""      "  _ = fleet_agents"        logging.info("SynthesisAgent: Analyzing fleet for fusion candidates.")"        # This would typically use telemetry to find agents that frequently call each other.
+        Analyzes the fleet to suggest which agents should be fused based on "usage patterns."      "  _ = fleet_agents"        logging.info("SynthesisAgent: Analyzing fleet for fusion candidates.")"        # This would typically use telemetry to find agents that frequently call each other.
         # For now, we suggest a logical fusion.
         return [
             {

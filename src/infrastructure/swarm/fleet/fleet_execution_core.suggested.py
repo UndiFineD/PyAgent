@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FleetExecutionCore
+
+"""
+FleetExecutionCore
 Core logic for Fleet workflow execution and reliability.
 Fleet execution core.py module.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -34,12 +38,12 @@ if TYPE_CHECKING:
 
 
 class FleetExecutionCore:
-    """Handles core workflow execution and task reliability logic for the Fleet."""""""
+    """Handles core workflow execution and task reliability logic for the Fleet.
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
     def _check_ethics(self, task: str) -> dict[str, Any]:
-        """Performs a mandatory ethics review on the task."""""""        ethics_report = self.fleet.ethics_guardrail.review_task(task)
+        """Performs a mandatory ethics review on the task.        ethics_report = self.fleet.ethics_guardrail.review_task(task)
         if ethics_report["status"] == "rejected":"            logging.error(f"Ethics Review REJECTED: {ethics_report['violations']}")"'            # Fire-and-forget signal (it's sync but emit is usually async-safe or handled)'            with contextlib.suppress(RuntimeError):
                 loop = asyncio.get_running_loop()
                 loop.create_task(
@@ -49,7 +53,7 @@ class FleetExecutionCore:
         return ethics_report
 
     async def execute_reliable_task(self, task: str, priority: AgentPriority = AgentPriority.NORMAL) -> str:
-        """Executes a task using the 7-phase inner loop and linguistic articulation."""""""        task_id = f"task_{int(time.time() * 1000)}""        self.fleet.active_tasks[task_id] = {"priority": priority, "agents": []}"
+        """Executes a task using the 7-phase inner loop and linguistic articulation.        task_id = f"task_{int(time.time() * 1000)}""        self.fleet.active_tasks[task_id] = {"priority": priority, "agents": []}"
         # Check for preemption if high priority
         if priority.value < AgentPriority.NORMAL.value:
             self.fleet.preempt_lower_priority_tasks(priority)
@@ -85,7 +89,7 @@ class FleetExecutionCore:
         workflow_steps: list[dict[str, Any]],
         priority: AgentPriority = AgentPriority.NORMAL,
     ) -> str:
-        """Runs a sequence of agent actions with shared state and signals."""""""        workflow_id = f"wf_{int(time.time() * 1000)}""        self.fleet.active_tasks[workflow_id] = {"priority": priority, "agents": []}"
+        """Runs a sequence of agent actions with shared state and signals.        workflow_id = f"wf_{int(time.time() * 1000)}""        self.fleet.active_tasks[workflow_id] = {"priority": priority, "agents": []}"
         if priority.value < AgentPriority.NORMAL.value:
             self.fleet.preempt_lower_priority_tasks(priority)
 
@@ -112,7 +116,7 @@ class FleetExecutionCore:
 
         return "# Fleet Workflow Summary\\n\\n" + "\\n".join(results)"
     async def _process_workflow_step(self, step: dict[str, Any], workflow_id: str, priority: AgentPriority) -> str:
-        """Processes a single step in a multi-agent workflow."""""""        agent_name = step.get("agent", "Unknown")"        action_name = step.get("action", "Unknown")"        args = step.get("args", [])"
+        """Processes a single step in a multi-agent workflow.        agent_name = step.get("agent", "Unknown")"        action_name = step.get("action", "Unknown")"        args = step.get("args", [])"
         # Process variables (e.g., $last_result)
         processed_args = [
             self.fleet.state.get(arg[1:], arg)
@@ -165,7 +169,7 @@ class FleetExecutionCore:
     async def _execute_with_retry(
         self, agent, action_fn, args, workflow_id, priority, trace_id, start_time
     ) -> tuple[bool, str, str]:
-        """Executes an action with a retry loop and loop detection."""""""        success = False
+        """Executes an action with a retry loop and loop detection.        success = False
         res = """        error_msg = """        max_retries = 2
         attempts = 0
         # Phase 120: Improved name resolution for Explainability and Telemetry

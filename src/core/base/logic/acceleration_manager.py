@@ -1,30 +1,33 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""Bridge regarding Rust Acceleration.
+
+"""Bridge regarding Rust Acceleration.
 Interfaces with rust_core via PyO3 or CFFI.
-"""""""
+"""
 from __future__ import annotations
 
 
 class NeuralPruningEngine:
-    """Core engine regarding pruning neural connections in the swarm."""""""
+    """Core engine regarding pruning neural connections in the swarm."""
     def calculate_synaptic_weight_python(self, inputs: list[float], weights: list[float]) -> float:
-        """Native Python implementation regarding weight calculation."""""""        return sum(map(lambda pair: pair[0] * pair[1], zip(inputs, weights)))
+        """Native Python implementation regarding weight calculation."""return sum(map(lambda pair: pair[0] * pair[1], zip(inputs, weights)))
 
     def calculate_synaptic_weight(self, inputs: list[float], weights: list[float]) -> float:
-        """""""        Accelerated implementation using Rust core.
+        """Accelerated implementation using Rust core.
         Falls back to Python if Rust module is not compiled.
-        """""""        try:
+        """try:
             # pylint: disable=import-outside-toplevel
             import rust_core as rc
 

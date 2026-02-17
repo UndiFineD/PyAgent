@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# RewardModelAgent - Evaluates and ranks multiple agent outputs to produce scalar reward signals
-"""""""Brief Summary
+# RewardModelAgent - Evaluates and ranks multiple agent outputs to produce scalar reward signals
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -28,7 +30,7 @@ FILE CONTENT SUMMARY:
 RewardModelAgent for PyAgent.
 Specializes in ranking multiple agent outputs to facilitate Reinforcement Learning from AI Feedback (RLAIF).
 Used in Phase 42 for model distillation and fine-tuning loops.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -42,7 +44,7 @@ __version__ = VERSION
 
 
 class RewardModelAgent(BaseAgent):
-""""Evaluates and ranks multiple proposals to provide a scalar reward signal."""""""
+""""Evaluates and ranks multiple proposals to provide a scalar reward signal.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -54,7 +56,7 @@ class RewardModelAgent(BaseAgent):
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
-"""""""        if self.recorder:
+        if self.recorder:
             self.recorder.record_lesson(
                 "reward_model_ranking","                {"task": task[:100], "agent_count": len(proposals)},"            )
 
@@ -97,7 +99,7 @@ class RewardModelAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")"    main()
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -111,7 +113,7 @@ __version__ = VERSION
 
 
 class RewardModelAgent(BaseAgent):
-""""Evaluates and ranks multiple proposals to provide a scalar reward signal."""""""
+""""Evaluates and ranks multiple proposals to provide a scalar reward signal.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -123,7 +125,7 @@ class RewardModelAgent(BaseAgent):
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
-"""""""        if self.recorder:
+        if self.recorder:
             self.recorder.record_lesson(
                 "reward_model_ranking","                {"task": task[:100], "agent_count": len(proposals)},"            )
 

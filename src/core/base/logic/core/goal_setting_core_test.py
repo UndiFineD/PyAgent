@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Tests for Goal Setting and Iterative Refinement Core
-"""""""
+
+"""Tests for Goal Setting and Iterative Refinement Core
+"""
 import pytest
 import asyncio
 
@@ -23,9 +26,9 @@ from src.core.base.logic.core.goal_setting_core import (
 
 
 class TestGoalSettingCore:
-    """Test suite for goal setting core."""""""
+    """Test suite for goal setting core."""
     def test_goal_creation(self):
-        """Test goal creation and validation."""""""        core = GoalSettingCore()
+        """Test goal creation and validation."""core = GoalSettingCore()
 
         goal = asyncio.run(core.create_goal(
             goal_id="test_goal","            description="Test goal description","            criteria=["simple", "tested", "handles edge cases"],"            priority=GoalPriority.HIGH,
@@ -38,7 +41,7 @@ class TestGoalSettingCore:
         assert goal.current_iteration == 0
 
     def test_goal_evaluation_default(self):
-        """Test default content evaluation."""""""        core = GoalSettingCore()
+        """Test default content evaluation."""core = GoalSettingCore()
 
         # Test content that meets criteria
         evaluation = asyncio.run(core.evaluate_content(
@@ -50,7 +53,7 @@ class TestGoalSettingCore:
 
         assert evaluation["goals_met"] is False"        assert "Missing requirement" in evaluation["feedback"]"
     def test_goal_refinement_default(self):
-        """Test default content refinement."""""""        core = GoalSettingCore()
+        """Test default content refinement."""core = GoalSettingCore()
 
         refined = asyncio.run(core.refine_content(
             content="Original content","            feedback="Missing requirement: tested","            criteria=["simple", "tested"]"        ))
@@ -59,7 +62,7 @@ class TestGoalSettingCore:
         assert "Missing requirement: tested" not in refined"
     @pytest.mark.asyncio
     async def test_iterative_refinement_achievement(self):
-        """Test iterative refinement that achieves goals."""""""        goal_core = GoalSettingCore()
+        """Test iterative refinement that achieves goals."""goal_core = GoalSettingCore()
         try:
             # Create goal
             await goal_core.create_goal(
@@ -87,7 +90,7 @@ class TestGoalSettingCore:
 
     @pytest.mark.asyncio
     async def test_iterative_refinement_max_iterations(self):
-        """Test iterative refinement that hits max iterations."""""""        goal_core = GoalSettingCore()
+        """Test iterative refinement that hits max iterations."""goal_core = GoalSettingCore()
         try:
             # Create goal that will never succeed
             await goal_core.create_goal(
@@ -103,7 +106,7 @@ class TestGoalSettingCore:
 
     @pytest.mark.asyncio
     async def test_goal_status_tracking(self):
-        """Test goal status tracking."""""""        goal_core = GoalSettingCore()
+        """Test goal status tracking."""goal_core = GoalSettingCore()
         try:
             # Create goal
             goal = await goal_core.create_goal("status_goal", "Status test", ["test"])"

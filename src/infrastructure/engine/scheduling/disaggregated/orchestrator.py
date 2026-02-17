@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Orchestrator.py module.
-"""""""
+
+Orchestrator.py module.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -28,12 +31,12 @@ logger = logging.getLogger(__name__)
 class ProxyOrchestrator:
     """Orchestrator that wraps DisaggregatedScheduler for easier request management.""""
     Acts as a high-level API for disaggregated prefill-decode serving.
-    """""""
+    
     def __init__(self, scheduler: DisaggregatedScheduler) -> None:
         self.scheduler = scheduler
 
     def create_request(self, prompt: str, max_tokens: int = 128, request_id: Optional[str] = None) -> ScheduledRequest:
-        """Create a new request for scheduling."""""""        if request_id is None:
+        """Create a new request for scheduling.        if request_id is None:
             request_id = f"req-{uuid.uuid4().hex[:8]}""
         from .config import KVTransferParams
 
@@ -49,7 +52,7 @@ class ProxyOrchestrator:
     async def process_request(self, request: ScheduledRequest) -> Dict[str, Any]:
         """Process a request through prefill and decode phases.""""
         This is a simplified orchestration flow.
-        """""""        try:
+                try:
             # 1. Schedule Prefill
             prefill_instance, _ = self.scheduler.schedule_prefill(request)
             if not prefill_instance:

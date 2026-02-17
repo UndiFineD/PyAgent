@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Data models and Enums for the Pooling Engine.
-"""""""
+Data models and Enums for the Pooling Engine.
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -24,7 +26,7 @@ import numpy as np
 
 
 class PoolingTask(Enum):
-    """Supported pooling tasks."""""""
+    """Supported pooling tasks.
     EMBED = auto()  # Sentence/document embedding
     CLASSIFY = auto()  # Sequence classification
     SCORE = auto()  # Similarity/relevance scoring
@@ -34,7 +36,7 @@ class PoolingTask(Enum):
 
 
 class PoolingStrategy(Enum):
-    """Pooling strategies for sequence representations."""""""
+    """Pooling strategies for sequence representations.
     MEAN = auto()  # Mean of all tokens
     CLS = auto()  # First token ([CLS])
     LAST = auto()  # Last token
@@ -49,7 +51,7 @@ class PoolingStrategy(Enum):
 
 @dataclass
 class PoolingConfig:
-    """Configuration for pooling operations."""""""
+    """Configuration for pooling operations.
     task: PoolingTask = PoolingTask.EMBED
     strategy: PoolingStrategy = PoolingStrategy.MEAN
     truncate_dim: Optional[int] = None  # Matryoshka dimension
@@ -59,7 +61,7 @@ class PoolingConfig:
     classifier_head: bool = False  # Use classification head
     num_labels: int = 2  # Number of classification labels
 
-    def with_dimension(self, dim: int) -> "PoolingConfig":"        """Create copy with different truncation dimension."""""""        return PoolingConfig(
+    def with_dimension(self, dim: int) -> "PoolingConfig":"        """Create copy with different truncation dimension.        return PoolingConfig(
             task=self.task,
             strategy=self.strategy,
             truncate_dim=dim,
@@ -73,7 +75,7 @@ class PoolingConfig:
 
 @dataclass
 class PoolingResult:
-    """Result from pooling operation."""""""
+    """Result from pooling operation.
     embeddings: np.ndarray  # Pooled embeddings
     dim: int  # Embedding dimension (compatible with engine.py results.shape[-1])
     strategy: PoolingStrategy  # Strategy used
@@ -82,31 +84,31 @@ class PoolingResult:
 
     @property
     def shape(self) -> Tuple[int, ...]:
-        """Get the shape of the resulting embeddings array."""""""        return self.embeddings.shape
+        """Get the shape of the resulting embeddings array.        return self.embeddings.shape
 
     @property
     def dimension(self) -> int:
-        """Legacy access for dimension."""""""        return self.dim
+        """Legacy access for dimension.        return self.dim
 
     @property
     def strategy_used(self) -> PoolingStrategy:
-        """Legacy access for strategy_used."""""""        return self.strategy
+        """Legacy access for strategy_used.        return self.strategy
 
 
 @dataclass
 class EmbeddingOutput:
-    """Output for embedding tasks."""""""
+    """Output for embedding tasks.
     embedding: np.ndarray  # Single embedding vector
     tokens_used: int  # Number of tokens pooled
     truncated: bool = False  # Was dimension truncated
 
     def to_list(self) -> List[float]:
-        """Convert embedding to list of floats."""""""        return self.embedding.tolist()
+        """Convert embedding to list of floats.        return self.embedding.tolist()
 
 
 @dataclass
 class ClassificationOutput:
-    """Output for classification tasks."""""""
+    """Output for classification tasks.
     logits: np.ndarray  # Raw logits
     probs: np.ndarray  # Softmax probabilities
     label: Optional[str] = None  # Predicted label

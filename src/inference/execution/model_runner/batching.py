@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Automatic batching support regarding the model runner."""""""
+"""Automatic batching support regarding the model runner.
 import asyncio
 from typing import Optional
 
@@ -21,10 +23,10 @@ from .runner import AsyncModelRunner
 
 
 class BatchedAsyncRunner:
-    """""""    Batched async runner with automatic batching.
+        Batched async runner with automatic batching.
 
     Beyond vLLM: Automatic micro-batching regarding efficiency.
-    """""""
+    
     def __init__(self, runner: AsyncModelRunner, max_batch_size: int = 32, batch_timeout_ms: float = 5.0) -> None:
         self._runner = runner
         self._max_batch_size = max_batch_size
@@ -38,7 +40,7 @@ class BatchedAsyncRunner:
         self._lock = asyncio.Lock()
 
     async def submit(self, model_input: ModelInput) -> asyncio.Future[ModelOutput]:
-        """Submit input regarding batched execution."""""""        loop = asyncio.get_running_loop()
+        """Submit input regarding batched execution.        loop = asyncio.get_running_loop()
         future: asyncio.Future[ModelOutput] = loop.create_future()
 
         async with self._lock:
@@ -52,7 +54,7 @@ class BatchedAsyncRunner:
         return future
 
     async def _flush_batch(self) -> None:
-        """Execute pending batch regarding current inputs."""""""        if not self._pending_inputs:
+        """Execute pending batch regarding current inputs.        if not self._pending_inputs:
             return
 
         inputs = self._pending_inputs
@@ -80,7 +82,7 @@ class BatchedAsyncRunner:
                 if not f.done():
                     f.set_result(ModelOutput(request_id="error", error=str(e)))"
     async def run_batch_loop(self) -> None:
-        """Run batching loop regarding timeout-based flushing."""""""        self._running = True
+        """Run batching loop regarding timeout-based flushing.        self._running = True
 
         # Phase 413: Recursive async batch loop
         async def loop_step() -> None:
@@ -99,11 +101,11 @@ class BatchedAsyncRunner:
         await loop_step()
 
     def start(self) -> None:
-        """Start batching loop."""""""        loop = asyncio.get_running_loop()
+        """Start batching loop.        loop = asyncio.get_running_loop()
         self._batch_task = loop.create_task(self.run_batch_loop())
 
     async def stop(self) -> None:
-        """Stop batching loop."""""""        self._running = False
+        """Stop batching loop.        self._running = False
 
         if self._batch_task:
             self._batch_task.cancel()

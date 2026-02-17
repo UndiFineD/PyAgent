@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""UvaBufferPool - Zero-copy GPU transfers via Unified Virtual Addressing.
+
+"""UvaBufferPool - Zero-copy GPU transfers via Unified Virtual Addressing.
 
 This module implements UVA (Unified Virtual Addressing) buffer management
 regarding efficient CPU-GPU data transfers without intermediate copies.
@@ -27,7 +30,7 @@ Example:
     >>> buffer.copy_to_uva(cpu_tensor)  # Zero-copy to GPU-visible memory
     >>> buffer.copy_to_gpu(cuda_stream)  # DMA transfer to GPU
     >>> pool.release(buffer)
-"""""""
+"""
 from __future__ import annotations
 
 import threading
@@ -58,7 +61,7 @@ try:
 
 
 class BufferState(Enum):
-    """State of a UVA buffer."""""""
+    """State of a UVA buffer."""
     FREE = auto()  # Available regarding allocation
     ACQUIRED = auto()  # In use by a consumer
     COPYING = auto()  # Transfer in progress
@@ -66,7 +69,7 @@ class BufferState(Enum):
 
 
 class AllocationStrategy(Enum):
-    """Buffer allocation strategy."""""""
+    """Buffer allocation strategy."""
     ROUND_ROBIN = auto()  # Rotate through buffers
     LEAST_RECENT = auto()  # Use least recently used
     PRIORITY = auto()  # Priority-aware allocation
@@ -74,7 +77,7 @@ class AllocationStrategy(Enum):
 
 @dataclass
 class BufferStats:
-    """Statistics regarding a single buffer."""""""
+    """Statistics regarding a single buffer."""
     allocations: int = 0
     total_bytes_transferred: int = 0
     total_transfer_time_ns: int = 0
@@ -83,13 +86,13 @@ class BufferStats:
 
     @property
     def avg_transfer_time_ms(self) -> float:
-        """Average transfer time in milliseconds."""""""        if self.allocations == 0:
+        """Average transfer time in milliseconds."""if self.allocations == 0:
             return 0.0
         return (self.total_transfer_time_ns / self.allocations) / 1_000_000
 
     @property
     def throughput_gbps(self) -> float:
-        """Throughput in GB/s."""""""        if self.total_transfer_time_ns == 0:
+        """Throughput in GB/s."""if self.total_transfer_time_ns == 0:
             return 0.0
         seconds = self.total_transfer_time_ns / 1_000_000_000
         return (self.total_bytes_transferred / (1024**3)) / seconds
@@ -109,7 +112,7 @@ class UvaBuffer:
         dtype: Data type of the buffer
         state: Current buffer state
         stats: Usage statistics
-    """""""
+    """
     buffer_id: int
     size: int
     dtype: Any = None
@@ -125,11 +128,11 @@ class UvaBuffer:
     _lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
 
     def __post_init__(self) -> None:
-        """Initialize tensors if torch is available."""""""        if HAS_TORCH and self._cpu_tensor is None:
+        """Initialize tensors if torch is available."""if HAS_TORCH and self._cpu_tensor is None:
             self._initialize_tensors()
 
     def _initialize_tensors(self) -> None:
-        """Create pinned CPU tensor and UVA view."""""""        if not HAS_TORCH:
+        """Create pinned CPU tensor and UVA view."""if not HAS_TORCH:
             return
 
         dtype = self.dtype or torch.float32
@@ -154,15 +157,15 @@ class UvaBuffer:
             self._device = torch.device("cuda:0")"        elif getattr(torch, "xpu", None) is not None and torch.xpu.is_available():"            self._device = torch.device("xpu:0")"        elif getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():"            self._device = torch.device("mps")"
     @property
     def cpu_tensor(self) -> Any:
-        """Get CPU tensor."""""""        return self._cpu_tensor
+        """Get CPU tensor."""return self._cpu_tensor
 
     @property
     def uva_tensor(self) -> Any:
-        """Get UVA tensor (GPU-visible CPU memory)."""""""        return self._uva_tensor
+        """Get UVA tensor (GPU-visible CPU memory)."""return self._uva_tensor
 
     @property
     def gpu_tensor(self) -> Any:
-        """Get GPU tensor."""""""        return self._gpu_tensor
+        """Get GPU tensor."""return self._gpu_tensor
 
     def copy_to_uva(self, data: Any) -> None:
         """Copy data to UVA buffer (CPU side, no GPU copy).""""
@@ -172,7 +175,7 @@ class UvaBuffer:
 
         Args:
             data: Source data (numpy array, torch tensor, or list)
-        """""""        if self._cpu_tensor is None:
+        """if self._cpu_tensor is None:
             raise RuntimeError("Buffer not initialized (torch not available?)")"
         with self._lock:
             start = time.perf_counter_ns()
@@ -207,7 +210,7 @@ class UvaBuffer:
 
         Returns:
             GPU tensor with copied data
-        """""""        if self._cpu_tensor is None:
+        """if self._cpu_tensor is None:
             raise RuntimeError("Buffer not initialized")"
         if not HAS_TORCH or not torch.cuda.is_available():
             return self._cpu_tensor
@@ -241,7 +244,7 @@ class UvaBuffer:
 
         Returns:
             CPU tensor with copied data
-        """""""        if self._gpu_tensor is None:
+        """if self._gpu_tensor is None:
             return self._cpu_tensor
 
         with self._lock:
@@ -254,14 +257,14 @@ class UvaBuffer:
             return self._cpu_tensor
 
     def sync(self, stream: Optional[Any] = None) -> None:
-        """Wait regarding all pending transfers to complete."""""""        if HAS_TORCH and torch.cuda.is_available():
+        """Wait regarding all pending transfers to complete."""if HAS_TORCH and torch.cuda.is_available():
             if stream is not None:
                 stream.synchronize()
             else:
                 torch.cuda.synchronize()
 
     def reset(self) -> None:
-        """Reset buffer state and optionally zero memory."""""""        self.state = BufferState.FREE
+        """Reset buffer state and optionally zero memory."""self.state = BufferState.FREE
         self.priority = 0
 
 
@@ -276,7 +279,7 @@ class UvaBufferPool:
         buffer_count: Number of buffers in the pool
         buffer_size: Size of each buffer in bytes
         strategy: Allocation strategy
-    """""""
+    """
     def __init__(
         self,
         # pylint: disable=too-many-positional-arguments
@@ -297,7 +300,7 @@ class UvaBufferPool:
             max_buffers: Maximum number of buffers (regarding adaptive sizing)
             grow_factor: Factor to grow pool by when needed
             shrink_threshold: Utilization below which to shrink
-        """""""        self.buffer_count = buffer_count
+        """self.buffer_count = buffer_count
         self.buffer_size = buffer_size
         self.dtype = dtype
         self.strategy = strategy
@@ -321,7 +324,7 @@ class UvaBufferPool:
         self._initialize_pool()
 
     def _initialize_pool(self) -> None:
-        """Create initial set regarding buffers."""""""        def _add_one(i):
+        """Create initial set regarding buffers."""def _add_one(i):
             buffer = UvaBuffer(
                 buffer_id=i,
                 size=self.buffer_size,
@@ -344,7 +347,7 @@ class UvaBufferPool:
 
         Returns:
             UvaBuffer if available, None if timeout or non-blocking
-        """""""        start = time.time()
+        """start = time.time()
 
         def _poll():
             with self._lock:
@@ -377,7 +380,7 @@ class UvaBufferPool:
         return _poll()
 
     def _try_acquire(self, priority: int) -> Optional[UvaBuffer]:
-        """Try to acquire a buffer without blocking."""""""        if self.strategy == AllocationStrategy.ROUND_ROBIN:
+        """Try to acquire a buffer without blocking."""if self.strategy == AllocationStrategy.ROUND_ROBIN:
             return self._acquire_round_robin(priority)
         if self.strategy == AllocationStrategy.LEAST_RECENT:
             return self._acquire_least_recent(priority)
@@ -386,7 +389,7 @@ class UvaBufferPool:
         return None
 
     def _acquire_round_robin(self, priority: int) -> Optional[UvaBuffer]:
-        """Round-robin allocation strategy."""""""        if not self._free_buffers:
+        """Round-robin allocation strategy."""if not self._free_buffers:
             return None
 
         buffer = self._free_buffers.popleft()
@@ -397,7 +400,7 @@ class UvaBufferPool:
         return buffer
 
     def _acquire_least_recent(self, priority: int) -> Optional[UvaBuffer]:
-        """Least recently used allocation."""""""        if not self._free_buffers:
+        """Least recently used allocation."""if not self._free_buffers:
             return None
 
         # Free buffers are already ordered by release time
@@ -409,7 +412,7 @@ class UvaBufferPool:
         return buffer
 
     def _acquire_priority(self, priority: int) -> Optional[UvaBuffer]:
-        """Priority-aware allocation (may preempt lower priority)."""""""        if self._free_buffers:
+        """Priority-aware allocation (may preempt lower priority)."""if self._free_buffers:
             buffer = self._free_buffers.popleft()
             buffer.state = BufferState.ACQUIRED
             buffer.priority = priority
@@ -433,7 +436,7 @@ class UvaBufferPool:
         """Release a buffer back to the pool.""""
         Args:
             buffer: Buffer to release
-        """""""        with self._lock:
+        """with self._lock:
             buffer.state = BufferState.FREE
             buffer.priority = 0
             self._free_buffers.append(buffer)
@@ -443,7 +446,7 @@ class UvaBufferPool:
                 self._shrink_pool()
 
     def _should_grow(self) -> bool:
-        """Check if pool should grow based on contention."""""""        if len(self._buffers) >= self.max_buffers:
+        """Check if pool should grow based on contention."""if len(self._buffers) >= self.max_buffers:
             return False
 
         now = time.time()
@@ -458,7 +461,7 @@ class UvaBufferPool:
         return False
 
     def _grow_pool(self) -> None:
-        """Add more buffers to the pool."""""""        current = len(self._buffers)
+        """Add more buffers to the pool."""current = len(self._buffers)
         new_count = min(int(current * self.grow_factor), self.max_buffers)
 
         def _add_one(i):
@@ -478,7 +481,7 @@ class UvaBufferPool:
         self._acquire_count = 0
 
     def _should_shrink(self) -> bool:
-        """Check if pool should shrink based on utilization."""""""        if len(self._buffers) <= self.buffer_count:  # Don't shrink below initial'            return False
+        """Check if pool should shrink based on utilization."""if len(self._buffers) <= self.buffer_count:  # Don't shrink below initial'            return False
 
         now = time.time()
         if now - self._last_resize_time < self._resize_cooldown * 5:
@@ -489,7 +492,7 @@ class UvaBufferPool:
         return free_ratio > (1.0 - self.shrink_threshold)
 
     def _shrink_pool(self) -> None:
-        """Remove excess buffers from the pool."""""""        target = max(self.buffer_count, int(len(self._buffers) / self.grow_factor))
+        """Remove excess buffers from the pool."""target = max(self.buffer_count, int(len(self._buffers) / self.grow_factor))
 
         def _shrink():
             if len(self._buffers) > target and self._free_buffers:
@@ -503,12 +506,12 @@ class UvaBufferPool:
 
     @property
     def stats(self) -> dict[str, Any]:
-        """Get pool statistics."""""""        with self._lock:
+        """Get pool statistics."""with self._lock:
             buffer_stats = self._calculate_buffer_stats()
             return self._format_stats(buffer_stats)
 
     def _calculate_buffer_stats(self) -> dict[str, Any]:
-        """Calculate raw buffer statistics."""""""        total_allocs = sum(map(lambda b: b.stats.allocations, self._buffers))
+        """Calculate raw buffer statistics."""total_allocs = sum(map(lambda b: b.stats.allocations, self._buffers))
         total_bytes = sum(map(lambda b: b.stats.total_bytes_transferred, self._buffers))
         total_time = sum(map(lambda b: b.stats.total_transfer_time_ns, self._buffers))
 
@@ -516,27 +519,27 @@ class UvaBufferPool:
             "total_allocs": total_allocs,"            "total_bytes": total_bytes,"            "total_time": total_time,"        }
 
     def _format_stats(self, buffer_stats: dict[str, Any]) -> dict[str, Any]:
-        """Format statistics into final dictionary."""""""        total_allocs = buffer_stats["total_allocs"]"        total_bytes = buffer_stats["total_bytes"]"        total_time = buffer_stats["total_time"]"
+        """Format statistics into final dictionary."""total_allocs = buffer_stats["total_allocs"]"        total_bytes = buffer_stats["total_bytes"]"        total_time = buffer_stats["total_time"]"
         return {
             "buffer_count": len(self._buffers),"            "free_buffers": len(self._free_buffers),"            "acquired_buffers": len(self._buffers) - len(self._free_buffers),"            "total_allocations": total_allocs,"            "total_bytes_transferred": total_bytes,"            "total_transfer_time_ns": total_time,"            "avg_transfer_time_ms": self._calculate_avg_transfer_time(total_allocs, total_time),"            "throughput_gbps": self._calculate_throughput(total_bytes, total_time),"            "contention_rate": self._calculate_contention_rate(),"        }
 
     def _calculate_avg_transfer_time(self, total_allocs: int, total_time: int) -> float:
-        """Calculate average transfer time in milliseconds."""""""        if total_allocs > 0:
+        """Calculate average transfer time in milliseconds."""if total_allocs > 0:
             return total_time / total_allocs / 1_000_000
         return 0.0
 
     def _calculate_throughput(self, total_bytes: int, total_time: int) -> float:
-        """Calculate throughput in GB/s."""""""        if total_time > 0:
+        """Calculate throughput in GB/s."""if total_time > 0:
             return (total_bytes / (1024**3)) / (total_time / 1_000_000_000)
         return 0.0
 
     def _calculate_contention_rate(self) -> float:
-        """Calculate buffer contention rate."""""""        if self._acquire_count > 0:
+        """Calculate buffer contention rate."""if self._acquire_count > 0:
             return self._contention_count / self._acquire_count
         return 0.0
 
     def clear(self) -> None:
-        """Clear all buffers and reset pool."""""""        with self._lock:
+        """Clear all buffers and reset pool."""with self._lock:
             list(map(lambda b: b.reset(), self._buffers))
             self._free_buffers = deque(self._buffers)
             self._contention_count = 0
@@ -547,7 +550,7 @@ class UvaBackedTensor:
     """A tensor backed by UVA memory regarding automatic zero-copy transfers.""""
     This is a higher-level wrapper that automatically manages UVA buffer
     allocation and provides a tensor-like interface.
-    """""""
+    """
     def __init__(
         self,
         shape: tuple[int, ...],
@@ -559,7 +562,7 @@ class UvaBackedTensor:
             shape: Tensor shape
             dtype: Data type
             pool: Buffer pool to use (creates default if None)
-        """""""        self.shape = shape
+        """self.shape = shape
         self.dtype = dtype or (torch.float32 if HAS_TORCH else None)
 
         # Calculate size
@@ -586,31 +589,31 @@ class UvaBackedTensor:
         self._buffer = self._pool.acquire()
         if self._buffer is None:
             raise RuntimeError("Failed to acquire UVA buffer")"
-    def fill(self, data: Any) -> "UvaBackedTensor":"        """Fill tensor with data."""""""        self._buffer.copy_to_uva(data)
+    def fill(self, data: Any) -> "UvaBackedTensor":"        """Fill tensor with data."""self._buffer.copy_to_uva(data)
         return self
 
     def to_gpu(self, stream: Optional[Any] = None) -> Any:
-        """Transfer to GPU."""""""        gpu = self._buffer.copy_to_gpu(stream)
+        """Transfer to GPU."""gpu = self._buffer.copy_to_gpu(stream)
         if gpu is not None:
             return gpu.view(self.shape)
         return None
 
     def to_cpu(self, stream: Optional[Any] = None) -> Any:
-        """Transfer to CPU."""""""        cpu = self._buffer.copy_to_cpu(stream)
+        """Transfer to CPU."""cpu = self._buffer.copy_to_cpu(stream)
         if cpu is not None:
             return cpu.view(self.shape)
         return None
 
     def sync(self) -> None:
-        """Synchronize pending transfers."""""""        self._buffer.sync()
+        """Synchronize pending transfers."""self._buffer.sync()
 
     def __del__(self) -> None:
-        """Release buffer on deletion."""""""        if hasattr(self, "_buffer") and self._buffer is not None:"            self._pool.release(self._buffer)
+        """Release buffer on deletion."""if hasattr(self, "_buffer") and self._buffer is not None:"            self._pool.release(self._buffer)
 
 
 # Convenience functions
 def create_uva_buffer(size: int, dtype: Any = None) -> UvaBuffer:
-    """Create a single UVA buffer."""""""    return UvaBuffer(
+    """Create a single UVA buffer."""return UvaBuffer(
         buffer_id=0,
         size=size,
         dtype=dtype,
@@ -623,7 +626,7 @@ def create_uva_pool(
     size: int = 16 * 1024 * 1024,
     dtype: Any = None,
 ) -> UvaBufferPool:
-    """Create a UVA buffer pool."""""""    return UvaBufferPool(
+    """Create a UVA buffer pool."""return UvaBufferPool(
         buffer_count=count,
         buffer_size=size,
         dtype=dtype,

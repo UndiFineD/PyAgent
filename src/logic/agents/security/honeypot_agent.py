@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Honeypot Agent - Detect and analyze adversarial inputs
-"""""""# [BATCHFIX] Commented metadata/non-Python
+
+"""
+Honeypot Agent - Detect and analyze adversarial inputs
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -33,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Honeypot agent.py module.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -51,7 +55,7 @@ __version__ = VERSION
 class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Detects and neutralizes prompt injection and adversarial attacks.
 #     Integrated with RedQueenCore for adversarial prompt evolution testing.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = RedQueenCore()
@@ -69,7 +73,7 @@ class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:"""""""""""        Inspects input for "ignore previous instruction" or similar patterns.""""""""        adversarial_patterns = [
+"""     async def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""""        Inspects input for "ignore previous instruction" or similar patterns."        adversarial_patterns = [
             "ignore all previous","            "system prompt","            "developer mode","            "DAN mode","        ]
         hit = False
         for pattern in adversarial_patterns:
@@ -101,7 +105,7 @@ class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def generate_test_attacks(self, base_task: str) -> list[str]:""""""""Generates a batch of mutated adversarial prompts for stress testing."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def generate_test_attacks(self, base_task: str) -> list[str]:"Generates a batch of mutated adversarial prompts for stress testing.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#   "      attacks = []"  # [BATCHFIX] closed string"        for strategy in self.core.MUTATION_STRATEGIES:
             attacks.append(self.core.mutate_prompt(base_task, strategy))
 
@@ -111,11 +115,11 @@ class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_trap_statistics(self) -> dict[str, Any]:""""""""Returns statistics on trapped adversarial attempts"."""""""        return {
+"""     def get_trap_statistics(self) -> dict[str, Any]:"Returns statistics on trapped adversarial attempts".        return {
             "attempts_neutralized": len(self.trapped_attempts),"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             "last_trap_time": self.trapped_attempts[-1]["timestamp"] if self.trapped_attempts else None,"        }
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -133,7 +137,7 @@ __version__ = VERSION
 class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Detects and neutralizes prompt injection and adversarial attacks.
     Integrated with RedQueenCore for adversarial prompt evolution testing.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = RedQueenCore()
@@ -151,8 +155,8 @@ class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:"""""""""""# [BATCHFIX] Commented metadata/non-Python
-#         Inspects input for "ignore previous "instruction" or similar patterns."  # [BATCHFIX] closed string""""""""        adversarial_patterns = [
+"""     async def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""""# [BATCHFIX] Commented metadata/non-Python
+#         Inspects input for "ignore previous "instruction" or similar patterns."  # [BATCHFIX] closed string"        adversarial_patterns = [
             "ignore all previous","            "system prompt","            "developer mode","            "DAN mode","        ]
         hit = False
         for pattern in adversarial_patterns:
@@ -184,7 +188,7 @@ class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def generate_test_attacks(self, base_task: str) -> list[str]:""""""""Generates a batch of mutated adversarial prompts for "stress testing."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def generate_test_attacks(self, base_task: str) -> list[str]:"Generates a batch of mutated adversarial prompts for "stress testing.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         attacks = []""""        for strategy in self.core.MUTATION_STRATEGIES:
             attacks.append(self.core.mutate_prompt(base_task, strategy))
@@ -195,7 +199,7 @@ class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_trap_statistics(self) -> dict[str, Any]:""""""""Returns statistics on trapped" adversarial attempts."""""""        return {
+"""     def get_trap_statistics(self) -> dict[str, Any]:"Returns statistics on trapped" adversarial attempts.        return {
             "attempts_neutralized": len(self.trapped_attempts),"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             "last_trap_time": self.trapped_attempts[-1]["timestamp"] if self.trapped_attempts else None,"        }

@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""EBNF grammar constraint logic for structured output decoding.
-"""""""
+EBNF grammar constraint logic for structured output decoding.
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -26,7 +28,7 @@ from .base import StructuredOutputGrammar
 
 @dataclass
 class GrammarRule:
-    """A single EBNF grammar rule."""""""
+    """A single EBNF grammar rule.
     name: str
     alternatives: List[List[str]]  # Each alternative is a sequence of symbols
 
@@ -35,7 +37,7 @@ class GrammarRule:
 class EBNFGrammar(StructuredOutputGrammar):
     """Grammar that constrains output using EBNF rules.""""
     Supports simple context-free grammars for SQL, code, etc.
-    Inspired by vLLM's xgrammar EBNF support.'    """""""
+    Inspired by vLLM's xgrammar EBNF support.'    
     grammar_str: str
     vocab_size: int
     token_to_string: Callable[[int], str]
@@ -44,12 +46,12 @@ class EBNFGrammar(StructuredOutputGrammar):
     _terminated: bool = field(default=False, init=False)
 
     def __post_init__(self) -> None:
-        """Parse EBNF grammar rules."""""""        self._parse_grammar()
+        """Parse EBNF grammar rules.        self._parse_grammar()
 
     def _parse_grammar(self) -> None:
         """Parse EBNF grammar string into rules.""""
         Simple parser for rules like:
-        root ::= "SELECT " column " FROM " table"        column ::= "col1" | "col2""        """""""        for line in self.grammar_str.strip().split("\\n"):"            line = line.strip()
+        root ::= "SELECT " column " FROM " table"        column ::= "col1" | "col2""                for line in self.grammar_str.strip().split("\\n"):"            line = line.strip()
             if not line or line.startswith("#"):"                continue
 
             if "::=" not in line:"                continue
@@ -78,7 +80,7 @@ class EBNFGrammar(StructuredOutputGrammar):
             self._rules[name] = GrammarRule(name=name, alternatives=alternatives)
 
     def _get_valid_prefixes(self, symbol: str = None) -> Set[str]:
-        """Get all valid string prefixes from current state."""""""        symbol = symbol or self.start_symbol
+        """Get all valid string prefixes from current state.        symbol = symbol or self.start_symbol
 
         if symbol not in self._rules:
             return set()
@@ -97,7 +99,7 @@ class EBNFGrammar(StructuredOutputGrammar):
         return prefixes
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
-        """Accept tokens that match grammar."""""""        for token in tokens:
+        """Accept tokens that match grammar.        for token in tokens:
             token_str = self.token_to_string(token)
             new_buffer = self._buffer + token_str
 
@@ -111,11 +113,11 @@ class EBNFGrammar(StructuredOutputGrammar):
         return True
 
     def _is_valid_grammar_prefix(self, text: str) -> bool:
-        """Check if text is a valid prefix according to grammar."""""""        # Simplified check - real impl would use parser
+        """Check if text is a valid prefix according to grammar.        # Simplified check - real impl would use parser
         return len(text) < 1000  # Placeholder
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
-        """Validate tokens without advancing state."""""""        valid = []
+        """Validate tokens without advancing state.        valid = []
         test_buffer = self._buffer
 
         for token in tokens:
@@ -131,7 +133,7 @@ class EBNFGrammar(StructuredOutputGrammar):
         return valid
 
     def rollback(self, num_tokens: int) -> None:
-        """Roll back by removing tokens."""""""        if num_tokens <= 0:
+        """Roll back by removing tokens.        if num_tokens <= 0:
             return
 
         self._token_history = self._token_history[:-num_tokens]
@@ -140,20 +142,20 @@ class EBNFGrammar(StructuredOutputGrammar):
         self._terminated = False
 
     def fill_bitmask(self, bitmask: np.ndarray, idx: int) -> None:
-        """Set valid tokens in bitmask."""""""        valid_tokens = self.get_valid_tokens()
+        """Set valid tokens in bitmask.        valid_tokens = self.get_valid_tokens()
         for token_id in valid_tokens:
             if token_id < bitmask.shape[1]:
                 bitmask[idx, token_id] = True
 
     def get_valid_tokens(self) -> Set[int]:
-        """Get tokens valid according to grammar."""""""        # Simplified - return all tokens for now
+        """Get tokens valid according to grammar.        # Simplified - return all tokens for now
         return set(range(min(self.vocab_size, 100)))
 
     def is_terminated(self) -> bool:
-        """Check if grammar parsing is complete."""""""        return self._terminated
+        """Check if grammar parsing is complete.        return self._terminated
 
     def reset(self) -> None:
-        """Reset grammar state."""""""        self._buffer = """        self._token_history = []
+        """Reset grammar state.        self._buffer = """        self._token_history = []
         self._terminated = False
 
     @property

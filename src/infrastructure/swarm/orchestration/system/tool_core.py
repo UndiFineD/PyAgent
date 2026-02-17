@@ -1,17 +1,21 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Tool core.py module.
-"""""""
+
+"""
+Tool core.py module.
+
 
 from __future__ import annotations
 
@@ -36,7 +40,7 @@ __version__ = VERSION
 
 
 class ToolMetadata(BaseModel):
-    """Metadata for a registered tool."""""""
+    """Metadata for a registered tool.
     name: str
     description: str
     parameters: dict[str, Any]
@@ -47,11 +51,11 @@ class ToolMetadata(BaseModel):
 
 
 class ToolCore:
-    """""""    Pure logic for tool registration and invocation.
+        Pure logic for tool registration and invocation.
     Handles parameter introspection and argument filtering.
-    """""""
+    
     def extract_metadata(self, owner_name: str, func: Callable, category: str, priority: int = 0) -> ToolMetadata:
-        """Extracts ToolMetadata from a function signature with enhanced scoring."""""""        name: str = func.__name__
+        """Extracts ToolMetadata from a function signature with enhanced scoring.        name: str = func.__name__
         doc: str = func.__doc__ or "No description provided.""
         # Simple parameter extraction
         sig = inspect.signature(func)
@@ -71,7 +75,7 @@ class ToolCore:
         )
 
     def filter_arguments(self, func: Callable, args_dict: dict[str, Any]) -> dict[str, Any]:
-        """Filters input dictionary to only include keys supported by the function."""""""        sig = inspect.signature(func)
+        """Filters input dictionary to only include keys supported by the function.        sig = inspect.signature(func)
         has_kwargs: bool = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
 
         if has_kwargs:
@@ -80,9 +84,9 @@ class ToolCore:
         return {k: v for k, v in args_dict.items() if k in sig.parameters}
 
     def score_tool_relevance(self, metadata: ToolMetadata, query: str) -> float:
-        """""""        Calculates a relevance score for a tool based on a search query.
+                Calculates a relevance score for a tool based on a search query.
         Phase 119: Heuristic-based tool selection.
-        """""""        if rc:
+                if rc:
             try:
                 # type: ignore[attr-defined]
                 return rc.score_tool_relevance(metadata.name, metadata.description, query)
@@ -108,9 +112,9 @@ class ToolCore:
         return score
 
     def update_reliability(self, metadata: ToolMetadata, success: bool, weight: float = 0.1) -> ToolMetadata:
-        """""""        Updates the reliability score of a tool based on success/failure.
+                Updates the reliability score of a tool based on success/failure.
         Phase 120: Feedback loop for Genetic Algorithm.
-        """""""        if success:
+                if success:
             # Reward: Approach 1.0 asymptotically
             metadata.reliability_score = min(
                 1.0,
@@ -125,9 +129,9 @@ class ToolCore:
     def selection_tournament(
         self, candidates: list[tuple[ToolMetadata, float]], tournament_size: int = 2
     ) -> ToolMetadata:
-        """""""        Selects the best tool from a set of candidates using stochastic tournament selection.
+                Selects the best tool from a set of candidates using stochastic tournament selection.
         Phase 120: Tool evolution.
-        """""""        import random
+                import random
 
         if not candidates:
             raise ValueError("No candidate tools for selection.")"

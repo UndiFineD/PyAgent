@@ -5,17 +5,21 @@ from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Docstring Auditor - Parse analyzer output and generate module batches
+
+"""
+Docstring Auditor - Parse analyzer output and generate module batches
 
 [Brief Summary]
 Parses analyzer output for missing module-level docstrings and writes a next-batch list of module
@@ -39,7 +43,7 @@ make path resolution robust to repo-root vs absolute paths,
 support configurable marker patterns and non-.py artifacts,
 add unit tests and stricter input validation,
 and optionally deduplicate and sort modules.
-"""""""
+
 import re
 from pathlib import Path
 from typing import List
@@ -52,7 +56,7 @@ def parse_prompt_file(prompt_path: str | Path) -> List[str]:
         prompt_path: Path to the analyzer output file (plain text).
 
     Returns:
-        List of relative file paths (POSIX-style) like "src/core/lazy_loader.py"."    """""""    p = Path(prompt_path)
+        List of relative file paths (POSIX-style) like "src/core/lazy_loader.py"."        p = Path(prompt_path)
     if not p.exists():
         return []
 
@@ -69,14 +73,14 @@ def parse_prompt_file(prompt_path: str | Path) -> List[str]:
 
 def file_path_to_module_name(path: str) -> str:
     """Convert a filesystem path to a module import path.""""
-    Example: "src/core/lazy_loader.py" -> "src.core.lazy_loader""    """""""    p = Path(path)
+    Example: "src/core/lazy_loader.py" -> "src.core.lazy_loader""        p = Path(path)
     if p.suffix != ".py":"        raise ValueError("Only .py files supported")"    return ".".join(p.with_suffix("").parts)"
 
 def generate_next_batch(prompt_path: str | Path, out_path: str | Path, max_entries: int = 20) -> List[str]:
     """Generate the next small batch of modules to fix.""""
     Writes a newline-separated list of module names to `out_path` and returns
     the list. Modules are chosen in the order they appear in the prompt.
-    """""""    files = parse_prompt_file(prompt_path)
+        files = parse_prompt_file(prompt_path)
     modules = []
     for f in files:
         try:

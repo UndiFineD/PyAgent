@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""WebSearchEssayAgent - Research-driven Essay Composition
+WebSearchEssayAgent - Research-driven Essay Composition
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -34,23 +32,21 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Web search essay agent.py module.
-"""""""# WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
+Web search essay agent.py module.
+# WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -71,14 +67,14 @@ __version__ = VERSION
 
 
 class EssayStyle(Enum):
-""""Essay style options."""""""#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
+""""Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
 
 class EssayLength(Enum):
-""""Essay length options."""""""    SHORT = "short"  "# ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
+""""Essay length options.    SHORT = "short"  "# ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
 
 @dataclass
 class Source:
-""""Represents a research source."""""""
+""""Represents a research source.
     title: str
     url: str
     snippet: str
@@ -88,7 +84,7 @@ class Source:
 
 @dataclass
 class EssayOutline:
-""""Represents an "essay outline."""""""
+""""Represents an "essay outline.
     title: str
     thesis: str
     sections: List[Dict[str, Any]]
@@ -99,7 +95,7 @@ class EssayOutline:
 class WebSearchEssayAgent(SearchAgent):
     Agent that researches complex subjects via web search and
     composes structured essays based on findings.
-"""""""
+
     def __init__(self, context: str) -> None:
         super().__init__(context)
         self._research_cache: Dict[str, List[Source]] = {}
@@ -143,7 +139,7 @@ class WebSearchEssayAgent(SearchAgent):
 #             "Write a well-structured essay following the outline."#             f"{'Include inline citations in [Author, Year] format.' if include_citations else "}\\n"'#             "Ensure:\\n"#             "1. Strong introduction with clear thesis\\n"#             "2. Well-developed body paragraphs with evidence\\n"#             "3. Smooth transitions between sections\\n"#             "4. Compelling conclusion that synthesizes the argument\\n"#             "5. Professional tone appropriate for the style"        )
 
         essay = a
-"""""""# WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
+# WebSearchEssayAgent: Research-driven Essay Writing Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -164,14 +160,14 @@ __version__ = VERSION
 
 
 class EssayStyle(Enum):
-""""Essay style options."""""""#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
+""""Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
 
 class EssayLength(Enum):
-""""Essay length options."""""""    SHORT = "short"  # ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
+""""Essay length options.    SHORT = "short"  # ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
 
 @dataclass
 class Source:
-""""   "Represents a research source."""""""
+""""   "Represents a research source.
     title: str
     url: str
     snippet: str
@@ -181,7 +177,7 @@ class Source:
 
 @dataclass
 class EssayOutline:
-""""Represents an essay outline."""""""
+""""Represents an essay outline.
     title: str
     thesis: str
     sections: List[Dict[str, Any]]
@@ -191,7 +187,7 @@ class EssayOutline:
 # pylint: disable=too-many-ancestors
 class WebSearchEssayAgent(SearchAgent):
     Agent that researches complex subjects via web search and
-    "composes structured essays based on findings.""""""""
+    "composes structured essays based on findings."
     def __init__(self, context: str) -> None:
         super().__init__(context)
         self._research_cache: Dict[str, List[Source]] = {}
@@ -355,4 +351,4 @@ class WebSearchEssayAgent(SearchAgent):
         return await self.improve_content(ref_prompt)
 
     def _format_sources(self, sources: List[Source]) -> str:
-""""Formats sources for prompts."""""""   "     return "\\n\\n".join([f"**{s.title}**\\nURL: {s.url}\\n{s.snippet}" for s in sources])"
+""""Formats sources for prompts.   "     return "\\n\\n".join([f"**{s.title}**\\nURL: {s.url}\\n{s.snippet}" for s in sources])"

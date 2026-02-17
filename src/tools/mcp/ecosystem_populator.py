@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Ecosystem Populator - MCP server metadata generator
+
+Ecosystem Populator - MCP server metadata generator
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -42,7 +45,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Population utility for the MCP Ecosystem.
 Provides 500+ (simulated/metadata) MCP server configurations for PyAgent.
-"""""""
+
 from typing import List
 try:
     from .bridge import MCPServerConfig
@@ -52,7 +55,7 @@ except ImportError:
 
     @dataclass
     class MCPServerConfig:
-        """Dataclass representing MCP server metadata configuration."""""""        name: str
+        """Dataclass representing MCP server metadata configuration.        name: str
         description: str
         category: str
         server_type: str
@@ -60,7 +63,7 @@ except ImportError:
         security_level: str = "medium""
 
 def get_expanded_ecosystem() -> List[MCPServerConfig]:
-    """Returns a list of 500+ MCP server metadata configurations."""""""    # Note: In a real implementation, this might fetch from a JSON or GitHub registry.
+    """Returns a list of 500+ MCP server metadata configurations.    # Note: In a real implementation, this might fetch from a JSON or GitHub registry.
     # Here we populate a representative set of high-value MCP servers.
 
     servers = []

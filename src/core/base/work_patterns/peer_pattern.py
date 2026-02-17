@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 """PEER Work Pattern implementation for PyAgent.""""
 PEER Pattern: Planning, Executing, Expressing, Reviewing
 A collaborative pattern where agents work in sequence to plan, execute,
 express results, and review for improvement.
-"""""""
+"""
 import logging
 from typing import Any, Dict, Optional
 
@@ -31,7 +34,7 @@ class PeerWorkPattern(WorkPattern):
     - Executing: Performs the actual work
     - Expressing: Formats and presents results
     - Reviewing: Evaluates quality and suggests improvements
-    """""""
+    """
     def __init__(self,
                  planning_agent: Optional[Any] = None,
                  executing_agent: Optional[Any] = None,
@@ -47,9 +50,9 @@ class PeerWorkPattern(WorkPattern):
         self.quality_threshold = quality_threshold
 
     def get_required_agents(self) -> list[str]:
-        """Get required agent types for PEER pattern."""""""        return ["planning", "executing", "expressing", "reviewing"]"
+        """Get required agent types for PEER pattern."""return ["planning", "executing", "expressing", "reviewing"]"
     def validate_agents(self) -> bool:
-        """Validate that all PEER agents are available."""""""        return all([
+        """Validate that all PEER agents are available."""return all([
             self.planning_agent is not None,
             self.executing_agent is not None,
             self.expressing_agent is not None,
@@ -64,7 +67,7 @@ class PeerWorkPattern(WorkPattern):
 
         Returns:
             Dict with execution results
-        """""""        if not self.validate_agents():
+        """if not self.validate_agents():
             raise ValueError("PEER pattern requires all four agent types to be configured")"
         retry_count = kwargs.get('retry_count', self.max_retries)'        jump_step = kwargs.get('jump_step')  # Allow jumping to specific step'        eval_threshold = kwargs.get('eval_threshold', self.quality_threshold)'
         results = []
@@ -112,7 +115,7 @@ class PeerWorkPattern(WorkPattern):
             "pattern": "PEER","            "results": results,"            "final_score": reviewing_result.get('score', 0) if reviewing_result else 0,"'            "completed": len(results) > 0 and not results[-1].get("error")"        }
 
     async def _execute_planning(self, context: CascadeContext, round_results: Dict) -> Dict[str, Any]:
-        """Execute the planning phase."""""""        if self.planning_agent:
+        """Execute the planning phase."""if self.planning_agent:
             # Create planning context
             planning_context = CascadeContext(
                 task_id=f"{context.task_id}_planning","                cascade_depth=context.cascade_depth + 1,
@@ -127,7 +130,7 @@ class PeerWorkPattern(WorkPattern):
     async def _execute_executing(
         self, context: CascadeContext, planning_result: Dict, round_results: Dict
     ) -> Dict[str, Any]:
-        """Execute the executing phase."""""""        if self.executing_agent:
+        """Execute the executing phase."""if self.executing_agent:
             executing_context = CascadeContext(
                 task_id=f"{context.task_id}_executing","                cascade_depth=context.cascade_depth + 1,
                 depth_limit=context.depth_limit,
@@ -141,7 +144,7 @@ class PeerWorkPattern(WorkPattern):
     async def _execute_expressing(
         self, context: CascadeContext, executing_result: Dict, round_results: Dict
     ) -> Dict[str, Any]:
-        """Execute the expressing phase."""""""        if self.expressing_agent:
+        """Execute the expressing phase."""if self.expressing_agent:
             expressing_context = CascadeContext(
                 task_id=f"{context.task_id}_expressing","                cascade_depth=context.cascade_depth + 1,
                 depth_limit=context.depth_limit,
@@ -155,7 +158,7 @@ class PeerWorkPattern(WorkPattern):
     async def _execute_reviewing(
         self, context: CascadeContext, expressing_result: Dict, round_results: Dict
     ) -> Dict[str, Any]:
-        """Execute the reviewing phase."""""""        if self.reviewing_agent:
+        """Execute the reviewing phase."""if self.reviewing_agent:
             reviewing_context = CascadeContext(
                 task_id=f"{context.task_id}_reviewing","                cascade_depth=context.cascade_depth + 1,
                 depth_limit=context.depth_limit,

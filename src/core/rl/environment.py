@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Environment.py module.
-"""""""# Reinforcement Learning Environment Framework - Phase 319 Enhanced
+
+"""Environment.py module.
+"""# Reinforcement Learning Environment Framework - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -27,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class EpisodeStats:
-    """Statistics for a single episode."""""""
+    """Statistics for a single episode."""
     episode_id: int
     total_reward: float = 0.0
     steps: int = 0
@@ -36,10 +39,10 @@ class EpisodeStats:
 
 
 class RLEnvironment(abc.ABC):
-    """""""    Base class for any Reinforcement Learning environment in PyAgent.
+    """Base class for any Reinforcement Learning environment in PyAgent.
     Inspired by Gymnasium but tuned for multi-agent autonomous code improvement.
     Enhanced with episode management, wrappers, and vectorized support.
-    """""""
+    """
     def __init__(self, max_steps: int = 1000) -> None:
         self.action_space: ActionSpace | None = None
         self.observation_space: Any = None
@@ -55,23 +58,23 @@ class RLEnvironment(abc.ABC):
 
     @abc.abstractmethod
     def reset(self, seed: Optional[int] = None, options: Optional[Dict] = None) -> Tuple[Any, Dict]:
-        """""""        Resets the environment to an initial state.
+        """Resets the environment to an initial state.
         Returns: (observation, info)
-        """""""        pass  # pylint: disable=unnecessary-pass
+        """pass  # pylint: disable=unnecessary-pass
 
     @abc.abstractmethod
     def step(self, action: Any) -> Tuple[Any, float, bool, bool, Dict[str, Any]]:
-        """""""        Executes an action in the environment.
+        """Executes an action in the environment.
         Returns: (observation, reward, terminated, truncated, info)
-        """""""        pass  # pylint: disable=unnecessary-pass
+        """pass  # pylint: disable=unnecessary-pass
 
-    def render(self, mode: str = "human") -> Optional[Any]:"        """Visualizes the current state."""""""        pass  # pylint: disable=unnecessary-pass
+    def render(self, mode: str = "human") -> Optional[Any]:"        """Visualizes the current state."""pass  # pylint: disable=unnecessary-pass
 
     def close(self) -> None:
-        """Clean up resources."""""""        pass  # pylint: disable=unnecessary-pass
+        """Clean up resources."""pass  # pylint: disable=unnecessary-pass
 
     def seed(self, seed: int) -> List[int]:
-        """Sets the random seed."""""""        import random
+        """Sets the random seed."""import random
 
         import numpy as np
 
@@ -80,7 +83,7 @@ class RLEnvironment(abc.ABC):
         return [seed]
 
     def set_reward_shaping(self, fn: Callable[[float, Any, Any], float]) -> None:
-        """Applies a custom reward shaping function."""""""        self._reward_shaping_fn = fn
+        """Applies a custom reward shaping function."""self._reward_shaping_fn = fn
 
     def _shape_reward(self, reward: float, state: Any, next_state: Any) -> float:
         if self._reward_shaping_fn:
@@ -88,16 +91,16 @@ class RLEnvironment(abc.ABC):
         return reward
 
     def get_episode_stats(self) -> Dict[str, Any]:
-        """Get statistics for completed episodes."""""""        return {
+        """Get statistics for completed episodes."""return {
             "episode_count": self._episode_count,"            "avg_reward": sum(self._episode_rewards) / len(self._episode_rewards) if self._episode_rewards else 0.0,"            "total_episodes": len(self._episode_rewards),"            "best_episode_reward": max(self._episode_rewards) if self._episode_rewards else 0.0,"        }
 
 
 class CodeImprovementEnvironment(RLEnvironment):
-    """""""    Concrete RL environment for autonomous code improvement tasks.
+    """Concrete RL environment for autonomous code improvement tasks.
     State: Current code metrics (complexity, coverage, etc.)
     Actions: Improvement strategies (refactor, add_tests, optimize, etc.)
     Reward: Delta in code quality metrics.
-    """""""
+    """
     def __init__(self, initial_metrics: Dict[str, float] = None) -> None:
         super().__init__(max_steps=50)
         self.action_space = DiscreteActionSpace(5, ["refactor", "add_tests", "optimize", "document", "skip"])"        self.initial_metrics = initial_metrics or {"complexity": 50.0, "coverage": 0.5, "quality": 0.6}"        self.metrics = dict(self.initial_metrics)

@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
-
-"""""""Safe scanner for `.external` repository snapshots.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+Safe scanner for `.external` repository snapshots.
 - Reads `.external/tracking.md` and extracts completed/integrated table rows.
 - Builds a per-directory candidate list of files and exported functions/classes.
 - Does NOT execute any external code; it only reads and regex-parses files.
@@ -22,7 +24,7 @@ Usage (PowerShell):
 python -m src.tools.external_refactor_scan
 
 Run only after reviewing and ensuring safety.
-"""""""
+
 from __future__ import annotations
 import os
 import re
@@ -44,9 +46,9 @@ EXCLUDE_DIRS = (
 
 
 def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
-    """""""    Extract rows from tracking.md that indicate completed/integrated status, 
+        Extract rows from tracking.md that indicate completed/integrated status, 
     to avoid re-processing.
-    """""""    if not tracking_path.exists():
+        if not tracking_path.exists():
         return []
     completed_rows = []
     with tracking_path.open("r", encoding="utf-8", errors="ignore") as f:"        for line in f:
@@ -58,7 +60,7 @@ def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
 
 
 def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
-    """Scan a directory for candidate files and their definitions, applying exclusion rules."""""""    file_list: List[Dict[str, Any]] = []
+    """Scan a directory for candidate files and their definitions, applying exclusion rules.    file_list: List[Dict[str, Any]] = []
     report: Dict[str, Any] = {"path": str(dirpath.relative_to(EXTERNAL)), "files": file_list}"    if VERBOSE:
         print(f"Scanning directory: {dirpath.relative_to(EXTERNAL)}")"    if not dirpath.is_dir():
         return report
@@ -111,7 +113,7 @@ def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
 
 
 def is_definition_in_src(name: str, src_root: Path) -> bool:
-    """Check if a definition with the given name exists anywhere in src_root."""""""    # Fast grep-like search without importing; searches for 'def name(' or 'class name''    pattern = re.compile(rf"\\b(def|class)\\s+{re.escape(name)}\\b")"    for p in src_root.rglob("*.py"):"        try:
+    """Check if a definition with the given name exists anywhere in src_root.    # Fast grep-like search without importing; searches for 'def name(' or 'class name''    pattern = re.compile(rf"\\b(def|class)\\s+{re.escape(name)}\\b")"    for p in src_root.rglob("*.py"):"        try:
             txt = p.read_text(encoding="utf-8", errors="ignore")"        except Exception:
             continue
         if pattern.search(txt):
@@ -120,9 +122,9 @@ def is_definition_in_src(name: str, src_root: Path) -> bool:
 
 
 def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
-    """""""    Build a report of candidate files and definitions from external_root, 
+        Build a report of candidate files and definitions from external_root, 
     marking which defs are missing in src_root.
-    """""""    dir_list: List[Dict[str, Any]] = []
+        dir_list: List[Dict[str, Any]] = []
     report: Dict[str, Any] = {"summary": {}, "directories": dir_list}"    for d in sorted(external_root.iterdir()):
         if not d.is_dir():
             continue
@@ -136,14 +138,14 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
 
 
 def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
-    """Write the report to both markdown and JSON files."""""""    json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")"    lines: List[str] = [
+    """Write the report to both markdown and JSON files.    json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")"    lines: List[str] = [
         "# External Refactor Report\\n","        "This report is auto-generated. Do not run any code found here without manual review.\\n\\n""    ]
     for d in report.get("directories", []):"        lines.append(f"## {d['path']}\\n")"'        for f in d.get("files", []):"            defs = f.get("definitions", [])"            missing_count = len(f.get("missing_in_src", []))"            lines.append(
                 f"- {f['path']} ({f['suffix']}) — ""'                f"defs: {', '.join(defs[:5]) or 'none'}; ""'                f"missing in src: {missing_count}\\n""            )
         lines.append("\\n")"    md_path.write_text("\\n".join(lines), encoding="utf-8")"
 
 def main() -> int:
-    """Main entry point for the external refactor scan."""""""    tracking = EXTERNAL / "tracking.md""    completed = EXTERNAL / "completed.md""    completed_rows = extract_completed_from_tracking(tracking)
+    """Main entry point for the external refactor scan.    tracking = EXTERNAL / "tracking.md""    completed = EXTERNAL / "completed.md""    completed_rows = extract_completed_from_tracking(tracking)
     if completed_rows:
         with completed.open("a", encoding="utf-8", errors="ignore") as f:"            f.write("\\n".join(completed_rows) + "\\n")"    # Build reuse report
     report = build_reuse_report(EXTERNAL, SRC)

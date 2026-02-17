@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""PredictiveSchedulerAgent - Predictive Resource Forecasting
+
+"""
+PredictiveSchedulerAgent - Predictive Resource Forecasting
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -36,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 PredictiveSchedulerAgent: Swarm agent for forecasting workload, resource needs,
 and scheduling tasks across the PyAgent swarm.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -53,7 +57,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 53: Predictive Resource Forecasting.
     Uses historical telemetry to forecast future token usage and compute needs.
 #     Phase 130: Neural Feedback Loop integration for adaptive weight balancing.
-"""""""
+
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.usage_history: list[dict[str, Any]] = []
@@ -65,7 +69,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def ingest_metrics(self, metrics: list[Any], actual_outcome: float | None = None) -> None:
         Ingests recent agent metrics for analysis.
         Phase 130: Adjusts weights using simple backpropagation logic if actual outcome is provided.
-"""""""        for m in metrics:
+        for m in metrics:
             self.usage_history.append(
                 {
                     "timestamp": getattr(m, "timestamp", time.time()),"                    "tokens": getattr(m, "token_count", 0),"                    "agent": getattr(m, "agent_name", "unknown"),"                }
@@ -85,7 +89,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def forecast_usage(self) -> dict[str, Any]:
         Forecasts usage for the next cycle.
         Phase 130: Weighted combination of average and trend based on neural feedback.
-"""""""        if len(self.usage_history) < 5:
+        if len(self.usage_history) < 5:
             return {
                 "forecasted_tokens": 0,"                "confidence": 0.1,"                "action": "collect_more_data","            }
 
@@ -100,14 +104,14 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "forecasted_tokens": forecast,"            "confidence": 0.8 if len(self.usage_history) > 20 else 0.4,"            "provisioning_recommendation": "scale_up" if forecast > 1000 else "stable","            "weights": self.weights,"        }
 
     def evaluate_scaling_needs(self, current_nodes: int) -> dict[str, Any]:
-""""Recommends scaling actions based on predicted load."""""""        forecast" = self.forecast_usage()"        needed_nodes = current_nodes
+""""Recommends scaling actions based on predicted load.        forecast" = self.forecast_usage()"        needed_nodes = current_nodes
 
         if forecast["forecasted_tokens"] > 5000:"            needed_nodes += 2
         elif forecast["forecasted_tokens"] > 2000:"            needed_nodes += 1
 
         return {
             "current_nodes": current_nodes,"            "recommended_nodes": needed_nodes,"            "trigger_scaling": needed_nodes > current_nodes,"        }
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -123,7 +127,7 @@ __version__ = VERSION
 class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 53: Predictive Resource Forecasting.
     Uses historical telemetry to forecast future token usage and compute needs.
-    Phase 130: Neural Feedback Loop integration for" adaptive weight balancing.""""""""
+    Phase 130: Neural Feedback Loop integration for" adaptive weight balancing."
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.usage_history: list[dict[str, Any]] = []
@@ -134,7 +138,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def ingest_metrics(self, metrics: list[Any], actual_outcome: float | None = None) -> None:
         Ingests recent agent metrics for analysis.
-        Phase 130: Adjusts weights using simple backpropagation logic if actual outcome is provided".""""""""        for m in metrics:
+        Phase 130: Adjusts weights using simple backpropagation logic if actual outcome is provided"."        for m in metrics:
             self.usage_history.append(
                 {
                     "timestamp": getattr(m, "timestamp", time.time()),"                    "tokens": getattr(m, "token_count", 0),"                    "agent": getattr(m, "agent_name", "unknown"),"                }
@@ -168,7 +172,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "forecasted_tokens": forecast,"            "confidence": 0.8 if len(self.usage_history) > 20 else 0.4,"            "provisioning_recommendation": "scale_up" if forecast > 1000 else "stable","            "weights": self.weights,"        }
 
     def evaluate_scaling_needs(self, current_nodes: int) -> dict[str, Any]:
-""""Recommends scaling actions based on predicted load."""""""        forecast = self.forecast_usage()
+""""Recommends scaling actions based on predicted load.        forecast = self.forecast_usage()
         needed_nodes = current_nodes
 
         if forecast["forecasted_tokens"] > 5000:"            needed_nodes += 2

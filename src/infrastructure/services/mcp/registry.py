@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Registry for MCP tool servers and session management.
-"""""""
+Registry for MCP tool servers and session management.
+
 from __future__ import annotations
 
 import asyncio
@@ -28,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 class MCPServerRegistry:
-    """Registry for MCP servers."""""""
+    """Registry for MCP servers.
     _instance: Optional["MCPServerRegistry"] = None"    _lock = asyncio.Lock()
 
     def __new__(cls):
@@ -43,16 +45,16 @@ class MCPServerRegistry:
         return self._servers
 
     def register(self, server: MCPToolServer) -> None:
-        """Register a server."""""""        self._servers[server.name] = server
+        """Register a server.        self._servers[server.name] = server
 
     def unregister(self, name: str) -> None:
-        """Unregister a server."""""""        self._servers.pop(name, None)
+        """Unregister a server.        self._servers.pop(name, None)
 
     def get(self, name: str) -> Optional[MCPToolServer]:
-        """Get server by name."""""""        return self._servers.get(name)
+        """Get server by name.        return self._servers.get(name)
 
     async def connect_all(self) -> Dict[str, MCPSession]:
-        """Connect to all registered servers."""""""        sessions = {}
+        """Connect to all registered servers.        sessions = {}
         for name, server in self._servers.items():
             try:
                 session = await server.connect()
@@ -62,20 +64,20 @@ class MCPServerRegistry:
                 logger.error(f"Failed to connect to {name}: {e}")"        return sessions
 
     async def disconnect_all(self) -> None:
-        """Disconnect from all servers."""""""        for server in self._servers.values():
+        """Disconnect from all servers.        for server in self._servers.values():
             try:
                 await server.disconnect()
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Error disconnecting {server.name}: {e}")"        self._sessions.clear()
 
     def get_all_tools(self) -> List[ToolSchema]:
-        """Get all tools from all servers."""""""        tools = []
+        """Get all tools from all servers.        tools = []
         for server in self._servers.values():
             tools.extend(server.tools)
         return tools
 
     async def call_tool(self, call: ToolCall) -> ToolResult:
-        """Route tool call to appropriate server."""""""        for server in self._servers.values():
+        """Route tool call to appropriate server.        for server in self._servers.values():
             if server.get_tool(call.name):
                 return await server.call_tool(call)
 
@@ -87,13 +89,13 @@ class MCPServerRegistry:
 
 
 class SessionManager:
-    """Manage MCP sessions."""""""
+    """Manage MCP sessions.
     def __init__(self, registry: Optional[MCPServerRegistry] = None):
         self.registry = registry or MCPServerRegistry()
         self._active_sessions: Dict[str, MCPSession] = {}
 
     async def create_session(self, server_name: str) -> Optional[MCPSession]:
-        """Create session for a server."""""""        server = self.registry.get(server_name)
+        """Create session for a server.        server = self.registry.get(server_name)
         if not server:
             return None
 
@@ -102,7 +104,7 @@ class SessionManager:
         return session
 
     async def close_session(self, session_id: str) -> bool:
-        """Close a session."""""""        session = self._active_sessions.pop(session_id, None)
+        """Close a session.        session = self._active_sessions.pop(session_id, None)
         if not session:
             return False
 
@@ -112,7 +114,7 @@ class SessionManager:
         return True
 
     def get_session(self, session_id: str) -> Optional[MCPSession]:
-        """Get session by ID."""""""        return self._active_sessions.get(session_id)
+        """Get session by ID.        return self._active_sessions.get(session_id)
 
     @property
     def active_sessions(self) -> List[MCPSession]:

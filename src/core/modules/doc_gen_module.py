@@ -1,16 +1,19 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Doc gen module.py module.
-"""""""
+
+"""Doc gen module.py module.
+"""
 from __future__ import annotations
 
 import ast
@@ -20,15 +23,15 @@ from src.core.base.common.base_modules import BaseModule
 
 
 class DocGenModule(BaseModule):
-    """""""    Consolidated core module for generating documentation.
+    """Consolidated core module for generating documentation.
     Migrated from DocGenCore.
-    """""""
+    """
     def initialize(self) -> bool:
-        """Initialize documentation templates."""""""        return super().initialize()
+        """Initialize documentation templates."""return super().initialize()
 
     def execute(self, source_code: str, file_name: str) -> str:
-        """""""        Extracts markdown documentation from Python source code.
-        """""""        if not self.initialized:
+        """Extracts markdown documentation from Python source code.
+        """if not self.initialized:
             self.initialize()
 
         try:
@@ -58,6 +61,6 @@ class DocGenModule(BaseModule):
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error extracting docs: {str(e)}""
     def get_doc_filename(self, rel_path: str) -> str:
-        """Generates a standardized documentation filename."""""""        return rel_path.replace(os.sep, "_").replace(".py", ".md")"
+        """Generates a standardized documentation filename."""return rel_path.replace(os.sep, "_").replace(".py", ".md")"
     def shutdown(self) -> bool:
-        """Cleanup documentation generator."""""""        return super().shutdown()
+        """Cleanup documentation generator."""return super().shutdown()

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -17,7 +19,7 @@ from typing import List, Set, Dict, Optional
 class WordlistIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Wordlist Intelligence - Wordlist generation and transformation""""""""""""""# [BATCHFIX] Commented metadata/non-Python
+"""Wordlist Intelligence - Wordlist generation and transformation# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -41,13 +43,15 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -58,7 +62,7 @@ from typing import List, Set, Dict, Optional
 class WordlistIntelligence:
     Module for generating and Transforming wordlists.
     Ported concepts from 0xSojalSec-bopscrk.
-"""""""
+
     DEFAULT_LEET_CHARSET = {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -83,7 +87,7 @@ class WordlistIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def case_transforms(word: str) -> Set[str]:""""""""Generates common case permutations of a word."""""""        results = {word, word.lower(), word.upper(), word.capitalize()}
+"""     def case_transforms(word: str) -> Set[str]:"Generates common case permutations of a word.        results = {word, word.lower(), word.upper(), word.capitalize()}
 
         # Alternating case
 # [BATCHFIX] Commented metadata/non-Python
@@ -101,7 +105,7 @@ class WordlistIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:""""""""Generates leet-speak permutations of a word."""""""        if charset is None:
+"""     def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:"Generates leet-speak permutations of a word.        if charset is None:
             charset = cls.DEFAULT_LEET_CHARSET
 
         results = {word}
@@ -132,7 +136,7 @@ class WordlistIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:""""""""Combines basic info with common padding to generate a targeted wordlist."""""""        if additions is None:
+"""     def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:"Combines basic info with common padding to generate a targeted wordlist.        if additions is None:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             additions = ["123", "!", "2024", "2025", "2026", "123!", "321", "password"]"
@@ -142,7 +146,7 @@ class WordlistIntelligence:
             for add in additions:
                 results.add(f"{base}{add}")"                results.add(f"{add}{base}")"                results.add(f"{base}_{add}")"                results.add(f"{add}_{base}")"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#        " return results"  # [BATCHFIX] closed string""""""""
+""" [BATCHFIX] Commented unterminated string""""#        " return results"  # [BATCHFIX] closed string"
     DEFAULT_LEET_CHARSET = {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -167,7 +171,7 @@ class WordlistIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def case_transforms(word: str) -> Set[str]:""""""""Generates common case permutations of a word."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def case_transforms(word: str) -> Set[str]:"Generates common case permutations of a word.# [BATCHFIX] Commented metadata/non-Python
 #         results = {word, word.lower(), word.upper("), word.capitalize()}"  # [BATCHFIX] closed string"
         # Alternating case
 # [BATCHFIX] Commented metadata/non-Python
@@ -185,7 +189,7 @@ class WordlistIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:""""""""Generates leet-speak permutations of a word."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = None) -> Set[str]:"Generates leet-speak permutations of a word.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#    "     if charset is None:"  # [BATCHFIX] closed string"            charset = cls.DEFAULT_LEET_CHARSET
 
         results = {word}
@@ -216,7 +220,7 @@ class WordlistIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:""""""""Combines basic info with common padding to generate a targeted wordlist."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def generate_personalized_wordlist(basics: List[str], additions: Optional[List[str]] = None) -> Set[str]:"Combines basic info with common padding to generate a targeted wordlist.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#   "      if additions is None:"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             additions = ["123", "!", "2024", "2025", "2026", "123!", "321", "password"]"

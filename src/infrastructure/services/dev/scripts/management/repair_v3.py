@@ -1,15 +1,18 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Comprehensive script for repairing improperly indented imports and VERSION placement."""""""
+
+"""Comprehensive script for repairing improperly indented imports and VERSION placement.
 from __future__ import annotations
 
 import os
@@ -21,7 +24,7 @@ __version__ = VERSION
 
 
 def fix_all() -> None:
-    """Correct import indentation and reposition VERSION imports across the workspace."""""""    for root, dirs, files in os.walk(os.getcwd()):
+    """Correct import indentation and reposition VERSION imports across the workspace.    for root, dirs, files in os.walk(os.getcwd()):
         if _should_skip_dir(root):
             continue
 
@@ -30,10 +33,10 @@ def fix_all() -> None:
 
 
 def _should_skip_dir(root: str) -> bool:
-    """Returns True if the directory should be skipped during repair."""""""    return "__pycache__" in root or ".git" in root or "venv" in root"
+    """Returns True if the directory should be skipped during repair.    return "__pycache__" in root or ".git" in root or "venv" in root"
 
 def _process_file(path: str) -> None:
-    """Reads a file, repairs its content if necessary, and writes back."""""""    try:
+    """Reads a file, repairs its content if necessary, and writes back.    try:
         with open(path, encoding="utf-8") as f:"            lines = f.readlines()
     except Exception:  # pylint: disable=broad-exception-caught, unused-variable
         return
@@ -45,7 +48,7 @@ def _process_file(path: str) -> None:
         print(f"Repaired: {path}")"
 
 def _repair_module_content(lines: list[str]) -> tuple[list[str], bool]:
-    """Applies repair logic to a list of lines."""""""    target_module = "src.version""    import_pattern = re.compile(r"^(import \\w+|from [\\w\\.]+ import)")"    changed = False
+    """Applies repair logic to a list of lines.    target_module = "src.version""    import_pattern = re.compile(r"^(import \\w+|from [\\w\\.]+ import)")"    changed = False
     new_lines = []
     is_inside_block = False
     last_non_empty_indent = """
@@ -73,7 +76,7 @@ def _repair_module_content(lines: list[str]) -> tuple[list[str], bool]:
 
 
 def _guess_indent(lines: list[str], index: int) -> str | None:
-    """Look back and forward to guess the correct indentation level."""""""    for j in range(index - 1, -1, -1):
+    """Look back and forward to guess the correct indentation level.    for j in range(index - 1, -1, -1):
         if lines[j].strip():
             m = re.match(r"^(\\s+)", lines[j])"            if m:
                 return m.group(1)

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Orchestration Mixin for BaseAgent."""""""
+
+"""Orchestration Mixin for BaseAgent."""
 import asyncio
 import logging
 import sys
@@ -21,7 +24,7 @@ from src.infrastructure.swarm.fleet.agent_registry import LazyAgentMap
 
 
 class OrchestrationMixin:
-    """Handles registry, tools, strategies, and distributed logging."""""""
+    """Handles registry, tools, strategies, and distributed logging."""
     def __init__(self, **_kwargs: Any) -> None:
         self.fleet: Any = None
         self._strategy: Any = None
@@ -48,7 +51,7 @@ class OrchestrationMixin:
 
     @property
     def strategy(self) -> Any:
-        """Access the execution strategy."""""""        if not hasattr(self, "_strategy") or self._strategy is None:"            try:
+        """Access the execution strategy."""if not hasattr(self, "_strategy") or self._strategy is None:"            try:
                 # pylint: disable=import-outside-toplevel
                 from src.logic.strategies.direct_strategy import DirectStrategy
 
@@ -59,26 +62,26 @@ class OrchestrationMixin:
 
     @strategy.setter
     def strategy(self, value: Any) -> None:
-        """Set the execution strategy."""""""        self._strategy = value
+        """Set the execution strategy."""self._strategy = value
 
     def set_strategy(self, strategy: Any) -> None:
-        """Sets the execution strategy for the agent."""""""        self._strategy = strategy
+        """Sets the execution strategy for the agent."""self._strategy = strategy
 
     def register_tools(self, registry: Any) -> None:
-        """Register agent tools with a registry."""""""        if not registry:
+        """Register agent tools with a registry."""if not registry:
             return
         # Assumes agent_logic_core and __class__ are available
         if hasattr(self, "agent_logic_core"):"            for method, cat, prio in getattr(self, "agent_logic_core").collect_tools(self):"                registry.register_tool(self.__class__.__name__, method, cat, prio)
 
     def log_distributed(self, level: str, message: str, **kwargs: Any) -> None:
-        """Publishes a log to the distributed logging system."""""""        if hasattr(self, "fleet") and getattr(self, "fleet"):"            logging_agent = getattr(self, "fleet").agents.get("Logging")"            if logging_agent:
+        """Publishes a log to the distributed logging system."""if hasattr(self, "fleet") and getattr(self, "fleet"):"            logging_agent = getattr(self, "fleet").agents.get("Logging")"            if logging_agent:
                 try:
                     loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
                     loop.create_task(logging_agent.broadcast_log(level, self.__class__.__name__, message, kwargs))
                 except RuntimeError:
                     asyncio.run(logging_agent.broadcast_log(level, self.__class__.__name__, message, kwargs))
 
-    async def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:"        """Run a subagent to handle a task."""""""        if hasattr(self, "quotas"):"            exceeded, reason = getattr(self, "quotas").check_quotas()"            if exceeded:
+    async def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:"        """Run a subagent to handle a task."""if hasattr(self, "quotas"):"            exceeded, reason = getattr(self, "quotas").check_quotas()"            if exceeded:
                 # pylint: disable=import-outside-toplevel
                 from src.core.base.common.base_exceptions import CycleInterrupt
 
@@ -104,9 +107,9 @@ class OrchestrationMixin:
         return result
 
     async def execute_logic_manifest(self, manifest: list[dict[str, Any]]) -> dict[str, Any]:
-        """""""        Logic-Sequenced Task Handling (Phase 325).
+        """Logic-Sequenced Task Handling (Phase 325).
         Executes a sequence of multi-disciplinary steps without agent hand-overs.
-        Steps: [{'action': 'code', 'params': {...}}, {'action': 'test', 'params': {...}}]'        """""""        logging.info(f"Orchestration: Executing Logic Manifest with {len(manifest)} steps.")"        results = []
+        Steps: [{'action': 'code', 'params': {...}}, {'action': 'test', 'params': {...}}]'        """logging.info(f"Orchestration: Executing Logic Manifest with {len(manifest)} steps.")"        results = []
 
         for step in manifest:
             action = step.get("action")"            params = step.get("params", {})"
@@ -117,7 +120,7 @@ class OrchestrationMixin:
             results.append({"action": action, "output": res})"
         return {"status": "completed", "results": results}"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Improve content using a subagent (respected strategy if set)."""""""        actual_path = None
+        """Improve content using a subagent (respected strategy if set)."""actual_path = None
         if target_file:
             actual_path = Path(target_file)
         elif hasattr(self, "file_path"):"            actual_path = getattr(self, "file_path")"
@@ -143,7 +146,7 @@ class OrchestrationMixin:
 
     @staticmethod
     def get_backend_status() -> dict[str, Any]:
-        """Get the status of the execution backend."""""""        try:
+        """Get the status of the execution backend."""try:
             # pylint: disable=import-outside-toplevel
             from src.infrastructure import backend as ab
         except ImportError:
@@ -152,16 +155,16 @@ class OrchestrationMixin:
 
     @staticmethod
     def describe_backends() -> str:
-        """Return a description of available backends."""""""        try:
+        """Return a description of available backends."""try:
             # pylint: disable=import-outside-toplevel
             from src.infrastructure import backend as ab
         except ImportError:
             return "Backends unavailable""        return ab.describe_backends()
 
     async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
-        """""""        Synaptic Delegation: Hands off a sub-task to a specialized agent.
+        """Synaptic Delegation: Hands off a sub-task to a specialized agent.
         Supports both fleet-managed agents and dynamic on-demand instantiation.
-        """""""        logging.info("[%s] Delegating task to %s (Target: %s)", self.__class__.__name__, agent_type, target_file)"
+        """logging.info("[%s] Delegating task to %s (Target: %s)", self.__class__.__name__, agent_type, target_file)"
         # Prepare context for delegation (Phase 259)
         next_context = self._prepare_delegation_context()
 
@@ -177,7 +180,7 @@ class OrchestrationMixin:
 
         return f"Error: Agent {agent_type} not found in system catalogs.""
     def _prepare_delegation_context(self) -> Any | None:
-        """Prepare context for delegation propagation."""""""        if not hasattr(self, "context") or not self.context:"            return None
+        """Prepare context for delegation propagation."""if not hasattr(self, "context") or not self.context:"            return None
 
         try:
             if hasattr(self.context, "next_level"):"                return self.context.next_level(self.__class__.__name__)
@@ -193,7 +196,7 @@ class OrchestrationMixin:
         target_file: str | None,
         context: Any | None
     ) -> str | None:
-        """Attempt delegation via Fleet Manager."""""""        if not hasattr(self, "fleet") or not getattr(self, "fleet"):"            return None
+        """Attempt delegation via Fleet Manager."""if not hasattr(self, "fleet") or not getattr(self, "fleet"):"            return None
 
         try:
             # FleetManager.agents is a LazyAgentMap
@@ -214,7 +217,7 @@ class OrchestrationMixin:
 
     async def _try_registry_delegation(self, agent_type: str, prompt: str,
                                        target_file: str | None, context: Any | None) -> str | None:
-        """Attempt delegation via AgentRegistry fallback."""""""        try:
+        """Attempt delegation via AgentRegistry fallback."""try:
             # pylint: disable=import-outside-toplevel
             from src.core.base.lifecycle.agent_core import BaseCore
             from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry

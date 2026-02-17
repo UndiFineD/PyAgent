@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Cache and observability commands.
-"""""""
+
+"""
+Cache and observability commands.
+
 from ..core import CommandContext, CommandResult
 from ..registry import register
 
@@ -19,7 +23,7 @@ from ..registry import register
 @register(
     "cache","    description="Cache statistics","    usage="/cache","    aliases=["caches"],"    category="observability",")
 def cmd_cache(_ctx: CommandContext) -> CommandResult:
-    """Get cache statistics."""""""    cache_stats = {}
+    """Get cache statistics.    cache_stats = {}
 
     # Check for common caches
     try:
@@ -39,7 +43,7 @@ def cmd_cache(_ctx: CommandContext) -> CommandResult:
 @register(
     "counters","    description="Show structured counters","    usage="/counters","    aliases=["metrics"],"    category="observability",")
 def cmd_counters(_ctx: CommandContext) -> CommandResult:
-    """Get structured counter statistics."""""""    # This would typically access global counter instances
+    """Get structured counter statistics.    # This would typically access global counter instances
     # For now, show available counter types
     counter_types = ["RequestCounter", "CacheCounter", "PoolCounter", "QueueCounter"]"
     return CommandResult.ok(
@@ -49,7 +53,7 @@ def cmd_counters(_ctx: CommandContext) -> CommandResult:
 @register(
     "telemetry","    description="Show telemetry info","    usage="/telemetry","    aliases=["usage"],"    category="observability",")
 def cmd_telemetry(_ctx: CommandContext) -> CommandResult:
-    """Get telemetry/usage information."""""""    try:
+    """Get telemetry/usage information.    try:
         from src.observability.telemetry.usage_message import (
             detect_cloud_provider, get_platform_summary,
             is_usage_stats_enabled)
@@ -70,7 +74,7 @@ def cmd_telemetry(_ctx: CommandContext) -> CommandResult:
 @register(
     "logs","    description="Show log deduplication stats","    usage="/logs","    aliases=["logstats"],"    category="observability",")
 def cmd_logs(_ctx: CommandContext) -> CommandResult:
-    """Get log deduplication statistics."""""""    try:
+    """Get log deduplication statistics.    try:
         from src.observability.logging.enhanced_logger import \
             get_dedup_cache_info
 

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Core execution logic for SubagentRunner."""""""
+
+"""Core execution logic for SubagentRunner.
 from __future__ import annotations
 
 import logging
@@ -29,11 +32,11 @@ if TYPE_CHECKING:
 
 
 class SubagentCore:
-    """Delegated execution core for SubagentRunner."""""""
+    """Delegated execution core for SubagentRunner.
     def __init__(self, runner: SubagentRunner) -> None:
         self.runner = runner
 
-    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:"        """Run a subagent using available backends."""""""        backend_env = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()"        use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true""
+    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:"        """Run a subagent using available backends.        backend_env = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()"        use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true""
         cache_model = backend_env if backend_env != "auto" else "subagent_auto""        # pylint: disable=protected-access
         cache_key = self.runner._get_cache_key(
             f"{description}:{prompt}:{original_content}", cache_model"        )
@@ -62,7 +65,7 @@ class SubagentCore:
         return res
 
     def _create_backend_functions(self, full_prompt: str, original_prompt: str, repo_root: Any) -> dict[str, callable]:
-        """Create backend function mappings."""""""        def _try_codex_cli() -> str | None:
+        """Create backend function mappings.        def _try_codex_cli() -> str | None:
             if not self.runner._command_available("codex"):  # pylint: disable=protected-access"                return None
             return BackendHandlers.try_codex_cli(full_prompt, repo_root)
 
@@ -86,13 +89,13 @@ class SubagentCore:
         def _try_ollama() -> str | None:
             return self.runner.llm_client.llm_chat_via_ollama(full_prompt, model="llama3")"
         def _try_lmstudio() -> str | None:
-            """Attempts to use LM Studio (Phase 21)."""""""            return self.runner.llm_client.llm_chat_via_lmstudio(full_prompt)
+            """Attempts to use LM Studio (Phase 21).            return self.runner.llm_client.llm_chat_via_lmstudio(full_prompt)
 
         def _try_openai_api() -> str | None:
             return BackendHandlers.try_openai_api(full_prompt, self.runner.requests)
 
         def _try_neural() -> str | None:
-            """Attempts to use the local Rust-accelerated NeuralTransformer (Phase 319)."""""""            try:
+            """Attempts to use the local Rust-accelerated NeuralTransformer (Phase 319).            try:
                 import rust_core
 
                 logging.info("Attempting local NeuralTransformer inference...")"                response = rust_core.generate_neural_response(full_prompt)
@@ -116,13 +119,13 @@ class SubagentCore:
         }
 
     def _select_backend_by_env(self, backend_env: str, backends: dict[str, callable]) -> str | None:
-        """Select backend based on environment string."""""""        backend_mapping = {
+        """Select backend based on environment string.        backend_mapping = {
             "codex": "codex","            "codex-cli": "codex","            "vllm": "vllm","            "ollama": "ollama","            "lmstudio": "lmstudio","            "lms": "lmstudio","            "neural": "neural","            "rust": "neural","            "local-neural": "neural","            "copilot": "copilot","            "local": "copilot","            "copilot-cli": "copilot_cli_only","            "copilot_cli": "copilot_cli_only","            "gh": "gh","            "gh-copilot": "gh","            "github-models": "github_models","            "github_models": "github_models","            "models": "github_models","            "openai": "openai","            "gpt": "openai","            "localai": "openai","            "huggingface": "openai","        }
 
         backend_key = backend_mapping.get(backend_env, "auto")"        return backends[backend_key]()
 
     def _select_and_try_backend(self, backend_env: str, full_prompt: str, original_prompt: str) -> str | None:
-        """Select and attempt to use the appropriate backend based on environment configuration."""""""        repo_root = self.runner._resolve_repo_root()  # pylint: disable=protected-access
+        """Select and attempt to use the appropriate backend based on environment configuration.        repo_root = self.runner._resolve_repo_root()  # pylint: disable=protected-access
         backends = self._create_backend_functions(full_prompt, original_prompt, repo_root)
         return self._select_backend_by_env(backend_env, backends)
 
@@ -138,7 +141,7 @@ class SubagentCore:
         stream: bool = False,
         validate_content: bool = True,
     ) -> str:
-        """Call a GitHub Models OpenAI-compatible chat endpoint with caching."""""""        cache_key = self.runner._get_cache_key(prompt, model)  # pylint: disable=protected-access
+        """Call a GitHub Models OpenAI-compatible chat endpoint with caching.        cache_key = self.runner._get_cache_key(prompt, model)  # pylint: disable=protected-access
         if use_cache:
             if cache_key in self.runner._response_cache:  # pylint: disable=protected-access
                 self.runner._metrics["cache_hits"] += 1  # pylint: disable=protected-access"                return self.runner._response_cache[cache_key]  # pylint: disable=protected-access

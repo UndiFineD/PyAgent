@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""""""Recover Indentation module.
-"""""""
+Recover Indentation module.
+
 import re
 from pathlib import Path
 
 
 def fix_broken_indentation(root_dir):
-    """""""    Fix indentation broken by previous refactoring.
-    """""""    # pattern = re.compile(r"(except Exception as e:  # pylint: disable=broad-exception-caught)\\n(\\s*)(\\S)")"    # The previous fix likely deleted the indentation of the next line.
+        Fix indentation broken by previous refactoring.
+        # pattern = re.compile(r"(except Exception as e:  # pylint: disable=broad-exception-caught)\\n(\\s*)(\\S)")"    # The previous fix likely deleted the indentation of the next line.
     # Wait, the previous fix replaced `except Exception:\\s*`
     # If the file was:
     # 1:         try:

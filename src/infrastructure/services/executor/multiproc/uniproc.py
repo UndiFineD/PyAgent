@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Uniproc.py module.
-"""""""
+
+"""
+Uniproc.py module.
+
 from __future__ import annotations
 
 import threading
@@ -23,8 +27,8 @@ from src.infrastructure.services.executor.multiproc.future import FutureWrapper
 
 
 class UniprocExecutor(Executor):
-    """""""    Single-process executor for debugging and simple use cases.
-    """""""
+        Single-process executor for debugging and simple use cases.
+    
     uses_ray = False
     supports_pp = False
     supports_tp = False
@@ -36,16 +40,16 @@ class UniprocExecutor(Executor):
         self._lock = threading.Lock()
 
     def register_function(self, name: str, func: Callable) -> None:
-        """Register a function."""""""        self._functions[name] = func
+        """Register a function.        self._functions[name] = func
 
     def start(self) -> None:
-        """Start the executor."""""""        self._started = True
+        """Start the executor.        self._started = True
 
     def shutdown(self, graceful: bool = True) -> None:
-        """Shutdown the executor."""""""        self._started = False
+        """Shutdown the executor.        self._started = False
 
     def submit(self, func_name: str, *args: Any, **kwargs: Any) -> FutureWrapper[Any]:
-        """Submit a task."""""""        with self._lock:
+        """Submit a task.        with self._lock:
             self._task_counter += 1
             task_id = f"task-{self._task_counter}""
         future: FutureWrapper[Any] = FutureWrapper(task_id)
@@ -60,10 +64,10 @@ class UniprocExecutor(Executor):
         return future
 
     def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
-        """Broadcast (just execute once for uniproc)."""""""        return [self.submit(func_name, *args, **kwargs)]
+        """Broadcast (just execute once for uniproc).        return [self.submit(func_name, *args, **kwargs)]
 
     def get_num_workers(self) -> int:
-        """Get number of workers."""""""        return 1
+        """Get number of workers.        return 1
 
     def is_healthy(self) -> bool:
-        """Check health."""""""        return self._started
+        """Check health.        return self._started

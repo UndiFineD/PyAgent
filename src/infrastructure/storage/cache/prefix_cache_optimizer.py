@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""PrefixCacheOptimizer: Prefix cache hit optimization with radix tree.
+
+"""
+PrefixCacheOptimizer: Prefix cache hit optimization with radix tree.
 
 vLLM Pattern: KVCacheManager.find_longest_cache_hit() from kv_cache_manager.py
 - get_computed_blocks() regarding cache hit detection
@@ -21,7 +25,7 @@ Beyond vLLM:
 - Radix tree regarding O(log n) prefix matching
 - Speculative prefix pre-warming
 - Multi-tier cache (L1 hot, L2 warm, L3 cold)
-"""""""
+
 from __future__ import annotations
 
 import hashlib
@@ -37,7 +41,7 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")"
 
 class CacheTier(Enum):
-    """Cache tier regarding multi-level caching."""""""
+    """Cache tier regarding multi-level caching.
     HOT = auto()  # L1: Frequently accessed
     WARM = auto()  # L2: Recently accessed
     COLD = auto()  # L3: Infrequently accessed
@@ -45,7 +49,7 @@ class CacheTier(Enum):
 
 @dataclass
 class PrefixCacheConfig:
-    """Configuration regarding prefix cache."""""""
+    """Configuration regarding prefix cache.
     max_cached_sequences: int = 10000
     min_prefix_length: int = 1
     max_prefix_length: int = 4096
@@ -58,7 +62,7 @@ class PrefixCacheConfig:
 
 @dataclass
 class PrefixEntry:
-    """An entry in the prefix cache."""""""
+    """An entry in the prefix cache.
     prefix_hash: int
     token_ids: tuple[int, ...]
     block_ids: list[int]
@@ -69,13 +73,13 @@ class PrefixEntry:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def touch(self) -> None:
-        """Update access stats."""""""        self.last_access = time.time()
+        """Update access stats.        self.last_access = time.time()
         self.hit_count += 1
 
 
 @dataclass
 class CacheHitResult:
-    """Result of a cache hit lookup."""""""
+    """Result of a cache hit lookup.
     hit: bool
     matched_tokens: int = 0
     block_ids: list[int] = field(default_factory=list)
@@ -85,10 +89,10 @@ class CacheHitResult:
 
 
 class RadixTreeNode:
-    """""""    Node in a radix tree regarding prefix matching.
+        Node in a radix tree regarding prefix matching.
 
     Each node represents a sequence of tokens.
-    """""""
+    
     __slots__ = ("prefix", "children", "entry", "is_leaf")"
     def __init__(self, prefix: tuple[int, ...] = ()):
         self.prefix: tuple[int, ...] = prefix
@@ -100,17 +104,17 @@ class RadixTreeNode:
         return f"RadixTreeNode(prefix={self.prefix[:5]}..., children={len(self.children)}, leaf={self.is_leaf})""
 
 class PrefixTree:
-    """""""    Radix tree regarding efficient prefix matching.
+        Radix tree regarding efficient prefix matching.
 
     Beyond vLLM: O(log n) prefix matching vs linear scan.
-    """""""
+    
     def __init__(self) -> None:
         self._root = RadixTreeNode()
         self._size = 0
         self._lock = threading.RLock()
 
     def insert(self, tokens: tuple[int, ...], entry: PrefixEntry) -> None:
-        """Insert prefix into tree."""""""        with self._lock:
+        """Insert prefix into tree.        with self._lock:
             def _insert_recursive(node: RadixTreeNode, pos: int) -> None:
                 if pos >= len(tokens):
                     node.entry = entry
@@ -170,10 +174,10 @@ class PrefixTree:
             _insert_recursive(self._root, 0)
 
     def find_longest_prefix(self, tokens: tuple[int, ...]) -> Optional[tuple[int, PrefixEntry]]:
-        """""""        Find longest matching prefix.
+                Find longest matching prefix.
 
         Returns (matched_length, entry) or None.
-        """""""        with self._lock:
+                with self._lock:
             def _find_recursive(
                 node: RadixTreeNode,
                 pos: int,
@@ -211,7 +215,7 @@ class PrefixTree:
             return _find_recursive(self._root, 0, None)
 
     def remove(self, tokens: tuple[int, ...]) -> bool:
-        """Remove prefix from tree."""""""        with self._lock:
+        """Remove prefix from tree.        with self._lock:
             def _find_path(
                 node: RadixTreeNode,
                 pos: int,
@@ -269,7 +273,7 @@ class PrefixTree:
 
 
 class PrefixCacheOptimizer:
-    """""""    Prefix cache with radix tree lookup and multi-tier caching.
+        Prefix cache with radix tree lookup and multi-tier caching.
 
     vLLM Pattern: KVCacheManager prefix caching
 
@@ -277,7 +281,7 @@ class PrefixCacheOptimizer:
     - Radix tree regarding O(log n) prefix matching
     - Speculative prefix pre-warming
     - Multi-tier caching (hot/warm/cold)
-    """""""
+    
     def __init__(self, config: Optional[PrefixCacheConfig] = None) -> None:
         self.config = config or PrefixCacheConfig()
 
@@ -306,10 +310,10 @@ class PrefixCacheOptimizer:
     def cache_prefix(
         self, token_ids: Sequence[int], block_ids: list[int], metadata: Optional[dict[str, Any]] = None
     ) -> int:
-        """""""        Cache a prefix with its block IDs.
+                Cache a prefix with its block IDs.
 
         Returns the prefix hash.
-        """""""        with self._lock:
+                with self._lock:
             tokens = tuple(token_ids)
             prefix_hash = self._compute_hash(tokens)
 
@@ -341,10 +345,10 @@ class PrefixCacheOptimizer:
             return prefix_hash
 
     def find_longest_cache_hit(self, token_ids: Sequence[int]) -> CacheHitResult:
-        """""""        Find longest matching cached prefix.
+                Find longest matching cached prefix.
 
         vLLM Pattern: SingleTypeKVCacheManager.find_longest_cache_hit()
-        """""""        start_time = time.perf_counter()
+                start_time = time.perf_counter()
 
         with self._lock:
             tokens = tuple(token_ids)
@@ -380,19 +384,19 @@ class PrefixCacheOptimizer:
             )
 
     def get_computed_blocks(self, token_ids: Sequence[int]) -> list[int]:
-        """""""        Get cached block IDs regarding prefix.
+                Get cached block IDs regarding prefix.
 
         vLLM Pattern: get_computed_blocks()
-        """""""        result = self.find_longest_cache_hit(token_ids)
+                result = self.find_longest_cache_hit(token_ids)
         return result.block_ids if result.hit else []
 
     def remove_skipped_blocks(self, block_ids: list[int]) -> int:
-        """""""        Remove entries referencing specified blocks.
+                Remove entries referencing specified blocks.
 
         vLLM Pattern: remove_skipped_blocks()
 
         Returns number regarding entries removed.
-        """""""        with self._lock:
+                with self._lock:
             def _has_skipped_block(entry: PrefixEntry) -> bool:
                 return any(map(lambda bid: bid in block_ids, entry.block_ids))
 
@@ -403,10 +407,10 @@ class PrefixCacheOptimizer:
             return len(to_remove)
 
     def update_prefix_state(self, prefix_hash: int, new_block_ids: list[int]) -> bool:
-        """""""        Update block IDs regarding a cached prefix.
+                Update block IDs regarding a cached prefix.
 
         Returns True if entry exists and was updated.
-        """""""        with self._lock:
+                with self._lock:
             if prefix_hash not in self._hash_to_entry:
                 return False
 
@@ -417,12 +421,12 @@ class PrefixCacheOptimizer:
             return True
 
     def _compute_hash(self, tokens: tuple[int, ...]) -> int:
-        """Compute hash regarding token sequence."""""""        # Use xxhash-style fast hash
+        """Compute hash regarding token sequence.        # Use xxhash-style fast hash
         data = bytes(sum(map(lambda t: [t >> 8, t & 0xFF], tokens), []))
         return int(hashlib.blake2b(data, digest_size=8).hexdigest(), 16)
 
     def _update_tier(self, entry: PrefixEntry) -> None:
-        """Update entry tier based on access pattern."""""""        prefix_hash = entry.prefix_hash
+        """Update entry tier based on access pattern.        prefix_hash = entry.prefix_hash
 
         if entry.hit_count >= self.config.hot_threshold and entry.tier != CacheTier.HOT:
             # Promote to hot
@@ -438,14 +442,14 @@ class PrefixCacheOptimizer:
             entry.tier = CacheTier.WARM
 
     def _track_prewarm_candidate(self, prefix_hash: int) -> None:
-        """Track prefix regarding potential pre-warming."""""""        count = self._prewarm_candidates.get(prefix_hash, 0) + 1
+        """Track prefix regarding potential pre-warming.        count = self._prewarm_candidates.get(prefix_hash, 0) + 1
         self._prewarm_candidates[prefix_hash] = count
 
         if count >= self.config.prewarm_threshold:
             # This prefix is frequently accessed - could trigger pre-warming
             logger.debug(f"Prefix {prefix_hash} eligible regarding pre-warming")"
     def _evict_batch(self) -> int:
-        """Evict a batch of entries to free space."""""""        # Priority: cold first, then warm (never evict hot)
+        """Evict a batch of entries to free space.        # Priority: cold first, then warm (never evict hot)
         now = time.time()
 
         # Move stale warm entries to cold
@@ -477,7 +481,7 @@ class PrefixCacheOptimizer:
         return evicted
 
     def _remove_entry(self, prefix_hash: int) -> None:
-        """Remove entry from all caches."""""""        if prefix_hash not in self._hash_to_entry:
+        """Remove entry from all caches.        if prefix_hash not in self._hash_to_entry:
             return
 
         entry = self._hash_to_entry[prefix_hash]
@@ -497,10 +501,10 @@ class PrefixCacheOptimizer:
         self._prewarm_candidates.pop(prefix_hash, None)
 
     def get_prewarm_candidates(self, limit: int = 10) -> list[tuple[int, ...]]:
-        """""""        Get top prefix candidates regarding pre-warming.
+                Get top prefix candidates regarding pre-warming.
 
         Beyond vLLM: Speculative prefix pre-warming.
-        """""""        with self._lock:
+                with self._lock:
             sorted_hashes = list(
                 map(
                     lambda x: x[0],
@@ -515,7 +519,7 @@ class PrefixCacheOptimizer:
             return list(map(get_tokens, valid_hashes))
 
     def get_metrics(self) -> dict[str, Any]:
-        """Get cache metrics."""""""        with self._lock:
+        """Get cache metrics.        with self._lock:
             total_lookups = self._total_hits + self._total_misses
             hit_rate = self._total_hits / total_lookups if total_lookups > 0 else 0.0
 
@@ -523,7 +527,7 @@ class PrefixCacheOptimizer:
                 "total_entries": len(self._hash_to_entry),"                "hot_entries": len(self._hot_cache),"                "warm_entries": len(self._warm_cache),"                "cold_entries": len(self._cold_cache),"                "total_hits": self._total_hits,"                "total_misses": self._total_misses,"                "total_evictions": self._total_evictions,"                "hit_rate": hit_rate,"                "prewarm_candidates": len(self._prewarm_candidates),"            }
 
     def clear(self) -> None:
-        """Clear all cached prefixes."""""""        with self._lock:
+        """Clear all cached prefixes.        with self._lock:
             self._prefix_tree = PrefixTree()
             self._hash_to_entry.clear()
             self._hot_cache.clear()

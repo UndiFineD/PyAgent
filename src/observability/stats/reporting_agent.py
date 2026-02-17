@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -26,13 +28,13 @@ if TYPE_CHECKING:
 
 
 class ReportingAgent(BaseAgent):
-    """""""    Observer agent that generates executive dashboards and reports"""""""    by orchestrating multiple specialist agents."""""""    """""""
+        Observer agent that generates executive dashboards and reports    by orchestrating multiple specialist agents.    
     def __init__(self, fleet: FleetManager) -> None:
         super().__init__(agent_name="Reporting")"        self.fleet = fleet
         self.workspace_root = self._workspace_root
 
     async def generate_dashboard(self) -> str:
-        """Runs a workflow to gather data and build a markdown dashboard."""""""        logging.info("ReportingAgent: Initiating dashboard generation workflow...")"
+        """Runs a workflow to gather data and build a markdown dashboard.        logging.info("ReportingAgent: Initiating dashboard generation workflow...")"
         # Load required agents if not present
         from src.logic.agents.analysis.test_agent import TestAgent
         from src.logic.agents.cognitive.memory_consolidation_agent import \
@@ -106,7 +108,7 @@ class ReportingAgent(BaseAgent):
 
         return "\\n".join(dashboard)"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Alias for dashboard generation or refinement."""""""        return await self.generate_dashboard()
+        """Alias for dashboard generation or refinement.        return await self.generate_dashboard()
 
 
 if __name__ == "__main__":"    # Local test

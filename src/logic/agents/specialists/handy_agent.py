@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# HandyAgent - Terminal-native context-aware shell agent
+# HandyAgent - Terminal-native context-aware shell agent
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -30,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in terminal-native interactions and context-aware shell execution.
 Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
-"""""""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -50,7 +52,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreMixin):
-""""Provides a terminal-native interface for the agent to interact with the OS."""""""
+""""Provides a terminal-native interface for the agent to interact with the OS.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -59,7 +61,7 @@ class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreM
         # Phase 108: Intelligence Harvesting
         work_root = getattr(self, "_workspace_root", None)"        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
-    # Methods delegated to "mixins""""""""
+    # Methods delegated to "mixins"
 from __future__ import annotations
 
 from pathlib import Path
@@ -79,7 +81,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreMixin):
-""""Provides a terminal-native interface for the agent to interact with" the OS."""""""
+""""Provides a terminal-native interface for the agent to interact with" the OS.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (

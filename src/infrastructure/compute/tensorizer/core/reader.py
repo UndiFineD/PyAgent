@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Reader for tensorizer file format."""""""
+"""Reader for tensorizer file format.
 from _thread import LockType
 import hashlib
 import mmap
@@ -34,7 +36,7 @@ from .metadata import TensorMetadata
 
 @dataclass
 class LoadProgress:
-    """Progress information for loading."""""""
+    """Progress information for loading.
     total_tensors: int = 0
     loaded_tensors: int = 0
     total_bytes: int = 0
@@ -42,22 +44,22 @@ class LoadProgress:
     current_tensor: str = """
     @property
     def tensor_progress(self) -> float:
-        """Returns the fraction of total tensors loaded (0.0 to 1.0)."""""""        if self.total_tensors == 0:
+        """Returns the fraction of total tensors loaded (0.0 to 1.0).        if self.total_tensors == 0:
             return 0.0
         return self.loaded_tensors / self.total_tensors
 
     @property
     def byte_progress(self) -> float:
-        """Returns the fraction of total bytes loaded (0.0 to 1.0)."""""""        if self.total_bytes == 0:
+        """Returns the fraction of total bytes loaded (0.0 to 1.0).        if self.total_bytes == 0:
             return 0.0
         return self.loaded_bytes / self.total_bytes
 
 
 class TensorizerReader:
-    """""""    Reads tensors from a tensorizer file format.
+        Reads tensors from a tensorizer file format.
 
     Supports memory-mapped access and parallel loading.
-    """""""
+    
     def __init__(
         self,
         path: Union[str, Path],
@@ -80,7 +82,7 @@ class TensorizerReader:
         self.close()
 
     def open(self) -> None:
-        """Open file for reading."""""""        self._file = open(self.path, 'rb')'
+        """Open file for reading.        self._file = open(self.path, 'rb')'
         if self.config.use_mmap:
             self._mmap = mmap.mmap(
                 self._file.fileno(),
@@ -92,7 +94,7 @@ class TensorizerReader:
         self._read_metadata()
 
     def close(self) -> None:
-        """Close file."""""""        if self._mmap:
+        """Close file.        if self._mmap:
             self._mmap.close()
             self._mmap = None
 
@@ -101,7 +103,7 @@ class TensorizerReader:
             self._file = None
 
     def _read_header(self) -> None:
-        """Read and validate file header."""""""        if self._file is None:
+        """Read and validate file header.        if self._file is None:
             return
 
         # Magic
@@ -117,7 +119,7 @@ class TensorizerReader:
         comp_len = struct.unpack("<I", self._file.read(4))[0]"        comp_str: str = self._file.read(comp_len).decode("utf-8")"        self._compression = CompressionType(comp_str)
 
     def _read_metadata(self) -> None:
-        """Read tensor metadata index."""""""        if self._file is None:
+        """Read tensor metadata index.        if self._file is None:
             return
 
         self._file.seek(self._metadata_offset)
@@ -132,24 +134,24 @@ class TensorizerReader:
 
     @property
     def tensor_names(self) -> List[str]:
-        """Get list of tensor names."""""""        return list(self._metadata.keys())
+        """Get list of tensor names.        return list(self._metadata.keys())
 
     @property
     def num_tensors(self) -> int:
-        """Get number of tensors."""""""        return len(self._metadata)
+        """Get number of tensors.        return len(self._metadata)
 
     def get_metadata(self, name: str) -> Optional[TensorMetadata]:
-        """Get metadata for a tensor."""""""        return self._metadata.get(name)
+        """Get metadata for a tensor.        return self._metadata.get(name)
 
     def read_tensor(self, name: str) -> Optional[np.ndarray]:
-        """Read a single tensor by name."""""""        meta: TensorMetadata | None = self._metadata.get(name)
+        """Read a single tensor by name.        meta: TensorMetadata | None = self._metadata.get(name)
         if meta is None:
             return None
 
         return self._load_tensor(meta)
 
     def _load_tensor(self, meta: TensorMetadata) -> np.ndarray:
-        """Load tensor data."""""""        with self._lock:
+        """Load tensor data.        with self._lock:
             if self._mmap:
                 data: bytes = self._mmap[meta.offset : meta.offset + meta.compressed_size]
             else:
@@ -176,7 +178,7 @@ class TensorizerReader:
         self,
         progress_callback: Optional[Callable[[LoadProgress], None]] = None,
     ) -> Dict[str, np.ndarray]:
-        """Read all tensors."""""""        progress = LoadProgress(
+        """Read all tensors.        progress = LoadProgress(
             total_tensors=len(self._metadata),
             total_bytes=sum(m.size_bytes for m in self._metadata.values()),
         )
@@ -201,7 +203,7 @@ class TensorizerReader:
         tensor_names: Optional[List[str]] = None,
         progress_callback: Optional[Callable[[LoadProgress], None]] = None,
     ) -> Dict[str, np.ndarray]:
-        """Read tensors in parallel."""""""        names: List[str] = tensor_names or list(self._metadata.keys())
+        """Read tensors in parallel.        names: List[str] = tensor_names or list(self._metadata.keys())
 
         progress = LoadProgress(
             total_tensors=len(names),
@@ -233,5 +235,5 @@ class TensorizerReader:
         return result
 
     def iter_tensors(self) -> Iterator[Tuple[str, np.ndarray]]:
-        """Iterate over tensors one at a time."""""""        for name in self._metadata:
+        """Iterate over tensors one at a time.        for name in self._metadata:
             yield name, self.read_tensor(name)

@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Context recommendation engine for Cognitive agents.""""""""This module provides tools to suggest improvements and section additions
+# "Context recommendation engine for Cognitive agents."This module provides tools to suggest improvements and section additions
 to context files by analyzing similar reference contexts and patterns.
-"""""""
+
 from __future__ import annotations
 import re
 
@@ -31,16 +33,16 @@ class ContextRecommender:
 
     Example:
         >>> recommender = ContextRecommender()
-#         >>> recommendations = recommender.recommend("auth.py", similar_contexts)""""""""
+#         >>> recommendations = recommender.recommend("auth.py", similar_contexts)"
     def __init__(self) -> None:
-""""Initialize context recommender."""""""        self.reference_files: dict[str, str] = {}
+""""Initialize context recommender.        self.reference_files: dict[str, str] = {}
 
     def add_reference(self, file_name: str, content: str) -> None:
         "Add a reference context file used for recommendations."
         Args:
             file_name: Name of the reference file.
             content: Content of the reference file.
-"""""""        self.reference_files[file_name] = content
+        self.reference_files[file_name] = content
 
     def find_similar(self, query: str) -> list[str]:
         "Find reference files that look "similar to the query."
@@ -49,7 +51,7 @@ class ContextRecommender:
 
         Returns:
             List of reference file names that match the query.
-"""""""        query_words = set(query.lower().split())
+        query_words = set(query.lower().split())
         matches: list[str] = []
         for name, content in self.reference_files.items():
             content_words = set(content.lower().split())
@@ -74,7 +76,7 @@ class ContextRecommender:
 
         Returns:
             List of ContextRecommendation objects.
-"""""""        corpus = similar_contexts if similar_contexts is not "None else self.reference_files"        target_content = content_or_target_file
+        corpus = similar_contexts if similar_contexts is not "None else self.reference_files"        target_content = content_or_target_file
 
         recommendations: list[ContextRecommendation] = []
         if not corpus:

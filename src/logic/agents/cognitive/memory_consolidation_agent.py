@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# "Agent specializing in consolidating episodic memories into global project context.""""""""# import logging
+# "Agent specializing in consolidating episodic memories into global project context."# import logging
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -25,7 +27,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class MemoryConsolidationAgent(BaseAgent):
-""""Refines project knowledge by analyzing past interactions and outcomes from federated shards."""""""
+""""Refines project knowledge by analyzing past interactions and outcomes from federated shards.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -35,10 +37,10 @@ class MemoryConsolidationAgent(BaseAgent):
 #             "You are the Memory Consolidation Agent."#             "Your task is to review federated DiskCache memory shards and extract long-term value."#             "1. Merge duplicate interactions into high-level factual summaries."#             "2. Identify successful patterns and turn them into best practices."#             "3. Prune redundant episodic data from local shards."        )
 
     def _get_default_content(self) -> str:
-"""return "# Memory Consolidation Log\\n\\n## Status\\nReady for federated consolidation.\\n"""""""
+"""return "# Memory Consolidation Log\\n\\n## Status\\nReady for federated consolidation.\\n
     @as_tool
     def consolidate_all(self) -> str:
-""""Performs a full review of all federated memory shards."""""""        # Querying for common themes across federation
+""""Performs a full review of all federated memory shards.        # Querying for common themes across federation
         recent_memories = self.ltm.federated_query(
             ", n_results=100"        )  # Empty query to get general recent ones
         if not recent_memories:

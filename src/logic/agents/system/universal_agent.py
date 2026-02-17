@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Universal Agent Shell - Dynamic role-based task orchestration
+
+"""
+Universal Agent Shell - Dynamic role-based task orchestration
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Module: universal_agent
 Implementation of Pillar 3: The Universal Agent Shell.
-"""""""
+
 from __future__ import annotations
 import logging
 from typing import Any, Dict
@@ -45,15 +49,15 @@ logger = logging.getLogger(__name__)
 class UniversalAgent(BaseAgent):
     IMPLEMENTATION OF PILLAR 3: The Universal Agent "Shell."    This agent does not have a fixed role; it dynamically adjusts its
 #     cognitive cores based on the Logic Manifest provided in the task.
-"""""""
+
     def __init__(self, **kwargs):
         # Default manifest for a universal shell
         if "manifest" not in kwargs:"            kwargs["manifest"] = {"                "role": "universal_shell","                "capabilities": ["dynamic_core_switching", "cort_reasoning"],"                "required_skills": ["reasoning", "orchestration"]"            }
         super().__init__(**kwargs)
 
     async def execute_query(self, query: str, context: Dict[str, Any] | None = None) -> Any:
-"""""""        Main cognitive loop for the Universal Agent.
-"""""""        # Phase 0: Explicit Role Loading (Pillar 5 Extension)
+        Main cognitive loop for the Universal Agent.
+        # Phase 0: Explicit Role Loading (Pillar 5 Extension)
         if "assume role" in query.lower() or "use shard" in query.lower():"            role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")"            if not role_match:
                 role_match = query.lower().split("shard")[-1].strip().split(" ")[0].strip(" .")"
             from src.core.base.lifecycle.manifest_repository import ManifestRepository
@@ -89,7 +93,7 @@ class UniversalAgent(BaseAgent):
 
         # Pillar 8 Hardening: Distribute state to the swarm after task completion
         if hasattr(self.core, "fleet_instance"):"            fleet = self.core.fleet_
-"""""""
+
 from __future__ import annotations
 import logging
 from typing import Any, Dict
@@ -103,14 +107,14 @@ class UniversalAgent(BaseAgent):
     IMPLEMENTATION OF PILLAR 3: The Universal Agent Shell.
     This agent does not have a fixed role; it dynamically adjusts its
     cognitive cores based on the Logic Manifest provided in the task.
-"""""""
+
     def __init__(self, **kwargs):
         # Default manifest for a universal shell
         if "manifest" not in kwargs:"            kwargs["manifest"] = {"                "role": "universal_shell","                "capabilities": ["dynamic_core_switching", "cort_reasoning"],"                "required_skills": ["reasoning", "orchestration"]"            }
         super().__init__(**kwargs)
 
     async def execute_query(self, query: str, context: Dict[str, Any] | None = None) -> Any:
-"""""""        Main cognitive" loop for the Universal Agent.""""""""        # Phase 0: Explicit "Role Loading (Pillar 5 Extension)"        if "assume role" in query.lower() or "use shard" in query.lower():"            role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")"            if not role_match:
+        Main cognitive" loop for the Universal Agent."        # Phase 0: Explicit "Role Loading (Pillar 5 Extension)"        if "assume role" in query.lower() or "use shard" in query.lower():"            role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")"            if not role_match:
                 role_match = query.lower().split("shard")[-1].strip().split(" ")[0].strip(" .")"
             from src.core.base.lifecycle.manifest_repository import ManifestRepository
             repo = ManifestRepository()

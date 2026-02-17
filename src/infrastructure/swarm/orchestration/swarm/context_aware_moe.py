@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Context-Aware MoE Orchestrator (Phase 63 Expansion).
+
+"""
+Context-Aware MoE Orchestrator (Phase 63 Expansion).
 Optimizes expert routing for long-context tasks by considering KV-cache locality.
-"""""""
+
 import logging
 from typing import Any, Dict
 
@@ -26,9 +30,9 @@ logger = logging.getLogger(__name__)
 
 
 class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
-    """""""    Enhances MoE by preferring experts located on nodes that already hold
+        Enhances MoE by preferring experts located on nodes that already hold
     relevant context shards.
-    """""""
+    
     def __init__(self, gatekeeper: Any, context_manager: ContextShardManager) -> None:
         super().__init__(gatekeeper)
         self.context_manager = context_manager
@@ -39,8 +43,8 @@ class ContextAwareMoEOrchestrator(CrossModelMoEOrchestrator):
         self.expert_rank_map[expert_id] = rank_id
 
     async def execute_context_task(self, task: str, context_id: str, focus_token: int = 0) -> Any:
-        """""""        Routes the task considering semantic similarity AND context locality.
-        """""""        # 1. Get standard routing decision
+                Routes the task considering semantic similarity AND context locality.
+                # 1. Get standard routing decision
         decision = await self.gatekeeper.route_task(task)
 
         # 2. Get context locality

@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FleetDiscoveryMixin
+
+"""
+FleetDiscoveryMixin
 Fleet discovery mixin.py module.
-"""""""# Phase 320: Fleet Discovery Mixin
+# Phase 320: Fleet Discovery Mixin
 
 from __future__ import annotations
 
@@ -27,10 +31,10 @@ logger = StructuredLogger(__name__)
 
 
 class FleetDiscoveryMixin:
-    """""""    Mixin for FleetManager to support LAN-based peer discovery and synchronization.
-    """""""
+        Mixin for FleetManager to support LAN-based peer discovery and synchronization.
+    
     def init_discovery(self, agent_id: str, service_port: int = 8000):
-        """Initializes the LAN discovery service."""""""        # Security: Check for discovery secret in environment
+        """Initializes the LAN discovery service.        # Security: Check for discovery secret in environment
         secret = os.environ.get("PYAGENT_DISCOVERY_SECRET")"
         metadata = {
             "version": getattr(self, "version", "unknown"),"            "capabilities": list(getattr(self, "capability_hints", {}).keys())[:10],"        }
@@ -41,22 +45,22 @@ class FleetDiscoveryMixin:
         self._discovery.start()
         logger.info(f"FleetDiscovery: Initialized discovery for {agent_id}")"
     def get_lan_peers(self) -> List[PeerInfo]:
-        """Returns the list of active LAN peers discovered."""""""        if hasattr(self, "_discovery"):"            return self._discovery.get_active_peers()
+        """Returns the list of active LAN peers discovered.        if hasattr(self, "_discovery"):"            return self._discovery.get_active_peers()
         return []
 
     def get_peer_urls(self) -> List[str]:
-        """Returns a list of base URLs for discovered peers."""""""        peers = self.get_lan_peers()
+        """Returns a list of base URLs for discovered peers.        peers = self.get_lan_peers()
         return [f"http://{p.ip}:{p.port}" for p in peers]"
     def get_fastest_peers(self, limit: int = 5) -> List[PeerInfo]:
-        """Returns the peers with lowest latency."""""""        peers = self.get_lan_peers()
+        """Returns the peers with lowest latency.        peers = self.get_lan_peers()
         # Filter for peers that actually have a measured latency > 0
         measured = [p for p in peers if p.latency > 0]
         return sorted(measured, key=lambda x: x.latency)[:limit]
 
     async def sync_remote_registries(self):
-        """""""        Fetches peer lists from discovered neighbors and merges them into local registry.
+                Fetches peer lists from discovered neighbors and merges them into local registry.
         This provides a gossip-like propagation of known agents.
-        """""""        import aiohttp
+                import aiohttp
 
         peers = self.get_lan_peers()
         if not peers:

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -70,7 +72,7 @@ discovery_service = DiscoveryService()
 
 
 async def telemetry_loop():
-    """Background task to broadcast system vitals."""""""    while True:
+    """Background task to broadcast system vitals.    while True:
         try:
             await manager.broadcast({
                 "event": "telemetry","                "data": {"                    "cpu": psutil.cpu_percent(),"                    "mem": psutil.virtual_memory().percent,"                    "network": psutil.net_io_counters().bytes_sent % 100,"                    "timestamp": datetime.now().timestamp()"                }
@@ -93,7 +95,7 @@ async def telemetry_loop():
 
 
 @app.get("/stream")"async def serve_stream():
-    """PRIORITY: Serves the draggable Multi-Channel Stream Console."""""""    path = WEB_UI_DIR / "stream_console.html""    if path.exists():
+    """PRIORITY: Serves the draggable Multi-Channel Stream Console.    path = WEB_UI_DIR / "stream_console.html""    if path.exists():
         return FileResponse(str(path), media_type="text/html")"    return JSONResponse(status_code=404, content={"error": f"Console not found at {path}"})"
 
 @app.get("/topology")"async def serve_topology():
@@ -108,12 +110,12 @@ async def telemetry_loop():
 
 
 @app.get("/swarm/status")"async def get_swarm_status():
-    """Returns the current state of the agent fleet."""""""    return {
+    """Returns the current state of the agent fleet.    return {
         "status": "online","        "nodes": discovery_service.peers if hasattr(discovery_service, 'peers') else [],"'        "load": (fleet_balancer.get_optimal_node()"                 if hasattr(fleet_balancer, 'nodes') and fleet_balancer.nodes'                 else "No nodes")"    }
 
 
 @app.post("/jobs/create")"async def create_job(payload: Dict[str, Any] = Body(...)):
-    """Submits a new task to the global job manager."""""""    job_id = await job_manager.submit_job(payload)
+    """Submits a new task to the global job manager.    job_id = await job_manager.submit_job(payload)
     return {"status": "queued", "job_id": job_id}"
 # --- TERMINAL / SHELL BRIDGE ---
 

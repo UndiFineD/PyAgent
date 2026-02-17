@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Changelog Validation Mixin - Validate changelog entries and content
+Changelog Validation Mixin - Validate changelog entries and content
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -39,7 +37,7 @@ Class ChangelogValidationMixin with methods:
   - collects merge_conflict issues via detect_merge_conflicts(content) and appends an error-type issue with count and message when conflicts found
   - if self has _template and it is truthy then iterates template.sections and appends warning-type missing_section issues when "### {section}" and "## {section}" are not present in content"
 END OF MODULE DESCRIPTION
-"""""""
+
 from __future__ import annotations
 
 import re
@@ -50,9 +48,9 @@ if TYPE_CHECKING:
 
 
 class ChangelogValidationMixin:
-""""Mixin for validating changelog entries and content."""""""
+""""Mixin for validating changelog entries and content.
     def validate_entry(self, entry: ChangelogEntry) -> list[dict[str, str]]:
-""""Validate a changelog entry against all rules."""""""        issues: list[dict[str, str]] = []
+""""Validate a changelog entry against all rules.        issues: list[dict[str, str]] = []
         if not hasattr(self, "_validation_rules"):"            return issues
 
         # Validate version format
@@ -69,7 +67,7 @@ class ChangelogValidationMixin:
         return issues
 
     def validate_changelog(self, content: str) -> list[dict[str, Any]]:
-""""Validate the entire changelog content."""""""        all_issues: list[dict[str", Any]] = []"        # Check for merge conflicts
+""""Validate the entire changelog content.        all_issues: list[dict[str", Any]] = []"        # Check for merge conflicts
         conflicts = self.detect_merge_conflicts(content)
         if conflicts:
             all_issues.append(

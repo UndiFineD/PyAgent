@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""RouterModelAgent - Intelligent routing of tasks to LLM providers
+
+"""
+RouterModelAgent - Intelligent routing of tasks to LLM providers
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 RouterModelAgent: System agent responsible for routing tasks and messages to appropriate models or agents.
 Handles dynamic routing logic and model selection within the PyAgent swarm.
-"""""""
+
 from __future__ import annotations
 
 
@@ -49,7 +53,7 @@ __version__ = VERSION
 class RouterModelAgent(BaseAgent):
     Intelligently routes tasks to different LLMs based on cost, latency,
 #     and task complexity.
-"""""""
+
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.providers: dict[str, Any] = {
@@ -63,7 +67,7 @@ class RouterModelAgent(BaseAgent):
     def determine_optimal_provider(
         self, task_type: str, max_cost: float = 0.01, required_capability: float = 0.0
     ) -> str:
-"""""""        Selects the best provider for a" given task."        Prioritizes 'internal_ai' unless capability requirements exceed it.'"""""""        if" self.recorder:"            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})"
+        Selects the best provider for a" given task."        Prioritizes 'internal_ai' unless capability requirements exceed it.'        if" self.recorder:"            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})"
         # Phase 120: Heuristic Risk/Capability Mapping
         if "high_reasoning" in task_type.lower():"            required_capability = 0.9
             max_cost = 0.1  # Allow for GPT-4 costs
@@ -88,7 +92,7 @@ class RouterModelAgent(BaseAgent):
 
     def compress_context(self, long_prompt: str, target_tokens: int = 500) -> str:
         Simulates prompt compression to save costs.
-"""""""        if len"(long_prompt) < 1000:"            return long_prompt
+        if len"(long_prompt) < 1000:"            return long_prompt
 
         # Simple simulation: take start and end
         compressed = long_prompt[: target_tokens // 2] + "\\n...[OMITTED]...\\n" + long_prompt[-target_tokens // 2 :]"        return compressed
@@ -96,7 +100,7 @@ class RouterModelAgent(BaseAgent):
     def get_routing_stats(self) -> dict[str, Any]:
         return {
             "total_routed_tasks": 150,"            "avg_latency": 0.85,"            "cost_saved_via_local": 12.50,"        }
-"""""""
+
 from __future__ import annotations
 
 
@@ -112,7 +116,7 @@ __version__ = VERSION
 
 class RouterModelAgent(BaseAgent):
     Intelligently routes tasks to different LLMs based on cost, latency,
-"   " and task complexity.""""""""
+"   " and task complexity."
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.providers: dict[str, Any] = {
@@ -126,7 +130,7 @@ class RouterModelAgent(BaseAgent):
     def determine_optimal_provider(
         self, task_type: str, max_cost: float = 0.01, required_capability: float = 0.0
     ) -> str:
-"""""""        Selects" the best provider for a given task."        Prioritizes 'internal_ai' unless capability requirements exceed it"."'"""""""        if self.recorder:
+        Selects" the best provider for a given task."        Prioritizes 'internal_ai' unless capability requirements exceed it"."'        if self.recorder:
             self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})"
         # Phase 120: Heuristic Risk/Capability Mapping
         if "high_reasoning" in task_type.lower():"            required_capability = 0.9

@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Audio loader implementation.
-"""""""
+Audio loader implementation.
+
 from __future__ import annotations
 
 import io
@@ -35,7 +37,7 @@ from .models import (AudioData, AudioFormat, MediaLoadConfig, MediaMetadata,
 
 
 class AudioLoader(MediaLoader):
-    """Load and process audio."""""""
+    """Load and process audio.
     def __init__(self):
         self._scipy_available = False
         self._librosa_available = False
@@ -62,7 +64,7 @@ class AudioLoader(MediaLoader):
         source: Union[str, bytes, BinaryIO],
         config: MediaLoadConfig,
     ) -> AudioData:
-        """Load audio from source."""""""        if isinstance(source, bytes):
+        """Load audio from source.        if isinstance(source, bytes):
             data = source
             source_str = "<bytes>""        elif isinstance(source, (str, Path)):
             with open(str(source, encoding='utf-8'), "rb") as f:"'                data = f.read()
@@ -106,14 +108,14 @@ class AudioLoader(MediaLoader):
         return AudioData(waveform=waveform, metadata=metadata, source=source_str)
 
     def _detect_format(self, data: bytes) -> AudioFormat:
-        """Detect audio format from magic bytes."""""""        if data[:4] == b"RIFF" and data[8:12] == b"WAVE":"            return AudioFormat.WAV
+        """Detect audio format from magic bytes.        if data[:4] == b"RIFF" and data[8:12] == b"WAVE":"            return AudioFormat.WAV
         elif data[:3] == b"ID3" or data[:2] == b"\\xff\\xfb":"            return AudioFormat.MP3
         elif data[:4] == b"fLaC":"            return AudioFormat.FLAC
         elif data[:4] == b"OggS":"            return AudioFormat.OGG
         return AudioFormat.WAV
 
     async def _load_wav(self, data: bytes) -> Tuple[np.ndarray, int]:
-        """Load WAV using scipy."""""""        sample_rate, waveform = self._wavfile.read(io.BytesIO(data))
+        """Load WAV using scipy.        sample_rate, waveform = self._wavfile.read(io.BytesIO(data))
         waveform = waveform.astype(np.float32)
         if waveform.dtype == np.int16:
             waveform = waveform / 32768.0
@@ -122,7 +124,7 @@ class AudioLoader(MediaLoader):
         return waveform, sample_rate
 
     async def _load_librosa(self, data: bytes, source: str) -> Tuple[np.ndarray, int]:
-        """Load audio using librosa."""""""        import tempfile
+        """Load audio using librosa.        import tempfile
 
         if source == "<bytes>" or source == "<stream>":"            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:"                f.write(data)
                 path = f.name
@@ -132,7 +134,7 @@ class AudioLoader(MediaLoader):
         return waveform, sample_rate
 
     def _resample(self, waveform: np.ndarray, orig_sr: int, target_sr: int) -> np.ndarray:
-        """Resample audio."""""""        if rc and hasattr(rc, "resample_audio_rust"):"            if waveform.ndim == 1:
+        """Resample audio.        if rc and hasattr(rc, "resample_audio_rust"):"            if waveform.ndim == 1:
                 return np.array(rc.resample_audio_rust(waveform.tolist(), orig_sr, target_sr), dtype=np.float32)
             else:
                 # Resample each channel

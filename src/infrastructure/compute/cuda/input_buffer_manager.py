@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""InputBufferManager - Input staging and buffer management for CUDA graphs.
+
+InputBufferManager - Input staging and buffer management for CUDA graphs.
 
 Implements vLLM's InputBatch patterns:'- Pre-allocated input buffers
 - Static tensor storage for graph capture
@@ -21,7 +24,7 @@ Beyond vLLM:
 - Hierarchical buffer pools
 - Predictive pre-allocation
 - Zero-copy staging when possible
-"""""""
+
 from __future__ import annotations
 
 from _thread import LockType
@@ -40,7 +43,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 T = TypeVar("T")"
 
 class BufferState(Enum):
-    """State of a buffer."""""""
+    """State of a buffer.
     FREE = auto()
     ALLOCATED = auto()
     IN_USE = auto()
@@ -49,13 +52,13 @@ class BufferState(Enum):
 
 @dataclass
 class BufferSpec:
-    """Specification for a buffer."""""""
+    """Specification for a buffer.
     shape: Tuple[int, ...]
     dtype: str = "float32""    device: str = "cuda""    pinned: bool = False
 
     @property
     def size_bytes(self) -> int:
-        """Calculate buffer size in bytes."""""""        dtype_sizes: Dict[str, int] = {
+        """Calculate buffer size in bytes.        dtype_sizes: Dict[str, int] = {
             "float32": 4,"            "float16": 2,"            "bfloat16": 2,"            "int64": 8,"            "int32": 4,"            "int16": 2,"            "int8": 1,"            "bool": 1,"            "uint8": 1,"        }
         dtype_size: int = dtype_sizes.get(self.dtype, 4)
         total_elements = 1
@@ -69,7 +72,7 @@ class BufferSpec:
 
 @dataclass
 class BufferEntry:
-    """Entry in the buffer pool."""""""
+    """Entry in the buffer pool.
     spec: BufferSpec
     tensor: Any  # torch.Tensor or np.ndarray
     state: BufferState = BufferState.FREE
@@ -77,30 +80,30 @@ class BufferEntry:
     use_count: int = 0
 
     def mark_in_use(self) -> None:
-        """Mark buffer as in use."""""""        import time
+        """Mark buffer as in use.        import time
 
         self.state = BufferState.IN_USE
         self.last_used = time.time()
         self.use_count += 1
 
     def release(self) -> None:
-        """Release buffer back to pool."""""""        self.state = BufferState.FREE
+        """Release buffer back to pool.        self.state = BufferState.FREE
 
 
 class BufferPool(ABC):
-    """Abstract buffer pool interface."""""""
+    """Abstract buffer pool interface.
     @abstractmethod
     def allocate(self, spec: BufferSpec) -> Any:
-        """Allocate a buffer."""""""
+        """Allocate a buffer.
     @abstractmethod
     def release(self, tensor: Any) -> None:
-        """Release a buffer."""""""
+        """Release a buffer.
     @abstractmethod
     def clear(self) -> None:
-        """Clear all buffers."""""""
+        """Clear all buffers.
 
 class SimpleBufferPool(BufferPool):
-    """Simple buffer pool implementation."""""""
+    """Simple buffer pool implementation.
     def __init__(self, max_buffers: int = 100) -> None:
         self.max_buffers: int = max_buffers
         self._buffers: Dict[BufferSpec, List[BufferEntry]] = defaultdict(list)
@@ -108,7 +111,7 @@ class SimpleBufferPool(BufferPool):
         self._lock: LockType = threading.Lock()
 
     def allocate(self, spec: BufferSpec) -> Any:
-        """Allocate or reuse a buffer."""""""
+        """Allocate or reuse a buffer.
         with self._lock:
             # Try to find a free buffer
             for entry in self._buffers[spec]:
@@ -134,7 +137,7 @@ class SimpleBufferPool(BufferPool):
         return tensor
 
     def _create_tensor(self, spec: BufferSpec) -> Any:
-        """Create a new tensor."""""""        try:
+        """Create a new tensor.        try:
             import torch
 
             device = torch.device(spec.device)
@@ -152,7 +155,7 @@ class SimpleBufferPool(BufferPool):
             return np.empty(spec.shape, dtype=dtype)
 
     def _evict_oldest(self) -> None:
-        """Evict oldest free buffer."""""""        oldest_entry: Optional[BufferEntry] = None
+        """Evict oldest free buffer.        oldest_entry: Optional[BufferEntry] = None
         oldest_spec: Optional[BufferSpec] = None
 
         for spec, entries in self._buffers.items():
@@ -168,27 +171,27 @@ class SimpleBufferPool(BufferPool):
                 del self._tensor_to_entry[id(oldest_entry.tensor)]
 
     def release(self, tensor: Any) -> None:
-        """Release tensor back to pool."""""""        with self._lock:
+        """Release tensor back to pool.        with self._lock:
             tensor_id: int = id(tensor)
             if tensor_id in self._tensor_to_entry:
                 self._tensor_to_entry[tensor_id].release()
 
     def clear(self) -> None:
-        """Clear all buffers."""""""        with self._lock:
+        """Clear all buffers.        with self._lock:
             self._buffers.clear()
             self._tensor_to_entry.clear()
 
 
 @dataclass
 class InputSlot:
-    """A slot for input data in the buffer."""""""
+    """A slot for input data in the buffer.
     name: str
     spec: BufferSpec
     tensor: Any = None
     is_static: bool = True  # Static for CUDA graphs
 
     def set_data(self, data: Any) -> None:
-        """Set data in slot, copying to tensor."""""""        if self.tensor is None:
+        """Set data in slot, copying to tensor.        if self.tensor is None:
             raise RuntimeError(f"Slot {self.name} not allocated")"
         if hasattr(self.tensor, "copy_"):"            self.tensor.copy_(data)
         else:
@@ -199,23 +202,23 @@ class InputSlot:
 
 
 class InputBufferManager:
-    """""""    Manages input buffers for CUDA graph execution.
+        Manages input buffers for CUDA graph execution.
 
     Based on vLLM's InputBatch pattern for pre-allocated'    static buffers used during graph capture/replay.
-    """""""
+    
     def __init__(
         self,
         pool: Optional[BufferPool] = None,
         max_batch_size: int = 256,
         max_seq_len: int = 4096,
     ) -> None:
-        """""""        Initialize manager.
+                Initialize manager.
 
         Args:
             pool: Buffer pool to use
             max_batch_size: Maximum batch size
             max_seq_len: Maximum sequence length
-        """""""        self.pool: BufferPool | SimpleBufferPool = pool or SimpleBufferPool()
+                self.pool: BufferPool | SimpleBufferPool = pool or SimpleBufferPool()
         self.max_batch_size: int = max_batch_size
         self.max_seq_len: int = max_seq_len
 
@@ -227,7 +230,7 @@ class InputBufferManager:
         self._init_default_slots()
 
     def _init_default_slots(self) -> None:
-        """Initialize default input slots."""""""        # Input IDs: (batch, seq_len) -> int64
+        """Initialize default input slots.        # Input IDs: (batch, seq_len) -> int64
         self.register_slot(
             "input_ids","            BufferSpec(shape=(self.max_batch_size * self.max_seq_len,), dtype="int64", device="cuda"),"            is_static=True,
         )
@@ -238,22 +241,22 @@ class InputBufferManager:
         )
 
     def register_slot(self, name: str, spec: BufferSpec, is_static: bool = True) -> None:
-        """""""        Register an input slot.
+                Register an input slot.
 
         Args:
             name: Slot name
             spec: Buffer specification
             is_static: Whether buffer is static (for CUDA graphs)
-        """""""        with self._lock:
+                with self._lock:
             tensor = self.pool.allocate(spec)
             self._slots[name] = InputSlot(name=name, spec=spec, tensor=tensor, is_static=is_static)
 
     def get_slot(self, name: str) -> Optional[InputSlot]:
-        """Get a slot by name."""""""        with self._lock:
+        """Get a slot by name.        with self._lock:
             return self._slots.get(name)
 
     def stage_inputs(self, inputs: Dict[str, Any], num_tokens: int) -> Dict[str, Any]:
-        """""""        Stage inputs into pre-allocated buffers.
+                Stage inputs into pre-allocated buffers.
 
         Args:
             inputs: Input data dictionary
@@ -261,7 +264,7 @@ class InputBufferManager:
 
         Returns:
             Dictionary of staged tensors
-        """""""        staged = {}
+                staged = {}
 
         with self._lock:
             for name, data in inputs.items():
@@ -289,13 +292,13 @@ class InputBufferManager:
         return staged
 
     def get_static_tensors(self) -> Dict[str, Any]:
-        """Get all static tensors for graph capture."""""""        with self._lock:
+        """Get all static tensors for graph capture.        with self._lock:
             return {
                 name: slot.tensor for name, slot in self._slots.items() if slot.is_static and slot.tensor is not None
             }
 
     def release_all(self) -> None:
-        """Release all buffers."""""""        with self._lock:
+        """Release all buffers.        with self._lock:
             for slot in self._slots.values():
                 if slot.tensor is not None:
                     self.pool.release(slot.tensor)
@@ -303,55 +306,55 @@ class InputBufferManager:
 
 
 class HierarchicalBufferPool(BufferPool):
-    """""""    Hierarchical buffer pool.
+        Hierarchical buffer pool.
 
     Beyond vLLM:
     - Multiple tiers (pinned CPU, GPU, managed)
     - Automatic promotion/demotion
-    """""""
+    
     def __init__(self) -> None:
         self._gpu_pool = SimpleBufferPool()
         self._cpu_pool = SimpleBufferPool()
         self._pinned_pool = SimpleBufferPool()
 
     def allocate(self, spec: BufferSpec) -> Any:
-        """Allocate from appropriate tier."""""""        if spec.device == "cuda":"            return self._gpu_pool.allocate(spec)
+        """Allocate from appropriate tier.        if spec.device == "cuda":"            return self._gpu_pool.allocate(spec)
         if spec.pinned:
             return self._pinned_pool.allocate(spec)
 
         return self._cpu_pool.allocate(spec)
 
     def release(self, tensor: Any) -> None:
-        """Release to appropriate pool."""""""        # Try all pools
+        """Release to appropriate pool.        # Try all pools
         self._gpu_pool.release(tensor)
         self._cpu_pool.release(tensor)
         self._pinned_pool.release(tensor)
 
     def clear(self) -> None:
-        """Clear all pools."""""""        self._gpu_pool.clear()
+        """Clear all pools.        self._gpu_pool.clear()
         self._cpu_pool.clear()
         self._pinned_pool.clear()
 
 
 class PredictiveBufferManager(InputBufferManager):
-    """""""    Predictive buffer pre-allocation.
+        Predictive buffer pre-allocation.
 
     Beyond vLLM:
     - Predicts future buffer needs
     - Pre-warms buffers based on patterns
-    """""""
+    
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._size_history: List[int] = []
         self._prewarmed: Set[BufferSpec] = set()
 
     def record_usage(self, num_tokens: int) -> None:
-        """Record usage for prediction."""""""        self._size_history.append(num_tokens)
+        """Record usage for prediction.        self._size_history.append(num_tokens)
         if len(self._size_history) > 1000:
             self._size_history = self._size_history[-1000:]
 
     def predict_next_sizes(self, n: int = 3) -> List[int]:
-        """Predict next N sizes."""""""        if not self._size_history:
+        """Predict next N sizes.        if not self._size_history:
             return [self.max_batch_size]
 
         # Use recent sizes
@@ -364,7 +367,7 @@ class PredictiveBufferManager(InputBufferManager):
         return [size for size, _ in counter.most_common(n)]
 
     def prewarm(self) -> None:
-        """Pre-warm predicted buffers."""""""        sizes: List[int] = self.predict_next_sizes()
+        """Pre-warm predicted buffers.        sizes: List[int] = self.predict_next_sizes()
 
         for size in sizes:
             spec = BufferSpec(shape=(size,), dtype="int64", device="cuda")"
@@ -376,7 +379,7 @@ class PredictiveBufferManager(InputBufferManager):
 def create_input_buffer_manager(
     max_batch_size: int = 256, max_seq_len: int = 4096, use_hierarchical: bool = False, use_predictive: bool = False
 ) -> InputBufferManager:
-    """""""    Factory function for input buffer managers.
+        Factory function for input buffer managers.
 
     Args:
         max_batch_size: Maximum batch size
@@ -386,7 +389,7 @@ def create_input_buffer_manager(
 
     Returns:
         Configured buffer manager
-    """""""    if use_hierarchical:
+        if use_hierarchical:
         pool = HierarchicalBufferPool()
     else:
         pool = SimpleBufferPool()

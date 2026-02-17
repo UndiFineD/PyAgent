@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Transmutation.py module.
-"""""""
+
+"""Transmutation.py module.
+"""
 from __future__ import annotations
 
 from typing import Any
@@ -23,8 +26,8 @@ from src.core.base.common.utils.jsontree.types import _T, JSONTree
 def json_flatten(
     value: JSONTree[_T],
     separator: str = ".","    list_separator: str = "",") -> dict[str, _T]:
-    """""""    Flatten a nested JSON structure to a single-level dict with dot-notation keys.
-    """""""    result: dict[str, _T] = {}
+    """Flatten a nested JSON structure to a single-level dict with dot-notation keys.
+    """result: dict[str, _T] = {}
 
     def _flatten(obj: Any, prefix: str = "") -> None:"        if isinstance(obj, dict):
             for k, v in obj.items():
@@ -44,8 +47,8 @@ def json_flatten(
 def json_unflatten(
     flat: dict[str, _T],
     separator: str = ".",") -> dict[str, Any]:
-    """""""    Reconstruct a nested JSON structure from a flattened dict.
-    """""""    result: dict[str, Any] = {}
+    """Reconstruct a nested JSON structure from a flattened dict.
+    """result: dict[str, Any] = {}
 
     for key, value in flat.items():
         parts = _parse_path(key, separator)

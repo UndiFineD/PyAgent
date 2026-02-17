@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Test Multi-Agent Orchestration Core
-"""""""
+
+"""Test Multi-Agent Orchestration Core
+"""
 import asyncio
 import pytest
 
@@ -26,12 +29,12 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 class MockCoordinator(AgentCoordinator):
-    """Mock coordinator for testing."""""""
+    """Mock coordinator for testing."""
     def __init__(self):
         self.executed_tasks = []
 
     async def execute_task(self, task: AgentTask, context: CascadeContext) -> AgentResult:
-        """Mock task execution."""""""        self.executed_tasks.append(task.description)
+        """Mock task execution."""self.executed_tasks.append(task.description)
 
         # Simulate some processing
         await asyncio.sleep(0.01)
@@ -42,7 +45,7 @@ class MockCoordinator(AgentCoordinator):
             output=f"Result for {task.description}","            metadata={"mock": True}"        )
 
     async def plan_orchestration(self, objective: str, context: CascadeContext) -> OrchestrationPlan:
-        """Mock orchestration planning."""""""        tasks = [
+        """Mock orchestration planning."""tasks = [
             AgentTask(description=f"Task 1 for {objective}", priority=1),"            AgentTask(description=f"Task 2 for {objective}", priority=2),"            AgentTask(description=f"Task 3 for {objective}", priority=3),"        ]
 
         return OrchestrationPlan(
@@ -52,7 +55,7 @@ class MockCoordinator(AgentCoordinator):
 
 @pytest.mark.asyncio
 async def test_multi_agent_orchestration_core():
-    """Test the multi-agent orchestration core functionality."""""""    coordinator = MockCoordinator()
+    """Test the multi-agent orchestration core functionality."""coordinator = MockCoordinator()
     core = MultiAgentOrchestrationCore(coordinator)
 
     # Test orchestration workflow
@@ -77,7 +80,7 @@ async def test_multi_agent_orchestration_core():
 
 @pytest.mark.asyncio
 async def test_orchestration_plan_validation():
-    """Test orchestration plan validation."""""""    coordinator = MockCoordinator()
+    """Test orchestration plan validation."""coordinator = MockCoordinator()
     core = MultiAgentOrchestrationCore(coordinator)
 
     # Test valid plan
@@ -99,7 +102,7 @@ async def test_orchestration_plan_validation():
 
 @pytest.mark.asyncio
 async def test_parallel_execution():
-    """Test parallel task execution."""""""    coordinator = MockCoordinator()
+    """Test parallel task execution."""coordinator = MockCoordinator()
     core = MultiAgentOrchestrationCore(coordinator)
 
     # Create a plan with parallel tasks

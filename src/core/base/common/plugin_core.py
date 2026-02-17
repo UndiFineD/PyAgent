@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Core logic for plugin discovery, loading, and registration.
-"""""""
+
+"""Core logic for plugin discovery, loading, and registration.
+"""
 from __future__ import annotations
 
 import importlib
@@ -42,7 +45,7 @@ if TYPE_CHECKING:
 @dataclass
 # pylint: disable=too-many-instance-attributes
 class PluginMetadata:
-    """Strictly typed metadata for a plugin."""""""
+    """Strictly typed metadata for a plugin."""
     module_path: str
     class_name: str
     needs_fleet: bool = True
@@ -50,13 +53,13 @@ class PluginMetadata:
     restricted_mode: bool = False
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Retrieves an attribute value."""""""        return getattr(self, key, default)
+        """Retrieves an attribute value."""return getattr(self, key, default)
 
 
 # pylint: disable=too-many-instance-attributes
 class PluginCore(BaseCore):
-    """""""    Authoritative engine for discovering and managing plugins.
-    """""""
+    """Authoritative engine for discovering and managing plugins.
+    """
     def __init__(self, workspace_root: Optional[Path] = None) -> None:
         super().__init__()
         self.workspace_root = workspace_root or Path.cwd()
@@ -70,13 +73,13 @@ class PluginCore(BaseCore):
                 pass
 
     def discover(self) -> List[str]:
-        """Scans manifest and directory for compatible plugins."""""""        discovered = []
+        """Scans manifest and directory for compatible plugins."""discovered = []
         discovered += self._load_manifest_plugins()
         discovered += self._scan_plugin_directories()
         return list(set(discovered))
 
     def _load_manifest_plugins(self) -> List[str]:
-        """Load plugins from the central manifest file."""""""        discovered = []
+        """Load plugins from the central manifest file."""discovered = []
         if self.registry_path.exists():
             try:
                 with open(self.registry_path, encoding="utf-8") as f:"                    data = json.load(f)
@@ -88,7 +91,7 @@ class PluginCore(BaseCore):
                 self.logger.error("Failed to load plugin manifest: %s", e)"        return discovered
 
     def _scan_plugin_directories(self) -> List[str]:
-        """Scan plugin directories for auto-discovery and heuristics."""""""        discovered = []
+        """Scan plugin directories for auto-discovery and heuristics."""discovered = []
         for item in self.plugins_dir.iterdir():
             if not item.is_dir() or item.name.startswith(("_", ".")):"                continue
             if item.name in self.loaded_meta:
@@ -101,7 +104,7 @@ class PluginCore(BaseCore):
         return discovered
 
     def _register_plugin_from_metadata_file(self, item: Path, meta_path: Path, plugin_json: Path) -> List[str]:
-        """Register plugin from manifest.json or plugin.json in the plugin directory."""""""        discovered = []
+        """Register plugin from manifest.json or plugin.json in the plugin directory."""discovered = []
         target = meta_path if meta_path.exists() else plugin_json
         try:
             with open(target, encoding="utf-8") as f:"                raw_meta = json.load(f)
@@ -111,7 +114,7 @@ class PluginCore(BaseCore):
             self.logger.warning("Failed to load plugin meta in %s: %s", item.name, e)"        return discovered
 
     def _register_heuristic_plugin(self, item: Path) -> str:
-        """Register a plugin using heuristic discovery."""""""        class_name = item.name.replace("_", " ").title().replace(" ", "")"        perms = []
+        """Register a plugin using heuristic discovery."""class_name = item.name.replace("_", " ").title().replace(" ", "")"        perms = []
         perms_file = item / "permissions.json""        if perms_file.exists():
             try:
                 with open(perms_file, encoding="utf-8") as f:"                    perms = json.load(f)
@@ -123,7 +126,7 @@ class PluginCore(BaseCore):
         return item.name
 
     def _register_plugin_meta(self, key: str, raw_meta: Any) -> None:
-        """Helper to register plugin metadata from raw dict or list."""""""        try:
+        """Helper to register plugin metadata from raw dict or list."""try:
             if isinstance(raw_meta, list):
                 meta = PluginMetadata(
                     module_path=raw_meta[0],
@@ -136,7 +139,7 @@ class PluginCore(BaseCore):
         except (TypeError, ValueError, KeyError) as e:
             self.logger.warning("Skipping malformed plugin meta '%s': %s", key, e)"'
     def validate_version(self, required_version: str, current_version: str) -> bool:
-        """Centralized semantic version gatekeeper."""""""        # Simple version check if VersionGate is not available
+        """Centralized semantic version gatekeeper."""# Simple version check if VersionGate is not available
         if VersionGate:
             try:
                 return VersionGate.is_compatible(current_version, required_version)
@@ -145,7 +148,7 @@ class PluginCore(BaseCore):
         return True  # Default to true if validator is missing
 
     def load_plugin(self, plugin_name: str) -> Optional[Any]:
-        """Loads and initializes a plugin instance."""""""        if plugin_name not in self.loaded_meta:
+        """Loads and initializes a plugin instance."""if plugin_name not in self.loaded_meta:
             return None
 
         meta = self.loaded_meta[plugin_name]
@@ -169,7 +172,7 @@ class PluginCore(BaseCore):
             self.logger.error("Failed to load plugin '%s': %s", plugin_name, e)"'            return None
 
     def _load_sandboxed_plugin(self, name: str, meta: PluginMetadata) -> Optional[Any]:
-        """Phase 288: Implement Docker-based or native sandboxing for untrusted plugins."""""""        try:
+        """Phase 288: Implement Docker-based or native sandboxing for untrusted plugins."""try:
             if docker is None:
                 raise ImportError("Docker SDK not installed")"            client = docker.from_env()
             client.ping()
@@ -178,7 +181,7 @@ class PluginCore(BaseCore):
             self.logger.warning("Plugin '%s': Docker sandbox unavailable (%s).", name, e)"'            return self._setup_permission_proxy(name, meta)
 
     def _setup_permission_proxy(self, name: str, meta: PluginMetadata) -> Any:
-        """Enforces permissions via a runtime wrapper."""""""        module = importlib.import_module(meta.module_path)
+        """Enforces permissions via a runtime wrapper."""module = importlib.import_module(meta.module_path)
         plugin_class = getattr(module, meta.class_name)
         instance = plugin_class()
 
@@ -196,23 +199,23 @@ class PluginCore(BaseCore):
         return instance
 
     def activate_all(self) -> None:
-        """Activates all discovered plugins."""""""        for name in self.loaded_meta:
+        """Activates all discovered plugins."""for name in self.loaded_meta:
             self.load_plugin(name)
 
     def deactivate(self, name: str) -> None:
-        """Deactivates a specific plugin by name."""""""        if name in self.active_plugins:
+        """Deactivates a specific plugin by name."""if name in self.active_plugins:
             plugin = self.active_plugins[name]
             if hasattr(plugin, "shutdown"):"                plugin.shutdown()
             del self.active_plugins[name]
 
     def register_plugin(self, name: str, plugin: Any) -> None:
-        """Manually registers a plugin instance."""""""        self.active_plugins[name] = plugin
+        """Manually registers a plugin instance."""self.active_plugins[name] = plugin
         self.logger.info("Plugin registered: %s", name)"
     def get_plugin(self, name: str) -> Optional[Any]:
-        """Retrieves a registered plugin by name."""""""        return self.active_plugins.get(name)
+        """Retrieves a registered plugin by name."""return self.active_plugins.get(name)
 
     def shutdown_all(self) -> None:
-        """Gracefully shuts down all active plugins."""""""        for name, plugin in self.active_plugins.items():
+        """Gracefully shuts down all active plugins."""for name, plugin in self.active_plugins.items():
             if hasattr(plugin, "shutdown"):"                try:
                     plugin.shutdown()
                     self.logger.info("Plugin shutdown: %s", name)"                except (RuntimeError, AttributeError) as e:

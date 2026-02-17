@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Validator.py module.
-"""""""
+
+Validator.py module.
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 from __future__ import annotations
 
@@ -22,14 +25,14 @@ from .config import StructuredOutputConfig, ValidationResult
 
 
 class StructuredOutputValidator:
-    """""""    Validate structured output against constraints.
-    """""""
+        Validate structured output against constraints.
+    
     def __init__(self, config: StructuredOutputConfig) -> None:
         self.config = config
         self._constraints = config.get_all_constraints()
 
     def validate(self, text: str) -> ValidationResult:
-        """Validate complete output regarding constraints."""""""        errors: list[str] = []
+        """Validate complete output regarding constraints.        errors: list[str] = []
         warnings: list[str] = []
         parsed_value = None
 
@@ -60,7 +63,7 @@ class StructuredOutputValidator:
         )
 
     def validate_partial(self, text: str) -> ValidationResult:
-        """Validate partial/streaming output regarding constraints."""""""        errors: list[str] = []
+        """Validate partial/streaming output regarding constraints.        errors: list[str] = []
         warnings: list[str] = []
 
         # Check if could still be valid
@@ -83,7 +86,7 @@ class StructuredOutputValidator:
         )
 
     def _could_be_json(self, text: str) -> bool:
-        """Check if text could be a JSON prefix."""""""        stripped = text.strip()
+        """Check if text could be a JSON prefix.        stripped = text.strip()
 
         if not stripped:
             return True
@@ -94,4 +97,4 @@ class StructuredOutputValidator:
         return False
 
     def _could_match_regex(self, _text: str, _pattern: str) -> bool:
-        """Check if text could still match regex."""""""        return True
+        """Check if text could still match regex.        return True

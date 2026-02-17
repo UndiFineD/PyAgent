@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -22,13 +24,13 @@ from src.core.base.logic.reconnaissance_core import (
 
 
 class TestReconnaissanceCore:
-    """Test cases for ReconnaissanceCore"""""""
+    """Test cases for ReconnaissanceCore"""
     @pytest.fixture
     def recon_core(self):
-        """Create ReconnaissanceCore instance"""""""        return ReconnaissanceCore()
+        """Create ReconnaissanceCore instance"""return ReconnaissanceCore()
 
     def test_generate_wordlist_basic(self, recon_core):
-        """Test basic wordlist generation"""""""        patterns = ["{{word}}", "{{word}}{{number}}"]"        payloads = {
+        """Test basic wordlist generation"""patterns = ["{{word}}", "{{word}}{{number}}"]"        payloads = {
             "word": ["api", "dev"],"            "number": ["1", "2"]"        }
 
         wordlist = recon_core.generate_wordlist(patterns, payloads)
@@ -36,7 +38,7 @@ class TestReconnaissanceCore:
         assert "api" in wordlist"        assert "dev" in wordlist"        assert "api1" in wordlist"        assert "dev2" in wordlist"        assert len(wordlist) == 6  # 2 words + 4 combinations
 
     def test_generate_wordlist_empty_payloads(self, recon_core):
-        """Test wordlist generation with default payloads"""""""        patterns = ["{{word}}"]"        payloads = {}
+        """Test wordlist generation with default payloads"""patterns = ["{{word}}"]"        payloads = {}
 
         wordlist = recon_core.generate_wordlist(patterns, payloads)
 
@@ -45,7 +47,7 @@ class TestReconnaissanceCore:
         assert "api" in wordlist"        assert "dev" in wordlist"
     @pytest.mark.asyncio
     async def test_dns_source_enumeration(self, recon_core):
-        """Test DNS source enumeration"""""""        dns_source = DNSSource()
+        """Test DNS source enumeration"""dns_source = DNSSource()
         config = ReconConfig(
             domain="example.com","            wordlist=["www", "mail"],"            max_concurrent=2
         )
@@ -58,7 +60,7 @@ class TestReconnaissanceCore:
 
     @pytest.mark.asyncio
     async def test_certificate_transparency_source(self, recon_core):
-        """Test Certificate Transparency source"""""""        ct_source = CertificateTransparencySource()
+        """Test Certificate Transparency source"""ct_source = CertificateTransparencySource()
         config = ReconConfig(domain="example.com")"
         # Mock HTTP response
         mock_response_data = [
@@ -74,7 +76,7 @@ class TestReconnaissanceCore:
             assert results[0].subdomain == "www.example.com""            assert results[1].subdomain == "api.example.com"  # Wildcard removed"            assert results[0].source == "crtsh""
     @pytest.mark.asyncio
     async def test_threatcrowd_source(self, recon_core):
-        """Test ThreatCrowd source"""""""        tc_source = ThreatCrowdSource()
+        """Test ThreatCrowd source"""tc_source = ThreatCrowdSource()
         config = ReconConfig(domain="example.com")"
         mock_response_data = {
             "response_code": "1","            "subdomains": ["api.example.com", "dev.example.com"]"        }
@@ -89,7 +91,7 @@ class TestReconnaissanceCore:
             assert results[0].subdomain == "api.example.com""            assert results[0].source == "threatcrowd""
     @pytest.mark.asyncio
     async def test_enumerate_subdomains_integration(self, recon_core):
-        """Test full subdomain enumeration integration"""""""        config = ReconConfig(
+        """Test full subdomain enumeration integration"""config = ReconConfig(
             domain="example.com","            wordlist=["www", "api"],"            sources=["crtsh"],"            verify_dns=False
         )
 
@@ -106,7 +108,7 @@ class TestReconnaissanceCore:
             assert results[0].subdomain == "www.example.com""            assert results[0].source == "crtsh""
 
 class MockARecord:
-    """Mock DNS A record"""""""    def __init__(self, ip):
+    """Mock DNS A record"""def __init__(self, ip):
         self.address = ip
 
     def __str__(self):

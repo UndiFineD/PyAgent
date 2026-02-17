@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Transport layer.py module.
-"""""""# Phase 319: Multi-Cloud Teleportation (ZMQ Transport Layer)
+
+"""
+Transport layer.py module.
+# Phase 319: Multi-Cloud Teleportation (ZMQ Transport Layer)
 
 import asyncio
 import os
@@ -35,9 +39,9 @@ logger = StructuredLogger(__name__)
 
 
 class VoyagerTransport:
-    """""""    VoyagerTransport: High-performance P2P message bus using ZeroMQ.
+        VoyagerTransport: High-performance P2P message bus using ZeroMQ.
     Uses DEALER/ROUTER pattern for asynchronous bi-directional communication.
-    """""""
+    
     def __init__(self, host: str = "0.0.0.0", port: int = 5555, encryption_key: Optional[bytes] = None) -> None:"        self.host: str = host
         self.port: int = port
         self.ctx = zmq.asyncio.Context()
@@ -79,7 +83,7 @@ class VoyagerTransport:
         return data
 
     async def start_server(self, handler: Callable[[Dict[str, Any]], Awaitable[Dict[str, Any]]]) -> None:
-        """Starts the ROUTER socket to listen for incoming peer requests."""""""        self.router = self.ctx.socket(zmq.ROUTER)
+        """Starts the ROUTER socket to listen for incoming peer requests.        self.router = self.ctx.socket(zmq.ROUTER)
         self.router.setsockopt(zmq.LINGER, 0)
         try:
             self.router.bind(f"tcp://{self.host}:{self.port}")"            self._handler = handler
@@ -130,7 +134,7 @@ class VoyagerTransport:
         timeout: int = 5000,
         peer_id: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
-        """Sends a message to a specific peer using a DEALER socket."""""""        import msgspec
+        """Sends a message to a specific peer using a DEALER socket.        import msgspec
 
         dealer: zmq.asyncio.Socket = self.ctx.socket(zmq.DEALER)
         dealer.setsockopt(zmq.LINGER, 0)
@@ -157,7 +161,7 @@ class VoyagerTransport:
             dealer.close()
 
     def stop(self) -> None:
-        """Stops the transport layer."""""""        self.running = False
+        """Stops the transport layer.        self.running = False
         if self.router and not self.router.closed:
             self.router.close(linger=0)
         if self.ctx:

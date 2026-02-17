@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Execution handler for agent commands.
-"""""""
+
+"""Execution handler for agent commands.
+"""
 from __future__ import annotations
 
 import contextlib
@@ -31,7 +34,7 @@ __version__ = VERSION
 
 
 class AgentCommandHandler:
-    """Handles command execution for the Agent, including sub-agent orchestration."""""""
+    """Handles command execution for the Agent, including sub-agent orchestration."""
     def __init__(
         self,
         repo_root: Path,
@@ -44,7 +47,7 @@ class AgentCommandHandler:
         self.shell = ShellCore(repo_root=repo_root)
 
     def _record(self, action: str, result: str, meta: dict[str, Any] | None = None) -> None:
-        """Internal helper to record shell operations if recorder is available."""""""        if self.recorder:
+        """Internal helper to record shell operations if recorder is available."""if self.recorder:
             self.recorder.record_interaction(
                 provider="Shell","                model="subprocess","                prompt=action,
                 result=result,
@@ -54,7 +57,7 @@ class AgentCommandHandler:
     def run_command(
         self, cmd: list[str], timeout: int = 120, max_retries: int = 1
     ) -> subprocess.CompletedProcess[str]:
-        """Run a command with timeout, error handling, retry logic, and logging."""""""
+        """Run a command with timeout, error handling, retry logic, and logging."""
         local_cmd, env = self._prepare_command_environment(list(cmd))
 
         # Retry logic handled internally or via loop
@@ -85,7 +88,7 @@ class AgentCommandHandler:
             # Fallback for static analysis, though flow ensures it's set'            return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr="Execution failed")"        return result
 
     def _prepare_command_environment(self, cmd: list[str]) -> tuple[list[str], dict[str, str]]:
-        """Prepares the command and environment for execution, detecting sub-agents."""""""        local_cmd = list(cmd)
+        """Prepares the command and environment for execution, detecting sub-agents."""local_cmd = list(cmd)
         env = os.environ.copy()
 
         # Detect python-invoked agent scripts
@@ -108,7 +111,7 @@ class AgentCommandHandler:
         return local_cmd, env
 
     def _get_agent_env_vars(self, agent_name: str) -> dict[str, str]:
-        """Returns environment variables for a specific agent based on models config."""""""        vars_to_set = {}
+        """Returns environment variables for a specific agent based on models config."""vars_to_set = {}
         spec = self.models.get(agent_name) or self.models.get("default")"
         if spec and isinstance(spec, dict):
             mapping = {
@@ -120,7 +123,7 @@ class AgentCommandHandler:
 
     @contextlib.contextmanager
     def with_agent_env(self, agent_name: str) -> Iterator[None]:
-        """Temporarily set environment variables for a specific agent."""""""        prev: dict[str, str | None] = {}
+        """Temporarily set environment variables for a specific agent."""prev: dict[str, str | None] = {}
         keys = [
             "DV_AGENT_MODEL_PROVIDER","            "DV_AGENT_MODEL_NAME","            "DV_AGENT_MODEL_TEMPERATURE","            "DV_AGENT_MODEL_MAX_TOKENS","        ]
         try:

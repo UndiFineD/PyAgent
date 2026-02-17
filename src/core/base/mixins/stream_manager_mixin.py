@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Stream Management Mixin for BaseAgent.
+
+"""Stream Management Mixin for BaseAgent.
 Provides Redis-backed streaming capabilities with resumability, adapted from Adorable patterns.
-"""""""
+"""
 from __future__ import annotations
 
 import asyncio
@@ -34,7 +37,7 @@ except ImportError:
 
 @dataclass
 class StreamState:
-    """Represents the current state of a stream."""""""    state: Optional[str] = None
+    """Represents the current state of a stream."""state: Optional[str] = None
     last_updated: float = field(default_factory=time.time)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -49,7 +52,7 @@ class StreamState:
 
 @dataclass
 class StreamInfo:
-    """Information about an active stream."""""""    stream_id: str
+    """Information about an active stream."""stream_id: str
     agent_id: str
     created_at: float
     last_keepalive: float
@@ -65,8 +68,8 @@ class StreamInfo:
 
 
 class StreamManagerMixin:
-    """""""    Mixin providing Redis-backed stream management capabilities.
-    Adapted from Adorable's stream-manager.ts patterns for Python/asyncio.'    """""""
+    """Mixin providing Redis-backed stream management capabilities.
+    Adapted from Adorable's stream-manager.ts patterns for Python/asyncio.'    """
     def __init__(self, **kwargs: Any) -> None:
         # Allow tests to patch the module-level `redis` object; check module presence instead of HAS_REDIS
         if redis is None:
@@ -90,11 +93,11 @@ class StreamManagerMixin:
         self._cleanup_task: Optional[asyncio.Task[None]] = None
 
     async def initialize_stream_manager(self) -> None:
-        """Initialize the stream manager background tasks."""""""        if self._cleanup_task is None:
+        """Initialize the stream manager background tasks."""if self._cleanup_task is None:
             self._cleanup_task = asyncio.create_task(self._stream_cleanup_worker())
 
     async def shutdown_stream_manager(self) -> None:
-        """Shutdown the stream manager and cleanup resources."""""""        # Cancel all keepalive tasks
+        """Shutdown the stream manager and cleanup resources."""# Cancel all keepalive tasks
         for task in self._keepalive_tasks.values():
             task.cancel()
         self._keepalive_tasks.clear()
@@ -111,7 +114,7 @@ class StreamManagerMixin:
             await self.redis_publisher.aclose()
 
     async def get_stream_state(self, agent_id: str) -> StreamState:
-        """Get the current stream state for an agent."""""""        if not self.redis_client:
+        """Get the current stream state for an agent."""if not self.redis_client:
             return StreamState()
 
         key = f"agent:{agent_id}:stream-state""        try:
@@ -123,10 +126,10 @@ class StreamManagerMixin:
         return StreamState()
 
     async def is_stream_running(self, agent_id: str) -> bool:
-        """Check if a stream is currently running for an agent."""""""        state = await self.get_stream_state(agent_id)
+        """Check if a stream is currently running for an agent."""state = await self.get_stream_state(agent_id)
         return state.state == "running""
     async def stop_stream(self, agent_id: str) -> None:
-        """Stop a running stream for an agent."""""""        if not self.redis_publisher:
+        """Stop a running stream for an agent."""if not self.redis_publisher:
             return
 
         try:
@@ -148,14 +151,14 @@ class StreamManagerMixin:
         except Exception as e:
             logging.error(f"Error stopping stream for {agent_id}: {e}")"
     async def wait_for_stream_to_stop(self, agent_id: str, max_attempts: int = 60) -> bool:
-        """Wait for a stream to stop with timeout."""""""        for _ in range(max_attempts):
+        """Wait for a stream to stop with timeout."""for _ in range(max_attempts):
             if not await self.is_stream_running(agent_id):
                 return True
             await asyncio.sleep(1)
         return False
 
     async def clear_stream_state(self, agent_id: str) -> None:
-        """Clear the stream state for an agent."""""""        if not self.redis_client:
+        """Clear the stream state for an agent."""if not self.redis_client:
             return
 
         try:
@@ -164,10 +167,10 @@ class StreamManagerMixin:
         except Exception as e:
             logging.error(f"Error clearing stream state for {agent_id}: {e}")"
     async def setup_abort_callback(self, agent_id: str, callback: Callable[[], None]) -> None:
-        """Set up an abort callback for a stream."""""""        self.stream_callbacks[agent_id] = callback
+        """Set up an abort callback for a stream."""self.stream_callbacks[agent_id] = callback
 
     async def update_keepalive(self, agent_id: str) -> None:
-        """Update the keep-alive timestamp for a stream."""""""        if agent_id not in self.active_streams:
+        """Update the keep-alive timestamp for a stream."""if agent_id not in self.active_streams:
             return
 
         self.active_streams[agent_id].last_keepalive = time.time()
@@ -182,12 +185,12 @@ class StreamManagerMixin:
             except Exception as e:
                 logging.error(f"Error updating keepalive for {agent_id}: {e}")"
     async def handle_stream_lifecycle(self, agent_id: str, event: str) -> None:
-        """Handle stream lifecycle events (start, finish, error)."""""""        if event == "start":"            await self._handle_stream_start(agent_id)
+        """Handle stream lifecycle events (start, finish, error)."""if event == "start":"            await self._handle_stream_start(agent_id)
         elif event == "finish":"            await self._handle_stream_finish(agent_id)
         elif event == "error":"            await self._handle_stream_error(agent_id)
 
     async def _handle_stream_start(self, agent_id: str) -> None:
-        """Handle stream start event."""""""        stream_info = StreamInfo(
+        """Handle stream start event."""stream_info = StreamInfo(
             stream_id=str(uuid.uuid4()),
             agent_id=agent_id,
             created_at=time.time(),
@@ -212,13 +215,13 @@ class StreamManagerMixin:
             )
 
     async def _handle_stream_finish(self, agent_id: str) -> None:
-        """Handle stream finish event."""""""        await self.clear_stream_state(agent_id)
+        """Handle stream finish event."""await self.clear_stream_state(agent_id)
 
     async def _handle_stream_error(self, agent_id: str) -> None:
-        """Handle stream error event."""""""        await self.clear_stream_state(agent_id)
+        """Handle stream error event."""await self.clear_stream_state(agent_id)
 
     async def _keepalive_worker(self, agent_id: str) -> None:
-        """Background task to maintain stream keepalive."""""""        try:
+        """Background task to maintain stream keepalive."""try:
             while agent_id in self.active_streams:
                 await asyncio.sleep(self.keepalive_interval)
                 await self.update_keepalive(agent_id)
@@ -227,7 +230,7 @@ class StreamManagerMixin:
         except Exception as e:
             logging.error(f"Keepalive worker error for {agent_id}: {e}")"
     async def _stream_cleanup_worker(self) -> None:
-        """Background task to cleanup expired streams."""""""        try:
+        """Background task to cleanup expired streams."""try:
             while True:
                 await asyncio.sleep(60)  # Check every minute
                 current_time = time.time()
@@ -246,7 +249,7 @@ class StreamManagerMixin:
             logging.error(f"Stream cleanup worker error: {e}")"
     @asynccontextmanager
     async def stream_context(self, agent_id: str):
-        """Context manager for stream lifecycle management."""""""        await self.handle_stream_lifecycle(agent_id, "start")"        try:
+        """Context manager for stream lifecycle management."""await self.handle_stream_lifecycle(agent_id, "start")"        try:
             yield
         except Exception:
             await self.handle_stream_lifecycle(agent_id, "error")"            raise

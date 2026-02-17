@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Profiling analysis mixin.py module.
-"""""""# Licensed under the Apache License, Version 2.0 (the "License");"
+
+"""
+Profiling analysis mixin.py module.
+# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 import logging
@@ -24,7 +28,7 @@ if TYPE_CHECKING:
 
 
 class ProfilingAnalysisMixin:
-    """Mixin for performance profiling in SelfImprovementAnalysis."""""""
+    """Mixin for performance profiling in SelfImprovementAnalysis.
     def add_profiling_findings(
         self: SelfImprovementAnalysis,
         findings: list[dict[str, Any]],
@@ -32,9 +36,9 @@ class ProfilingAnalysisMixin:
         rel_path: str,
         content: str
     ) -> None:
-        """""""        Analyzes a file for performance bottlenecks using the ProfilingAgent.
+                Analyzes a file for performance bottlenecks using the ProfilingAgent.
         Only profiles if the file is likely to be a bottleneck (large, loops, etc).
-        """""""        # Heuristic: Only profile if file > 500 lines or has many loops/complex logic
+                # Heuristic: Only profile if file > 500 lines or has many loops/complex logic
         if len(content.splitlines()) < 200:
             return
 

@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Routing engine for task distribution.
+
+"""
+Routing engine for task distribution.
 (Facade for src.core.base.common.routing_core)
-"""""""
+
 import os
 from typing import Any
 
@@ -25,8 +29,8 @@ from src.infrastructure.compute.backend.runner_backends import BackendHandlers
 
 
 class RoutingEngine(StandardRoutingCore):
-    """Facade for RoutingCore."""""""
-    def select_provider(self, task_type="general", priority="balanced", federated=False):"        """Legacy compatibility wrapper."""""""        if federated:
+    """Facade for RoutingCore.
+    def select_provider(self, task_type="general", priority="balanced", federated=False):"        """Legacy compatibility wrapper.        if federated:
             return "federated_cluster""
         report = BackendHandlers.get_performance_report()
         preferred: str = os.environ.get("DV_AGENT_BACKEND", "github_models")"
@@ -45,5 +49,5 @@ class RoutingEngine(StandardRoutingCore):
 
     @staticmethod
     def get_routing_stats() -> dict[str, Any]:
-        """Returns statistics on routing decisions and provider health."""""""        return {
+        """Returns statistics on routing decisions and provider health.        return {
             "active_metrics": BackendHandlers.get_performance_report(),"            "default_backend": os.environ.get("DV_AGENT_BACKEND", "github_models"),"        }

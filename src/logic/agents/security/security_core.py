@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# SecurityCore - Core security and safety validation
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# SecurityCore - Core security and safety validation
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -38,7 +40,7 @@ FILE CONTENT SUMMARY:
 SecurityCore logic for workspace safety.
 Combines scanning for secrets, command auditing, shell script analysis, and injection detection.
 This is designed for high-performance static analysis and future Rust migration.
-"""""""
+
 from __future__ import annotations
 
 import importlib.util
@@ -57,7 +59,7 @@ _RUST_AVAILABLE = importlib.util.find_spec("rust_core") is not None"__version__ 
 class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterMixin):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Pure logic core for security and safety validation."""""""
+""""Pure logic core for security and safety validation.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""# [BATCHFIX] Commented metadata/non-Python
@@ -95,7 +97,7 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root
 # [BATCHFIX] Commented metadata/non-Python
-#         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else "None"  # [BATCHFIX] closed string""""""""
+#         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else "None"  # [BATCHFIX] closed string"
 from __future__ import annotations
 
 import importlib.util
@@ -114,7 +116,7 @@ _RUST_AVAILABLE = importlib.util.find_spec("rust_core") is not None"__version__ 
 class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterMixin):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Pure logic core for security and safety validation."""""""
+""""Pure logic core for security and safety validation.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""# [BATCHFIX] Commented metadata/non-Python

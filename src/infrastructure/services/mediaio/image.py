@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Image loader implementation."""""""
+
+"""
+Image loader implementation.
 # pylint: disable=too-many-function-args
 
 from __future__ import annotations
@@ -28,7 +32,7 @@ from .models import (ImageData, ImageFormat, MediaLoadConfig, MediaMetadata,
 
 
 class ImageLoader(MediaLoader):
-    """Load and process images."""""""
+    """Load and process images.
     def __init__(self):
         self._pil_available = False
         self._cv2_available = False
@@ -53,7 +57,7 @@ class ImageLoader(MediaLoader):
         source: Union[str, bytes, BinaryIO],
         config: MediaLoadConfig,
     ) -> ImageData:
-        """Load image from source."""""""        data, source_str = await self._read_source(source)
+        """Load image from source.        data, source_str = await self._read_source(source)
         fmt = self._detect_format(data)
 
         if self._pil_available:
@@ -75,7 +79,7 @@ class ImageLoader(MediaLoader):
         return ImageData(data=img, metadata=metadata, source=source_str)
 
     async def _read_source(self, source: Union[str, bytes, BinaryIO]) -> Tuple[bytes, str]:
-        """Read bytes from source."""""""        if isinstance(source, bytes):
+        """Read bytes from source.        if isinstance(source, bytes):
             return source, "<bytes>""        if isinstance(source, (str, Path)):
             source_str = str(source)
             if source_str.startswith(("http://", "https://")):"                data = await self._fetch_url(source_str)
@@ -86,7 +90,7 @@ class ImageLoader(MediaLoader):
         data = source.read()
         return data, "<stream>""
     async def _fetch_url(self, url: str) -> bytes:
-        """Fetch image from URL."""""""        try:
+        """Fetch image from URL.        try:
             import aiohttp
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as resp:
@@ -97,7 +101,7 @@ class ImageLoader(MediaLoader):
                 return resp.read()
 
     def _detect_format(self, data: bytes) -> ImageFormat:
-        """Detect image format from magic bytes."""""""        if data[:2] == b"\\xff\\xd8":"            return ImageFormat.JPEG
+        """Detect image format from magic bytes.        if data[:2] == b"\\xff\\xd8":"            return ImageFormat.JPEG
         if data[:8] == b"\\x89PNG\\r\\n\\x1a\\n":"            return ImageFormat.PNG
         if data[:4] == b"RIFF" and data[8:12] == b"WEBP":"            return ImageFormat.WEBP
         if data[:6] in (b"GIF87a", b"GIF89a"):"            return ImageFormat.GIF
@@ -105,7 +109,7 @@ class ImageLoader(MediaLoader):
         return ImageFormat.JPEG
 
     async def _load_pil(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
-        """Load using PIL."""""""        img = self._image_lib.open(io.BytesIO(data))
+        """Load using PIL.        img = self._image_lib.open(io.BytesIO(data))
         if img.mode != "RGB":"            img = img.convert("RGB")"
         if config.target_size:
             img = self._resize_pil(img, config.target_size, config.resize_mode)
@@ -119,7 +123,7 @@ class ImageLoader(MediaLoader):
         return arr
 
     def _resize_pil(self, img, target: Tuple[int, int], mode: ResizeMode):
-        """Resize image using PIL."""""""        w, h = img.size
+        """Resize image using PIL.        w, h = img.size
         tw, th = target
 
         if mode == ResizeMode.STRETCH:
@@ -152,7 +156,7 @@ class ImageLoader(MediaLoader):
         return img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
 
     async def _load_cv2(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
-        """Load using OpenCV."""""""        arr = np.frombuffer(data, dtype=np.uint8)
+        """Load using OpenCV.        arr = np.frombuffer(data, dtype=np.uint8)
         img = self._cv2.imdecode(arr, self._cv2.IMREAD_COLOR)
         img = self._cv2.cvtColor(img, self._cv2.COLOR_BGR2RGB)
 
@@ -168,7 +172,7 @@ class ImageLoader(MediaLoader):
         return img
 
     def _resize_cv2(self, img: np.ndarray, target: Tuple[int, int], mode: ResizeMode) -> np.ndarray:
-        """Resize image using OpenCV."""""""        h, w = img.shape[:2]
+        """Resize image using OpenCV.        h, w = img.shape[:2]
         tw, th = target
 
         if mode == ResizeMode.STRETCH:

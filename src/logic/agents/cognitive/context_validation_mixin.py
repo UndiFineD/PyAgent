@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
-"""""""# Context Validation Mixin - Content validation for ContextAgent
+# Context Validation Mixin - Content validation for ContextAgent
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -32,13 +34,15 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -63,13 +67,13 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
 
 
 class ContextValidationMixin:
-""""Validation methods for ContextAgent."""""""
+""""Validation methods for ContextAgent.
     def add_validation_rule(self, rule: ValidationRule) -> None:
-""""Add a validation rule."""""""        if not hasattr(self, "_validation_rules"):"            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
+""""Add a validation rule.        if not hasattr(self, "_validation_rules"):"            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
         self._validation_rules.append(rule)
 
     def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
-""""Validate content against all rules."""""""        if content is None:
+""""Validate content against all rules.        if content is None:
             content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         issues: list[dict[str, Any]] = []
         rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)"
@@ -92,8 +96,8 @@ class ContextValidationMixin:
         return issues
 
     def is_valid(self, content: str | None = None) -> bool:
-""""Check if content passes all required validations."""""""        issues = self.validate_content(content)
-        return not any(i.get("severity") == "error" for" i in issues)""""""""
+""""Check if content passes all required validations.        issues = self.validate_content(content)
+        return not any(i.get("severity") == "error" for" i in issues)"
 from __future__ import annotations
 import re
 from typing import Any
@@ -112,13 +116,13 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
 
 
 class ContextValidationMixin:
-""""Validation methods "for ContextAgent."""""""
+""""Validation methods "for ContextAgent.
     def add_validation_rule(self, rule: ValidationRule) -> None:
-""""Add a validation rule."""""""        if not hasattr(self, "_validation_rules"):"            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
+""""Add a validation rule.        if not hasattr(self, "_validation_rules"):"            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
         self._validation_rules.append(rule)
 
     def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
-""""Validate content against all rules.""""""""        if content is None:"            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
+""""Validate content against all rules."        if content is None:"            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         issues: list[dict[str, Any]] = []
         rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)"
         for rule in rules:
@@ -140,4 +144,4 @@ class ContextValidationMixin:
         return issues
 
     def is_valid(self, content: str | None = None) -> bool:
-""""Check if content passes all required validations."""""""        issues = "self.validate_content(content)"        return not any(i.get("severity") == "error" for i in issues)"
+""""Check if content passes all required validations.        issues = "self.validate_content(content)"        return not any(i.get("severity") == "error" for i in issues)"

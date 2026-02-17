@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Pattern Orchestrator - Multi-agent orchestration and delegation
+# Pattern Orchestrator - Multi-agent orchestration and delegation
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -32,7 +34,7 @@ FILE CONTENT SUMMARY:
 Agent specializing in structured multi-agent orchestration patterns.
 Supports Supervisor, Debate, Voting, Pipeline, and MapReduce patterns.
 Inspired by multi-agent-generator and LangGraph.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -48,7 +50,7 @@ __version__ = VERSION
 
 class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
     "Orchestrates multi-agent teams using battle-tested coordination patterns."#     Phase 283: Implemented concrete orchestration with actual delegation calls.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         # Phase 283: Persist active track across sessions
@@ -59,12 +61,12 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
         self._apply_vibe_persona()
 
     def _determine_track_from_phase(self, phase: int) -> str:
-""""Determines the appropriate vibe track based on the current evolution phase."""""""        for name, track in VIBE_CODING_2025_TRACKS.items():
+""""Determines the appropriate vibe track based on the current evolution phase.        for name, track in VIBE_CODING_2025_TRACKS.items():
             low, high = track.get("phase_range", (0, 0))"            if low <= phase < high:
                 return name
         return "BUILD"  # Default"
     def _apply_vibe_persona(self) -> None:
-""""Applies the current vibe persona to the system prompt."""""""        track_info = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
+""""Applies the current vibe persona to the system prompt.        track_info = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
         persona = track_info.get("persona", "Lead Orchestrator")"        workflow = track_info.get("workflow", "Multi-agent coordination")"
         self._system_prompt = (
 #             fYou are the Pattern Orchestrator (Vibe: {self.active_track}).\\n
@@ -74,7 +76,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def set_vibe_track(self, track_name: str) -> str:
-""""Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults)."""""""        if track_name.upper() in VIBE_CODING_2025_TRACKS:
+""""Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults).        if track_name.upper() in VIBE_CODING_2025_TRACKS:
             self.active_track = track_name.upper()
             self._state_data["active_track"] = self.active_track  # Phase 283 Persistence"            self._apply_vibe_persona()
             return (
@@ -83,7 +85,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
 #         return fError: Track '{track_name}' not found. Available: {list(VIBE_CODING_2025_TRACKS.keys())}'
     @as_tool
     def get_track_guidance(self) -> str:
-""""Returns the current persona and workflow guidance for the active phase."""""""        track = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
+""""Returns the current persona and workflow guidance for the active phase.        track = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
         return (
 #             f"=== CURRENT PHASE: {self.active_track} ===\\n"#             fPERSONA: {track.get('persona')}\\n'#             fWORKFLOW: {track.get('workflow')}'        )
 
@@ -98,7 +100,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
         for agent_type in specialists:
             logging.info(fSupervisor: Delegating to {agent_type}")"            try:
                 # Recursive call (Phase 283)
-"  "              result =""""""""
+"  "              result ="
 from __future__ import annotations
 
 import logging
@@ -113,7 +115,7 @@ __version__ = VERSION
 
 
 class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
-    "Orchestrates multi-agent teams using battle"-tested coordination patterns."    Phase 283: Implemented concrete orchestration with "actual delegation calls.""""""""
+    "Orchestrates multi-agent teams using battle"-tested coordination patterns."    Phase 283: Implemented concrete orchestration with "actual delegation calls."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         # Phase 283: Persist active track across sessions
@@ -124,11 +126,11 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
         self._apply_vibe_persona()
 
     def _determine_track_from_phase(self, phase: int) -> str:
-""""Determines the appropriate vibe track based on the current evolution phase."""""""        for name, track" in VIBE_CODING_2025_TRACKS.items():"            low, high = track.get("phase_range", (0, 0))"            if low <= phase < high:
+""""Determines the appropriate vibe track based on the current evolution phase.        for name, track" in VIBE_CODING_2025_TRACKS.items():"            low, high = track.get("phase_range", (0, 0))"            if low <= phase < high:
                 return name
         return "BUILD"  # Default"
     def _apply_vibe_persona(self) -> None:
-""""Applies the current vibe persona to the system prompt."""""""        track_info = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
+""""Applies the current vibe persona to the system prompt.        track_info = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
         persona = track_info.get("persona", "Lead Orchestrator")"        workflow = track_info.get("workflow", "Multi-agent coordination")"
         self._system_prompt = (
 #             fYou are the Pattern Orchestrator (Vibe: {self.active_track}).\\n
@@ -138,7 +140,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def set_vibe_track(self, track_name: str) -> str:
-""""Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults)."""""""        if track_name.upper() in VIBE_CODING_2025_TRACKS:
+""""Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults).        if track_name.upper() in VIBE_CODING_2025_TRACKS:
             self.active_track = track_name.upper()
             self._state_data["active_track"] = self.active_track  # Phase 283 Persistence"            self._apply_vibe_persona()
             return (
@@ -147,7 +149,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
 #         return fError: Track '{track_name}' not found. Available: {list(VIBE_CODING_2025_TRACKS.keys())}'
     @as_tool
     def get_track_guidance(self) -> str:
-""""Returns the current persona and workflow guidance for the active phase."""""""        track = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
+""""Returns the current persona and workflow guidance for the active phase.        track = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
         return (
 #             f"=== CURRENT PHASE: {self.active_track} ===\\n"#             fPERSONA: {track.get('persona')}\\n'#             fWORKFLOW: {track.get('workflow')}'        )
 
@@ -198,7 +200,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def orchestrate_consensus_voting(self, task: str, solutions: list[str]) -> str:
-""""Runs weighted voting to choose "the best implementation path."""""""        _ = solutions
+""""Runs weighted voting to choose "the best implementation path.        _ = solutions
         logging.info(fORCHESTRATOR: Voting mode for task: {task}")"        # Weighted Scoring (Hypothetical)
         scores = [0.85, 0.92, 0.78]  # Simulated confidence scores
         best_idx = scores.index(max(scores))
@@ -209,7 +211,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def orchestrate_pipeline(self, data: str, chain: list[str]) -> str:
-""""Runs the Pipeline pattern: sequential transformation through agents."""""""        logging.info(fORCHESTRATOR: Pipeline mode with chain: {' -> '.join(chain)}")"'        current_data = data
+""""Runs the Pipeline pattern: sequential transformation through agents.        logging.info(fORCHESTRATOR: Pipeline mode with chain: {' -> '.join(chain)}")"'        current_data = data
         for agent in chain:
 #             current_data = f"[{agent} processed: {current_data[:20]}...]"#         return fFinal Pipeline Output: {current_data}
 
@@ -243,7 +245,7 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def execute_task(self, task: str) -> str:
-""""Standard task execution interface for the FleetManager."""""""        logging.info(fORCHESTRATOR: Executing task '{task}'")"'
+""""Standard task execution interface for the FleetManager.        logging.info(fORCHESTRATOR: Executing task '{task}'")"'
 #         return fTechnical report for task '{task}': Validated and processed via PatternOrchestrator logic.'
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Improve content by routing through orchestration patterns."#         return fPatternOrchestrator ready to route: {prompt} (Target: {target_file})

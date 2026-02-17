@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# FleetDeployerAgent - Fleet lifecycle management and containerization
+# FleetDeployerAgent - Fleet lifecycle management and containerization
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -33,7 +35,7 @@ FILE CONTENT SUMMARY:
 FleetDeployerAgent for PyAgent.
 Specializes in autonomous containerization, Dockerfile generation,
 and managing node spawning across environments.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -51,7 +53,7 @@ __version__ = VERSION
 
 
 class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages the lifecycle of fleet nodes, including containerization and deployment."""""""
+""""Manages the lifecycle of fleet nodes, including containerization and deployment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.deploy_dir = Path("deploy")"        self.deploy_dir.mkdir(parents=True, exist_ok=True)
@@ -72,7 +74,7 @@ class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 
-"""""""        dockerfile_content = fFROM python:{python_version}
+        dockerfile_content = fFROM python:{python_version}
 
 WORKDIR /app
 COPY requirements.txt .
@@ -90,7 +92,7 @@ ENV AGENT_TYPE={agent_type}
 
 
 
-CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]""""""""#         path = self.deploy_dir / fDockerfile.{agent_type}
+CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path = self.deploy_dir / fDockerfile.{agent_type}
         # Phase 287: Use asyncio.to_thread for blocking I/O if needed,
         # but small writes are usually fine. However, we'll be consistent.'
         def write_file() -> str:
@@ -106,7 +108,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]""""""""#         
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
-"""""""        logging.info(fFleetDeployer: Spawning new node '{agent_name}' of "type '{agent_type}'")"'
+        logging.info(fFleetDeployer: Spawning new node '{agent_name}' of "type '{agent_type}'")"'
         spawn_log = {
             "node_id": agent_name,"            "type": agent_type,"            "status": "provisioning","            "timestamp": time.time() if "time" in globals() else 0,"        }
 
@@ -140,7 +142,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]""""""""#         
             results.append(res)
         return "\\n".join(results)"
     @as_tool
-    async def consensus_driven_deploy(self, agent_type: str," node_name": "str) -> str:"        "Depl""""""""
+    async def consensus_driven_deploy(self, agent_type: str," node_name": "str) -> str:"        "Depl"
 from __future__ import annotations
 
 import asyncio
@@ -158,7 +160,7 @@ __version__ = VERSION
 
 
 class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages the lifecycle of fleet nodes, including "containerization and deployment."""""""
+""""Manages the lifecycle of fleet nodes, including "containerization and deployment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.deploy_dir = Path("deploy")"        self.deploy_dir.mkdir(parents=True, exist_ok=True)
@@ -179,7 +181,7 @@ class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 
-"""""""        dockerfile_content = fFROM python:{python_version}
+        dockerfile_content = fFROM python:{python_version}
 
 WORKDIR /app
 COPY requirements.txt .
@@ -197,7 +199,7 @@ ENV AGENT_TYPE={agent_type}
 
 
 
-CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]""""""""#         path =" self.deploy_dir / fDockerfile.{agent_type}"        # Phase 287: Use asyncio.to_thread for blocking I/O if needed,
+CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path =" self.deploy_dir / fDockerfile.{agent_type}"        # Phase 287: Use asyncio.to_thread for blocking I/O if needed,
         # but small writes are usually fine. However, we'll be consistent.'
         def write_file() -> str:
             with open(path, "w", encoding="utf-8") as f:"                f.write(dockerfile_content)
@@ -212,7 +214,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]""""""""#         
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
-"""""""        logging.info(fFleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")"'
+        logging.info(fFleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")"'
         spawn_log = {
             "node_id": agent_name,"            "type": agent_type,"            "status": "provisioning","            "timestamp": time.time() if "time" in globals() else 0,"        }
 

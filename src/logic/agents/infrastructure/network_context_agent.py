@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# NetworkContextAgent - Build code relationship graph
+# NetworkContextAgent - Build code relationship graph
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -48,7 +50,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class NetworkContextAgent(BaseAgent):
-""""Scans the codebase to build a graph of imports and class hierarchies."""""""
+""""Scans the codebase to build a graph of imports and class hierarchies.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.engine = GraphContextEngine(str(self.file_path.parent))
@@ -57,9 +59,9 @@ class NetworkContextAgent(BaseAgent):
 #             "You are the Network Context Agent (Graph Specialist)."#             "Internalize the codebase as a graph where nodes are files/classes and edges are relationships."#             "You identify tightly coupled clusters and suggest separation of concerns."        )
 
     def _get_default_content(self) -> str:
-"""return "# Codebase Network Analysis\\n\\n## Clusters\\nPending scan...\\n"""""""
+"""return "# Codebase Network Analysis\\n\\n## Clusters\\nPending scan...\\n
     def scan_project(self) -> str:
-""""Perform a full scan of the project to build the graph."""""""        root = self.file_path.parent
+""""Perform a full scan of the project to build the graph.        root = self.file_path.parent
 
         # 1. Discover all python files as nodes
         py_files = []
@@ -94,14 +96,14 @@ class NetworkContextAgent(BaseAgent):
         self.engine.save(str(self.graph_file))
         logging.info(fScan complete. Graph saved to {self.graph_file}.")"
     def analyze_impact(self, file_path: str) -> str:
-""""Analyze the impact of changing a specific file."""""""        self.engine.load(str(self."graph_file))"        rel_path = os.path.relpath(file_path, self.file_path.parent)
+""""Analyze the impact of changing a specific file.        self.engine.load(str(self."graph_file))"        rel_path = os.path.relpath(file_path, self.file_path.parent)
 
         impacted_nodes = self.engine.get_impact_radius(rel_path, max_depth=3)
 
         report = [f"## Impact Analysis for {rel_path}"]"        if not impacted_nodes:
             report.append("No direct downstream dependencies found in the graph.")"        else:
             report.append(fFound {len(impacted_nodes)} potentially impacted entities within 3 hops:")"            for node in sorted(list(impacted_nodes)):
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -118,7 +120,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class NetworkContextAgent(BaseAgent):
-""""Scans the codebase to build a graph of imports and class hierarchies."""""""
+""""Scans the codebase to build a graph of imports and class hierarchies.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.engine = GraphContextEngine(str(self.file_path.parent))
@@ -127,9 +129,9 @@ class NetworkContextAgent(BaseAgent):
 #             "You are the Network Context Agent (Graph Specialist)."#             "Internalize the codebase as a graph where nodes are files/classes and edges are relationships."#             "You identify tightly coupled clusters and suggest separation of concerns."        )
 
     def _get_default_content(self) -> str:
-"""return "# Codebase Network Analysis\\n\\n## Clusters\\nPending scan...\\n"""""""
+"""return "# Codebase Network Analysis\\n\\n## Clusters\\nPending scan...\\n
     def scan_project(self) -> str:
-""""Perform a full scan of the project to build the graph."""""""        root = "self.file_path.parent"
+""""Perform a full scan of the project to build the graph.        root = "self.file_path.parent"
         # 1. Discover all python files as nodes
         py_files = []
         for p in root.rglob("*.py"):"            if any(part in str(p) for part in ["__pycache__", "venv", ".git", ".agent_cache"]):"                continue
@@ -163,7 +165,7 @@ class NetworkContextAgent(BaseAgent):
         self.engine.save(str(self.graph_file))
         logging.info(fScan complete. Graph saved to {self.graph_file}.")"
     def analyze_impact(self, file_path: str) -> str:
-""""Analyze the impact of changing a specific file."""""""        self.engine.load(str(self.graph_file))
+""""Analyze the impact of changing a specific file.        self.engine.load(str(self.graph_file))
         rel_path = os.path.relpath(file_path, self.file_path.parent)
 
         impacted_nodes = self.engine.get_impact_radius(rel_path, max_depth=3)

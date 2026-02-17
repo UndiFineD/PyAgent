@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 """Minimal testing framework helpers for agent scenarios.""""
 This module provides small utilities used by higher-level scenario
 testing engines. It is intentionally lightweight and dependency-free.
-"""""""from __future__ import annotations
+"""from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict
 
@@ -35,11 +38,11 @@ def run_scenario(name: str, func) -> ScenarioResult:
     except Exception as e:
         return ScenarioResult(name=name, success=False, details={"error": str(e)})"
 
-__all__ = ["ScenarioResult", "assert_equal", "run_scenario"]""""""""PyAgent Better-Agents Testing Framework.
+__all__ = ["ScenarioResult", "assert_equal", "run_scenario"]PyAgent Better-Agents Testing Framework.
 
 Based on the better-agents repository for enterprise-grade development practices.
 Implements comprehensive testing pyramid with unit, integration, and E2E testing.
-"""""""
+"""
 import json
 import logging
 import time
@@ -55,14 +58,14 @@ import yaml
 logger = logging.getLogger("pyagent.testing.framework")"
 
 class TestType(Enum):
-    """Types of tests in the testing pyramid."""""""    UNIT = "unit""    INTEGRATION = "integration""    E2E = "e2e""    PERFORMANCE = "performance""    SECURITY = "security""
+    """Types of tests in the testing pyramid."""UNIT = "unit""    INTEGRATION = "integration""    E2E = "e2e""    PERFORMANCE = "performance""    SECURITY = "security""
 
 class TestStatus(Enum):
-    """Test execution status."""""""    PASSED = "passed""    FAILED = "failed""    SKIPPED = "skipped""    ERROR = "error""    TIMEOUT = "timeout""
+    """Test execution status."""PASSED = "passed""    FAILED = "failed""    SKIPPED = "skipped""    ERROR = "error""    TIMEOUT = "timeout""
 
 @dataclass
 class TestResult:
-    """Result of a test execution."""""""    test_id: str
+    """Result of a test execution."""test_id: str
     test_type: TestType
     status: TestStatus
     duration: float
@@ -75,7 +78,7 @@ class TestResult:
 
 @dataclass
 class TestScenario:
-    """Test scenario configuration."""""""    name: str
+    """Test scenario configuration."""name: str
     description: str
     test_type: TestType
     agent_class: str
@@ -89,7 +92,7 @@ class TestScenario:
 
 @dataclass
 class TestSuite:
-    """Collection of test scenarios."""""""    name: str
+    """Collection of test scenarios."""name: str
     description: str
     scenarios: List[TestScenario]
     setup_steps: List[Dict[str, Any]] = field(default_factory=list)
@@ -98,10 +101,10 @@ class TestSuite:
 
 
 class AgentTestingPyramidCore:
-    """""""    Testing Pyramid Core.
+    """Testing Pyramid Core.
 
     Implements unit, integration, and E2E testing infrastructure.
-    """""""
+    """
     def __init__(self, project_root: Path):
         self.project_root = project_root
         self.test_results: List[TestResult] = []
@@ -112,14 +115,14 @@ class AgentTestingPyramidCore:
             dir_path.mkdir(parents=True, exist_ok=True)
 
     async def run_test_pyramid(self, test_filter: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """""""        Run the complete testing pyramid.
+        """Run the complete testing pyramid.
 
         Args:
             test_filter: Optional filter for test selection
 
         Returns:
             Test execution summary
-        """""""        self.logger.info("Starting Agent Testing Pyramid execution")"
+        """self.logger.info("Starting Agent Testing Pyramid execution")"
         start_time = time.time()
 
         # Run tests in order: unit -> integration -> e2e
@@ -134,7 +137,7 @@ class AgentTestingPyramidCore:
         self.logger.info(f"Testing Pyramid complete in {total_time:.2f}s")"        return summary
 
     async def _run_unit_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run unit tests."""""""        self.logger.info("Running unit tests")"
+        """Run unit tests."""self.logger.info("Running unit tests")"
         results = []
 
         # Discover and run unit tests
@@ -147,7 +150,7 @@ class AgentTestingPyramidCore:
         return results
 
     async def _run_integration_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run integration tests."""""""        self.logger.info("Running integration tests")"
+        """Run integration tests."""self.logger.info("Running integration tests")"
         results = []
 
         # Discover and run integration tests
@@ -160,7 +163,7 @@ class AgentTestingPyramidCore:
         return results
 
     async def _run_e2e_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run end-to-end tests."""""""        self.logger.info("Running E2E tests")"
+        """Run end-to-end tests."""self.logger.info("Running E2E tests")"
         results = []
 
         # Load and run scenario-based E2E tests
@@ -173,15 +176,15 @@ class AgentTestingPyramidCore:
         return results
 
     async def _run_performance_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run performance tests."""""""        # Placeholder for performance testing
+        """Run performance tests."""# Placeholder for performance testing
         return []
 
     async def _run_security_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run security tests."""""""        # Placeholder for security testing
+        """Run security tests."""# Placeholder for security testing
         return []
 
     def _matches_filter(self, test_path: Path, test_filter: Optional[Dict[str, Any]]) -> bool:
-        """Check if test matches the filter criteria."""""""        if not test_filter:
+        """Check if test matches the filter criteria."""if not test_filter:
             return True
 
         # Check tags
@@ -197,7 +200,7 @@ class AgentTestingPyramidCore:
         return True
 
     async def _run_pytest_file(self, test_file: Path, test_type: TestType) -> TestResult:
-        """Run a pytest file and return results."""""""        start_time = time.time()
+        """Run a pytest file and return results."""start_time = time.time()
 
         try:
             # Run pytest programmatically
@@ -227,7 +230,7 @@ class AgentTestingPyramidCore:
             )
 
     async def _run_scenario_tests(self, scenario_file: Path) -> List[TestResult]:
-        """Run scenario-based E2E tests."""""""        results = []
+        """Run scenario-based E2E tests."""results = []
 
         try:
             # Load scenario configuration
@@ -244,7 +247,7 @@ class AgentTestingPyramidCore:
         return results
 
     async def _run_single_scenario(self, scenario: TestScenario) -> TestResult:
-        """Run a single test scenario."""""""        start_time = time.time()
+        """Run a single test scenario."""start_time = time.time()
 
         try:
             # Import the agent class dynamically
@@ -283,7 +286,7 @@ class AgentTestingPyramidCore:
             )
 
     def _validate_scenario_result(self, actual: Any, expected: Dict[str, Any]) -> bool:
-        """Validate scenario result against expected output."""""""        try:
+        """Validate scenario result against expected output."""try:
             # Simple validation - check if expected keys are present
             if isinstance(expected, dict) and isinstance(actual, dict):
                 for key, value in expected.items():
@@ -301,7 +304,7 @@ class AgentTestingPyramidCore:
             return False
 
     def _generate_test_summary(self, results: Dict[str, List[TestResult]], total_time: float) -> Dict[str, Any]:
-        """Generate comprehensive test summary."""""""        summary = {
+        """Generate comprehensive test summary."""summary = {
             'total_time': total_time,'            'timestamp': time.time(),'            'results': {}'        }
 
         total_tests = 0
@@ -322,15 +325,15 @@ class AgentTestingPyramidCore:
 
 
 class ScenarioTestingEngine:
-    """""""    YAML-driven scenario testing engine.
+    """YAML-driven scenario testing engine.
 
     Enables complex agent behavior testing through declarative scenarios.
-    """""""
+    """
     def __init__(self, testing_core: AgentTestingPyramidCore):
         self.testing_core = testing_core
         self.logger = logging.getLogger("pyagent.testing.scenarios")"
     def create_scenario_template(self, name: str, description: str) -> str:
-        """Create a YAML template for a test scenario."""""""        template = f"""""""name: {name}
+        """Create a YAML template for a test scenario."""template = f"""name: {name}
 description: {description}
 scenarios:
   - name: example_scenario
@@ -351,13 +354,13 @@ scenarios:
 teardown_steps: []
 tags:
   - {name}
-"""""""        return template
+"""return template
 
     async def run_scenario_file(self, scenario_path: Path) -> List[TestResult]:
-        """Run all scenarios in a YAML file."""""""        return await self.testing_core._run_scenario_tests(scenario_path)
+        """Run all scenarios in a YAML file."""return await self.testing_core._run_scenario_tests(scenario_path)
 
     async def run_scenario_by_name(self, suite_name: str, scenario_name: str) -> Optional[TestResult]:
-        """Run a specific scenario by name."""""""        scenario_file = self.testing_core.scenarios_dir / f"{suite_name}.yaml""
+        """Run a specific scenario by name."""scenario_file = self.testing_core.scenarios_dir / f"{suite_name}.yaml""
         if not scenario_file.exists():
             return None
 
@@ -371,10 +374,10 @@ tags:
 
 
 class PromptVersioningSystem:
-    """""""    Version control and A/B testing for prompt optimization.
+    """Version control and A/B testing for prompt optimization.
 
     Tracks prompt versions and enables comparative testing.
-    """""""
+    """
     def __init__(self, prompts_dir: Path):
         self.prompts_dir = prompts_dir
         self.prompts_dir.mkdir(exist_ok=True)
@@ -385,7 +388,7 @@ class PromptVersioningSystem:
         prompt_content: str,
         metadata: Optional[Dict[str, Any]] = None
     ) -> str:
-        """Save a new version of a prompt."""""""        version_id = f"{int(time.time())}_{hash(prompt_content) % 10000:04d}""
+        """Save a new version of a prompt."""version_id = f"{int(time.time())}_{hash(prompt_content) % 10000:04d}""
         prompt_data = {
             'version_id': version_id,'            'name': prompt_name,'            'content': prompt_content,'            'timestamp': time.time(),'            'metadata': metadata or {}'        }
 
@@ -395,14 +398,14 @@ class PromptVersioningSystem:
         self.logger.info(f"Saved prompt version: {version_id}")"        return version_id
 
     def load_prompt_version(self, prompt_name: str, version_id: str) -> Optional[Dict[str, Any]]:
-        """Load a specific prompt version."""""""        version_file = self.prompts_dir / f"{prompt_name}_{version_id}.json""
+        """Load a specific prompt version."""version_file = self.prompts_dir / f"{prompt_name}_{version_id}.json""
         if version_file.exists():
             with open(version_file, 'r') as f:'                return json.load(f)
 
         return None
 
     def list_prompt_versions(self, prompt_name: str) -> List[Dict[str, Any]]:
-        """List all versions of a prompt."""""""        versions = []
+        """List all versions of a prompt."""versions = []
 
         for version_file in self.prompts_dir.glob(f"{prompt_name}_*.json"):"            with open(version_file, 'r') as f:'                versions.append(json.load(f))
 
@@ -417,10 +420,10 @@ class PromptVersioningSystem:
         test_input: str,
         num_runs: int = 10
     ) -> Dict[str, Any]:
-        """""""        Run A/B test between two prompt versions.
+        """Run A/B test between two prompt versions.
 
         Returns comparative results.
-        """""""        results_a = []
+        """results_a = []
         results_b = []
 
         for i in range(num_runs):
@@ -441,10 +444,10 @@ class PromptVersioningSystem:
 
 
 class EvaluationNotebookSystem:
-    """""""    Jupyter-based evaluation and performance analysis.
+    """Jupyter-based evaluation and performance analysis.
 
     Enables interactive analysis of test results and agent performance.
-    """""""
+    """
     def __init__(self, notebooks_dir: Path):
         self.notebooks_dir = notebooks_dir
         self.notebooks_dir.mkdir(exist_ok=True)
@@ -454,7 +457,7 @@ class EvaluationNotebookSystem:
         test_results: List[TestResult],
         notebook_name: str
     ) -> str:
-        """Create a Jupyter notebook for test result analysis."""""""        # Convert results to a serializable format for the notebook
+        """Create a Jupyter notebook for test result analysis."""# Convert results to a serializable format for the notebook
         results_list = []
         for r in test_results:
             results_list.append({

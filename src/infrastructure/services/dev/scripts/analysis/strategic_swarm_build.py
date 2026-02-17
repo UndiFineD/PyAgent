@@ -1,18 +1,21 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 """Strategic swarm orchestration and build coordination.""""
 Orchestrates the deployment and coordination of agent swarms for system-wide
 optimization and strategic execution of complex workflows.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -67,11 +70,11 @@ def main() -> None:
     # 3. Demonstrate External Learning
     print("\\n--- EXTERNAL FEDERATED LEARNING ---")"    ai = LLMClient(requests, workspace_root=root)
 
-    # We query the model specified by the user's intent (high-parameter workload)'    learning_prompt = f"""""""    Context: A strategic directive for PyAgent fleet redesign.
+    # We query the model specified by the user's intent (high-parameter workload)'    learning_prompt = f    Context: A strategic directive for PyAgent fleet redesign.
     Directive: {strategic_prompt}
 
     Analyze the directive and suggest 3 high-impact technical patterns for the swarm's Self-Improvement cycle.'    Focus on: 1. Data Sharding, 2. Dynamic Refactoring, 3. Security.
-    """""""
+    
     print("Consulting Gemini 3 Flash (GitHub Models) for architectural refinement...")"    try:
         # Note: If GITHUB_TOKEN is not set, this will fail gracefully or use fallback
         external_lesson = ai.llm_chat_via_github_models(learning_prompt, model="google/gemini-2.0-flash-exp")"        if external_lesson:

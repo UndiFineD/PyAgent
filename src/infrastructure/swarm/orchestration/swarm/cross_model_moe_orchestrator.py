@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Cross-Model MoE Orchestrator (Phase 61).
+
+"""
+Cross-Model MoE Orchestrator (Phase 61).
 Manages task lifecycle across multiple specialized agents.
-"""""""
+
 import asyncio
 import logging
 from typing import Any, Dict, Optional
@@ -27,9 +31,9 @@ logger = logging.getLogger(__name__)
 
 
 class CrossModelMoEOrchestrator:
-    """""""    Swarm-level Mixture of Experts.
+        Swarm-level Mixture of Experts.
     Turns the entire agent fleet into a distributed MoE.
-    """""""
+    
     def __init__(self, gatekeeper: MoEGatekeeper, fusion_engine: Optional[WeightedExpertFusion] = None) -> None:
         self.gatekeeper = gatekeeper
         self.fusion_engine = fusion_engine or WeightedExpertFusion()
@@ -38,12 +42,12 @@ class CrossModelMoEOrchestrator:
         self.timeout_sec = 10.0
 
     def register_agent_instance(self, agent_id: str, instance: Any):
-        """Link an expert ID to a runnable agent instance."""""""        self.agent_registry[agent_id] = instance
+        """Link an expert ID to a runnable agent instance.        self.agent_registry[agent_id] = instance
         self.expert_health[agent_id] = True
 
-    async def execute_moe_task(self, task: str, mode: str = "best_expert") -> Any:"        """""""        Routes and executes a task using the MoE pattern.
+    async def execute_moe_task(self, task: str, mode: str = "best_expert") -> Any:"                Routes and executes a task using the MoE pattern.
         Includes self-healing logic (Phase 66) to handle expert failures.
-        """""""        logger.info(f"MoE Orchestrator: Routing task '{task[:50]}...'")"'
+                logger.info(f"MoE Orchestrator: Routing task '{task[:50]}...'")"'
         # 1. Routing
         decision = await self.gatekeeper.route_task(task, top_k=2)
 

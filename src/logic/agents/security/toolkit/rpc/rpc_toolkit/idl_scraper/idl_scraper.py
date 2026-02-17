@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 import argparse
 import json
@@ -37,7 +35,7 @@ from posixpath import join as path_urljoin
 
 def get_protocol_names():
     pass  # [BATCHFIX] inserted for empty block
-"""Fetch the list of protocol names from Microsoft's technical documents page."""""""'"""""""#     html = requests.get(TECHNICAL_DOCS_URL).content
+"""Fetch the list of protocol names from Microsoft's technical documents page.'#     html = requests.get(TECHNICAL_DOCS_URL).content
     soup = BeautifulSoup(html, "html.parser")"    table_rows = soup.find("table").find("tbody").find_all("tr")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     idl_names = []""""    for row in table_rows:
@@ -52,14 +50,14 @@ def get_protocol_names():
 
 def get_toc_items_from_protocol_name(protocol_name):
     Fetch the table of contents JSON file for a specific protocol, and return its "items" list."    This is the first step towards getting the URLs for all relvant IDL files.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 #     toc_url = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, "toc."json")"  # [BATCHFIX] closed string"    toc_page = requests.get(toc_url).content
     return json.loads(toc_page).get("items", None)"
 
 def get_dicts_rec(array):
     Recursively yields all dicationary objects from the table of content JSON.
     This is a helper function for get_idl_page_uuids_from_toc_items().
-"""""""    for element in array:
+    for element in array:
         yield (element)
         if "children" in element:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -69,7 +67,7 @@ def get_dicts_rec(array):
 def get_idl_page_uuids_from_toc_items(items):
 # [BATCHFIX] Commented metadata/non-Python
 #     Fetch the UUIDs of the pages where IDL files "are documented."  # [BATCHFIX] closed string"    These are *not* the UUIDs of the interfaces! :) Just pages identifiers.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#   "  idl_page_uuids = {}"  # [BATCHFIX] closed string"    for item in get_dicts_rec(items):
 # [BATCHFIX] Commented metadata/non-Python
 #         toc_title = item.get("toc_title", ")"  # [BATCHFIX] closed string"        if "Full IDL" in toc_title and "children" not in item:"            # This is the case when only a single IDL is present for the protocol.

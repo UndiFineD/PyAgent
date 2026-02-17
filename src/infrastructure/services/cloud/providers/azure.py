@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Azure AI Foundry cloud provider connector.
+
+Azure AI Foundry cloud provider connector.
 
 Provides integration with Azure AI Foundry (formerly Azure ML) for inference requests.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -30,13 +33,13 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class AzureAIConnector(CloudProviderBase):
-    """""""    Connector for Azure AI Foundry models.
+        Connector for Azure AI Foundry models.
 
     Supports models hosted on Azure AI Foundry endpoints,
     including Llama 3, Phi-3, Cohere, etc.
 
     Compatible with OpenAI-style API endpoints provided by Azure.
-    """""""
+    
     # Pricing per 1M tokens (input/output) - approximate (Standard Azure Pay-As-Go)
     PRICING: dict[str, dict[str, float]] = {
         "gpt-4": {"input": 30.00, "output": 60.00},"        "gpt-4.1": {"input": 5.00, "output": 15.00},"        "gpt-35-turbo": {"input": 0.50, "output": 1.50},"        "meta-llama-3-70b-instruct": {"input": 0.65, "output": 2.75},"        "meta-llama-3-8b-instruct": {"input": 0.15, "output": 0.15},"        "phi-3-mini-4k-instruct": {"input": 0.10, "output": 0.10},"    }
@@ -47,14 +50,14 @@ class AzureAIConnector(CloudProviderBase):
         endpoint: Optional[str] = None,
         api_version: str = "2024-02-01","        **config,
     ) -> None:
-        """""""        Initialize Azure AI Connector.
+                Initialize Azure AI Connector.
 
         Args:
             api_key: Azure AI Registry or Endpoint key.
             endpoint: Full endpoint URL (e.g., https://<name>.<region>.inference.ai.azure.com).
             api_version: API version for Azure requests.
             **config: Additional options.
-        """""""        super().__init__(api_key=api_key, **config)
+                super().__init__(api_key=api_key, **config)
         self._api_key = api_key or os.getenv("AZURE_AI_KEY")"        self._endpoint: str | None = endpoint or os.getenv("AZURE_AI_ENDPOINT")"        self._api_version: str = api_version
 
     @property

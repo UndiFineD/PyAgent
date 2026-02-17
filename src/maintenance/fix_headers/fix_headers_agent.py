@@ -6,18 +6,20 @@ from pathlib import Path
 
 
 class FixHeadersAgent:
-    """"Agent for fixing and standardizing license headers in Python files."""""""
+    """"Agent for fixing and standardizing license headers in Python files.
     HEADER_TEMPLATE = """#!/usr/bin/env python3""""# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""""""
+
     def __init__(self, dry_run: bool = False, verbose: bool = False):
         self.dry_run = dry_run
         self.verbose = verbose
@@ -34,7 +36,7 @@ class FixHeadersAgent:
         - Preserves an encoding comment on line 1 or 2 (PEP-263)
         - Handles optional UTF-8 BOM at start
         - Removes only top-of-file comment blocks that look like license/copyright
-        """""""        if not content:
+                if not content:
             return content
 
         # Remove BOM (remember it so we can re-add if needed)
@@ -107,12 +109,12 @@ class FixHeadersAgent:
                     self.files_processed += 1
 
     def get_summary(self) -> str:
-        return f"""""""Header Fix Summary:
+        return fHeader Fix Summary:
 ==================
 Files processed: {self.files_processed}
 Files updated:    {self.files_updated}
 Files skipped:    {self.files_skipped}
-Mode:             {'DRY RUN' if self.dry_run else 'LIVE'}'"""""""
+Mode:             {'DRY RUN' if self.dry_run else 'LIVE'}'
     def run(self, target: str | Path, exclude_patterns: set[str] | None = None) -> None:
         target_path = Path(target)
         if target_path.is_file():

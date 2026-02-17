@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""Engine.py module.
-"""""""
+
+Engine.py module.
+
 from __future__ import annotations
 
 import threading
@@ -26,8 +29,8 @@ from .impl import ChoiceGrammar, SimpleRegexGrammar
 
 
 class StructuredOutputManager:
-    """""""    Engine-level manager regarding structured output constraints.
-    """""""
+        Engine-level manager regarding structured output constraints.
+    
     def __init__(
         self,
         vocab_size: int,
@@ -68,13 +71,13 @@ class StructuredOutputManager:
         backend: StructuredOutputBackend,
         grammar_types: Optional[List[GrammarType]] = None,
     ) -> None:
-        """""""        Register a structured output backend regarding types.
+                Register a structured output backend regarding types.
 
         Args:
             name: Unique name regarding backend.
             backend: The backend instance regarding registration.
             grammar_types: Optional list regarding types this backend handles.
-        """""""        self._backends[name] = backend
+                self._backends[name] = backend
 
         types_to_register = grammar_types or backend.get_supported_types()
         # Phase 374: Functional type registration
@@ -84,14 +87,14 @@ class StructuredOutputManager:
         self,
         grammar_type: GrammarType,
     ) -> Optional[StructuredOutputBackend]:
-        """""""        Get the backend responsible regarding a specific grammar type.
+                Get the backend responsible regarding a specific grammar type.
 
         Args:
             grammar_type: The type regarding finding a backend.
 
         Returns:
             A backend instance or None if not found.
-        """""""        backend_name = self._type_to_backend.get(grammar_type)
+                backend_name = self._type_to_backend.get(grammar_type)
         return self._backends.get(backend_name) if backend_name else None
 
     def compile_grammar(
@@ -100,7 +103,7 @@ class StructuredOutputManager:
         request_id: Optional[str] = None,
         async_compile: bool = False,
     ) -> Union[StructuredOutputGrammar, Future]:
-        """""""        Compile a grammar specification.
+                Compile a grammar specification.
 
         Args:
             grammar_spec: The grammar specification to compile.
@@ -109,7 +112,7 @@ class StructuredOutputManager:
 
         Returns:
             A compiled grammar instance, or a Future if compiled asynchronously.
-        """""""        self._total_requests += 1
+                self._total_requests += 1
         cache_key = grammar_spec.to_cache_key()
 
         cached = self._get_from_cache(cache_key)
@@ -137,7 +140,7 @@ class StructuredOutputManager:
         request_id: Optional[str],
         cache_key: str,
     ) -> StructuredOutputGrammar:
-        """Inner method to perform grammar compilation."""""""        import time
+        """Inner method to perform grammar compilation.        import time
 
         start = time.perf_counter()
 
@@ -195,7 +198,7 @@ class StructuredOutputManager:
         grammars: Sequence[Optional[StructuredOutputGrammar]],
         bitmask: Optional[np.ndarray] = None,
     ) -> np.ndarray:
-        """""""        Fill a batch token bitmask regarding multiple grammars.
+                Fill a batch token bitmask regarding multiple grammars.
 
         Args:
             grammars: Sequence regarding grammar instances.
@@ -203,7 +206,7 @@ class StructuredOutputManager:
 
         Returns:
             The filled bitmask array.
-        """""""        batch_size = len(grammars)
+                batch_size = len(grammars)
 
         if bitmask is None:
             bitmask = self._bitmask_buffer[:batch_size]
@@ -221,7 +224,7 @@ class StructuredOutputManager:
         grammar: StructuredOutputGrammar,
         tokens: Sequence[int],
     ) -> ValidationResult:
-        """""""        Validate and accept tokens into a grammar.
+                Validate and accept tokens into a grammar.
 
         Args:
             grammar: The grammar instance to update.
@@ -229,7 +232,7 @@ class StructuredOutputManager:
 
         Returns:
             A ValidationResult indicating success or failure.
-        """""""        if grammar.is_terminated():
+                if grammar.is_terminated():
             return ValidationResult(
                 is_valid=False,
                 accepted_prefix_length=0,
@@ -249,11 +252,11 @@ class StructuredOutputManager:
             error_message=f"Rejected at token {valid_prefix_len}","        )
 
     def get_stats(self) -> Dict[str, Any]:
-        """""""        Get global manager statistics regarding backends.
+                Get global manager statistics regarding backends.
 
         Returns:
             Dictionary containing manager and backend stats.
-        """""""        stats = {
+                stats = {
             "total_requests": self._total_requests,"            "cache_hits": self._cache_hits,"            "cache_hit_rate": (self._cache_hits / self._total_requests if self._total_requests > 0 else 0.0),"            "cache_size": len(self._grammar_cache),"            "pending_compilations": len(self._pending_compilations),"            "backends": {},"        }
 
         # Phase 377: Functional backend stats collection
@@ -270,14 +273,14 @@ class StructuredOutputManager:
         stats["backends"] = dict(map(build_backend_stat, self._backends.items()))"        return stats
 
     def shutdown(self) -> None:
-        """Shutdown the manager and its workers."""""""        if self._executor:
+        """Shutdown the manager and its workers.        if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
 
 
 class SimpleBackend(StructuredOutputBackend):
-    """""""    Simple backend implementation regarding basic grammar types.
-    """""""
+        Simple backend implementation regarding basic grammar types.
+    
     def __init__(
         self,
         vocab_size: int,
@@ -285,14 +288,14 @@ class SimpleBackend(StructuredOutputBackend):
         tokenizer_decode: Optional[Callable[[List[int]], str]] = None,
         token_strings: Optional[Dict[int, str]] = None,
     ) -> None:
-        """""""        Initialize SimpleBackend.
+                Initialize SimpleBackend.
 
         Args:
             vocab_size: Vocabulary size.
             tokenizer_encode: Encoding function.
             tokenizer_decode: Decoding function.
             token_strings: Token string mapping.
-        """""""        super().__init__(vocab_size, tokenizer_encode, tokenizer_decode)
+                super().__init__(vocab_size, tokenizer_encode, tokenizer_decode)
         self._token_strings = token_strings or {}
 
     def compile_grammar(
@@ -300,7 +303,7 @@ class SimpleBackend(StructuredOutputBackend):
         grammar_spec: GrammarSpec,
         request_id: Optional[str] = None,
     ) -> StructuredOutputGrammar:
-        """""""        Compile a grammar.
+                Compile a grammar.
 
         Args:
             grammar_spec: Specification.
@@ -308,7 +311,7 @@ class SimpleBackend(StructuredOutputBackend):
 
         Returns:
             A compiled grammar instance.
-        """""""        if grammar_spec.grammar_type == GrammarType.REGEX:
+                if grammar_spec.grammar_type == GrammarType.REGEX:
             return SimpleRegexGrammar(
                 grammar_spec=grammar_spec,
                 vocab_size=self.vocab_size,
@@ -327,4 +330,4 @@ class SimpleBackend(StructuredOutputBackend):
 
         raise ValueError(f"Unsupported grammar type: {grammar_spec.grammar_type}")"
     def get_supported_types(self) -> List[GrammarType]:
-        """Get supported types."""""""        return [GrammarType.REGEX, GrammarType.CHOICE]
+        """Get supported types.        return [GrammarType.REGEX, GrammarType.CHOICE]

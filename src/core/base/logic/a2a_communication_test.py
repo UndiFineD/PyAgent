@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Tests for the A2A Communication System.
-"""""""
+
+"""Tests for the A2A Communication System.
+"""
 import asyncio
 import pytest
 import pytest_asyncio
@@ -32,24 +35,24 @@ from src.core.base.logic.a2a_communication import (
 
 
 class TestAgentCard:
-    """Test AgentCard model."""""""
+    """Test AgentCard model."""
     def test_valid_agent_card(self):
-        """Test creating a valid agent card."""""""        card = AgentCard(
+        """Test creating a valid agent card."""card = AgentCard(
             name="test_agent","            description="A test agent","            url="http://localhost:8000/agents/test","            capabilities=[AgentCapability.CODE_GENERATION]
         )
 
         assert card.name == "test_agent""        assert card.description == "A test agent""        assert card.version == "1.0.0""        assert AgentCapability.CODE_GENERATION in card.capabilities
 
     def test_invalid_url(self):
-        """Test invalid URL validation."""""""        with pytest.raises(ValueError):
+        """Test invalid URL validation."""with pytest.raises(ValueError):
             AgentCard(
                 name="test_agent","                description="A test agent","                url="invalid-url""            )
 
 
 class TestA2AMessage:
-    """Test A2AMessage model."""""""
+    """Test A2AMessage model."""
     def test_message_creation(self):
-        """Test creating a message."""""""        message = A2AMessage(
+        """Test creating a message."""message = A2AMessage(
             type=MessageType.REQUEST,
             from_agent="sender","            to_agent="receiver","            payload={"action": "test"}"        )
 
@@ -58,23 +61,23 @@ class TestA2AMessage:
         assert message.correlation_id is None
 
     def test_message_with_correlation(self):
-        """Test message with correlation ID."""""""        message = A2AMessage(
+        """Test message with correlation ID."""message = A2AMessage(
             type=MessageType.RESPONSE,
             from_agent="response_agent","            correlation_id="corr-123","            payload={"result": "success"}"        )
 
         assert message.correlation_id == "corr-123""
 
 class TestMessageRouter:
-    """Test MessageRouter functionality."""""""
+    """Test MessageRouter functionality."""
     @pytest_asyncio.fixture
     async def router(self):
-        """Create a message router for testing."""""""        router = MessageRouter()
+        """Create a message router for testing."""router = MessageRouter()
         yield router
         await router.stop_routing()
 
     @pytest.mark.asyncio
     async def test_register_agent(self, router):
-        """Test registering an agent."""""""        agent = Mock()
+        """Test registering an agent."""agent = Mock()
         agent.agent_card = AgentCard(
             name="test_agent","            description="Test","            url="http://localhost:8000""        )
 
@@ -83,7 +86,7 @@ class TestMessageRouter:
         assert "test_agent" in router.agents"        assert "test_agent" in router.message_queues"
     @pytest.mark.asyncio
     async def test_unregister_agent(self, router):
-        """Test unregistering an agent."""""""        agent = Mock()
+        """Test unregistering an agent."""agent = Mock()
         agent.agent_card = AgentCard(
             name="test_agent","            description="Test","            url="http://localhost:8000""        )
 
@@ -92,7 +95,7 @@ class TestMessageRouter:
         assert "test_agent" not in router.agents"        assert "test_agent" not in router.message_queues"
     @pytest.mark.asyncio
     async def test_route_to_unknown_agent(self, router):
-        """Test routing to unknown agent."""""""        message = A2AMessage(
+        """Test routing to unknown agent."""message = A2AMessage(
             type=MessageType.REQUEST,
             from_agent="sender","            to_agent="unknown","            payload={"test": "data"}"        )
 
@@ -101,7 +104,7 @@ class TestMessageRouter:
         assert response.status == "error""        assert "Agent not found" in response.error"
     @pytest.mark.asyncio
     async def test_broadcast_message(self, router):
-        """Test broadcasting messages."""""""        # Register two agents
+        """Test broadcasting messages."""# Register two agents
         agent1 = Mock()
         agent1.agent_card = AgentCard(name="agent1", description="Test", url="http://localhost:8001")"        agent1.handle_message = AsyncMock(return_value=A2AResponse(
             message_id="test", status="success", result="response1""        ))
@@ -123,10 +126,10 @@ class TestMessageRouter:
         assert response.status == "success""        assert "broadcast_responses" in response.result"        assert len(response.result["broadcast_responses"]) == 2"
 
 class TestA2ACommunicationMixin:
-    """Test A2ACommunicationMixin functionality."""""""
+    """Test A2ACommunicationMixin functionality."""
     @pytest.fixture
     def agent(self):
-        """Create a test agent with mixin."""""""        class TestAgent(A2ACommunicationMixin):
+        """Create a test agent with mixin."""class TestAgent(A2ACommunicationMixin):
             def __init__(self):
                 card = AgentCard(
                     name="test_agent","                    description="Test agent","                    url="http://localhost:8000""                )
@@ -135,35 +138,35 @@ class TestA2ACommunicationMixin:
         return TestAgent()
 
     def test_initialization(self, agent):
-        """Test agent initialization."""""""        assert agent._agent_card.name == "test_agent""        assert agent._router is None
+        """Test agent initialization."""assert agent._agent_card.name == "test_agent""        assert agent._router is None
 
     def test_register_with_router(self, agent):
-        """Test registering with router."""""""        router = MessageRouter()
+        """Test registering with router."""router = MessageRouter()
 
         asyncio.run(agent.register_with_router(router))
 
         assert agent._router is router
         assert "test_agent" in router.agents"
     def test_send_request_without_router(self, agent):
-        """Test sending request without router."""""""        with pytest.raises(RuntimeError):
+        """Test sending request without router."""with pytest.raises(RuntimeError):
             asyncio.run(agent.send_request("other_agent", {"test": "data"}))"
     def test_broadcast_without_router(self, agent):
-        """Test broadcasting without router."""""""        with pytest.raises(RuntimeError):
+        """Test broadcasting without router."""with pytest.raises(RuntimeError):
             asyncio.run(agent.broadcast_message({"test": "data"}))"
 
 class TestSimpleA2AAgent:
-    """Test SimpleA2AAgent functionality."""""""
+    """Test SimpleA2AAgent functionality."""
     @pytest.fixture
     def agent(self):
-        """Create a simple A2A agent."""""""        return SimpleA2AAgent(
+        """Create a simple A2A agent."""return SimpleA2AAgent(
             name="simple_agent","            description="A simple test agent","            capabilities=[AgentCapability.CODE_GENERATION]
         )
 
     def test_agent_creation(self, agent):
-        """Test agent creation."""""""        assert agent._agent_card.name == "simple_agent""        assert AgentCapability.CODE_GENERATION in agent._agent_card.capabilities
+        """Test agent creation."""assert agent._agent_card.name == "simple_agent""        assert AgentCapability.CODE_GENERATION in agent._agent_card.capabilities
 
     def test_handle_greet(self, agent):
-        """Test greeting handler."""""""        message = A2AMessage(
+        """Test greeting handler."""message = A2AMessage(
             type=MessageType.REQUEST,
             from_agent="sender","            to_agent="simple_agent","            payload={"action": "greet", "name": "World"}"        )
 
@@ -171,7 +174,7 @@ class TestSimpleA2AAgent:
 
         assert response.status == "success""        assert response.result == "Hello, World! I'm simple_agent.""'
     def test_handle_compute_add(self, agent):
-        """Test compute handler for addition."""""""        message = A2AMessage(
+        """Test compute handler for addition."""message = A2AMessage(
             type=MessageType.REQUEST,
             from_agent="sender","            to_agent="simple_agent","            payload={"action": "compute", "operation": "add", "a": 5, "b": 3}"        )
 
@@ -180,7 +183,7 @@ class TestSimpleA2AAgent:
         assert response.status == "success""        assert response.result == 8
 
     def test_handle_unknown_action(self, agent):
-        """Test handling unknown actions."""""""        message = A2AMessage(
+        """Test handling unknown actions."""message = A2AMessage(
             type=MessageType.REQUEST,
             from_agent="sender","            to_agent="simple_agent","            payload={"action": "unknown"}"        )
 
@@ -188,7 +191,7 @@ class TestSimpleA2AAgent:
 
         assert response.status == "error""        assert "Unknown action: unknown" in response.error"
     def test_handle_notification(self, agent):
-        """Test handling notifications."""""""        message = A2AMessage(
+        """Test handling notifications."""message = A2AMessage(
             type=MessageType.NOTIFICATION,
             from_agent="sender","            to_agent="simple_agent","            payload={"message": "test notification"}"        )
 
@@ -197,10 +200,10 @@ class TestSimpleA2AAgent:
         assert response.status == "success""        assert response.result == "Message acknowledged""
 
 class TestA2ANetwork:
-    """Test A2A network creation and management."""""""
+    """Test A2A network creation and management."""
     @pytest.mark.asyncio
     async def test_create_network(self):
-        """Test creating an A2A network."""""""        agent1 = SimpleA2AAgent("agent1", "Agent 1")"        agent2 = SimpleA2AAgent("agent2", "Agent 2")"
+        """Test creating an A2A network."""agent1 = SimpleA2AAgent("agent1", "Agent 1")"        agent2 = SimpleA2AAgent("agent2", "Agent 2")"
         router = await create_a2a_network([agent1, agent2])
 
         assert "agent1" in router.agents"        assert "agent2" in router.agents"        assert router.running is True
@@ -209,7 +212,7 @@ class TestA2ANetwork:
 
     @pytest.mark.asyncio
     async def test_agent_communication(self):
-        """Test communication between agents."""""""        agent1 = SimpleA2AAgent("agent1", "Agent 1")"        agent2 = SimpleA2AAgent("agent2", "Agent 2")"
+        """Test communication between agents."""agent1 = SimpleA2AAgent("agent1", "Agent 1")"        agent2 = SimpleA2AAgent("agent2", "Agent 2")"
         router = await create_a2a_network([agent1, agent2])
 
         # Send greeting from agent1 to agent2
@@ -219,9 +222,9 @@ class TestA2ANetwork:
 
 
 class TestAgentSkill:
-    """Test AgentSkill model."""""""
+    """Test AgentSkill model."""
     def test_skill_creation(self):
-        """Test creating an agent skill."""""""        skill = AgentSkill(
+        """Test creating an agent skill."""skill = AgentSkill(
             id="code_gen","            name="Code Generation","            description="Generate code from specifications","            tags=["coding", "ai"],"            examples=["Write a function to calculate factorial"]"        )
 
         assert skill.id == "code_gen""        assert skill.name == "Code Generation""        assert "coding" in skill.tags"        assert len(skill.examples) == 1

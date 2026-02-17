@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Secure Authentication Manager combining OAuth 2.0 with E2EE.
-Implements zero-knowledge authentication where the server never sees user's encryption keys.'"""""""
+
+"""Secure Authentication Manager combining OAuth 2.0 with E2EE.
+Implements zero-knowledge authentication where the server never sees user's encryption keys.'"""
 from __future__ import annotations
 
 import hashlib
@@ -36,7 +39,7 @@ logger = logging.getLogger("pyagent.secure_auth")"
 
 @dataclass
 class UserSession:
-    """Authenticated user session with E2EE capabilities."""""""    user_id: str
+    """Authenticated user session with E2EE capabilities."""user_id: str
     oauth_token: str
     session_token: str
     created_at: float
@@ -45,14 +48,14 @@ class UserSession:
 
 
 class SecureAuthManager:
-    """""""    Manages OAuth authentication with integrated E2EE.
+    """Manages OAuth authentication with integrated E2EE.
 
     Security Model:
     1. OAuth 2.0 for identity verification (like GitHub, Google)
     2. Client-side key generation (never sent to server)
     3. Zero-knowledge: Server authenticates user but cannot decrypt their data
     4. Multi-tenant isolation with per-user encryption
-    """""""
+    """
     def __init__(self, e2e_core: E2EEncryptionCore):
         self.e2e_core = e2e_core
         self.active_sessions: Dict[str, UserSession] = {}
@@ -67,7 +70,7 @@ class SecureAuthManager:
     # ==================== WebAuthn Flow ====================
 
     def begin_webauthn_registration(self, user_id: str, display_name: str) -> Dict[str, Any]:
-        """Generate options for new passkey registration."""""""        user = PublicKeyCredentialUserEntity(
+        """Generate options for new passkey registration."""user = PublicKeyCredentialUserEntity(
             id=user_id.encode(),
             name=user_id,
             display_name=display_name
@@ -92,7 +95,7 @@ class SecureAuthManager:
         return dict(registration_data)
 
     def complete_webauthn_registration(self, user_id: str, credential_data: Dict[str, Any]) -> bool:
-        """Verify and save new passkey credential."""""""        if user_id not in self.challenges:
+        """Verify and save new passkey credential."""if user_id not in self.challenges:
             logger.error("No WebAuthn registration challenge found for user %s", user_id)"            return False
 
         try:
@@ -112,7 +115,7 @@ class SecureAuthManager:
             logger.error("WebAuthn registration verification failed: %s", e)"            return False
 
     def begin_webauthn_authentication(self, user_id: str) -> Dict[str, Any]:
-        """Generate options for passkey login."""""""        if user_id not in self.user_credentials or not self.user_credentials[user_id]:
+        """Generate options for passkey login."""if user_id not in self.user_credentials or not self.user_credentials[user_id]:
             logger.warning("No credentials found for user %s", user_id)"            # We return empty to indicate failure or fallback
             return {}
 
@@ -122,7 +125,7 @@ class SecureAuthManager:
         return dict(auth_data)
 
     def complete_webauthn_authentication(self, user_id: str, assertion_data: Dict[str, Any]) -> Optional[UserSession]:
-        """Verify passkey assertion and create secure session."""""""        if user_id not in self.challenges:
+        """Verify passkey assertion and create secure session."""if user_id not in self.challenges:
             return None
 
         try:
@@ -143,9 +146,9 @@ class SecureAuthManager:
 
     # ==================== OAuth Flow ====================
 
-    def initiate_oauth_flow(self, provider: str = "github") -> Dict:"        """""""        Initiate OAuth 2.0 flow.
+    def initiate_oauth_flow(self, provider: str = "github") -> Dict:"        """Initiate OAuth 2.0 flow.
         Returns authorization URL and state token for CSRF protection.
-        """""""        state = secrets.token_urlsafe(32)
+        """state = secrets.token_urlsafe(32)
 
         # Store state for verification
         self.oauth_states[state] = {
@@ -161,7 +164,7 @@ class SecureAuthManager:
             "authorization_url": oauth_urls.get(provider, ""),"            "state": state,"            "provider": provider"        }
 
     def complete_oauth_flow(self, code: str, state: str) -> Optional[UserSession]:
-        """""""        Complete OAuth flow and establish secure session with E2EE.
+        """Complete OAuth flow and establish secure session with E2EE.
 
         Process:
         1. Verify OAuth state (CSRF protection)
@@ -169,7 +172,7 @@ class SecureAuthManager:
         3. Get user info from OAuth provider
         4. Generate E2EE keys for user (client-side in production)
         5. Create encrypted session
-        """""""        # Verify state
+        """# Verify state
         if state not in self.oauth_states:
             logger.warning("Invalid OAuth state token")"            return None
 
@@ -195,7 +198,7 @@ class SecureAuthManager:
     # ==================== Session Management ====================
 
     def _create_session(self, user_id: str, oauth_token: str) -> UserSession:
-        """Create a new authenticated session."""""""        session_token = secrets.token_urlsafe(32)
+        """Create a new authenticated session."""session_token = secrets.token_urlsafe(32)
 
         session = UserSession(
             user_id=user_id,
@@ -210,7 +213,7 @@ class SecureAuthManager:
         return session
 
     def verify_session(self, session_token: str) -> Optional[UserSession]:
-        """Verify and return active session."""""""        session = self.active_sessions.get(session_token)
+        """Verify and return active session."""session = self.active_sessions.get(session_token)
 
         if not session:
             return None
@@ -222,7 +225,7 @@ class SecureAuthManager:
         return session
 
     def revoke_session(self, session_token: str) -> bool:
-        """Revoke an active session (logout)."""""""        if session_token in self.active_sessions:
+        """Revoke an active session (logout)."""if session_token in self.active_sessions:
             user_id = self.active_sessions[session_token].user_id
             del self.active_sessions[session_token]
             logger.info("Session revoked for user: %s", user_id)"            return True
@@ -231,9 +234,9 @@ class SecureAuthManager:
     # ==================== E2EE Operations ====================
 
     def encrypt_user_memory(self, session_token: str, memory_data: Dict) -> Optional[bytes]:
-        """""""        Encrypt user memory data with their personal encryption key.
+        """Encrypt user memory data with their personal encryption key.
         Zero-knowledge: Server stores encrypted blob without ability to decrypt.
-        """""""        session = self.verify_session(session_token)
+        """session = self.verify_session(session_token)
         if not session or not session.e2e_enabled:
             return None
 
@@ -243,7 +246,7 @@ class SecureAuthManager:
         )
 
     def decrypt_user_memory(self, session_token: str, encrypted_data: bytes) -> Optional[Dict]:
-        """Decrypt user memory data using their personal encryption key."""""""        session = self.verify_session(session_token)
+        """Decrypt user memory data using their personal encryption key."""session = self.verify_session(session_token)
         if not session or not session.e2e_enabled:
             return None
 
@@ -253,7 +256,7 @@ class SecureAuthManager:
         )
 
     def encrypt_user_chat(self, session_token: str, chat_data: Dict) -> Optional[bytes]:
-        """Encrypt chat history with user's personal key."""""""'        session = self.verify_session(session_token)
+        """Encrypt chat history with user's personal key."""'        session = self.verify_session(session_token)
         if not session:
             return None
 
@@ -263,7 +266,7 @@ class SecureAuthManager:
         )
 
     def decrypt_user_chat(self, session_token: str, encrypted_data: bytes) -> Optional[Dict]:
-        """Decrypt chat history using user's personal key."""""""'        session = self.verify_session(session_token)
+        """Decrypt chat history using user's personal key."""'        session = self.verify_session(session_token)
         if not session:
             return None
 
@@ -280,9 +283,9 @@ class SecureAuthManager:
         recipient_user_id: str,
         message: str
     ) -> Optional[Dict]:
-        """""""        Send an end-to-end encrypted message between users.
+        """Send an end-to-end encrypted message between users.
         Uses Signal Protocol for perfect forward secrecy.
-        """""""        sender_session = self.verify_session(sender_session_token)
+        """sender_session = self.verify_session(sender_session_token)
         if not sender_session:
             return None
 
@@ -309,9 +312,9 @@ class SecureAuthManager:
         recipient_session_token: str,
         encrypted_bundle: Dict
     ) -> Optional[str]:
-        """""""        Receive and decrypt an end-to-end encrypted message.
+        """Receive and decrypt an end-to-end encrypted message.
         Automatically handles out-of-order messages and key ratcheting.
-        """""""        recipient_session = self.verify_session(recipient_session_token)
+        """recipient_session = self.verify_session(recipient_session_token)
         if not recipient_session:
             return None
 

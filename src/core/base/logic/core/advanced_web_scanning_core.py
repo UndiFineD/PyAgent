@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Advanced Web Scanning Core
+
+"""Advanced Web Scanning Core
 
 This core provides comprehensive web application scanning capabilities,
 including host header attacks, code injection detection, and advanced vulnerability checks.
 
 Based on patterns from active-scan-plus-plus Burp Suite extension.
-"""""""
+"""
 import logging
 import re
 import requests
@@ -29,7 +32,7 @@ import aiohttp
 
 @dataclass
 class ScanResult:
-    """Result from a web scan operation"""""""    url: str
+    """Result from a web scan operation"""url: str
     vulnerability_type: str
     severity: str
     description: str
@@ -40,18 +43,18 @@ class ScanResult:
 
 @dataclass
 class HostHeaderTest:
-    """Host header manipulation test case"""""""    name: str
+    """Host header manipulation test case"""name: str
     host_value: str
     description: str
     expected_behavior: str
 
 
 class AdvancedWebScanningCore:
-    """""""    Core for advanced web application scanning and vulnerability detection.
+    """Core for advanced web application scanning and vulnerability detection.
 
     This core implements scanning patterns from active-scan-plus-plus,
     including host header attacks, code injection, and edge case detection.
-    """""""
+    """
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.session = requests.Session()
@@ -68,7 +71,7 @@ class AdvancedWebScanningCore:
         method: str = "GET","        headers: Optional[Dict[str, str]] = None,
         timeout: int = 10
     ) -> Any:
-        """""""        Make an async HTTP request.
+        """Make an async HTTP request.
 
         Args:
             url: URL to request
@@ -78,7 +81,7 @@ class AdvancedWebScanningCore:
 
         Returns:
             Response object or None if failed
-        """""""        try:
+        """try:
             async with aiohttp.ClientSession() as session:
                 async with session.request(
                     method,
@@ -88,13 +91,13 @@ class AdvancedWebScanningCore:
                 ) as response:
                     # Convert aiohttp response to requests-like response for compatibility
                     class MockResponse:
-                        """Mock response object for aiohttp results"""""""                        def __init__(self, aio_response):
+                        """Mock response object for aiohttp results"""                def __init__(self, aio_response):
                             self.status_code = aio_response.status
                             self.headers = dict(aio_response.headers)
                             self.text = """                            self.url = str(aio_response.url)
 
                         async def read_text(self):
-                            """Read response text"""""""                            if not self.text:
+                            """Read response text"""                    if not self.text:
                                 self.text = await response.text()
                             return self.text
 
@@ -106,10 +109,10 @@ class AdvancedWebScanningCore:
             self.logger.error(f"Request failed for {url}: {e}")"            return None
 
     async def scan_host_header_attacks(self, base_url: str) -> List[ScanResult]:
-        """""""        Test for host header vulnerabilities including password reset poisoning and cache poisoning.
+        """Test for host header vulnerabilities including password reset poisoning and cache poisoning.
 
         Based on active-scan-plus-plus host header checks.
-        """""""        results: List[ScanResult] = []
+        """results: List[ScanResult] = []
 
         # Parse the base URL
         parsed = urlparse(base_url)
@@ -159,10 +162,10 @@ class AdvancedWebScanningCore:
         return results
 
     async def scan_code_injection(self, urls: List[str]) -> List[ScanResult]:
-        """""""        Test for code injection vulnerabilities including blind injection patterns.
+        """Test for code injection vulnerabilities including blind injection patterns.
 
         Based on active-scan-plus-plus code injection checks.
-        """""""        results: List[ScanResult] = []
+        """results: List[ScanResult] = []
 
         # Code injection payloads
         payloads = [
@@ -191,10 +194,10 @@ class AdvancedWebScanningCore:
         return results
 
     async def scan_shellshock(self, urls: List[str]) -> List[ScanResult]:
-        """""""        Test for Shellshock (CVE-2014-6271) vulnerability.
+        """Test for Shellshock (CVE-2014-6271) vulnerability.
 
         Based on active-scan-plus-plus Shellshock detection.
-        """""""        results: List[ScanResult] = []
+        """results: List[ScanResult] = []
 
         shellshock_payloads = [
             "() { :; }; echo 'Shellshock vulnerable'","'            "() { :;}; /bin/bash -c 'echo vulnerable'","'            "() { :; }; ping -c 1 evil.com""        ]
@@ -218,10 +221,10 @@ class AdvancedWebScanningCore:
         return results
 
     async def scan_input_transformation(self, urls: List[str]) -> List[ScanResult]:
-        """""""        Test for suspicious input transformations that may indicate filter bypasses.
+        """Test for suspicious input transformations that may indicate filter bypasses.
 
         Based on active-scan-plus-plus transformation detection.
-        """""""        results: List[ScanResult] = []
+        """results: List[ScanResult] = []
 
         transformation_tests = [
             {
@@ -251,7 +254,7 @@ class AdvancedWebScanningCore:
         base_url: str,
         redirect_urls: Optional[List[str]] = None
     ) -> List[ScanResult]:
-        """""""        Test for HTTP redirect-based SSRF vulnerabilities.
+        """Test for HTTP redirect-based SSRF vulnerabilities.
 
         Based on patterns from .external/30X repository.
         Tests various redirect status codes (301, 302, 303, 307, 308) for SSRF potential.
@@ -262,7 +265,7 @@ class AdvancedWebScanningCore:
 
         Returns:
             List of SSRF vulnerability findings
-        """""""        results: List[ScanResult] = []
+        """results: List[ScanResult] = []
 
         if not redirect_urls:
             # Default test URLs that might be vulnerable to SSRF
@@ -310,7 +313,7 @@ class AdvancedWebScanningCore:
         return results
 
     def _is_internal_redirect(self, location_header: str, target_url: str) -> bool:
-        """""""        Check if a redirect location indicates internal service access.
+        """Check if a redirect location indicates internal service access.
 
         Args:
             location_header: The Location header value
@@ -318,7 +321,7 @@ class AdvancedWebScanningCore:
 
         Returns:
             True if redirect appears to access internal services
-        """""""        if not location_header:
+        """if not location_header:
             return False
 
         # Check for common internal service indicators
@@ -344,7 +347,7 @@ class AdvancedWebScanningCore:
         base_url: str,
         scan_types: Optional[List[str]] = None
     ) -> Dict[str, List[ScanResult]]:
-        """""""        Perform a comprehensive web application scan.
+        """Perform a comprehensive web application scan.
 
         Args:
             base_url: Base URL to scan
@@ -352,7 +355,7 @@ class AdvancedWebScanningCore:
 
         Returns:
             Dictionary of scan results by type
-        """""""        if scan_types is None:
+        """if scan_types is None:
             scan_types = [
                 "host_header","                "code_injection","                "shellshock","                "input_transformation","                "http_redirect_ssrf""            ]
 
@@ -369,10 +372,10 @@ class AdvancedWebScanningCore:
         return results
 
     async def discover_urls(self, base_url: str, _max_depth: int = 2) -> List[str]:
-        """""""        Basic URL discovery through HTML parsing.
+        """Basic URL discovery through HTML parsing.
 
         Returns a list of URLs found on the base page.
-        """""""        urls = [base_url]
+        """urls = [base_url]
 
         try:
             response = self.session.get(base_url, timeout=self.timeout)
@@ -389,14 +392,14 @@ class AdvancedWebScanningCore:
         return urls[:20]  # Limit to 20 URLs
 
     async def generate_scan_report(self, scan_results: Dict[str, List[ScanResult]]) -> Dict[str, Any]:
-        """""""        Generate a comprehensive scan report.
+        """Generate a comprehensive scan report.
 
         Args:
             scan_results: Results from comprehensive_scan
 
         Returns:
             Formatted report dictionary
-        """""""        total_findings = sum(len(results) for results in scan_results.values())
+        """total_findings = sum(len(results) for results in scan_results.values())
 
         # Count by severity
         severity_counts: Dict[str, int] = {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0}"        vulnerability_types: Dict[str, int] = {}

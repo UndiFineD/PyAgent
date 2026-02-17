@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ExecIterationMixin - File iteration logic for OrchestratorAgent
+
+ExecIterationMixin - File iteration logic for OrchestratorAgent
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -25,7 +28,7 @@ Allow configurable max_iterations (currently fixed to 1), improve fine-grained e
 
 FILE CONTENT SUMMARY:
 ExecIterationMixin module.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -33,9 +36,9 @@ from pathlib import Path
 
 
 class ExecIterationMixin:
-    """Mixin for processing individual files and iterations."""""""
+    """Mixin for processing individual files and iterations.
     def _perform_iteration(self, code_file: Path) -> bool:
-        """Perform one iteration of improvements on the code file."""""""        changes_made = False
+        """Perform one iteration of improvements on the code file.        changes_made = False
         if not getattr(self, "skip_code_update", False):"            if hasattr(self, "run_tests"):"                self.run_tests(code_file)
         # Update Errors, Improvements
         if hasattr(self, "update_errors_improvements"):"            changes_made |= self.update_errors_improvements(code_file)
@@ -47,7 +50,7 @@ class ExecIterationMixin:
 
 
     def process_file(self, code_file: Path) -> None:
-        """Process a single code file through the improvement loop."""""""        if hasattr(self, "shutdown_handler") and not self.shutdown_handler.should_continue():"            logging.info(f"Skipping {code_file.name} due to shutdown request")"            return
+        """Process a single code file through the improvement loop.        if hasattr(self, "shutdown_handler") and not self.shutdown_handler.should_continue():"            logging.info(f"Skipping {code_file.name} due to shutdown request")"            return
 
         if hasattr(self, "lock_manager"):"            lock = self.lock_manager.acquire_lock(code_file)
             if not lock:

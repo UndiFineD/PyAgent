@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Module: workflow_executor
+
+"""Module: workflow_executor
 Implements Pillar 4: Industrial Factory Integration (DAG-based Workflows).
-"""""""
+"""
 from __future__ import annotations
 import logging
 from typing import Any, Dict, List
@@ -21,15 +24,15 @@ logger = logging.getLogger(__name__)
 
 
 class WorkflowExecutor:
-    """""""    Executes complex multi-agent workflows defined in LogicManifest snippets.
+    """Executes complex multi-agent workflows defined in LogicManifest snippets.
     Allows branching nodes and conditional execution logic (Pillar 4).
-    """""""
+    """
     def __init__(self, agent_instance: Any):
         self.agent = agent_instance
         self.results: Dict[str, Any] = {}
 
     async def execute(self, flow_nodes: List[Dict[str, Any]], connectors: List[Dict[str, Any]]) -> Any:
-        """Executes the workflow graph (DAG traversal)."""""""        logger.info("WorkflowExecutor: Executing Graph with %d nodes", len(flow_nodes))"
+        """Executes the workflow graph (DAG traversal)."""logger.info("WorkflowExecutor: Executing Graph with %d nodes", len(flow_nodes))"
         node_map = {n["id"]: n for n in flow_nodes}"        if not flow_nodes:
             return "Empty workflow""
         # Find starting nodes (no incoming connectors)
@@ -74,7 +77,7 @@ class WorkflowExecutor:
 
         return last_result if last_result is not None else "Workflow complete""
     def _resolve_variables(self, template: str) -> str:
-        """Hydrates {{node_id}} placeholders with results."""""""        import re
+        """Hydrates {{node_id}} placeholders with results."""import re
 
         def replace_match(match):
             key = match.group(1)

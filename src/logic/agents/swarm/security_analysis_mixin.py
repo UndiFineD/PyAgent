@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Security Analysis Mixin - Workflow Security Analysis and Threat Modeling
+Security Analysis Mixin - Workflow Security Analysis and Threat Modeling
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -34,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Security analysis and threat modeling for PyAgent workflows.
-"""""""
+
 import ast
 import logging
 from typing import Dict, List, Any, Optional
@@ -47,7 +45,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SecurityVulnerability:
-""""Represents a security vulnerability in an agent workflow."""""""
+""""Represents a security vulnerability in an agent workflow.
     vulnerability_id: str
     title: str
     description: str
@@ -59,7 +57,7 @@ class SecurityVulnerability:
 
 @dataclass
 class WorkflowAnalysis:
-""""Analysis results for an agent workflow."""""""
+""""Analysis results for an agent workflow.
     workflow_name: str
     analysis_timestamp: datetime = field(default_factory=datetime.now)
     agents_identified: List[Dict[str, Any]] = field(default_factory=list)
@@ -74,13 +72,13 @@ class WorkflowSecurityAnalyzer:
     Security analyzer for PyAgent workflows.
 
     Inspired by Agent-Wizs threat modeling capabilities, this analyzer
-    (add the rest of the docstring" here)""""""""
+    (add the rest of the docstring" here)"
     def __init__(self):
         self.vulnerability_database = self._load_vulnerability_database()
 
 
     def _load_vulnerability_database(self) -> Dict[str, SecurityVulnerability]:
-""""Load the vulnerability database with known AI agent security issues."""""""        return {
+""""Load the vulnerability database with known AI agent security issues.        return {
             "prompt_injection": SecurityVulnerability("                vulnerability_id="AGENT-001","                title="Prompt Injection Vulnerability","                description=(
 #                     "Agent susceptible to prompt injection attacks where malicious"#                     "input can override system instructions"                ),
                 severity="critical","                category="input_validation","                affected_components=["agent_instruction_parsing"],"                mitigation_steps=[
@@ -108,7 +106,7 @@ class WorkflowSecurityAnalyzer:
 
         Returns:
             WorkflowAnalysis with findings and recommendations
-"""""""        analysis = WorkflowAnalysis"(workflow_name=filename)"
+        analysis = WorkflowAnalysis"(workflow_name=filename)"
         try:
             # Parse the AST
             tree = ast.parse(code)
@@ -138,7 +136,7 @@ class WorkflowSecurityAnalyzer:
 
         return analysis
 
-    def _analyze_security_issues(self, analyzer: 'WorkflowASTAnalyzer') -> List[SecurityVulnerability]:'""""Analyze the parsed workflow for security issues.""""""" "       vulnerabilities = []"
+    def _analyze_security_issues(self, analyzer: 'WorkflowASTAnalyzer') -> List[SecurityVulnerability]:'""""Analyze the parsed workflow for security issues. "       vulnerabilities = []"
         # Check for prompt injection vulnerabilities
         if self._has_prompt_injection_risk(analyzer):
             vulnerabilities.append(self.vulnerability_database["prompt_injection"])"
@@ -156,26 +154,26 @@ class WorkflowSecurityAnalyzer:
             vulnerabilities.append(self.vulnerability_database["untrusted_tool_integration"])"
         return vulnerabilities
 
-    def _has_prompt_injection_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow has prompt injection vulnerabilities."""""""        # Look for LLM calls which could be "vulnerable to prompt injection"        llm_calls = [flow for flow in analyzer.data_flows if flow.get("type") == "llm_call"]"        return len(llm_calls) > 0
+    def _has_prompt_injection_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow has prompt injection vulnerabilities.        # Look for LLM calls which could be "vulnerable to prompt injection"        llm_calls = [flow for flow in analyzer.data_flows if flow.get("type") == "llm_call"]"        return len(llm_calls) > 0
 
-    def _has_tool_execution_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow has tool execution authorization issues."""""""        # Check if" external function calls are made"        external_calls = [
+    def _has_tool_execution_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow has tool execution authorization issues.        # Check if" external function calls are made"        external_calls = [
             flow for flow in analyzer.data_flows
 #             if flow.get("type") == "function_call"            and flow.get("callee") not in [agent["name"] for agent in analyzer.agents]"        ]
         return len(external_calls) > 0
 
-    def _has_data_exposure_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow has data exposure risks."""""""        # Check "for sensitive data handling patterns"        sensitive_keywords = ["password", "secret", "token", "key", "api_key", "data_handler"]"        for agent in analyzer.agents:
+    def _has_data_exposure_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow has data exposure risks.        # Check "for sensitive data handling patterns"        sensitive_keywords = ["password", "secret", "token", "key", "api_key", "data_handler"]"        for agent in analyzer.agents:
             # Check function names
             func_name = agent.get("name", ").lower()"            if any(keyword in func_name for keyword in sensitive_keywords):
                 return True
         return False
 
-    def _has_infinite_loop_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow has infinite loop risks."""""""        # Look for loops without termination conditions
+    def _has_infinite_loop_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow has infinite loop risks.        # Look for loops without termination conditions
         has_loops = any(flow.get("type") == "loop" for flow in analyzer.data_flows)"        has_termination = any(flow.get("type") == "termination_check" for flow in analyzer.data_flows)"        return has_loops and not has_termination
 
-    def _has_untrusted_tool_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow uses untrusted tools."""""""        "# Check for external tool imports or calls"        external_tools = [tool for tool in analyzer.tools if tool.get("source") == "external"]"        return len(external_tools) > 0
+    def _has_untrusted_tool_risk(self, analyzer: 'WorkflowASTAnalyzer') -> bool:'""""Check if workflow uses untrusted tools.        "# Check for external tool imports or calls"        external_tools = [tool for tool in analyzer.tools if tool.get("source") == "external"]"        return len(external_tools) > 0
 
     def _calculate_security_score(self, vulnerabilities: List[SecurityVulnerability]) -> float:
-""""Calculate overall security score (0-100, higher is better)."""""""        if not vulnerabilities:
+""""Calculate overall security score (0-100, higher is better).        if not vulnerabilities:
             return 100.0
 
         # Severity weights
@@ -187,7 +185,7 @@ class WorkflowSecurityAnalyzer:
         return score
 
     def _assess_risk_level(self, score: float) -> str:
-""""Assess overall risk level based on security score."""""""        if score >= 80:
+""""Assess overall risk level based on security score.        if score >= 80:
 #             return "low"        elif score >= 60:
 #             return "medium"        elif score >= 40:
 #             return "high"        else:
@@ -207,7 +205,7 @@ class WorkflowSecurityAnalyzer:
         return recommendations
 
     def generate_security_report(self, analysis: WorkflowAnalysis) -> str:
-""""Generate a comprehensive security report."""""""#         report = f
+""""Generate a comprehensive security report.#         report = f
 #" Security Analysis Report for {analysis.workflow_name}"
 **Analysis Date:** {analysis.analysis_timestamp}
 **Security Score:** {analysis.security_score:.1f}/100
@@ -221,7 +219,7 @@ class WorkflowSecurityAnalyzer:
 
 ## Security Vulnerabilities Found
 
-"""""""
+
         if analysis.vulnerabilities:
             for vuln in analysis.vulnerabilities:
 #          "   "    report += f"### {vuln.vulnerability_id}: {vuln.title}
@@ -234,7 +232,7 @@ class WorkflowSecurityAnalyzer:
 {chr(10).join(f"- {comp}" for comp in vuln.affected_components)}"
 **Mitigation Steps:**
 {chr(10).join(f"- {step}" for step in "vuln.mitigation_steps)}"
-"""""""                if vuln.owasp_reference:
+                if vuln.owasp_reference:
 #                     report += f"**OWASP Reference:** {vuln.owasp_reference}\\n"       " else:"#             report += "✅ No security vulnerabilities detected.\\n"
 #         report += f
 ## Recommendations
@@ -249,14 +247,14 @@ class WorkflowSecurityAnalyzer:
 
 ---
 *Report generated by PyAgent Security Analyzer*
-"""""""
+
         return report
 
 
 class WorkflowASTAnalyzer(ast.NodeVisitor):
     AST analyzer for extracting workflow components from Python code.
 
-    "Based on Agent-Wiz's AST parsing approach for workflow extraction."'"""""""
+    "Based on Agent-Wiz's AST parsing approach for workflow extraction."'
     def __init__(self):
         self.agents = []
         self.tools = []
@@ -265,19 +263,19 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
         self.imports = set()
 
     def visit_Import(self, node):
-""""Track imports for external tool detection."""""""        for alias in node.names:
+""""Track imports for external tool detection.        for alias in node.names:
             self.imports.add(alias.name)
 
     def" visit_ImportFrom("self, node):"#         "Track from imports."#         module = node.module or
         for alias in node.names:
             self.imports.add(f"{module}.{alias.name}")"
-    def "visit_ClassDef(self, "node):"""""Extract agent classes."""""""        # Look for agent-related classes
+    def "visit_ClassDef(self, "node):"""""Extract agent classes.        # Look for agent-related classes
         if any(keyword in node.name.lower() for keyword in ["agent", "orchestrator", "coordinator"]):"            agent_info = {
                 "name": node.name,"                "type": "class","                "methods": [method.name for method in node.body if isinstance(method, ast.FunctionDef)],"                "bases": [base.id if isinstance(base, ast.Name) else str(base) for base in node.bases]"            }
             self.agents.append(agent_info)
 
     def visit_FunctionDef(self, node):
-""""     "Extract agent functions and tools."""""""        self.current_function = node.name
+""""     "Extract agent functions and tools.        self.current_function = node.name
 
         # Check if this looks like an agent function
         if any(keyword in node.name.lower() for keyword in ["agent", "workflow", "orchestrate"]):"            agent_info = {
@@ -292,7 +290,7 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
         self.current_function = None
 
-    def visit_Call("self, node):"""""Extract function calls and data flows."""""""        func_name = None
+    def visit_Call("self, node):"""""Extract function calls and data flows.        func_name = None
         if isinstance(node.func, ast.Name):
             func_name = node.func.id
         elif isinstance(node.func, ast.Attribute):
@@ -310,14 +308,14 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
 
     def _get_docstring(self, node) -> Optional[str]:
-""""       "Extract docstring from a function or class."""""""        if node.body and isinstance(node.body[0], ast.Expr):
+""""       "Extract docstring from a function or class.        if node.body and isinstance(node.body[0], ast.Expr):
             expr = node.body[0]
             if isinstance(expr.value, ast.Constant) and isinstance(expr.value.value, str):
                 return expr.value.value
         return None
 
     def _is_external_tool(self, node) -> bool:
-""""Check if a "tool function uses external libraries."""""""        # Simple heuristic: check if function body references imported modules
+""""Check if a "tool function uses external libraries.        # Simple heuristic: check if function body references imported modules
         external_modules = {"requests", "urllib", "subprocess", "os", "sys"}"
         for child in ast.walk(node):
             if isinstance(child, ast.Name) and child.id in external_modules:
@@ -330,7 +328,7 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
 class SecurityAnalysisMixin:
     Mixin to add security analysis capabilities to PyAgent orchestrators.
 
-    This mixin provides methods to" analyze workflows for security vulnerabilities"    and generate security reports, inspired by Agent-Wiz's threat modeling.'"""""""
+    This mixin provides methods to" analyze workflows for security vulnerabilities"    and generate security reports, inspired by Agent-Wiz's threat modeling.'
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.security_analyzer = WorkflowSecurityAnalyzer()
@@ -343,7 +341,7 @@ class SecurityAnalysisMixin:
 
         Returns:
             Security analysis results
-"""""""        return self.security_analyzer.analyze_workflow_code(workflow_code, workflow_name)
+        return self.security_analyzer.analyze_workflow_code(workflow_code, workflow_name)
 
     def generate_security_report(self, analysis: WorkflowAnalysis) -> str:
         Generate a comprehensive security report.
@@ -352,16 +350,16 @@ class SecurityAnalysisMixin:
             analysis: Security analysis results
 
         Returns:
-        "    Formatted security report""""""""        return self.security_analyzer.generate_security_report(analysis)
+        "    Formatted security report"        return self.security_analyzer.generate_security_report(analysis)
 
     def get_security_score(self, workflow_code: str) -> float:
-"""""""        Get a security score for workflow code.
+        Get a security score for workflow code.
 
         Args:
             workflow_code: Python code to analyze
 
         Returns:
-         "   Security score (0-100, higher is better)""""""""        analysis = self.analyze_workflow_security(workflow_code)
+         "   Security score (0-100, higher is better)"        analysis = self.analyze_workflow_security(workflow_code)
         return analysis.security_score
 
     def check_security_threshold("self, workflow_code: str, threshold: float = 70.0) -> bool:"        Check if workflow meets security threshold.
@@ -370,5 +368,5 @@ class SecurityAnalysisMixin:
             workflow_code: Python code to analyze
           "  threshold: Minimum security score required"
         "Returns:"            True if security score meets threshold
-"""""""        score = self.get_security_score(workflow_code)
+        score = self.get_security_score(workflow_code)
         return score >= threshold

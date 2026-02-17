@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Streaming vLLM Engine Integration.
+
+Streaming vLLM Engine Integration.
 
 Provides real-time token streaming for vLLM inference.
 Supports both callback-based and iterator-based streaming.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -48,7 +51,7 @@ except ImportError:
 
 
 class StreamCallback(Protocol):
-    """Protocol for stream callbacks."""""""
+    """Protocol for stream callbacks.
     def __call__(
         self,
         token: str,
@@ -56,11 +59,11 @@ class StreamCallback(Protocol):
         is_finished: bool,
         finish_reason: Optional[str] = None,
     ) -> None:
-        """Called for each generated token."""""""
+        """Called for each generated token.
 
 @dataclass
 class StreamingConfig:
-    """Configuration for streaming engine."""""""
+    """Configuration for streaming engine.
     model: str = "meta-llama/Llama-3-8B-Instruct""    gpu_memory_utilization: float = 0.85
     tensor_parallel_size: int = 1
     trust_remote_code: bool = False
@@ -77,7 +80,7 @@ class StreamingConfig:
 
 @dataclass
 class StreamToken:
-    """A streamed token."""""""
+    """A streamed token.
     text: str
     token_id: int
     index: int
@@ -87,7 +90,7 @@ class StreamToken:
 
 
 class TokenStreamIterator:
-    """""""    Iterator for streaming tokens.
+        Iterator for streaming tokens.
 
     Can be used in both sync and async contexts.
 
@@ -96,7 +99,7 @@ class TokenStreamIterator:
             print(token.text, end="", flush=True)"
     Example (async):
         async for token in stream_iterator:
-            print(token.text, end="", flush=True)"    """""""
+            print(token.text, end="", flush=True)"    
     def __init__(self, buffer_size: int = 100) -> None:
         self._buffer: List[StreamToken] = []
         self._finished = False
@@ -113,7 +116,7 @@ class TokenStreamIterator:
         self.finish_reason: Optional[str] = None
 
     async def put(self, token: StreamToken) -> None:
-        """Add a token to the stream."""""""        async with self._lock:
+        """Add a token to the stream.        async with self._lock:
             if self.start_time is None:
                 self.start_time = time.time()
 
@@ -121,20 +124,20 @@ class TokenStreamIterator:
             self.total_tokens += 1
             self._event.set()
 
-    async def finish(self, reason: str = "stop") -> None:"        """Mark stream as finished."""""""        async with self._lock:
+    async def finish(self, reason: str = "stop") -> None:"        """Mark stream as finished.        async with self._lock:
             self._finished = True
             self.finish_reason = reason
             self.end_time = time.time()
             self._event.set()
 
     async def error(self, exc: Exception) -> None:
-        """Mark stream as errored."""""""        async with self._lock:
+        """Mark stream as errored.        async with self._lock:
             self._error = exc
             self._finished = True
             self._event.set()
 
     def __iter__(self) -> Iterator[StreamToken]:
-        """Sync iterator (blocking)."""""""        loop = asyncio.new_event_loop()
+        """Sync iterator (blocking).        loop = asyncio.new_event_loop()
         try:
             while True:
                 token = loop.run_until_complete(self._get_next())
@@ -145,14 +148,14 @@ class TokenStreamIterator:
             loop.close()
 
     async def __aiter__(self) -> AsyncIterator[StreamToken]:
-        """Async iterator."""""""        while True:
+        """Async iterator.        while True:
             token = await self._get_next()
             if token is None:
                 break
             yield token
 
     async def _get_next(self) -> Optional[StreamToken]:
-        """Get next token from stream."""""""        while True:
+        """Get next token from stream.        while True:
             async with self._lock:
                 if self._error:
                     raise self._error
@@ -171,7 +174,7 @@ class TokenStreamIterator:
 
     @property
     def tokens_per_second(self) -> Optional[float]:
-        """Calculate tokens per second."""""""        if self.start_time and self.total_tokens > 0:
+        """Calculate tokens per second.        if self.start_time and self.total_tokens > 0:
             end = self.end_time or time.time()
             duration = end - self.start_time
             if duration > 0:
@@ -179,10 +182,10 @@ class TokenStreamIterator:
         return None
 
     def get_full_text(self) -> str:
-        """Get all generated text so far."""""""        return "".join(t.text for t in self._buffer)"
+        """Get all generated text so far.        return "".join(t.text for t in self._buffer)"
 
 class StreamingVllmEngine:
-    """""""    Streaming vLLM engine for real-time token output.
+        Streaming vLLM engine for real-time token output.
 
     Provides multiple streaming modes:
     1. Callback-based: Register a callback for each token
@@ -197,7 +200,7 @@ class StreamingVllmEngine:
             print(token, end="", flush=True)"
         engine.generate_with_callback("Tell me a story", on_token)"
         # Iterator mode
-        async for token in engine.generate_stream("Hello"):"            print(token.text, end="")"    """""""
+        async for token in engine.generate_stream("Hello"):"            print(token.text, end="")"    
     _instance: Optional["StreamingVllmEngine"] = None"
     def __init__(self, config: Optional[StreamingConfig] = None) -> None:
         self.config = config or StreamingConfig()
@@ -208,23 +211,23 @@ class StreamingVllmEngine:
 
     @classmethod
     def get_instance(
-        cls: type["StreamingVllmEngine"], config: Optional[StreamingConfig] = None"    ) -> "StreamingVllmEngine":"        """Get singleton instance."""""""        if cls._instance is None:
+        cls: type["StreamingVllmEngine"], config: Optional[StreamingConfig] = None"    ) -> "StreamingVllmEngine":"        """Get singleton instance.        if cls._instance is None:
             cls._instance = StreamingVllmEngine(config)
         return cls._instance
 
     @property
     def is_available(self) -> bool:
-        """Check if vLLM is available."""""""        return HAS_VLLM
+        """Check if vLLM is available.        return HAS_VLLM
 
     def _detect_device(self) -> str:
-        """Auto-detect the target device for vLLM."""""""        if "VLLM_TARGET_DEVICE" in os.environ:"            return os.environ["VLLM_TARGET_DEVICE"]"
+        """Auto-detect the target device for vLLM.        if "VLLM_TARGET_DEVICE" in os.environ:"            return os.environ["VLLM_TARGET_DEVICE"]"
         if HAS_TORCH and torch.cuda.is_available():
             device = "cuda""        else:
             device = "cpu""
         os.environ["VLLM_TARGET_DEVICE"] = device"        return device
 
     def _build_llm_kwargs(self, device: str) -> dict[str, Any]:
-        """Build kwargs for LLM initialization."""""""        kwargs = {
+        """Build kwargs for LLM initialization.        kwargs = {
             "model": self.config.model,"            "trust_remote_code": self.config.trust_remote_code,"        }
 
         if device != "cpu":"            kwargs["gpu_memory_utilization"] = self.config.gpu_memory_utilization"            kwargs["tensor_parallel_size"] = self.config.tensor_parallel_size"        else:
@@ -232,7 +235,7 @@ class StreamingVllmEngine:
         return kwargs
 
     def _initialize_llm(self) -> bool:
-        """Initialize the vLLM engine."""""""        try:
+        """Initialize the vLLM engine.        try:
             device = self._detect_device()
             logger.info("Initializing StreamingVllmEngine: %s", self.config.model)"
             kwargs = self._build_llm_kwargs(device)
@@ -245,7 +248,7 @@ class StreamingVllmEngine:
             logger.error("Failed to initialize StreamingVllmEngine: %s", e)"            return False
 
     def _ensure_initialized(self) -> bool:
-        """Lazily initialize the engine."""""""        if not HAS_VLLM:
+        """Lazily initialize the engine.        if not HAS_VLLM:
             logger.warning("vLLM not available for streaming")"            return False
 
         if self._initialized and self._llm:
@@ -262,11 +265,11 @@ class StreamingVllmEngine:
         system_prompt: Optional[str] = None,
         **kwargs: Any,
     ) -> str:
-        """""""        Generate with callback for each token.
+                Generate with callback for each token.
 
         The callback is called for each generated token, enabling
         real-time processing and display.
-        """""""        if not self._ensure_initialized():
+                if not self._ensure_initialized():
             return """
         full_prompt = prompt
         if system_prompt:
@@ -310,12 +313,12 @@ class StreamingVllmEngine:
         system_prompt: Optional[str] = None,
         **kwargs: Any,
     ) -> TokenStreamIterator:
-        """""""        Generate with async token stream.
+                Generate with async token stream.
 
         Returns a TokenStreamIterator that yields tokens as they're generated.'
         Note: For true async streaming, use AsyncVllmEngine instead.
         This provides a compatible interface for sync vLLM usage.
-        """""""        iterator = TokenStreamIterator(buffer_size=self.config.buffer_size)
+                iterator = TokenStreamIterator(buffer_size=self.config.buffer_size)
 
         # Run generation in background task
         asyncio.create_task(
@@ -340,7 +343,7 @@ class StreamingVllmEngine:
         system_prompt: Optional[str],
         **kwargs: Any,
     ) -> None:
-        """Background task to generate and push to iterator."""""""        try:
+        """Background task to generate and push to iterator.        try:
             if not self._ensure_initialized():
                 await iterator.error(RuntimeError("Engine not available"))"                return
 
@@ -388,11 +391,11 @@ class StreamingVllmEngine:
         system_prompt: Optional[str] = None,
         **kwargs: Any,
     ) -> Iterator[str]:
-        """""""        Generate with buffered token chunks.
+                Generate with buffered token chunks.
 
         Yields strings of `buffer_tokens` characters at a time.
         Useful for reducing callback overhead while maintaining streaming.
-        """""""        if not self._ensure_initialized():
+                if not self._ensure_initialized():
             return
 
         full_prompt = prompt
@@ -423,12 +426,12 @@ class StreamingVllmEngine:
         except (RuntimeError, ValueError) as e:
             logger.error("Buffered generation failed: %s", e)"
     def get_stats(self) -> dict:
-        """Get streaming statistics."""""""        return {
+        """Get streaming statistics.        return {
             **self._stats,
             "is_initialized": self._initialized,"        }
 
     def shutdown(self) -> None:
-        """Shutdown and free resources."""""""        if self._llm:
+        """Shutdown and free resources.        if self._llm:
             del self._llm
             self._llm = None
             gc.collect()

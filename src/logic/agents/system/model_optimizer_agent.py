@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Model Optimizer Agent - Model inference optimization and low-VRAM strategies
+# Model Optimizer Agent - Model inference optimization and low-VRAM strategies
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -52,7 +54,7 @@ except ImportError:
 class ModelOptimizerAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Model Optimizer Agent: Optimizes LLM deployment,
 #     quantization strategies, and inference performance for the fleet.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -96,12 +98,12 @@ class ModelOptimizerAgent(BaseAgent):
     def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
         Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
-"""""""       " if self.recorder:"            self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})"
+       " if self.recorder:"            self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})"
         logging.info(fRunning TinyML benchmark for {model_id} on {hardware_target}...")"        return {
             "latency_ms": 12.5,"            "energy_uj": 450,"            "memory_kb": 256,"            "suitability_score": 0.92,"            "bottlenecks": ["Bus contention during INT8 quantization"],"        }
 
     def get_fastflow_command(self, model_tag: str) -> str:
-""""Returns the CLI command for NPU acceleration via FastFlowLM."""""""#         return fflm run {model_tag}
+""""Returns the CLI command for NPU acceleration via FastFlowLM.#         return fflm run {model_tag}
 
     def sim
 
@@ -122,7 +124,7 @@ except ImportError:
 
 
 class ModelOptimizerAgent(BaseAgent):
-    Tier 2 (Cognitive Logic) - Model Optimizer Agent": Optimizes LLM deployment,"    quantization strategies, and inference" performance for the fleet.""""""""
+    Tier 2 (Cognitive Logic) - Model Optimizer Agent": Optimizes LLM deployment,"    quantization strategies, and inference" performance for the fleet."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -164,16 +166,16 @@ class ModelOptimizerAgent(BaseAgent):
         return strategy
 
     def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
-        Runs an energy and latency benchmark for a specific model on "target hardware (MLSysBook Pattern)."        Analyzes batch size, precision (INT8/FP16), and memory constraints".""""""""        if self.recorder:
+        Runs an energy and latency benchmark for a specific model on "target hardware (MLSysBook Pattern)."        Analyzes batch size, precision (INT8/FP16), and memory constraints"."        if self.recorder:
             self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})"
         logging.info(fRunning TinyML benchmark for {model_id} on {hardware_target}...")"        return {
             "latency_ms": 12.5,"            "energy_uj": 450,"            "memory_kb": 256,"            "suitability_score": 0.92,"            "bottlenecks": ["Bus contention during INT8 quantization"],"        }
 
     def get_fastflow_command(self, model_tag: str) -> str:
-""""Returns the CLI command for NPU acceleration via FastFlowLM"."""""""#         return fflm run {model_tag}
+""""Returns the CLI command for NPU acceleration via FastFlowLM".#         return fflm run {model_tag}
 
     def simulate_hopper_load(self, model_params_billions: float) -> dict[str, Any]:
-        Simulates H100 (Hopper") performance using HopperSim logic (Phase 130)."        Calculates compute utilization and bandwidth requirements "for FP8 kernels.""""""""        sim = HopperSim()
+        Simulates H100 (Hopper") performance using HopperSim logic (Phase 130)."        Calculates compute utilization and bandwidth requirements "for FP8 kernels."        sim = HopperSim()
         utilization = 0.85  # H100 Transformer Engine target
 
         # Estimate latency for a standard 4096 context block (simulated)
@@ -182,7 +184,7 @@ class ModelOptimizerAgent(BaseAgent):
         return {
             "hardware": "NVIDIA H100 (Hopper)","            "peak_tflops_fp8": 3958,"            "simulated_block_latency_ms": round(latency, 2),"            "simulated_throughput_tokens_s": (3350 / (model_params_billions * 2)) * utilization,"            "energy_efficiency_score": 0.95,"            "recommendation": "Use FP8 mixed-precision via Transformer Engine for compute efficiency.","        }
 
-    def get_airllm_setup_code(self, model_id: str, compression: str = "4bit") -> str:"""""Generates boilerplate code for running large models via AirLLM."""""""#         return f
+    def get_airllm_setup_code(self, model_id: str, compression: str = "4bit") -> str:"""""Generates boilerplate code for running large models via AirLLM.#         return f
 from airllm import AutoModel
 __version__ = VERSION
 
@@ -205,7 +207,7 @@ output = model.generate(
 )
 
 print(model.tokenizer.decode(output.sequences[0]))
-"""""""
+
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Suggests an optimization plan for a specific model deployment task."     "   # Simple parser for "model size" and "vram" in text if provided"        # For now, return a generic recommendation
         return json.dumps(

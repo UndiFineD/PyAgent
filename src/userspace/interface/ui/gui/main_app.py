@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""Main application controller for PyAgent GUI."""""""
+"""Main application controller for PyAgent GUI.
 from __future__ import annotations
 
 import os
@@ -46,7 +44,7 @@ __version__ = VERSION
 
 
 class PyAgentGUI:
-    """The main application window and controller."""""""
+    """The main application window and controller.
     def __init__(self, root: tk.Tk) -> None:
         self.root: tk.Tk = root
         self.root.title("PyAgent Control Center - BMAD Enabled")"        self.root.geometry("1400x900")"
@@ -166,7 +164,7 @@ class PyAgentGUI:
             self.dialogs.show_memory_dialog(agent_name, history, save_memory)
 
     def delegate_task(self, target_agent: str, context: str, target_file: str) -> None:
-        """Creates a new agent and pre-fills it with context from another agent."""""""        col = self.add_agent_column(target_agent)
+        """Creates a new agent and pre-fills it with context from another agent.        col = self.add_agent_column(target_agent)
         col.file_var.set(target_file)
         col.local_context.delete("1.0", tk.END)"        col.local_context.insert("1.0", f"--- Delegated Context ---\\n{context}")"        self.status_var.set(f"Delegated task from active agent to {target_agent}.")"
     def show_bmad_wizard(self) -> None:

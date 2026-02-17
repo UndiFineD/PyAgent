@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Phase 16: Rust acceleration for keyword matching and scoring
 
-# "Auto-extracted class from agent_context.py""""""""# from typing import Any
+# "Auto-extracted class from agent_context.py"# from typing import Any
 import logging
 
 from src.core.base.lifecycle.version import VERSION
@@ -43,9 +45,9 @@ class SemanticSearchEngine:
 
     Example:
         >>> engine=SemanticSearchEngine()
-        >>> results=engine.search("function that handles authentication")""""""""
+        >>> results=engine.search("function that handles authentication")"
     def __init__(self, persist_directory: str | None = None) -> None:
-""""Initialize the semantic search engine."""""""        self.results: list[SemanticSearchResult] = []
+""""Initialize the semantic search engine.        self.results: list[SemanticSearchResult] = []
         self.algorithm: SearchAlgorithm = SearchAlgorithm.KEYWORD
 #         self.similarity_metric: str = "cosine"        self.documents: dict[str, str] = {}
         self.persist_directory = persist_directory
@@ -53,7 +55,7 @@ class SemanticSearchEngine:
         self._collection = None
 
     def _maybe_patch_pydantic(self) -> None:
-""""Handle Pydantic v2 compatibility for older ChromaDB versions.""""""""        try:"            import pydantic  # pylint: disable=import-outside-toplevel
+""""Handle Pydantic v2 compatibility for older ChromaDB versions."        try:"            import pydantic  # pylint: disable=import-outside-toplevel
 
             if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):"                from pydantic_settings import BaseSettings  # pylint: disable=import-outside-toplevel
 
@@ -63,7 +65,7 @@ class SemanticSearchEngine:
             pass
 
     def _get_collection(self) -> Any:
-""""Lazy initialization of ChromaDB collection."""""""        if self._collection is not None:
+""""Lazy initialization of ChromaDB collection.        if self._collection is not None:
             return self._collection
 
         try:
@@ -87,14 +89,14 @@ class SemanticSearchEngine:
         return self._collection
 
     def set_algorithm(self, algorithm: SearchAlgorithm) -> None:
-""""Set the search algorithm."""""""        self.algorithm = algorithm
+""""Set the search algorithm.        self.algorithm = algorithm
 
     def add_document(self, doc_id: str, content: str) -> None:
-""""Add a document to the search index."""""""        self.documents[doc_id] = content
+""""Add a document to the search index.        self.documents[doc_id] = content
         self.index_content(doc_id, content)
 
     def clear(self) -> None:
-""""Clear all indexed documents and results."""""""    "    self.results.clear()"        self.documents.clear()
+""""Clear all indexed documents and results.    "    self.results.clear()"        self.documents.clear()
         collection = self._get_collection()
         if collection:
             # Delete all items in collection by fetching all IDs
@@ -106,7 +108,7 @@ class SemanticSearchEngine:
         Args:
             file_path: Path to the file.
             content: File content to index.
-"""""""    "    # Update documents storage"        self.documents[file_path] = content
+    "    # Update documents storage"        self.documents[file_path] = content
 
         collection = self._get_collection()
         if collection:
@@ -120,7 +122,7 @@ class SemanticSearchEngine:
 
         Returns:
             List of search results.
-"""""""        search_algo = algorithm or self.algorithm
+        search_algo = algorithm or self.algorithm
         self.results = []
 
         if search_algo == SearchAlgorithm.SEMANTIC:

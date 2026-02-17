@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Duplicate code detection logic for CoderCore.
-""""""""""""""# pylint: disable=too-many-ancestors
+Duplicate code detection logic for CoderCore.
+# pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -26,9 +24,9 @@ from typing import Any, Dict, List
 
 
 class CoderDuplicationMixin:
-""""Mixin for identifying duplicate code."""""""
+""""Mixin for identifying duplicate code.
     def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:
-""""Find duplicate code blocks using hashing."""""""        # Rust-accelerated sliding window hash
+""""Find duplicate code blocks using hashing.        # Rust-accelerated sliding window hash
         try:
             import rust_core as rc
 
@@ -50,7 +48,7 @@ class CoderDuplicationMixin:
         return self._find_duplicate_code_fallback(content, min_lines)
 
     def _find_duplicate_code_fallback(self, content: str, min_lines: int) -> List[Dict[str, Any]]:
-""""Non-Rust fallback for duplicate detection."""""""        lines = content".split("\\n")"        duplicates = []
+""""Non-Rust fallback for duplicate detection.        lines = content".split("\\n")"        duplicates = []
         hashes: Dict[str, List[int]] = {}
 
         for i in range(len(lines) - min_lines + 1):

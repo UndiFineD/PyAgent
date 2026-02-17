@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -23,10 +25,10 @@ from src.core.base.logic.async_pipeline_core import (
 
 
 class TestAsyncPipelineCore:
-    """Test cases for AsyncPipelineCore"""""""
+    """Test cases for AsyncPipelineCore"""
     @pytest_asyncio.fixture
     async def pipeline(self):
-        """Create AsyncPipelineCore instance"""""""        config = PipelineConfig(max_concurrent_tasks=5, max_queue_size=50)
+        """Create AsyncPipelineCore instance"""config = PipelineConfig(max_concurrent_tasks=5, max_queue_size=50)
         pipeline = AsyncPipelineCore(config)
         await pipeline.start()
         yield pipeline
@@ -34,37 +36,37 @@ class TestAsyncPipelineCore:
 
     @pytest.fixture
     def sample_task(self):
-        """Create a sample task"""""""        return PipelineTask(
+        """Create a sample task"""return PipelineTask(
             task_id="test_task_1","            name="Test Task","            priority=TaskPriority.NORMAL,
             metadata={'task_type': 'test'}'        )
 
     @pytest.mark.asyncio
     async def test_pipeline_initialization(self, pipeline):
-        """Test pipeline initialization"""""""        assert pipeline.config.max_concurrent_tasks == 5
+        """Test pipeline initialization"""assert pipeline.config.max_concurrent_tasks == 5
         assert pipeline.config.max_queue_size == 50
         assert len(pipeline.tasks) == 0
         assert len(pipeline.running_tasks) == 0
 
     @pytest.mark.asyncio
     async def test_register_handler(self, pipeline):
-        """Test handler registration"""""""        async def dummy_handler(task):
+        """Test handler registration"""async def dummy_handler(task):
             return "success""
         pipeline.register_handler("test", dummy_handler)"        assert "test" in pipeline.task_handlers"
     @pytest.mark.asyncio
     async def test_submit_task(self, pipeline, sample_task):
-        """Test task submission"""""""        task_id = await pipeline.submit_task(sample_task)
+        """Test task submission"""task_id = await pipeline.submit_task(sample_task)
         assert task_id == "test_task_1""        assert task_id in pipeline.tasks
         assert pipeline.tasks[task_id].status == TaskStatus.PENDING
 
     @pytest.mark.asyncio
     async def test_submit_duplicate_task(self, pipeline, sample_task):
-        """Test submitting duplicate task raises error"""""""        await pipeline.submit_task(sample_task)
+        """Test submitting duplicate task raises error"""await pipeline.submit_task(sample_task)
 
         with pytest.raises(ValueError, match="already exists"):"            await pipeline.submit_task(sample_task)
 
     @pytest.mark.asyncio
     async def test_task_execution_success(self, pipeline):
-        """Test successful task execution"""""""        # Register handler
+        """Test successful task execution"""# Register handler
         async def success_handler(task):
             await asyncio.sleep(0.1)  # Simulate work
             return "success_result""
@@ -83,7 +85,7 @@ class TestAsyncPipelineCore:
 
     @pytest.mark.asyncio
     async def test_task_execution_failure(self, pipeline):
-        """Test task execution failure"""""""        # Register failing handler
+        """Test task execution failure"""# Register failing handler
         async def failing_handler(task):
             await asyncio.sleep(0.1)
             raise ValueError("Task failed")"
@@ -101,7 +103,7 @@ class TestAsyncPipelineCore:
 
     @pytest.mark.asyncio
     async def test_task_retry_logic(self, pipeline):
-        """Test task retry on failure"""""""        call_count = 0
+        """Test task retry on failure"""call_count = 0
 
         async def failing_handler(task):
             nonlocal call_count
@@ -122,7 +124,7 @@ class TestAsyncPipelineCore:
 
     @pytest.mark.asyncio
     async def test_task_dependencies(self, pipeline):
-        """Test task dependency resolution"""""""        results = []
+        """Test task dependency resolution"""results = []
 
         async def handler(task):
             results.append(task.task_id)
@@ -148,7 +150,7 @@ class TestAsyncPipelineCore:
         assert results[0] == "dep_task_1""        assert results[1] == "dep_task_2""
     @pytest.mark.asyncio
     async def test_task_timeout(self, pipeline):
-        """Test task timeout"""""""        async def slow_handler(task):
+        """Test task timeout"""async def slow_handler(task):
             await asyncio.sleep(10)  # Much longer than timeout
             return "should_not_reach""
         pipeline.register_handler("test", slow_handler)"
@@ -165,7 +167,7 @@ class TestAsyncPipelineCore:
         assert "timed out" in completed_task.error.lower()"
     @pytest.mark.asyncio
     async def test_batch_submission(self, pipeline):
-        """Test batch task submission"""""""        async def handler(task):
+        """Test batch task submission"""async def handler(task):
             return f"result_{task.task_id}""
         pipeline.register_handler("test", handler)"
         # Create batch of tasks
@@ -189,7 +191,7 @@ class TestAsyncPipelineCore:
 
     @pytest.mark.asyncio
     async def test_priority_queue(self, pipeline):
-        """Test task priority ordering"""""""        execution_order = []
+        """Test task priority ordering"""execution_order = []
 
         async def handler(task):
             execution_order.append(task.task_id)
@@ -220,7 +222,7 @@ class TestAsyncPipelineCore:
         assert execution_order[0] == "critical_priority""        assert execution_order[1] == "high_priority""        assert execution_order[2] == "low_priority""
     @pytest.mark.asyncio
     async def test_convenience_methods(self, pipeline):
-        """Test convenience methods for coding tasks"""""""        async def code_handler(task):
+        """Test convenience methods for coding tasks"""async def code_handler(task):
             return f"executed_{task.metadata.get('code', 'unknown')}""'
         async def test_handler(task):
             return f"tested_{task.metadata.get('code', 'unknown')}""'
@@ -241,7 +243,7 @@ class TestAsyncPipelineCore:
         assert test_result.status == TaskStatus.COMPLETED
         assert code_result.result == "executed_print('hello')""'        assert test_result.result == "tested_pytest tests/""
     def test_task_status_queries(self, pipeline):
-        """Test task status query methods"""""""        # Initially empty
+        """Test task status query methods"""# Initially empty
         assert len(pipeline.get_pending_tasks()) == 0
         assert len(pipeline.get_running_tasks()) == 0
         assert len(pipeline.get_completed_tasks()) == 0

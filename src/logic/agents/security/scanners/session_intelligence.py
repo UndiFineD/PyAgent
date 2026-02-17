@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -21,8 +23,8 @@ from typing import Optional, Dict, List
 class SessionIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Identifies and analyzes session cookies/tokens for common frameworks."""""""#     Refactored from badsecrets.
-"""""""
+"""Identifies and analyzes session cookies/tokens for common frameworks.#     Refactored from badsecrets.
+
     PATTERNS = {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#         "flask": re.compile(reyJ(?:[\\w-]*\\.)(?:[\\w-]*\\.)[\\w-]*"),"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -36,7 +38,7 @@ class SessionIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def identify_session(cls, cookie_value: str) -> Optional[str]:""""""""Identifies the type of session token based on regex patterns."""""""        for name, pattern in cls.PATTERNS.items():
+"""     def identify_session(cls, cookie_value: str) -> Optional[str]:"Identifies the type of session token based on regex patterns.        for name, pattern in cls.PATTERNS.items():
             if pattern.match(cookie_value):
                 return name
         return None
@@ -45,7 +47,7 @@ class SessionIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def generate_jwt_attacks(token: str, public_key: Optional[str] = None) -> List[str]:""""        Generates JWT algorithm confusion and 'none' attack tokens.'        Ported from 0xSojalSec-Confusional.
-"""""""        parts = token.split(".")"        if len(parts) != 3:
+        parts = token.split(".")"        if len(parts) != 3:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             return []""""
@@ -79,7 +81,7 @@ class SessionIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def decode_flask_cookie(cls, cookie: str) -> Optional[Dict]:""""""""Decodes the payload part of a Flask session cookie without verification."""""""        try:
+"""     def decode_flask_cookie(cls, cookie: str) -> Optional[Dict]:"Decodes the payload part of a Flask session cookie without verification.        try:
             # Flask cookies are serialized with itsdangerous (base64 of json)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python

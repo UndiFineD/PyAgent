@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Tool Evolution Agent - Automated tool creation and task automation detection
+# Tool Evolution Agent - Automated tool creation and task automation detection
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -32,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in self-evolution and automated tool creation.
 Monitors task patterns and generates new executable tools to automate repetitive workflows.
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -52,7 +54,7 @@ __version__ = VERSION
 
 
 class ToolEvolutionAgent(BaseAgent):
-""""Detects automation opportunities and writes its own toolsets."""""""
+""""Detects automation opportunities and writes its own toolsets.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = ToolDraftingCore()
@@ -65,7 +67,7 @@ class ToolEvolutionAgent(BaseAgent):
     def analyze_gui_recording_for_automation(self, recording_path: str) -> str:
         "Analyzes a GUI recording file and generates a Python tool to reproduce the logic."        Args:
             recording_path: Path to the .json recording from MultiModalContextAgent.
-"""""""        path = Path(recording_path)
+        path = Path(recording_path)
         if not path.exists():
 #             return fError: Recording at {recording_path} not found.
 
@@ -93,7 +95,7 @@ class ToolEvolutionAgent(BaseAgent):
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
             code_content: Complete Python code for the tool function.
             description: What the tool does.
-"""""""#         filename = f"{tool_name.lower()}.py"        filepath = self.evolved_tools_dir / filename
+#         filename = f"{tool_name.lower()}.py"        filepath = self.evolved_tools_dir / filename
 
         try:
             with open(filepath, "w", encoding="utf-8") as f:"                f.write(f'"'"'"'"{description}"\\n\\n')"'                f.write(code_content)
@@ -105,7 +107,7 @@ class ToolEvolutionAgent(BaseAgent):
     def generate_tool_contract(self, name: str, description: str, endpoint: str) -> str:
         "Generates an OpenAPI 3.0 contract for a drafted tool."#         Args:
             name: Techni
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -125,7 +127,7 @@ __version__ = VERSION
 
 
 class ToolEvolutionAgent(BaseAgent):
-""""Detects automation opportunities" and writes its own toolsets."""""""
+""""Detects automation opportunities" and writes its own toolsets.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = ToolDraftingCore()
@@ -138,7 +140,7 @@ class ToolEvolutionAgent(BaseAgent):
     def analyze_gui_recording_for_automation(self, recording_path: str) -> str:
         "Analyzes a GUI recording file and generates a" Python tool to reproduce the logic."        Args:
             recording_path: Path to the .json recording from MultiModalContextAgent.
-"""""""        path = Path(recording_path)
+        path = Path(recording_path)
         if not path.exists():
 #             return fError: Recording at {recording_path} not found.
 
@@ -166,7 +168,7 @@ class ToolEvolutionAgent(BaseAgent):
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
             code_content: Complete Python code for the tool function.
             description: What the tool does.
-"""""""#         filename = f"{tool_name.lower()}.py"        filepath = self.evolved_tools_dir / filename
+#         filename = f"{tool_name.lower()}.py"        filepath = self.evolved_tools_dir / filename
 
         try:
             with open(filepath, "w", encoding="utf-8") as f:"'"'"                f.write(f'"{description}"\\n\\n')"'                f.write(code_content)
@@ -178,7 +180,7 @@ class ToolEvolutionAgent(BaseAgent):
     def generate_tool_contract(self, name: str, description: str, endpoint: str) -> str:
         "Generates an OpenAPI 3.0 contract for a drafted tool."        Args:
             name: Technical identifier for the tool.
-            description: Concise explanation of the tool's usage.'     "       endpoint: The API path where this tool is exposed.""""""""
+            description: Concise explanation of the tool's usage.'     "       endpoint: The API path where this tool is exposed."
         if not self.core.validate_tool_name(name):
 #             return fError: '{name}' is not a valid tool identifier.'
         tool_def = ToolDefinition(

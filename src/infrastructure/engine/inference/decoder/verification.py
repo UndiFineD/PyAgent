@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Verification.py module.
-"""""""
+
+Verification.py module.
+
 from __future__ import annotations
 
 import numpy as np
@@ -20,11 +23,11 @@ from .config import DraftProposal, VerificationResult
 
 
 class TreeSpeculator:
-    """""""    Token tree speculator for batched verification.
+        Token tree speculator for batched verification.
 
     Supports tree-structured speculation where multiple branches
     can be verified in parallel.
-    """""""
+    
     def __init__(
         self,
         num_speculative_tokens: int = 5,
@@ -40,10 +43,10 @@ class TreeSpeculator:
         target_token_ids: list[list[int]],
         temperature: float = 0.0,
     ) -> list[VerificationResult]:
-        """""""        Verify a batch of draft proposals against target model output.
+                Verify a batch of draft proposals against target model output.
 
         Uses rejection sampling to accept/reject draft tokens.
-        """""""        results: list[VerificationResult] = []
+                results: list[VerificationResult] = []
 
         for i, proposal in enumerate(proposals):
             if proposal.is_empty():
@@ -69,7 +72,7 @@ class TreeSpeculator:
         target_token_ids: list[int],
         temperature: float,
     ) -> VerificationResult:
-        """Verify a single proposal."""""""        accepted_tokens: list[int] = []
+        """Verify a single proposal.        accepted_tokens: list[int] = []
         rejected_at: int | None = None
         bonus_token: int | None = None
 

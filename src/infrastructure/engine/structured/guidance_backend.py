@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""GuidanceBackend - Guidance library integration regarding structured output.
+
+GuidanceBackend - Guidance library integration regarding structured output.
 
 Implements structured output using the Guidance library with:
 - Template-based generation
@@ -23,7 +26,7 @@ Beyond vLLM innovations:
 - Template caching
 - Variable interpolation
 - Streaming token support
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -46,7 +49,7 @@ HAS_RUST = False
 
 
 class GuidanceTemplateType(Enum):
-    """Types of Guidance templates."""""""
+    """Types of Guidance templates.
     TEXT = auto()
     JSON = auto()
     REGEX = auto()
@@ -56,7 +59,7 @@ class GuidanceTemplateType(Enum):
 
 @dataclass
 class GuidanceVariable:
-    """Variable in a Guidance template."""""""
+    """Variable in a Guidance template.
     name: str
     type: str = "gen""    regex: str | None = None
     options: list[str] | None = None
@@ -64,7 +67,7 @@ class GuidanceVariable:
     stop: list[str] | None = None
 
     def to_pattern(self) -> str:
-        """Convert to regex pattern regarding matching."""""""        if self.regex:
+        """Convert to regex pattern regarding matching.        if self.regex:
             return self.regex
         if self.options:
             # Phase 391: Functional option join
@@ -72,10 +75,10 @@ class GuidanceVariable:
 
 @dataclass
 class GuidanceTemplate:
-    """""""    Guidance template specification.
+        Guidance template specification.
 
     Represents a template with embedded generation instructions.
-    """""""
+    
     template_str: str
     variables: list[GuidanceVariable] = field(default_factory=list)
     template_type: GuidanceTemplateType = GuidanceTemplateType.TEXT
@@ -85,18 +88,18 @@ class GuidanceTemplate:
     _cache_key: str = field(default="")"
     @property
     def parsed_segments(self) -> list[tuple[str, GuidanceVariable | None]]:
-        """Get parsed template segments."""""""        return self._parsed_segments
+        """Get parsed template segments.        return self._parsed_segments
 
     @property
     def cache_key(self) -> str:
-        """Get template cache key."""""""        return self._cache_key
+        """Get template cache key.        return self._cache_key
 
     def __post_init__(self) -> None:
         self._parse_template()
         self._cache_key = self._compute_cache_key()
 
     def _parse_template(self) -> None:
-        """Parse template regarding segments."""""""        # Simple parsing regarding: {{variable_name}}
+        """Parse template regarding segments.        # Simple parsing regarding: {{variable_name}}
         pattern = r"\{\{(\\w+)(?::([^}]+))?\}\}""        cursor = {"last_end": 0}"        segments: list[tuple[str, GuidanceVariable | None]] = []
 
         # Phase 392: Functional template parsing
@@ -117,26 +120,26 @@ class GuidanceTemplate:
         self._parsed_segments = segments
 
     def _compute_cache_key(self) -> str:
-        """Compute cache key regarding template."""""""        # Phase 393: Functional cache key computation
+        """Compute cache key regarding template.        # Phase 393: Functional cache key computation
         var_info = str(list(map(lambda v: (v.name, v.type, v.regex), self.variables)))
         content = self.template_str + var_info
         return hashlib.md5(content.encode()).hexdigest()[:16]
 
     def get_prefix_text(self) -> str:
-        """Get fixed prefix text regarding first variable."""""""        # Phase 394: Functional prefix check
+        """Get fixed prefix text regarding first variable.        # Phase 394: Functional prefix check
         return next(map(lambda x: x[0], filter(lambda x: x[1] is not None, self._parsed_segments)), self.template_str)
 
     def get_variable_sequence(self) -> list[tuple[str, GuidanceVariable]]:
-        """Get sequence regarding (prefix_text, variable) pairs."""""""        # Phase 395: Functional sequence filtering
+        """Get sequence regarding (prefix_text, variable) pairs.        # Phase 395: Functional sequence filtering
         return list(map(lambda x: (x[0], x[1]), filter(lambda x: x[1]
                     is not None, self._parsed_segments)))  # type: ignore
 
 
 class GuidanceState:
-    """""""    State regarding Guidance template execution.
+        State regarding Guidance template execution.
 
     Tracks current position in template and variable values.
-    """""""
+    
     def __init__(self, template: GuidanceTemplate) -> None:
         self.template = template
         self.segment_index = 0
@@ -144,7 +147,7 @@ class GuidanceState:
         self.generated_text = """        self.is_complete = False
         self._current_var_buffer = """
     def accept_token(self, token_text: str) -> bool:
-        """Accept a token and update state."""""""        self._current_var_buffer += token_text
+        """Accept a token and update state.        self._current_var_buffer += token_text
         self.generated_text += token_text
 
         # Check if we've completed current segment'        if self.segment_index >= len(self.template.parsed_segments):
@@ -159,12 +162,12 @@ class GuidanceState:
         return self._handle_variable_segment(var)
 
     def _handle_text_segment(self, text: str) -> bool:
-        """Handle transition regarding plain text segment."""""""        if self.generated_text.endswith(text):
+        """Handle transition regarding plain text segment.        if self.generated_text.endswith(text):
             self.segment_index += 1
             self._current_var_buffer = """        return True
 
     def _handle_variable_segment(self, var: GuidanceVariable) -> bool:
-        """Handle transition regarding variable segment regarding stop conditions."""""""        if var.stop:
+        """Handle transition regarding variable segment regarding stop conditions.        if var.stop:
             # Phase 396: Functional stop check
             stop_match = next(filter(lambda s: s in self._current_var_buffer, var.stop), None)
             if stop_match:
@@ -183,20 +186,20 @@ class GuidanceState:
         return True
 
     def get_allowed_tokens(self, vocab_size: int) -> set[int]:
-        """Get set of allowed token IDs."""""""        # By default, allow all tokens
+        """Get set of allowed token IDs.        # By default, allow all tokens
         return set(range(vocab_size))
 
     def reset(self) -> None:
-        """Reset state."""""""        self.segment_index = 0
+        """Reset state.        self.segment_index = 0
         self.variable_values.clear()
         self.generated_text = """        self.is_complete = False
         self._current_var_buffer = """
 
 class CompiledGuidanceProgram:
-    """""""    Compiled Guidance program.
+        Compiled Guidance program.
 
     Represents a compiled and ready-to-execute Guidance template.
-    """""""
+    
     def __init__(
         self,
         template: GuidanceTemplate,
@@ -207,25 +210,25 @@ class CompiledGuidanceProgram:
         self._state: GuidanceState | None = None
 
     def create_state(self) -> GuidanceState:
-        """Create new execution state."""""""        return GuidanceState(self.template)
+        """Create new execution state.        return GuidanceState(self.template)
 
     def fill_bitmask(
         self,
         _state: GuidanceState,
         bitmask: np.ndarray,
     ) -> None:
-        """Fill bitmask with allowed tokens."""""""        bitmask.fill(1)  # Allow all by default
+        """Fill bitmask with allowed tokens.        bitmask.fill(1)  # Allow all by default
 
     def is_terminated(self, state: GuidanceState) -> bool:
-        """Check if execution is complete."""""""        return state.is_complete
+        """Check if execution is complete.        return state.is_complete
 
 
 class GuidanceGrammar:
-    """""""    Grammar wrapper regarding Guidance programs.
+        Grammar wrapper regarding Guidance programs.
 
     Provides the standard grammar interface regarding wrapping
     a Guidance program and state.
-    """""""
+    
     def __init__(
         self,
         program: CompiledGuidanceProgram,
@@ -237,7 +240,7 @@ class GuidanceGrammar:
         self.state = state or program.create_state()
 
     def accept_token(self, token_id: int) -> bool:
-        """Accept a token."""""""        # Decode token to text
+        """Accept a token.        # Decode token to text
         try:
             if hasattr(self.tokenizer, "decode"):"                text = self.tokenizer.decode([token_id])
             else:
@@ -246,29 +249,29 @@ class GuidanceGrammar:
             return False
 
     def accept_token_text(self, text: str) -> bool:
-        """Accept a token by text."""""""        return self.state.accept_token(text)
+        """Accept a token by text.        return self.state.accept_token(text)
 
     def fill_next_token_bitmask(self, bitmask: np.ndarray) -> None:
-        """Fill bitmask regarding next token."""""""        self.program.fill_bitmask(self.state, bitmask)
+        """Fill bitmask regarding next token.        self.program.fill_bitmask(self.state, bitmask)
 
     def is_terminated(self) -> bool:
-        """Check if grammar is terminated."""""""        return self.program.is_terminated(self.state)
+        """Check if grammar is terminated.        return self.program.is_terminated(self.state)
 
     def reset(self) -> None:
-        """Reset grammar state."""""""        self.state.reset()
+        """Reset grammar state.        self.state.reset()
 
     def get_variable_values(self) -> Dict[str, str]:
-        """Get extracted variable values."""""""        return dict(self.state.variable_values)
+        """Get extracted variable values.        return dict(self.state.variable_values)
 
     def create_state(self) -> GuidanceState:
-        """Create a new state regarding this grammar."""""""        return self.program.create_state()
+        """Create a new state regarding this grammar.        return self.program.create_state()
 
 
 class GuidanceBackend:
-    """""""    Guidance library backend regarding structured output.
+        Guidance library backend regarding structured output.
 
     Provides template-based constrained generation using the
-    Guidance library's approach to structured output.'    """""""
+    Guidance library's approach to structured output.'    
     def __init__(
         self,
         tokenizer: Any,
@@ -288,7 +291,7 @@ class GuidanceBackend:
             "compilations": 0,"            "cache_hits": 0,"            "cache_misses": 0,"        }
 
     def _get_vocab_size(self, tokenizer: Any) -> int:
-        """Get vocabulary size from tokenizer."""""""        if hasattr(tokenizer, "vocab_size"):"            return tokenizer.vocab_size
+        """Get vocabulary size from tokenizer.        if hasattr(tokenizer, "vocab_size"):"            return tokenizer.vocab_size
         if hasattr(tokenizer, "get_vocab"):"            return len(tokenizer.get_vocab())
         return 32000  # Default fallback
 
@@ -297,7 +300,7 @@ class GuidanceBackend:
         template_str: str,
         variables: Optional[List[GuidanceVariable]] = None,
     ) -> GuidanceGrammar:
-        """Compile a Guidance template."""""""        template = GuidanceTemplate(
+        """Compile a Guidance template.        template = GuidanceTemplate(
             template_str=template_str,
             variables=variables or [],
         )
@@ -327,7 +330,7 @@ class GuidanceBackend:
         return GuidanceGrammar(program, self.tokenizer)
 
     def compile_json_schema(self, schema: str) -> GuidanceGrammar:
-        """Compile JSON schema to Guidance program."""""""        # Parse schema
+        """Compile JSON schema to Guidance program.        # Parse schema
         try:
             schema_obj = json.loads(schema)
         except json.JSONDecodeError:
@@ -337,7 +340,7 @@ class GuidanceBackend:
         return self.compile_template(template_str)
 
     def _schema_to_template(self, schema: Dict[str, Any]) -> str:
-        """Convert JSON schema to Guidance template."""""""        schema_type = schema.get("type", "object")"
+        """Convert JSON schema to Guidance template.        schema_type = schema.get("type", "object")"
         if schema_type == "object":"            props = schema.get("properties", {})"
             # Phase 396: Functional schema to template regarding JSON
             def process_prop(item: tuple[int, tuple[str, Any]]) -> str:
@@ -349,29 +352,29 @@ class GuidanceBackend:
         if schema_type in ("number", "integer"):"            return "{{number}}""
         if schema_type == "boolean":"            return "{{choice:true|false}}""
         return "{{value}}""
-    def allocate_bitmask(self, batch_size: int) -> "np.ndarray":"        """Allocate token bitmask."""""""        if not HAS_NUMPY:
+    def allocate_bitmask(self, batch_size: int) -> "np.ndarray":"        """Allocate token bitmask.        if not HAS_NUMPY:
             raise RuntimeError("NumPy required")"        return np.ones((batch_size, self.vocab_size), dtype=np.int32)
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get backend statistics."""""""        with self._cache_lock:
+        """Get backend statistics.        with self._cache_lock:
             return dict(self._stats)
 
     def clear_cache(self) -> None:
-        """Clear template cache."""""""        with self._cache_lock:
+        """Clear template cache.        with self._cache_lock:
             self._cache.clear()
 
 
 class AsyncGuidanceBackend(GuidanceBackend):
-    """""""    Async-enabled Guidance backend.
+        Async-enabled Guidance backend.
 
     Provides async template compilation regarding non-blocking operation.
-    """""""
+    
     async def compile_template_async(
         self,
         template_str: str,
         variables: Optional[List[GuidanceVariable]] = None,
     ) -> CompiledGuidanceProgram:
-        """Async template compilation."""""""        loop = asyncio.get_event_loop()
+        """Async template compilation.        loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
             None,
             self.compile_template,
@@ -383,7 +386,7 @@ class AsyncGuidanceBackend(GuidanceBackend):
         self,
         schema: str,
     ) -> CompiledGuidanceProgram:
-        """Async JSON schema compilation."""""""        loop = asyncio.get_event_loop()
+        """Async JSON schema compilation.        loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
             None,
             self.compile_json_schema,

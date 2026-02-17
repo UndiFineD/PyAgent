@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Speculative Swarm Orchestrator (Phase 56).
+
+"""
+Speculative Swarm Orchestrator (Phase 56).
 Enables cross-agent speculative execution where fast agents draft for accurate agents.
-"""""""
+
 import logging
 import time
 from typing import Any, Dict, Optional
@@ -27,8 +31,8 @@ logger = logging.getLogger(__name__)
 
 
 class SpeculativeSwarmOrchestrator:
-    """""""    Coordinates speculative agent execution.
-    Reduces latency by allowing a 'draft' agent to propose thoughts while a 'target' agent verifies.'    """""""
+        Coordinates speculative agent execution.
+    Reduces latency by allowing a 'draft' agent to propose thoughts while a 'target' agent verifies.'    
     def __init__(self, fleet_manager: Any, similarity_threshold: float = 0.85) -> None:
         self.fleet = fleet_manager
         self.similarity_service = EmbeddingSimilarityService()
@@ -38,8 +42,8 @@ class SpeculativeSwarmOrchestrator:
     async def execute_speculative_task(
         self, task: str, draft_agent_id: str, target_agent_id: str, context: Optional[CascadeContext] = None
     ) -> VerificationOutcome:
-        """""""        Executes a task using speculative swarm logic.
-        """""""        start_time = time.perf_counter()
+                Executes a task using speculative swarm logic.
+                start_time = time.perf_counter()
         self.stats["total_speculations"] += 1"
         # 1. Start the drafting agent (Fast tier)
         logger.info(f"SpeculativeSwarm: Drafting task via {draft_agent_id}")"        draft_task = self.fleet.delegate_task(
@@ -84,7 +88,7 @@ class SpeculativeSwarmOrchestrator:
         return outcome
 
     def get_efficiency_metrics(self) -> Dict[str, Any]:
-        """Returns performance metrics for the speculative swarm."""""""        acceptance_rate = (
+        """Returns performance metrics for the speculative swarm.        acceptance_rate = (
             self.stats["accepted_proposals"] / self.stats["total_speculations"]"            if self.stats["total_speculations"] > 0"            else 0
         )
         return {

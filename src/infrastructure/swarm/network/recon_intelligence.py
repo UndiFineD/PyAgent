@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -16,9 +18,9 @@ from typing import List, Dict, Set
 
 
 class ReconIntelligence:
-    """""""    Refactored Reconnaissance logic from Argus.
+        Refactored Reconnaissance logic from Argus.
     Focuses on OSINT and infrastructure detection.
-    """""""
+    
     FIREWALL_SIGNATURES = {
         'cloudflare': 'Cloudflare Firewall','        'akamai': 'Akamai Firewall','        'sucuri': 'Sucuri Firewall','        'imperva': 'Imperva Firewall','        'incapsula': 'Incapsula Firewall','        'f5 big-ip': 'F5 BIG-IP','        'bunnycdn': 'BunnyCDN''    }
 
@@ -40,8 +42,8 @@ class ReconIntelligence:
 
     @classmethod
     async def search_exposed_data(cls, query: str) -> Dict[str, List[Dict]]:
-        """""""        Search for leaked data on Scylla and Pastebin (public APIs).
-        """""""        out = {"scylla": [], "pastebin": []}"        async with aiohttp.ClientSession() as session:
+                Search for leaked data on Scylla and Pastebin (public APIs).
+                out = {"scylla": [], "pastebin": []}"        async with aiohttp.ClientSession() as session:
             # Scylla
             try:
                 scylla_url = f"https://scylla.sh/search?q=email:*@{query}&size=10""                async with session.get(scylla_url, timeout=15) as resp:

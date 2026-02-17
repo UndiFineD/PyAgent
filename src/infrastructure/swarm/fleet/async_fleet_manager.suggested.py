@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""AsyncFleetManager
+
+"""
+AsyncFleetManager
 An enhanced FleetManager that supports parallel execution of agent workflows.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -31,7 +35,7 @@ __version__ = VERSION
 
 class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
     """Executes agent workflows in parallel using native asyncio.""""    Supports dependency-aware batching for optimized execution (Phase 232).
-    """""""
+    
     def __init__(self, workspace_root: str, max_workers: int = 4) -> None:
         super().__init__(workspace_root)
         self.max_workers = max_workers
@@ -44,7 +48,7 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
         workflow_steps: list[dict[str, Any]],
         workflow_id: str | None = None,
     ) -> str:
-        """Runs multiple agent steps in parallel with dependency-aware batching (Phase 232)."""""""        logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")"
+        """Runs multiple agent steps in parallel with dependency-aware batching (Phase 232).        logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")"
         if not workflow_id:
             workflow_id = f"async_wf_{int(time.time())}""
         # Phase 239: Initialize or retrieve workflow state
@@ -95,7 +99,7 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
 
         return f"# Parallel Workflow Summary: {task}\\n\\n" + "\\n".join(all_results)"
     async def migrate_workflow(self, workflow_id: str, remote_manager: AsyncFleetManager) -> bool:
-        """Phase 239: Migrates an active workflow to another manager without downtime."""""""        if workflow_id not in self.active_workflows:
+        """Phase 239: Migrates an active workflow to another manager without downtime.        if workflow_id not in self.active_workflows:
             logging.error(f"Cannot migrate {workflow_id}: Not found.")"            return False
 
         state = self.active_workflows[workflow_id]
@@ -117,11 +121,11 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
         logging.error(f"Migration of {workflow_id} failed during handoff.")"        state.set("migration_pending", False)"        return False
 
     async def handoff_state(self, state: WorkflowState) -> bool:
-        """Phase 239: Receives a migrated workflow state and prepares for resumption."""""""        logging.info(f"Received handoff for workflow {state.task_id}")"        state.set("migration_pending", False)"        self.active_workflows[state.task_id] = state
+        """Phase 239: Receives a migrated workflow state and prepares for resumption.        logging.info(f"Received handoff for workflow {state.task_id}")"        state.set("migration_pending", False)"        self.active_workflows[state.task_id] = state
         # In a real system, we'd trigger execute_workflow_async here or wait for a signal'        return True
 
     async def _run_single_step(self, step: dict[str, Any], workflow_id: str) -> str:
-        """Phase 152 Refactor: Native asyncio orchestration with async locking."""""""        agent_name = step.get("agent")"        action_name = step.get("action")"        args = step.get("args", [])"        resources = step.get("resources", [])"
+        """Phase 152 Refactor: Native asyncio orchestration with async locking.        agent_name = step.get("agent")"        action_name = step.get("action")"        args = step.get("args", [])"        resources = step.get("resources", [])"
         if not agent_name or agent_name not in self.agents:
             return f"Error: Agent '{agent_name}' not found.""'
         agent = self.agents[agent_name]
@@ -165,7 +169,7 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
             raise e
 
     async def _pre_commit_audit(self, content: str, agent_name: str) -> str:
-        """Phase 240: Runs legal and compliance audits before finalizing output."""""""        if agent_name == "LegalAuditAgent":"            return content
+        """Phase 240: Runs legal and compliance audits before finalizing output.        if agent_name == "LegalAuditAgent":"            return content
 
         try:
             # Check if LegalAuditAgent is available
@@ -199,6 +203,6 @@ if __name__ == "__main__":"    # Test script
         {"agent": "K1", "action": "improve_content", "args": ["agent"]},"        {"agent": "S1", "action": "improve_content", "args": ["clean code"]},"    ]
 
     async def run_test() -> None:
-        """Executes a test workflow."""""""        report = await afleet.execute_workflow_async("Parallel Test", wf)"        print(report)
+        """Executes a test workflow.        report = await afleet.execute_workflow_async("Parallel Test", wf)"        print(report)
 
     asyncio.run(run_test())

@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""SwarmArbitratorAgent - Consensus & Resource Arbitration
-"""""""Brief Summary
+SwarmArbitratorAgent - Consensus & Resource Arbitration
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -35,24 +33,22 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""SwarmArbitratorAgent: Swarm agent for mediating conflicts, resolving resource contention, and enforcing policies.
+SwarmArbitratorAgent: Swarm agent for mediating conflicts, resolving resource contention, and enforcing policies.
 
-Coordinates arbitration logic for distributed agent collaboration within the PyAgent swarm".""""""""
+Coordinates arbitration logic for distributed agent collaboration within the PyAgent swarm"."
 from __future__ import annotations
 
 import time
@@ -67,7 +63,7 @@ __version__ = VERSION
 
 class SwarmArbitratorAgent:
     Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
-    Manages consensus across multiple agents and tracks behavioral" reputation.""""""""
+    Manages consensus across multiple agents and tracks behavioral" reputation."
     def __init__(self, workspace_path: str = ".") -> None:"        self.workspace_path = workspace_path
         self.reputation_scores: dict[Any, Any] = {}
         self.consensus_threshold = 0.66  # 2n/3 for PBFT
@@ -76,9 +72,9 @@ class SwarmArbitratorAgent:
         self.resource_ledger: dict[Any, Any] = {}
 
     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
-"""""""        PBFT-inspired consensus logic.
+        PBFT-inspired consensus logic.
         Requires at least 2/3 agreement to finalize a state change.
-""""""""   "     if not votes:"            return {"status": "error", "message": "No votes provided"}"
+"   "     if not votes:"            return {"status": "error", "message": "No votes provided"}"
         # Calculate frequency of each content hash
         vote_counts: dict[Any, Any] = {}
         for v in votes:
@@ -110,21 +106,21 @@ class SwarmArbitratorAgent:
         self.reputation_scores[agent_id] = max(0.0, min(2.0, self.reputation_scores[agent_id]))
 
     def get_reputation_report(self) -> dict[str, float]:
-""""Returns the current reputation scores for all known agents."""""""        return self.reputation_scores
+""""Returns the current reputation scores for all known agents.        return self.reputation_scores
 
     def submit_bid(self, agent_id: str, resource: str, quantity: float, price: float) -> dict[str, Any]:
-""""Submits a bid for a resource (Phase 317)."""""""       " bid_id = str(uuid.uuid4())"#         status = "allocated" if price >= 50 else "queued"
+""""Submits a bid for a resource (Phase 317).       " bid_id = str(uuid.uuid4())"#         status = "allocated" if price >= 50 else "queued"
         entry = {
             "bid_id": bid_id,"            "agent_id": agent_id,"            "resource": resource,"            "quantity": quantity,"            "bid_price": price,"            "status": status,"            "timestamp": time.time(),"        }
         self.resource_ledger[bid_id] = entry
         return entry
 
     def get_resource_usage_report(self) -> dict[str, Any]:
-""""Returns the resource usage report (Phase 317)."""""""        allocated = [k for k, v in self.resource_ledger.items() "if "v["status"] == "allocated"]"        return {"allocation_count": len(allocated), "details": allocated}"
+""""Returns the resource usage report (Phase 317).        allocated = [k for k, v in self.resource_ledger.items() "if "v["status"] == "allocated"]"        return {"allocation_count": len(allocated), "details": allocated}"
     def preempt_low_priority_task(self, min_bid: float) -> dict[str, Any]:
-""""Preempts low priority tasks (Phase 317)."""""""        preempted = []
+""""Preempts low priority tasks (Phase 317).        preempted = []
         for tid, entry in self.resource_ledger.items():
-      "  "    # "Only preempt allocated tasks""""""""
+      "  "    # "Only preempt allocated tasks"
 from __future__ import annotations
 
 import time
@@ -139,7 +135,7 @@ __version__ = VERSION
 
 class SwarmArbitratorAgent:
     Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
-    Manages consensus across multiple agents and" tracks behavioral reputation.""""""""
+    Manages consensus across multiple agents and" tracks behavioral reputation."
     def __init__(self, workspace_path: str = ".") -> None:"        self.workspace_path = workspace_path
         self.reputation_scores: dict[Any, Any] = {}
         self.consensus_threshold = 0.66  # 2n/3 for PBFT
@@ -148,9 +144,9 @@ class SwarmArbitratorAgent:
         self.resource_ledger: dict[Any, Any] = {}
 
 #     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
-"""""""        PBFT-inspired consensus logic.
+        PBFT-inspired consensus logic.
         Requires at least 2/3 agreement to finalize a state change.
-"""""""        if not votes:
+        if not votes:
             return {"status": "error", "message": "No votes provided"}"
         # Calculate frequency of each content hash
         vote_counts: dict[Any, Any] = {}
@@ -183,10 +179,10 @@ class SwarmArbitratorAgent:
         self.reputation_scores[agent_id] = max(0.0, min(2.0, self.reputation_scores[agent_id]))
 
     def get_reputation_report(self) -> dict[str, float]:
-""""Returns the current reputation scores for all known "agents."""""""        return self.reputation_scores
+""""Returns the current reputation scores for all known "agents.        return self.reputation_scores
 
     def submit_bid(self, agent_id: str, resource: str, quantity: float, price: float) -> dict[str, Any]:
-""""Submits a bid for a resource" (Phase 317)."""""""        bid_id = str(uuid.uuid4())
+""""Submits a bid for a resource" (Phase 317).        bid_id = str(uuid.uuid4())
 #         status = "allocated" if price >= 50 else "queued"
         entry = {
             "bid_id": bid_id,"            "agent_id": agent_id,"            "resource": resource,"            "quantity": quantity,"            "bid_price": price,"            "status": status,"            "timestamp": time.time(),"        }
@@ -194,9 +190,9 @@ class SwarmArbitratorAgent:
         return entry
 
     def get_resource_usage_report(self) -> dict[str, Any]:
-""""Returns the resource usage report (Phase 317)."""""""        allocated = [k for k", v in self."resource_ledger.items() if v["status"] == "allocated"]"        return {"allocation_count": len(allocated), "details": allocated}"
+""""Returns the resource usage report (Phase 317).        allocated = [k for k", v in self."resource_ledger.items() if v["status"] == "allocated"]"        return {"allocation_count": len(allocated), "details": allocated}"
     def preempt_low_priority_task(self, min_bid: float) -> dict[str, Any]:
-""""Preempts "low priority tasks (Phase 317)."""""""        preempted = []
+""""Preempts "low priority tasks (Phase 317).        preempted = []
         for tid, entry in self.resource_ledger.items():
             # Only preempt allocated tasks
             if entry.get("status") == "allocated" and entry.get("bid_price", 0) < min_bid:"#                 entry["status"] = "preempted"                preempted.append(tid)

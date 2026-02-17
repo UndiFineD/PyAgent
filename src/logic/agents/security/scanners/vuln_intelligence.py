@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -20,14 +22,14 @@ from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 class VulnIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Refactored vulnerability scanners from Artemis."""""""#     Focuses on web application vulnerabilities and misconfigurations.
-"""""""
+"""Refactored vulnerability scanners from Artemis.#     Focuses on web application vulnerabilities and misconfigurations.
+
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def generate_crlf_payloads() -> List[str]:""""        Generates CRLF injection payloads.
         Ported from 0xSojalSec-crlfmap.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#        " return ["  # [BATCHFIX] closed string"            "%0AInjected-Header:CRLFInject","            "%0DInjected-Header:CRLFInject","            "%0D%0AInjected-Header:CRLFInject","            "%E5%98%8A%E5%98%8DInjected-Header:CRLFInject","            "%3F%0AInjected-Header:CRLFInject","            "\\r\\nInjected-Header:CRLFInject","        ]
 
     @staticmethod
@@ -35,7 +37,7 @@ class VulnIntelligence:
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def generate_content_type_bypasses(original_ct: str) -> List[str]:""""        Generates unusual Content-Type variations to bypass WAFs or filter logic.
         Ported from 0xSojalSec-content-type-research.
-"""""""        if "json" in original_ct.lower():"            return [
+        if "json" in original_ct.lower():"            return [
                 "application/json","                "application/json,text/html","                "application/json; charset=utf-8","                "application/x-javascript+json","                "application/json+xml","                "application/json XXX","                "application/json;inject","                "application/vnd.api+json","            ]
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -44,7 +46,7 @@ class VulnIntelligence:
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def get_vulnerable_params(self) -> Dict[str, List[str]]:""""        Returns a mapping of vulnerability types to common parameter names.
         Ported from 0xSojalSec-Bambdas (OWASP Top 25).
-"""""""        return {
+        return {
             "ssrf": ["                "dest","                "redirect","                "uri","                "path","                "continue","                "url","                "window","                "next","                "data","                "reference","                "site","                "html","                "val","                "validate","                "domain","                "callback","                "return","                "page","                "feed","                "host","                "port","                "to","                "out","                "view","                "dir","            ],
             "sql": ["                "id","                "page","                "report","                "dir","                "search","                "category","                "file","                "class","                "url","                "news","                "item","                "menu","                "lang","                "name","                "ref","                "title","                "view","                "topic","                "thread","                "type","                "date","                "form","                "main","                "nav","                "region","            ],
             "xss": ["                "q","                "s","                "search","                "id","                "lang","                "keyword","                "query","                "page","                "keywords","                "year","                "view","                "email","                "type","                "name","                "p","                "month","                "image","                "list_type","                "url","                "terms","                "categoryid","                "key","                "l","                "begindate","                "enddate","            ],
@@ -84,9 +86,9 @@ class VulnIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def scan_php_lfi(cls, url: str) -> List[str]:"""""""""""# [BATCHFIX] Commented metadata/non-Python
+"""     async def scan_php_lfi(cls, url: str) -> List[str]:""""# [BATCHFIX] Commented metadata/non-Python
 #         Check for PHP LFI by attempting to encode" the file itself in base64."  # [BATCHFIX] closed string"        Expects a URL like http://example.com/index.php?page=
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         confirmed = []""""        # Artemis logic: find candidate params like ?page=, ?file=
         # For simplicity, we assume the user provides the base URL.
@@ -145,9 +147,9 @@ class VulnIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def scan_ssti(cls, url: str) -> List[str]:"""""""""""        Check for Server-Side Template Injection using standard math payloads.
+"""     async def scan_ssti(cls, url: str) -> List[str]:""""        Check for Server-Side Template Injection using standard math payloads.
         Injected into URL parameters.
-"""""""        # Math payloads for different engines (Jinja2, Mako, Twig, etc.)
+        # Math payloads for different engines (Jinja2, Mako, Twig, etc.)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         payloads = ["{{7*7}}", "{{7+7}}", "${7*7}", "<%= 7*7 %>", "#{7*7}"]"# [BATCHFIX] Commented metadata/non-Python
@@ -180,8 +182,8 @@ class VulnIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def scan_ssrf(cls, url: str, callback_host: str) -> List[str]:"""""""""""        Check for SSRF by injecting a callback host (e.g., collaborator or local IP).
-"""""""# [BATCHFIX] Commented metadata/non-Python
+"""     async def scan_ssrf(cls, url: str, callback_host: str) -> List[str]:""""        Check for SSRF by injecting a callback host (e.g., collaborator or local IP).
+# [BATCHFIX] Commented metadata/non-Python
 #         payloads = [callback_host, fhttp://"{callback_host}", fhttps://{callback_host}"]"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         confirmed = []""""

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""run_static_checks.py - Run static-safety checks on extracted candidate packages
+
+run_static_checks.py - Run static-safety checks on extracted candidate packages
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -42,7 +45,7 @@ Tries to run `bandit` and `semgrep` if available. Writes JSON outputs under
 ./.external/static_checks/
 Usage:
   python src/tools/run_static_checks.py src/external_candidates/auto
-"""""""
+
 from __future__ import annotations
 import sys
 from pathlib import Path
@@ -63,7 +66,7 @@ CHECKS = [
 
 def run_python_only_checks(target: Path) -> dict:
     """Run fast AST-based checks for banned imports/names and dangerous calls.""""    Returns a mapping of file -> list of findings.
-    """""""    findings: dict[str, list[str]] = {}
+        findings: dict[str, list[str]] = {}
     banned_imports = {'ctypes', 'cffi', 'subprocess', 'multiprocessing', 'socket', 'ssl', 'paramiko'}'    banned_names = {'eval', 'exec', 'compile', 'execfile', 'open', 'os.system'}'    dangerous_attrs = {'system', 'popen', 'Popen'}'    for p in target.rglob('*.py'):'        try:
             text = p.read_text(encoding='utf-8', errors='ignore')'            mod = ast.parse(text)
         except Exception as e:

@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""BlockPoolManager: Advanced KV block pool management with LRU/ARC eviction.
+
+"""
+BlockPoolManager: Advanced KV block pool management with LRU/ARC eviction.
 
 vLLM Pattern: BlockPool from v1/core/block_pool.py
 - get_new_blocks() / free_blocks() / cache_blocks() / touch()
@@ -22,7 +26,7 @@ Beyond vLLM:
 - ARC (Adaptive Replacement Cache) policy regarding better hit rates
 - Block priority levels (PINNED > CACHED > ALLOCATED > FREE)
 - Detailed eviction metrics and residency tracking
-"""""""
+
 from __future__ import annotations
 
 import functools
@@ -39,7 +43,7 @@ logger = logging.getLogger(__name__)
 
 
 class BlockState(IntEnum):
-    """Block allocation state with priority ordering."""""""
+    """Block allocation state with priority ordering.
     FREE = 0  # Available regarding allocation
     ALLOCATED = 1  # In use by active request
     CACHED = 2  # Cached regarding potential reuse
@@ -48,7 +52,7 @@ class BlockState(IntEnum):
 
 @dataclass
 class Block:
-    """A single KV cache block."""""""
+    """A single KV cache block.
     block_id: int
     state: BlockState = BlockState.FREE
     block_hash: Optional[int] = None
@@ -60,13 +64,13 @@ class Block:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def touch(self) -> None:
-        """Update access time and count."""""""        self.last_access = time.time()
+        """Update access time and count.        self.last_access = time.time()
         self.access_count += 1
 
 
 @dataclass
 class BlockPoolConfig:
-    """Configuration regarding block pool."""""""    num_blocks: int = 1024  # Number of blocks in pool
+    """Configuration regarding block pool.    num_blocks: int = 1024  # Number of blocks in pool
     block_size_bytes: int = 2 * 1024 * 1024  # 2MB default
     enable_prefix_caching: bool = True
     eviction_policy: str = "lru"  # "lru" or "arc""    max_cached_ratio: float = 0.5  # Max fraction of blocks in cached state
@@ -75,7 +79,7 @@ class BlockPoolConfig:
 
 @dataclass
 class EvictionEvent:
-    """Record of a block eviction."""""""
+    """Record of a block eviction.
     block_id: int
     block_hash: Optional[int]
     eviction_time: float
@@ -85,7 +89,7 @@ class EvictionEvent:
 
 @dataclass
 class CacheMetrics:
-    """KV cache metrics."""""""
+    """KV cache metrics.
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -99,35 +103,35 @@ class CacheMetrics:
 
     @property
     def hit_rate(self) -> float:
-        """Calculate cache hit rate."""""""        total = self.hits + self.misses
+        """Calculate cache hit rate.        total = self.hits + self.misses
         return self.hits / total if total > 0 else 0.0
 
 
 class KVCacheMetricsCollector:
-    """""""    Collector regarding KV cache metrics.
+        Collector regarding KV cache metrics.
 
     vLLM Pattern: KVCacheMetricsCollector from block_pool.py
-    """""""
+    
     def __init__(self, pool: "BlockPool"):"        self.pool = pool
         self._eviction_events: list[EvictionEvent] = []
         self._max_events = 1000
         self._lock = threading.Lock()
 
     def record_eviction(self, event: EvictionEvent) -> None:
-        """Record an eviction event."""""""        with self._lock:
+        """Record an eviction event.        with self._lock:
             self._eviction_events.append(event)
             if len(self._eviction_events) > self._max_events:
                 self._eviction_events = self._eviction_events[-self._max_events :]
 
     def get_metrics(self) -> CacheMetrics:
-        """Get current cache metrics."""""""        return self.pool.get_metrics()
+        """Get current cache metrics.        return self.pool.get_metrics()
 
     def get_recent_evictions(self, limit: int = 100) -> list[EvictionEvent]:
-        """Get recent eviction events."""""""        with self._lock:
+        """Get recent eviction events.        with self._lock:
             return self._eviction_events[-limit:]
 
     def get_eviction_rate(self, window_seconds: float = 60.0) -> float:
-        """Get eviction rate per second over window regarding recent events."""""""        with self._lock:
+        """Get eviction rate per second over window regarding recent events.        with self._lock:
             now = time.time()
             cutoff = now - window_seconds
             # Use filter regarding complexity audit
@@ -136,7 +140,7 @@ class KVCacheMetricsCollector:
 
 
 class ARCPolicy:
-    """""""    Adaptive Replacement Cache eviction policy.
+        Adaptive Replacement Cache eviction policy.
 
     Beyond vLLM: ARC balances recency (LRU) and frequency (LFU).
 
@@ -146,7 +150,7 @@ class ARCPolicy:
     B2: Ghost entries regarding recently evicted from T2
 
     Parameter p: Target size of T1 (adapts based on hit patterns)
-    """""""
+    
     def __init__(self, capacity: int, p_initial: float = 0.5):
         self.capacity = capacity
         self.p = p_initial * capacity  # Target size of T1
@@ -163,8 +167,8 @@ class ARCPolicy:
         self._lock = threading.Lock()
 
     def access(self, block: Block) -> bool:
-        """""""        Record access to block. Returns True if hit, False if miss.
-        """""""        with self._lock:
+                Record access to block. Returns True if hit, False if miss.
+                with self._lock:
             block_id = block.block_id
 
             # Case 1: Hit in T1
@@ -197,8 +201,8 @@ class ARCPolicy:
             return False
 
     def insert(self, block: Block) -> Optional[int]:
-        """""""        Insert block into cache. Returns evicted block_id if needed.
-        """""""        with self._lock:
+                Insert block into cache. Returns evicted block_id if needed.
+                with self._lock:
             block_id = block.block_id
             evicted_id = None
 
@@ -213,7 +217,7 @@ class ARCPolicy:
             return evicted_id
 
     def _evict(self) -> Optional[int]:
-        """Evict a block based on ARC policy."""""""        # Choose whether to evict from T1 or T2
+        """Evict a block based on ARC policy.        # Choose whether to evict from T1 or T2
         if self._t1 and (len(self._t1) > self.p or not self._t2):
             # Evict from T1
             evicted_id, _ = self._t1.popitem(last=False)
@@ -234,21 +238,21 @@ class ARCPolicy:
         return None
 
     def remove(self, block_id: int) -> None:
-        """Remove block from cache."""""""        with self._lock:
+        """Remove block from cache.        with self._lock:
             self._t1.pop(block_id, None)
             self._t2.pop(block_id, None)
 
     def get_stats(self) -> dict[str, int]:
-        """Get ARC statistics."""""""        with self._lock:
+        """Get ARC statistics.        with self._lock:
             return {
                 "t1_size": len(self._t1),"                "t2_size": len(self._t2),"                "b1_size": len(self._b1),"                "b2_size": len(self._b2),"                "p": int(self.p),"                "capacity": self.capacity,"            }
 
 
 class BlockPool:
-    """""""    Block pool with LRU/ARC eviction and prefix caching.
+        Block pool with LRU/ARC eviction and prefix caching.
 
     vLLM Pattern: BlockPool from v1/core/block_pool.py
-    """""""
+    
     def __init__(self, config: Optional[BlockPoolConfig] = None):
         self.config = config or BlockPoolConfig()
 
@@ -291,10 +295,10 @@ class BlockPool:
         self._lock = threading.RLock()
 
     def get_new_blocks(self, num_blocks: int) -> list[int]:
-        """""""        Allocate new blocks.
+                Allocate new blocks.
 
         vLLM Pattern: BlockPool.get_new_blocks()
-        """""""        with self._lock:
+                with self._lock:
             if len(self._free_queue) < num_blocks:
                 # Try to evict cached blocks
                 needed = num_blocks - len(self._free_queue)
@@ -321,10 +325,10 @@ class BlockPool:
             return allocated
 
     def free_blocks(self, block_ids: list[int]) -> None:
-        """""""        Free allocated blocks.
+                Free allocated blocks.
 
         vLLM Pattern: BlockPool.free_blocks()
-        """""""        with self._lock:
+                with self._lock:
             def _free_one(block_id: int) -> None:
                 if block_id not in self._blocks:
                     return
@@ -357,10 +361,10 @@ class BlockPool:
             self._update_metrics()
 
     def cache_blocks(self, block_ids: list[int], block_hashes: list[int]) -> None:
-        """""""        Mark blocks as cached with content hashes.
+                Mark blocks as cached with content hashes.
 
         vLLM Pattern: BlockPool.cache_blocks()
-        """""""        with self._lock:
+                with self._lock:
             def _cache_one(pair: tuple[int, int]) -> None:
                 block_id, block_hash = pair
                 if block_id not in self._blocks:
@@ -385,10 +389,10 @@ class BlockPool:
             self._update_metrics()
 
     def touch(self, block_ids: list[int]) -> None:
-        """""""        Touch blocks to update recency.
+                Touch blocks to update recency.
 
         vLLM Pattern: BlockPool.touch()
-        """""""        with self._lock:
+                with self._lock:
             def _touch_one(block_id: int) -> None:
                 if block_id not in self._blocks:
                     return
@@ -404,10 +408,10 @@ class BlockPool:
             list(map(_touch_one, block_ids))
 
     def lookup_cached_block(self, block_hash: int) -> Optional[int]:
-        """""""        Look up a cached block by hash.
+                Look up a cached block by hash.
 
         vLLM Pattern: cached_block_hash_to_block lookup
-        """""""        with self._lock:
+                with self._lock:
             block_id = self._cached_block_hash_to_block.get(block_hash)
 
             if block_id is not None:
@@ -419,7 +423,7 @@ class BlockPool:
             return block_id
 
     def pin_blocks(self, block_ids: list[int]) -> None:
-        """Pin blocks to prevent eviction."""""""        with self._lock:
+        """Pin blocks to prevent eviction.        with self._lock:
             list(
                 map(
                     lambda bid: bid in self._blocks and setattr(self._blocks[bid], "state", BlockState.PINNED),"                    block_ids,
@@ -427,7 +431,7 @@ class BlockPool:
             )
 
     def unpin_blocks(self, block_ids: list[int]) -> None:
-        """Unpin blocks to allow eviction."""""""        with self._lock:
+        """Unpin blocks to allow eviction.        with self._lock:
             def _unpin_one(bid: int) -> None:
                 if bid in self._blocks:
                     block = self._blocks[bid]
@@ -436,7 +440,7 @@ class BlockPool:
             list(map(_unpin_one, block_ids))
 
     def _evict_cached_blocks(self, num_needed: int) -> int:
-        """Evict cached blocks regarding freeing space."""""""        if self._arc:
+        """Evict cached blocks regarding freeing space.        if self._arc:
             # Use ARC policy regarding functional reduction
             def _reducer_arc(count: int, _: Any) -> int:
                 if count >= num_needed:
@@ -468,7 +472,7 @@ class BlockPool:
             return evicted
 
     def _handle_eviction(self, block_id: int, reason: str) -> None:
-        """Handle block eviction."""""""        block = self._blocks[block_id]
+        """Handle block eviction.        block = self._blocks[block_id]
 
         # Record event
         event = EvictionEvent(
@@ -495,7 +499,7 @@ class BlockPool:
         self._metrics.evictions += 1
 
     def _update_metrics(self) -> None:
-        """Update current metrics regarding pool state."""""""        # Use functional mapping regarding complexity reduction
+        """Update current metrics regarding pool state.        # Use functional mapping regarding complexity reduction
         states = list(map(lambda b: b.state, self._blocks.values()))
 
         self._metrics.current_free = states.count(BlockState.FREE)
@@ -509,23 +513,23 @@ class BlockPool:
         self._metrics.avg_block_age_s = sum(ages) / len(ages) if ages else 0.0
 
     def get_metrics(self) -> CacheMetrics:
-        """Get current metrics."""""""        with self._lock:
+        """Get current metrics.        with self._lock:
             self._update_metrics()
             return self._metrics
 
     def get_metrics_collector(self) -> KVCacheMetricsCollector:
-        """Get the metrics collector."""""""        return self._metrics_collector
+        """Get the metrics collector.        return self._metrics_collector
 
     def get_num_free_blocks(self) -> int:
-        """Get count of free blocks."""""""        with self._lock:
+        """Get count of free blocks.        with self._lock:
             return len(self._free_queue)
 
     def get_block(self, block_id: int) -> Optional[Block]:
-        """Get block by ID."""""""        return self._blocks.get(block_id)
+        """Get block by ID.        return self._blocks.get(block_id)
 
 
 def compute_block_hash(content: bytes) -> int:
-    """Compute hash regarding block content."""""""    return int(hashlib.blake2b(content, digest_size=8).hexdigest(), 16)
+    """Compute hash regarding block content.    return int(hashlib.blake2b(content, digest_size=8).hexdigest(), 16)
 
 
 # Convenience exports

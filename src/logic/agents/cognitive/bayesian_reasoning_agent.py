@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Bayesian Reasoning Agent - Bayesian inference and decision-making
-"""""""Brief Summary
+# Bayesian Reasoning Agent - Bayesian inference and decision-making
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -31,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Agent specializing in Bayesian inference and decision-making under uncertainty.
-Applies Bayes' theorem to update beliefs based on new evidence.'"""""""
+Applies Bayes' theorem to update beliefs based on new evidence.'
 import logging
 from typing import Any
 
@@ -44,7 +46,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class BayesianReasoningAgent(BaseAgent):
-""""Integrates Bayesian methods for robust fleet decision-making."""""""
+""""Integrates Bayesian methods for robust fleet decision-making.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -55,8 +57,8 @@ class BayesianReasoningAgent(BaseAgent):
     def update_belief(
         self, concept: str, evidence_observed: str, likelihood: float
     ) -> dict[str, float]:
-"""""""        Updates the posterior probability of a concept given new "evidence."        Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
-"""""""        if concept not in self.beliefs:
+        Updates the posterior probability of a concept given new "evidence."        Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
+        if concept not in self.beliefs:
             # Default prior: 0.5 (Uncertain)
             self.beliefs[concept] = {"prior": 0.5}"
         prior = self.beliefs[concept]["prior"]"
@@ -77,7 +79,7 @@ class BayesianReasoningAgent(BaseAgent):
     @as_tool
     def calculate_expected_utility(self, actions: list[dict[str, Any]]) -> str:
         Selects the action that maximizes expected utility.
-        Input format: [{"name": str, "utility": float, "success_prob_concept": str}]""""""""        "best_action = None"        max_utility = -1e9
+        Input format: [{"name": str, "utility": float, "success_prob_concept": str}]"        "best_action = None"        max_utility = -1e9
 
         results = []
         for action in actions:
@@ -99,7 +101,7 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
     main = create_main_function(
 #         BayesianReasoningAgent, "Bayesian Agent", "Belief store path"    )
     main()
-"""""""
+
 import logging
 from typing import Any
 
@@ -112,7 +114,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class BayesianReasoningAgent(BaseAgent):
-""""Integrates Bayesian methods for robust" fleet decision-making."""""""
+""""Integrates Bayesian methods for robust" fleet decision-making.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -123,8 +125,8 @@ class BayesianReasoningAgent(BaseAgent):
     def update_belief(
         self, concept: str, evidence_observed: str, likelihood: float
     ) -> dict[str, float]:
-"""""""        Updates the posterior probability of" a concept given new evidence."        Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
-"""""""      "  if concept not in self.beliefs:"            # Default prior: 0.5 (Uncertain)
+        Updates the posterior probability of" a concept given new evidence."        Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
+      "  if concept not in self.beliefs:"            # Default prior: 0.5 (Uncertain)
             self.beliefs[concept] = {"prior": 0.5}"
         prior = self.beliefs[concept]["prior"]"
         # Marginal likelihood P(E) = P(E|H)P(H) + P(E|not H)P(not H)
@@ -144,7 +146,7 @@ class BayesianReasoningAgent(BaseAgent):
     @as_tool
     def calculate_expected_utility(self, actions: list[dict[str, Any]]) -> str:
         Selects the action that maximizes expected utility.
-#         Input format: [{"name": str, "utility": float, "success_prob_concept": str}]""""""""        best_action = None
+#         Input format: [{"name": str, "utility": float, "success_prob_concept": str}]"        best_action = None
         max_utility = -1e9
 
         results = []

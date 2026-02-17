@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py"""""""""""
+
+"""
+Auto-extracted class from agent_backend.py""""
 from __future__ import annotations
 
 import threading
@@ -31,7 +35,7 @@ class RequestThrottler:
         if throttler.allow_request("github-models"):"            make_request()
         else:
             wait_or_queue()
-    """""""
+    
     def __init__(
         self,
         requests_per_second: float = 10.0,
@@ -41,7 +45,7 @@ class RequestThrottler:
         Args:
             requests_per_second: Sustained request rate.
             burst_size: Maximum burst size.
-        """""""        self.requests_per_second = requests_per_second
+                self.requests_per_second = requests_per_second
         self.burst_size = burst_size
         self._buckets: dict[str, float] = {}  # backend -> tokens
         self._last_update: dict[str, float] = {}
@@ -54,7 +58,7 @@ class RequestThrottler:
 
         Returns:
             bool: True if request is allowed.
-        """""""        with self._lock:
+                with self._lock:
             now = time.time()
 
             # Initialize bucket if needed
@@ -85,7 +89,7 @@ class RequestThrottler:
 
         Returns:
             bool: True if token acquired.
-        """""""        start = time.time()
+                start = time.time()
 
         while time.time() - start < timeout:
             if self.allow_request(backend):
@@ -103,7 +107,7 @@ class RequestThrottler:
 
         Returns:
             Dict: Throttle status.
-        """""""        with self._lock:
+                with self._lock:
             tokens = self._buckets.get(backend, self.burst_size)
             return {
                 "available_tokens": tokens,"                "max_tokens": self.burst_size,"                "requests_per_second": self.requests_per_second,"            }

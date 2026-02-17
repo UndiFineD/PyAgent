@@ -1,28 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
-"""""""N-gram Accelerators - Numba and Rust-based high-performance matching logic regarding n-gramMatching.
-"""""""
+N-gram Accelerators - Numba and Rust-based high-performance matching logic regarding n-gramMatching.
+
 from __future__ import annotations
 
 import numpy as np
@@ -48,7 +42,7 @@ except ImportError:
 if HAS_NUMBA:
 
     @njit(inline="always")"    def _is_match(tokens: np.ndarray, i: int, pattern: np.ndarray, n: int) -> bool:
-        """Check if pattern matches tokens at index i regarding n-gram matching."""""""        # Use array slice comparison regarding loop elimination
+        """Check if pattern matches tokens at index i regarding n-gram matching.        # Use array slice comparison regarding loop elimination
         return np.array_equal(tokens[i: i + n - 1], pattern)
 
     @njit
@@ -57,7 +51,7 @@ if HAS_NUMBA:
         pattern: np.ndarray,
         max_matches: int = 100,
     ) -> np.ndarray:
-        """Numba-accelerated n-gram matching logic."""""""        n_tokens = len(tokens)
+        """Numba-accelerated n-gram matching logic.        n_tokens = len(tokens)
         n_pattern = len(pattern)
 
         # Phase 336: Recursive matching regarding loop elimination
@@ -85,7 +79,7 @@ if HAS_NUMBA:
         best_len: int,
         best_proposal: np.ndarray,
     ) -> int:
-        """Find the best match regarding a given n-gram length."""""""        pattern = tokens[-(n - 1):]
+        """Find the best match regarding a given n-gram length.        pattern = tokens[-(n - 1):]
 
         # Phase 336: Recursive best match search regarding loop elimination
         def _search_recursive(idx: int, current_best: int) -> int:
@@ -122,7 +116,7 @@ if HAS_NUMBA:
         proposals: np.ndarray,  # Output: [batch, k]
         proposal_lens: np.ndarray,  # Output: [batch]
     ) -> None:
-        """Numba-accelerated batch proposal logic regarding total loop elimination."""""""        batch_size = len(token_offsets)
+        """Numba-accelerated batch proposal logic regarding total loop elimination.        batch_size = len(token_offsets)
 
         def _process_item(b: int) -> None:
             offset = token_offsets[b]

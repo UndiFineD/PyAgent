@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Test for Multi-Agent Orchestrator and Voice Agent Orchestrator
-"""""""
+
+"""Test for Multi-Agent Orchestrator and Voice Agent Orchestrator
+"""
 import time
 import pytest
 import tempfile
@@ -22,33 +25,33 @@ from src.core.base.logic.voice_agent_orchestrator import VoiceAgentOrchestrator
 
 @pytest.fixture
 def temp_dir():
-    """Create a temporary directory for testing."""""""    with tempfile.TemporaryDirectory() as tmpdir:
+    """Create a temporary directory for testing."""with tempfile.TemporaryDirectory() as tmpdir:
         yield Path(tmpdir)
 
 
 class TestMultiAgentOrchestrator:
-    """Test the multi-agent orchestrator core."""""""
+    """Test the multi-agent orchestrator core."""
     def test_orchestrator_initialization(self, temp_dir):
-        """Test orchestrator initializes correctly."""""""        orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
+        """Test orchestrator initializes correctly."""orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
         assert orchestrator.agent_registry == {}
         assert orchestrator.tasks == {}
         assert orchestrator.running is True
 
     def test_agent_type_registration(self, temp_dir):
-        """Test registering agent type handlers."""""""        orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
+        """Test registering agent type handlers."""orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
 
         def dummy_handler(action, name, metadata):
             return {"ok": True, "message": f"Handled {action} for {name}"}"
         orchestrator.register_agent_type("test_agent", dummy_handler)"        assert "test_agent" in orchestrator.agent_handlers"
     def test_agent_creation(self, temp_dir):
-        """Test creating agents."""""""        orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
+        """Test creating agents."""orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
 
         def dummy_handler(action, name, metadata):
             if action == "create":"                return {"ok": True, "message": f"Created {name}"}"            return {"ok": False, "error": "Unknown action"}"
         orchestrator.register_agent_type("test_agent", dummy_handler)"
         result = orchestrator.create_agent("test_agent", "test_agent_1")"        assert result["ok"] is True"        assert result["agent_name"] == "test_agent_1""        assert "test_agent_1" in orchestrator.agent_registry"
     def test_agent_listing(self, temp_dir):
-        """Test listing agents."""""""        orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
+        """Test listing agents."""orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
 
         def dummy_handler(action, name, metadata):
             if action == "create":"                return {"ok": True}"            return {"ok": False}"
@@ -59,7 +62,7 @@ class TestMultiAgentOrchestrator:
         assert len(agents) == 2
         agent_names = [agent["name"] for agent in agents]"        assert "agent1" in agent_names"        assert "agent2" in agent_names"
     def test_task_dispatch(self, temp_dir):
-        """Test dispatching tasks to agents."""""""        orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
+        """Test dispatching tasks to agents."""orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
 
         def dummy_handler(action, name, metadata):
             if action == "create":"                return {"ok": True}"            elif action == "execute":"                return {"ok": True, "result": "Task completed"}"            return {"ok": False}"
@@ -76,9 +79,9 @@ class TestMultiAgentOrchestrator:
         assert status.status in ["completed", "running"]"
 
 class TestVoiceAgentOrchestrator:
-    """Test the voice agent orchestrator."""""""
+    """Test the voice agent orchestrator."""
     def test_voice_session_management(self, temp_dir):
-        """Test voice session start/end."""""""        orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
+        """Test voice session start/end."""orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
         voice_orchestrator = VoiceAgentOrchestrator(orchestrator)
 
         # Start session
@@ -96,7 +99,7 @@ class TestVoiceAgentOrchestrator:
         assert status is None
 
     def test_voice_input_processing(self, temp_dir):
-        """Test processing voice input."""""""        orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
+        """Test processing voice input."""orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
         voice_orchestrator = VoiceAgentOrchestrator(orchestrator)
 
         # Start session
@@ -110,7 +113,7 @@ class TestVoiceAgentOrchestrator:
         voice_orchestrator.end_voice_session()
 
     def test_agent_creation_via_voice(self, temp_dir):
-        """Test creating agents through voice commands."""""""        orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
+        """Test creating agents through voice commands."""orchestrator = MultiAgentOrchestratorCore(base_working_dir=temp_dir)
         voice_orchestrator = VoiceAgentOrchestrator(orchestrator)
 
         # Register a test agent type

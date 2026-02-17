@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ComplianceAgent - Monitoring and enforcing data privacy & compliance
+
+"""
+ComplianceAgent - Monitoring and enforcing data privacy & compliance
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -27,7 +31,7 @@ Make PII patterns configurable and extensible, support async/streaming scans for
 FILE CONTENT SUMMARY:
 ComplianceAgent: Agent for monitoring, enforcing, and reporting on regulatory and organizational compliance.
 Automates compliance checks and remediation workflows.
-"""""""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -43,9 +47,9 @@ __version__ = VERSION
 
 
 class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  # pylint: disable=too-many-ancestors
-    """""""    Phase 57: Data Privacy & Compliance.
+        Phase 57: Data Privacy & Compliance.
     Scans memory shards for PII and sensitive data patterns.
-    """""""
+    
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self._pii_patterns = {
@@ -58,7 +62,7 @@ class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  
 
 # [AUTO-FIXED F821]     @as_tool
     def scan_shard(self, shard_data: str) -> dict:
-        """Scans a memory shard for compliance issues (Phase 57). Enforces privacy and rate limiting."""""""        if not self._privacy_enforced:
+        """Scans a memory shard for compliance issues (Phase 57). Enforces privacy and rate limiting.        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for compliance scanning.")"        import re
         findings = []
         for name, pattern in self._pii_patterns.items():

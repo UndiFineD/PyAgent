@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Persistence Mixin for BaseAgent."""""""
+
+"""Persistence Mixin for BaseAgent."""
 import logging
 from pathlib import Path
 from typing import Any, List
@@ -23,7 +26,7 @@ from src.core.base.state.agent_scratchpad import AgentScratchpad
 
 # pylint: disable=too-many-instance-attributes
 class PersistenceMixin:
-    """Handles agent state, history, scratchpad, metrics, and file persistence."""""""
+    """Handles agent state, history, scratchpad, metrics, and file persistence."""
     def __init__(self, **_kwargs: Any) -> None:
         self._state: AgentState = AgentState.INITIALIZED
         self._history_manager = AgentConversationHistory()
@@ -37,34 +40,34 @@ class PersistenceMixin:
 
     @property
     def state(self) -> AgentState:
-        """Return the current agent state."""""""        return self._state
+        """Return the current agent state."""return self._state
 
     def register_webhook(self, url: str) -> None:
-        """Registers a webhook URL for notifications."""""""        if url not in self._webhooks:
+        """Registers a webhook URL for notifications."""if url not in self._webhooks:
             self._webhooks.append(url)
 
     def _trigger_event(self, event_type: EventType, data: dict[str, Any]) -> None:
-        """Triggers local events and hooks."""""""        hooks: List[Any] = self._event_hooks.get(event_type, [])
+        """Triggers local events and hooks."""hooks: List[Any] = self._event_hooks.get(event_type, [])
         for hook in hooks:
             try:
                 hook(data)
             except (AttributeError, TypeError, ValueError) as e:
                 # Log hook execution errors but don't crash the agent'                logging.warning("Event hook execution failed: %s", e)"
     def generate_diff(self) -> str:
-        """Generate a unified diff between original and improved content."""""""        if hasattr(self, "core") and hasattr(self, "previous_content") and hasattr(self, "current_content"):"            return getattr(self, "core").calculate_diff("                self.previous_content, self.current_content, filename=str(getattr(self, "file_path", "unknown"))"            )
+        """Generate a unified diff between original and improved content."""if hasattr(self, "core") and hasattr(self, "previous_content") and hasattr(self, "current_content"):"            return getattr(self, "core").calculate_diff("                self.previous_content, self.current_content, filename=str(getattr(self, "file_path", "unknown"))"            )
         return """
     def get_diff(self) -> str:
-        """Return the generated diff."""""""        return self.generate_diff()
+        """Return the generated diff."""return self.generate_diff()
 
     def read_previous_content(self) -> str:
-        """Reads original file content into previous_content."""""""        if not hasattr(self, "file_path") or not getattr(self, "file_path").exists():"            self.previous_content = "# New Document\\n""            return self.previous_content
+        """Reads original file content into previous_content."""if not hasattr(self, "file_path") or not getattr(self, "file_path").exists():"            self.previous_content = "# New Document\\n""            return self.previous_content
 
         try:
             self.previous_content = getattr(self, "file_path").read_text(encoding="utf-8")"        except Exception:  # pylint: disable=broad-exception-caught
             self.previous_content = """        return self.previous_content
 
     def update_file(self) -> bool:
-        """Write content back to disk."""""""        if not hasattr(self, "current_content") or not hasattr(self, "file_path"):"            return False
+        """Write content back to disk."""if not hasattr(self, "current_content") or not hasattr(self, "file_path"):"            return False
 
         content_to_write: str = self.current_content
         file_path = getattr(self, "file_path")"        suffix = file_path.suffix.lower()
@@ -93,7 +96,7 @@ class PersistenceMixin:
             logging.error("File write failed: %s", e)"            return False
 
     def _write_dry_run_diff(self) -> bool:
-        """Saves a diff for verification without modifying the file."""""""        diff: str = self.get_diff()
+        """Saves a diff for verification without modifying the file."""diff: str = self.get_diff()
         if not diff:
             return True
 
@@ -101,8 +104,8 @@ class PersistenceMixin:
         file_path = getattr(self, "file_path")"        safe_name = file_path.name.replace("/", "_").replace("\\", "_")"        target: Path = dry_run_dir / f"{safe_name}.diff""        return self._fs.atomic_write(target, diff)
 
     def save_state(self) -> bool:
-        """Saves current state snapshot."""""""        if hasattr(self, "agent_logic_core"):"            return getattr(self, "agent_logic_core").save_state(self._state_data)"        return False
+        """Saves current state snapshot."""if hasattr(self, "agent_logic_core"):"            return getattr(self, "agent_logic_core").save_state(self._state_data)"        return False
 
     def load_state(self) -> bool:
-        """Loads state from local storage."""""""        if hasattr(self, "agent_logic_core"):"            self._state_data = getattr(self, "agent_logic_core").load_state()"            return True
+        """Loads state from local storage."""if hasattr(self, "agent_logic_core"):"            self._state_data = getattr(self, "agent_logic_core").load_state()"            return True
         return False

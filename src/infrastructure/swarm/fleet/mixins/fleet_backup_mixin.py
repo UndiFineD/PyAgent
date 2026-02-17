@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FleetBackupMixin
+
+"""
+FleetBackupMixin
 Mixin: fleet_backup_mixin
 Implements Pillar 8/9 hardening: Shard RAID-10 Distributed Backup.
-"""""""
+
 from __future__ import annotations
 import asyncio
 import logging
@@ -24,15 +28,15 @@ logger = logging.getLogger(__name__)
 
 
 class FleetBackupMixin:
-    """""""    Handles distribution and retrieval of state shards across the swarm.
-    """""""
+        Handles distribution and retrieval of state shards across the swarm.
+    
     backup_node: Any = None
     voyager_discovery: Any = None
     voyager_transport: Any = None
 
     async def harden_agent_state(self, agent_id: str, state_data: Dict[str, Any]) -> bool:
-        """""""        Takes agent state, shards it, and distributes parts to the fleet nodes.
-        """""""        # 1. Create RAID-10 Shards
+                Takes agent state, shards it, and distributes parts to the fleet nodes.
+                # 1. Create RAID-10 Shards
         shards = self.backup_node.create_shards(state_data)
 
         # 2. Identify available peer nodes
@@ -57,8 +61,8 @@ class FleetBackupMixin:
         logger.info(f"FleetBackup: Distributed {success_count}/{len(shards)} shards across {len(peers)} peers.")"        return success_count > 0
 
     async def recover_agent_state(self, state_hash: str) -> Dict[str, Any] | None:
-        """""""        Polls the swarm for shards and reconstructs agent state.
-        """""""        peers = self.voyager_discovery.get_active_peers()
+                Polls the swarm for shards and reconstructs agent state.
+                peers = self.voyager_discovery.get_active_peers()
         shard_pool = self.backup_node.get_local_shards_for_hash(state_hash)
 
         if peers:
@@ -75,8 +79,8 @@ class FleetBackupMixin:
         return self.backup_node.reconstruct_state(shard_pool)
 
     async def run_resilience_audit(self):
-        """""""        BG Loop: Verifies that all local state has sufficient replicas in the swarm.
-        """""""        logger.info("FleetResilience: Starting Shard RAID-10 Audit...")"        # 1. Gather all unique local agent IDs
+                BG Loop: Verifies that all local state has sufficient replicas in the swarm.
+                logger.info("FleetResilience: Starting Shard RAID-10 Audit...")"        # 1. Gather all unique local agent IDs
         agent_ids = [a for a in getattr(self, "agents", {}).keys()]"        workspace_root = getattr(self, "workspace_root", None)"        if not workspace_root:
             logger.warning("FleetResilience: workspace_root not available, skipping audit.")"            return
 

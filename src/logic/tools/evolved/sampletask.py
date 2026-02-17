@@ -1,19 +1,22 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Sample Task Module - Automated GUI Click/Type Task
 
-Brief Summary
-DATE: 2026-02-12
+"""
+Sample Task Module - Automated GUI Click/Type Task
+
+# DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Import the module and call sample_automated_task() directly, or let
@@ -43,7 +46,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 A sample automated GUI task.
-"""""""
+
 from __future__ import annotations
 
 import pyautogui
@@ -56,5 +59,5 @@ __version__ = VERSION
 
 @as_tool(priority=5)
 def sample_automated_task() -> None:
-    """Automated task from sample recording."""""""    pyautogui.click(100, 200)
+    """Automated task from sample recording.    pyautogui.click(100, 200)
     pyautogui.press("a")"    pyautogui.press("enter")"    pyautogui.click(150, 250)

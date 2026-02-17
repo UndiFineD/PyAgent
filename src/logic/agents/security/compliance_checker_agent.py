@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Compliance Checker Agent - Validate changelog entries for security and legal compliance
 
-Brief Summary
-DATE: 2026-02-13
+"""
+Compliance Checker Agent - Validate changelog entries for security and legal compliance
+
+# DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Import and construct: from src.core.something import ComplianceChecker (or directly from file); checker = ComplianceChecker()
@@ -30,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_changes.py
-"""""""
+
 from __future__ import annotations
 
 
@@ -51,7 +54,7 @@ class ComplianceChecker:
     Example:
         >>> checker=ComplianceChecker()
         >>> results=checker.check_all(entries)
-    """""""
+    
 
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]"    LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]"
     def __init__(self):
@@ -84,7 +87,7 @@ class ComplianceChecker:
 
         Returns:
             ComplianceResult for security category.
-        """""""        self._security_issues = []
+                self._security_issues = []
         self._security_recommendations = []
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.SECURITY_KEYWORDS):
@@ -102,7 +105,7 @@ class ComplianceChecker:
 
         Returns:
             ComplianceResult for legal category.
-        """""""        self._legal_issues = []
+                self._legal_issues = []
         self._legal_recommendations = []
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.LEGAL_KEYWORDS):
@@ -119,7 +122,7 @@ class ComplianceChecker:
 
         Returns:
             List of ComplianceResult for all categories.
-        """""""        return [
+                return [
             self.check_security_compliance(entries),
             self.check_legal_compliance(entries),
         ]

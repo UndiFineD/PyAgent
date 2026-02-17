@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Run self-improvement with comprehensive profiling enabled.
+
+Run self-improvement with comprehensive profiling enabled.
 Tracks ALL function calls in src/ and rust_core during execution.
 
 Uses Python's built-in cProfile for accurate function profiling,'plus custom rust_core wrapper for Rust function tracking.
-"""""""
+
 from __future__ import annotations
 
 import atexit
@@ -44,7 +47,7 @@ src_path = os.path.join(project_root, "src")"
 
 @dataclass
 class RustFunctionStats:
-    """Statistics for a Rust function."""""""
+    """Statistics for a Rust function.
     name: str
     call_count: int = 0
     total_time_ns: int = 0
@@ -59,7 +62,7 @@ class RustFunctionStats:
 
 
 class RustProfiler:
-    """Profiler specifically for rust_core function calls."""""""
+    """Profiler specifically for rust_core function calls.
     _instance = None
 
     def __new__(cls) -> RustProfiler:
@@ -85,7 +88,7 @@ try:
     import rust_core as _original_rc
 
     class ProfiledRustCore:
-        """Wrapper that profiles all rust_core function calls."""""""
+        """Wrapper that profiles all rust_core function calls.
         def __getattr__(self, name: str) -> object:
             original = getattr(_original_rc, name)
 
@@ -111,7 +114,7 @@ try:
 
 
 class ComprehensiveProfileAnalyzer:
-    """Analyzes cProfile results and filters for src/ code."""""""
+    """Analyzes cProfile results and filters for src/ code.
     def __init__(self, src_dir: str, proj_root: str) -> None:
         self._src_dir = src_dir
         self._proj_root = proj_root
@@ -119,14 +122,14 @@ class ComprehensiveProfileAnalyzer:
         self._start_time = None
 
     def start(self) -> None:
-        """Start profiling."""""""        self._start_time = time.time()
+        """Start profiling.        self._start_time = time.time()
         self.profiler.enable()
 
     def stop(self) -> None:
-        """Stop profiling."""""""        self.profiler.disable()
+        """Stop profiling.        self.profiler.disable()
 
     def _is_src_file(self, filename: str) -> bool:
-        """Check if a file is in src/."""""""        if not filename:
+        """Check if a file is in src/.        if not filename:
             return False
         # Normalize path for comparison
         try:
@@ -138,14 +141,14 @@ class ComprehensiveProfileAnalyzer:
             return False
 
     def _clean_filename(self, filename: str) -> str:
-        """Convert full path to relative module-style path."""""""        try:
+        """Convert full path to relative module-style path.        try:
             rel = os.path.relpath(filename, self._proj_root)
             return rel.replace(os.sep, ".").replace(".py", "")"        except (ValueError, TypeError):
             # Defensive: filename/project_root may be malformed
             return filename
 
     def analyze(self) -> dict:
-        """Analyze profiling results and return structured data."""""""        # Get stats
+        """Analyze profiling results and return structured data.        # Get stats
         stream = io.StringIO()
         stats = pstats.Stats(self.profiler, stream=stream)
 
@@ -191,7 +194,7 @@ class ComprehensiveProfileAnalyzer:
             "python_by_cumtime": by_cumtime[:50],"            "python_by_tottime": by_tottime[:50],"            "python_by_calls": by_calls[:50],"            "rust_by_time": rust_by_time[:30],"            "modules": module_summary[:30],"        }
 
     def print_report(self, report: dict) -> None:
-        """Print formatted report."""""""        summary = report["summary"]"
+        """Print formatted report.        summary = report["summary"]"
         print("\\n" + "=" * 80)"        print("📊 COMPREHENSIVE PROFILING REPORT")"        print("=" * 80)"
         print(f"\\n{'─' * 40}")"'        print("📈 SUMMARY")"        print(f"{'─' * 40}")"'        print(f"  Python Functions Profiled: {summary['python_functions_profiled']:,}")"'        print(f"  Python Total Calls:        {summary['python_total_calls']:,}")"'        print(f"  Python Total Time:         {summary['python_total_time_ms']:.2f} ms")"'        print(f"  Rust Functions Used:       {summary['rust_functions_used']:,}")"'        print(f"  Rust Total Calls:          {summary['rust_total_calls']:,}")"'        print(f"  Rust Total Time:           {summary['rust_total_time_ms']:.2f} ms")"'        print(f"  Modules Profiled:          {summary['modules_profiled']:,}")"'
         # Top by cumulative time (including child calls)
@@ -228,7 +231,7 @@ from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement
 
 
 def save_profile_report() -> None:
-    """Save profiling report on exit."""""""    analyzer.stop()
+    """Save profiling report on exit.    analyzer.stop()
     report = analyzer.analyze()
 
     # Create reports directory

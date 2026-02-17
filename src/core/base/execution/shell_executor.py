@@ -1,17 +1,20 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Shell execution core for agents.
+
+"""Shell execution core for agents.
 Handles subprocess spawning, environment propagation, and interaction recording.
-"""""""
+"""
 from __future__ import annotations
 
 import json
@@ -27,9 +30,9 @@ __version__ = VERSION
 
 
 class ShellExecutor:
-    """""""    Safely executes shell commands and records outcomes.
+    """Safely executes shell commands and records outcomes.
     Standardized Facade over ShellCore (Phase 317).
-    """""""
+    """
     _core: Optional[ShellCore] = None
 
     @classmethod
@@ -47,7 +50,7 @@ class ShellExecutor:
         recorder: Optional[Any] = None,
         timeout: int = 120,
     ) -> subprocess.CompletedProcess[str]:
-        """Phase 266: Asynchronous subprocess execution via ShellCore."""""""        _ = agent_name
+        """Phase 266: Asynchronous subprocess execution via ShellCore."""_ = agent_name
         core: ShellCore = ShellExecutor._get_core()
 
         env: Dict[str, str] = {}
@@ -77,7 +80,7 @@ class ShellExecutor:
         timeout: int = 120,
         max_retries: int = 1,
     ) -> subprocess.CompletedProcess[str]:
-        """Run a command via core synchronous execution."""""""        _ = agent_name
+        """Run a command via core synchronous execution."""_ = agent_name
         core: ShellCore = ShellExecutor._get_core()
 
         env: Dict[str, str] = os.environ.copy()

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Remote neural synapse.py module.
-"""""""# Phase 319: Multi-Cloud Teleportation (Remote Neural Synapse)
+
+"""
+Remote neural synapse.py module.
+# Phase 319: Multi-Cloud Teleportation (Remote Neural Synapse)
 
 import asyncio
 from typing import Any, Dict, List, Optional
@@ -26,8 +30,8 @@ logger = StructuredLogger(__name__)
 
 
 class RemoteNeuralSynapse:
-    """""""    Manages the 'synaptic' firing of tasks and agents to remote peers.'    Implements the transport layer for Voyager Phase 1.1 using ZMQ.
-    """""""
+        Manages the 'synaptic' firing of tasks and agents to remote peers.'    Implements the transport layer for Voyager Phase 1.1 using ZMQ.
+    
     def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None) -> None:
         self.fleet_manager = fleet_manager
         self.engine = TeleportationEngine()
@@ -37,12 +41,12 @@ class RemoteNeuralSynapse:
         self._server_task: Optional[asyncio.Task] = None
 
     async def start(self) -> None:
-        """Starts the transport server to receive remote synaptic fires."""""""        if self._server_task:
+        """Starts the transport server to receive remote synaptic fires.        if self._server_task:
             return
         self._server_task = asyncio.create_task(self.transport.start_server(self._handle_incoming_synapse))
 
     async def stop(self) -> None:
-        """Stops the transport server."""""""        self.transport.stop()
+        """Stops the transport server.        self.transport.stop()
         if self._server_task:
             self._server_task.cancel()
             try:
@@ -52,7 +56,7 @@ class RemoteNeuralSynapse:
             self._server_task = None
 
     async def broadcast(self, message: Dict[str, Any]) -> None:
-        """Broadcasts a message to all discovered peers."""""""        if not self.discovery_node:
+        """Broadcasts a message to all discovered peers.        if not self.discovery_node:
             return
 
         peers = self.discovery_node.get_peers()
@@ -63,14 +67,14 @@ class RemoteNeuralSynapse:
             await asyncio.gather(*tasks, return_exceptions=True)
 
     async def send_to_peer(self, ip: str, port: int, message: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Sends a message to a specific peer."""""""        try:
+        """Sends a message to a specific peer.        try:
             return await self.transport.send_to_peer(ip, port, message)
         except Exception as e:
             logger.error(f"Synapse: Failed to send to {ip}:{port} - {e}")"            return None
 
     async def _handle_incoming_synapse(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        """""""        Processes incoming teleported agents or task requests.
-        """""""        msg_type = message.get("type", "unknown")"        logger.info(f"Synapse: Incoming {msg_type} from {message.get('sender_id', 'unknown')}")"'
+                Processes incoming teleported agents or task requests.
+                msg_type = message.get("type", "unknown")"        logger.info(f"Synapse: Incoming {msg_type} from {message.get('sender_id', 'unknown')}")"'
         if msg_type == "teleport":"            encoded_blob: Any | None = message.get("agent_blob")"            if encoded_blob:
                 blob: bytes = self.engine.decode_from_transport(encoded_blob)
                 state: Dict[str, Any] = self.engine.restore_agent_state(blob)
@@ -101,7 +105,7 @@ class RemoteNeuralSynapse:
                 logger.error(f"Synapse: Memory query failed: {e}")"                return {"status": "error", "message": str(e)}"
         return {"status": "error", "message": "Unsupported synapse type."}"
     async def teleport_agent_to_peer(self, agent: Any, peer_address: str, transport_port: int) -> bool:
-        """""""        Transmits an agent's neural state to a remote peer via ZMQ.'        """""""        blob: bytes = self.engine.capture_agent_state(agent)
+                Transmits an agent's neural state to a remote peer via ZMQ.'                blob: bytes = self.engine.capture_agent_state(agent)
         payload = {
             "type": "teleport","            "agent_blob": self.engine.encode_for_transport(blob),"            "sender_id": self.fleet_manager.fleet_id if hasattr(self.fleet_manager, "fleet_id") else "unknown","        }
 
@@ -112,9 +116,9 @@ class RemoteNeuralSynapse:
         logger.error(f"Synapse: Teleportation failed or unconfirmed: {response}")"        return False
 
     async def teleport_to_peer_name(self, agent: Any, peer_name: str) -> bool:
-        """""""        Phase 319: Bridges mDNS discovery with ZMQ transport.
+                Phase 319: Bridges mDNS discovery with ZMQ transport.
         Resolves peer name to address automatically.
-        """""""        if not self.discovery_node:
+                if not self.discovery_node:
             logger.error("Synapse: Cannot teleport by name - discovery_node not initialized.")"            return False
 
         target = self.discovery_node.resolve_synapse_address(peer_name)
@@ -125,6 +129,6 @@ class RemoteNeuralSynapse:
         return await self.teleport_agent_to_peer(agent, peer_ip, peer_port)
 
     async def remote_invoke(self, thought_pattern: str, target_peer: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """""""        Executes a 'Remote Neural Synapse' - sending a specific reasoning task to another node.'        """""""        # Logic to send a task and wait for a result
+                Executes a 'Remote Neural Synapse' - sending a specific reasoning task to another node.'                # Logic to send a task and wait for a result
         logger.info(f"Synapse: Remote invocation triggered on {target_peer.get('name')}")"'        # Placeholder for actual result retrieval
         return {"status": "dispatched", "task": thought_pattern[:20]}"

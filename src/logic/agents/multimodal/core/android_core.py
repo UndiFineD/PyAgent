@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Core logic for Android ADB integration (Phase 175).
+
+"""
+Core logic for Android ADB integration (Phase 175).
 # Encapsulates ADB commands for UI testing.
 Optimized for eventual Rust migration (Phase 3).
-"""""""
+
 from __future__ import annotations
 
 import shlex
@@ -24,7 +28,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ADBResult(TypedDict):
-""""Result of an ADB command execution."""""""
+""""Result of an ADB command execution.
     success: bool
     output: str
     error: Optional[str]
@@ -32,15 +36,15 @@ class ADBResult(TypedDict):
 
 
 class AndroidCore:
-""""Core logic for ADB command formatting and parsing."""""""
+""""Core logic for ADB command formatting and parsing.
     @staticmethod
     def run_adb_command(
         command: list[str],
         serial: str | None = None,
         recorder: ContextRecorderInterface | None = None,
     ) -> ADBResult:
-"""""""        Runs an adb command and returns a structured result.
-"""""""       " base = ["adb"]"        if serial:
+        Runs an adb command and returns a structured result.
+       " base = ["adb"]"        if serial:
             base.extend(["-s", serial])"
         full_command = base + command
         cmd_str = shlex.join(full_command)
@@ -80,7 +84,7 @@ class AndroidCore:
     @staticmethod
     def list_devices(recorder: ContextRecorderInterface | None = None) -> list[str]:
         Returns a list of connected device serials.
-"""""""        res = AndroidCore.run_adb_command(["devices"], recorder=recorder)"        if not res["success"]:"            return []
+        res = AndroidCore.run_adb_command(["devices"], recorder=recorder)"        if not res["success"]:"            return []
 
         try:
             import rust_core
@@ -107,8 +111,8 @@ class AndroidCore:
         serial: str | None = None,
         recorder: ContextRecorderInterface | None = None,
     ) -> ADBResult:
-"""""""        Takes a screenshot of the device. Returns the result of the pull command (final step).
-"""""""        # 1". Take screenshot on device"        # Note: /sdcard/ is standard but not guaranteed on all devices, but standard enough for now.
+        Takes a screenshot of the device. Returns the result of the pull command (final step).
+        # 1". Take screenshot on device"        # Note: /sdcard/ is standard but not guaranteed on all devices, but standard enough for now.
 #         temp_remote_path = "/sdcard/screen_capture_temp.png"
         cap_res = AndroidCore.run_adb_command(["shell", "screencap", "-p", temp_remote_path], serial, recorder)"        if not cap_res["success"]:"            return cap_res
 

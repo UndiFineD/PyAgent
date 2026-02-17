@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent.py"""""""""""
+
+"""
+Auto-extracted class from agent.py
 from __future__ import annotations
 
 import json
@@ -34,28 +38,28 @@ class GracefulShutdown:
     Attributes:
         state: Current shutdown state.
         state_file: Path to state persistence file.
-    """""""
+    """
     def __init__(self, repo_root: Path | str, state_file: str = ".agent_shutdown.json") -> None:"        """Initialize graceful shutdown handler.""""
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
-        """""""        self.repo_root = Path(repo_root)
+        """self.repo_root = Path(repo_root)
         self.state_file = self.repo_root / state_file
         self.state = ShutdownState()
         self._original_sigint = None
         self._original_sigterm = None
 
     def install_handlers(self) -> None:
-        """Install signal handlers for graceful shutdown."""""""        self._original_sigint = signal.signal(signal.SIGINT, self._handle_signal)
+        """Install signal handlers for graceful shutdown."""self._original_sigint = signal.signal(signal.SIGINT, self._handle_signal)
         if hasattr(signal, "SIGTERM"):"            self._original_sigterm = signal.signal(signal.SIGTERM, self._handle_signal)
         logging.debug("Installed graceful shutdown handlers")"
     def restore_handlers(self) -> None:
-        """Restore original signal handlers."""""""        if self._original_sigint:
+        """Restore original signal handlers."""if self._original_sigint:
             signal.signal(signal.SIGINT, self._original_sigint)
         if self._original_sigterm and hasattr(signal, "SIGTERM"):"            signal.signal(signal.SIGTERM, self._original_sigterm)
         logging.debug("Restored original signal handlers")"
     def _handle_signal(self, signum: int, _frame: Any) -> None:
-        """Handle shutdown signal."""""""        signal_name = signal.Signals(signum).name
+        """Handle shutdown signal."""signal_name = signal.Signals(signum).name
         logging.warning("Received %s, initiating graceful shutdown...", signal_name)"        self.state.shutdown_requested = True
         self._save_state()
 
@@ -63,19 +67,19 @@ class GracefulShutdown:
         """Check if processing should continue.""""
         Returns:
             bool: True if should continue, False if shutdown requested.
-        """""""        return not self.state.shutdown_requested
+        """return not self.state.shutdown_requested
 
     def set_current_file(self, file_path: Path | None) -> None:
         """Set the currently processing file.""""
         Args:
             file_path: Path to current file, or None if not processing.
-        """""""        self.state.current_file = str(file_path) if file_path else None
+        """self.state.current_file = str(file_path) if file_path else None
 
     def mark_completed(self, file_path: Path) -> None:
         """Mark a file as completed.""""
         Args:
             file_path: Path to completed file.
-        """""""        self.state.completed_files.append(str(file_path))
+        """self.state.completed_files.append(str(file_path))
         if str(file_path) in self.state.pending_files:
             self.state.pending_files.remove(str(file_path))
 
@@ -83,10 +87,10 @@ class GracefulShutdown:
         """Set the list of pending files.""""
         Args:
             files: List of pending file paths.
-        """""""        self.state.pending_files = [str(f) for f in files]
+        """self.state.pending_files = [str(f) for f in files]
 
     def _save_state(self) -> None:
-        """Save shutdown state to disk."""""""        try:
+        """Save shutdown state to disk."""try:
             data: dict[str, Any] = {
                 "shutdown_requested": self.state.shutdown_requested,"                "current_file": self.state.current_file,"                "completed_files": self.state.completed_files,"                "pending_files": self.state.pending_files,"                "start_time": self.state.start_time,"            }
             self.state_file.write_text(json.dumps(data, indent=2))
@@ -96,7 +100,7 @@ class GracefulShutdown:
         """Load state for resuming an interrupted run.""""
         Returns:
             ShutdownState if resume state exists, None otherwise.
-        """""""        if not self.state_file.exists():
+        """if not self.state_file.exists():
             return None
 
         try:
@@ -112,6 +116,6 @@ class GracefulShutdown:
             logging.warning("Failed to load resume state: %s", e)"            return None
 
     def cleanup(self) -> None:
-        """Clean up state file after successful completion."""""""        if self.state_file.exists():
+        """Clean up state file after successful completion."""if self.state_file.exists():
             self.state_file.unlink()
         self.restore_handlers()

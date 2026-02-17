@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""High-performance native vLLM engine for PyAgent's 'Own AI'.'Optimized for local inference and future trillion-parameter context handling.
-"""""""
+
+High-performance native vLLM engine for PyAgent's 'Own AI'.'Optimized for local inference and future trillion-parameter context handling.
+
 from __future__ import annotations
 
 import logging
@@ -31,8 +34,8 @@ except ImportError:
 
 
 class VllmNativeEngine:
-    """""""    Manages a local vLLM instance using the library directly.
-    Preferred for 'Own AI' where local hardware is sufficient.'    """""""
+        Manages a local vLLM instance using the library directly.
+    Preferred for 'Own AI' where local hardware is sufficient.'    
     _instance: VllmNativeEngine | None = None
     _llm: Any | None = None
 
@@ -47,12 +50,12 @@ class VllmNativeEngine:
         self.enabled = HAS_VLLM
 
     @classmethod
-    def get_instance(cls: type["VllmNativeEngine"], **kwargs: Any) -> 'VllmNativeEngine':"'        """Get the singleton instance of the native engine."""""""        if cls._instance is None:
+    def get_instance(cls: type["VllmNativeEngine"], **kwargs: Any) -> 'VllmNativeEngine':"'        """Get the singleton instance of the native engine.        if cls._instance is None:
             cls._instance = VllmNativeEngine(**kwargs)
         return cls._instance
 
     def _init_llm(self) -> bool:
-        """Lazily initialize the vLLM engine to save VRAM until needed."""""""        if not self.enabled:
+        """Lazily initialize the vLLM engine to save VRAM until needed.        if not self.enabled:
             return False
 
         if self._llm is None:
@@ -80,7 +83,7 @@ class VllmNativeEngine:
                 return False
         return True
 
-    def _format_prompt(self, prompt: str, system_prompt: str = "") -> str:"        """Format the prompt with system prompt if provided."""""""        if system_prompt:
+    def _format_prompt(self, prompt: str, system_prompt: str = "") -> str:"        """Format the prompt with system prompt if provided.        if system_prompt:
             return f"{system_prompt}\\n\\nUser: {prompt}\\n\\nAssistant:""        return prompt
 
     def _build_sampling_params(
@@ -90,7 +93,7 @@ class VllmNativeEngine:
         guided_json: Optional[dict] = None,
         guided_regex: Optional[str] = None,
         guided_choice: Optional[list] = None,
-    ) -> "SamplingParams":"        """Build sampling parameters with optional guided decoding."""""""        sampling_kwargs = {
+    ) -> "SamplingParams":"        """Build sampling parameters with optional guided decoding.        sampling_kwargs = {
             "temperature": temperature,"            "max_tokens": max_tokens,"            "top_p": 0.95,"        }
 
         if guided_json is not None:
@@ -100,12 +103,12 @@ class VllmNativeEngine:
         return SamplingParams(**sampling_kwargs)
 
     def _build_generate_kwargs(self, lora_request: Optional[Any] = None) -> dict[str, Any]:
-        """Build generate kwargs with optional LoRA request."""""""        generate_kwargs = {}
+        """Build generate kwargs with optional LoRA request.        generate_kwargs = {}
         if lora_request is not None:
             generate_kwargs["lora_request"] = lora_request"        return generate_kwargs
 
     def _extract_generated_text(self, outputs: list) -> str:
-        """Extract the generated text from vLLM outputs."""""""        if outputs:
+        """Extract the generated text from vLLM outputs.        if outputs:
             return outputs[0].outputs[0].text
         return """
     def generate(
@@ -118,7 +121,7 @@ class VllmNativeEngine:
         guided_regex: Optional[str] = None,
         guided_choice: Optional[list] = None,
     ) -> str:
-        """""""        Generates text from the local model.
+                Generates text from the local model.
 
         Args:
             prompt: Input prompt
@@ -132,7 +135,7 @@ class VllmNativeEngine:
 
         Returns:
             Generated text
-        """""""        if not self._init_llm():
+                if not self._init_llm():
             return """
         try:
             full_prompt = self._format_prompt(prompt, system_prompt)
@@ -152,7 +155,7 @@ class VllmNativeEngine:
         system_prompt: str = "","        temperature: float = 0.3,
         max_tokens: int = 1024,
     ) -> str:
-        """Generate JSON output constrained by schema."""""""        json_system = "You must respond with valid JSON only.""        if system_prompt:
+        """Generate JSON output constrained by schema.        json_system = "You must respond with valid JSON only.""        if system_prompt:
             json_system = f"{system_prompt}\\n\\n{json_system}""
         return self.generate(
             prompt,
@@ -167,7 +170,7 @@ class VllmNativeEngine:
         prompt: str,
         choices: list[str],
         system_prompt: str = "","    ) -> str:
-        """Generate output constrained to specific choices."""""""        return self.generate(
+        """Generate output constrained to specific choices.        return self.generate(
             prompt,
             system_prompt=system_prompt,
             temperature=0.0,
@@ -181,7 +184,7 @@ class VllmNativeEngine:
         pattern: str,
         system_prompt: str = "","        max_tokens: int = 256,
     ) -> str:
-        """Generate output matching a regex pattern."""""""        return self.generate(
+        """Generate output matching a regex pattern.        return self.generate(
             prompt,
             system_prompt=system_prompt,
             temperature=0.5,
@@ -190,7 +193,7 @@ class VllmNativeEngine:
         )
 
     def shutdown(self) -> None:
-        """Clears the vLLM instance and frees VRAM (Phase 108)."""""""        if self._llm:
+        """Clears the vLLM instance and frees VRAM (Phase 108).        if self._llm:
             # vLLM doesn't have a simple 'off' but we can delete reference'            # and try to trigger GC or rely on process exit.
             # pylint: disable=import-outside-toplevel
             import gc

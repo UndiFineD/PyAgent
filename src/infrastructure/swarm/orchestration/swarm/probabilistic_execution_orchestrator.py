@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Probabilistic execution orchestrator.py module.
-"""""""
+
+"""
+Probabilistic execution orchestrator.py module.
+
 
 from __future__ import annotations
 
@@ -28,14 +32,14 @@ if TYPE_CHECKING:
 
 
 class ProbabilisticExecutionOrchestrator:
-    """""""    Implements 'Wave-function collapse' execution for Phase 28.'    Runs multiple parallel task variations and selects the most stable/optimal outcome.
-    """""""
+        Implements 'Wave-function collapse' execution for Phase 28.'    Runs multiple parallel task variations and selects the most stable/optimal outcome.
+    
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
     def execute_with_confidence(self, task: str, variations: int = 3) -> dict[str, Any]:
-        """""""        Executes a task multiple times and collapses the results into a single high-confidence output.
-        """""""        logging.info(f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations.")"'
+                Executes a task multiple times and collapses the results into a single high-confidence output.
+                logging.info(f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations.")"'
         results = []
         import asyncio
 
@@ -69,9 +73,9 @@ class ProbabilisticExecutionOrchestrator:
             "status": "success","            "final_result": collapsed_result,"            "variations_run": len(results),"            "confidence": confidence,"        }
 
     async def _collapse(self, task: str, results: list[Any]) -> Any:
-        """""""        Selects the most optimal result from the set of variations.
+                Selects the most optimal result from the set of variations.
         If RealityAnchorAgent is available, it uses it for verification.
-        """""""        # Attempt to use RealityAnchorAgent for grounding if it exists in the fleet
+                # Attempt to use RealityAnchorAgent for grounding if it exists in the fleet
         if hasattr(self.fleet, "reality_anchor") and self.fleet.reality_anchor:"            best_result = None
             highest_score = -1.0
 
@@ -102,8 +106,8 @@ class ProbabilisticExecutionOrchestrator:
         return results[0]
 
     def _calculate_confidence(self, results: list[Any], winner: Any) -> float:
-        """""""        Calculates confidence score based on similarity between variations.
-        """""""        if not results:
+                Calculates confidence score based on similarity between variations.
+                if not results:
             return 0.0
         # Percentage of results that match the winner string-wise
         matches = sum(1 for r in results if str(r) == str(winner))

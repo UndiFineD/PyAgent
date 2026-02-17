@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Ruff Complexity Parser:
+
+Ruff Complexity Parser:
 Parses Ruff JSON output to extract and rank cyclomatic complexity violations.
 Ported from temp/check_complexity.py for re-use in the PyAgent analysis suite.
-"""""""
+
 import argparse
 import json
 import os
@@ -21,7 +24,7 @@ import re
 
 
 def parse_ruff_complexity(json_file: str, threshold: int = 25):
-    """Reads ruff_output.json and prints ranked complexity issues."""""""    if not os.path.exists(json_file):
+    """Reads ruff_output.json and prints ranked complexity issues.    if not os.path.exists(json_file):
         print(f"Error: {json_file} not found")"        return
 
     try:

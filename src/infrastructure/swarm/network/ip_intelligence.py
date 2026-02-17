@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -22,9 +24,9 @@ logger = logging.getLogger(__name__)
 
 
 class IPIntelligence:
-    """""""    Asynchronous IP Intelligence gathering using RDAP and Cymru Whois.
+        Asynchronous IP Intelligence gathering using RDAP and Cymru Whois.
     Refactored from 0xSojalSec-netscan.
-    """""""
+    
     RIR_APIS = [
         "https://rdap.arin.net/registry/ip/","        "https://rdap.db.ripe.net/ip/","        "https://rdap.apnic.net/ip/","        "https://rdap.lacnic.net/rdap/ip/","        "https://rdap.afrinic.net/rdap/ip/""    ]
 
@@ -37,8 +39,8 @@ class IPIntelligence:
         "103.21.244.0/22", "103.22.200.0/22", "103.31.4.0/22", "141.101.64.0/18","        "108.162.192.0/18", "190.93.240.0/20", "188.114.96.0/20", "197.234.240.0/22","        "198.41.128.0/17", "162.158.0.0/15", "104.16.0.0/13", "104.24.0.0/14","        "172.64.0.0/13", "131.0.72.0/22""    ]
 
     def is_cloudflare(self, ip: str) -> bool:
-        """""""        Checks if an IP address belongs to Cloudflare's public ranges.'        Ported from 0xSojalSec-CloudFail.
-        """""""        import ipaddress
+                Checks if an IP address belongs to Cloudflare's public ranges.'        Ported from 0xSojalSec-CloudFail.
+                import ipaddress
         try:
             ip_obj = ipaddress.ip_address(ip)
             for network in self.CLOUDFLARE_V4:
@@ -57,8 +59,8 @@ class IPIntelligence:
             await self.session.close()
 
     async def get_asn_info(self, ip: str) -> Optional[Dict[str, str]]:
-        """""""        Query whois.cymru.com for ASN information.
-        """""""        async with self.semaphore:
+                Query whois.cymru.com for ASN information.
+                async with self.semaphore:
             try:
                 # Open raw socket connection to port 43
                 reader, writer = await asyncio.wait_for(
@@ -86,8 +88,8 @@ class IPIntelligence:
             return None
 
     async def get_rdap_info(self, ip: str) -> Dict[str, Any]:
-        """""""        Query Regional Internet Registries (RIRs) via RDAP.
-        """""""        if not self.session:
+                Query Regional Internet Registries (RIRs) via RDAP.
+                if not self.session:
             # If not using context manager, perform local session (inefficient for bulk)
             async with aiohttp.ClientSession() as session:
                 return await self._query_rirs(session, ip)

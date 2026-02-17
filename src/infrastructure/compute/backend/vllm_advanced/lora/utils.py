@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Utilities for LoRA adapter management.
-"""""""
+Utilities for LoRA adapter management.
+
 import json
 import logging
 from pathlib import Path
@@ -34,7 +36,7 @@ def create_lora_request(
     adapter_id: int,
     path: str,
 ) -> Optional[Any]:
-    """Create a LoRARequest directly."""""""    if not HAS_LORA:
+    """Create a LoRARequest directly.    if not HAS_LORA:
         return None
 
     return LoRARequest(
@@ -47,8 +49,8 @@ def create_lora_request(
 def discover_adapters(
     directory: Union[str, Path],
     pattern: str = "adapter_config.json",") -> List[Dict[str, Any]]:
-    """""""    Discover LoRA adapters in a directory.
-    """""""    directory = Path(directory)
+        Discover LoRA adapters in a directory.
+        directory = Path(directory)
     adapters = []
 
     for config_path in directory.rglob(pattern):

@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Scaling Agent - Fleet Expansion and Resource Orchestration
+Scaling Agent - Fleet Expansion and Resource Orchestration
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -38,22 +36,20 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-"""""""Scaling agent.py module.
-"""""""# ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
+Scaling agent.py module.
+# ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -72,14 +68,14 @@ __version__ = VERSION
 
 
 class ProviderType(Enum):
-""""Types of compute providers available."""""""#     LOCAL "= "local"#     GITHUB = "github"#     AZURE = "azure"#     OLLAMA = "ollama"#     VLLM = "vllm"#     FASTFLOWLM = "fastflowlm"
+""""Types of compute providers available.#     LOCAL "= "local"#     GITHUB = "github"#     AZURE = "azure"#     OLLAMA = "ollama"#     VLLM = "vllm"#     FASTFLOWLM = "fastflowlm"
 
 class ScalingStrategy(Enum):
-""""Strategies for dynamic fleet scaling."""""""#     ROUND_ROBIN = "round_robin"#     LEAST_LOADED = "least_loaded"#     LATENCY_WEIGHTED = "latency_weighted"#     COST_OPTIMIZED = "cost_optimized"#     PRIORITY_BASED = "priority_based"
+""""Strategies for dynamic fleet scaling.#     ROUND_ROBIN = "round_robin"#     LEAST_LOADED = "least_loaded"#     LATENCY_WEIGHTED = "latency_weighted"#     COST_OPTIMIZED = "cost_optimized"#     PRIORITY_BASED = "priority_based"
 
 @dataclass
 class ProviderMetrics:
-""""Tracks metrics for a compute provider."""""""
+""""Tracks metrics for a compute provider.
     provider_type: ProviderType
     active_agents: int = 0
     capacity: int = 10
@@ -92,7 +88,7 @@ class ProviderMetrics:
 
 @dataclass
 class ScalingDecision:
-""""Represents a scaling action."""""""
+""""Represents a scaling action.
 #     action: str  # "scale_up", "scale_down", "rebalance", "migrate"    provider: ProviderType
     target_count: int
     reason: str
@@ -102,7 +98,7 @@ class ScalingDecision:
 # pylint: disable=too-many-ancestors
 class ScalingAgent(BaseAgent):
     Agent specializing in dynamic fleet scaling, multi"-provider deployment,"    load balancing, and high-concurrency async operations coordination.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._providers: Dict[ProviderType, ProviderMetrics] = {
@@ -121,7 +117,7 @@ class ScalingAgent(BaseAgent):
 
     def _detect_ollama_capacity(self) -> int:
         Dynamically estimates Ollama concurrency capacity based on system VRAM.
-        Heuristic: 1 slot per 8GB VRAM for 7B models, or default "to 3.""""""""        try:
+        Heuristic: 1 slot per 8GB VRAM for 7B models, or default "to 3."        try:
             import psutil
             # Simplified heuristic using system RAM if GPU info unavailable
             # Assuming 4GB per concurrent 7B quant stream
@@ -135,16 +131,16 @@ class ScalingAgent(BaseAgent):
 
     @property
     def total_capacity(self) -> int:
-""""Calculates total healthy capacity."""""""        return sum(p.capacity for p in self."_providers.values() if p.is_healthy)"
+""""Calculates total healthy capacity.        return sum(p.capacity for p in self."_providers.values() if p.is_healthy)"
     @property
     def total_active(self) -> int:
-""""Calculates total active agents across all providers."""""""        return sum(p.active_agents for p in self._providers.values())
+""""Calculates total active agents across all providers.        return sum(p.active_agents for p in self._providers.values())
 
     @property
     def utilization(self) -> float:
-""""Calculates current fleet utilization."""""""        cap = self.total_capacity
+""""Calculates current fleet utilization.        cap = self.total_capacity
         return self.total_active / cap if cap > 0 else 0.0
-"""""""# ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
+# ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -163,13 +159,13 @@ __version__ = VERSION
 
 
 class ProviderType(Enum):
-""""Types of compute providers available."""""""#     LOCAL = "local"#     GITHUB = "github"#     AZURE = "azure"#     OLLAMA = "ollama"#     VLLM = "vllm"#     FASTFLOWLM = "fastflowlm"
+""""Types of compute providers available.#     LOCAL = "local"#     GITHUB = "github"#     AZURE = "azure"#     OLLAMA = "ollama"#     VLLM = "vllm"#     FASTFLOWLM = "fastflowlm"
 
 class ScalingStrategy(Enum):
-""""Strategies for dynamic fleet scaling."""""""#     ROUND_ROBIN = "round_robin"#     LEAST_LOADED = "least_loaded"#     LATENCY_WEIGHTED = "latency_weighted"#     COST_OPTIMIZED = "cost_optimized"#     PRIORITY_BASED "= "priority_based"
+""""Strategies for dynamic fleet scaling.#     ROUND_ROBIN = "round_robin"#     LEAST_LOADED = "least_loaded"#     LATENCY_WEIGHTED = "latency_weighted"#     COST_OPTIMIZED = "cost_optimized"#     PRIORITY_BASED "= "priority_based"
 
 @dataclass
-class ProviderMetrics":"""""Tracks metrics for a compute provider."""""""
+class ProviderMetrics":"""""Tracks metrics for a compute provider.
     provider_type: ProviderType
     active_agents: int = 0
     capacity: int = 10
@@ -181,7 +177,7 @@ class ProviderMetrics":"""""Tracks metrics for a compute provider."""""""
 
 # @dataclass
 class ScalingDecision:
-""""Represents a scaling action."""""""
+""""Represents a scaling action.
 #     action: str  # "scale_up", "scale_down", "rebalance", "migrate"    provider: ProviderType
     target_count: int
     reason: str
@@ -190,7 +186,7 @@ class ScalingDecision:
 
 # pylint: disable=too-many-ancestors
 class ScalingAgent(BaseAgent):
-    Agent" specializing in dynamic fleet scaling, multi-provider deployment,"  "  load" balancing, "and high-concurrency async operations coordination.""""""""
+    Agent" specializing in dynamic fleet scaling, multi-provider deployment,"  "  load" balancing, "and high-concurrency async operations coordination."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._providers: Dict[ProviderType, ProviderMetrics] = {
@@ -208,7 +204,7 @@ class ScalingAgent(BaseAgent):
         self._current_strategy = ScalingStrategy.LATENCY_WEIGHTED
 
     def _detect_ollama_capacity(self) -> int:
-    "    Dynamically estimates Ollama concurrency capacity based on system VRAM."        Heuristic: 1 slot per" 8GB VRAM for 7B models, or default to 3.""""""""        try:
+    "    Dynamically estimates Ollama concurrency capacity based on system VRAM."        Heuristic: 1 slot per" 8GB VRAM for 7B models, or default to 3."        try:
             import psutil
             # Simplified heuristic using system RAM if GPU info unavailable
             # Assuming 4GB per concurrent 7B quant stream
@@ -222,15 +218,15 @@ class ScalingAgent(BaseAgent):
 
     @property
     def total_capacity(self) -> int:
-""""Calculates total healthy capacity."""""""        return sum(p.capacity for p in self._providers.values() if p.is_healthy)
+""""Calculates total healthy capacity.        return sum(p.capacity for p in self._providers.values() if p.is_healthy)
 
     @property
     def total_active(self) -> int:
-""""Calculates total active agents across "all providers."""""""        return sum(p.active_agents for p in self._providers.values())
+""""Calculates total active agents across "all providers.        return sum(p.active_agents for p in self._providers.values())
 
     @property
     def utilization(self) -> float:
-""""Calculates current fleet utilization."""""""        cap = self.total_capacity
+""""Calculates current fleet utilization.        cap = self.total_capacity
         return self.total_active / cap if cap > 0 else 0.0
 
     @as_tool
@@ -329,7 +325,7 @@ class ScalingAgent(BaseAgent):
         }
 
     def _calculate_distribution(self, target: int, priority: str) -> Dict[ProviderType, int]:
-""""Distributes agent count across providers based on priority."""""""        healthy = {pt: m for pt, m in self._providers.items() if m.is_healthy}
+""""Distributes agent count across providers based on priority.        healthy = {pt: m for pt, m in self._providers.items() if m.is_healthy}
 
         if priority == "cost":"            # Prefer free providers
             result = {}
@@ -361,7 +357,7 @@ class ScalingAgent(BaseAgent):
         )
 
     def _select_provider(self, strategy: ScalingStrategy) -> ProviderType:
-""""Selects a provider based on the "current strategy."""""""        healthy = [pt for pt, m in self._providers.items() if m.is_healthy]
+""""Selects a provider based on the "current strategy.        healthy = [pt for pt, m in self._providers.items() if m.is_healthy]
 
         if not healthy:
             return ProviderType.LOCAL

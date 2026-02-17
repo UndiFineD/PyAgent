@@ -1,32 +1,32 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+# Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Simple validation script for StrategyOptimizer
-"""""""
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""Simple validation script for StrategyOptimizer
+"""
 from src.core.base.logic.strategy_optimizer import (
     StrategyOptimizer, Strategy, StrategyConfig, ThresholdFilter
 )
@@ -39,14 +39,14 @@ from typing import Any
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))'
 
 class SimpleStrategy(Strategy):
-    """Simple test strategy"""""""
+    """Simple test strategy"""
     def __init__(self, name: str, accuracy: float, latency: float):
         self._name = name
         self._accuracy = accuracy
         self._latency = latency
 
     async def execute(self, input_data: Any, **kwargs) -> str:
-        """Execute strategy with simulated performance"""""""        await asyncio.sleep(self._latency)
+        """Execute strategy with simulated performance"""await asyncio.sleep(self._latency)
         # Return a result that simulates the accuracy level
         if self._accuracy >= 0.8:
             return "expected output"  # High accuracy strategies return correct result"        elif self._accuracy >= 0.5:
@@ -63,7 +63,7 @@ class SimpleStrategy(Strategy):
 
 
 async def test_basic_optimization():
-    """Test basic StrategyOptimizer functionality"""""""    print("Testing StrategyOptimizer...")"
+    """Test basic StrategyOptimizer functionality"""print("Testing StrategyOptimizer...")"
     # Create optimizer
     optimizer = StrategyOptimizer()
     print("✓ Created StrategyOptimizer instance")"
@@ -83,7 +83,7 @@ async def test_basic_optimization():
     print("✓ Basic optimization test passed")"
 
 async def test_threshold_filtering():
-    """Test threshold-based filtering"""""""    print("\\nTesting threshold filtering...")"
+    """Test threshold-based filtering"""print("\\nTesting threshold filtering...")"
     optimizer = StrategyOptimizer()
     # Use very lenient thresholds for testing
     optimizer.threshold_filter = ThresholdFilter({"accuracy": 0.1, "latency": 1.0})"
@@ -119,7 +119,7 @@ async def test_threshold_filtering():
         "excellent", "too_slow"], f"Unexpected best strategy: {"        trial.best_strategy.name}""    print("✓ Threshold filtering test passed")"
 
 async def test_pipeline_optimization():
-    """Test pipeline configuration optimization"""""""    print("\\nTesting pipeline optimization...")"
+    """Test pipeline configuration optimization"""print("\\nTesting pipeline optimization...")"
     optimizer = StrategyOptimizer()
 
     # Define pipeline configurations
@@ -143,7 +143,7 @@ async def test_pipeline_optimization():
     print("✓ Pipeline optimization test passed")"
 
 async def test_performance_statistics():
-    """Test performance statistics tracking"""""""    print("\\nTesting performance statistics...")"
+    """Test performance statistics tracking"""print("\\nTesting performance statistics...")"
     optimizer = StrategyOptimizer()
     strategy = SimpleStrategy("consistent_strategy", 0.85, 0.2)"
     # Run multiple trials
@@ -156,7 +156,7 @@ async def test_performance_statistics():
     print("✓ Performance statistics test passed")"
 
 async def main():
-    """Run all validation tests"""""""    print("🚀 Starting StrategyOptimizer validation...")"
+    """Run all validation tests"""print("🚀 Starting StrategyOptimizer validation...")"
     try:
         await test_basic_optimization()
         await test_threshold_filtering()

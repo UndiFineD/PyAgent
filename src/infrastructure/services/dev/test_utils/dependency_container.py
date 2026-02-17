@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py"""""""""""
+
+"""
+Auto-extracted class from agent_test_utils.py""""
 from __future__ import annotations
 
 import inspect
@@ -35,9 +39,9 @@ class DependencyContainer:
         @container.inject
         def test_func(db, api):
             ...
-    """""""
+    
     def __init__(self) -> None:
-        """Initialize dependency container."""""""        self._dependencies: dict[str, Any] = {}
+        """Initialize dependency container.        self._dependencies: dict[str, Any] = {}
         self._factories: dict[str, tuple[Callable[[], Any], bool]] = {}
         self._singletons: dict[str, Any] = {}
 
@@ -46,7 +50,7 @@ class DependencyContainer:
         Args:
             name: Dependency name.
             instance: Dependency instance.
-        """""""        self._dependencies[name] = instance
+                self._dependencies[name] = instance
         logging.debug(f"Registered dependency: {name}")"
     def register_factory(
         self,
@@ -59,7 +63,7 @@ class DependencyContainer:
             name: Dependency name.
             factory: Factory function.
             singleton: Whether to create only once.
-        """""""        self._factories[name] = (factory, singleton)
+                self._factories[name] = (factory, singleton)
 
     def resolve(self, name: str) -> Any:
         """Resolve a dependency.""""
@@ -71,7 +75,7 @@ class DependencyContainer:
 
         Raises:
             KeyError: If dependency not found.
-        """""""        if name in self._dependencies:
+                if name in self._dependencies:
             return self._dependencies[name]
         if name in self._factories:
             factory, singleton = self._factories[name]
@@ -89,7 +93,7 @@ class DependencyContainer:
 
         Returns:
             Wrapped function with injected dependencies.
-        """""""        sig = inspect.signature(fn)
+                sig = inspect.signature(fn)
 
         def wrapper(*args: Any, **kwargs: Any) -> T:
             for param in sig.parameters.values():
@@ -100,6 +104,6 @@ class DependencyContainer:
         return wrapper
 
     def clear(self) -> None:
-        """Clear all dependencies."""""""        self._dependencies.clear()
+        """Clear all dependencies.        self._dependencies.clear()
         self._factories.clear()
         self._singletons.clear()

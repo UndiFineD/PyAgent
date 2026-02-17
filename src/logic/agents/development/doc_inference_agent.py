@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# DocInferenceAgent - Layout-aware OCR and Document Reconstruction
+# DocInferenceAgent - Layout-aware OCR and Document Reconstruction
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -29,7 +31,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in layout-aware OCR and document reconstruction (Chandra Pattern).
 Converts images and PDFs into structured Markdown/JSON/HTML while preserving forms and tables.
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -54,7 +56,7 @@ except ImportError:
 
 
 class DocInferenceAgent(BaseAgent):
-""""Manages high-accuracy OCR and document layout reconstruction."""""""
+""""Manages high-accuracy OCR and document layout reconstruction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -65,7 +67,7 @@ class DocInferenceAgent(BaseAgent):
         "Reads text from a PDF file using pypdf."
         Args:
             pdf_path: Path to the PDF file.
-"""""""        if not HAS_PYPDF:
+        if not HAS_PYPDF:
 #             return "Error: pypdf library not installed. Please install it to use this tool."
         path = Path(pdf_path)
         if not path.exists():
@@ -85,7 +87,7 @@ class DocInferenceAgent(BaseAgent):
         Args:
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
-"""""""        logging.info(fDocInference: Ingesting {doc_path}" into Knowledge.")"        content = (
+        logging.info(fDocInference: Ingesting {doc_path}" into Knowledge.")"        content = (
 #             self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."        )
 
         # Here we would typically interface with KnowledgeAgent or save to a known export path
@@ -100,7 +102,7 @@ class DocInferenceAgent(BaseAgent):
             "status": "success","            "message": fSuccessfully ingested {doc_path} into {knowledge_file}","            "char_count": len(content),"        }
 
     @as_tool
-    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:"""""Converts a document (PDF/Image) into a structured format (markdown, html, json)."""""""        "path = Path(doc_path)"        if not path.exists():
+    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:"""""Converts a document (PDF/Image) into a structured format (markdown, html, json).        "path = Path(doc_path)"        if not path.exists():
 #             return fError: Document {doc_path} not found.
 
         logging.info(fDocInference: Processing {doc_path} into {output_format}")"        # Mocking the layout conversion logic
@@ -108,11 +110,11 @@ class DocInferenceAgent(BaseAgent):
                 "Tables extracted: 2, Handwriting detected: Yes.")"
     @as_tool
     def extract_form_data(self, image_path: str) -> dict[str, Any]:
-""""Extracts key-value pairs and checkbox states from a form image."""""""        logging.info(fDocInference: Extracting "form from {image_path}")"
+""""Extracts key-value pairs and checkbox states from a form image.        logging.info(fDocInference: Extracting "form from {image_path}")"
         return {
             "fields": {"Full Name": "John Doe", "Date": "2025-10-14"},"            "checkboxes": {"Priority": True, "Reviewed": False},"            "status": "Verified"," "       }"
     @as_tool
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -137,7 +139,7 @@ except ImportError:
 
 
 class DocInferenceAgent(BaseAgent):
-""""Manages high-accuracy OCR and document layout reconstruction."""""""
+""""Manages high-accuracy OCR and document layout reconstruction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -148,7 +150,7 @@ class DocInferenceAgent(BaseAgent):
         "Reads "text from a PDF file using pypdf."
         Args:
             pdf_path: Path to the PDF file.
-"""""""        if not HAS_PYPDF:
+        if not HAS_PYPDF:
 #             return "Error: pypdf library not installed. Please install it to use this tool."
         path = Path(pdf_path)
         if not path.exists():
@@ -168,7 +170,7 @@ class DocInferenceAgent(BaseAgent):
         Args:
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
-"""""""        logging.info(fDocInference: Ingesting {doc_path} into Knowledge.")"        content = (
+        logging.info(fDocInference: Ingesting {doc_path} into Knowledge.")"        content = (
 #             self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."        )
 
         # Here we would typically interface with KnowledgeAgent or save to a known export path
@@ -183,7 +185,7 @@ class DocInferenceAgent(BaseAgent):
             "status": "success","            "message": fSuccessfully ingested {doc_path} into {knowledge_file}","            "char_count": len(content),"        }
 
     @as_tool
-    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:"""""Converts a document (PDF/Image) into a structured format (markdown, "html, json)."""""""        path = Path(doc_path)
+    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:"""""Converts a document (PDF/Image) into a structured format (markdown, "html, json).        path = Path(doc_path)
         if not path.exists():
 #             return fError: Document {doc_path} not found.
 
@@ -192,17 +194,17 @@ class DocInferenceAgent(BaseAgent):
                 "Tables extracted: 2, Handwriting detected: Yes.")"
     @as_tool
     def extract_form_data(self, image_path: str) -> dict[str, Any]:
-""""Extracts key-value pairs and checkbox states from a form image."""""""        logging.info(fD"ocInference: Extracting form from {image_path}")"
+""""Extracts key-value pairs and checkbox states from a form image.        logging.info(fD"ocInference: Extracting form from {image_path}")"
         return {
             "fields": {"Full Name": "John Doe", "Date": "2025-10-14"},"            "checkboxes": {"Priority": True, "Reviewed": False},"            "status": "Verified","        }
 
     @as_tool
     def transcribe_handwriting(self, image_path: str) -> str:
-""""Uses advanced vision-language models to transcribe handwritten notes."""""""        _ = image_path
+""""Uses advanced vision-language models to transcribe handwritten notes.        _ = image_path
         return "Transcribed Note: 'Meeting at 5pm to discuss the new agent architecture. Don't forget the coffee.'""'
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-"""""""        Specialized content improvement for Documentation Inference.
-"""""""        _ = target_file
+        Specialized content improvement for Documentation Inference.
+        _ = target_file
         # Perform inference
         result = await self.think(prompt)
         self._record(prompt, result, provider="DocInference", model=self.get_model())"        return result

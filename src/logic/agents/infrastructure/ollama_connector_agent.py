@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Ollama Connector Agent - Edge Ollama Inference Connector
-"""""""Brief Summary
+# Ollama Connector Agent - Edge Ollama Inference Connector
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 
@@ -49,7 +51,7 @@ class OllamaConnectorAgent(BaseAgent):
     Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
 #     Automatically detects and selects the fastest available Ollama instance on the network.
-"""""""
+
     OLLAMA_CANDIDATES = [
         "http://192.168.88.251:11434/v1",  # Fastest network instance"        "http://localhost:11434/v1",       # Local fallback"    ]
 
@@ -100,7 +102,7 @@ class OllamaConnectorAgent(BaseAgent):
         reasoning: bool = False,
         json_schema: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-"""""""        Runs a local inference request using OpenAI-compatible endpoints.
+        Runs a local inference request using OpenAI-compatible endpoints.
 
         Args:
             prompt: User query or code prefix (if suffix is present).
@@ -111,7 +113,7 @@ class OllamaConnectorAgent(BaseAgent):
             json_schema: If provided, enforcing JSON output (Ollama output format).
 
         Returns:
-            Dict containing 'content', 'reasoning_trace', and 'cost'.'"""""""        if not await self."check_availability():"            return {"error": fOllama service not reachable at {self.endpoint}"}"
+            Dict containing 'content', 'reasoning_trace', and 'cost'.'        if not await self."check_availability():"            return {"error": fOllama service not reachable at {self.endpoint}"}"
 #         response_content =
         reasoning_content = None
 
@@ -122,7 +124,7 @@ class OllamaConnectorAgent(BaseAgent):
                 response = await self.client.completions.create(
                     model=model,
                     prompt=prompt,
-           "  "       suffix=suffi""""""""
+           "  "       suffix=suffi"
 from __future__ import annotations
 
 import logging
@@ -144,7 +146,7 @@ logger = logging.getLogger(__name__)
 class OllamaConnectorAgent(BaseAgent):
     Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
-    Automatically detects and selects the fastest available Ollama "instance on the network.""""""""
+    Automatically detects and selects the fastest available Ollama "instance on the network."
     OLLAMA_CANDIDATES = [
         "http://192.168.88.251:11434/v1",  # Fastest network instance"        "http://localhost:11434/v1",       # Local fallback"    ]
 
@@ -195,7 +197,7 @@ class OllamaConnectorAgent(BaseAgent):
         reasoning: bool = False,
         json_schema: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-"""""""        Runs a local inference "request using OpenAI-compatible endpoints."
+        Runs a local inference "request using OpenAI-compatible endpoints."
         Args:
             prompt: User query or code prefix (if suffix is present).
             model: Model name.
@@ -205,7 +207,7 @@ class OllamaConnectorAgent(BaseAgent):
             json_schema: If provided, enforcing JSON output (Ollama output format).
 
         Returns:
-            Dict containing 'content', 'reasoning_trace', and 'cost'.'"""""""  "   "   if not await self.check_availability():"            return {"error": fOllama service not reachable at {self.endpoint}"}"
+            Dict containing 'content', 'reasoning_trace', and 'cost'.'  "   "   if not await self.check_availability():"            return {"error": fOllama service not reachable at {self.endpoint}"}"
 #         response_content =
         reasoning_content = None
 

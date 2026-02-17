@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""AB Engine - A/B comparison and significance calculation""""""""""""""Lightweight, synchronous A/B comparison helpers and a fallback significance routine.
-"""""""
+AB Engine - A/B comparison and significance calculationLightweight, synchronous A/B comparison helpers and a fallback significance routine.
+
 from __future__ import annotations
 
 import contextlib
@@ -41,14 +39,14 @@ except Exception:
 
 @dataclass
 class ABComparisonResult:
-    """Result of comparing two metric groups."""""""
+    """Result of comparing two metric groups.
     metrics_compared: int
     differences: dict[str, float] = field(default_factory=dict)
 
 
 @dataclass
 class ABSignificanceResult:
-    """Result of A/B statistical significance calculation."""""""
+    """Result of A/B statistical significance calculation.
     p_value: float
     is_significant: bool
     effect_size: float = 0.0
@@ -56,7 +54,7 @@ class ABSignificanceResult:
 
 @dataclass
 class ABComparison:
-    """A / B comparison between code versions."""""""
+    """A / B comparison between code versions.
     id: str
     version_a: str
     version_b: str
@@ -66,7 +64,7 @@ class ABComparison:
 
 
 class ABComparisonEngine:
-    """Compare stats between different code versions (A / B testing)."""""""
+    """Compare stats between different code versions (A / B testing).
     def __init__(self) -> None:
         self.comparisons: dict[str, ABComparison] = {}
 
@@ -111,7 +109,7 @@ class ABComparisonEngine:
 
 
 class ABComparator:
-    """Compares A/B test metrics and computes simple significance."""""""
+    """Compares A/B test metrics and computes simple significance.
     def compare(self, a_data: dict[str, float], b_data: dict[str, float]) -> ABComparisonResult:
         common = sorted(set(a_data.keys()) & set(b_data.keys()))
         diffs = {
@@ -127,7 +125,7 @@ class ABComparator:
         treatment_values: List[float],
         alpha: float = 0.05,
     ) -> ABSignificanceResult:
-        """Attempt Rust-accelerated test, fallback to a Welch t-test approximation with normal p-value."""""""        if not control_values or not treatment_values:
+        """Attempt Rust-accelerated test, fallback to a Welch t-test approximation with normal p-value.        if not control_values or not treatment_values:
             return ABSignificanceResult(p_value=1.0, is_significant=False, effect_size=0.0)
 
         # Try rust implementation if present

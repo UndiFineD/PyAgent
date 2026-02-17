@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
-
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 """Test runner utilities.""""
 Provides a small helper to execute focused pytest runs and return results.
 Used by agents to verify changes before committing.
-"""""""
+"""
 from __future__ import annotations
 
 import shlex
@@ -42,7 +44,7 @@ def run_focused_tests_for_files(files: Iterable[str], timeout: int = 300) -> Tup
 
     Behavior:
         - Extracts base names from files and builds a -k expression joining with 'or'.'        - If no file names can be extracted, runs the entire `tests/unit` suite as a conservative fallback.
-    """""""    basenames = []
+    """basenames = []
     for p in files:
         try:
             pn = Path(p).name

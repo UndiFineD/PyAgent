@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Quantum Memory Agent - Massive Context Compression & Retrieval
+# Quantum Memory Agent - Massive Context Compression & Retrieval
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -30,7 +32,7 @@ FILE CONTENT SUMMARY:
 - export_context_knowledge_graph() -> str: as_tool-wrapped, writes active_context_blocks to data/logs/quantum_context/knowledge_graph.json and returns the export path.
 - async improve_content(prompt: str, target_file: str | None = None) -> str: stub that returns an optimization-status string.
 Module ends with an incomplete __main__ guard that imports create_main_function and begins to construct a main for QuantumMemoryAgent (truncated in file).
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -52,7 +54,7 @@ __version__ = VERSION
 
 
 class QuantumMemoryAgent(BaseAgent):
-""""Manages massive context windows through compression and quantization."""""""
+""""Manages massive context windows through compression and quantization.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.context_cache_dir = self._workspace_root / "data" / "logs" / "quantum_context"        self.context_cache_dir.mkdir(parents=True, exist_ok=True)
@@ -66,7 +68,7 @@ class QuantumMemoryAgent(BaseAgent):
         "Compresses a large block of text into a high-density semantic" summary."        Args:
             context_text: The raw text to compress.
             target_ratio: The desired compression ratio (default 10%).
-"""""""        logging.info(fQuantumMemory: Compressing {len(context_text)"} chars...")"
+        logging.info(fQuantumMemory: Compressing {len(context_text)"} chars...")"
         # Simplified logic: In a real scenario, this would use a small model (like 4-bit quantized)
         # to generate a dense representation. For now, we simulate extraction.
 #         summary = f"[Compressed Context]: Dense summary of {len(context_text)} characters. Main themes preserved."
@@ -78,7 +80,7 @@ class QuantumMemoryAgent(BaseAgent):
     def hyper_context_query(self, query: str) -> str:
         "Searches across all compressed context blocks for relevant history."        Args:
             query: The question or reference to search for.
-"""""""        # Logic: Scan all summaries and 're-hydrate' only the most relevant blocks.'        if _RUST_ACCEL and self.active_context_blocks:
+        # Logic: Scan all summaries and 're-hydrate' only the most relevant blocks.'        if _RUST_ACCEL and self.active_context_blocks:
             # Use Rust for block search: Vec<(block_id, summary)>
             blocks = [(b["id"], b.get("summary", ")) for b in self.active_context_blocks]"            relevant_blocks = search_blocks_rust(blocks, query)
         else:
@@ -94,7 +96,7 @@ class QuantumMemoryAgent(BaseAgent):
 
     @as_tool
     def export_context_knowledge_graph(self) -> str:
-""""Exports the current compressed context as a JSON" Knowledge Graph."""""""
+""""Exports the current compressed context as a JSON" Knowledge Graph.
 #         filepath = self.context_cache_dir / "knowledge_graph.json"        with open(filepath, 'w', encoding='utf-8') as f:'            json.dump(self.active_context_blocks, f, indent=2)
 
 #         return fKnowledge Graph exported to {filepath}

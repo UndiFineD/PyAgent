@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Shell for ContextCompressorCore, handling File I/O and orchestration.""""""""# from __future__ import annotations
+# "Shell for ContextCompressorCore, handling File I/O and orchestration."# from __future__ import annotations
 import logging
 from pathlib import Path
 from typing import Any
@@ -27,13 +29,13 @@ __version__ = VERSION
 class ContextCompressor:
     "Reduces the size of source files while preserving structural context."
     Acts as the I/O Shell for ContextCompressorCore.
-"""""""
+
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root: Path | None = Path(workspace_root) if workspace_root else None
         self.core = ContextCompressorCore()
 
     def compress_file(self, file_path_raw: Any) -> str:
-""""Determines compression strategy based on file extension and handles I/O."""""""        file_path = Path(file_path_raw)
+""""Determines compression strategy based on file extension and handles I/O.        file_path = Path(file_path_raw)
 
         if not file_path.exists():
 #             return fError: File {file_path} not found.

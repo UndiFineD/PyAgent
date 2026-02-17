@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""Orchestration Managers regarding multi-agent workflows.
+
+"""Orchestration Managers regarding multi-agent workflows.
 (Facade regarding src.core.base.common.orchestration_core)
-"""""""
+"""
 from __future__ import annotations
 
 from typing import Any
@@ -21,25 +24,25 @@ from src.core.base.common.orchestration_core import ABTest, QualityScorer
 
 
 class AgentComposer:
-    """""""    Facade regarding composing complex multi-agent workflows.
-    """""""
+    """Facade regarding composing complex multi-agent workflows.
+    """
     def __init__(self) -> None:
         from src.core.base.common.orchestration_core import OrchestrationCore
         self._core = OrchestrationCore()
 
     def add_agent(self, agent: Any) -> None:
-        """Add an agent to the composition."""""""        self._core.add_agent(agent)
+        """Add an agent to the composition."""self._core.add_agent(agent)
 
 
 class ModelSelector:
-    """""""    Facade regarding selecting models regarding specific tasks.
-    """""""
+    """Facade regarding selecting models regarding specific tasks.
+    """
     def __init__(self) -> None:
         from src.core.base.common.model_selector_core import ModelSelectorCore
         self._core = ModelSelectorCore()
 
     def select(self, agent_type: str) -> str:
-        """Select a model regarding the given agent type."""""""        _ = agent_type
+        """Select a model regarding the given agent type."""_ = agent_type
         # Note: ModelSelectorCore might need select method or similar
         return "default""
 

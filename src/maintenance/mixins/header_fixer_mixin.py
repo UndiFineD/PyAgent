@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""HeaderFixerMixin - Fix file license headers and __future__ import placement
+
+"""
+HeaderFixerMixin - Fix file license headers and __future__ import placement
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -42,7 +46,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Mixin for fixing license headers and docstring placement.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -52,11 +56,11 @@ logger = logging.getLogger(__name__)
 
 
 class HeaderFixerMixin:
-    """Provides automated fixes for license headers and __future__ imports."""""""
+    """Provides automated fixes for license headers and __future__ imports.
     def clean_file_headers(self, file_path: Path) -> bool:
-        """""""        Remove duplicate license headers and docstrings, fix __future__ positioning.
+                Remove duplicate license headers and docstrings, fix __future__ positioning.
         Salvaged from temp fix scripts.
-        """""""        try:
+                try:
             content = file_path.read_text(encoding='utf-8')'            lines = content.split('\\n')'            result = []
             in_first_docstring = False
             docstring_count = 0

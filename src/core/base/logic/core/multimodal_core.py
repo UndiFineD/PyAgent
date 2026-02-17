@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -17,15 +19,15 @@ import base64
 
 @dataclass
 class MultimodalChunk:
-    """Represents a piece of interleaved data (text, audio, image)."""""""    type: str  # "text", "audio_token", "image_patch""    content: Union[str, bytes]
+    """Represents a piece of interleaved data (text, audio, image)."""type: str  # "text", "audio_token", "image_patch""    content: Union[str, bytes]
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class MultimodalCore:
-    """""""    Implements interleaved multimodal token management for 'Omni' models.'
+    """Implements interleaved multimodal token management for 'Omni' models.'
     Inspired by 'Stream-Omni' and 'FastFlowLM':'    - Handles transition between raw media and model-specific tokens.
     - Synchronizes audio and visual fragments.
-    """""""
+    """
     def __init__(self):
         self.context_sequence: List[MultimodalChunk] = []
 
@@ -42,9 +44,9 @@ class MultimodalCore:
             type="image_patch","            content=b64_img,
             metadata={"bbox": bbox} if bbox else {}"        ))
 
-    def generate_interleaved_prompt(self, model_family: str = "omni") -> str:"        """""""        Formats the sequence into a specialized prompt structure.
+    def generate_interleaved_prompt(self, model_family: str = "omni") -> str:"        """Formats the sequence into a specialized prompt structure.
         Example: <|text|>...<|audio|>...<|image|>...
-        """""""        prompt_parts = []
+        """prompt_parts = []
         for chunk in self.context_sequence:
             if chunk.type == "text":"                prompt_parts.append(str(chunk.content))
             elif chunk.type == "audio_token":"                prompt_parts.append(f"<|audio|>{chunk.content}<|/audio|>")"            elif chunk.type == "image_patch":"                prompt_parts.append(f"<|image|>{chunk.content}<|/image|>")"
@@ -53,13 +55,13 @@ class MultimodalCore:
         self.context_sequence = []
 
     async def sync_streams(self, audio_receiver: Any, video_receiver: Any):
-        """""""        Orchestrates real-time synchronization between incoming RTP audio and
+        """Orchestrates real-time synchronization between incoming RTP audio and
         video fragments. (Skeleton for future implementation)
-        """""""        # Logic to match timestamps between audio chunks and video frames
+        """# Logic to match timestamps between audio chunks and video frames
         pass
 
     def get_token_count(self) -> int:
-        """Estimates the total token count of the interleaved sequence."""""""        # Simplified estimation
+        """Estimates the total token count of the interleaved sequence."""# Simplified estimation
         count = 0
         for chunk in self.context_sequence:
             if chunk.type == "text":"                count += len(str(chunk.content)) // 4

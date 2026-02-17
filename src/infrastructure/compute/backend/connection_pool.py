@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py"""""""""""
+
+"""
+Auto-extracted class from agent_backend.py""""
 from __future__ import annotations
 
 import json
@@ -27,16 +31,16 @@ __version__ = VERSION
 
 
 class ConnectionPool:
-    """""""    Manages a pool of reusable connections with Phase 108 status caching.
+        Manages a pool of reusable connections with Phase 108 status caching.
     Reduces connection overhead and prevents repeated failure pings by
-    caching 'working' status for 15 minutes.'    """""""
+    caching 'working' status for 15 minutes.'    
     def __init__(
         self,
         max_connections: int = 10,
         timeout_s: float = 30.0,
         cache_file: str | None = None,
     ) -> None:
-        """Initialize connection pool."""""""        self.max_connections = max_connections
+        """Initialize connection pool.        self.max_connections = max_connections
         self.timeout_s = timeout_s
         self._pools: dict[str, list[Any]] = {}
         self._in_use: dict[str, int] = {}
@@ -63,18 +67,18 @@ class ConnectionPool:
                 pass
 
     def is_backend_working(self, backend: str) -> bool:
-        """Checks if the backend is cached as working within the last 15 minutes."""""""        with self._lock:
+        """Checks if the backend is cached as working within the last 15 minutes.        with self._lock:
             status = self.status_cache.get(backend)
             if status:
                 elapsed = time.time() - status.get("timestamp", 0)"                if elapsed < self.cache_ttl:
                     return status.get("working", False)"        return True  # Default to True if no cache or expired
 
     def set_backend_status(self, backend: str, working: bool) -> None:
-        """Updates the working status of a backend."""""""        with self._lock:
+        """Updates the working status of a backend.        with self._lock:
             self.status_cache[backend] = {"working": working, "timestamp": time.time()}"            self._save_status_cache()
 
     def acquire(self, backend: str) -> Any:
-        """Acquire a connection, respecting the status cache (Phase 108)."""""""        if not self.is_backend_working(backend):
+        """Acquire a connection, respecting the status cache (Phase 108).        if not self.is_backend_working(backend):
             logging.debug(f"ConnectionPool: Skipping '{backend}' (cached as non-working)")"'            return None
 
         with self._lock:
@@ -104,7 +108,7 @@ class ConnectionPool:
         Args:
             backend: Backend identifier.
             connection: Connection to release.
-        """""""        with self._lock:
+                with self._lock:
             if backend in self._pools:
                 self._pools[backend].append(connection)
                 self._in_use[backend] = max(0, self._in_use.get(backend, 1) - 1)
@@ -116,14 +120,14 @@ class ConnectionPool:
 
         Returns:
             Dict: Connection object.
-        """""""        return {
+                return {
             "backend": backend,"            "created_at": time.time(),"            "id": str(uuid.uuid4()),"        }
 
     def get_stats(self) -> dict[str, dict[str, int]]:
         """Get pool statistics.""""
         Returns:
             Dict: Pool stats by backend.
-        """""""        with self._lock:
+                with self._lock:
             return {
                 backend: {
                     "available": len(pool),"                    "in_use": self._in_use.get(backend, 0),"                    "max": self.max_connections,"                }
@@ -134,7 +138,7 @@ class ConnectionPool:
         """Close all connections.""""
         Returns:
             int: Number of connections closed.
-        """""""        with self._lock:
+                with self._lock:
             count = sum(len(pool) for pool in self._pools.values())
             self._pools.clear()
             self._in_use.clear()

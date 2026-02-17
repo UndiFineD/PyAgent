@@ -1,29 +1,32 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""MicroBatchContext - Context manager for micro-batch execution state.
+
+"""MicroBatchContext - Context manager for micro-batch execution state.
 
 Provides a robust interface for managing micro-batch execution, supporting context variables,
 batch state, and nested batch scopes. Useful for distributed and pipelined GPU workloads.
-"""""""
+"""
 
 import threading
 from typing import Any, Dict, Optional
 
 
 class MicroBatchContext:
-    """""""    Context manager for micro-batch execution state.
+    """Context manager for micro-batch execution state.
     Supports context variables, batch id, and nested batch scopes.
-    """""""    _local = threading.local()
+    """_local = threading.local()
 
     def __init__(self, batch_id: Optional[int] = None, variables: Optional[Dict[str, Any]] = None):
         self.batch_id = batch_id
@@ -38,7 +41,7 @@ class MicroBatchContext:
         self._local.current = self._prev_context
 
     @classmethod
-    def current(cls) -> Optional["MicroBatchContext"]:"        """Get the current active micro-batch context, if any."""""""        return getattr(cls._local, 'current', None)'
+    def current(cls) -> Optional["MicroBatchContext"]:"        """Get the current active micro-batch context, if any."""return getattr(cls._local, 'current', None)'
     def get(self, key: str, default: Any = None) -> Any:
         return self.variables.get(key, default)
 

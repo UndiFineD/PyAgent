@@ -1,17 +1,21 @@
 
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""DependencyCore
+
+"""
+DependencyCore
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -36,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
     - Optionally support dotted-class-bases and other AST node types (Attribute,
       Subscript) for more complete inheritance detection and robustness to complex
       code patterns.
-"""""""
+
 from __future__ import annotations
 
 import ast
@@ -49,10 +53,10 @@ __version__ = VERSION
 
 
 class DependencyCore:
-    """""""    Pure logic core for dependency analysis.
+        Pure logic core for dependency analysis.
     Provides static methods to parse Python source code for import and class inheritance dependencies.
     All logic is side-effect-free and does not perform I/O.
-    """""""
+    
     @staticmethod
     def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:"        """Parse imports and class inheritance from Python code content.""""
         Args:
@@ -61,7 +65,7 @@ class DependencyCore:
 
         Returns:
             Dictionary mapping dependency names to DependencyNode instances.
-        """""""        nodes: dict[str, DependencyNode] = {}
+                nodes: dict[str, DependencyNode] = {}
 
         try:
             tree = ast.parse(content)
@@ -96,7 +100,7 @@ class DependencyCore:
             name: The dependency name.
             dep_type: The type of dependency (import or class inheritance).
             file_path: The file path where the dependency was found.
-        """""""        if name not in nodes:
+                if name not in nodes:
             nodes[name] = DependencyNode(name=name, type=dep_type, file_path=file_path)
         else:
             if file_path not in nodes[name].depended_by:
@@ -111,7 +115,7 @@ class DependencyCore:
 
         Returns:
             List of dependency names not in the standard library.
-        """""""        return [name for name in nodes if name not in stdlib_list]
+                return [name for name in nodes if name not in stdlib_list]
 
 from __future__ import annotations
 
@@ -125,9 +129,9 @@ __version__ = VERSION
 
 
 class DependencyCore:
-    """Pure logic core for dependency analysis."""""""
+    """Pure logic core for dependency analysis.
     @staticmethod
-    def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:"        """Parses imports and class inheritance from code content."""""""        nodes: dict[str, DependencyNode] = {}
+    def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:"        """Parses imports and class inheritance from code content.        nodes: dict[str, DependencyNode] = {}
 
         try:
             tree = ast.parse(content)
@@ -164,4 +168,4 @@ class DependencyCore:
 
     @staticmethod
     def filter_external_deps(nodes: dict[str, DependencyNode], stdlib_list: set[str]) -> list[str]:
-        """Filters nodes to return only non-standard library dependencies."""""""        return [name for name in nodes if name not in stdlib_list]
+        """Filters nodes to return only non-standard library dependencies.        return [name for name in nodes if name not in stdlib_list]

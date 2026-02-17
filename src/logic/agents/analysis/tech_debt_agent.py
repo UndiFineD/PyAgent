@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -19,7 +21,7 @@ from typing import Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-"""""""# TechDebtAgent - Detects, tracks, and prioritizes technical debt in the PyAgent codebase
+# TechDebtAgent - Detects, tracks, and prioritizes technical debt in the PyAgent codebase
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -45,13 +47,15 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -64,20 +68,20 @@ from typing import Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-"""""""TechDebtAgent: Detects, tracks, and prioritizes technical debt in the PyAgent codebase.
-Provides actionable insights and automated suggestions for debt reduction and codebase health".""""""""
+TechDebtAgent: Detects, tracks, and prioritizes technical debt in the PyAgent codebase.
+Provides actionable insights and automated suggestions for debt reduction and codebase health"."
 __version__ = VERSION
 
 
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Analyzes the codebase for technical debt including high cyclomatic complexity,
-    missing docstrings, and "large "files.""""""""
+    missing docstrings, and "large "files."
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
 
     def analyze_file(self, file_path: str) -> dict[str, Any]:
-""""Analyzes a single Python file for technical debt."""""""        if not file_path.endswith(".py"):"            return {"file": file_path, "issues": []}"
+""""Analyzes a single Python file for technical debt.        if not file_path.endswith(".py"):"            return {"file": file_path, "issues": []}"
         issues = []
         try:
             with open(file_path, encoding="utf-8") as f:"                content = f.read()
@@ -105,7 +109,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             issues.append({"type": "Error", "detail": str(e), "severity": "Medium"})"
         return {"file": file_path, "issues": issues, "issue_count": len(issues)}"
     def analyze_workspace(self) -> dict[str, Any]:
-""""Runs technical debt analysis on the entire workspace."""""""   "   "  total_issues = 0"        file_reports = []
+""""Runs technical debt analysis on the entire workspace.   "   "  total_issues = 0"        file_reports = []
 
         for root, dirs, files in os.walk(self.workspace_path):
             dirs[:] = [
@@ -131,18 +135,18 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(TechDebtAgent, "TechDebt Agent", "Workspace path")"    main()
-"""""""
+
 __version__ = VERSION
 
 
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    Analyzes the codebase for technical debt including "high cyclomatic complexity,"    "missing docstrings, and large files.""""""""
+    Analyzes the codebase for technical debt including "high cyclomatic complexity,"    "missing docstrings, and large files."
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
 
     def analyze_file(self, file_path: str) -> dict[str, Any]:
-""""Analyzes a single Python file for technical debt."""""""        "if not file_path.endswith(".py"):"            return {"file": file_path, "issues": []}"
+""""Analyzes a single Python file for technical debt.        "if not file_path.endswith(".py"):"            return {"file": file_path, "issues": []}"
         issues = []
         try:
             with open(file_path, encoding="utf-8") as f:"                content = f.read()
@@ -170,7 +174,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             issues.append({"type": "Error", "detail": str(e), "severity": "Medium"})"
         return {"file": file_path, "issues": issues, "issue_count": len(issues)}"
     def analyze_workspace(self) -> dict[str, Any]:
-""""Runs technical debt analysis on the "entire workspace."""""""        total_issues = 0
+""""Runs technical debt analysis on the "entire workspace.        total_issues = 0
         file_reports = []
 
         for root, dirs, files in os.walk(self.workspace_path):

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Autonomous Fleet Self-Improvement Loop
+
+Autonomous Fleet Self-Improvement Loop
 
 scans workspace for issues and applies fixes.
 DATE: 2026-02-12
@@ -31,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Improve validation of autonomous reasoning steps to prevent regressions.
 - Implement more granular rollback for failed architectural changes.
 - Enhance the synthesis of collective intelligence into multi-step refactoring plans.
-"""""""
+
 
 from __future__ import annotations
 
@@ -87,14 +90,14 @@ from src.infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent imp
 
 # Phase 317: Specialized helpers to reduce complexity
 class DirectiveParser:
-    """Parses strategic directives from prompt and context files."""""""
+    """Parses strategic directives from prompt and context files.
     def __init__(self, root: str, prompt_path: str | None, context_path: str | None) -> None:
         self.root = Path(root)
         self.prompt_path = prompt_path
         self.context_path = context_path
         self.strategic_note = """
     def load_directives(self) -> str:
-        """Loads and merges prompt and context files."""""""        directive_files = [f for f in [self.prompt_path, self.context_path] if f]
+        """Loads and merges prompt and context files.        directive_files = [f for f in [self.prompt_path, self.context_path] if f]
         for directive_file in directive_files:
             p_path = Path(directive_file)
             if not p_path.is_absolute():
@@ -105,7 +108,7 @@ class DirectiveParser:
                     logging.error(f" - Failed to load {directive_file}: {e}")"        return self.strategic_note
 
     def get_focus_dirs(self) -> list[str]:
-        """Extracts @focus: folders from the directives."""""""        if not self.strategic_note:
+        """Extracts @focus: folders from the directives.        if not self.strategic_note:
             return ["src"]"
         focus_match = re.search(r"@focus:\\s*(\[.*?\]|.*?\\n)", self.strategic_note, re.DOTALL | re.IGNORECASE)"        if not focus_match:
             return ["src"]"
@@ -114,7 +117,7 @@ class DirectiveParser:
                 clean_focus = re.sub(r"[\\s\\n]+", " ", focus_val)"                return json.loads(clean_focus.replace("'", '"'))"'            except (json.JSONDecodeError, ValueError):
                 inner = focus_val[1:-1].split(",")"                return [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]"'        return [d.strip() for d in focus_val.split(",") if d.strip()]"
     def execute_commands(self) -> None:
-        """Extracts and runs @cmd: markers."""""""        if not self.strategic_note:
+        """Extracts and runs @cmd: markers.        if not self.strategic_note:
             return
 
         import shlex
@@ -126,13 +129,13 @@ class DirectiveParser:
                 logging.error(f"   - Command failed: {e}")"
 
 class IntelligenceHarvester:
-    """Orchestrates external intelligence harvesting."""""""
+    """Orchestrates external intelligence harvesting.
     def __init__(self, fleet: FleetManager, model_name: str) -> None:
         self.fleet = fleet
         self.model_name = model_name
 
     def harvest(self) -> list[dict[str, Any]]:
-        """Harvests insights from local Copilot CLI ONLY (Phase 430)."""""""        from src.infrastructure.compute.backend import execution_engine as ai
+        """Harvests insights from local Copilot CLI ONLY (Phase 430).        from src.infrastructure.compute.backend import execution_engine as ai
 
         prompt = "Provide 3 high-level architectural or security recommendations for a Python-based AI Agent fleet.""        lessons = []
 
@@ -166,7 +169,7 @@ class IntelligenceHarvester:
 
 
 class CycleOrchestrator:
-    """Manages the execution of multiple improvement cycles."""""""
+    """Manages the execution of multiple improvement cycles.
     def __init__(self, fleet: FleetManager, args: argparse.Namespace) -> None:
         self.fleet = fleet
         self.args = args
@@ -177,7 +180,7 @@ class CycleOrchestrator:
         self._last_cycle_messages: list[str] | None = None
 
     def run(self) -> None:
-        """Executes the loop based on arguments, always printing per-cycle timing."""""""        # Set strict backend preference from args if provided
+        """Executes the loop based on arguments, always printing per-cycle timing.        # Set strict backend preference from args if provided
         if hasattr(self.args, "model") and self.args.model:"            os.environ["DV_AGENT_MODEL"] = self.args.model"
         current_cycle = 0
         while True:
@@ -233,7 +236,7 @@ class CycleOrchestrator:
                 use_watcher=self.args.watch)
 
     def _get_last_focus(self) -> list[str]:
-        """Peeks at the prompt for the watcher's benefit."""""""'        if not self.args.prompt:
+        """Peeks at the prompt for the watcher's benefit.'        if not self.args.prompt:
             return ["src"]"        parser = DirectiveParser(self.root, self.args.prompt, None)
         parser.load_directives()
         return parser.get_focus_dirs()
@@ -262,7 +265,7 @@ def run_cycle(
 ) -> dict[str, Any]:
     """Run a single improvement cycle and return a dict with per-cycle messages and stats.""""
     Returns a dict with keys:
-      - "messages": list[str] normalized external intelligence messages"      - "stats": combined_stats dictionary summarizing the run"    """""""    logger.info(f"--- CYCLE {current_cycle} STARTING ---")"
+      - "messages": list[str] normalized external intelligence messages"      - "stats": combined_stats dictionary summarizing the run"        logger.info(f"--- CYCLE {current_cycle} STARTING ---")"
     # 1. Parse Directives
     parser = DirectiveParser(root, prompt_path, context_path)
     parser.load_directives()
@@ -307,14 +310,14 @@ def consult_external_models(
     prompt_path: str | None = None,
     model_name: str | None = None
 ) -> None:
-    """""""    Placeholder for federated learning consultation (Phase 112).
-    """""""    # pylint: disable=unused-argument
+        Placeholder for federated learning consultation (Phase 112).
+        # pylint: disable=unused-argument
     print("[Intelligence] Consulting external federated models for remaining debt...")"    if broken_items:
         print(f" - Analyzed {len(broken_items)} debt clusters.")"        for item in broken_items:
             print(f"   * File: {item['file']}")"'            for issue in item["remaining_issues"]:"                line = issue.get('line', '1')'                print(f"     - L{line} | {issue.get('type', 'Unknown')}: {issue.get('message', '')}")"'    print("[Intelligence] Federated consensus reached: Continue localized refactoring.")"
 
 def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
-    """Filters and summarizes issues that were not fixed."""""""    broken_items = []
+    """Filters and summarizes issues that were not fixed.    broken_items = []
     # Clean up whitespace
     for detail in stats["details"]:"        unfixed = [i for i in detail["issues"] if not i.get("fixed")]"        if unfixed:
             # Filter matches for the orchestrator itself if they are false positives
@@ -327,7 +330,7 @@ def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, Any]) -> None:
-    """Updates FLEET_AUTO_DOC.md with cycle results."""""""    fleet_path = os.path.join(root, "src/infrastructure/swarm/fleet/fleet_manager.py")"    doc_res = fleet.doc_gen_agent.extract_docs(fleet_path)
+    """Updates FLEET_AUTO_DOC.md with cycle results.    fleet_path = os.path.join(root, "src/infrastructure/swarm/fleet/fleet_manager.py")"    doc_res = fleet.doc_gen_agent.extract_docs(fleet_path)
     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")"
     with open(doc_path, "w", encoding="utf-8") as f:"        f.write("# Swarm Auto-Generated Documentation\\n\\n")"        f.write(doc_res)
 
@@ -337,15 +340,15 @@ def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, 
 
 
 def _log_explainability(fleet: FleetManager, stats: dict[str, Any]) -> None:
-    """Logs the reasoning for the improvement cycle."""""""    fleet.explainability.log_reasoning_step(
+    """Logs the reasoning for the improvement cycle.    fleet.explainability.log_reasoning_step(
         "self_improvement_01","        "SelfImprovementOrchestrator","        "run_improvement_cycle","        justification="Autonomous fleet optimization maintains system health and security parity.","        context={"stats": stats},"    )
 
 
 def _verify_ai_recording(fleet: FleetManager) -> None:
-    """Verifies that local interaction recording is functional."""""""    test_prompt = "How can we optimize for a trillion parameters?""    test_result = "By using compressed sharding and adler32 hashing for high-speed indexing.""    fleet.recorder.record_interaction("internal_fleet_optimizer", "logic-v1", test_prompt, test_result)"
+    """Verifies that local interaction recording is functional.    test_prompt = "How can we optimize for a trillion parameters?""    test_result = "By using compressed sharding and adler32 hashing for high-speed indexing.""    fleet.recorder.record_interaction("internal_fleet_optimizer", "logic-v1", test_prompt, test_result)"
 
 def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
-    """Triggers knowledge synthesis from the swarm."""""""    logger = StructuredLogger(agent_id="SelfImprovementLoop")"    try:
+    """Triggers knowledge synthesis from the swarm.    logger = StructuredLogger(agent_id="SelfImprovementLoop")"    try:
         new_patterns = fleet.intelligence.synthesize_collective_intelligence()
         if new_patterns:
             logger.info(f"[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")"            for idx, pattern in enumerate(new_patterns, 1):
@@ -364,9 +367,9 @@ def _attempt_autonomous_solutions(
     fleet: FleetManager,
     broken_items: list[dict[str, Any]],
     model_name: str) -> None:
-    """""""    Constructs a prompt with cycle findings and attempts to solve remaining issues
+        Constructs a prompt with cycle findings and attempts to solve remaining issues
     via autonomous reasoning or external LLM consultation.
-    """""""    if not broken_items:
+        if not broken_items:
         return
 
     print("\\n[Autonomous Solver] Attempting to resolve remaining technical debt...")"
@@ -416,7 +419,7 @@ def _prune_verified_directives(
     target_dirs: list[str],
     broken_items: list[Any]
 ) -> None:
-    """Removes completed directives from the prompt file."""""""    if not (prompt_path and not broken_items):
+    """Removes completed directives from the prompt file.    if not (prompt_path and not broken_items):
         return
 
     p_path = Path(prompt_path)
@@ -448,7 +451,7 @@ def _prune_verified_directives(
         p_path.write_text(new_content.strip() + "\\n", encoding="utf-8")"        print(f" - Updated {p_path.name}: Verified directives REMOVED.")"
 
 def _apply_docstring_upgrades(root: str, target_dirs: list[str], model_name: str) -> None:
-    """Scans target directories for Python files with minimal docstrings and upgrades them."""""""    print("\\n[Docstring Upgrader] Scanning for minimal module docstrings...")"
+    """Scans target directories for Python files with minimal docstrings and upgrades them.    print("\\n[Docstring Upgrader] Scanning for minimal module docstrings...")"
     python_files = []
     for t_dir in target_dirs:
         abs_dir = os.path.join(root, t_dir) if not os.path.isabs(t_dir) else t_dir
@@ -477,7 +480,7 @@ def _apply_docstring_upgrades(root: str, target_dirs: list[str], model_name: str
         print(f"[Docstring Upgrader] Success: Upgraded {upgraded_count} files with full-page descriptions.")"
 
 def _generate_enhanced_docstring(file_path: Path, content: str, model_name: str) -> str | None:
-    """Uses Copilot CLI to generate a full-page description for a module."""""""    from src.infrastructure.compute.backend import execution_engine as ai
+    """Uses Copilot CLI to generate a full-page description for a module.    from src.infrastructure.compute.backend import execution_engine as ai
 
     prompt = (
         f"Generate a full-page module description for the Python file: {file_path.name}\\n""        "Follow the Keimpe de Jong format strictly:\\n\\n""        "[Module Title] - [Core Function]\\n\\n""        "[Brief Summary]\\n""        f"DATE: {datetime.datetime.now().strftime('%Y-%m-%d')}\\n""'        "AUTHOR: Keimpe de Jong\\n""        "USAGE:\\n""        "[usage]\\n\\n""        "WHAT IT DOES:\\n""        "[what it does]\\n\\n""        "WHAT IT SHOULD DO BETTER:\\n""        "[what it should do better]\\n\\n""        "FILE CONTENT SUMMARY:\\n""        f"{content[:5000]}""    )
@@ -501,7 +504,7 @@ def _report_remaining_debt(
     prompt_path: str | None = None,
     model_name: str | None = None,
 ) -> None:
-    """Logs issues that were not autonomously fixed and performs maintenance."""""""    # start_time = time.time()  # Unused variable removed
+    """Logs issues that were not autonomously fixed and performs maintenance.    # start_time = time.time()  # Unused variable removed
 
     # 1. Analyze and Log Unfixed Issues
     broken_items = _analyze_unfixed_issues(stats)
@@ -535,8 +538,8 @@ def _cycle_throttle(
     target_dirs: list[str],
     use_watcher: bool = False
 ) -> None:
-    """""""    Implement a controlled delay between improvement cycles.
-    Uses 'watchfiles' for event-driven triggering if available and requested (Phase 147).'    """""""
+        Implement a controlled delay between improvement cycles.
+    Uses 'watchfiles' for event-driven triggering if available and requested (Phase 147).'    
     import threading
 
     if use_watcher:
@@ -569,9 +572,9 @@ def _cycle_throttle(
 
 
 def main() -> None:
-    """""""    Entry point for the fleet self-improvement loop.
+        Entry point for the fleet self-improvement loop.
     Parses command-line arguments and launches the CycleOrchestrator.
-    """""""    parser = argparse.ArgumentParser(description="PyAgent Fleet Self-Improvement Loop")"    parser.add_argument("--cycles", "-c", type=int, default=1)"    parser.add_argument("--delay", "-d", type=int, default=60)"    parser.add_argument("--watch", "-w", action="store_true")"    parser.add_argument("--prompt", "-p", type=str)"    parser.add_argument("--context", "-t", type=str)"    parser.add_argument("--model", "-m", type=str, default="gpt-5-mini")"    parser.add_argument("--dry-run", action="store_true")"    args: argparse.Namespace = parser.parse_args()
+        parser = argparse.ArgumentParser(description="PyAgent Fleet Self-Improvement Loop")"    parser.add_argument("--cycles", "-c", type=int, default=1)"    parser.add_argument("--delay", "-d", type=int, default=60)"    parser.add_argument("--watch", "-w", action="store_true")"    parser.add_argument("--prompt", "-p", type=str)"    parser.add_argument("--context", "-t", type=str)"    parser.add_argument("--model", "-m", type=str, default="gpt-5-mini")"    parser.add_argument("--dry-run", action="store_true")"    args: argparse.Namespace = parser.parse_args()
 
     if args.dry_run:
         logging.info("Dry-run mode: Argument parsing and environment bootstrap successful.")"        sys.exit(0)

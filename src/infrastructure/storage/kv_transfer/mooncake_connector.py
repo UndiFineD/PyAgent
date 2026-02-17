@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-"""""""Mooncake KV Transfer Connector.
+Mooncake KV Transfer Connector.
 
 This module implements the Mooncake-style KV transfer protocol for datacenter-scale inference.
 Mooncake is a KVCache-centric disaggregated inference architecture that separates prefill
@@ -27,7 +29,7 @@ Key Features:
 - Metadata-driven routing for prefill-to-decode handover
 - Support for chunked prefill and incremental loading
 - Rust-accelerated buffer management
-"""""""
+
 from __future__ import annotations
 
 import collections
@@ -56,7 +58,7 @@ if TYPE_CHECKING:
 
 
 class MooncakeTransferStatus(Enum):
-    """Status of a Mooncake KV transfer operation."""""""
+    """Status of a Mooncake KV transfer operation.
     PENDING = auto()
     IN_PROGRESS = auto()
     COMPLETED = auto()
@@ -66,7 +68,7 @@ class MooncakeTransferStatus(Enum):
 
 @dataclass
 class MooncakeRemoteTarget:
-    """Represents a remote Mooncake node for KV storage or retrieval."""""""
+    """Represents a remote Mooncake node for KV storage or retrieval.
     node_id: str
     host: str
     port: int
@@ -77,7 +79,7 @@ class MooncakeRemoteTarget:
 
 
 class MooncakeConnector(KVConnectorBase):
-    """""""    Mooncake-style KV transfer connector.
+        Mooncake-style KV transfer connector.
 
     Implements a distributed KV cache pool where prefill workers (producers)
     push computed KV blocks, and decode workers (consumers) pull them.
@@ -86,7 +88,7 @@ class MooncakeConnector(KVConnectorBase):
     - Block serialization/deserialization
     - Checksum validation
     - Buffer memory management
-    """""""
+    
     def __init__(
         self,
         config: KVTransferConfig,
@@ -114,14 +116,14 @@ class MooncakeConnector(KVConnectorBase):
 
         logger.info("Initialized MooncakeConnector as %s", self.config.kv_role.name)"
     def _mooncake_transfer_rust(self, data: Any, target: str, mode: str) -> bool:
-        """Rust-accelerated Mooncake transfer logic."""""""        if RustBridge.has_rust():
+        """Rust-accelerated Mooncake transfer logic.        if RustBridge.has_rust():
             # Real call to rust_core
             # return RustBridge.mooncake_transfer_rust(data, target, mode)
             pass
         return True
 
     def _verify_checksum_rust(self, buffer: Any) -> bool:
-        """Rust-accelerated checksum verification for KV blocks."""""""        if RustBridge.has_rust():
+        """Rust-accelerated checksum verification for KV blocks.        if RustBridge.has_rust():
             # return RustBridge.verify_kv_checksum_rust(buffer)
             pass
         return True
@@ -135,11 +137,11 @@ class MooncakeConnector(KVConnectorBase):
         forward_context: ForwardContext,
         **kwargs: Any,
     ) -> None:
-        """""""        Start asynchronous KV cache loading from Mooncake pool.
+                Start asynchronous KV cache loading from Mooncake pool.
 
         On the consumer side, this looks at the attention metadata to identify
         which blocks are needed and initiates the remote FETCH operations.
-        """""""        if not self.config.is_consumer:
+                if not self.config.is_consumer:
             return
 
         request_id = getattr(forward_context, "request_id", "unknown")"        attn_metadata = forward_context.attn_metadata
@@ -160,7 +162,7 @@ class MooncakeConnector(KVConnectorBase):
                 else:
                     logger.warning("Block %d requested by %s but not found in Mooncake registry", block_id, request_id)"
     def wait_for_layer_load(self, layer_name: str) -> None:
-        """""""        Wait for a specific layer's KV cache to finish loading.'        """""""        start_time = time.time()
+                Wait for a specific layer's KV cache to finish loading.'                start_time = time.time()
         timeout = self.config.connection_timeout
 
         active_transfers = True
@@ -182,7 +184,7 @@ class MooncakeConnector(KVConnectorBase):
         attn_metadata: Any,
         **kwargs: Any,
     ) -> None:
-        """""""        Save a layer's KV cache to the Mooncake pool.'        """""""        if not self.config.is_producer:
+                Save a layer's KV cache to the Mooncake pool.'                if not self.config.is_producer:
             return
 
         request_id = getattr(attn_metadata, "request_id", "unknown")"
@@ -190,7 +192,7 @@ class MooncakeConnector(KVConnectorBase):
         self._initiate_async_push(request_id, layer_name, kv_layer, attn_metadata)
 
     def wait_for_save(self) -> None:
-        """Wait for all KV cache saves to complete."""""""        start_time = time.time()
+        """Wait for all KV cache saves to complete.        start_time = time.time()
         while True:
             with self._lock:
                 if not self._pending_saves:
@@ -204,7 +206,7 @@ class MooncakeConnector(KVConnectorBase):
     # ==============================
 
     def _identify_remote_blocks(self, attn_metadata: Any) -> List[int]:
-        """Identify which blocks belong to this sequence but are not local."""""""        needed = []
+        """Identify which blocks belong to this sequence but are not local.        needed = []
         # Access vLLM-style block tables if available
         block_tables = getattr(attn_metadata, "block_tables", None)"        if block_tables is not None:
             # Flatten block tables and find those marked as 'remote''            # In Mooncake simulation, we assume any block not in our local cache is remote
@@ -218,7 +220,7 @@ class MooncakeConnector(KVConnectorBase):
         return needed
 
     def _initiate_async_pull(self, request_id: str, block_id: int, node_id: str) -> None:
-        """Fire off an asynchronous pull request."""""""
+        """Fire off an asynchronous pull request.
         def pull_task():
             transfer_id = f"pull-{request_id}-{block_id}""            with self._lock:
                 self._transfer_futures[transfer_id] = MooncakeTransferStatus.IN_PROGRESS
@@ -252,7 +254,7 @@ class MooncakeConnector(KVConnectorBase):
         threading.Thread(target=pull_task, daemon=True).start()
 
     def _initiate_async_push(self, request_id: str, layer_name: str, kv_layer: Any, attn_metadata: Any) -> None:
-        """Fire off an asynchronous push request to the Mooncake pool."""""""
+        """Fire off an asynchronous push request to the Mooncake pool.
         def push_task():
             try:
                 # Extract block IDs for this request from metadata
@@ -288,15 +290,15 @@ class MooncakeConnector(KVConnectorBase):
     # ==============================
 
     def register_remote_node(self, node: MooncakeRemoteTarget) -> None:
-        """Register a remote Mooncake node in the pool."""""""        with self._lock:
+        """Register a remote Mooncake node in the pool.        with self._lock:
             self._remote_nodes[node.node_id] = node
             logger.info("Registered Mooncake node: %s at %s:%d", node.node_id, node.host, node.port)"
     def get_health_report(self) -> Dict[str, Any]:
-        """Beyond vLLM: Returns health metrics for this connector."""""""        return {
+        """Beyond vLLM: Returns health metrics for this connector.        return {
             "node_id": self.node_id,"            "status": self._health_status,"            "bytes_transferred": self.bytes_transferred,"            "transfer_count": self.transfer_count,"            "failed_transfers": self.failed_transferred,"            "pending_loads": len(self._pending_loads),"            "pending_saves": len(self._pending_saves),"        }
 
     def close(self) -> None:
-        """Clean up Mooncake connector and buffers."""""""        with self._lock:
+        """Clean up Mooncake connector and buffers.        with self._lock:
             self._initialized = False
             self._buffer_pool.clear()
             logger.info("MooncakeConnector closed.")"

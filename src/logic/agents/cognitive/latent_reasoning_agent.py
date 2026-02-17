@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# LatentReasoningAgent for PyAgent.
+# LatentReasoningAgent for PyAgent.
 # Specializes in detecting English-bias in multilingual swarm outputs and ensuring
 latent reasoning consistency across language boundaries.
 Ref: ArXiv 2601.02996 (Latent Reasoning in LLMs)
-"""""""
+
 import logging
 from typing import Any
 
@@ -29,7 +31,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class LatentReasoningAgent(BaseAgent):
     Guardrail agent that validates cross-lingual reasoning integrity.
-#     Prevents 'representation collapse' in low-resource language outputs.'"""""""
+#     Prevents 'representation collapse' in low-resource language outputs.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -39,8 +41,8 @@ class LatentReasoningAgent(BaseAgent):
     def audit_multilingual_output(
         self, task: str, response: str, language: str
     ) -> dict[str, Any]:
-"""""""        Audits a response for latent reasoning "consistency."        Flags outputs where reasoning strength likely drops due to language-specific training gaps.
-"""""""     "   _ = response"        logging.info(
+        Audits a response for latent reasoning "consistency."        Flags outputs where reasoning strength likely drops due to language-specific training gaps.
+     "   _ = response"        logging.info(
 #             fLatentReasoningAgent: Auditing {language} output for task: {task[:30]}
         )
 
@@ -59,8 +61,8 @@ class LatentReasoningAgent(BaseAgent):
     def verify_silent_steps(
         self, chain_of_thought: list[str], target_language: str
     ) -> bool:
-"""""""        Verifies if each step of the reasoning chain holds up in the target language.
-"""""""        # Logic to simulate cross-lingual logical entailment
+        Verifies if each step of the reasoning chain holds up in the target language.
+        # Logic to simulate cross-lingual logical entailment
         _ = chain_of_thought
         _ = target_language
         return True

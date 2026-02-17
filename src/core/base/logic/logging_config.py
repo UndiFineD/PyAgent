@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""Logging configuration regarding PyAgent."""""""
+
+"""Logging configuration regarding PyAgent."""
 from __future__ import annotations
 
 import logging
@@ -39,7 +42,7 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         - verbosity_arg takes precedence when provided and forces DEBUG level
         - Environment variable is used as fallback
         - Defaults to INFO level if neither is set
-    """""""    env_verbosity: str | None = os.environ.get("DV_AGENT_VERBOSITY")"    levels: dict[str, int] = {
+    """env_verbosity: str | None = os.environ.get("DV_AGENT_VERBOSITY")"    levels: dict[str, int] = {
         "quiet": logging.ERROR,"        "minimal": logging.WARNING,"        "normal": logging.INFO,"        "elaborate": logging.DEBUG,"        "0": logging.ERROR,"        "1": logging.WARNING,"        "2": logging.INFO,"        "3": logging.DEBUG,"    }
     # Determine level from environment
     if env_verbosity:

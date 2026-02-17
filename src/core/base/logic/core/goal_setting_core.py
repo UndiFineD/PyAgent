@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Goal Setting and Iterative Refinement Core
+
+"""Goal Setting and Iterative Refinement Core
 
 Implements goal-driven iterative improvement patterns for self-correcting agents.
 Based on agentic design patterns with goal evaluation, iterative refinement, and
 self-correction reasoning techniques.
-"""""""
+"""
 import logging
 from typing import List, Dict, Any, Optional, Callable
 from dataclasses import dataclass, field
@@ -26,14 +29,14 @@ from src.core.base.common.base_core import BaseCore
 
 
 class GoalStatus(str, Enum):
-    """Goal achievement status enumeration."""""""    PENDING = "pending""    IN_PROGRESS = "in_progress""    ACHIEVED = "achieved""    FAILED = "failed""    MAX_ITERATIONS_REACHED = "max_iterations_reached""
+    """Goal achievement status enumeration."""PENDING = "pending""    IN_PROGRESS = "in_progress""    ACHIEVED = "achieved""    FAILED = "failed""    MAX_ITERATIONS_REACHED = "max_iterations_reached""
 
 class GoalPriority(str, Enum):
-    """Goal priority levels."""""""    LOW = "low""    MEDIUM = "medium""    HIGH = "high""    CRITICAL = "critical""
+    """Goal priority levels."""LOW = "low""    MEDIUM = "medium""    HIGH = "high""    CRITICAL = "critical""
 
 @dataclass
 class Goal:
-    """Represents a goal with evaluation criteria."""""""    id: str
+    """Represents a goal with evaluation criteria."""id: str
     description: str
     criteria: List[str]  # List of criteria that must be met
     priority: GoalPriority = GoalPriority.MEDIUM
@@ -45,17 +48,17 @@ class Goal:
     completed_at: Optional[datetime] = None
 
     def is_achieved(self) -> bool:
-        """Check if goal is achieved based on latest evaluation."""""""        if not self.evaluation_history:
+        """Check if goal is achieved based on latest evaluation."""if not self.evaluation_history:
             return False
         return self.evaluation_history[-1].get("goals_met", False)"
     def should_continue_iteration(self) -> bool:
-        """Check if we should continue iterating."""""""        return (self.current_iteration < self.max_iterations and
+        """Check if we should continue iterating."""return (self.current_iteration < self.max_iterations and
                 self.status not in [GoalStatus.ACHIEVED, GoalStatus.FAILED])
 
 
 @dataclass
 class IterationResult:
-    """Result of a single iteration."""""""    iteration: int
+    """Result of a single iteration."""iteration: int
     content: str
     evaluation: Dict[str, Any]
     feedback: str
@@ -64,14 +67,14 @@ class IterationResult:
 
 
 class GoalSettingCore(BaseCore):
-    """""""    Core for goal-driven iterative refinement and self-correction.
+    """Core for goal-driven iterative refinement and self-correction.
 
     Implements patterns from agentic design patterns including:
     - Goal setting with evaluation criteria
     - Iterative refinement with feedback loops
     - Self-correction reasoning
     - Goal achievement tracking
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.active_goals: Dict[str, Goal] = {}
@@ -88,7 +91,7 @@ class GoalSettingCore(BaseCore):
         priority: GoalPriority = GoalPriority.MEDIUM,
         max_iterations: int = 5
     ) -> Goal:
-        """""""        Create a new goal with evaluation criteria.
+        """Create a new goal with evaluation criteria.
 
         Args:
             goal_id: Unique identifier for the goal
@@ -99,7 +102,7 @@ class GoalSettingCore(BaseCore):
 
         Returns:
             Created Goal object
-        """""""        goal = Goal(
+        """goal = Goal(
             id=goal_id,
             description=description,
             criteria=criteria,
@@ -111,27 +114,27 @@ class GoalSettingCore(BaseCore):
         self.logger.info(f"Created goal {goal_id}: {description}")"        return goal
 
     def register_evaluation_function(self, goal_type: str, func: Callable):
-        """""""        Register a custom evaluation function for a goal type.
+        """Register a custom evaluation function for a goal type.
 
         Args:
             goal_type: Type of goal this function evaluates
             func: Function that takes content and criteria, returns evaluation dict
-        """""""        self.evaluation_functions[goal_type] = func
+        """self.evaluation_functions[goal_type] = func
 
     def register_refinement_function(self, goal_type: str, func: Callable):
-        """""""        Register a custom refinement function for a goal type.
+        """Register a custom refinement function for a goal type.
 
         Args:
             goal_type: Type of goal this function refines
             func: Function that takes content, feedback, and criteria, returns refined content
-        """""""        self.refinement_functions[goal_type] = func
+        """self.refinement_functions[goal_type] = func
 
     async def evaluate_content(
         self,
         content: str,
         criteria: List[str],
         goal_type: str = "default""    ) -> Dict[str, Any]:
-        """""""        Evaluate content against goal criteria.
+        """Evaluate content against goal criteria.
 
         Args:
             content: Content to evaluate
@@ -140,7 +143,7 @@ class GoalSettingCore(BaseCore):
 
         Returns:
             Evaluation results with goals_met boolean and detailed feedback
-        """""""        if goal_type in self.evaluation_functions:
+        """if goal_type in self.evaluation_functions:
             return await self.evaluation_functions[goal_type](content, criteria)
 
         # Default evaluation logic
@@ -163,7 +166,7 @@ class GoalSettingCore(BaseCore):
         feedback: str,
         criteria: List[str],
         goal_type: str = "default""    ) -> str:
-        """""""        Refine content based on feedback and criteria.
+        """Refine content based on feedback and criteria.
 
         Args:
             content: Original content
@@ -173,7 +176,7 @@ class GoalSettingCore(BaseCore):
 
         Returns:
             Refined content
-        """""""        if goal_type in self.refinement_functions:
+        """if goal_type in self.refinement_functions:
             return await self.refinement_functions[goal_type](content, feedback, criteria)
 
         # Default refinement logic - provide generic improvement suggestions
@@ -185,7 +188,7 @@ class GoalSettingCore(BaseCore):
         goal_id: str,
         initial_content: str,
         goal_type: str = "default""    ) -> Goal:
-        """""""        Execute iterative refinement for a goal.
+        """Execute iterative refinement for a goal.
 
         Args:
             goal_id: ID of the goal to iterate
@@ -194,7 +197,7 @@ class GoalSettingCore(BaseCore):
 
         Returns:
             Updated Goal object
-        """""""        if goal_id not in self.active_goals:
+        """if goal_id not in self.active_goals:
             raise ValueError(f"Goal {goal_id} not found")"
         goal = self.active_goals[goal_id]
         goal.status = GoalStatus.IN_PROGRESS
@@ -241,18 +244,18 @@ class GoalSettingCore(BaseCore):
         return goal
 
     async def get_goal_status(self, goal_id: str) -> Optional[Goal]:
-        """Get the current status of a goal."""""""        if goal_id in self.active_goals:
+        """Get the current status of a goal."""if goal_id in self.active_goals:
             return self.active_goals[goal_id]
         return self.completed_goals.get(goal_id)
 
     async def list_active_goals(self) -> List[Goal]:
-        """List all active goals."""""""        return list(self.active_goals.values())
+        """List all active goals."""return list(self.active_goals.values())
 
     async def list_completed_goals(self) -> List[Goal]:
-        """List all completed goals."""""""        return list(self.completed_goals.values())
+        """List all completed goals."""return list(self.completed_goals.values())
 
     async def cleanup(self):
-        """Cleanup resources."""""""        self.active_goals.clear()
+        """Cleanup resources."""self.active_goals.clear()
         self.completed_goals.clear()
         self.evaluation_functions.clear()
         self.refinement_functions.clear()

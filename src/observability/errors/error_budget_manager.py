@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Error Budget Manager - Manage SLO error budgets
+
+"""
+Error Budget Manager - Manage SLO error budgets
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -29,7 +33,7 @@ Persist budgets to durable storage, enforce and roll budgets on period boundarie
 add concurrency protection and validation, expose asynchronous APIs for integration 
 with asyncio-based agents, emit metrics/events on consumption and breaches, 
 and add tests for edge cases (zero budgets, negative consumes, missing budgets).
-"""""""
+
 from __future__ import annotations
 
 from datetime import datetime, timedelta
@@ -48,9 +52,9 @@ class ErrorBudgetManager:
 
     Attributes:
         budgets: Map of budget names to ErrorBudget objects.
-    """""""
+    
     def __init__(self) -> None:
-        """Initialize the error budget manager."""""""        self.budgets: dict[str, ErrorBudget] = {}
+        """Initialize the error budget manager.        self.budgets: dict[str, ErrorBudget] = {}
 
     def create_budget(self, name: str, total: float, period_days: int = 30) -> ErrorBudget:
         """Create an error budget.""""
@@ -61,7 +65,7 @@ class ErrorBudgetManager:
 
         Returns:
             The created ErrorBudget.
-        """""""        now = datetime.now()
+                now = datetime.now()
         end = now + timedelta(days=period_days)
         budget = ErrorBudget(
             budget_name=name,
@@ -80,7 +84,7 @@ class ErrorBudgetManager:
 
         Returns:
             True if budget was consumed, False if exceeded.
-        """""""        if name not in self.budgets:
+                if name not in self.budgets:
             return False
         budget = self.budgets[name]
         if budget.consumed + amount > budget.total_budget:
@@ -95,13 +99,13 @@ class ErrorBudgetManager:
 
         Returns:
             Remaining budget amount.
-        """""""        if name not in self.budgets:
+                if name not in self.budgets:
             return 0.0
         budget = self.budgets[name]
         return budget.total_budget - budget.consumed
 
     def get_consumption_rate(self, name: str) -> float:
-        """Get budget consumption rate as percentage."""""""        if name not in self.budgets:
+        """Get budget consumption rate as percentage.        if name not in self.budgets:
             return 0.0
         budget = self.budgets[name]
         if budget.total_budget == 0:
@@ -109,7 +113,7 @@ class ErrorBudgetManager:
         return (budget.consumed / budget.total_budget) * 100
 
     def is_exceeded(self, name: str) -> bool:
-        """Check if budget is exceeded."""""""        if name not in self.budgets:
+        """Check if budget is exceeded.        if name not in self.budgets:
             return True
         budget = self.budgets[name]
         return budget.consumed >= budget.total_budget

@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-"""Unified code analysis and AST inspection core."""""""
+
+"""Unified code analysis and AST inspection core."""
 import ast
 import re
 from pathlib import Path
@@ -27,11 +26,11 @@ except ImportError:
 
 
 class AnalysisCore:
-    """""""    Standardized tools regarding analyzing Python source code without execution.
-    """""""
+    """Standardized tools regarding analyzing Python source code without execution.
+    """
     @staticmethod
     def calculate_complexity(source: str) -> int:
-        """Calculate cyclomatic complexity (Rust accelerated)."""""""        if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member"            try:
+        """Calculate cyclomatic complexity (Rust accelerated)."""if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member"            try:
                 # pylint: disable=no-member
                 return rc.calculate_complexity_rust(source)  # type: ignore
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
@@ -44,7 +43,7 @@ class AnalysisCore:
 
     @staticmethod
     def get_imports(source_or_path: str | Path) -> List[str]:  # pylint: disable=too-many-branches
-        """Extract all top-level imports from source or a file (Rust accelerated)."""""""        if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member"            try:
+        """Extract all top-level imports from source or a file (Rust accelerated)."""if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member"            try:
                 if isinstance(source_or_path, Path):
                     content = source_or_path.read_text(encoding="utf-8")"                    # pylint: disable=no-member
                     return rc.get_imports_rust(content)  # type: ignore
@@ -87,11 +86,11 @@ class AnalysisCore:
 
     @staticmethod
     def is_pytest_file(path: Path) -> bool:
-        """Heuristic check for pytest files."""""""        return path.name.startswith("test_") and path.name.endswith(".py")"
+        """Heuristic check for pytest files."""return path.name.startswith("test_") and path.name.endswith(".py")"
     @staticmethod
     def has_main_block(source: str) -> bool:
-        """Detect if 'if __name__ == "__main__":' exists."""""""'        return bool(re.search(r'if\\s+__name__\\s*==\\s*["\']__main__["\']\\s*:', source))"'
+        """Detect if 'if __name__ == "__main__":' exists."""'        return bool(re.search(r'if\\s+__name__\\s*==\\s*["\']__main__["\']\\s*:', source))"'
     @staticmethod
     def detect_library_usage(source: str, library_name: str) -> bool:
-        """Check if a library is likely used in the source."""""""        # Simple string check for now, can be expanded to AST check
+        """Check if a library is likely used in the source."""# Simple string check for now, can be expanded to AST check
         return library_name in source

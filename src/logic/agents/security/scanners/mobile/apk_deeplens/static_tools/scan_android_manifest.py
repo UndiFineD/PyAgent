@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -22,7 +24,7 @@ class ScanAndroidManifest(object):
 
     def extract_manifest_info(self, extracted_source_path):
     pass  # [BATCHFIX] inserted for empty block
-"""Extracts basic information from an Android Manifest file.""""""""""""""#         manifest_path = os.path.join(extracted_source_path, "resources", "AndroidManifest.xml")"
+"""Extracts basic information from an Android Manifest file.#         manifest_path = os.path.join(extracted_source_path, "resources", "AndroidManifest.xml")"
         if not os.path.isfile(manifest_path):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -178,7 +180,7 @@ class ScanAndroidManifest(object):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-""" """return component.get(f"{{{ns['android']}}}exported") == "true"""""""'
+""" """return component.get(f"{{{ns['android']}}}exported") == "true'
     def parse_android_manifest(self, manifest_path):
         ns = {"android": "http://schemas.android.com/apk/res/android"}"
         # Parse the XML content

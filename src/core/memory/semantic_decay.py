@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Module: semantic_decay
+
+"""
+""""Module: semantic_decay
 Implements advanced Synaptic Decay, Neural Context Pruning, and Semantic Cache Invalidation.
 Phase 91-92: Sliding-window invalidation and attention-entropy maps for KV-cache landmarks.
-"""""""
+"""
 from __future__ import annotations
 import time
 import logging
@@ -27,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class MemoryBlock:
-    """Represents a block of memory with metadata for pruning decisions."""""""    key: str
+    """Represents a block of memory with metadata for pruning decisions."""key: str
     content: Any
     access_count: int = 0
     last_access: float = field(default_factory=time.time)
@@ -40,7 +44,7 @@ class MemoryBlock:
 
 @dataclass
 class PruningDecision:
-    """Result of pruning analysis."""""""    block_key: str
+    """Result of pruning analysis."""block_key: str
     should_prune: bool
     reason: str
     confidence: float
@@ -48,22 +52,22 @@ class PruningDecision:
 
 
 class NeuralContextPruner:
-    """""""    Advanced neural context pruning using attention-entropy maps.
+    """Advanced neural context pruning using attention-entropy maps.
     
     Implements Phase 92: Using attention-entropy maps to identify and prune 
     KV-cache landmarks, enabling 1M+ token contexts.
-    """""""    
+    """
     def __init__(self, attention_threshold: float = 0.3, entropy_window: int = 1000):
         self.attention_threshold = attention_threshold
         self.entropy_window = entropy_window
         self.attention_history: Dict[str, List[float]] = defaultdict(list)
         
     def calculate_attention_entropy(self, block: MemoryBlock, context_window: List[MemoryBlock]) -> float:
-        """""""        Calculate attention entropy for a memory block within its context window.
+        """Calculate attention entropy for a memory block within its context window.
         
         Higher entropy indicates the block is a semantic landmark that should be preserved.
         Lower entropy indicates redundant or low-value information that can be pruned.
-        """""""        if not context_window:
+        """if not context_window:
             return 0.0
             
         # Calculate attention distribution within the window
@@ -91,7 +95,7 @@ class NeuralContextPruner:
         return entropy
     
     def _calculate_semantic_similarity(self, block1: MemoryBlock, block2: MemoryBlock) -> float:
-        """Calculate semantic similarity between two memory blocks."""""""        if block1.semantic_fingerprint and block2.semantic_fingerprint:
+        """Calculate semantic similarity between two memory blocks."""if block1.semantic_fingerprint and block2.semantic_fingerprint:
             # Simple fingerprint-based similarity (could be enhanced with embeddings)
             return 1.0 if block1.semantic_fingerprint == block2.semantic_fingerprint else 0.1
         else:
@@ -99,7 +103,7 @@ class NeuralContextPruner:
             return self._content_similarity(block1.content, block2.content)
     
     def _content_similarity(self, content1: Any, content2: Any) -> float:
-        """Calculate content-based similarity."""""""        if isinstance(content1, str) and isinstance(content2, str):
+        """Calculate content-based similarity."""if isinstance(content1, str) and isinstance(content2, str):
             # Simple Jaccard similarity for text content
             words1 = set(content1.lower().split())
             words2 = set(content2.lower().split())
@@ -109,8 +113,8 @@ class NeuralContextPruner:
         return 0.1  # Default low similarity
     
     def should_prune_block(self, block: MemoryBlock, context_window: List[MemoryBlock]) -> PruningDecision:
-        """""""        Determine if a memory block should be pruned based on neural context analysis.
-        """""""        entropy = self.calculate_attention_entropy(block, context_window)
+        """Determine if a memory block should be pruned based on neural context analysis.
+        """entropy = self.calculate_attention_entropy(block, context_window)
         block.attention_entropy = entropy
         
         # Low entropy + low access + old age = candidate for pruning
@@ -145,10 +149,10 @@ class NeuralContextPruner:
 
 
 class SemanticCacheInvalidator:
-    """""""    Implements Phase 91: Sliding-window invalidation of LSH buckets.
+    """Implements Phase 91: Sliding-window invalidation of LSH buckets.
     
     Manages semantic cache invalidation to prevent context staleness in long-running conversations.
-    """""""    
+    """
     def __init__(self, window_size: int = 100, invalidation_threshold: float = 0.7):
         self.window_size = window_size
         self.invalidation_threshold = invalidation_threshold
@@ -156,7 +160,7 @@ class SemanticCacheInvalidator:
         self.semantic_clusters: Dict[str, Set[str]] = defaultdict(set)
         
     def track_access(self, key: str, semantic_fingerprint: Optional[str] = None):
-        """Track memory access for sliding window analysis."""""""        current_time = time.time()
+        """Track memory access for sliding window analysis."""current_time = time.time()
         self.access_window.append((key, current_time))
         
         # Maintain window size
@@ -168,10 +172,10 @@ class SemanticCacheInvalidator:
             self.semantic_clusters[semantic_fingerprint].add(key)
     
     def get_invalidated_keys(self, current_context: List[str]) -> Set[str]:
-        """""""        Identify keys that should be invalidated based on sliding window analysis.
+        """Identify keys that should be invalidated based on sliding window analysis.
         
         Returns keys that are no longer relevant in the current context window.
-        """""""        invalidated = set()
+        """invalidated = set()
         
         # Find keys outside the current context that haven't been accessed recently'        context_set = set(current_context)
         window_keys = {key for key, _ in self.access_window}
@@ -196,20 +200,20 @@ class SemanticCacheInvalidator:
         return invalidated
     
     def _get_fingerprint_for_key(self, key: str) -> Optional[str]:
-        """Get semantic fingerprint for a key (placeholder implementation)."""""""        # This would integrate with the actual memory storage system
+        """Get semantic fingerprint for a key (placeholder implementation)."""# This would integrate with the actual memory storage system
         return None  # Explicitly document that this returns None in current implementation
         
     def _get_key_age(self, key: str) -> float:
-        """Get age of key in seconds."""""""        for k, timestamp in self.access_window:
+        """Get age of key in seconds."""for k, timestamp in self.access_window:
             if k == key:
                 return time.time() - timestamp
         return float('inf')'
 
 class SynapticDecay:
-    """""""    Enhanced synaptic decay system with neural context pruning and semantic invalidation.
+    """Enhanced synaptic decay system with neural context pruning and semantic invalidation.
     
     Integrates multiple pruning strategies for optimal memory management.
-    """""""
+    """
     def __init__(self, decay_rate: float = 0.05, relevance_threshold: float = 0.2):
         self.decay_rate = decay_rate
         self.relevance_threshold = relevance_threshold
@@ -222,7 +226,7 @@ class SynapticDecay:
         self.memory_blocks: Dict[str, MemoryBlock] = {}
 
     def track_access(self, key_id: str, semantic_fingerprint: Optional[str] = None):
-        """Update access timestamp and boost relevance score."""""""        self.last_access[key_id] = time.time()
+        """Update access timestamp and boost relevance score."""self.last_access[key_id] = time.time()
         current_score = self.knowledge_scores.get(key_id, 1.0)
         self.knowledge_scores[key_id] = min(1.0, current_score + 0.1)
         
@@ -237,7 +241,7 @@ class SynapticDecay:
         self.semantic_invalidator.track_access(key_id, semantic_fingerprint)
 
     def add_memory_block(self, key: str, content: Any, semantic_fingerprint: Optional[str] = None):
-        """Add a new memory block to the system."""""""        block = MemoryBlock(
+        """Add a new memory block to the system."""block = MemoryBlock(
             key=key,
             content=content,
             semantic_fingerprint=semantic_fingerprint
@@ -247,10 +251,10 @@ class SynapticDecay:
         self.last_access[key] = time.time()
 
     def process_decay(self, keys: List[str]) -> List[str]:
-        """""""        Enhanced decay processing with neural context pruning.
+        """Enhanced decay processing with neural context pruning.
         
         Returns keys that should be pruned based on multiple criteria.
-        """""""        to_prune = []
+        """to_prune = []
         current_time = time.time()
         
         # Get all memory blocks for context analysis
@@ -297,13 +301,13 @@ class SynapticDecay:
         return list(set(to_prune))  # Remove duplicates
 
     def _should_prune_simple(self, key: str, current_time: float) -> bool:
-        """Simple pruning decision for keys without full block data."""""""        time_since_access = current_time - self.last_access.get(key, current_time)
+        """Simple pruning decision for keys without full block data."""time_since_access = current_time - self.last_access.get(key, current_time)
         decay_factor = math.exp(-self.decay_rate * time_since_access / 86400)
         relevance = self.knowledge_scores.get(key, 1.0) * decay_factor
         return relevance < self.relevance_threshold
 
     def get_memory_stats(self) -> Dict[str, Any]:
-        """Get comprehensive memory statistics."""""""        total_blocks = len(self.memory_blocks)
+        """Get comprehensive memory statistics."""total_blocks = len(self.memory_blocks)
         avg_entropy = sum(b.attention_entropy for b in self.memory_blocks.values()) / total_blocks if total_blocks > 0 else 0
         avg_relevance = sum(b.relevance_score for b in self.memory_blocks.values()) / total_blocks if total_blocks > 0 else 0
         
@@ -311,7 +315,7 @@ class SynapticDecay:
             "total_memory_blocks": total_blocks,"            "average_attention_entropy": avg_entropy,"            "average_relevance_score": avg_relevance,"            "semantic_clusters": len(self.semantic_invalidator.semantic_clusters),"            "access_window_size": len(self.semantic_invalidator.access_window)"        }
 
     def prune_low_utility(self, cache_manager: Any):
-        """Actively prunes low-utility items from a provided cache manager."""""""        # Concept: get all keys from cache_manager.kv_cache
+        """Actively prunes low-utility items from a provided cache manager."""# Concept: get all keys from cache_manager.kv_cache
         # keys = cache_manager.get_all_keys()
         # dead_keys = self.process_decay(keys)
         # for k in dead_keys: cache_manager.delete(k)

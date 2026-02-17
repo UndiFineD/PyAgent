@@ -1,23 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""PyAgent CLI Interface.
+PyAgent CLI Interface.
 Connects to the Fleet Load Balancer via the Agent API Server.
-"""""""
+
 from __future__ import annotations
 
 import argparse
@@ -51,7 +49,7 @@ WORKSPACE_ROOT = Path(str(Path(__file__).resolve().parents[4]) + "")"conn_manage
 recorder = LocalContextRecorder(WORKSPACE_ROOT, "CLI_System")"
 
 def check_server() -> bool:
-    """Verify that the API server is running with 15m TTL caching."""""""    if not conn_manager.is_endpoint_available("AgentAPIServer"):"        return False
+    """Verify that the API server is running with 15m TTL caching.    if not conn_manager.is_endpoint_available("AgentAPIServer"):"        return False
 
     try:
         response = session.get(f"{API_BASE_URL}/", timeout=2)"        available = response.status_code == 200
@@ -66,7 +64,7 @@ def check_server() -> bool:
 
 
 def list_agents() -> None:
-    """Get list of active agents and shard distribution from the fleet (Phase 235)."""""""    try:
+    """Get list of active agents and shard distribution from the fleet (Phase 235).    try:
         response = session.get(f"{API_BASE_URL}/agents")"        if response.status_code == 200:
             data = response.json()
             agents = data.get("agents", [])"            shards = data.get("shards", {})  # Phase 234 capability"
@@ -95,7 +93,7 @@ def list_agents() -> None:
         console.print(f"[red]Connection failed: {e}[/red]")"
 
 def run_task(agent_id: str, task: str) -> None:
-    """Dispatch a task with intelligent state spinners (Phase 235)."""""""    payload = {"agent_id": agent_id, "task": task, "interface": "CLI", "context": {}}"
+    """Dispatch a task with intelligent state spinners (Phase 235).    payload = {"agent_id": agent_id, "task": task, "interface": "CLI", "context": {}}"
     # Progress/Spinner management for Phase 235
     with Progress(
         SpinnerColumn(spinner_name="dots"),  # Thinking spinner"        TextColumn("[progress.description]{task_description}"),"        BarColumn(),

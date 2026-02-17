@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py"""""""""""
+
+"""
+Auto-extracted class from agent_backend.py""""
 from __future__ import annotations
 
 import threading
@@ -34,7 +38,7 @@ class RequestBatcher:
     Example:
         batcher=RequestBatcher(batch_size=10, timeout_s=5.0)
         batcher.add("prompt1")"        batcher.add("prompt2")"        batch=batcher.get_batch()  # Returns when ready
-    """""""
+    
     def __init__(
         self,
         batch_size: int = 10,
@@ -46,7 +50,7 @@ class RequestBatcher:
             batch_size: Requests per batch.
             timeout_s: Max wait time before processing partial batch.
             recorder: Infrastructure recorder for intelligence harvesting.
-        """""""        self.batch_size = batch_size
+                self.batch_size = batch_size
         self.timeout_s = timeout_s
         self.recorder = recorder
         self._buffer: list[str] = []
@@ -60,14 +64,14 @@ class RequestBatcher:
 
         Returns:
             bool: True if batch is now ready.
-        """""""        with self._lock:
+                with self._lock:
             if not self._buffer:
                 self._batch_start = time.time()
             self._buffer.append(prompt)
             return len(self._buffer) >= self.batch_size
 
     def is_ready(self) -> bool:
-        """Check if batch is ready for processing."""""""        with self._lock:
+        """Check if batch is ready for processing.        with self._lock:
             if len(self._buffer) >= self.batch_size:
                 return True
             if self._batch_start and (time.time() - self._batch_start) >= self.timeout_s:
@@ -78,7 +82,7 @@ class RequestBatcher:
         """Get current batch and reset buffer.""""
         Returns:
             Optional[BatchRequest]: Current batch or None if empty.
-        """""""        with self._lock:
+                with self._lock:
             if not self._buffer:
                 return None
 
@@ -90,5 +94,5 @@ class RequestBatcher:
             return batch
 
     def pending_count(self) -> int:
-        """Get number of pending requests."""""""        with self._lock:
+        """Get number of pending requests.        with self._lock:
             return len(self._buffer)

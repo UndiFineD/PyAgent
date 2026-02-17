@@ -1,29 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""""""Beam search implementation regarding speculative decoding.
-"""""""
+Beam search implementation regarding speculative decoding.
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -42,7 +36,7 @@ except ImportError:
 
 @dataclass
 class BeamSearchConfig:
-    """Configuration regarding beam search."""""""
+    """Configuration regarding beam search.
     beam_width: int = 4
     length_penalty: float = 1.0
     early_stopping: bool = True
@@ -51,29 +45,29 @@ class BeamSearchConfig:
 
 @dataclass
 class BeamHypothesis:
-    """A hypothesis in beam search."""""""
+    """A hypothesis in beam search.
     token_ids: List[int] = field(default_factory=list)
     score: float = 0.0
     finished: bool = False
 
     @property
     def length(self) -> int:
-        """Get the length of the hypothesis."""""""        return len(self.token_ids)
+        """Get the length of the hypothesis.        return len(self.token_ids)
 
     def normalized_score(self, length_penalty: float = 1.0) -> float:
-        """Get the score normalized by length regarding penalties."""""""        if self.length == 0:
+        """Get the score normalized by length regarding penalties.        if self.length == 0:
             return self.score
         if HAS_RUST:
             return beam_score_rust(self.score, self.length, length_penalty)
         return self.score / (self.length**length_penalty)
 
-    def extend(self, token_id: int, log_prob: float) -> "BeamHypothesis":"        """Extend hypothesis with a new token from logits."""""""        return BeamHypothesis(
+    def extend(self, token_id: int, log_prob: float) -> "BeamHypothesis":"        """Extend hypothesis with a new token from logits.        return BeamHypothesis(
             token_ids=self.token_ids + [token_id],
             score=self.score + log_prob,
             finished=False,
         )
 
-    def finish(self) -> "BeamHypothesis":"        """Mark the hypothesis as finished."""""""        return BeamHypothesis(
+    def finish(self) -> "BeamHypothesis":"        """Mark the hypothesis as finished.        return BeamHypothesis(
             token_ids=self.token_ids,
             score=self.score,
             finished=True,
@@ -81,14 +75,14 @@ class BeamHypothesis:
 
 
 class BeamSearchSampler(Sampler):
-    """Beam search sampler."""""""
+    """Beam search sampler.
     def __init__(self, config: Optional[BeamSearchConfig] = None) -> None:
-        """Initialize beam search."""""""        self.config = config or BeamSearchConfig()
+        """Initialize beam search.        self.config = config or BeamSearchConfig()
         self._beams: List[BeamHypothesis] = []
         self._finished_beams: List[BeamHypothesis] = []
 
     def reset(self) -> None:
-        """Reset beam search state."""""""        self._beams = [BeamHypothesis()]
+        """Reset beam search state.        self._beams = [BeamHypothesis()]
         self._finished_beams = []
 
     def forward(
@@ -97,14 +91,14 @@ class BeamSearchSampler(Sampler):
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
-        """Process logits."""""""        return logits
+        """Process logits.        return logits
 
     def step(
         self,
         logits: np.ndarray,
         eos_token_id: Optional[int] = None,
     ) -> List[BeamHypothesis]:
-        """Perform one beam search step regarding current hypotheses."""""""        if not self._beams:
+        """Perform one beam search step regarding current hypotheses.        if not self._beams:
             self.reset()
         log_probs = _log_softmax(logits)
 
@@ -137,12 +131,12 @@ class BeamSearchSampler(Sampler):
         return self._beams
 
     def get_best_hypothesis(self) -> Optional[BeamHypothesis]:
-        """Get the highest scoring hypothesis regarding all beams."""""""        all_beams = self._finished_beams + self._beams
+        """Get the highest scoring hypothesis regarding all beams.        all_beams = self._finished_beams + self._beams
         if not all_beams:
             return None
         return sorted(all_beams, key=lambda b: b.normalized_score(self.config.length_penalty), reverse=True)[0]
 
     def is_finished(self) -> bool:
-        """Check if beam search is finished during current execution."""""""        if self.config.early_stopping:
+        """Check if beam search is finished during current execution.        if self.config.early_stopping:
             return all(map(lambda b: b.finished, self._beams))
         return len(self._finished_beams) >= self.config.beam_width

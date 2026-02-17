@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Performance Profiling Suite for PyAgent.
+
+Performance Profiling Suite for PyAgent.
 Validates Rust-accelerated logic and monitors tokenization throughput.
-"""""""
+
 import sys
 import asyncio
 from pathlib import Path
@@ -49,7 +52,7 @@ from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuit
 
 
 async def main():
-    """Main execution point for the profiling suite."""""""    profiler = RustProfiler.get_instance()
+    """Main execution point for the profiling suite.    profiler = RustProfiler.get_instance()
     profiler.enable()
 
     # Verify that calling it manually works
@@ -65,7 +68,7 @@ async def main():
     # 1. Tokenization Benchmarks
     test_texts = {
         "Short": "What is Python?","        "Medium": "Explain the concept of technical debt in software development.","        "Long": ("            "Provide a comprehensive analysis of microservices architecture." * 50"        ),
-        "Code": """""""def binary_search(arr, target):
+        "Code": def binary_search(arr, target):
     left, right = 0, len(arr) - 1
     while left <= right:
         mid = (left + right) // 2
@@ -73,7 +76,7 @@ async def main():
         elif arr[mid] < target: left = mid + 1
         else: right = mid - 1
     return -1
-"""""""    }
+    }
 
     print("\\n🚀 Running Profiled Benchmarks...")"    suite.benchmark_tokenization(test_texts, iterations=1000)
 

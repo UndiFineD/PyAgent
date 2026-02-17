@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -25,14 +27,14 @@ from src.core.base.common.base_core import BaseCore
 
 
 class ThreatLevel(Enum):
-    """Threat severity levels"""""""    LOW = "low""    MEDIUM = "medium""    HIGH = "high""    CRITICAL = "critical""
+    """Threat severity levels"""LOW = "low""    MEDIUM = "medium""    HIGH = "high""    CRITICAL = "critical""
 
 class ADObjectType(Enum):
-    """Active Directory object types"""""""    USER = "user""    COMPUTER = "computer""    GROUP = "group""    OU = "organizational_unit""    GPO = "group_policy_object""    SERVICE_ACCOUNT = "service_account""
+    """Active Directory object types"""USER = "user""    COMPUTER = "computer""    GROUP = "group""    OU = "organizational_unit""    GPO = "group_policy_object""    SERVICE_ACCOUNT = "service_account""
 
 @dataclass
 class ADObject:
-    """Represents an Active Directory object"""""""    distinguished_name: str
+    """Represents an Active Directory object"""distinguished_name: str
     object_class: ADObjectType
     sam_account_name: Optional[str] = None
     user_principal_name: Optional[str] = None
@@ -45,7 +47,7 @@ class ADObject:
 
 @dataclass
 class ThreatFinding:
-    """Represents a threat hunting finding"""""""    id: str
+    """Represents a threat hunting finding"""id: str
     title: str
     description: str
     threat_level: ThreatLevel
@@ -58,7 +60,7 @@ class ThreatFinding:
 
 @dataclass
 class HuntingResult:
-    """Results from a threat hunting operation"""""""    scan_id: str
+    """Results from a threat hunting operation"""scan_id: str
     scan_type: str
     findings: List[ThreatFinding]
     scanned_objects: int
@@ -68,11 +70,11 @@ class HuntingResult:
 
 
 class ActiveDirectoryThreatHuntingCore(BaseCore):
-    """""""    Active Directory Threat Hunting Core for comprehensive AD security analysis.
+    """Active Directory Threat Hunting Core for comprehensive AD security analysis.
 
     Provides capabilities for Active Directory enumeration, threat detection,
     permission analysis, and security monitoring based on advanced threat hunting patterns.
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.logger = logging.getLogger(__name__)
@@ -83,7 +85,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         self.baseline_data: Dict[str, Any] = {}
 
     async def initialize(self) -> bool:
-        """Initialize the Active Directory threat hunting core"""""""        try:
+        """Initialize the Active Directory threat hunting core"""try:
             # Initialize threat detection rules and baselines
             await self.load_threat_detection_rules()
             await self.initialize_baselines()
@@ -92,7 +94,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
             self.logger.exception("Failed to initialize Active Directory Threat Hunting Core")"            return False
 
     async def load_threat_detection_rules(self) -> None:
-        """Load threat detection rules and indicators"""""""        self.risk_indicators = {
+        """Load threat detection rules and indicators"""self.risk_indicators = {
             "privileged_accounts": ["                "Domain Admins","                "Enterprise Admins","                "Schema Admins","                "Administrators""            ],
             "suspicious_permissions": ["                "GenericAll","                "GenericWrite","                "WriteDACL","                "WriteOwner","                "Replicating Directory Changes""            ],
             "service_accounts": ["                "ServicePrincipalNames","                "PasswordNeverExpires","                "TrustedForDelegation""            ],
@@ -102,7 +104,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
         self.logger.info(f"Loaded threat detection rules with {len(self.risk_indicators)} categories")"
     async def initialize_baselines(self) -> None:
-        """Initialize baseline security configurations"""""""        self.baseline_data = {
+        """Initialize baseline security configurations"""self.baseline_data = {
             "max_group_membership": 50,"            "max_privileged_accounts": 10,"            "password_expiry_days": 90,"            "account_lockout_threshold": 5,"            "stale_account_threshold_days": 90,"            "service_account_indicators": ["svc-", "service-", "-svc", "-service"]"        }
 
         self.logger.info("Initialized baseline security configurations")"
@@ -112,7 +114,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         _search_base: Optional[str] = None,
         object_types: Optional[List[ADObjectType]] = None
     ) -> List[ADObject]:
-        """""""        Enumerate Active Directory objects
+        """Enumerate Active Directory objects
 
         Args:
             domain_controller: Domain controller to query
@@ -121,7 +123,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
         Returns:
             List of enumerated AD objects
-        """""""        # Mock AD enumeration - in real implementation, this would use LDAP queries
+        """# Mock AD enumeration - in real implementation, this would use LDAP queries
         enumerated_objects = []
 
         # Generate mock AD objects for demonstration
@@ -138,7 +140,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         self.logger.info(f"Enumerated {len(enumerated_objects)} AD objects")"        return enumerated_objects
 
     async def _generate_mock_ad_objects(self, object_types: List[ADObjectType]) -> List[Dict[str, Any]]:
-        """Generate mock AD objects for demonstration"""""""        objects = []
+        """Generate mock AD objects for demonstration"""objects = []
 
         if ADObjectType.USER in object_types:
             # Mock users
@@ -176,7 +178,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         target_objects: Optional[List[str]] = None,  # noqa: ARG002
         custom_rules: Optional[Dict[str, Any]] = None  # noqa: ARG002
     ) -> HuntingResult:
-        """""""        Perform a threat hunting operation
+        """Perform a threat hunting operation
 
         Args:
             hunt_type: Type of hunt (privileged_accounts, stale_accounts, etc.)
@@ -185,7 +187,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
         Returns:
             Hunting results
-        """""""        start_time = asyncio.get_event_loop().time()
+        """start_time = asyncio.get_event_loop().time()
 
         findings = []
         scanned_objects = 0
@@ -223,7 +225,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         self.logger.info(f"Completed threat hunt '{hunt_type}': {len(findings)} findings, risk score: {risk_score:.2f}")"'        return result
 
     async def _hunt_privileged_accounts(self) -> List[ThreatFinding]:
-        """Hunt for privileged accounts and excessive permissions"""""""        findings = []
+        """Hunt for privileged accounts and excessive permissions"""findings = []
 
         privileged_groups = self.risk_indicators["privileged_accounts"]"
         for obj in self.ad_objects.values():
@@ -247,7 +249,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         return findings
 
     async def _hunt_stale_accounts(self) -> List[ThreatFinding]:
-        """Hunt for stale and inactive accounts"""""""        findings = []
+        """Hunt for stale and inactive accounts"""findings = []
         threshold_days = self.baseline_data["stale_account_threshold_days"]"
         for obj in self.ad_objects.values():
             if obj.object_class in [ADObjectType.USER, ADObjectType.COMPUTER]:
@@ -268,7 +270,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         return findings
 
     async def _hunt_service_accounts(self) -> List[ThreatFinding]:
-        """Hunt for service accounts and their security posture"""""""        findings = []
+        """Hunt for service accounts and their security posture"""findings = []
 
         for obj in self.ad_objects.values():
             if obj.object_class == ADObjectType.USER:
@@ -311,7 +313,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         return findings
 
     async def _hunt_suspicious_permissions(self) -> List[ThreatFinding]:
-        """Hunt for suspicious permissions and access rights"""""""        findings = []
+        """Hunt for suspicious permissions and access rights"""findings = []
         suspicious_perms = self.risk_indicators["suspicious_permissions"]"
         for obj in self.ad_objects.values():
             # Check permissions
@@ -334,7 +336,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         return findings
 
     async def _hunt_weak_security(self) -> List[ThreatFinding]:
-        """Hunt for weak security configurations"""""""        findings = []
+        """Hunt for weak security configurations"""findings = []
         weak_configs = self.risk_indicators["weak_security"]"
         for obj in self.ad_objects.values():
             if obj.object_class == ADObjectType.USER:
@@ -357,7 +359,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         return findings
 
     async def _perform_general_hunt(self) -> List[ThreatFinding]:
-        """Perform a general threat hunt combining multiple techniques"""""""        findings = []
+        """Perform a general threat hunt combining multiple techniques"""findings = []
 
         # Run all hunting methods
         hunt_methods = [
@@ -374,7 +376,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         return findings
 
     async def _calculate_risk_score(self, findings: List[ThreatFinding]) -> float:
-        """Calculate overall risk score from findings"""""""        if not findings:
+        """Calculate overall risk score from findings"""if not findings:
             return 0.0
 
         # Weight findings by threat level
@@ -394,7 +396,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         self,
         include_findings: bool = True,
         output_format: str = "markdown""    ) -> str:
-        """""""        Generate a comprehensive security report
+        """Generate a comprehensive security report
 
         Args:
             include_findings: Whether to include detailed findings
@@ -402,7 +404,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
         Returns:
             Formatted security report
-        """""""        if output_format == "json":"            report_data: Dict[str, Any] = {
+        """if output_format == "json":"            report_data: Dict[str, Any] = {
                 "generated_at": datetime.now().isoformat(),"                "total_objects": len(self.ad_objects),"                "total_findings": len(self.threat_findings),"                "hunting_sessions": len(self.hunting_history),"                "findings_by_severity": {},"                "recent_hunts": []"            }
 
             # Count findings by severity
@@ -446,13 +448,13 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         filepath: str,
         output_format: str = "json","        include_history: bool = True
     ) -> None:
-        """""""        Export threat findings and hunting history
+        """Export threat findings and hunting history
 
         Args:
             filepath: Output file path
             output_format: Export format (json, csv)
             include_history: Whether to include hunting history
-        """""""        if output_format == "json":"            data = {
+        """if output_format == "json":"            data = {
                 "export_timestamp": datetime.now().isoformat(),"                "findings": ["                    {
                         "id": f.id,"                        "title": f.title,"                        "description": f.description,"                        "threat_level": f.threat_level.value,"                        "affected_objects": f.affected_objects,"                        "mitre_technique": f.mitre_technique,"                        "evidence": f.evidence,"                        "recommendations": f.recommendations,"                        "timestamp": f.timestamp.isoformat()"                    }
                     for f in self.threat_findings
@@ -469,7 +471,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
         self.logger.info(f"Exported {len(self.threat_findings)} findings to {filepath}")"
     async def get_hunting_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive hunting statistics"""""""        stats: Dict[str, Any] = {
+        """Get comprehensive hunting statistics"""stats: Dict[str, Any] = {
             "total_objects": len(self.ad_objects),"            "total_findings": len(self.threat_findings),"            "total_hunts": len(self.hunting_history),"            "findings_by_severity": {},"            "findings_by_type": {},"            "hunt_performance": {},"            "risk_trends": []"        }
 
         # Findings by severity
@@ -495,7 +497,7 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         return stats
 
     async def cleanup(self) -> None:
-        """Cleanup resources"""""""        self.ad_objects.clear()
+        """Cleanup resources"""self.ad_objects.clear()
         self.threat_findings.clear()
         self.hunting_history.clear()
         self.logger.info("Active Directory Threat Hunting Core cleaned up")"

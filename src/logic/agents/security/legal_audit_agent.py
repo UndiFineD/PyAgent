@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""LegalAuditAgent - Legal compliance and smart contract auditing
-"""""""# [BATCHFIX] Commented metadata/non-Python
+
+"""
+LegalAuditAgent - Legal compliance and smart contract auditing
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -40,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 LegalAuditAgent: Agent for auditing legal compliance, licensing, and intellectual property.
 Automates legal risk assessment and documentation.
-"""""""
+
 from __future__ import annotations
 
 import re
@@ -56,7 +60,7 @@ __version__ = VERSION
 class LicenseReport(TypedDict, total=False):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Structured report for license auditing."""""""
+""""Structured report for license auditing.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     detected_licenses: list[str]""""    risk_level: str
@@ -72,7 +76,7 @@ class LicenseReport(TypedDict, total=False):
 class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 #     Phase 59: Autonomous Legal & Smart Contract "Auditing."  # [BATCHFIX] closed string"    Scans codebases for licensing risks, liability concerns, and smart contract vulnerabilities.
-"""""""
+
     def __init__(self, path: str, **kwargs: Any) -> None:
         super().__init__(path, **kwargs)
         self.license_patterns = {
@@ -85,7 +89,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "GPL","            "AGPL","        ]  # Blacklist for non-copyleft projects (Phase 238)
 
     def _record(self, prompt: str, result: str, provider: str = "LegalAudit", model: str = "v1") -> None:"    pass  # [BATCHFIX] inserted for empty block
-""""Internal helper to record interactions to the swarm context."""""""# [BATCHFIX] Commented metadata/non-Python
+""""Internal helper to record interactions to the swarm context.# [BATCHFIX] Commented metadata/non-Python
 #         if hasattr(self, "recorder") and" self.recorder:"  # [BATCHFIX] closed string"            try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#                 self.recorder.record_interaction(
@@ -99,7 +103,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def check_license_compliance(self, content: str, project_license: str = "MIT") -> LicenseReport:"        Phase 238: Check generated code against a license blacklist to prevent
         GPL/AGPL contamination in permissive projects.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#       "  _ = project_license"  # [BATCHFIX] closed string"        scan = self.scan_licensing(content)
         violations = [
 # [BATCHFIX] Commented metadata/non-Python
@@ -115,7 +119,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def scan_licensing(self, content: str) -> LicenseReport:
     pass  # [BATCHFIX] inserted for empty block
-""""Identifies licenses and flags copyleft risks."""""""# [BATCHFIX] Commented metadata/non-Python
+""""Identifies licenses and flags copyleft risks.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         detected = []""""        for name, pattern in self.license_patterns.items():
             if re.search(pattern, content, re.IGNORECASE):
@@ -133,14 +137,14 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def verify_smart_contract(self, logic: str) -> dict[str, Any]:""""""""Simulates auditing a smart contract for common vulnerabilities."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def verify_smart_contract(self, logic: str) -> dict[str, Any]:"Simulates auditing a smart contract for common vulnerabilities.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#  "       vulnerabilities = []"  # [BATCHFIX] closed string"        if "reentrancy" in logic.lower() or ".call{value:" in logic:"            vulnerabilities.append("Potential Reentrancy Vulnerability")"        if "tx.origin" in logic:"            vulnerabilities.append("Insecure use of tx.origin")"        if "selfdestruct" in logic:"            vulnerabilities.append("Critical: selfdestruct found")"
         return {
             "status": "fail" if vulnerabilities else "pass","            "vulnerabilities": vulnerabilities,"            "threat_score": len(vulnerabilities) * 2.5,"        }
 
     def generate_liability_report(self", task_output:" str) -> str:"    pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         "Analy"  # [BATCHFIX] closed string""""""""
+""" [BATCHFIX] Commented unterminated string""""#         "Analy"  # [BATCHFIX] closed string"
 from __future__ import annotations
 
 import re
@@ -156,7 +160,7 @@ __version__ = VERSION
 class LicenseReport(TypedDict, total=False):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Structured report for license auditing."""""""
+""""Structured report for license auditing.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     detected_licenses: list[str]""""    risk_level: str
@@ -172,7 +176,7 @@ class LicenseReport(TypedDict, total=False):
 class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 59: Autonomous Legal & Smart Contract Auditing.
 # [BATCHFIX] Commented metadata/non-Python
-#     Scans codebases for licensing risks, liability "concerns, and smart contract vulnerabilities."  # [BATCHFIX] closed string""""""""
+#     Scans codebases for licensing risks, liability "concerns, and smart contract vulnerabilities."  # [BATCHFIX] closed string"
     def __init__(self, path: str, **kwargs: Any) -> None:
         super().__init__(path, **kwargs)
         self.license_patterns = {
@@ -185,7 +189,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "GPL","            "AGPL","        ]  # Blacklist for non-copyleft projects (Phase 238)
 
     def _record(self, prompt: str, result: str, provider: str = "LegalAudit", model: str = "v1") -> None:"    pass  # [BATCHFIX] inserted for empty block
-""""Internal helper to record interactions to the swarm context."""""""    "    if" hasattr(self, "recorder") and self.recorder:"            try:
+""""Internal helper to record interactions to the swarm context.    "    if" hasattr(self, "recorder") and self.recorder:"            try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#                 self.recorder.record_interaction(
                     provider=provider,
@@ -198,7 +202,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def check_license_compliance(self, content: str, project_license: str = "MIT") -> LicenseReport:"# [BATCHFIX] Commented metadata/non-Python
 #         Phase 238: Check" generated code against a license blacklist to prevent"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-#         GPL/AGPL contamination in "permissive projects."  # [BATCHFIX] closed string""""""""        _ = project_license
+#         GPL/AGPL contamination in "permissive projects."  # [BATCHFIX] closed string"        _ = project_license
         scan = self.scan_licensing(content)
         violations = [
 # [BATCHFIX] Commented metadata/non-Python
@@ -214,7 +218,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def scan_licensing(self, content: str) -> LicenseReport:
     pass  # [BATCHFIX] inserted for empty block
-""""Identifies licenses and flags copyleft risks."""""""# [BATCHFIX] Commented metadata/non-Python
+""""Identifies licenses and flags copyleft risks.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         detected = []""""        for name, pattern in self.license_patterns.items():
             if re.search(pattern, content, re.IGNORECASE):
@@ -232,7 +236,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def verify_smart_contract(self, logic: str) -> dict[str, Any]:""""""""Simulates auditing a smart contract for common vulnerabilities."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def verify_smart_contract(self, logic: str) -> dict[str, Any]:"Simulates auditing a smart contract for common vulnerabilities.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         vulnerabilities = []""""        if "reentrancy" in logic.lower() or ".call{value:" in logic:"            vulnerabilities.append("Potential Reentrancy Vulnerability")"        if "tx.origin" in logic:"            vulnerabilities.append("Insecure use of tx.origin")"        if "selfdestruct" in logic:"            vulnerabilities.append("Critical: selfdestruct found")"
         return {
@@ -240,7 +244,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def generate_liability_report(self, task_output: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""Analyzes agent output for language that might imply legal liability."""""""# [BATCHFIX] Commented metadata/non-Python
+""""Analyzes agent output for language that might imply legal liability.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#         "liability_keywords = ["guarantee", "perfect", "100% safe", "no risk"]"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         flags = [w for w in liability_keywords if w in task_output.lower()]""""

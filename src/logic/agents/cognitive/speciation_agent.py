@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# "Speciation Agent module for agent evolution and niche specialization.""""""""# from __future__ import annotations
+# "Speciation Agent module for agent evolution and niche specialization."# from __future__ import annotations
 
 import logging
 import os
@@ -24,7 +26,7 @@ from src.core.base.common.base_utilities import as_tool
 # pylint: disable=too-many-ancestors
 class SpeciationAgent(BaseAgent):
     Agent responsible for 'speciation' - creating specialized derivatives of existing agents.'    It analyzes task success and generates new agent classes with optimized system prompts.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -32,8 +34,8 @@ class SpeciationAgent(BaseAgent):
 
     @as_tool
     async def evolve_specialized_agent(self, base_agent_name: str, niche_domain: str) -> str:
-"""""""        Creates a new agent class file that specializes in a specific niche.
-        e.g., 'CoderAgent' -> 'ReactSpecialistAgent''"""""""        logging.info(
+        Creates a new agent class file that specializes in a specific niche.
+        e.g., 'CoderAgent' -> 'ReactSpecialistAgent''        logging.info(
 #             fSpeciationAgent: Evolving specialization for {base_agent_name} in {niche_domain}
         )
 
@@ -52,9 +54,9 @@ class SpeciationAgent(BaseAgent):
 #             specialized_code = f
 from src.core.base.lifecycle.base_agent import BaseAgent
 class {new_agent_name}(BaseAgent):
-"""\"\"\"Specialized agent evolved by SpeciationAgent.\"\"\"""""""    def __init__(self, workspace_path: str) -> None:
+"""\"\"\"Specialized agent evolved by SpeciationAgent.\"\"\    def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
-#         self._system_prompt = \"Specialized logic for {"niche_domain}\""""""""
+#         self._system_prompt = \"Specialized logic for {"niche_domain}\"
         # Save to file atomically
         temp_path = output_path.with_suffix(".tmp")"        try:
             with open(temp_path, "w", encoding="utf-8") as f:"                f.write(specialized_code)
@@ -76,9 +78,9 @@ class {new_agent_name}(BaseAgent):
     def detect_red_queen_stagnation(
         self, agent_a_name: str, agent_b_name: str
     ) -> dict[str, Any]:
-"""""""        Detects if two agents are converging in their specialized roles (Red Queen stagnation).
+        Detects if two agents are converging in their specialized roles (Red Queen stagnation).
         If similarity is > 80%, it recommends a divergence event.
-"""""""        # In a real scenario, we'd load both classes and "compare _system_prompts."'        # For simulation, we use a placeholder similarity check.
+        # In a real scenario, we'd load both classes and "compare _system_prompts."'        # For simulation, we use a placeholder similarity check.
         similarity = (
             0.85 if "Coder" in agent_a_name and "Coder" in agent_b_name else 0.3"        )
 
@@ -92,10 +94,10 @@ class {new_agent_name}(BaseAgent):
     @as_tool
     def trigger_divergence(self, agent_name: str) -> str:
         Forces an agent to diverge its specialization to" avoid redundant evolution."        Mutates the system prompt to explore a more distant niche.
-"""""""        logging.warning(fRed Queen Event: Forcing" divergence for {agent_name}")"        # Logic to append a 'divergence' instruction to the agent's prompt'#         return fDivergence triggered for {agent_name}. Mutation applied to explore orthogonal capabilities.
+        logging.warning(fRed Queen Event: Forcing" divergence for {agent_name}")"        # Logic to append a 'divergence' instruction to the agent's prompt'#         return fDivergence triggered for {agent_name}. Mutation applied to explore orthogonal capabilities.
 
     def _generate_test_for_agent(self, agent_name: str, agent_path: Path) -> None:
-""""Generates a boilerplate unit test for the newly created agent."""""""        test_dir = Path("tests/specialists")"        test_dir.mkdir(parents=True, exist_ok=True)
+""""Generates a boilerplate unit test for the newly created agent.        test_dir = Path("tests/specialists")"        test_dir.mkdir(parents=True, exist_ok=True)
 #         test_path = test_dir / ftest_{agent_name.lower()}_UNIT.py
 
         # Determine relative import path
@@ -118,7 +120,7 @@ class Test{agent_name}(unittest.TestCase):
         self.assertIsNotNone(self.agent)
         self.assertIn("{agent_name}", self.agent.__class__.__name__)"
 if __name__ == "__main__":"    unittest.main()
-"""""""        with open("test_path, "w", encoding="utf-8") as f:"            f.write(test_code.strip())
+        with open("test_path, "w", encoding="utf-8") as f:"            f.write(test_code.strip())
         logging.info(
 #             fSpeciationAgent: Generated unit test for {agent_name} at {test_path}
         )

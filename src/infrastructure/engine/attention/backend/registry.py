@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Registry for attention backends with capability-based selection.
-"""""""
+Registry for attention backends with capability-based selection.
+
 from __future__ import annotations
 
 import logging
@@ -31,23 +33,23 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class AttentionBackendRegistry:
-    """""""    Registry for attention backends with capability-based selection.
+        Registry for attention backends with capability-based selection.
 
     Features:
     - Backend registration and discovery
     - Capability-based lookup
     - Runtime hot-swap (beyond vLLM)
     - Fallback chains
-    """""""
+    
     _instance: AttentionBackendRegistry | None = None
 
     def __new__(cls) -> AttentionBackendRegistry:
-        """Singleton pattern."""""""        if cls._instance is None:
+        """Singleton pattern.        if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self) -> None:
-        """Initialize the registry with default backends."""""""        if hasattr(self, "_initialized"):"            return
+        """Initialize the registry with default backends.        if hasattr(self, "_initialized"):"            return
 
         self._backends: dict[str, type[AttentionBackend]] = {}
         self._active_backend: AttentionBackend | None = None
@@ -71,12 +73,12 @@ class AttentionBackendRegistry:
         backend_cls: type[AttentionBackend],
         override: bool = False,
     ) -> None:
-        """""""        Register an attention backend.
+                Register an attention backend.
 
         Args:
             backend_cls: Backend class to register
             override: Whether to override existing registration
-        """""""        name: str = backend_cls.get_name()
+                name: str = backend_cls.get_name()
 
         if name in self._backends and not override:
             logger.warning(f"Backend '{name}' already registered, skipping")"'            return
@@ -84,14 +86,14 @@ class AttentionBackendRegistry:
         self._backends[name] = backend_cls
         logger.debug(f"Registered attention backend: {name}")"
     def unregister(self, name: str) -> bool:
-        """""""        Unregister a backend.
+                Unregister a backend.
 
         Args:
             name: Backend name to remove
 
         Returns:
             True if removed, False if not found
-        """""""        if name in self._backends:
+                if name in self._backends:
             del self._backends[name]
             if name in self._fallback_chain:
                 self._fallback_chain.remove(name)
@@ -102,14 +104,14 @@ class AttentionBackendRegistry:
         self,
         name: str | AttentionBackendEnum | None = None,
     ) -> AttentionBackend | None:
-        """""""        Get a backend by name.
+                Get a backend by name.
 
         Args:
             name: Backend name or enum (uses active if None)
 
         Returns:
             Backend instance or None
-        """""""        if name is None:
+                if name is None:
             return self._active_backend
 
         if isinstance(name, AttentionBackendEnum):
@@ -126,7 +128,7 @@ class AttentionBackendRegistry:
         attn_type: AttentionType | None = None,
         prefer: str | None = None,
     ) -> AttentionBackend | None:
-        """""""        Select best backend based on requirements.
+                Select best backend based on requirements.
 
         Args:
             capabilities: Required capabilities
@@ -135,7 +137,7 @@ class AttentionBackendRegistry:
 
         Returns:
             Best matching backend
-        """""""        # Try preferred first
+                # Try preferred first
         if prefer:
             backend = self.get_backend(prefer)
             if backend and self._check_backend(backend, capabilities, attn_type):
@@ -161,7 +163,7 @@ class AttentionBackendRegistry:
         capabilities: AttentionCapabilities | None,
         attn_type: AttentionType | None,
     ) -> bool:
-        """Check if backend meets requirements."""""""        if attn_type is not None and not backend.supports(attn_type):
+        """Check if backend meets requirements.        if attn_type is not None and not backend.supports(attn_type):
             return False
 
         if capabilities is not None:
@@ -180,14 +182,14 @@ class AttentionBackendRegistry:
         self,
         backend: str | AttentionBackend | AttentionBackendEnum,
     ) -> bool:
-        """""""        Set the active backend.
+                Set the active backend.
 
         Args:
             backend: Backend name, instance, or enum
 
         Returns:
             True if set successfully
-        """""""        if isinstance(backend, str):
+                if isinstance(backend, str):
             self._active_backend = self.get_backend(backend)
         elif isinstance(backend, AttentionBackendEnum):
             self._active_backend = self.get_backend(backend.value)
@@ -202,7 +204,7 @@ class AttentionBackendRegistry:
         self,
         new_backend: str | AttentionBackend,
     ) -> bool:
-        """""""        Hot-swap to a new backend without restart.
+                Hot-swap to a new backend without restart.
 
         Beyond vLLM: Allows runtime backend changes.
 
@@ -211,7 +213,7 @@ class AttentionBackendRegistry:
 
         Returns:
             True if swap successful
-        """""""        if not self._hot_swap_enabled:
+                if not self._hot_swap_enabled:
             logger.warning("Hot-swap disabled")"            return False
 
         old_backend = self._active_backend
@@ -227,20 +229,20 @@ class AttentionBackendRegistry:
         return False
 
     def set_fallback_chain(self, chain: list[str]) -> None:
-        """Set the backend fallback chain."""""""        self._fallback_chain = chain
+        """Set the backend fallback chain.        self._fallback_chain = chain
 
     def list_backends(self) -> list[str]:
-        """List all registered backends."""""""        return list(self._backends.keys())
+        """List all registered backends.        return list(self._backends.keys())
 
     def get_capabilities(self, name: str) -> AttentionCapabilities | None:
-        """Get capabilities for a backend."""""""        backend_cls = self._backends.get(name)
+        """Get capabilities for a backend.        backend_cls = self._backends.get(name)
         if backend_cls:
             return backend_cls.get_capabilities()
         return None
 
     @lru_cache(maxsize=32)
     def _check_availability(self, name: str) -> bool:
-        """Check if backend is actually usable."""""""        backend = self.get_backend(name)
+        """Check if backend is actually usable.        backend = self.get_backend(name)
         if backend is None:
             return False
 
@@ -260,9 +262,9 @@ class AttentionBackendRegistry:
         return True
 
     def get_available_backends(self) -> list[str]:
-        """Get list of actually usable backends."""""""        return [name for name in self._backends if self._check_availability(name)]
+        """Get list of actually usable backends.        return [name for name in self._backends if self._check_availability(name)]
 
 
 # Convenience function
 def get_attention_registry() -> AttentionBackendRegistry:
-    """Get the singleton attention backend registry."""""""    return AttentionBackendRegistry()
+    """Get the singleton attention backend registry.    return AttentionBackendRegistry()

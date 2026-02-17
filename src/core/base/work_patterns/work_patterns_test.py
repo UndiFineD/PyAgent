@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tests for work patterns."""""""
+
+"""Tests for work patterns."""
 import pytest
 from unittest.mock import MagicMock
 from typing import Optional, Dict, Any
@@ -20,31 +23,31 @@ from src.core.base.work_patterns import PeerWorkPattern
 
 
 class MockAgent:
-    """Mock agent for testing."""""""
+    """Mock agent for testing."""
     def __init__(self, agent_id: str, response: Optional[Dict[Any, Any]] = None):
         self.agent_id = agent_id
         self.response = response or {"result": f"Mock response from {agent_id}"}"
     async def execute_task(self, context: CascadeContext) -> dict:
-        """Mock execute task."""""""        return self.response
+        """Mock execute task."""return self.response
 
 
 class TestPeerWorkPattern:
-    """Test the PEER work pattern."""""""
+    """Test the PEER work pattern."""
     def test_initialization(self):
-        """Test PEER pattern initialization."""""""        pattern = PeerWorkPattern()
+        """Test PEER pattern initialization."""pattern = PeerWorkPattern()
         assert pattern.name == "PEER""        assert "Planning, Executing, Expressing, Reviewing" in pattern.description"        assert pattern.max_retries == 3
         assert pattern.quality_threshold == 0.8
 
     def test_get_required_agents(self):
-        """Test getting required agents."""""""        pattern = PeerWorkPattern()
+        """Test getting required agents."""pattern = PeerWorkPattern()
         required = pattern.get_required_agents()
         assert required == ["planning", "executing", "expressing", "reviewing"]"
     def test_validate_agents_without_agents(self):
-        """Test validation without agents."""""""        pattern = PeerWorkPattern()
+        """Test validation without agents."""pattern = PeerWorkPattern()
         assert not pattern.validate_agents()
 
     def test_validate_agents_with_agents(self):
-        """Test validation with agents."""""""        planning = MockAgent("planning")"        executing = MockAgent("executing")"        expressing = MockAgent("expressing")"        reviewing = MockAgent("reviewing")"
+        """Test validation with agents."""planning = MockAgent("planning")"        executing = MockAgent("executing")"        expressing = MockAgent("expressing")"        reviewing = MockAgent("reviewing")"
         pattern = PeerWorkPattern(
             planning_agent=planning,
             executing_agent=executing,
@@ -55,13 +58,13 @@ class TestPeerWorkPattern:
 
     @pytest.mark.asyncio
     async def test_execute_without_agents(self):
-        """Test execution without required agents."""""""        pattern = PeerWorkPattern()
+        """Test execution without required agents."""pattern = PeerWorkPattern()
         context = CascadeContext(task_id="test_task")"
         with pytest.raises(ValueError, match="PEER pattern requires all four agent types"):"            await pattern.execute(context)
 
     @pytest.mark.asyncio
     async def test_execute_with_mock_agents(self):
-        """Test execution with mock agents."""""""        # Setup mock agents with different responses
+        """Test execution with mock agents."""# Setup mock agents with different responses
         planning = MockAgent("planning", {"plan": "Test plan"})"        executing = MockAgent("executing", {"execution": "Test execution"})"        expressing = MockAgent("expressing", {"expression": "Test expression"})"        reviewing = MockAgent("reviewing", {"review": "Test review", "score": 0.9})"
         pattern = PeerWorkPattern(
             planning_agent=planning,
@@ -78,7 +81,7 @@ class TestPeerWorkPattern:
         round_result = result["results"][0]"        assert "planning" in round_result"        assert "executing" in round_result"        assert "expressing" in round_result"        assert "reviewing" in round_result"
     @pytest.mark.asyncio
     async def test_execute_with_low_score_retry(self):
-        """Test execution with low score requiring retry."""""""        # Setup agents where reviewing gives low score initially, then high
+        """Test execution with low score requiring retry."""# Setup agents where reviewing gives low score initially, then high
         call_count = 0
 
         async def reviewing_response(context):

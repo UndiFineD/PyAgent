@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Trace synthesis.py module.
-"""""""
+
+"""
+Trace synthesis.py module.
+
 import logging
 from collections import defaultdict
 from typing import Any, Dict, List
@@ -24,15 +28,15 @@ logger = logging.getLogger(__name__)
 
 
 class SwarmTraceSynthesizer:
-    """""""    Condenses raw audit logs into actionable 'Global Wisdom' (Phase 82).'    Analyzes historical expert pairings to optimize future MoE routing decisions.
-    """""""
+        Condenses raw audit logs into actionable 'Global Wisdom' (Phase 82).'    Analyzes historical expert pairings to optimize future MoE routing decisions.
+    
     def __init__(self, audit_logger: SwarmAuditLogger) -> None:
         self.audit_logger = audit_logger
         self.wisdom_cache: Dict[str, Any] = {}
 
     def synthesize_wisdom(self) -> Dict[str, Any]:
-        """""""        Aggregates disparate agent experiences into a central core.
-        Calculates 'Pairwise Affinity' between experts and domain success rates.'        """""""        expert_affinities = defaultdict(lambda: defaultdict(float))
+                Aggregates disparate agent experiences into a central core.
+        Calculates 'Pairwise Affinity' between experts and domain success rates.'                expert_affinities = defaultdict(lambda: defaultdict(float))
         expert_counts = defaultdict(int)
         domain_success = defaultdict(list)
 
@@ -70,5 +74,5 @@ class SwarmTraceSynthesizer:
         logger.info(f"[Phase 82] Wisdom Synthesis Complete. Domain Baselines: {len(final_wisdom['domain_baselines'])}")"'        return final_wisdom
 
     def get_recommendation(self, _domain: str) -> List[str]:
-        """Returns recommended experts based on synthesized wisdom."""""""        # Simple logic: pick experts with highest domain success or synergetic pairs
+        """Returns recommended experts based on synthesized wisdom.        # Simple logic: pick experts with highest domain success or synergetic pairs
         return [expert for expert, _ in self.wisdom_cache.get("top_experts", [])]"

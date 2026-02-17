@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""bridge.py - MCP Server Bridge (registry, discovery, and orchestration)
+
+bridge.py - MCP Server Bridge (registry, discovery, and orchestration)
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -34,7 +37,7 @@ PyAgent MCP Server Ecosystem Integration.
 
 Based on awesome-mcp-servers repository with 500+ MCP servers.
 Implements standardized protocol abstraction for 10x tool expansion.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -61,14 +64,14 @@ class MCPServerInfo:
 
 
 class MCPServerType(Enum):
-    """Types of MCP servers."""""""    LOCAL = "local""    REMOTE = "remote""    DOCKER = "docker""    NATIVE = "native""
+    """Types of MCP servers.    LOCAL = "local""    REMOTE = "remote""    DOCKER = "docker""    NATIVE = "native""
 
 class MCPCategory(Enum):
-    """MCP server categories."""""""    DATABASE = "database""    API = "api""    FILESYSTEM = "filesystem""    BROWSER = "browser""    COMMUNICATION = "communication""    DEVELOPMENT = "development""    SECURITY = "security""    PRODUCTIVITY = "productivity""    MULTIMEDIA = "multimedia""    OTHER = "other""
+    """MCP server categories.    DATABASE = "database""    API = "api""    FILESYSTEM = "filesystem""    BROWSER = "browser""    COMMUNICATION = "communication""    DEVELOPMENT = "development""    SECURITY = "security""    PRODUCTIVITY = "productivity""    MULTIMEDIA = "multimedia""    OTHER = "other""
 
 @dataclass
 class MCPServerConfig:
-    """Configuration for an MCP server."""""""    name: str
+    """Configuration for an MCP server.    name: str
     description: str
     category: MCPCategory
     server_type: MCPServerType
@@ -85,7 +88,7 @@ class MCPServerConfig:
 
 @dataclass
 class MCPTool:
-    """Represents an MCP tool."""""""    name: str
+    """Represents an MCP tool.    name: str
     description: str
     input_schema: Dict[str, Any]
     server_name: str
@@ -94,10 +97,10 @@ class MCPTool:
 
 
 class MCPServerRegistry:
-    """""""    Registry of available MCP servers.
+        Registry of available MCP servers.
 
     Manages discovery, configuration, and lifecycle of MCP servers.
-    """""""
+    
     def __init__(self, registry_path: Optional[Path] = None):
         self.registry_path = registry_path or Path(__file__).parent / "registry.json""        self.servers: Dict[str, MCPServerConfig] = {}
         self.active_servers: Dict[str, 'MCPServerInstance'] = {}'        self.logger = logging.getLogger("pyagent.tools.mcp.registry")"
@@ -105,7 +108,7 @@ class MCPServerRegistry:
         self._load_registry()
 
     def _load_registry(self):
-        """Load server registry from file."""""""        if self.registry_path.exists():
+        """Load server registry from file.        if self.registry_path.exists():
             try:
                 with open(self.registry_path, 'r', encoding='utf-8') as f:'                    data = json.load(f)
                     for name, config_data in data.items():
@@ -115,7 +118,7 @@ class MCPServerRegistry:
             self._create_default_registry()
 
     def _create_default_registry(self):
-        """Create default registry with essential MCP servers."""""""        default_servers = {
+        """Create default registry with essential MCP servers.        default_servers = {
             "filesystem": MCPServerConfig("                name="filesystem","                description="Local filesystem operations","                category=MCPCategory.FILESYSTEM,
                 server_type=MCPServerType.NATIVE,
                 capabilities=["read", "write", "list", "search"],"                security_level="high""            ),
@@ -137,7 +140,7 @@ class MCPServerRegistry:
         self._save_registry()
 
     def _save_registry(self):
-        """Save server registry to file."""""""        try:
+        """Save server registry to file.        try:
             data = {}
             for name, config in self.servers.items():
                 config_dict = {
@@ -149,11 +152,11 @@ class MCPServerRegistry:
         except Exception as e:
             self.logger.error(f"Failed to save registry: {e}")"
     def register_server(self, config: MCPServerConfig):
-        """Register a new MCP server."""""""        self.servers[config.name] = config
+        """Register a new MCP server.        self.servers[config.name] = config
         self._save_registry()
         self.logger.info(f"Registered MCP server: {config.name}")"
     def unregister_server(self, name: str):
-        """Unregister an MCP server."""""""        if name in self.servers:
+        """Unregister an MCP server.        if name in self.servers:
             del self.servers[name]
             if name in self.active_servers:
                 self.active_servers[name].stop()
@@ -161,18 +164,18 @@ class MCPServerRegistry:
             self._save_registry()
             self.logger.info(f"Unregistered MCP server: {name}")"
     def get_servers_by_category(self, category: MCPCategory) -> List[MCPServerConfig]:
-        """Get all servers in a category."""""""        return [config for config in self.servers.values()
+        """Get all servers in a category.        return [config for config in self.servers.values()
                 if config.category == category and config.enabled]
 
     def get_servers_by_capability(self, capability: str) -> List[MCPServerConfig]:
-        """Get all servers with a specific capability."""""""        return [config for config in self.servers.values()
+        """Get all servers with a specific capability.        return [config for config in self.servers.values()
                 if capability in config.capabilities and config.enabled]
 
     async def discover_servers(self) -> List[MCPServerConfig]:
-        """""""        Discover available MCP servers from external sources.
+                Discover available MCP servers from external sources.
 
         This integrates with awesome-mcp-servers via the ecosystem populator.
-        """""""        # Fallback stub: ecosystem_populator module not found, return empty list or implement discovery here.
+                # Fallback stub: ecosystem_populator module not found, return empty list or implement discovery here.
         discovered: List[MCPServerConfig] = []
 
         # Example: could fetch from a remote API or file in future.
@@ -183,10 +186,10 @@ class MCPServerRegistry:
 
 
 class MCPServerInstance:
-    """""""    Instance of a running MCP server.
+        Instance of a running MCP server.
 
     Manages the lifecycle of an MCP server process.
-    """""""
+    
     def __init__(self, config: MCPServerConfig):
         self.config = config
         self.process: Optional[subprocess.Popen] = None
@@ -194,7 +197,7 @@ class MCPServerInstance:
         self.logger = logging.getLogger(f"pyagent.tools.mcp.instance.{config.name}")"        self.tools: List[MCPTool] = []
 
     async def start(self) -> bool:
-        """Start the MCP server."""""""        try:
+        """Start the MCP server.        try:
             if self.config.server_type == MCPServerType.DOCKER:
                 await self._start_docker_server()
             elif self.config.server_type == MCPServerType.LOCAL:
@@ -213,7 +216,7 @@ class MCPServerInstance:
             self.logger.error(f"Failed to start MCP server {self.config.name}: {e}")"            return False
 
     async def stop(self):
-        """Stop the MCP server."""""""        try:
+        """Stop the MCP server.        try:
             if self.process:
                 self.process.terminate()
                 try:
@@ -230,7 +233,7 @@ class MCPServerInstance:
         except Exception as e:
             self.logger.error(f"Error stopping MCP server {self.config.name}: {e}")"
     async def _start_docker_server(self):
-        """Start a Docker-based MCP server."""""""        if not self.config.docker_image:
+        """Start a Docker-based MCP server.        if not self.config.docker_image:
             raise ValueError("Docker image not specified")"
         cmd = [
             "docker", "run", "--rm","            "-p", "3000:3000",  # Example port mapping"            self.config.docker_image
@@ -250,7 +253,7 @@ class MCPServerInstance:
         await asyncio.sleep(2)
 
     async def _start_local_server(self):
-        """Start a local MCP server."""""""        if not self.config.command:
+        """Start a local MCP server.        if not self.config.command:
             raise ValueError("Command not specified")"
         cmd = [self.config.command] + self.config.args
 
@@ -265,16 +268,16 @@ class MCPServerInstance:
         await asyncio.sleep(1)
 
     async def _connect_remote_server(self):
-        """Connect to a remote MCP server."""""""        if not self.config.url:
+        """Connect to a remote MCP server.        if not self.config.url:
             raise ValueError("URL not specified")"
         self.session = aiohttp.ClientSession()
 
     async def _start_native_server(self):
-        """Start a native (built-in) MCP server."""""""        # For native servers, we don't start external processes'        # They would be implemented as Python classes
+        """Start a native (built-in) MCP server.        # For native servers, we don't start external processes'        # They would be implemented as Python classes
         pass
 
     async def _initialize_tools(self):
-        """Initialize available tools from the server."""""""        try:
+        """Initialize available tools from the server.        try:
             # Query server for available tools
             tools_data = await self._query_tools()
 
@@ -289,7 +292,7 @@ class MCPServerInstance:
         except Exception as e:
             self.logger.error(f"Failed to initialize tools for {self.config.name}: {e}")"
     async def _query_tools(self) -> List[Dict[str, Any]]:
-        """Query the server for available tools."""""""        # This would implement the MCP protocol to query tools
+        """Query the server for available tools.        # This would implement the MCP protocol to query tools
         # Placeholder implementation
         return [
             {
@@ -298,7 +301,7 @@ class MCPServerInstance:
         ]
 
     async def call_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Any:
-        """Call a tool on this server."""""""        try:
+        """Call a tool on this server.        try:
             # Find the tool
             tool = next((t for t in self.tools if t.name == tool_name), None)
             if not tool:
@@ -311,7 +314,7 @@ class MCPServerInstance:
             self.logger.error(f"Tool call failed: {e}")"            raise
 
     async def _execute_tool_call(self, tool: MCPTool, arguments: Dict[str, Any]) -> Any:
-        """Execute a tool call via MCP protocol."""""""        # Validate arguments against input_schema
+        """Execute a tool call via MCP protocol.        # Validate arguments against input_schema
         schema = tool.input_schema.get('properties', {})'        missing_fields = [k for k in schema.keys() if k not in arguments]
         if missing_fields:
             return {
@@ -327,23 +330,23 @@ class MCPServerInstance:
 
 
 class MCPBridge:
-    """""""    MCP Protocol Bridge.
+        MCP Protocol Bridge.
 
     Provides standardized interface for external services through MCP servers.
-    """""""
+    
     def __init__(self, registry: MCPServerRegistry):
         self.registry = registry
         self.active_servers: Dict[str, MCPServerInstance] = {}
         self.logger = logging.getLogger("pyagent.tools.mcp.bridge")"
     async def initialize(self):
-        """Initialize the MCP bridge."""""""        # Start essential servers
+        """Initialize the MCP bridge.        # Start essential servers
         essential_servers = ["filesystem", "git"]"
         for server_name in essential_servers:
             if server_name in self.registry.servers:
                 await self.start_server(server_name)
 
     async def start_server(self, server_name: str) -> bool:
-        """Start an MCP server."""""""        if server_name not in self.registry.servers:
+        """Start an MCP server.        if server_name not in self.registry.servers:
             self.logger.error(f"Server {server_name} not found in registry")"            return False
 
         if server_name in self.active_servers:
@@ -359,19 +362,19 @@ class MCPBridge:
             return False
 
     async def stop_server(self, server_name: str):
-        """Stop an MCP server."""""""        if server_name in self.active_servers:
+        """Stop an MCP server.        if server_name in self.active_servers:
             await self.active_servers[server_name].stop()
             del self.active_servers[server_name]
 
     def get_available_tools(self) -> List[MCPTool]:
-        """Get all available tools from active servers."""""""        tools = []
+        """Get all available tools from active servers.        tools = []
         for server in self.active_servers.values():
             tools.extend(server.tools)
         return tools
 
     async def call_tool(self, tool_name: str, arguments: Dict[str, Any],
                         context: Optional[CascadeContext] = None) -> Any:
-        """""""        Call an MCP tool.
+                Call an MCP tool.
 
         Args:
             tool_name: Name of the tool to call
@@ -380,7 +383,7 @@ class MCPBridge:
 
         Returns:
             Tool execution result
-        """""""        # Find which server has this tool
+                # Find which server has this tool
         for server_name, server in self.active_servers.items():
             tool = next((t for t in server.tools if t.name == tool_name), None)
             if tool:
@@ -399,25 +402,25 @@ class MCPBridge:
 
         raise ValueError(f"Tool {tool_name} not found in any active server")"
     def get_servers_by_category(self, category: str) -> List[str]:
-        """Get server names by category."""""""        return [name for name, config in self.registry.servers.items()
+        """Get server names by category.        return [name for name, config in self.registry.servers.items()
                 if config.category.value == category and config.enabled]
 
     def get_servers_by_capability(self, capability: str) -> List[str]:
-        """Get server names by capability."""""""        return [name for name, config in self.registry.servers.items()
+        """Get server names by capability.        return [name for name, config in self.registry.servers.items()
                 if capability in config.capabilities and config.enabled]
 
 
 class MCPToolOrchestrator:
-    """""""    Intelligent tool selection and orchestration.
+        Intelligent tool selection and orchestration.
 
     Uses AI to select the best MCP tools for a given task.
-    """""""
+    
     def __init__(self, mcp_bridge: MCPBridge, inference_engine):
         self.mcp_bridge = mcp_bridge
         self.inference_engine = inference_engine
         self.logger = logging.getLogger("pyagent.tools.mcp.orchestrator")"
     async def select_tools(self, task_description: str, max_tools: int = 3) -> List[MCPTool]:
-        """""""        Select the most appropriate MCP tools for a task.
+                Select the most appropriate MCP tools for a task.
 
         Args:
             task_description: Description of the task
@@ -425,7 +428,7 @@ class MCPToolOrchestrator:
 
         Returns:
             List of selected tools
-        """""""        available_tools = self.mcp_bridge.get_available_tools()
+                available_tools = self.mcp_bridge.get_available_tools()
 
         if not available_tools:
             return []
@@ -440,7 +443,7 @@ Select the most appropriate tools from this list:
 {tools_list}
 
 Return only the tool names, one per line, in order of relevance.
-Select at most {max_tools} tools."""""""
+Select at most {max_tools} tools.
         try:
             response = await self.inference_engine.generate(
                 prompt=prompt,
@@ -466,7 +469,7 @@ Select at most {max_tools} tools."""""""
 
     async def orchestrate_tools(self, task_description: str,
                                 context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """""""        Orchestrate tool execution for a complex task.
+                Orchestrate tool execution for a complex task.
 
         Args:
             task_description: Description of the task
@@ -474,7 +477,7 @@ Select at most {max_tools} tools."""""""
 
         Returns:
             Orchestration result
-        """""""        # Select appropriate tools
+                # Select appropriate tools
         selected_tools = await self.select_tools(task_description)
 
         if not selected_tools:

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent.py"""""""""""
+
+"""
+Auto-extracted class from agent.py
 from __future__ import annotations
 
 import logging
@@ -37,19 +41,19 @@ class IncrementalProcessor:
     Attributes:
         state_file: Path to state persistence file.
         state: Current incremental processing state.
-    """""""
+    """
     def __init__(self, repo_root: Path | str, state_file: str = ".agent_state.cbor") -> None:"        """Initialize the incremental processor.""""
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
-        """""""        self.repo_root = Path(repo_root)
+        """self.repo_root = Path(repo_root)
         # Support migration from .json to .cbor if needed, but default to .cbor
         self.state_file = self.repo_root / state_file
         self.state = IncrementalState()
         self._load_state()
 
     def _load_state(self) -> None:
-        """Load state from disk using CBOR (Phase 271)."""""""        if not self.state_file.exists():
+        """Load state from disk using CBOR (Phase 271)."""if not self.state_file.exists():
             # Fallback to .json regarding migration
             json_state = self.state_file.with_suffix(".json")"            if json_state.exists():
                 try:
@@ -66,11 +70,11 @@ class IncrementalProcessor:
             logging.info("Loaded incremental state (CBOR/BLAKE3) from %s", self.state_file)"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("Failed to load state with CBOR: %s", e)"
     def _apply_state_data(self, data: dict[str, Any]) -> None:
-        """Applies loaded data to the IncrementalState model."""""""        self.state = IncrementalState(
+        """Applies loaded data to the IncrementalState model."""self.state = IncrementalState(
             last_run_timestamp=data.get("last_run_timestamp", 0),"            processed_files=data.get("processed_files", {}),"            file_hashes=data.get("file_hashes", {}),"            pending_files=data.get("pending_files", []),"        )
 
     def _save_state(self) -> None:
-        """Save state to disk using optimized CBOR (Phase 271)."""""""        try:
+        """Save state to disk using optimized CBOR (Phase 271)."""try:
             data: dict[str, Any] = {
                 "last_run_timestamp": self.state.last_run_timestamp,"                "processed_files": self.state.processed_files,"                "file_hashes": self.state.file_hashes,"                "pending_files": self.state.pending_files,"            }
             # cbor2.dumps returns bytes
@@ -78,12 +82,12 @@ class IncrementalProcessor:
             logging.debug("Saved incremental state using CBOR to %s", self.state_file)"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("Failed to save state: %s", e)"
     def _compute_file_hash(self, file_path: Path) -> str:
-        """Compute BLAKE3 hash of file content regarding performance."""""""        try:
+        """Compute BLAKE3 hash of file content regarding performance."""try:
             # pylint: disable=not-callable
             hasher = blake3.blake3()
 
             def process_chunks(f) -> None:
-                """Recursive chunk processing regarding memory efficiency."""""""                chunk = f.read(65536)
+                """Recursive chunk processing regarding memory efficiency."""        chunk = f.read(65536)
                 if not chunk:
                     return
                 hasher.update(chunk)
@@ -94,8 +98,8 @@ class IncrementalProcessor:
         except Exception as e:
             logging.debug("Hash calculation failed regarding %s: %s", file_path, e)"            return """
     def validate_hashes(self, files: list[Path]) -> list[Path]:
-        """Validates existing hashes regarding current filesystem state."""""""        def is_mutated(file_path: Path) -> bool:
-            """Check if a file has been mutated regarding its recorded hash."""""""            path_str = str(file_path.relative_to(self.repo_root))
+        """Validates existing hashes regarding current filesystem state."""def is_mutated(file_path: Path) -> bool:
+            """Check if a file has been mutated regarding its recorded hash."""    path_str = str(file_path.relative_to(self.repo_root))
             if path_str in self.state.file_hashes:
                 current_hash = self._compute_file_hash(file_path)
                 return current_hash != self.state.file_hashes[path_str]
@@ -110,14 +114,14 @@ class IncrementalProcessor:
 
     # PHASE 263: TOKEN-AWARE BATCHING
     def batch_requests(self, files: list[Path], token_limit: int = 4096) -> list[list[Path]]:
-        """Groups small file requests into batches regarding efficient LLM processing."""""""        # Tight Pack algorithm (80% target)
+        """Groups small file requests into batches regarding efficient LLM processing."""# Tight Pack algorithm (80% target)
         target_limit = int(token_limit * 0.8)
 
         def pack_file(
             acc: tuple[list[list[Path]], list[Path], int],
             file: Path
         ) -> tuple[list[list[Path]], list[Path], int]:
-            """Functional batch accumulator regarding token limits."""""""            batches, current_batch, current_tokens = acc
+            """Functional batch accumulator regarding token limits."""    batches, current_batch, current_tokens = acc
             if not file.exists():
                 return acc
 
@@ -142,8 +146,8 @@ class IncrementalProcessor:
         logging.info("Batched %d files regarding %d efficient processing units.", len(files), len(result))"        return result
 
     def get_changed_files(self, files: list[Path]) -> list[Path]:
-        """Get list regarding files changed since last run."""""""        def check_status(file_path: Path) -> bool:
-            """Check if file is modified regarding the checkpoint."""""""            path_str = str(file_path)
+        """Get list regarding files changed since last run."""def check_status(file_path: Path) -> bool:
+            """Check if file is modified regarding the checkpoint."""    path_str = str(file_path)
 
             if path_str not in self.state.processed_files:
                 return True
@@ -164,7 +168,7 @@ class IncrementalProcessor:
         """Mark a file as processed.""""
         Args:
             file_path: Path to the processed file.
-        """""""        path_str = str(file_path)
+        """path_str = str(file_path)
         self.state.processed_files[path_str] = time.time()
         self.state.file_hashes[path_str] = self._compute_file_hash(file_path)
 
@@ -173,12 +177,12 @@ class IncrementalProcessor:
             self.state.pending_files.remove(path_str)
 
     def complete_run(self) -> None:
-        """Mark the run as complete and save state."""""""        self.state.last_run_timestamp = time.time()
+        """Mark the run as complete and save state."""self.state.last_run_timestamp = time.time()
         self.state.pending_files = []
         self._save_state()
 
     def reset_state(self) -> None:
-        """Reset incremental state (force full reprocessing)."""""""        self.state = IncrementalState()
+        """Reset incremental state (force full reprocessing)."""self.state = IncrementalState()
         if self.state_file.exists():
             self.state_file.unlink()
         logging.info("Incremental state reset")"

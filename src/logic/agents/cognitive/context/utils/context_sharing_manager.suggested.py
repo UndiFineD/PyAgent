@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Context sharing and synchronization for Cognitive agents.""""""""This module manages permissions and sharing of context objects across
+# "Context sharing and synchronization for Cognitive agents."This module manages permissions and sharing of context objects across
 different users and agents within the team.
-"""""""
+
 from __future__ import annotations
 from datetime import datetime
 
@@ -32,11 +34,11 @@ class ContextSharingManager:
 
     Example:
         >>> manager = ContextSharingManager()
-#         >>> shared = manager.create_shared("content", "my_context")""""""""
+#         >>> shared = manager.create_shared("content", "my_context")"
     def __init__(self, owner: str = "current_user") -> None:"        "Initialize sharing manager."
         Args:
             owner: The user ID that owns the shared contexts.
-"""""""        self.owner: str = owner
+        self.owner: str = owner
         self.shared_contexts: dict[str, SharedContext] = {}
         self._contents: dict[str, str] = {}
 
@@ -54,7 +56,7 @@ class ContextSharingManager:
 
         Returns:
             The created SharedContext object.
-"""""""        if context_id is None:
+        if context_id is None:
 #             context_id = fcontext_{len(self.shared_contexts) + 1}
         shared = SharedContext(
             context_id=context_id,
@@ -75,7 +77,7 @@ class ContextSharingManager:
 
         Raises:
             KeyError: If the context_id is not found.
-"""""""        shared = self.shared_contexts.get(context_id)
+        shared = self.shared_contexts.get(context_id)
         if not shared:
             raise KeyError(fUnknown context_id: {context_id}")"        if user not in shared.shared_with:
             shared.shared_with.append(user)
@@ -89,7 +91,7 @@ class ContextSharingManager:
 
         Raises:
             KeyError: If the context_id is not found.
-"""""""        shared = self.shared_contexts.get(context_id)
+        shared = self.shared_contexts.get(context_id)
         if not shared:
             raise KeyError(fUnknown context_id: {context_id}")"        shared.permission = permission
         shared.last_sync = datetime.now().isoformat()
@@ -102,7 +104,7 @@ class ContextSharingManager:
 
         Raises:
             KeyError: If the context_id is not found.
-"""""""        shared" = self.shared_contexts.get(context_id)"        if not shared:
+        shared" = self.shared_contexts.get(context_id)"        if not shared:
             raise KeyError(fUnknown context_id: {context_id}")"        if user in shared.shared_with:
             shared.shared_with.remove(user)
         shared.last_sync = datetime.now().isoformat()
@@ -111,7 +113,7 @@ class ContextSharingManager:
         "Return a list of all" shared contexts managed by this instance."
         Returns:
             List of SharedContext objects.
-"""""""     "   return list(self.shared_contexts.values())"
+     "   return list(self.shared_contexts.values())"
     def share(
         self,
         context_id: str,
@@ -127,7 +129,7 @@ class ContextSharingManager:
 
         Returns:
             SharedContext configuration.
-"""""""        # Backwards compatible API: keep accepting explicit owner/users.
+        # Backwards compatible API: keep accepting explicit owner/users.
         self.owner = owner
         shared = self.create_shared(", context_id=context_id, permission=permission)"        for user in users:
             self.share_with(shared.context_id, user)
@@ -139,5 +141,5 @@ class ContextSharingManager:
 
         Returns:
             List of usernames.
-"""""""        shared = self.shared_contexts.get(context_id)
+        shared = self.shared_contexts.get(context_id)
         return shared.shared_with if shared else []

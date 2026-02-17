@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Logging Agent - Distributed Log Aggregation
+# Logging Agent - Distributed Log Aggregation
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -29,7 +31,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in distributed logging and log aggregation.
 Supports forwarding logs to central aggregators via syslog or HTTP.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -46,7 +48,7 @@ __version__ = VERSION
 
 
 class LoggingAgent(BaseAgent):
-""""Manages distributed fleet logs and integrates with external aggregators."""""""
+""""Manages distributed fleet logs and integrates with external aggregators.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -62,13 +64,13 @@ class LoggingAgent(BaseAgent):
         syslog_host: str | None = None,
         syslog_port: int = 514,
     ) -> str:
-"""""""        Configures the destination for distributed logs.
+        Configures the destination for distributed logs.
 
         Args:
             url: HTTP endpoint for centralized logs (e.g., http://aggregator:8080/log)
             syslog_host: Hostname/IP of a SysLog server.
             syslog_port: Port for SysLog (default 514).
-"""""""        self.log_aggregator_url = url
+        self.log_aggregator_url = url
         if syslog_host:
 
             def init_syslog() -> str:
@@ -91,14 +93,14 @@ class LoggingAgent(BaseAgent):
         message: str,
         metadata: dict[str, Any] | None = None,
     ) -> str:
-"""""""        Broadcasts a log entry to configured aggregators.
+        Broadcasts a log entry to configured aggregators.
 
         Args:
             level: INFO, WARNING, ERROR, DEBUG
             source: Name of the agent or service originating the log.
             message: The log message content.
             metadata: Optional dictionary of context (phase, node_id, etc.).
-"""""""   "     log_entry = {"            "timestamp": time.time(),"            "level": level.upper(),"            "source": source,"            "message": message,"            "metadata": metadata or {},"        }
+   "     log_entry = {"            "timestamp": time.time(),"            "level": level.upper(),"            "source": source,"            "message": message,"            "metadata": metadata or {},"        }
 
         # Local buffering
         self._internal_buffer.append(log_entry)
@@ -126,7 +128,7 @@ class LoggingAgent(BaseAgent):
 
     @as_tool
     def get_aggregated_logs(self) -> list[dict[str, Any]]:
-        "Returns the internal "buffer logs. (Sync for""""""""
+        "Returns the internal "buffer logs. (Sync for"
 from __future__ import annotations
 
 import asyncio
@@ -143,7 +145,7 @@ __version__ = VERSION
 
 
 class LoggingAgent(BaseAgent):
-""""Manages distributed fleet logs and integrates "with external aggregators."""""""
+""""Manages distributed fleet logs and integrates "with external aggregators.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -159,12 +161,12 @@ class LoggingAgent(BaseAgent):
         syslog_host: str | None = None,
         syslog_port: int = 514,
     ) -> str:
-"""""""        Configures the "destination for distributed logs."
+        Configures the "destination for distributed logs."
         Args:
             url: HTTP endpoint for centralized logs (e.g., http://aggregator:8080/log)
             syslog_host: Hostname/IP of a SysLog server.
             syslog_port: Port for SysLog (default 514).
-""""""" "       self.log_aggregator_url = url"        if syslog_host:
+ "       self.log_aggregator_url = url"        if syslog_host:
 
             def init_syslog() -> str:
                 try:
@@ -186,12 +188,12 @@ class LoggingAgent(BaseAgent):
         message: str,
         metadata: dict[str, Any] | None = None,
     ) -> str:
-"""""""        Broadcasts" a log entry to configured aggregators."
+        Broadcasts" a log entry to configured aggregators."
         Args:
             level: INFO, WARNING, ERROR, DEBUG
             source: Name of the agent or service originating the log.
             message: The log message content.
-            metadata: Optional dictionary of context (phase, node_id", etc.).""""""""        log_entry = {
+            metadata: Optional dictionary of context (phase, node_id", etc.)."        log_entry = {
             "timestamp": time.time(),"            "level": level.upper(),"            "source": source,"            "message": message,"            "metadata": metadata or {},"        }
 
         # Local buffering
@@ -220,4 +222,4 @@ class LoggingAgent(BaseAgent):
 
     @as_tool
     def get_aggregated_logs(self) -> list[dict[str, Any]]:
-""""Returns the internal buffer logs. (Sync for test" access)"""""""        return self._internal_buffer
+""""Returns the internal buffer logs. (Sync for test" access)        return self._internal_buffer

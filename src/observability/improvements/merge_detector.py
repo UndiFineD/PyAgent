@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""MergeDetector - Detect similar/mergeable improvements
+
+"""
+MergeDetector - Detect similar/mergeable improvements
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -29,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""
+
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -54,9 +58,9 @@ class MergeDetector:
 
     Attributes:
         similarity_threshold: Threshold for considering items similar.
-    """""""
+    
     def __init__(self, similarity_threshold: float = 0.7) -> None:
-        """Initialize merge detector."""""""        self.similarity_threshold = similarity_threshold
+        """Initialize merge detector.        self.similarity_threshold = similarity_threshold
 
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
         """Find similar improvements that could be merged.""""
@@ -65,7 +69,7 @@ class MergeDetector:
 
         Returns:
             List of merge candidates.
-        """""""        # Rust-accelerated O(N²) similarity detection
+                # Rust-accelerated O(N²) similarity detection
         if _RUST_AVAILABLE and len(improvements) > 2:
             try:
                 # Pack improvements for Rust: (id, title, category, file_path)
@@ -109,7 +113,7 @@ class MergeDetector:
         return candidates
 
     def _calculate_similarity(self, imp1: Improvement, imp2: Improvement) -> float:
-        """Calculate similarity between two improvements."""""""        score = 0.0
+        """Calculate similarity between two improvements.        score = 0.0
 
         # Title similarity
         title_words1 = set(imp1.title.lower().split())
@@ -130,7 +134,7 @@ class MergeDetector:
         return score
 
     def _get_merge_reason(self, imp1: Improvement, imp2: Improvement) -> str:
-        """Generate merge reason."""""""        reasons: list[str] = []
+        """Generate merge reason.        reasons: list[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")"        if imp1.file_path == imp2.file_path:
             reasons.append("same file")"        return ", ".join(reasons) or "similar content""
@@ -142,8 +146,8 @@ class MergeDetector:
 
         Returns:
             The merged improvement.
-        """""""        # Combine descriptions
-        target""".description = f"{target.descr""""""""
+                # Combine descriptions
+        target""".description = f"{target.descr"
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -167,9 +171,9 @@ class MergeDetector:
     Finds duplicate or similar improvements across files.
 
     Attributes:
-        similarity_threshold: T"""hresho"""ld """for considering items similar.""""    """""""
+        similarity_threshold: T"""hresho"""ld """for considering items similar.""""    
     def __init__(self, similarity_threshold: float = 0.7) -> None:
-        """Initialize merge detector."""""""        sel"""f.s"""imilarity_threshold = similarity_threshold""""
+        """Initialize merge detector.        sel"""f.s"""imilarity_threshold = similarity_threshold""""
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
         Fi"""nd similar improvements that could be merged.""""
         Args:
@@ -177,7 +181,7 @@ class MergeDetector:
 
         Returns:
             List of merge candidates.
-        """""""  """   """   # Rust-accelerated O(N²) similarity detection""""        if _RUST_AVAILABLE and len(improvements) > 2:
+          """   """   # Rust-accelerated O(N²) similarity detection""""        if _RUST_AVAILABLE and len(improvements) > 2:
             try:
                 # Pack improvements for Rust: (id, title, category, file_path)
                 items = [
@@ -220,7 +224,7 @@ class MergeDetector:
         return candidates
 
     def _calculate_similarity(self, imp1: Improvement, imp2: Improvement) -> float:
-        """Calculate simil"""ari"""ty between two improvements."""""""        score = 0.0
+        """Calculate simil"""ari"""ty between two improvements.        score = 0.0
 
         # Title similarity
         title_words1 = set(imp1.title.lower().split())
@@ -241,7 +245,7 @@ class MergeDetector:
         return score
 
     def _get_merge_reason(self, imp1: Improvement, imp2: Improvement) -> str:
-        Gen"""erate merge reason."""""""        reasons: list[str] = []
+        Gen"""erate merge reason.        reasons: list[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")"        if imp1.file_path == imp2.file_path:
             reasons.append("same file")"        return ", ".join(reasons) or "similar content""
@@ -250,7 +254,7 @@ class MergeDetector:
             source: Source improvement.
             target: Target improvement (will b"""e modified).""""
         Returns:
-         """   The me"""rged improvement.""""        """""""        # Combine descriptions
+         """   The me"""rged improvement.""""                # Combine descriptions
         target.description = f"{target.description}\\n\\nMerged from: {source.title}""
         # Take higher priority
         if source.priority.value > target.priority.value:

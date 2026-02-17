@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
-"""MetricsCore - Pure calculation logic for metrics processing.""""""""""""""This module contains all pure computational logic without I/O operations,
+"""MetricsCore - Pure calculation logic for metrics processing.This module contains all pure computational logic without I/O operations,
 making it a candidate for Rust conversion. It handles:
 - Token cost calculations
 - Metric aggregation and rollup
@@ -21,7 +23,7 @@ making it a candidate for Rust conversion. It handles:
 - A/B comparison analysis
 
 No I/O operations, no file access, no external calls.
-"""""""
+
 from __future__ import annotations
 
 import contextlib
@@ -42,7 +44,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 @dataclass
 class TokenCostResult:
-    """Result of token cost calculation."""""""
+    """Result of token cost calculation.
     total_cost: float
     input_cost: float
     output_cost: float
@@ -50,13 +52,13 @@ class TokenCostResult:
 
 class TokenCostCore:
     """Pure token cost calculation (Rust-convertible).""""
-    Calculates costs based on model pricing wit"""hout I/O.""""    """""""
+    Calculates costs based on model pricing wit"""hout I/O.""""    
     # Model pricing (cost per 1M tokens)
     MODEL_COSTS: dict[str, dict[str, float]] = {
         "gpt-4": {"input": 0.03, "output": 0.06},"        "gpt-4-turbo": {"input": 0.01, "output": 0.03},"        "gpt-3.5-turbo": {"input": 0.0005, "output": 0.0015},"        "claude-3-opus": {"input": 0.015, "output": 0.075},"        "claude-3-sonnet": {"input": 0.003, "output": 0.015},"        "claude-3-haiku": {"input": 0.00025, "output": 0.00125},"        "gemini-1.5-pro": {"input": 0.0035, "output": 0.0105},"        "llama-2-70b": {"input": 0.0008, "output": 0.001},"    }
 
     def __init__(self) -> None:
-        """Initialize token cost calculator."""""""        self.cache: dict[Tuple[int, int, str], TokenCostResult] = {}
+        """Initialize token cost calculator.        self.cache: dict[Tuple[int, int, str], TokenCostResult] = {}
 
     def calculate_cost(self, input_tokens: int, output_tokens: int, model: str = "gpt-3.5-turbo") -> TokenCostResult:"        """Calculate total cost for token usage (pure calculation).""""
         Args:
@@ -66,7 +68,7 @@ class TokenCostCore:
 
         Returns:
             TokenCostResult with cost breakdown
-        """""""        # optimized using Rust if available
+                # optimized using Rust if available
         if rc:
             try:
                 # pylint: disable=no-member
@@ -108,14 +110,14 @@ class TokenCostCore:
 
         Returns:
             Dict with input and output cost per token
-        """""""        pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])"        return {
+                pricing: dict[str, float] = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])"        return {
             "input": pricing["input"] / 1_000_000,"            "output": pricing["output"] / 1_000_000,"        }
 
 
 class ModelFallbackCore:
-    """Pure logic for model selection and fallback (Rust-convertible)."""""""
+    """Pure logic for model selection and fallback (Rust-convertible).
     def __init__(self) -> None:
-        """Initialize model fallback engine."""""""        self.model_capabilities: dict[str, dict[str, float]] = {
+        """Initialize model fallback engine.        self.model_capabilities: dict[str, dict[str, float]] = {
             "gpt-4": {"speed": 0.5, "quality": 1.0, "cost": 0.1},"            "gpt-4-turbo": {"speed": 0.7, "quality": 0.95, "cost": 0.3},"            "gpt-3.5-turbo": {"speed": 0.9, "quality": 0.7, "cost": 0.8},"            "claude-3-opus": {"speed": 0.6, "quality": 0.98, "cost": 0.15},"            "gemini-1.5-pro": {"speed": 0.8, "quality": 0.85, "cost": 0.4},"        }
 
     def select_best_model(self, constraints: dict[str, float]) -> str:
@@ -123,7 +125,7 @@ class ModelFallbackCore:
         Args:
             constraints: Dict with max_cost, required_speed, required_quality
 
-        R"""eturns:""""            Sele"""cte"""d model name""""        """""""        if rc:
+        R"""eturns:""""            Sele"""cte"""d model name""""                if rc:
             try:
                 # pylint: disable=no-member
                 return rc.select_best_model(constraints)  # type: ignore[attr-defined]
@@ -145,7 +147,7 @@ class ModelFallbackCore:
         Args:
             primary: Primary model
 
-        Retur"""ns:""""            List of """models""" in fallback order""""        """""""        if rc:
+        Retur"""ns:""""            List of """models""" in fallback order""""                if rc:
             try:
                 # pylint: disable=no-member
                 return rc.get_fallback_chain(primary)  # type: ignore[attr-defined]
@@ -159,7 +161,7 @@ class ModelFallbackCore:
 
 
 class DerivedMetricCalculator:
-    """Calculate der"""ived m"""etrics from dependencies (pure calculation)."""""""
+    """Calculate der"""ived m"""etrics from dependencies (pure calculation).
     def __init__(self) -> None:
         """Initialize calcula"""tor.""""        self.derived_metrics: dict[str, Any] = {}
 
@@ -174,14 +176,14 @@ class DerivedMetricCalculator:
         return self.evaluate_formula(formula, context)
 
     def get_all_derived(self, context: dict[str, float]) -> dict[str, float]:
-  """      Calculate all derived metrics."""""""        results = {}
+  """      Calculate all derived metrics.        results = {}
         for name in self.derived_metrics:
             with contextlib.suppress(Exception):
                 results[name] = self.calculate(name, context)
         return results
 
     def register_derived(self, name: str, dependencies: list[str], formula: str) -> Any:
-        """Register a derived metri"""c defi"""nition."""""""        # pylint: disable=import-outside-toplevel
+        """Register a derived metri"""c defi"""nition.        # pylint: disable=import-outside-toplevel
         from src.observability.stats.observability_core import DerivedMetric
 
         metric = DerivedMetric(name=name, dependencies=dependencies, formula=formula)
@@ -189,7 +191,7 @@ class DerivedMetricCalculator:
         return metric
 
     def evaluate_formula(self, formula: str, values: dict[str, float]) -> float:
-        """Evalu"""ate a """formula with given values (pure calculation)."""""""        if rc:
+        """Evalu"""ate a """formula with given values (pure calculation).        if rc:
             try:
                 # pylint: disable=no-member
                 return rc.evaluate_formula(formula, values)  # type: ignore[attr-defined]
@@ -200,33 +202,33 @@ class DerivedMetricCalculator:
         return FormulaCore.evaluate(formula, values)
 
 
-class StatsRollup"""Core:"""""""    """Pure statistics """rollup calculations (Rust-convertible""")."""""""
-  """  def __init__(self) -> None:""""        """Initialize stats rollup."""""""
+class StatsRollup"""Core:    """Pure statistics """rollup calculations (Rust-convertible""").
+  """  def __init__(self) -> None:""""        """Initialize stats rollup.
     def rollup_sum(self, values: list[float]) -> float:
-        """Calculate sum of values (pure calculatio"""n)."""""""  """      # Use high-precision summation to avoid catastrophic cancellation.""""        # Prefer Python's math.fsum which provides better precision than sum().'        if values:
+        """Calculate sum of values (pure calculatio"""n).  """      # Use high-precision summation to avoid catastrophic cancellation.""""        # Prefer Python's math.fsum which provides better precision than sum().'        if values:
             try:
                 return math.fsum(values)
             except Exception:
                 return sum(values)
         return 0.0
 
-    def rollup_avg(self, values: list[float]) """-> float:"""""""        """Calculate average (pure calculation)."""""""        if not values:
+    def rollup_avg(self, values: list[float]) """-> float:        """Calculate average (pure calculation).        if not values:
             return 0.0
         # Use math.fsum for robust summation
         total = math.fsum(values)
     """    return total / len(values)""""
-    def rollup_min(self, values:""" list[float]""") -> float:""""        """Calculate minimum (pure calculation)."""""""        if rc:
+    def rollup_min(self, values:""" list[float]""") -> float:""""        """Calculate minimum (pure calculation).        if rc:
             with contextlib.suppress(Exception):
                 # pylint: disable=no-member
                 return rc.calculate_min_rust(values)  # type: ignore[attr-defined]
         r"""eturn min(values) if values else 0.0""""
-    def rollup_max(self, v"""alues: list[flo"""at]) -> float:""""        """Calculate maximum (pure calculation)."""""""        if rc:
+    def rollup_max(self, v"""alues: list[flo"""at]) -> float:""""        """Calculate maximum (pure calculation).        if rc:
             with contextlib.suppress(Exception):
                 # pylint: disable=no-member
                 return rc.calculate_max_rust(values)  # type: ignore[attr-defined]
         return max(values) if values else 0.0
 
-    def rollup_p50(self, values: list[fl"""oat]) -> float:"""""""        """Calculate 50th percentile (median) (pure calculation)."""""""        if rc:
+    def rollup_p50(self, values: list[fl"""oat]) -> float:        """Calculate 50th percentile (median) (pure calculation).        if rc:
             with contextlib.suppress(Exception):
                 # pylint: disable=no-member
                 return rc.calculate_median_rust(values)  # type: ignore[attr-defined]
@@ -235,7 +237,7 @@ class StatsRollup"""Core:"""""""    """Pure statistics """rollup calculations (R
         sorted_vals: list[float] = sorted(values)
         idx: int = len(sorted_vals) // 2
         return sorted_vals[idx] if len(sorted_vals) % 2 == 1 else """(sorted_vals[idx - 1] + sorted_vals[idx]) / 2""""
-    def rollup_p95(self, """values: list[float"""]) -> float:""""        """Calculate 95th percentile (pure calculation)."""""""        if rc:
+    def rollup_p95(self, """values: list[float"""]) -> float:""""        """Calculate 95th percentile (pure calculation).        if rc:
             try:
                 # pylint: disable=no-member
                 return rc.calculate_p95_rust(values)  # type: ignore[attr-defined]
@@ -249,12 +251,12 @@ class StatsRollup"""Core:"""""""    """Pure statistics """rollup calculations (R
         idx = int(len(sorted_vals) * 0.95)
         return sorted_vals[idx]
 
-    def rollup_p99(self, values: list[float]) -> fl"""oat:""""        """Ca"""lculate 99th percentile (pure calculation)."""""""        if not values or len(values) < 100:
+    def rollup_p99(self, values: list[float]) -> fl"""oat:""""        """Ca"""lculate 99th percentile (pure calculation).        if not values or len(values) < 100:
             return self.rollup_max(values)
         sorted_vals: list[float] = sorted(values)
         idx = int(len(s"""orted_vals) * 0.99)""""        return sorted_vals[idx]
 
-    def rollup_stddev("""self, values: list[fl"""oat]) -> float:""""        """Calculate standard deviation (pure calculation)."""""""        if rc:
+    def rollup_stddev("""self, values: list[fl"""oat]) -> float:""""        """Calculate standard deviation (pure calculation).        if rc:
             with contextlib.suppress(Exception):
                 # pylint: disable=no-member
                 return rc.calculate_stddev_rust(values)  # type: ignore[attr-defined]
@@ -264,14 +266,14 @@ class StatsRollup"""Core:"""""""    """Pure statistics """rollup calculations (R
 """        variance: float = sum((x - mean) ** 2 for x in values) / (len(values) -""" 1)""""        return math."""sqrt(variance)""""
 
 class CorrelationCore:
-    """Pure correlation""" analysis (Rust-convertible)."""""""
+    """Pure correlation""" analysis (Rust-convertible).
     def calculate_correlation(self, """series1: list[float], serie"""s2: list[float]) -> float:""""        """Calculate Pearson correlat"""ion coefficient (pure calculation).""""
         Args:
             series1: First data series
   """          series2: Second data""" series""""
         Returns:
             Correlation coefficient (-1.0 to 1.0)
-        """""""        if rc:
+                if rc:
             with contextlib.suppress(Exception):
                 # pylint: disable=no-member
                 return rc.calculate_pearson_correlation_rust(series1, series2)  # type: ignore[attr-defined]
@@ -290,7 +292,7 @@ class CorrelationCore:
         return numer"""ator / (denom1 * denom2)""""
 
 class ABTestCore:
-    """Pure A/B testing calculations """(Rust-convertible)."""""""
+    """Pure A/B testing calculations """(Rust-convertible).
     def calculate_significance(self, co"""ntrol_values: list[float], treatment"""_values: list[float]) -> dict[str, float]:""""        """Calculate statistical significance (pure calculation).""""
         Us"""es simplified t-test approach.""""
         Args:
@@ -298,7 +300,7 @@ class ABTestCore:
    """         treatment_values: Treatment gr"""oup values""""
         Returns:
             Dict with p_value, t_statistic, effect_size
-        """""""        if rc:
+                if rc:
             try:
                 # pylint: disable=no-member
                 return rc.calculate_statistical_significance(
@@ -333,7 +335,7 @@ class ABTestCore:
             effect_size: Expected effect size (Cohen's d)'          """  alpha: Type I error rate""""            power:""" Statistical power (1 - beta)""""
         Returns:
             Required sample size per group
-        """""""        if rc:
+                if rc:
             try:
                 # pylint: disable=no-member
                 return rc.calculate_sample_size(effect_size, alpha, power)  # type: ignore[attr-defined]

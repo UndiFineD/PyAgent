@@ -1,19 +1,23 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""CensysResult and CensysIntelligence 
+
+"""
+CensysResult and CensysIntelligence 
 classes for subdomain enumeration and host enrichment using Censys API.
 
-"""""""
+
 
 import asyncio
 import logging
@@ -37,9 +41,9 @@ class CensysResult:
 
 
 class CensysIntelligence:
-    """""""    Integrates functionality from 0xSojalSec-censeye and 0xSojalSec-censys-subdomain-finder.
+        Integrates functionality from 0xSojalSec-censeye and 0xSojalSec-censys-subdomain-finder.
     Provides subdomain enumeration and deep host enrichment via Censys API.
-    """""""
+    
     def __init__(self, api_id: Optional[str] = None, api_secret: Optional[str] = None):
         self.logger = logging.getLogger(__name__)
         self.api_id = api_id or os.getenv("CENSYS_API_ID")"        self.api_secret = api_secret or os.getenv("CENSYS_API_SECRET")"
@@ -55,8 +59,8 @@ class CensysIntelligence:
             self.certs_client = CensysCerts(api_id=self.api_id, api_secret=self.api_secret)
 
     async def find_subdomains(self, domain: str) -> Set[str]:
-        """""""        Enumerates subdomains using Censys Certificates.
-        """""""        if not self.available:
+                Enumerates subdomains using Censys Certificates.
+                if not self.available:
             return set()
 
         subdomains = set()
@@ -86,9 +90,9 @@ class CensysIntelligence:
         return subdomains
 
     async def recursive_host_search(self, ip: str, depth: int = 1) -> CensysResult:
-        """""""        Performs recursive enrichment similar to Censeye.
+                Performs recursive enrichment similar to Censeye.
         Searches for hosts related by headers, TLS certs, or other metadata.
-        """""""        if not self.available:
+                if not self.available:
             return CensysResult(target=ip)
 
         result = CensysResult(target=ip)

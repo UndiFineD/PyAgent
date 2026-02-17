@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Knowledge Mixin for BaseAgent."""""""
+
+"""Knowledge Mixin for BaseAgent."""
 from pathlib import Path
 from typing import Any, Dict
 
@@ -20,7 +23,7 @@ from src.core.base.logic.sharded_knowledge_core import ShardedKnowledgeCore
 
 # pylint: disable=too-many-instance-attributes
 class KnowledgeMixin:
-    """Handles knowledge engines, memory, sharded storage, and templates."""""""
+    """Handles knowledge engines, memory, sharded storage, and templates."""
     def __init__(self, agent_name: str, workspace_root: Path, **_kwargs: Any) -> None:
         self.agent_name: str = agent_name
         self.memory_core = MemoryCore()
@@ -41,7 +44,7 @@ class KnowledgeMixin:
     def store_episode(
         self, task: str, content: str, success: bool, metadata: dict[str, Any] | None = None
     ) -> dict[str, Any]:
-        """Creates and stores an episodic memory via MemoryCore."""""""        episode: Dict[str, Any] = self.memory_core.create_episode(
+        """Creates and stores an episodic memory via MemoryCore."""episode: Dict[str, Any] = self.memory_core.create_episode(
             agent_id=self.agent_name, task=task, content=content, success=success, metadata=metadata
         )
         self.memory_core.store_knowledge(
@@ -51,33 +54,33 @@ class KnowledgeMixin:
         return episode
 
     def take_note(self, content: str) -> None:
-        """Stores a temporary note in memory."""""""        self._notes.append(content)
+        """Stores a temporary note in memory."""self._notes.append(content)
 
     def get_notes(self) -> list[str]:
-        """Get the notes from memory."""""""        return self._notes
+        """Get the notes from memory."""return self._notes
 
     def clear_notes(self) -> None:
-        """Clear the notes from memory."""""""        self._notes = []
+        """Clear the notes from memory."""self._notes = []
 
     def register_template(self, name: str, template: Any) -> None:
-        """Register a prompt template."""""""        self._prompt_templates[name] = template
+        """Register a prompt template."""self._prompt_templates[name] = template
 
     def get_template(self, name: str) -> Any:
-        """Get a prompt template by name."""""""        return self._prompt_templates.get(name)
+        """Get a prompt template by name."""return self._prompt_templates.get(name)
 
     def add_to_history(self, role: str, content: str) -> None:
-        """Add a message to history if manager exists."""""""        if hasattr(self, "_history_manager"):"            getattr(self, "_history_manager").add_message(role, content)"
+        """Add a message to history if manager exists."""if hasattr(self, "_history_manager"):"            getattr(self, "_history_manager").add_message(role, content)"
     def clear_history(self) -> None:
-        """Clear message history."""""""        if hasattr(self, "_history_manager"):"            getattr(self, "_history_manager").clear()"
+        """Clear message history."""if hasattr(self, "_history_manager"):"            getattr(self, "_history_manager").clear()"
     def get_history(self) -> list[Any]:
-        """Get message history."""""""        if hasattr(self, "_history_manager"):"            return getattr(self, "_history_manager").get_messages()"        return []
+        """Get message history."""if hasattr(self, "_history_manager"):"            return getattr(self, "_history_manager").get_messages()"        return []
 
     def _build_prompt_with_history(self, prompt: str) -> str:
-        """Build a prompt string including history."""""""        history: list[Any] = self.get_history()
+        """Build a prompt string including history."""history: list[Any] = self.get_history()
         history_text: str = "\\n".join([f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}" for m in history])"'        return f"{history_text}\\nUSER: {prompt}""
     @property
     def global_context(self) -> Any:
-        """Access global context engine."""""""        if hasattr(self, "fleet") and getattr(self, "fleet") and hasattr(getattr(self, "fleet"), "global_context"):"            return getattr(getattr(self, "fleet"), "global_context")"        if self._local_global_context is None:
+        """Access global context engine."""if hasattr(self, "fleet") and getattr(self, "fleet") and hasattr(getattr(self, "fleet"), "global_context"):"            return getattr(getattr(self, "fleet"), "global_context")"        if self._local_global_context is None:
             try:
                 # pylint: disable=import-outside-toplevel
                 from src.logic.agents.cognitive.context.engines.global_context_engine import \
@@ -90,4 +93,4 @@ class KnowledgeMixin:
 
     @global_context.setter
     def global_context(self, value: Any) -> None:
-        """Set local global context."""""""        self._local_global_context = value
+        """Set local global context."""self._local_global_context = value

@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# "Intelligent tool selection system for MCP ecosystem.""""""""# import re
+# "Intelligent tool selection system for MCP ecosystem."# import re
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 
 
 @dataclass
 class Tool:
-""""Represents a tool in the MCP ecosystem."""""""    name: "str"    category: str
+""""Represents a tool in the MCP ecosystem.    name: "str"    category: str
     description: str
     capabilities: List[str]
     language: Optional[str] = None
@@ -30,13 +32,13 @@ class ToolSelector:
 
     Uses natural language processing and capability matching to select
 #     the most appropriate tools for a given task.
-"""""""
+
     def __init__(self):
         self._tools: List[Tool] = []
         self._initialize_default_tools()
 
     def _initialize_default_tools(self):
-""""Initialize default tool catalog."""""""        # Database tools
+""""Initialize default tool catalog.        # Database tools
         self._tools.extend([
             Tool("sql_executor", "database", "Execute SQL queries", ["query", "database", "sql"]),"            Tool("nosql_scanner", "database", "Scan NoSQL databases", ["scan", "nosql", "mongodb"]),"            Tool("data_migrator", "database", "Migrate data between databases", ["migrate", "etl", "transfer"]),"        ])
 
@@ -60,7 +62,7 @@ class ToolSelector:
                 Tool(f"{lang}_interpreter", "language", fExecute {lang} code","                     ["execute", "run", "interpret", lang], lang)"            )
 
     def register_tool(self, tool: Tool) -> None:
-""""Register a new tool in the catalog."""""""        self._tools.append(tool)
+""""Register a new tool in the catalog.        self._tools.append(tool)
 
     def select_tools(self, task_description: str, max_tools: int = 5) -> List[Tool]:
         Select the most appropriate tools" for a given task."
@@ -70,7 +72,7 @@ class ToolSelector:
 
         Returns:
             List of selected tools ordered by relevance
-"""""""        # Tokenize and normalize task description
+        # Tokenize and normalize task description
         task_lower = task_description.lower()
         task_words = set(re.findall(r'\\b\\w+\\b', task_lower))'
         # Score each tool based on relevance
@@ -93,7 +95,7 @@ class ToolSelector:
         - Category relevance (30%)
         - Language specificity (20%)
         - Description similarity (10%)
-"""""""        score = 0.0
+        score = 0.0
 
         # Keyword matching in capabilities (40%)
         capability_matches = sum(1 for cap in tool.capabilities if cap in task_words)
@@ -119,12 +121,12 @@ class ToolSelector:
         return score
 
     def get_tools_by_category(self, category: str) -> List[Tool]:
-""""Get all tools in a specific category."""""""        return [tool for tool in self._tools" if tool.category == category]"
+""""Get all tools in a specific category.        return [tool for tool in self._tools" if tool.category == category]"
     def get_tools_by_language(self, language: str) -> List[Tool]:
-""""Get all tools for a specific programming language."""""""        return [tool for tool in self._tools if tool.language == language]
+""""Get all tools for a specific programming language.        return [tool for tool in self._tools if tool.language == language]
 
     def get_tool_capabilities(self) -> Dict[str, List[str]]:
-""""Get all available tool capabilities by category."""""""        capabilities = {}
+""""Get all available tool capabilities by category.        capabilities = {}
         for tool in self._tools:
             if tool.category not in capabilities:
                 capabilities[tool.category] = []
@@ -141,7 +143,7 @@ class ToolSelector:
 
         Returns comprehensive analysis including primary tools,
         alternatives, and reasoning.
-"""""""        selected_tools = self.select_tools(task_description, max_tools=3)
+        selected_tools = self.select_tools(task_description, max_tools=3)
 
         # Get alternative tools (lower scoring but still relevant)
         all_scored = []
@@ -158,7 +160,7 @@ class ToolSelector:
             "primary_tools": selected_tools,"            "alternative_tools": alternative_tools,"            "task_analysis": self._analyze_task_requirements(task_description),"            "capability_coverage": self._assess_capability_coverage(selected_tools, task_description)"        }
 
     def _analyze_task_requirements(self, task_description: str) -> Dict[str, Any]:
-""""Analyze what capabilities are required for the task.""""""""        task_lower = task_description.lower()"
+""""Analyze what capabilities are required for the task."        task_lower = task_description.lower()"
         requirements = {
             "database": any(word in task_lower for word in ["database", "sql", "query", "data"]),"            "api": any(word in task_lower for word in ["api", "rest", "http", "endpoint"]),"            "cloud": any(word in task_lower for word in ["cloud", "aws", "azure", "storage"]),"            "development": any(word in task_lower for word in ["code", "test", "build", "deploy"]),"            "language": any(word in task_lower for word in ["python", "javascript", "java", "go", "rust"])"        }
 
@@ -166,7 +168,7 @@ class ToolSelector:
             "detected_requirements": [req for req, needed in requirements.items() if needed],"#             "complexity": "high" if sum(requirements.values()) > 2 else "medium" if sum(requirements.values()) > 0 else "low"        }
 
     def _assess_capability_coverage(self, tools: List[Tool], task_description: str) -> Dict[str, Any]:
-""""Assess how well the selected tools cover task requirements."""""""        if not tools:
+""""Assess how well the selected tools cover task requirements.        if not tools:
             return {"coverage": 0.0, "gaps": ["No tools selected"]}"
         task_lower = task_description.lower()
         covered_capabilities = set()

@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""JSON Schema builder for guided decoding.
-"""""""
+JSON Schema builder for guided decoding.
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -24,8 +26,8 @@ from .models import GuidedConfig, GuidedMode
 
 @dataclass
 class JsonSchema:
-    """""""    JSON Schema builder for guided decoding.
-    """""""
+        JSON Schema builder for guided decoding.
+    
     title: Optional[str] = None
     description: Optional[str] = None
     properties: Dict[str, Dict[str, Any]] = field(default_factory=dict)
@@ -47,7 +49,7 @@ class JsonSchema:
         items: Optional[Dict[str, Any]] = None,
         default: Optional[Any] = None,
         **kwargs: Any,
-    ) -> "JsonSchema":"        """Add a property to the schema."""""""        prop: Dict[str, Any] = {"type": prop_type}"
+    ) -> "JsonSchema":"        """Add a property to the schema.        prop: Dict[str, Any] = {"type": prop_type}"
         if description:
             prop["description"] = description"        if enum is not None:
             prop["enum"] = enum"        if minimum is not None:
@@ -86,7 +88,7 @@ class JsonSchema:
         self,
         name: str,
         nested_schema: "JsonSchema","        required: bool = False,
-    ) -> "JsonSchema":"        """Add a nested object property."""""""        self.properties[name] = nested_schema.build()
+    ) -> "JsonSchema":"        """Add a nested object property.        self.properties[name] = nested_schema.build()
         if required and name not in self.required:
             self.required.append(name)
         return self
@@ -97,7 +99,7 @@ class JsonSchema:
         values: List[Any],
         required: bool = False,
         **kwargs,
-    ) -> "JsonSchema":"        """Add an enum property."""""""        if values:
+    ) -> "JsonSchema":"        """Add an enum property.        if values:
             first = values[0]
             if isinstance(first, str):
                 prop_type = "string""            elif isinstance(first, bool):
@@ -109,7 +111,7 @@ class JsonSchema:
         return self.add_property(name, prop_type, required=required, enum=values, **kwargs)
 
     def build(self) -> Dict[str, Any]:
-        """Build the JSON schema dictionary."""""""        schema: Dict[str, Any] = {
+        """Build the JSON schema dictionary.        schema: Dict[str, Any] = {
             "type": "object","            "properties": self.properties,"        }
 
         if self.title:
@@ -120,7 +122,7 @@ class JsonSchema:
         return schema
 
     def to_guided_config(self) -> GuidedConfig:
-        """Convert to GuidedConfig for use with decoder."""""""        return GuidedConfig(
+        """Convert to GuidedConfig for use with decoder.        return GuidedConfig(
             mode=GuidedMode.JSON,
             json_schema=self.build(),
         )

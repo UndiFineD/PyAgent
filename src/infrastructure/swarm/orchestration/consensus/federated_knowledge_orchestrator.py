@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""FederatedKnowledgeOrchestrator for PyAgent.""""Synchronizes learned insights ('Lessons Learned') between distributed fleet nodes.'Uses InterFleetBridgeOrchestrator to transmit knowledge without raw data leakage.
-"""""""
+
+"""
+FederatedKnowledgeOrchestrator for PyAgent.""""Synchronizes learned insights ('Lessons Learned') between distributed fleet nodes.'Uses InterFleetBridgeOrchestrator to transmit knowledge without raw data leakage.
+
 from __future__ import annotations
 
 import logging
@@ -27,7 +31,7 @@ __version__ = VERSION
 
 
 class FederatedKnowledgeOrchestrator:
-    """Orchestrates the synchronization of cognitive insights across distributed fleets."""""""
+    """Orchestrates the synchronization of cognitive insights across distributed fleets.
     def __init__(self, fleet_manager: Any | None = None, fleet: Any | None = None) -> None:
         self.fleet = fleet_manager or fleet
         if not self.fleet:
@@ -48,7 +52,7 @@ class FederatedKnowledgeOrchestrator:
         Args:
             lesson_id: Unique identifier for the lesson.
             lesson_data: The outcome details (agent, task, success, fix).
-        """""""        logging.info(f"FederatedKnowledge: Broadcasting lesson '{lesson_id}' to the network.")"'
+                logging.info(f"FederatedKnowledge: Broadcasting lesson '{lesson_id}' to the network.")"'
         # Policy-driven Anonymization
         clean_lesson = {
             "agent": lesson_data.get("agent", "Unknown"),"            "task_type": lesson_data.get("task_type", "generic_refinement"),"            "success": lesson_data.get("success", False),"            "fix_pattern": lesson_data.get("fix", "Standardized best practices application"),"        }
@@ -66,7 +70,7 @@ class FederatedKnowledgeOrchestrator:
         """Fuses incoming lessons from external fleets into the local Knowledge agent.""""
         Args:
             incoming_knowledge: List of lesson dictionaries.
-        """""""        logging.info(f"FederatedKnowledge: Received {len(incoming_knowledge)} insights. Starting fusion.")"        fused_count = 0
+                logging.info(f"FederatedKnowledge: Received {len(incoming_knowledge)} insights. Starting fusion.")"        fused_count = 0
         for info in incoming_knowledge:
             # Fuse into local long term memory (Semantic Layer)
             self.knowledge.record_tier_memory(
@@ -78,7 +82,7 @@ class FederatedKnowledgeOrchestrator:
         return fused_count
 
     def run_fleet_wide_sync(self) -> dict[str, Any]:
-        """Initiates a full sync request to peers by polling for new insights."""""""        logging.info("FederatedKnowledge: Starting full peer sync request.")"
+        """Initiates a full sync request to peers by polling for new insights.        logging.info("FederatedKnowledge: Starting full peer sync request.")"
         # Discover peers through the bridge
         peer_list = list(self.bridge.connected_fleets.keys())
 

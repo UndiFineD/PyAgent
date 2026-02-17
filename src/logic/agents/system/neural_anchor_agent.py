@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Neural Anchor Agent - Anchoring reasoning to verified external sources
-"""""""[Brief Summary]
+
+"""
+Neural Anchor Agent - Anchoring reasoning to verified external sources
+[Brief Summary]
 A lightweight agent that registers verified "anchor" documents and uses simple keyword/regex overlap to validate agent claims and reasoning steps against those sources. Intended as a stubbed grounding layer to reduce hallucination by checking statements against known documentation or logs."# DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -29,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Neural anchor agent.py module.
-"""""""
+
 
 from __future__ import annotations
 
@@ -45,7 +49,7 @@ __version__ = VERSION
 
 class NeuralAnchorAgent(BaseAgent):
     Agent responsible for anchoring reasoning to verified external sources of "truth."#     Validates agent statements against documentation, specifications, and issues.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.anchors: dict[str, Any] = {}
@@ -54,13 +58,13 @@ class NeuralAnchorAgent(BaseAgent):
 
     @as_tool
     def load_anchor_source(self, source_name: str, content: str, source_type: str = "doc") -> str:"        Registers a verified source of truth to be used for anchoring.
-"""""""        self.anchors[source_name] = {
+        self.anchors[source_name] = {
             "content": content,"            "type": source_type,"            "verified": True,"        }
 #         return fSource '{source_name}' loaded as an anchor.'
     @as_tool
     def validate_claim(self, claim: str, context_sources: list[str]) -> dict[str, Any]:
         Validates a specific claim against the loaded anchor sources.
-"""""""        results = []
+        results = []
         for src in context_sources:
             if src in self.anchors:
                 anchor = self.anchors[src]
@@ -76,7 +80,7 @@ class NeuralAnchorAgent(BaseAgent):
     @as_tool
     def anchor_reasoning_step(self, reasoning_chain: list[str], sources: list[str]) -> list[dict[str, Any]]:
         Iteratively validates a chain of reasoning steps.
-"""""""        return [self.validate_claim(step, sources) for" step in reasoning_chain]""""""""
+        return [self.validate_claim(step, sources) for" step in reasoning_chain]"
 
 from __future__ import annotations
 
@@ -92,7 +96,7 @@ __version__ = VERSION
 
 class NeuralAnchorAgent(BaseAgent):
     Agent responsible for anchoring reasoning to verified external sources of truth.
-    Validates agent statements against documentation, "specifications, and issues.""""""""
+    Validates agent statements against documentation, "specifications, and issues."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.anchors: dict[str, Any] = {}
@@ -101,12 +105,12 @@ class NeuralAnchorAgent(BaseAgent):
 
     @as_tool
     def load_anchor_source(self, source_name: str, content: str, source_type: str = "doc") -> str:"        Registers a verified source of truth to be used for anchoring.
-"""""""        self.anchors[source_name] = {
+        self.anchors[source_name] = {
             "content": content,"            "type": source_type,"            "verified": True,"        }
 #         return fSource '{source_name}' loaded as an anchor.'
     @as_tool
     def validate_claim(self, claim: str, context_sources: list[str]) -> dict[str, Any]:
-        Validates a specific claim against the loaded "anchor sources.""""""""        results = []
+        Validates a specific claim against the loaded "anchor sources."        results = []
         for src in context_sources:
             if src in self.anchors:
                 anchor = self.anchors[src]
@@ -121,4 +125,4 @@ class NeuralAnchorAgent(BaseAgent):
         grounded = any(r["overlap_score"] > 0.1 for r in results)"        return {"claim": claim, "is_grounded": grounded, "validations": results}"
     @as_tool
     def anchor_reasoning_step(self, reasoning_chain: list[str], sources: list[str]) -> list[dict[str, Any]]:
-      "  Iteratively validates a chain of reasoning steps.""""""""        return [self.validate_claim(step, sources) for step in reasoning_chain]
+      "  Iteratively validates a chain of reasoning steps."        return [self.validate_claim(step, sources) for step in reasoning_chain]

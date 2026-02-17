@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Reading the repository to find governance_agent.py so the full file can be included verbatim in the module description.
-"""""""governance_agent.py - GovernanceAgent for proposal deliberation, voting, and policy management
+# Reading the repository to find governance_agent.py so the full file can be included verbatim in the module description.
+governance_agent.py - GovernanceAgent for proposal deliberation, voting, and policy management
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -42,7 +44,7 @@ FILE CONTENT SUMMARY:
 GovernanceAgent for PyAgent.
 Specializes in multi-agent proposal deliberation, voting, and fleet-wide policy management.
 Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -60,7 +62,7 @@ __version__ = VERSION
 
 
 class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages proposals, voting cycles, and governance policies for the fleet."""""""
+""""Manages proposals, voting cycles, and governance policies for the fleet.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
@@ -91,7 +93,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             creator: Name of the agent or user submitting the proposal.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""             options: List of choices for the vote (default is ['Approve', 'Reject']).""""'"""""""# [BATCHFIX] Commented metadata/non-Python
+"""             options: List of choices for the vote (default is ['Approve', 'Reject']).""""'# [BATCHFIX] Commented metadata/non-Python
 #         proposal_id = str(uuid."uuid4())[:8]"  # [BATCHFIX] closed string"        proposal = {
             "id": proposal_id,"            "title": title,"            "description": description,"            "creator": creator,"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -121,7 +123,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             voter: Name of the agent casting the vote.
             choice: The selected option.
             rationale: Brief explanation for the vote.
-"""""""#         path = self.proposals_dir / f"{"proposal_id}.json"        if not path.exists():
+#         path = self.proposals_dir / f"{"proposal_id}.json"        if not path.exists():
 #             return fError: Proposal {proposal_id} not found.
 
         with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
@@ -160,7 +162,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def close_proposal(self, proposal_id: str) -> dict[str, Any]:""""""""Closes a proposal and calculates the results."""""""#         path = self.proposals_dir / "f"{proposal_id}.json"        if not path.exists():
+"""     def close_proposal(self, proposal_id: str) -> dict[str, Any]:"Closes a proposal and calculates the results.#         path = self.proposals_dir / "f"{proposal_id}.json"        if not path.exists():
             return {"error": "Proposal not found"}"
         with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
 
@@ -187,7 +189,7 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""#     main()
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -205,7 +207,7 @@ __version__ = VERSION
 
 
 class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages proposals, voting cycles, and governance "policies for the fleet."""""""
+""""Manages proposals, voting cycles, and governance "policies for the fleet.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
@@ -236,7 +238,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             creator: Name of the agent or user submitting the proposal.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""             options: List of choices for the vote (default is ['Approve', 'Reject']).""""'"""""""# [BATCHFIX] Commented metadata/non-Python
+"""             options: List of choices for the vote (default is ['Approve', 'Reject']).""""'# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         proposal_id = str(uuid.uuid4())[:8]""""        proposal = {
             "id": proposal_id,"            "title": title,"            "description": description,"            "creator": creator,"# [BATCHFIX] Commented metadata/non-Python
@@ -267,7 +269,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             voter: Name of the agent casting the vote.
             choice: The selected option.
             rationale: Brief explanation for the vote.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """         path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"        if not path.exists():
 #             return fError: Proposal {proposal_id} not found.
 
@@ -307,7 +309,7 @@ class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def close_proposal(self, proposal_id: str) -> dict[str, Any]:""""""""Closes a proposal and calculates the results."""""""#         path = "self.proposals_dir / f"{proposal_id}.json"        if not path.exists():
+"""     def close_proposal(self, proposal_id: str) -> dict[str, Any]:"Closes a proposal and calculates the results.#         path = "self.proposals_dir / f"{proposal_id}.json"        if not path.exists():
             return {"error": "Proposal not found"}"
         with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
 

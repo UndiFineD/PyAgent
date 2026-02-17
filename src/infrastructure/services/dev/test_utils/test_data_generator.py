@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py"""""""""""
+
+"""
+Auto-extracted class from agent_test_utils.py""""
 from __future__ import annotations
 
 import json
@@ -27,14 +31,14 @@ class TestDataGenerator:
     Example:
         gen=TestDataGenerator()
         code=gen.generate_python_code(with_errors=False)
-    """""""
+    
     __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
         """Initialize data generator.""""
         Args:
             seed: Random seed for reproducibility.
-        """""""        self.seed = seed
+                self.seed = seed
         if seed:
             import random
 
@@ -54,7 +58,7 @@ class TestDataGenerator:
 
         Returns:
             str: Generated Python code.
-        """""""        lines = ['"""Generated test module."""', "", "import os", ""]"'
+                lines = ['"""Generated test module."""', "", "import os", ""]"'
         for i in range(num_functions):
             lines.append(f"def function_{i}(arg1, arg2):")"            if with_docstrings:
                 lines.append(f'    """Function {i} docstring."""')""""'            if with_errors and i == 0:
@@ -75,7 +79,7 @@ class TestDataGenerator:
 
         Returns:
             str: Generated markdown.
-        """""""        lines: list[str] = []
+                lines: list[str] = []
         if with_headers:
             lines.append("# Test Document")"            lines.append("")"        for i in range(num_sections):
             if with_headers:
@@ -93,7 +97,7 @@ class TestDataGenerator:
 
         Returns:
             str: Generated JSON.
-        """""""        data: dict[str, Any] = {
+                data: dict[str, Any] = {
             "items": ["                {
                     "id": i,"                    "name": f"item_{i}","                    "value": i * 10,"                }
                 for i in range(num_items)

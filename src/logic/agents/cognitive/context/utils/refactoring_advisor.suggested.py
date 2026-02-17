@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Refactoring advice engine for Cognitive agents.""""""""This module analyzes agent contexts to identify potential refactoring
+# "Refactoring advice engine for Cognitive agents."This module analyzes agent contexts to identify potential refactoring
 opportunities and suggestions, leveraging Rust acceleration when available.
-"""""""
+
 from __future__ import annotations
 import re
 from typing import Any
@@ -40,16 +42,16 @@ class RefactoringAdvisor:
     Example:
         >>> advisor = RefactoringAdvisor()
 #         >>> suggestions = advisor.analyze(contexts)
-"""""""
+
     def __init__(self) -> None:
-""""Initialize refactoring advisor."""""""        self.patterns: dict[str, dict[str", str]] = {}"
+""""Initialize refactoring advisor.        self.patterns: dict[str, dict[str", str]] = {}"
     def add_pattern(self, name: str, pattern: str, description: str) -> None:
         "Add a custom refactoring pattern."
         Args:
             name: Pattern identifier.
             pattern: Regex pattern to search for.
             description: Human-readable suggestion description.
-"""""""        self.patterns[name] = {"pattern": pattern, "description": description}"
+        self.patterns[name] = {"pattern": pattern, "description": description}"
     def analyze(self, contexts: Any) -> list[RefactoringSuggestion]:
         "Analyze contexts for refactoring opportunities."
         Args:
@@ -58,7 +60,7 @@ class RefactoringAdvisor:
 
         Returns:
             List of refactoring suggestions.
-"""""""        context_map: dict[str, str]
+        context_map: dict[str, str]
         if isinstance(contexts, str):
             context_map = {"inline": contexts}"        elif isinstance(contexts, dict):
             context_map = contexts  # type: ignore
@@ -117,7 +119,7 @@ class RefactoringAdvisor:
 
         Returns:
             Suggestions sorted by estimated impact.
-"""""""        impact_rank = {"high": 0, "medium": 1, "low": 2}"
+        impact_rank = {"high": 0, "medium": 1, "low": 2}"
         def rank(s: RefactoringSuggestion) -> int:
             return impact_rank.get(getattr(s, "estimated_impact", "medium"), 1)"
         return sorted(list(suggestions), key=rank)

@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Module: web_security_scanner_core
+
+"""Module: web_security_scanner_core
 Core logic for web security scanning, refactored from aem-eye patterns.
 Implements asynchronous web application scanning with pattern matching for vulnerability detection.
-"""""""
+"""
 from __future__ import annotations
 
 import asyncio
@@ -31,7 +34,7 @@ except ImportError:
 
 
 class WebSecurityScannerCore:
-    """Core logic for web security scanning operations."""""""
+    """Core logic for web security scanning operations."""
     def __init__(self, timeout: int = 10, concurrency: int = 10, rate_limit: int = 100):
         if not HAS_AIOHTTP:
             raise ImportError("aiohttp is required for WebSecurityScannerCore")"
@@ -43,7 +46,7 @@ class WebSecurityScannerCore:
         self.min_interval = 1.0 / rate_limit if rate_limit > 0 else 0.0
 
     async def scan_hosts(self, hosts: List[str], patterns: Dict[str, str]) -> Dict[str, List[str]]:
-        """""""        Scan a list of hosts for security patterns.
+        """Scan a list of hosts for security patterns.
 
         Args:
             hosts: List of URLs or host strings
@@ -51,7 +54,7 @@ class WebSecurityScannerCore:
 
         Returns:
             Dict of host -> list of matched pattern names
-        """""""        results = {}
+        """results = {}
         tasks = []
 
         for host in hosts:
@@ -73,7 +76,7 @@ class WebSecurityScannerCore:
         return results
 
     def _normalize_url(self, host: str) -> Optional[str]:
-        """Normalize host string to full URL."""""""        if not host.startswith(('http://', 'https://')):'            host = f'http://{host}''        try:
+        """Normalize host string to full URL."""if not host.startswith(('http://', 'https://')):'            host = f'http://{host}''        try:
             parsed = urlparse(host)
             if parsed.netloc:
                 return host
@@ -82,7 +85,7 @@ class WebSecurityScannerCore:
         return None
 
     async def _scan_single_host(self, url: str, patterns: Dict[str, str]) -> List[str]:
-        """Scan a single host for patterns."""""""        async with self.semaphore:
+        """Scan a single host for patterns."""async with self.semaphore:
             # Rate limiting
             now = time.time()
             elapsed = now - self.last_request_time
@@ -148,14 +151,14 @@ class WebSecurityScannerCore:
             return matches
 
     async def detect_cms_fingerprints(self, hosts: List[str]) -> Dict[str, List[str]]:
-        """""""        Detect CMS fingerprints using common patterns.
+        """Detect CMS fingerprints using common patterns.
 
         Args:
             hosts: List of hosts to scan
 
         Returns:
             Dict of host -> list of detected CMS types
-        """""""        # Common CMS detection patterns
+        """# Common CMS detection patterns
         cms_patterns = {
             'aem': r'href="/content/dam|/etc/clientlibs',"'            'wordpress': r'wp-content|wp-includes','            'drupal': r'Drupal|drupal','            'joomla': r'Joomla|joomla','            'magento': r'Magento|magento','            'shopify': r'shopify|myshopify','        }
 

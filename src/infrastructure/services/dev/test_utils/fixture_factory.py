@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py"""""""""""
+
+"""
+Auto-extracted class from agent_test_utils.py""""
 from __future__ import annotations
 
 from pathlib import Path
@@ -26,12 +30,12 @@ class FixtureFactory:
     """Factory for creating test fixtures.""""
     Creates pre-configured fixtures for tests including agents,
     files, and other resources with optional dependencies.
-    """""""
+    
     def __init__(self, base_dir: Path | None = None) -> None:
         """Initialize fixture factory.""""
         Args:
             base_dir: Base directory for file fixtures.
-        """""""        self.base_dir = base_dir or Path.cwd()
+                self.base_dir = base_dir or Path.cwd()
 
     def create_agent_fixture(
         self,
@@ -47,9 +51,9 @@ class FixtureFactory:
 
         Returns:
             Agent fixture object with name, config and dependencies attributes.
-        """""""
+        
         class AgentFixture:
-            """Fixture representing a pre-configured agent for testing."""""""
+            """Fixture representing a pre-configured agent for testing.
             def __init__(
                 self,
                 name: str,
@@ -69,16 +73,16 @@ class FixtureFactory:
 
         Returns:
             File fixture object with setup_fn method.
-        """""""
+        
         class FileFixture:
-            """Fixture representing a file to be created during test setup."""""""
+            """Fixture representing a file to be created during test setup.
             def __init__(self, base_dir: Path, name: str, content: str) -> None:
                 self.base_dir = base_dir
                 self.name = name
                 self.content = content
 
             def setup_fn(self) -> Path:
-                """Set up the file and return its path."""""""                path = self.base_dir / self.name
+                """Set up the file and return its path.                path = self.base_dir / self.name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(self.content)
                 return path

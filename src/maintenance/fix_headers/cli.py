@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Fix Headers CLI - Command-line entry point for fixing Apache 2.0 license headers
+
+"""
+Fix Headers CLI - Command-line entry point for fixing Apache 2.0 license headers
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -39,23 +43,23 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 CLI interface for the Fix Headers Tool.
-"""""""
+
 import argparse
 
 from .fix_headers_agent import FixHeadersAgent
 
 
 def main():
-    """CLI entry point for the Fix Headers Tool."""""""    parser = argparse.ArgumentParser(
+    """CLI entry point for the Fix Headers Tool.    parser = argparse.ArgumentParser(
         description="Fix Apache 2.0 headers in Python files","        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""""""Examples:
+        epilog=Examples:
   python -m src.maintenance.fix_headers.cli src/logic/agents/
   python -m src.maintenance.fix_headers.cli --dry-run --verbose src/
   python -m src.maintenance.fix_headers.cli single_file.py
 
 This tool ensures all Python files have proper Apache 2.0 license headers
 with PyAgent copyright notices.
-        """""""    )
+            )
 
     parser.add_argument(
         'target','        help='File or directory to process''    )

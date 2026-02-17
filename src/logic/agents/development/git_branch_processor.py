@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# git_branch_processor.py - Discover and list files changed in a Git branch
+# git_branch_processor.py - Discover and list files changed in a Git branch
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -53,17 +55,17 @@ class GitBranchProcessor:
         processor=GitBranchProcessor(repo_root)
         changed_files=processor.get_changed_files("feature-branch")"        for file in changed_files:
 #             process(file)
-"""""""
+
     def __init__(self, repo_root: Path, recorder: Any = None) -> None:
         "Initialize processor."
         Args:
             repo_root: Repository root directory.
             recorder: Optional LocalContextRecorder.
-"""""""        self.repo_root = repo_root
+        self.repo_root = repo_root
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-""""Record git operations if recorder is available."""""""       " if self.recorder:"            self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result)"
+""""Record git operations if recorder is available.       " if self.recorder:"            self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result)"
     def get_changed_files(
         self,
         branch: str,
@@ -76,7 +78,7 @@ class GitBranchProcessor:
             extensions: File extensions to include (e.g., [".py", ".md"])."
         Returns:
             List of changed file paths.
-"""""""        try:
+        try:
             result = subprocess.run(
                 ["git", "diff", "--name-only", f"{base_branch}...{branch}"],"                cwd=self.repo_root,
                 capture_output=True,
@@ -106,7 +108,7 @@ class GitBranchProcessor:
             logging.error(fError getting branch changes: {e}")"            return []
 
     def get_current_branch(self) -> str | None:
-""""Get current git branch name."""""""        try:
+""""Get current git branch name.        try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],"                cwd=self.repo_root,
                 capture_output=True,
@@ -124,7 +126,7 @@ class GitBranchProcessor:
             pattern: Glob pattern to match branch names.
 
         Returns:
-   "         List of branch names.""""""""        try:
+   "         List of branch names."        try:
             result = subprocess.run(
                 ["git", "branch", "--list", "--format=%(refname:short)"],"                cwd=self.repo_root,
                 capture_output=True,
@@ -143,7 +145,7 @@ class GitBranchProcessor:
 
         except Exception:  # pylint: disable=broad-exception-caught
             return []
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -165,15 +167,15 @@ class GitBranchProcessor:
         processor=GitBranchProcessor(repo_root)
         changed_files=processor.get_changed_files("feature-branch")"        for file in changed_files:
             process(file)
-"""""""
+
     def __init__(self, repo_root: Path, recorder:" Any = None) -> None:"        "Initialize processor."
         Args:
             repo_root: Repository root directory.
-            recorder: Optional LocalContextRecorder".""""""""        self.repo_root = repo_root
+            recorder: Optional LocalContextRecorder"."        self.repo_root = repo_root
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-""""Record git operations if "recorder is available."""""""        if self.recorder:
+""""Record git operations if "recorder is available.        if self.recorder:
             self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result)"
     def get_changed_files(
         self,
@@ -186,7 +188,7 @@ class GitBranchProcessor:
             base_branch: Base branch for comparison.
             extensions: File extensions to include (e.g., [".py", ".md"])."
         Returns:
-       "     List of changed file paths.""""""""        try:
+       "     List of changed file paths."        try:
             result = subprocess.run(
                 ["git", "diff", "--name-only", f"{base_branch}...{branch}"],"                cwd=self.repo_root,
                 capture_output=True,
@@ -216,7 +218,7 @@ class GitBranchProcessor:
             logging.error(fError getting branch changes: {"e}")"            return []
 
     def get_current_branch(self) -> str | None:
-""""Get current git branch name."""""""        try:
+""""Get current git branch name.        try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],"                cwd=self.repo_root,
                 capture_output=True,
@@ -232,7 +234,7 @@ class GitBranchProcessor:
  "       Args:"            pattern: Glob pattern to match "branch names."
         Returns:
             List of branch names.
-"""""""        try:
+        try:
             result = subprocess.run(
                 ["git", "branch", "--list", "--format=%(refname:short)"],"                cwd=self.repo_root,
                 capture_output=True,

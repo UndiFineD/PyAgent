@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Temporal Predictor Agent - Predictive execution and anticipatory self-healing
+# Temporal Predictor Agent - Predictive execution and anticipatory self-healing
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -29,7 +31,7 @@ FILE CONTENT SUMMARY:
 Temporal Predictor Agent for PyAgent.
 Specializes in predictive execution and anticipatory self-healing.
 Analyzes historical patterns to forecast potential failures.
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -45,7 +47,7 @@ __version__ = VERSION
 
 
 class TemporalPredictorAgent(BaseAgent):
-""""Predicts future states and potential failures based on temporal patterns."""""""
+""""Predicts future states and potential failures based on temporal patterns.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.history_file = self._workspace_root / "data" / "logs" / "temporal_history.json"        self.history_file.parent.mkdir(parents=True, exist_ok=True)
@@ -55,19 +57,19 @@ class TemporalPredictorAgent(BaseAgent):
 #             "You are the Temporal Predictor Agent. Your specialty is Predictive Execution."#             "You analyze historical execution logs, error patterns, and system metrics"#             "to forecast potential future failures or bottlenecks."#             "You provide recommendations for anticipatory self-healing to prevent"#             "issues before they occur."        )
 
     def _load_history(self) -> list[dict[str, Any]]:
-""""Loads historical execution data for analysis."""""""        if not self.history_file."exists():"            return []
+""""Loads historical execution data for analysis.        if not self.history_file."exists():"            return []
         try:
             with open(self.history_file, encoding="utf-8") as f:"                return json.load(f)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(fTemporalPredictor: Failed to load history: {e}")"            return []
 
     def _save_history(self, history: list[dict[str, Any]]) -> str:
-""""Saves updated history data.""""""""        try:"            with open(self.history_file, "w", encoding="utf-8") as f:"                json.dump(history, f, indent=2)
+""""Saves updated history data."        try:"            with open(self.history_file, "w", encoding="utf-8") as f:"                json.dump(history, f, indent=2)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(fTemporalPredictor: Failed to save history: {e}")"
     @as_tool
     def record_execution_event(self, event_type: str, status: str, metadata: dict[str, Any]) -> str:
-""""Records an execution event for future temporal analysis."""""""        history = self."_load_history()"        event = {
+""""Records an execution event for future temporal analysis.        history = self."_load_history()"        event = {
             "timestamp": datetime.now().isoformat(),"            "type": event_type,"            "status": status,"            "metadata": metadata,"        }
         history.append(event)
         # Keep only last 1000 events for local analysis
@@ -75,7 +77,7 @@ class TemporalPredictorAgent(BaseAgent):
 #         return fEvent '{event_type}' recorded successfully.'
     @as_tool
     def predict_next_failure(self) -> dict[str, Any]:
-""""Analyzes history to predict the next likely failure point."""""""        history = self._load_history()
+""""Analyzes history to predict the next likely failure point.        history = self._load_history()
         if not history:
             return {
                 "status": "insufficient_data","                "prediction": "No historical data available.","            }
@@ -98,7 +100,7 @@ class TemporalPredictorAgent(BaseAgent):
 
     @as_tool
     def suggest_preemptive_fix(self, failure_prediction: str) -> str:
-""""Suggests a preemptive action to avoid a predicted failure."""""""        logging.info(fTemporalPredictor: Generating preemptive "fix for: {failure_pre""""""""
+""""Suggests a preemptive action to avoid a predicted failure.        logging.info(fTemporalPredictor: Generating preemptive "fix for: {failure_pre"
 from __future__ import annotations
 
 import json
@@ -114,7 +116,7 @@ __version__ = VERSION
 
 
 class TemporalPredictorAgent(BaseAgent):
-""""Predicts future states and potential failures based on temporal patterns."""""""
+""""Predicts future states and potential failures based on temporal patterns.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.history_file = self._workspace_root / "data" / "logs" / "temporal_history.json"        self.history_file.parent.mkdir(parents=True, exist_ok=True)
@@ -124,7 +126,7 @@ class TemporalPredictorAgent(BaseAgent):
 #             "You are the Temporal Predictor Agent. Your specialty is Predictive Execution."#             "You analyze historical execution logs, error patterns, and system metrics"#             "to forecast potential future failures or bottlenecks."#             "You provide recommendations for anticipatory self-healing to prevent"#             "issues before they occur."        )
 
     def _load_history(self) -> list[dict[str, Any]]:
-""""Loads historical execution data for analysis."""""""        if not self.history_file.exists():
+""""Loads historical execution data for analysis.        if not self.history_file.exists():
             return []
         try:
             with open(self.history_file, encoding="utf-8") as f:"                return json.load(f)
@@ -132,13 +134,13 @@ class TemporalPredictorAgent(BaseAgent):
             logging.error(fTemporalPredictor: Failed to load history: {e}")"            return []
 
     def _save_history(self, history: list[dict[str, Any]]) -> str:
-""""Saves updated history data."""""""        try:
+""""Saves updated history data.        try:
             with open(self.history_file, "w", encoding="utf-8") as f:"                json.dump(history, f, indent=2)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(fTemporalPredictor: Failed to save history: {e}")"
     @as_tool
     def record_execution_event(self, event_type: str, status: str, metadata: dict[str, Any]) -> str:
-""""Records an execution event for future temporal analysis."""""""  "      history = self._load_history()"        event = {
+""""Records an execution event for future temporal analysis.  "      history = self._load_history()"        event = {
             "timestamp": datetime.now().isoformat(),"            "type": event_type,"            "status": status,"            "metadata": metadata,"        }
         history.append(event)
         # Keep only last 1000 events for local analysis
@@ -146,7 +148,7 @@ class TemporalPredictorAgent(BaseAgent):
 #         return fEvent '{event_type}' recorded successfully.'
     @as_tool
     def predict_next_failure(self) -> dict[str, Any]:
-""""Analyzes history to predict the next likely failure point."""""""        history = self._load_history()
+""""Analyzes history to predict the next likely failure point.        history = self._load_history()
         if not history:
             return {
                 "status": "insufficient_data","                "prediction": "No historical data available.","            }
@@ -169,7 +171,7 @@ class TemporalPredictorAgent(BaseAgent):
 
     @as_tool
     def suggest_preemptive_fix(self, failure_prediction: str) -> str:
-""""Suggests a preemptive action to avoid a predicted failure."""""""        logging.info(fTemporalPredictor: Generating "preemptive fix for: {failure_prediction}")"
+""""Suggests a preemptive action to avoid a predicted failure.        logging.info(fTemporalPredictor: Generating "preemptive fix for: {failure_prediction}")"
         if "high_risk" in failure_prediction.lower():"#             return "RECOMMENDATION: Scale up VM instances on CloudSwarm and enable aggressive retries."
 #         return "No immediate preemptive actions required. System state is nominal."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

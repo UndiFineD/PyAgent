@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Metadata structure for serialized tensors."""""""
+"""Metadata structure for serialized tensors.
 import struct
 from dataclasses import dataclass
 from typing import Tuple
@@ -22,7 +24,7 @@ from .config import CompressionType, TensorDtype
 
 @dataclass
 class TensorMetadata:
-    """Metadata for a serialized tensor."""""""
+    """Metadata for a serialized tensor.
     name: str
     shape: Tuple[int, ...]
     dtype: TensorDtype
@@ -32,7 +34,7 @@ class TensorMetadata:
     compressed_size: int = 0
 
     def to_bytes(self) -> bytes:
-        """Serialize metadata to bytes."""""""        # Name (length-prefixed)
+        """Serialize metadata to bytes.        # Name (length-prefixed)
         name_bytes: bytes = self.name.encode("utf-8")"        result: bytes = struct.pack("<I", len(name_bytes)) + name_bytes"
         # Shape (length-prefixed array)
         result += struct.pack("<I", len(self.shape))"        for dim in self.shape:
@@ -46,7 +48,7 @@ class TensorMetadata:
         return result
 
     @classmethod
-    def from_bytes(cls, data: bytes, pos: int = 0) -> Tuple["TensorMetadata", int]:"        """Deserialize metadata from bytes."""""""        # Name
+    def from_bytes(cls, data: bytes, pos: int = 0) -> Tuple["TensorMetadata", int]:"        """Deserialize metadata from bytes.        # Name
         name_len = struct.unpack_from("<I", data, pos)[0]"        pos += 4
         name: str = data[pos : pos + name_len].decode("utf-8")"        pos += name_len
 

@@ -1,26 +1,29 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Stub detector mixin.py module.
-"""""""# Licensed under the Apache License, Version 2.0 (the "License");"
+
+"""Stub detector mixin.py module.
+"""# Licensed under the Apache License, Version 2.0 (the "License");"
 import ast
 
 
 class StubDetectorMixin:
-    """Methods regarding detecting stub nodes in the AST."""""""
+    """Methods regarding detecting stub nodes in the AST."""
     @staticmethod
     def _is_stub_node(node: ast.AST) -> bool | str:
-        """Determines regarding the stub status of a node functionally (pass/NotImplementedError)."""""""        def is_docstring(s: ast.AST) -> bool:
-            """Checks if a node is a docstring constant."""""""            return (isinstance(s, ast.Expr) and
+        """Determines regarding the stub status of a node functionally (pass/NotImplementedError)."""def is_docstring(s: ast.AST) -> bool:
+            """Checks if a node is a docstring constant."""    return (isinstance(s, ast.Expr) and
                     isinstance(s.value, ast.Constant) and
                     isinstance(s.value.value, str))
 
@@ -56,7 +59,7 @@ class StubDetectorMixin:
                 return True
 
             def evaluate_item(item: ast.AST) -> bool | str:
-                """Evaluates an item regarding its stub status."""""""                if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                """Evaluates an item regarding its stub status."""        if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     from .stub_detector_mixin import StubDetectorMixin
                     return StubDetectorMixin._is_stub_node(item)
                 if isinstance(item, ast.Pass):

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py"""""""""""
+
+"""
+Auto-extracted class from agent_test_utils.py""""
 from __future__ import annotations
 
 import json
@@ -38,11 +42,11 @@ class TestRecorder:
             result=api_call("data")  # Records the call"        recorder.save("test_recording.json")"
         # Replay mode
         recorder.load("test_recording.json")"        with recorder.replay():
-            result=api_call("data")  # Returns recorded result"    """""""
+            result=api_call("data")  # Returns recorded result"    
     __test__ = False
 
     def __init__(self) -> None:
-        """Initialize recorder."""""""        self._recordings: list[RecordedInteraction] = []
+        """Initialize recorder.        self._recordings: list[RecordedInteraction] = []
         self._replay_index = 0
         self._mode: str = "normal"  # "record", "replay", "normal""
     def record_interaction(
@@ -60,7 +64,7 @@ class TestRecorder:
             args: Arguments.
             kwargs: Keyword arguments.
             result: Result of the call.
-        """""""        if self._mode == "record":"            interaction = RecordedInteraction(
+                if self._mode == "record":"            interaction = RecordedInteraction(
                 call_type=call_type,
                 call_name=call_name,
                 args=args,
@@ -81,7 +85,7 @@ class TestRecorder:
 
         Returns:
             Recorded result or None.
-        """""""        if self._mode != "replay":"            return None
+                if self._mode != "replay":"            return None
 
         if self._replay_index < len(self._recordings):
             recording = self._recordings[self._replay_index]
@@ -93,20 +97,20 @@ class TestRecorder:
 
     @contextmanager
     def record(self) -> Iterator[TestRecorder]:
-        """Context manager for recording mode."""""""        self._mode = "record""        self._recordings = []
+        """Context manager for recording mode.        self._mode = "record""        self._recordings = []
         try:
             yield self
         finally:
             self._mode = "normal""
     @contextmanager
     def replay(self) -> Iterator[TestRecorder]:
-        """Context manager for replay mode."""""""        self._mode = "replay""        self._replay_index = 0
+        """Context manager for replay mode.        self._mode = "replay""        self._replay_index = 0
         try:
             yield self
         finally:
             self._mode = "normal""
     def save(self, path: Path) -> None:
-        """Save recordings to file."""""""        data: list[dict[str, Any]] = []
+        """Save recordings to file.        data: list[dict[str, Any]] = []
         for r in self._recordings:
             data.append(
                 {
@@ -115,7 +119,7 @@ class TestRecorder:
         with open(path, 'w', encoding='utf-8') as f:'            json.dump(data, f, indent=2, default=str)
 
     def load(self, path: Path) -> None:
-        """Load recordings from file."""""""        with open(path, encoding='utf-8') as f:'            data = json.load(f)
+        """Load recordings from file.        with open(path, encoding='utf-8') as f:'            data = json.load(f)
         self._recordings = [
             RecordedInteraction(
                 call_type=d["call_type"],"                call_name=d["call_name"],"                args=tuple(d["args"]),"                kwargs=d["kwargs"],"                result=d["result"],"                timestamp=d["timestamp"],"            )

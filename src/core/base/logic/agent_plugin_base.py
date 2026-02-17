@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent.py"""""""""""
+
+"""
+Auto-extracted class from agent.py
 from __future__ import annotations
 
 import logging
@@ -34,7 +38,7 @@ class AgentPluginBase(ABC):
         name: Plugin name.
         priority: Execution priority.
         config: Plugin configuration.
-    """""""
+    """
     def __init__(
         self,
         name: str,
@@ -46,7 +50,7 @@ class AgentPluginBase(ABC):
             name: Unique plugin name.
             priority: Execution priority.
             config: Plugin - specific configuration.
-        """""""        self.name: str = name
+        """self.name: str = name
         self.priority: AgentPriority = priority
         self.config: dict[str, Any] = config or {}
         self.logger: logging.Logger = logging.getLogger(f"plugin.{name}")"
@@ -59,18 +63,18 @@ class AgentPluginBase(ABC):
 
         Returns:
             bool: True if changes were made, False otherwise.
-        """""""        raise NotImplementedError()
+        """raise NotImplementedError()
 
     def setup(self) -> None:
-        """Called once when plugin is loaded. Override for initialization."""""""
+        """Called once when plugin is loaded. Override for initialization."""
     @abstractmethod
     def shutdown(self) -> None:
-        """Handle graceful shutdown, cleanup resources, and terminate processes."""""""        raise NotImplementedError()
+        """Handle graceful shutdown, cleanup resources, and terminate processes."""raise NotImplementedError()
 
     def teardown(self) -> None:
-        """Called once when plugin is unloaded. Override for cleanup."""""""
+        """Called once when plugin is unloaded. Override for cleanup."""
     def health_check(self) -> AgentHealthCheck:
         """Check plugin health status.""""
         Returns:
             AgentHealthCheck: Health check result.
-        """""""        return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)
+        """return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)

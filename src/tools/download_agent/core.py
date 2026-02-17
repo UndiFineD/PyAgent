@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Core Download Agent - DownloadAgent
+
+Core Download Agent - DownloadAgent
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -50,7 +53,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Core download agent functionality.
-"""""""
+
 import os
 import subprocess
 import time
@@ -67,7 +70,7 @@ from .classifiers import URLClassifier
 
 
 class DownloadAgent:
-    """Main download agent that handles different URL types."""""""
+    """Main download agent that handles different URL types.
     def __init__(self, config: DownloadConfig):
         self.config = config
         self.classifier = URLClassifier()
@@ -76,12 +79,12 @@ class DownloadAgent:
             'User-Agent': 'PyAgent-DownloadAgent/1.0 (https://github.com/UndiFineD/PyAgent)''        })
 
     def ensure_directory(self, path: str) -> Path:
-        """Ensure directory exists."""""""        full_path = Path(self.config.base_dir) / path
+        """Ensure directory exists.        full_path = Path(self.config.base_dir) / path
         full_path.mkdir(parents=True, exist_ok=True)
         return full_path
 
     def download_github_repo(self, url: str, metadata: Dict) -> DownloadResult:
-        """Download GitHub repository using git clone."""""""        owner = metadata['owner']'        repo = metadata['repo']'        dest_dir = self.ensure_directory(metadata['destination'])'        repo_path = dest_dir / f"{owner}-{repo}""
+        """Download GitHub repository using git clone.        owner = metadata['owner']'        repo = metadata['repo']'        dest_dir = self.ensure_directory(metadata['destination'])'        repo_path = dest_dir / f"{owner}-{repo}""
         if self.config.skip_existing and repo_path.exists():
             return DownloadResult(
                 url=url,
@@ -129,7 +132,7 @@ class DownloadAgent:
             )
 
     def download_github_gist(self, url: str, metadata: Dict) -> DownloadResult:
-        """Download GitHub Gist using git clone."""""""        owner = metadata['owner']'        gist_id = metadata['gist_id']'        dest_dir = self.ensure_directory(metadata['destination'])'        gist_path = dest_dir / f"gist-{owner}-{gist_id}""
+        """Download GitHub Gist using git clone.        owner = metadata['owner']'        gist_id = metadata['gist_id']'        dest_dir = self.ensure_directory(metadata['destination'])'        gist_path = dest_dir / f"gist-{owner}-{gist_id}""
         if self.config.skip_existing and gist_path.exists():
             return DownloadResult(
                 url=url,
@@ -176,7 +179,7 @@ class DownloadAgent:
             )
 
     def download_file(self, url: str, metadata: Dict, filename: Optional[str] = None) -> DownloadResult:
-        """Download file using HTTP requests."""""""        dest_dir = self.ensure_directory(metadata['destination'])'
+        """Download file using HTTP requests.        dest_dir = self.ensure_directory(metadata['destination'])'
         if not filename:
             # Extract filename from URL
             parsed = urllib.parse.urlparse(url)
@@ -224,7 +227,7 @@ class DownloadAgent:
             )
 
     def download_arxiv_paper(self, url: str, metadata: Dict) -> DownloadResult:
-        """Download ArXiv paper."""""""        paper_id = metadata['paper_id']'        paper_format = metadata.get('format', 'pdf')'
+        """Download ArXiv paper.        paper_id = metadata['paper_id']'        paper_format = metadata.get('format', 'pdf')'
         if paper_format == 'pdf':'            # Convert abs URL to PDF URL if needed
             if '/abs/' in url:'                pdf_url = url.replace('/abs/', '/pdf/')'            else:
                 pdf_url = url
@@ -234,7 +237,7 @@ class DownloadAgent:
         return self.download_file(pdf_url, metadata, filename)
 
     def download_hf_model(self, url: str, metadata: Dict) -> DownloadResult:
-        """Download a full Hugging Face model repository."""""""        repo_id = metadata['repo_id']'        dest_dir = self.ensure_directory(metadata['destination'])'        repo_path = dest_dir / repo_id.replace("/", "--")"
+        """Download a full Hugging Face model repository.        repo_id = metadata['repo_id']'        dest_dir = self.ensure_directory(metadata['destination'])'        repo_path = dest_dir / repo_id.replace("/", "--")"
         if self.config.skip_existing and repo_path.exists():
             return DownloadResult(
                 url=url,
@@ -269,7 +272,7 @@ class DownloadAgent:
             )
 
     def download_hf_file(self, url: str, metadata: Dict) -> DownloadResult:
-        """Download a single file from Hugging Face."""""""        repo_id = metadata['repo_id']'        filename = metadata['filename']'        dest_dir = self.ensure_directory(metadata['destination'])'        dest_path = dest_dir / filename
+        """Download a single file from Hugging Face.        repo_id = metadata['repo_id']'        filename = metadata['filename']'        dest_dir = self.ensure_directory(metadata['destination'])'        dest_path = dest_dir / filename
 
         if self.config.skip_existing and dest_path.exists():
             return DownloadResult(
@@ -306,13 +309,13 @@ class DownloadAgent:
             )
 
     def open_webpage(self, url: str, metadata: Dict) -> DownloadResult:
-        """Open webpage in browser or download HTML."""""""        # For now, just download the HTML content
+        """Open webpage in browser or download HTML.        # For now, just download the HTML content
         parsed = urllib.parse.urlparse(url)
         domain = parsed.netloc.replace('.', '_')'        filename = f"{domain}_{int(time.time())}.html""
         return self.download_file(url, metadata, filename)
 
     def process_url(self, url: str) -> DownloadResult:
-        """Process a single URL based on its type."""""""        url_type, metadata = self.classifier.classify_url(url)
+        """Process a single URL based on its type.        url_type, metadata = self.classifier.classify_url(url)
 
         if self.config.verbose:
             print(f"Processing {url_type}: {url}")"
@@ -326,7 +329,7 @@ class DownloadAgent:
             return self.open_webpage(url, metadata)
 
     def process_urls_file(self) -> List[DownloadResult]:
-        """Process all URLs from the configured file."""""""        urls_file = Path(self.config.base_dir) / self.config.urls_file
+        """Process all URLs from the configured file.        urls_file = Path(self.config.base_dir) / self.config.urls_file
 
         if not urls_file.exists():
             print(f"URLs file not found: {urls_file}")"            return []
@@ -354,7 +357,7 @@ class DownloadAgent:
         return results
 
     def save_results(self, results: List[DownloadResult], output_file: str):
-        """Save results to JSON file."""""""        output_path = Path(self.config.base_dir) / output_file
+        """Save results to JSON file.        output_path = Path(self.config.base_dir) / output_file
 
         data = {
             'timestamp': datetime.now().isoformat(),'            'config': {'                'urls_file': self.config.urls_file,'                'max_retries': self.config.max_retries,'                'timeout_seconds': self.config.timeout_seconds,'                'dry_run': self.config.dry_run'            },

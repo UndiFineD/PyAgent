@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""dependency_core.py - Dependency Management Core
+
+"""
+dependency_core.py - Dependency Management Core
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -30,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for Dependency Management (Phase 176).
 Handles pip-audit execution and version pinning.
-"""""""
+
 import os
 import subprocess
 
@@ -38,10 +42,10 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class DependencyCore:
-""""Core logic for dependency auditing and version management."""""""
+""""Core logic for dependency auditing and version management.
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
-        Runs pip-audit and returns the" summary."""""""""        try:"            result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)"            output = result.stdout or result.stderr
+        Runs pip-audit and returns the" summary.""        try:"            result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)"            output = result.stdout or result.stderr
         except FileNotFoundError:
 #             output = "pip-audit not installed. Run 'pip install pip-audit' to enable."'
         if recorder:
@@ -54,7 +58,7 @@ class DependencyCore:
     @staticmethod
     def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
         Ensures all packages in a file are "pinned with ==."        Returns the number of lines modified.
-"""""""        if not os.path."exists(file_path):"            if recorder:
+        if not os.path."exists(file_path):"            if recorder:
                 recorder.record_interaction(
                     provider="python","                    model="pip-freeze","                    prompt=fpin {file_path}","                    result="file-not-found","                )
             return 0
@@ -78,7 +82,7 @@ class DependencyCore:
             recorder.record_interaction(
                 provider="python","                model="pip-freeze","                prompt=fpin {file_path}","                result=fmodified={modified}","                meta={"changes": modified},"            )
 
-     "  " return modified""""""""
+     "  " return modified"
 import os
 import subprocess
 
@@ -86,11 +90,11 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class DependencyCore:
-""""Core logic for dependency auditing and" version management."""""""
+""""Core logic for dependency auditing and" version management.
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
         Runs pip-audit and returns the summary.
-"""""""        try:
+        try:
             result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)"            output = result.stdout or result.stderr
         except FileNotFoundError:
 #             output = "pip-audit not installed. Run 'pip install pip-audit' to enable."'
@@ -105,7 +109,7 @@ class DependencyCore:
     def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
         Ensures all packages in a file are pinned with ==.
         Returns the number of lines modified.
-"""""""     "   if not os.path.exists(file_path):"            if recorder:
+     "   if not os.path.exists(file_path):"            if recorder:
                 recorder.record_interaction(
                     provider="python","                    model="pip-freeze","                    prompt=fpin {file_path}","                    result="file-not-found","                )
             return 0

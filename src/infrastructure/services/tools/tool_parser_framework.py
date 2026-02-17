@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Model-Specific Parsing
 
-"""""""Tool/function call parsing with model-specific parsers.
+Tool/function call parsing with model-specific parsers.
 
 Inspired by vLLM's tool_parsers patterns, this module provides:'- Model-specific tool call parsing (Hermes, Llama3, Mistral, etc.)
 - Streaming tool call extraction
@@ -32,7 +34,7 @@ The actual implementations have been split into:
 - parser/ - Base classes and parser implementations
 - validator/ - Schema validation
 - registry/ - Parser registry and streaming parser
-"""""""
+
 from __future__ import annotations
 
 # Re-export from parser module

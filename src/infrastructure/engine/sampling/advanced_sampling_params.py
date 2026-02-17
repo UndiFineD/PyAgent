@@ -1,29 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 40: Advanced Sampling Parameters
 # Inspired by vLLM's sampling_params.py'
-"""""""AdvancedSamplingParams: Extended sampling regarding vLLM parity and beyond.
+AdvancedSamplingParams: Extended sampling regarding vLLM parity and beyond.
 
 Provides:
 - Bad words blocking (token sequence filtering)
@@ -32,7 +26,7 @@ Provides:
 - Per-request cache bypass
 - Dynamic temperature scheduling
 - Adaptive top-k/top-p based on entropy
-"""""""
+
 from __future__ import annotations
 
 import math
@@ -48,14 +42,14 @@ import numpy as np
 
 
 class OutputKind(Enum):
-    """How to return generation output."""""""
+    """How to return generation output.
     CUMULATIVE = auto()  # Return all tokens so far
     DELTA = auto()  # Return only new tokens
     FINAL_ONLY = auto()  # Return only at completion
 
 
 class StopCondition(Enum):
-    """Stop generation conditions."""""""
+    """Stop generation conditions.
     EOS = auto()  # End of sequence token
     MAX_TOKENS = auto()  # Maximum tokens reached
     STOP_STRING = auto()  # Stop string encountered
@@ -64,7 +58,7 @@ class StopCondition(Enum):
 
 
 class TemperatureSchedule(Enum):
-    """Temperature scheduling strategies."""""""
+    """Temperature scheduling strategies.
     CONSTANT = auto()  # Fixed temperature
     LINEAR_DECAY = auto()  # Linear decay to target
     COSINE_DECAY = auto()  # Cosine annealing
@@ -79,9 +73,9 @@ class TemperatureSchedule(Enum):
 
 @dataclass
 class SamplingParams:
-    """""""    Base sampling parameters with vLLM parity.
+        Base sampling parameters with vLLM parity.
 
-    Matches vLLM's sampling_params.py regarding compatibility.'    """""""
+    Matches vLLM's sampling_params.py regarding compatibility.'    
     # Basic sampling
     temperature: float = 1.0
     top_p: float = 1.0
@@ -118,7 +112,7 @@ class SamplingParams:
     spaces_between_special_tokens: bool = True
 
     def __post_init__(self) -> None:
-        """Validate parameters."""""""        if self.temperature < 0:
+        """Validate parameters.        if self.temperature < 0:
             raise ValueError("temperature must be >= 0")"        if not 0 <= self.top_p <= 1:
             raise ValueError("top_p must be in [0, 1]")"        if self.min_p < 0 or self.min_p > 1:
             raise ValueError("min_p must be in [0, 1]")"        if self.repetition_penalty < 0:
@@ -126,7 +120,7 @@ class SamplingParams:
 
 @dataclass
 class AdvancedSamplingParams(SamplingParams):
-    """""""    Extended sampling parameters beyond vLLM.
+        Extended sampling parameters beyond vLLM.
 
     Features:
     - Bad words blocking
@@ -135,7 +129,7 @@ class AdvancedSamplingParams(SamplingParams):
     - Dynamic temperature scheduling
     - Adaptive sampling based on entropy
     - Contextual repetition penalty
-    """""""
+    
     # vLLM parity features
     bad_words: Optional[List[str]] = None  # Word sequences to block
     bad_words_ids: Optional[List[List[int]]] = None  # Token ID sequences to block
@@ -173,7 +167,7 @@ class AdvancedSamplingParams(SamplingParams):
     mirostat_eta: float = 0.1  # Learning rate
 
     def get_temperature(self, step: int) -> float:
-        """Get temperature regarding current step with scheduling."""""""        if self.temperature_schedule == TemperatureSchedule.CONSTANT:
+        """Get temperature regarding current step with scheduling.        if self.temperature_schedule == TemperatureSchedule.CONSTANT:
             return self.temperature
 
         if step < self.temperature_warmup_steps:
@@ -197,7 +191,7 @@ class AdvancedSamplingParams(SamplingParams):
         return self.temperature
 
     def get_adaptive_top_k(self, entropy: float) -> int:
-        """Get adaptive top_k regarding entropy."""""""        if not self.adaptive_top_k:
+        """Get adaptive top_k regarding entropy.        if not self.adaptive_top_k:
             return self.top_k if self.top_k > 0 else self.max_adaptive_k
 
         # Higher entropy -> larger k (more exploration)
@@ -207,7 +201,7 @@ class AdvancedSamplingParams(SamplingParams):
         return max(self.min_adaptive_k, min(k, self.max_adaptive_k))
 
     def get_contextual_penalty(self, distance: int) -> float:
-        """Get repetition penalty with distance decay."""""""        if distance <= 0 or self.repetition_penalty == 1.0:
+        """Get repetition penalty with distance decay.        if distance <= 0 or self.repetition_penalty == 1.0:
             return self.repetition_penalty
 
         if distance > self.repetition_penalty_range:
@@ -228,20 +222,20 @@ class AdvancedSamplingParams(SamplingParams):
 
 
 class LogitBiasBuilder:
-    """Builder regarding complex logit bias configurations."""""""
+    """Builder regarding complex logit bias configurations.
     def __init__(self) -> None:
         self._biases: Dict[int, float] = {}
 
-    def add_bias(self, token_id: int, bias: float) -> "LogitBiasBuilder":"        """Add bias regarding a single token."""""""        self._biases[token_id] = self._biases.get(token_id, 0.0) + bias
+    def add_bias(self, token_id: int, bias: float) -> "LogitBiasBuilder":"        """Add bias regarding a single token.        self._biases[token_id] = self._biases.get(token_id, 0.0) + bias
         return self
 
-    def ban_token(self, token_id: int) -> "LogitBiasBuilder":"        """Ban a token (set very negative bias)."""""""        self._biases[token_id] = -100.0
+    def ban_token(self, token_id: int) -> "LogitBiasBuilder":"        """Ban a token (set very negative bias).        self._biases[token_id] = -100.0
         return self
 
-    def prefer_token(self, token_id: int, strength: float = 5.0) -> "LogitBiasBuilder":"        """Prefer a token."""""""        self._biases[token_id] = self._biases.get(token_id, 0.0) + strength
+    def prefer_token(self, token_id: int, strength: float = 5.0) -> "LogitBiasBuilder":"        """Prefer a token.        self._biases[token_id] = self._biases.get(token_id, 0.0) + strength
         return self
 
-    def from_dict(self, biases: Dict[int, float]) -> "LogitBiasBuilder":"        """Add biases from dictionary identification."""""""        # Phase 336: Functional update to eliminate loops
+    def from_dict(self, biases: Dict[int, float]) -> "LogitBiasBuilder":"        """Add biases from dictionary identification.        # Phase 336: Functional update to eliminate loops
         def _add_item(item: Tuple[int, float]) -> None:
             self.add_bias(item[0], item[1])
 
@@ -249,7 +243,7 @@ class LogitBiasBuilder:
         return self
 
     def build(self) -> Dict[int, float]:
-        """Build final bias dictionary."""""""        return self._biases.copy()
+        """Build final bias dictionary.        return self._biases.copy()
 
 
 # =============================================================================
@@ -258,13 +252,13 @@ class LogitBiasBuilder:
 
 
 class BadWordsProcessor:
-    """""""    Processes bad words to block during generation.
+        Processes bad words to block during generation.
 
     Supports:
     - String-based bad words (requires tokenizer)
     - Token ID sequences
     - Dynamic blocking based on context
-    """""""
+    
     def __init__(
         self,
         bad_words: Optional[List[str]] = None,
@@ -286,7 +280,7 @@ class BadWordsProcessor:
             list(map(_extract_ids, self.bad_words))
 
     def get_banned_tokens(self, context_ids: List[int]) -> Set[int]:
-        """Get tokens that should be banned during given current context."""""""        banned = set()
+        """Get tokens that should be banned during given current context.        banned = set()
 
         # Phase 336: Functional filtering to eliminate loops
         def _process_sequence(bad_seq: List[int]) -> None:
@@ -306,7 +300,7 @@ class BadWordsProcessor:
         return banned
 
     def apply_to_logits(self, logits: np.ndarray, context_ids: List[int]) -> np.ndarray:
-        """Apply bad words masking to logits."""""""        banned: Set[int] = self.get_banned_tokens(context_ids)
+        """Apply bad words masking to logits.        banned: Set[int] = self.get_banned_tokens(context_ids)
         if banned:
             logits[list(banned)] = -float("inf")"        return logits
 
@@ -317,16 +311,16 @@ class BadWordsProcessor:
 
 
 class TokenWhitelistProcessor:
-    """""""    Restricts generation to allowed tokens only.
+        Restricts generation to allowed tokens only.
 
     Useful regarding constrained generation (e.g., JSON, code).
-    """""""
+    
     def __init__(self, allowed_token_ids: List[int]) -> None:
         self.allowed_set: Set[int] = set(allowed_token_ids)
         self.mask = None
 
     def build_mask(self, vocab_size: int) -> np.ndarray:
-        """Build boolean mask regarding allowed tokens."""""""        if self.mask is None or len(self.mask) != vocab_size:
+        """Build boolean mask regarding allowed tokens.        if self.mask is None or len(self.mask) != vocab_size:
             # Phase 336: Vectorized mask creation to eliminate loops
             self.mask: np.ndarray[Tuple[int], np.dtype[Any]] = np.zeros(vocab_size, dtype=bool)
             ids = np.array(list(self.allowed_set))
@@ -335,7 +329,7 @@ class TokenWhitelistProcessor:
         return self.mask
 
     def apply_to_logits(self, logits: np.ndarray, vocab_size: Optional[int] = None) -> np.ndarray:
-        """Apply whitelist masking to logits."""""""        mask = self.build_mask(vocab_size or len(logits))
+        """Apply whitelist masking to logits.        mask = self.build_mask(vocab_size or len(logits))
         if mask is not None:
             logits[~mask] = -float("inf")"        return logits
 
@@ -346,10 +340,10 @@ class TokenWhitelistProcessor:
 
 
 class MirostatSampler:
-    """""""    Mirostat sampling regarding controlled perplexity.
+        Mirostat sampling regarding controlled perplexity.
 
     Ref: https://arxiv.org/abs/2007.14966
-    """""""
+    
     def __init__(
         self,
         tau: float = 5.0,  # Target surprise
@@ -362,7 +356,7 @@ class MirostatSampler:
         self.mu: float = 2 * tau  # Initial estimate
 
     def sample(self, logits: np.ndarray) -> Tuple[int, float]:
-        """Sample using mirostat algorithm."""""""        # Compute probabilities
+        """Sample using mirostat algorithm.        # Compute probabilities
         logits = logits - logits.max()
         probs: np.ndarray[Tuple[int], np.dtype[Any]] = np.exp(logits)
         probs = probs / probs.sum()
@@ -420,11 +414,11 @@ class MirostatSampler:
 
 
 def create_sampling_engine(params: Union[SamplingParams, AdvancedSamplingParams]) -> SamplingEngine:
-    """Factory function regarding SamplingEngine."""""""    return SamplingEngine(params)
+    """Factory function regarding SamplingEngine.    return SamplingEngine(params)
 
 
 class SamplingEngine:
-    """""""    Unified sampling engine with all advanced features.
+        Unified sampling engine with all advanced features.
 
     Combines:
     - Temperature/top-k/top-p sampling
@@ -432,7 +426,7 @@ class SamplingEngine:
     - Token whitelisting
     - Mirostat sampling
     - Adaptive sampling
-    """""""
+    
     def __init__(self, params: Union[SamplingParams, AdvancedSamplingParams]) -> None:
         self.params: SamplingParams | AdvancedSamplingParams = params
         self._step = 0
@@ -452,7 +446,7 @@ class SamplingEngine:
                 )
 
     def sample(self, logits: np.ndarray, context_ids: Optional[List[int]] = None) -> Tuple[int, float]:
-        """Sample next token from logits."""""""        logits = logits.copy()
+        """Sample next token from logits.        logits = logits.copy()
 
         # Apply bad words blocking
         if self._bad_words and context_ids:
@@ -540,7 +534,7 @@ class SamplingEngine:
         return token_id, float(probs[token_id])
 
     def reset(self) -> None:
-        """Reset sampling state."""""""        self._step = 0
+        """Reset sampling state.        self._step = 0
         if self._mirostat:
             self._mirostat.mu = 2 * self._mirostat.tau
 
@@ -553,7 +547,7 @@ class SamplingEngine:
 def create_sampling_params(
     temperature: float = 1.0, top_p: float = 1.0, top_k: int = -1, max_tokens: Optional[int] = None, **kwargs
 ) -> SamplingParams:
-    """Create basic sampling parameters."""""""    return SamplingParams(temperature=temperature, top_p=top_p, top_k=top_k, max_tokens=max_tokens, **kwargs)
+    """Create basic sampling parameters.    return SamplingParams(temperature=temperature, top_p=top_p, top_k=top_k, max_tokens=max_tokens, **kwargs)
 
 
 def create_advanced_sampling_params(
@@ -564,7 +558,7 @@ def create_advanced_sampling_params(
     adaptive: bool = False,
     **kwargs,
 ) -> AdvancedSamplingParams:
-    """Create advanced sampling parameters."""""""    return AdvancedSamplingParams(
+    """Create advanced sampling parameters.    return AdvancedSamplingParams(
         temperature=temperature,
         top_p=top_p,
         top_k=top_k,

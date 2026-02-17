@@ -1,26 +1,24 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""AEM Hacker Core - Comprehensive Adobe Experience Manager Security Assessment
+"""AEM Hacker Core - Comprehensive Adobe Experience Manager Security Assessment
 
 This core implements advanced AEM vulnerability scanning patterns based on
 the aem-hacker repository, providing concurrent detection of SSRF, RCE, XSS,
 and misconfiguration vulnerabilities in AEM instances.
-"""""""
+"""
 import asyncio
 import requests
 import base64
@@ -40,7 +38,7 @@ from src.core.base.models.communication_models import CascadeContext
 
 @dataclass
 class AEMFinding:
-    """Represents a security finding in AEM assessment."""""""    name: str
+    """Represents a security finding in AEM assessment."""name: str
     url: str
     description: str
     severity: str = "medium""    cve: Optional[str] = None
@@ -49,7 +47,7 @@ class AEMFinding:
 
 @dataclass
 class AEMScanConfig:
-    """Configuration for AEM security scanning."""""""    target_url: str
+    """Configuration for AEM security scanning."""target_url: str
     callback_host: str
     callback_port: int = 80
     workers: int = 3
@@ -62,7 +60,7 @@ class AEMScanConfig:
 
 @dataclass
 class AEMScanResults:
-    """Results from AEM security scanning."""""""    target_url: str
+    """Results from AEM security scanning."""target_url: str
     findings: List[AEMFinding] = field(default_factory=list)
     scan_duration: float = 0.0
     checks_performed: int = 0
@@ -70,11 +68,11 @@ class AEMScanResults:
 
 
 class AEMHackerCore(BaseCore):
-    """""""    Advanced AEM Security Assessment Core
+    """Advanced AEM Security Assessment Core
 
     Implements comprehensive vulnerability scanning for Adobe Experience Manager
     instances, detecting SSRF, RCE, XSS, and misconfiguration vulnerabilities.
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.registered_checks = {}
@@ -87,11 +85,11 @@ class AEMHackerCore(BaseCore):
             'set_preferences': self.check_set_preferences,'            'querybuilder_servlet': self.check_querybuilder_servlet,'            'felix_console': self.check_felix_console,'            'groovy_console': self.check_groovy_console,'            'ssrf_salesforce_servlet': self.check_ssrf_salesforce_servlet,'        })
 
     def _generate_token(self, length: int = 10) -> str:
-        """Generate a random token for SSRF detection."""""""        return ''.join(random.choices(string.ascii_letters, k=length))'
+        """Generate a random token for SSRF detection."""return ''.join(random.choices(string.ascii_letters, k=length))'
     def _random_string(self, length: int = 10) -> str:
-        """Generate a random string."""""""        return ''.join(random.choices(string.ascii_letters, k=length))'
+        """Generate a random string."""return ''.join(random.choices(string.ascii_letters, k=length))'
     def register_check(self, name: str):
-        """Decorator to register vulnerability checks."""""""        def decorator(func):
+        """Decorator to register vulnerability checks."""def decorator(func):
             self.registered_checks[name] = func
             return func
         return decorator
@@ -101,7 +99,7 @@ class AEMHackerCore(BaseCore):
         config: AEMScanConfig,
         context: Optional[CascadeContext] = None
     ) -> AEMScanResults:
-        """""""        Perform comprehensive AEM security assessment.
+        """Perform comprehensive AEM security assessment.
 
         Args:
             config: Scan configuration
@@ -109,7 +107,7 @@ class AEMHackerCore(BaseCore):
 
         Returns:
             Scan results with findings
-        """""""        start_time = time.time()
+        """start_time = time.time()
         results = AEMScanResults(target_url=config.target_url)
 
         try:
@@ -132,7 +130,7 @@ class AEMHackerCore(BaseCore):
         return results
 
     async def _run_checks_parallel(self, config: AEMScanConfig) -> List[AEMFinding]:
-        """Run vulnerability checks in parallel."""""""        findings: List[AEMFinding] = []
+        """Run vulnerability checks in parallel."""findings: List[AEMFinding] = []
 
         checks_to_run = list(self.registered_checks.values())
         if config.enabled_checks:
@@ -161,7 +159,7 @@ class AEMHackerCore(BaseCore):
         return findings
 
     async def _run_single_check(self, check_func, config: AEMScanConfig) -> List[AEMFinding]:
-        """Run a single vulnerability check."""""""        loop = asyncio.get_event_loop()
+        """Run a single vulnerability check."""loop = asyncio.get_event_loop()
         my_host = f"{config.callback_host}:{config.callback_port}""
         # Run check in thread pool since many checks are synchronous
         findings = await loop.run_in_executor(
@@ -184,7 +182,7 @@ class AEMHackerCore(BaseCore):
         debug: bool = False,
         proxy: Optional[str] = None
     ) -> List[AEMFinding]:
-        """Check for exposed setPreferences servlet."""""""        findings = []
+        """Check for exposed setPreferences servlet."""findings = []
         r = self._random_string(3)
 
         paths = itertools.product(
@@ -212,7 +210,7 @@ class AEMHackerCore(BaseCore):
         debug: bool = False,
         proxy: Optional[str] = None
     ) -> List[AEMFinding]:
-        """Check for exposed QueryBuilder servlet."""""""        findings = []
+        """Check for exposed QueryBuilder servlet."""findings = []
         r = self._random_string(3)
 
         paths = itertools.product(
@@ -263,7 +261,7 @@ class AEMHackerCore(BaseCore):
         debug: bool = False,
         proxy: Optional[str] = None
     ) -> List[AEMFinding]:
-        """Check for exposed Felix console."""""""        findings = []
+        """Check for exposed Felix console."""findings = []
         r = self._random_string(3)
 
         paths = itertools.product(
@@ -292,7 +290,7 @@ class AEMHackerCore(BaseCore):
         debug: bool = False,
         proxy: Optional[str] = None
     ) -> List[AEMFinding]:
-        """Check for exposed Groovy console."""""""        findings = []
+        """Check for exposed Groovy console."""findings = []
         r = self._random_string(3)
 
         # Test script for RCE
@@ -341,7 +339,7 @@ class AEMHackerCore(BaseCore):
         debug: bool = False,
         proxy: Optional[str] = None
     ) -> List[AEMFinding]:
-        """Check for SSRF via Salesforce servlet."""""""        findings = []
+        """Check for SSRF via Salesforce servlet."""findings = []
 
         paths = [
             (
@@ -373,7 +371,7 @@ class AEMHackerCore(BaseCore):
         self, url: str, method: str = 'GET', data: Optional[str] = None,'        headers: Optional[Dict[str, str]] = None, proxy: Optional[str] = None,
         debug: bool = False
     ) -> Optional[Any]:
-        """Make HTTP request (uses requests for internal thread-pool compatibility)."""""""        try:
+        """Make HTTP request (uses requests for internal thread-pool compatibility)."""try:
             proxies = {"http": proxy, "https": proxy} if proxy else None"            if debug:
                 print(f">> Sending {method} {url}")"
             if method == 'GET':'                return requests.get(url, headers=headers, proxies=proxies, timeout=30, data=data)
@@ -385,7 +383,7 @@ class AEMHackerCore(BaseCore):
 
 
 class AEMSSRFDetector:
-    """SSRF detection server for AEM vulnerability scanning."""""""
+    """SSRF detection server for AEM vulnerability scanning."""
     def __init__(self, token: str, detections: Dict[str, List[str]], port: int = 80):
         self.token = token
         self.detections = detections
@@ -394,7 +392,7 @@ class AEMSSRFDetector:
         self.thread = None
 
     async def start(self):
-        """Start the SSRF detection server."""""""        def run_server():
+        """Start the SSRF detection server."""def run_server():
             def handler(*args):
                 return AEMSSRFHandler(self.token, self.detections, *args)
             self.server = HTTPServer(('', self.port), handler)'            self.server.serve_forever()
@@ -403,7 +401,7 @@ class AEMSSRFDetector:
         self.thread.start()
 
     async def stop(self):
-        """Stop the SSRF detection server."""""""        if self.server:
+        """Stop the SSRF detection server."""if self.server:
             self.server.shutdown()
             self.server.server_close()
         if self.thread:
@@ -411,7 +409,7 @@ class AEMSSRFDetector:
 
 
 class AEMSSRFHandler(BaseHTTPRequestHandler):
-    """HTTP handler for SSRF detection."""""""
+    """HTTP handler for SSRF detection."""
     def __init__(self, token: str, detections: Dict[str, List[str]], *args):
         self.token = token
         self.detections = detections

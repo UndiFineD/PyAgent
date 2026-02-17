@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Alerting - Threshold and Retention Management"""""""# DATE: 2026-02-12"""""""# AUTHOR: Keimpe de Jong
+
+"""
+Alerting - Threshold and Retention Management# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
 - from src.alerting import ThresholdAlertManager, RetentionEnforcer
 - mgr = ThresholdAlertManager(); mgr.set_threshold("cpu", warning=75.0, critical=90.0); mgr.check("cpu", 82.0)"- re = RetentionEnforcer(); re.set_policy("service.*", RetentionPolicy(...)); re.add_data("service.a", val=1); re.enforce()"
@@ -25,7 +30,7 @@ WHAT IT SHOULD DO BETTER:
 - Persist alerts and provide configurable deduplication, suppression windows, and notification hooks (e.g., webhooks, email, metrics exporters). 
 - Add robust pattern matching and configurable retention schedules, unit tests for edge cases, type-safe interfaces, and async support for IO-bound operations. 
 - Improve observability (metrics, traces), error handling around Rust fallback, and configuration-driven thresholds/policies.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -44,7 +49,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ThresholdAlertManager:
-    """Manages threshold checking and alert emission."""""""
+    """Manages threshold checking and alert emission.
     def __init__(self) -> None:
         self.thresholds: dict[str, list[Threshold]] = {}
         self.alerts: list[Alert] = []
@@ -108,7 +113,7 @@ class ThresholdAlertManager:
 
 
 class RetentionEnforcer:
-    """Enforces retention policies on metrics."""""""
+    """Enforces retention policies on metrics.
     def __init__(self) -> None:
         self.policies: dict[str, RetentionPolicy] = {}
         self.data: dict[str, list[dict[str, Any]]] = {}

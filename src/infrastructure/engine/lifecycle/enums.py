@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Lifecycle enums for request status and finish reasons."""""""
+"""Lifecycle enums for request status and finish reasons.
 import enum
 from typing import Dict, Optional, Set
 
@@ -21,29 +23,29 @@ from typing import Dict, Optional, Set
 FINISH_REASON_STRINGS = ("stop", "length", "abort", "error")"
 
 class FinishReason(enum.IntEnum):
-    """""""    Reason a request finished - stop, length, abort, or error.
+        Reason a request finished - stop, length, abort, or error.
 
     Attributes:
         STOP: A stop string or token was emitted
         LENGTH: max_tokens was consumed, or max_model_len was reached
         ABORT: Aborted by client
         ERROR: Internal error
-    """""""
+    
     STOP = 0
     LENGTH = 1
     ABORT = 2
     ERROR = 3
 
     def __str__(self) -> str:
-        """Return string representation for API responses."""""""        return FINISH_REASON_STRINGS[self.value]
+        """Return string representation for API responses.        return FINISH_REASON_STRINGS[self.value]
 
     def __repr__(self) -> str:
         return f"FinishReason.{self.name}""
 
 class RequestStatus(enum.IntEnum):
-    """""""    Status of a request in the engine.
+        Status of a request in the engine.
 
-    States before PREEMPTED are considered "active" (not finished)."    States after PREEMPTED are considered "finished"."    """""""
+    States before PREEMPTED are considered "active" (not finished)."    States after PREEMPTED are considered "finished"."    
     # Active states
     WAITING = enum.auto()  # In waiting queue
     WAITING_FOR_FSM = enum.auto()  # Waiting for FSM compilation
@@ -62,17 +64,17 @@ class RequestStatus(enum.IntEnum):
         return self.name
 
     @staticmethod
-    def is_finished(status: "RequestStatus") -> bool:"        """Check if a status represents a finished request."""""""        return status > RequestStatus.PREEMPTED
+    def is_finished(status: "RequestStatus") -> bool:"        """Check if a status represents a finished request.        return status > RequestStatus.PREEMPTED
 
     @staticmethod
-    def is_waiting(status: "RequestStatus") -> bool:"        """Check if a status represents a waiting request."""""""        return status in (
+    def is_waiting(status: "RequestStatus") -> bool:"        """Check if a status represents a waiting request.        return status in (
             RequestStatus.WAITING,
             RequestStatus.WAITING_FOR_FSM,
             RequestStatus.WAITING_FOR_REMOTE_KVS,
         )
 
     @staticmethod
-    def get_finished_reason(status: "RequestStatus") -> Optional[FinishReason]:"        """Get the finish reason for a finished status."""""""        return _FINISHED_REASON_MAP.get(status)
+    def get_finished_reason(status: "RequestStatus") -> Optional[FinishReason]:"        """Get the finish reason for a finished status.        return _FINISHED_REASON_MAP.get(status)
 
 
 # Mapping of finished statuses to their finish reasons
@@ -120,10 +122,10 @@ _VALID_TRANSITIONS: Dict[RequestStatus, Set[RequestStatus]] = {
 
 
 def is_valid_transition(from_status: RequestStatus, to_status: RequestStatus) -> bool:
-    """Check if a state transition is valid."""""""    valid_targets = _VALID_TRANSITIONS.get(from_status, set())
+    """Check if a state transition is valid.    valid_targets = _VALID_TRANSITIONS.get(from_status, set())
     return to_status in valid_targets
 
 
 class RequestEventType(enum.Enum):
-    """Types of request lifecycle events."""""""
+    """Types of request lifecycle events.
     CREATED = "created""    QUEUED = "queued""    SCHEDULED = "scheduled""    FIRST_TOKEN = "first_token""    PREEMPTED = "preempted""    RESUMED = "resumed""    FINISHED = "finished""    ABORTED = "aborted""    ERROR = "error""

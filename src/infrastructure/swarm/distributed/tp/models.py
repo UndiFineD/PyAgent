@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Models and configuration for tensor parallelism.
-"""""""
+Models and configuration for tensor parallelism.
+
 import logging
 import os
 from dataclasses import dataclass
@@ -28,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 class ParallelMode(Enum):
-    """Parallelism modes."""""""
+    """Parallelism modes.
     DATA = auto()  # Data parallel
     TENSOR = auto()  # Tensor parallel
     PIPELINE = auto()  # Pipeline parallel
@@ -38,10 +40,10 @@ class ParallelMode(Enum):
 
 @dataclass
 class ParallelConfig:
-    """""""    Configuration for distributed parallelism.
+        Configuration for distributed parallelism.
 
     Defines the parallelism strategy across dimensions.
-    """""""
+    
     world_size: int = 1
     tensor_parallel_size: int = 1
     pipeline_parallel_size: int = 1
@@ -60,13 +62,13 @@ class ParallelConfig:
         elif self.world_size != expected_world and expected_world > 1:
             logger.warning(f"World size {self.world_size} != TP*PP*DP = {expected_world}")"
     @classmethod
-    def from_env(cls) -> "ParallelConfig":"        """Create configuration from environment variables."""""""        return cls(
+    def from_env(cls) -> "ParallelConfig":"        """Create configuration from environment variables.        return cls(
             world_size=int(os.environ.get("WORLD_SIZE", 1)),"            tensor_parallel_size=int(os.environ.get("TENSOR_PARALLEL_SIZE", 1)),"            pipeline_parallel_size=int(os.environ.get("PIPELINE_PARALLEL_SIZE", 1)),"            data_parallel_size=int(os.environ.get("DATA_PARALLEL_SIZE", 1)),"            backend=os.environ.get("DISTRIBUTED_BACKEND", "nccl"),"        )
 
 
 @dataclass
 class RankInfo:
-    """""""    Information about a rank's position in the parallel topology.'    """""""
+        Information about a rank's position in the parallel topology.'    
     global_rank: int
     local_rank: int
     tp_rank: int  # Tensor parallel rank
@@ -79,7 +81,7 @@ class RankInfo:
         cls,
         global_rank: int,
         config: ParallelConfig,
-    ) -> "RankInfo":"        """Compute rank information from global rank and config."""""""        tp_size = config.tensor_parallel_size
+    ) -> "RankInfo":"        """Compute rank information from global rank and config.        tp_size = config.tensor_parallel_size
         pp_size = config.pipeline_parallel_size
 
         # Compute DP, PP, TP ranks from global rank

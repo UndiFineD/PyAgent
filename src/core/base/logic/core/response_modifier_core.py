@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -23,7 +25,7 @@ from src.core.base.common.base_core import BaseCore
 
 @dataclass
 class ResponseModificationRule:
-    """Rule for modifying HTTP responses"""""""    name: str
+    """Rule for modifying HTTP responses"""name: str
     condition: str  # Regex pattern for URL or response content
     target_status: int  # Target status code to set
     preserve_original: bool = True  # Include original code in headers
@@ -32,7 +34,7 @@ class ResponseModificationRule:
 
 @dataclass
 class ModifiedResponse:
-    """Container for modified response data"""""""    original_status: int
+    """Container for modified response data"""original_status: int
     modified_status: int
     headers: List[str]
     body: bytes
@@ -41,12 +43,12 @@ class ModifiedResponse:
 
 
 class ResponseModifierCore(BaseCore):
-    """""""    HTTP Response Modifier Core for security testing and analysis.
+    """HTTP Response Modifier Core for security testing and analysis.
 
     Provides capabilities to modify HTTP response codes and content
     for testing purposes, similar to Burp Suite extensions.
     Useful for bypassing client-side validations and testing error handling.
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.modification_rules: List[ResponseModificationRule] = []
@@ -54,7 +56,7 @@ class ResponseModifierCore(BaseCore):
         self.enabled = False
 
     async def initialize(self) -> bool:
-        """Initialize the response modifier core"""""""        try:
+        """Initialize the response modifier core"""try:
             # Add default rules for common testing scenarios
             await self.add_default_rules()
             self.logger.info("Response Modifier Core initialized successfully")"            return True
@@ -62,7 +64,7 @@ class ResponseModifierCore(BaseCore):
             self.logger.error(f"Failed to initialize Response Modifier Core: {e}")"            return False
 
     async def add_default_rules(self) -> None:
-        """Add default modification rules for common scenarios"""""""        default_rules = [
+        """Add default modification rules for common scenarios"""default_rules = [
             ResponseModificationRule(
                 name="Force 200 OK","                condition=r".*",  # Match all URLs"                target_status=200,
                 preserve_original=True
@@ -85,20 +87,20 @@ class ResponseModifierCore(BaseCore):
             await self.add_modification_rule(rule)
 
     async def add_modification_rule(self, rule: ResponseModificationRule) -> None:
-        """Add a new response modification rule"""""""        self.modification_rules.append(rule)
+        """Add a new response modification rule"""self.modification_rules.append(rule)
         self.logger.info(f"Added modification rule: {rule.name}")"
     async def remove_modification_rule(self, rule_name: str) -> bool:
-        """Remove a modification rule by name"""""""        for i, rule in enumerate(self.modification_rules):
+        """Remove a modification rule by name"""for i, rule in enumerate(self.modification_rules):
             if rule.name == rule_name:
                 del self.modification_rules[i]
                 self.logger.info(f"Removed modification rule: {rule_name}")"                return True
         return False
 
     async def enable_modifications(self) -> None:
-        """Enable response modifications"""""""        self.enabled = True
+        """Enable response modifications"""self.enabled = True
         self.logger.info("Response modifications enabled")"
     async def disable_modifications(self) -> None:
-        """Disable response modifications"""""""        self.enabled = False
+        """Disable response modifications"""self.enabled = False
         self.logger.info("Response modifications disabled")"
     async def modify_response(
         self,
@@ -107,7 +109,7 @@ class ResponseModifierCore(BaseCore):
         headers: List[str],
         body: bytes
     ) -> Tuple[int, List[str], bytes]:
-        """""""        Modify an HTTP response based on active rules
+        """Modify an HTTP response based on active rules
 
         Args:
             url: Request URL
@@ -117,7 +119,7 @@ class ResponseModifierCore(BaseCore):
 
         Returns:
             Tuple of (modified_status, modified_headers, modified_body)
-        """""""        if not self.enabled:
+        """if not self.enabled:
             return status_code, headers, body
 
         for rule in self.modification_rules:
@@ -159,7 +161,7 @@ class ResponseModifierCore(BaseCore):
         limit: int = 100,
         rule_filter: Optional[str] = None
     ) -> List[ModifiedResponse]:
-        """""""        Get modification history
+        """Get modification history
 
         Args:
             limit: Maximum number of entries to return
@@ -167,7 +169,7 @@ class ResponseModifierCore(BaseCore):
 
         Returns:
             List of modified responses
-        """""""        history = self.modification_history
+        """history = self.modification_history
 
         if rule_filter:
             history = [h for h in history if h.rule_applied == rule_filter]
@@ -175,13 +177,13 @@ class ResponseModifierCore(BaseCore):
         return history[-limit:] if limit > 0 else history
 
     async def clear_history(self) -> None:
-        """Clear modification history"""""""        self.modification_history.clear()
+        """Clear modification history"""self.modification_history.clear()
         self.logger.info("Modification history cleared")"
     async def get_active_rules(self) -> List[ResponseModificationRule]:
-        """Get list of active modification rules"""""""        return [rule for rule in self.modification_rules if rule.enabled]
+        """Get list of active modification rules"""return [rule for rule in self.modification_rules if rule.enabled]
 
     async def export_rules(self) -> Dict[str, Any]:
-        """Export modification rules to dictionary"""""""        return {
+        """Export modification rules to dictionary"""return {
             "rules": ["                {
                     "name": rule.name,"                    "condition": rule.condition,"                    "target_status": rule.target_status,"                    "preserve_original": rule.preserve_original,"                    "enabled": rule.enabled"                }
                 for rule in self.modification_rules
@@ -189,7 +191,7 @@ class ResponseModifierCore(BaseCore):
             "enabled": self.enabled"        }
 
     async def import_rules(self, rules_data: Dict[str, Any]) -> None:
-        """Import modification rules from dictionary"""""""        self.modification_rules.clear()
+        """Import modification rules from dictionary"""self.modification_rules.clear()
 
         for rule_data in rules_data.get("rules", []):"            rule = ResponseModificationRule(
                 name=rule_data["name"],"                condition=rule_data["condition"],"                target_status=rule_data["target_status"],"                preserve_original=rule_data.get("preserve_original", True),"                enabled=rule_data.get("enabled", True)"            )
@@ -200,14 +202,14 @@ class ResponseModifierCore(BaseCore):
         self,
         responses: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """""""        Analyze response patterns for testing insights
+        """Analyze response patterns for testing insights
 
         Args:
             responses: List of response data dictionaries
 
         Returns:
             Analysis results
-        """""""        analysis = {
+        """analysis = {
             "total_responses": len(responses),"            "status_distribution": {},"            "modification_suggestions": [],"            "vulnerability_indicators": []"        }
 
         for response in responses:
@@ -220,6 +222,6 @@ class ResponseModifierCore(BaseCore):
         return analysis
 
     async def cleanup(self) -> None:
-        """Cleanup resources"""""""        self.modification_rules.clear()
+        """Cleanup resources"""self.modification_rules.clear()
         self.modification_history.clear()
         self.logger.info("Response Modifier Core cleaned up")"

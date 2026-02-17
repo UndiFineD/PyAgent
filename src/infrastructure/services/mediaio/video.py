@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Video loader implementation.
-"""""""
+Video loader implementation.
+
 from __future__ import annotations
 
 from typing import BinaryIO, Tuple, Union
@@ -33,7 +35,7 @@ from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
 
 
 class VideoLoader(MediaLoader):
-    """Load and process videos."""""""
+    """Load and process videos.
     def __init__(self):
         self._cv2_available = False
         try:
@@ -52,7 +54,7 @@ class VideoLoader(MediaLoader):
         source: Union[str, bytes, BinaryIO],
         config: MediaLoadConfig,
     ) -> VideoData:
-        """Load video from source."""""""        if not self._cv2_available:
+        """Load video from source.        if not self._cv2_available:
             raise RuntimeError("OpenCV required for video loading")"
         if isinstance(source, bytes):
             import tempfile
@@ -72,7 +74,7 @@ class VideoLoader(MediaLoader):
         )
 
     async def _load_frames(self, path: str, config: MediaLoadConfig) -> Tuple[np.ndarray, np.ndarray, MediaMetadata]:
-        """Load frames from video file."""""""        if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):"            # TensorRT path for 120fps optimization
+        """Load frames from video file.        if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):"            # TensorRT path for 120fps optimization
             # This is a stub for real TensorRT/CUDA acceleration
             rc.initialize_tensorrt_rust()
             # ... process with TensorRT ...

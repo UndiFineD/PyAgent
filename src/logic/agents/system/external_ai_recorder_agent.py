@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# External AI Recorder Agent - Records and consolidates external AI session data
+# External AI Recorder Agent - Records and consolidates external AI session data
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -34,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in recording and consolidating knowledge from external AI sessions.
 Captures prompts, contexts, and responses provided to/from external systems like ChatGPT, Claude, etc.
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -48,7 +50,7 @@ __version__ = VERSION
 
 
 class ExternalAIRecorderAgent(BaseAgent):
-""""Records interactions with external AI models to build a rich local knowledge repository."""""""
+""""Records interactions with external AI models to build a rich local knowledge repository.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.logs_dir = self._workspace_root / "data" / "logs" / "external_ai_learning"        self.logs_dir.mkdir(parents=True, exist_ok=True)
@@ -62,7 +64,7 @@ class ExternalAIRecorderAgent(BaseAgent):
             external_ai_name: Name of the external system (e.g., 'Claude-3.5', 'GPT-4.1').'            prompt: The user query sent to the external AI.
             context: Any supplemental context provided in the session.
             response: The full text response from the external AI.
-"""""""        # Phase 105: Direct Shard Recording
+        # Phase 105: Direct Shard Recording
         if self.recorder:
             self.recorder.record_interaction(
                 provider=external_ai_name,
@@ -80,7 +82,7 @@ class ExternalAIRecorderAgent(BaseAgent):
 
     @as_tool
     def synthesize_local_knowledge(self) -> str:
-""""Analyzes recorded interactions to identify recurring patterns or high-value insights."""""""
+""""Analyzes recorded interactions to identify recurring patterns or high-value insights.
 #         return "Local knowledge synthesis: Identification of 5 high-value patterns from external records completed."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         return "Local knowledge base is thriving with data from external AI sessions."

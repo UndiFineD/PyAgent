@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""DocGenerator - Generates simple documentation for Improvement objects
+
+"""
+DocGenerator - Generates simple documentation for Improvement objects
 
 A small utility class that renders human-readable Markdown for Improvement instances using simple string templates and optional metadata extraction.
 # DATE: 2026-02-12
@@ -31,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""
+
 from __future__ import annotations
 
 from typing import Any, cast
@@ -44,7 +48,7 @@ __version__ = VERSION
 
 
 class DocGenerator:
-    """Generates simple documentation text for improvements."""""""
+    """Generates simple documentation text for improvements.
     def __init__(self) -> None:
         self.templates: dict[str, str] = {
             "default": "## {title}\\n\\n{description}\\n","        }
@@ -54,7 +58,7 @@ class DocGenerator:
             meta = getattr(improvement, "metadata", None)"            if isinstance(meta, dict) and meta:
                 base += "\\n## Metadata\\n""                meta_dict = cast(dict[str, Any], meta)
                 for k, v in meta_dict.items():
-                    base += f"- {k}: {v}\\n""        retur"""n base"""""""""""
+                    base += f"- {k}: {v}\\n""        retur"""n base""""
 from __future__ import annotations
 
 from typing import Any, cast
@@ -67,7 +71,7 @@ __version__ = VERSION
 
 
 class DocGenerator:
-    """Generates simple documentation text for improvements."""""""
+    """Generates simple documentation text for improvements.
     def __init__(self) -> None:
         self.templates: dict[str, str] = {
             "default": "## {title}\\n\\n{description}\\n","        }

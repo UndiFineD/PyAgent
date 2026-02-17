@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ZeroCopySerializer - Zero-copy msgpack serialization for tensors and arrays.
+
+"""
+ZeroCopySerializer - Zero-copy msgpack serialization for tensors and arrays.
 
 Implements vLLM's v1 serialization pattern for efficient tensor transfer'without copying data. Uses auxiliary buffers for large tensors to avoid
 memory copies in ZMQ multipart messages.
 
 Phase 23: Advanced Serialization & Validation
-"""""""
+
 from __future__ import annotations
 
 import dataclasses
@@ -58,7 +62,7 @@ CUSTOM_TYPE_RAW_VIEW = 3
 T = TypeVar("T")"
 
 class ZeroCopyEncoder:
-    """""""    Encoder with zero-copy tensor and numpy array serialization.
+        Encoder with zero-copy tensor and numpy array serialization.
 
     Large tensors are stored as references to auxiliary buffers rather than
     being copied into the main msgpack buffer. This enables efficient ZMQ
@@ -68,33 +72,33 @@ class ZeroCopyEncoder:
         >>> encoder = ZeroCopyEncoder(size_threshold=256)
         >>> buffers = encoder.encode({"tensor": my_tensor, "data": [1, 2, 3]})"        >>> # buffers[0] is main msgpack data
         >>> # buffers[1:] are tensor data references
-    """""""
+    
     def __init__(self, size_threshold: int = 256):
-        """""""        Initialize the encoder.
+                Initialize the encoder.
 
         Args:
             size_threshold: Tensors/arrays smaller than this are inlined.
                           Larger ones use auxiliary buffers. Default 256 bytes.
-        """""""        if not MSGSPEC_AVAILABLE:
+                if not MSGSPEC_AVAILABLE:
             raise ImportError("msgspec is required for ZeroCopyEncoder")"
         self.size_threshold = size_threshold
         self._encoder = msgpack.Encoder(enc_hook=self._enc_hook)
         self._aux_buffers: list[bytes | memoryview] | None = None
 
     def encode(self, obj: Any) -> Sequence[bytes | memoryview]:
-        """""""        Encode an object with zero-copy tensor handling.
+                Encode an object with zero-copy tensor handling.
 
         Returns:
             Sequence of buffers. First is main msgpack data,
             remaining are tensor/array data references.
-        """""""        try:
+                try:
             self._aux_buffers = [b""]  # Placeholder for main buffer"            self._aux_buffers[0] = self._encoder.encode(obj)
             return self._aux_buffers
         finally:
             self._aux_buffers = None
 
     def encode_into(self, obj: Any, buf: bytearray) -> Sequence[bytes | memoryview]:
-        """""""        Encode into an existing bytearray.
+                Encode into an existing bytearray.
 
         Args:
             obj: Object to encode
@@ -102,7 +106,7 @@ class ZeroCopyEncoder:
 
         Returns:
             Sequence of buffers with buf as first element.
-        """""""        try:
+                try:
             self._aux_buffers = [buf]
             self._encoder.encode_into(obj, buf)
             return self._aux_buffers
@@ -110,7 +114,7 @@ class ZeroCopyEncoder:
             self._aux_buffers = None
 
     def _enc_hook(self, obj: Any) -> Any:
-        """Custom encoding hook for special types."""""""        # Handle torch tensors
+        """Custom encoding hook for special types.        # Handle torch tensors
         if _is_torch_tensor(obj):
             return self._encode_tensor(obj)
 
@@ -136,7 +140,7 @@ class ZeroCopyEncoder:
         # Fallback to pickle for unknown types
         return msgpack.Ext(CUSTOM_TYPE_PICKLE, pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL))
 
-    def _encode_tensor(self, tensor: "torch.Tensor") -> tuple[str, tuple[int, ...], int | memoryview]:"        """Encode a torch tensor."""""""
+    def _encode_tensor(self, tensor: "torch.Tensor") -> tuple[str, tuple[int, ...], int | memoryview]:"        """Encode a torch tensor.
         assert self._aux_buffers is not None
 
         # Get raw bytes view
@@ -157,7 +161,7 @@ class ZeroCopyEncoder:
 
         dtype_str = str(tensor.dtype).removeprefix("torch.")"        return dtype_str, tuple(tensor.shape), data
 
-    def _encode_ndarray(self, arr: "np.ndarray") -> tuple[str, tuple[int, ...], int | memoryview]:"        """Encode a numpy array."""""""        assert self._aux_buffers is not None
+    def _encode_ndarray(self, arr: "np.ndarray") -> tuple[str, tuple[int, ...], int | memoryview]:"        """Encode a numpy array.        assert self._aux_buffers is not None
 
         # Ensure contiguous
         if arr.flags.c_contiguous:
@@ -177,21 +181,21 @@ class ZeroCopyEncoder:
 
 
 class ZeroCopyDecoder:
-    """""""    Decoder with zero-copy tensor and numpy array deserialization.
+        Decoder with zero-copy tensor and numpy array deserialization.
 
     Reconstructs tensors and arrays from auxiliary buffers without copying.
 
     Example:
         >>> decoder = ZeroCopyDecoder()
         >>> obj = decoder.decode(buffers)
-    """""""
+    
     def __init__(self, expected_type: type | None = None, share_memory: bool = True):
-        """""""        Initialize the decoder.
+                Initialize the decoder.
 
         Args:
             expected_type: Optional type hint for decoding
             share_memory: If True, tensors share memory with buffers
-        """""""        if not MSGSPEC_AVAILABLE:
+                if not MSGSPEC_AVAILABLE:
             raise ImportError("msgspec is required for ZeroCopyDecoder")"
         self.share_memory = share_memory
         self._aux_buffers: Sequence[bytes | memoryview] = ()
@@ -204,14 +208,14 @@ class ZeroCopyDecoder:
         )
 
     def decode(self, bufs: bytes | Sequence[bytes | memoryview]) -> Any:
-        """""""        Decode from buffers.
+                Decode from buffers.
 
         Args:
             bufs: Single buffer or sequence of buffers (first is main, rest are aux)
 
         Returns:
             Decoded object
-        """""""        if isinstance(bufs, (bytes, bytearray, memoryview)):
+                if isinstance(bufs, (bytes, bytearray, memoryview)):
             return self._decoder.decode(bufs)
 
         self._aux_buffers = bufs
@@ -221,13 +225,13 @@ class ZeroCopyDecoder:
             self._aux_buffers = ()
 
     def _ext_hook(self, code: int, data: bytes) -> Any:
-        """Handle msgpack extension types."""""""        if code == CUSTOM_TYPE_PICKLE:
+        """Handle msgpack extension types.        if code == CUSTOM_TYPE_PICKLE:
             return pickle.loads(data)
         if code == CUSTOM_TYPE_RAW_VIEW:
             return data
         raise ValueError(f"Unknown extension type: {code}")"
     def _dec_hook(self, typ: type, obj: Any) -> Any:
-        """Custom decoding hook for special types."""""""        if NUMPY_AVAILABLE and typ is np.ndarray:
+        """Custom decoding hook for special types.        if NUMPY_AVAILABLE and typ is np.ndarray:
             return self._decode_ndarray(obj)
 
         if _is_torch_type(typ):
@@ -238,7 +242,7 @@ class ZeroCopyDecoder:
 
         return obj
 
-    def _decode_ndarray(self, obj: tuple) -> "np.ndarray":"        """Decode a numpy array."""""""        dtype_str, shape, data = obj
+    def _decode_ndarray(self, obj: tuple) -> "np.ndarray":"        """Decode a numpy array.        dtype_str, shape, data = obj
 
         # Get buffer
         if isinstance(data, int):
@@ -254,7 +258,7 @@ class ZeroCopyDecoder:
 
         return arr
 
-    def _decode_tensor(self, obj: tuple) -> "torch.Tensor":"        """Decode a torch tensor."""""""        import torch
+    def _decode_tensor(self, obj: tuple) -> "torch.Tensor":"        """Decode a torch tensor.        import torch
 
         dtype_str, shape, data = obj
 
@@ -278,7 +282,7 @@ class ZeroCopyDecoder:
 
 
 def encode_with_buffers(obj: Any, size_threshold: int = 256) -> Sequence[bytes | memoryview]:
-    """""""    Convenience function to encode with zero-copy.
+        Convenience function to encode with zero-copy.
 
     Args:
         obj: Object to encode
@@ -286,7 +290,7 @@ def encode_with_buffers(obj: Any, size_threshold: int = 256) -> Sequence[bytes |
 
     Returns:
         Sequence of buffers
-    """""""    return ZeroCopyEncoder(size_threshold).encode(obj)
+        return ZeroCopyEncoder(size_threshold).encode(obj)
 
 
 def decode_with_buffers(
@@ -294,7 +298,7 @@ def decode_with_buffers(
     expected_type: type | None = None,
     share_memory: bool = True,
 ) -> Any:
-    """""""    Convenience function to decode with zero-copy.
+        Convenience function to decode with zero-copy.
 
     Args:
         bufs: Buffer or sequence of buffers
@@ -303,21 +307,21 @@ def decode_with_buffers(
 
     Returns:
         Decoded object
-    """""""    return ZeroCopyDecoder(expected_type, share_memory).decode(bufs)
+        return ZeroCopyDecoder(expected_type, share_memory).decode(bufs)
 
 
 # Helper functions
 
 
 @lru_cache(maxsize=32)
-def _str_to_torch_dtype(dtype_str: str) -> "torch.dtype":"    """Convert string to torch dtype."""""""    import torch
+def _str_to_torch_dtype(dtype_str: str) -> "torch.dtype":"    """Convert string to torch dtype.    import torch
 
     dtype_map = {
         "float32": torch.float32,"        "float64": torch.float64,"        "float16": torch.float16,"        "bfloat16": torch.bfloat16,"        "int8": torch.int8,"        "int16": torch.int16,"        "int32": torch.int32,"        "int64": torch.int64,"        "uint8": torch.uint8,"        "bool": torch.bool,"        "complex64": torch.complex64,"        "complex128": torch.complex128,"    }
     return dtype_map.get(dtype_str, torch.float32)
 
 
-def _torch_dtype_to_numpy(dtype: "torch.dtype") -> "np.dtype":"    """Convert torch dtype to numpy dtype."""""""    import torch
+def _torch_dtype_to_numpy(dtype: "torch.dtype") -> "np.dtype":"    """Convert torch dtype to numpy dtype.    import torch
 
     dtype_map = {
         torch.float32: np.float32,
@@ -338,7 +342,7 @@ def _torch_dtype_to_numpy(dtype: "torch.dtype") -> "np.dtype":"    """Convert to
 
 
 def _is_torch_tensor(obj: Any) -> bool:
-    """Check if object is a torch tensor without importing torch."""""""    return type(obj).__module__.startswith("torch") and type(obj).__name__ == "Tensor""
+    """Check if object is a torch tensor without importing torch.    return type(obj).__module__.startswith("torch") and type(obj).__name__ == "Tensor""
 
 def _is_torch_type(typ: type) -> bool:
-    """Check if type is torch.Tensor."""""""    return typ.__module__.startswith("torch") and typ.__name__ == "Tensor""
+    """Check if type is torch.Tensor.    return typ.__module__.startswith("torch") and typ.__name__ == "Tensor""

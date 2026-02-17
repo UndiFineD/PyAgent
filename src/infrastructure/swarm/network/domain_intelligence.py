@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -34,10 +36,10 @@ class BugBountyProgram:
 
 
 class DomainIntelligence:
-    """""""    Asynchronous Domain Intelligence gathering.
+        Asynchronous Domain Intelligence gathering.
     Integrates with ProjectDiscovery Chaos dataset.
     Refactored from 0xSojalSec-SubDomain-Grabber.
-    """""""
+    
     CHAOS_URL = "https://chaos-data.projectdiscovery.io/index.json""
     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
         self._session = session
@@ -54,7 +56,7 @@ class DomainIntelligence:
             await self._session.close()
 
     async def fetch_chaos_index(self) -> List[Dict[str, Any]]:
-        """Fetch the full index of bug bounty programs from Chaos."""""""        session = self._session or aiohttp.ClientSession()
+        """Fetch the full index of bug bounty programs from Chaos.        session = self._session or aiohttp.ClientSession()
         try:
             async with session.get(self.CHAOS_URL) as response:
                 if response.status == 200:
@@ -67,8 +69,8 @@ class DomainIntelligence:
                 await session.close()
 
     async def get_program_subdomains(self, program_url: str) -> List[str]:
-        """""""        Download and extract subdomains for a specific program.
-        Safety: Uses python's zipfile instead of shell commands.'        """""""        session = self._session or aiohttp.ClientSession()
+                Download and extract subdomains for a specific program.
+        Safety: Uses python's zipfile instead of shell commands.'                session = self._session or aiohttp.ClientSession()
         subdomains = []
         try:
             async with session.get(program_url) as response:
@@ -94,7 +96,7 @@ class DomainIntelligence:
         return subdomains
 
     async def search_program(self, query: str) -> List[BugBountyProgram]:
-        """Search for programs matching a query string."""""""        index = await self.fetch_chaos_index()
+        """Search for programs matching a query string.        index = await self.fetch_chaos_index()
         results = []
         query = query.lower()
 

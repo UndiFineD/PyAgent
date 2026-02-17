@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Manager for usage quotas.
+
+Manager for usage quotas.
 (Facade for src.core.base.common.resource_core)
-"""""""
+
 from __future__ import annotations
 
 from typing import Any
@@ -21,7 +24,7 @@ from src.core.base.common.resource_core import ResourceCore, QuotaConfig
 
 
 class UsageQuotaManager:
-    """Manages resource quotas and budget enforcement. (Facade)"""""""
+    """Manages resource quotas and budget enforcement. (Facade)
     def __init__(
         self,
         daily_limit: int | None = None,
@@ -36,15 +39,15 @@ class UsageQuotaManager:
         self._requests: list[dict[str, Any]] = []
 
     def record_request(self, tokens: int = 1, cost: float = 0.0) -> None:
-        """Record a request for quota tracking."""""""        import time
+        """Record a request for quota tracking.        import time
         self._requests.append({"tokens": tokens, "cost": cost, "timestamp": time.time()})"        self.update_usage(tokens_input=tokens)
 
     def can_request(self) -> bool:
-        """Check if a new request is allowed under current quotas."""""""        exceeded, _ = self.check_quotas()
+        """Check if a new request is allowed under current quotas.        exceeded, _ = self.check_quotas()
         return not exceeded
 
     def get_usage_report(self) -> dict[str, Any]:
-        """Return usage report."""""""        import time
+        """Return usage report.        import time
         now = time.time()
         hour_ago = now - 3600
         day_ago = now - 86400
@@ -55,13 +58,13 @@ class UsageQuotaManager:
             "total_requests": len(self._requests),"            "total_tokens": total_tokens,"            "daily_used": daily_used,"            "daily_limit": self.daily_limit,"            "daily_remaining": max(0, self.daily_limit - daily_used) if self.daily_limit > 0 else 999999,"            "hourly_used": hourly_used,"            "hourly_limit": self.hourly_limit,"            "hourly_remaining": max(0, self.hourly_limit - hourly_used) if self.hourly_limit > 0 else 999999,"        }
 
     def get_remaining(self) -> tuple[int, int]:
-        """Get remaining token quota (daily, hourly)."""""""        report = self.get_usage_report()
+        """Get remaining token quota (daily, hourly).        report = self.get_usage_report()
         return report["daily_remaining"], report["hourly_remaining"]"
     def update_usage(self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0) -> bool:
-        """Update current usage."""""""        return self._core.update_usage(tokens_input, tokens_output, cycles)
+        """Update current usage.        return self._core.update_usage(tokens_input, tokens_output, cycles)
 
     def check_quotas(self) -> tuple[bool, str | None]:
-        """Check if quotas are exceeded (session + temporal)."""""""        # 1. Session-based check (e.g. per-agent lifecycle)
+        """Check if quotas are exceeded (session + temporal).        # 1. Session-based check (e.g. per-agent lifecycle)
         exceeded, reason = self._core.check_quotas()
         if exceeded:
             return True, reason
@@ -73,8 +76,8 @@ class UsageQuotaManager:
 
     @property
     def is_interrupted(self) -> bool:
-        """Return True if session is interrupted by quota."""""""        return self._core.is_interrupted
+        """Return True if session is interrupted by quota.        return self._core.is_interrupted
 
     @property
     def total_tokens(self) -> int:
-        """Get total tokens used."""""""        return self._core.usage.total_tokens
+        """Get total tokens used.        return self._core.usage.total_tokens

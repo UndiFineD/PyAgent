@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -23,7 +25,7 @@ from src.core.base.common.base_core import BaseCore
 
 @dataclass
 class ContentEditRequest:
-    """Request for content editing/generation"""""""    instruction: str
+    """Request for content editing/generation"""instruction: str
     input_content: Optional[Union[str, bytes]] = None  # text or image data
     content_type: str = "text"  # text, image, audio, video"    edit_mode: str = "generate"  # generate, edit, refine"    parameters: Dict[str, Any] = field(default_factory=dict)
     context: Optional[Dict[str, Any]] = None
@@ -31,7 +33,7 @@ class ContentEditRequest:
 
 @dataclass
 class ContentEditResult:
-    """Result of content editing operation"""""""    output_content: Union[str, bytes]
+    """Result of content editing operation"""output_content: Union[str, bytes]
     content_type: str
     confidence_score: float
     processing_time: float
@@ -41,7 +43,7 @@ class ContentEditResult:
 
 @dataclass
 class ContentTemplate:
-    """Template for content generation/editing"""""""    name: str
+    """Template for content generation/editing"""name: str
     description: str
     instruction_template: str
     content_type: str
@@ -50,11 +52,11 @@ class ContentTemplate:
 
 
 class AIContentEditorCore(BaseCore):
-    """""""    AI Content Editor Core for instruction-based content generation and editing.
+    """AI Content Editor Core for instruction-based content generation and editing.
 
     Provides capabilities for multi-modal content creation, editing, and refinement
     using instruction-based approaches similar to advanced AI content editors.
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.templates: Dict[str, ContentTemplate] = {}
@@ -63,7 +65,7 @@ class AIContentEditorCore(BaseCore):
         self.active_models: Dict[str, Any] = {}  # Mock model instances
 
     async def initialize(self) -> bool:
-        """Initialize the AI content editor core"""""""        try:
+        """Initialize the AI content editor core"""try:
             # Initialize with default templates and models
             await self.load_default_templates()
             await self.initialize_models()
@@ -72,7 +74,7 @@ class AIContentEditorCore(BaseCore):
             self.logger.error(f"Failed to initialize AI Content Editor Core: {e}")"            return False
 
     async def load_default_templates(self) -> None:
-        """Load default content editing templates"""""""        default_templates = [
+        """Load default content editing templates"""default_templates = [
             ContentTemplate(
                 name="text_summarizer","                description="Summarize text content with key points","                instruction_template=(
                     "Summarize the following text, highlighting the key points and main ideas: {content}""                ),
@@ -92,7 +94,7 @@ class AIContentEditorCore(BaseCore):
 
         self.logger.info(f"Loaded {len(default_templates)} default templates")"
     async def initialize_models(self) -> None:
-        """Initialize AI models for different content types"""""""        # Mock model initialization - in real implementation, these would be actual ML models
+        """Initialize AI models for different content types"""# Mock model initialization - in real implementation, these would be actual ML models
         self.model_configs = {
             "text_processor": {"                "type": "transformer","                "max_tokens": 4096,"                "supported_languages": ["en", "es", "fr", "de", "zh"]"            },
             "image_processor": {"                "type": "diffusion","                "resolution": "1024x1024","                "supported_formats": ["png", "jpg", "webp"]"            },
@@ -108,14 +110,14 @@ class AIContentEditorCore(BaseCore):
         self,
         request: ContentEditRequest
     ) -> ContentEditResult:
-        """""""        Process a content editing request
+        """Process a content editing request
 
         Args:
             request: Content editing request
 
         Returns:
             Content editing result
-        """""""        start_time = asyncio.get_event_loop().time()
+        """start_time = asyncio.get_event_loop().time()
 
         try:
             # Select appropriate model and template
@@ -158,10 +160,10 @@ class AIContentEditorCore(BaseCore):
                 metadata={"error": str(e)}"            )
 
     async def _select_model(self, request: ContentEditRequest) -> str:
-        """Select appropriate model for the request"""""""        if request.content_type == "text":"            return "text_processor""        elif request.content_type == "image":"            return "image_processor""        elif request.content_type in ["python", "javascript", "java", "cpp", "go"]:"            return "code_processor""        else:
+        """Select appropriate model for the request"""if request.content_type == "text":"            return "text_processor""        elif request.content_type == "image":"            return "image_processor""        elif request.content_type in ["python", "javascript", "java", "cpp", "go"]:"            return "code_processor""        else:
             return "multimodal_processor""
     async def _select_template(self, request: ContentEditRequest) -> Optional[ContentTemplate]:
-        """Select appropriate template for the request"""""""        # Try to match based on instruction keywords
+        """Select appropriate template for the request"""# Try to match based on instruction keywords
         instruction_lower = request.instruction.lower()
 
         if "summarize" in instruction_lower or "summary" in instruction_lower:"            return self.templates.get("text_summarizer")"        elif "enhance" in instruction_lower or "improve" in instruction_lower:"            if request.content_type == "image":"                return self.templates.get("image_enhancer")"            else:
@@ -173,7 +175,7 @@ class AIContentEditorCore(BaseCore):
         request: ContentEditRequest,
         template: Optional[ContentTemplate]
     ) -> str:
-        """Process text content editing"""""""        # Ensure input content is string
+        """Process text content editing"""# Ensure input content is string
         input_content = """        if request.input_content:
             if isinstance(request.input_content, bytes):
                 input_content = request.input_content.decode(errors="replace")"            else:
@@ -197,7 +199,7 @@ class AIContentEditorCore(BaseCore):
         request: ContentEditRequest,
         template: Optional[ContentTemplate]
     ) -> bytes:
-        """Process image content editing"""""""        # Mock image processing - in real implementation, this would use diffusion models
+        """Process image content editing"""# Mock image processing - in real implementation, this would use diffusion models
         if request.input_content:
             # If input is provided, return modified version
             input_bytes = request.input_content if isinstance(request.input_content, bytes) \
@@ -210,7 +212,7 @@ class AIContentEditorCore(BaseCore):
         request: ContentEditRequest,
         template: Optional[ContentTemplate]
     ) -> str:
-        """Process code content editing"""""""        code = """        if request.input_content:
+        """Process code content editing"""code = """        if request.input_content:
             if isinstance(request.input_content, bytes):
                 code = request.input_content.decode(errors="replace")"            else:
                 code = request.input_content
@@ -223,13 +225,13 @@ class AIContentEditorCore(BaseCore):
         request: ContentEditRequest,
         template: Optional[ContentTemplate]
     ) -> str:
-        """Process generic content types"""""""        content = """        if request.input_content:
+        """Process generic content types"""content = """        if request.input_content:
             if isinstance(request.input_content, bytes):
                 content = request.input_content.decode(errors="replace")"            else:
                 content = str(request.input_content)
         return f"Processed {request.content_type} content: {content}""
     async def _calculate_confidence(self, result_content: Any, request: ContentEditRequest) -> float:
-        """Calculate confidence score for the result"""""""        # Mock confidence calculation
+        """Calculate confidence score for the result"""# Mock confidence calculation
         base_confidence = 0.8
 
         # Adjust based on content length/complexity
@@ -246,23 +248,23 @@ class AIContentEditorCore(BaseCore):
         return max(0.0, min(1.0, base_confidence))
 
     async def add_template(self, template: ContentTemplate) -> None:
-        """Add a new content editing template"""""""        self.templates[template.name] = template
+        """Add a new content editing template"""self.templates[template.name] = template
         self.logger.info(f"Added template: {template.name}")"
     async def remove_template(self, template_name: str) -> bool:
-        """Remove a content editing template"""""""        if template_name in self.templates:
+        """Remove a content editing template"""if template_name in self.templates:
             del self.templates[template_name]
             self.logger.info(f"Removed template: {template_name}")"            return True
         return False
 
     async def get_available_templates(self) -> List[ContentTemplate]:
-        """Get list of available templates"""""""        return list(self.templates.values())
+        """Get list of available templates"""return list(self.templates.values())
 
     async def get_edit_history(
         self,
         limit: int = 50,
         content_type: Optional[str] = None
     ) -> List[ContentEditResult]:
-        """""""        Get content editing history
+        """Get content editing history
 
         Args:
             limit: Maximum number of results
@@ -270,7 +272,7 @@ class AIContentEditorCore(BaseCore):
 
         Returns:
             List of edit results
-        """""""        history = self.edit_history
+        """history = self.edit_history
 
         if content_type:
             history = [h for h in history if h.content_type == content_type]
@@ -281,14 +283,14 @@ class AIContentEditorCore(BaseCore):
         self,
         time_range_hours: int = 24
     ) -> Dict[str, Any]:
-        """""""        Generate a report on content editing activities
+        """Generate a report on content editing activities
 
         Args:
             time_range_hours: Hours to look back
 
         Returns:
             Activity report
-        """""""        cutoff_time = datetime.now().replace(hour=datetime.now().hour - time_range_hours)
+        """cutoff_time = datetime.now().replace(hour=datetime.now().hour - time_range_hours)
 
         recent_edits = [e for e in self.edit_history if e.timestamp > cutoff_time]
 
@@ -311,7 +313,7 @@ class AIContentEditorCore(BaseCore):
         return report
 
     async def export_templates(self) -> Dict[str, Any]:
-        """Export templates to dictionary"""""""        return {
+        """Export templates to dictionary"""return {
             "templates": ["                {
                     "name": template.name,"                    "description": template.description,"                    "instruction_template": template.instruction_template,"                    "content_type": template.content_type,"                    "parameters": template.parameters,"                    "examples": template.examples"                }
                 for template in self.templates.values()
@@ -319,7 +321,7 @@ class AIContentEditorCore(BaseCore):
         }
 
     async def import_templates(self, templates_data: Dict[str, Any]) -> None:
-        """Import templates from dictionary"""""""        self.templates.clear()
+        """Import templates from dictionary"""self.templates.clear()
 
         for template_data in templates_data.get("templates", []):"            template = ContentTemplate(
                 name=template_data["name"],"                description=template_data["description"],"                instruction_template=template_data["instruction_template"],"                content_type=template_data["content_type"],"                parameters=template_data.get("parameters", {}),"                examples=template_data.get("examples", [])"            )
@@ -327,7 +329,7 @@ class AIContentEditorCore(BaseCore):
 
         self.logger.info(f"Imported {len(self.templates)} templates")"
     async def cleanup(self) -> None:
-        """Cleanup resources"""""""        self.templates.clear()
+        """Cleanup resources"""self.templates.clear()
         self.edit_history.clear()
         self.active_models.clear()
         self.logger.info("AI Content Editor Core cleaned up")"

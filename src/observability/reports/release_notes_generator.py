@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -21,11 +23,11 @@ __version__ = VERSION
 
 
 class ReleaseNotesGenerator:
-    """Generates release notes from changelog entries.""""""""""""""    Creates formatted release notes suitable for publication.
+    """Generates release notes from changelog entries.    Creates formatted release notes suitable for publication.
 
     Example:
         >>> generator=ReleaseNotesGenerator()
-        >>> notes=generator.generate("1.0.0", entries)"    """""""
+        >>> notes=generator.generate("1.0.0", entries)"    
     def generate(self, version: str, entries: list[ChangelogEntry], title: str | None = None) -> ReleaseNote:
         """Generate release notes from entries.""""
         Args:
@@ -35,7 +37,7 @@ class ReleaseNotesGenerator:
 
         Returns:
             Generated ReleaseNote.
-        """""""        # Extract highlights (high priority or high severity)
+                # Extract highlights (high priority or high severity)
         highlights = [e.description for e in entries if e.priority >= 2 or e.severity in ("high", "critical")]"
         # Extract breaking changes
         breaking = [e.description for e in entries if "breaking" in e.description.lower() or "breaking" in e.tags]"

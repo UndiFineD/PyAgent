@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ErrorSeverity - Enumeration of error severity levels
+
+"""
+ErrorSeverity - Enumeration of error severity levels
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -24,7 +28,7 @@ Provides a small, explicit Enum (ErrorSeverity) representing five discrete sever
 WHAT IT SHOULD DO BETTER:
 - Add rich-comparison helpers or a utility wrapper to make ordinal comparisons and threshold checks more ergonomic and type-safe.
 - Provide mappings to logging levels, human-readable labels, and JSON (de)serialization methods for configuration and transport.
-- Include unit tests and examples showing intended comparison semantics and integration with the project's logging and alerting subsystems.'"""""""
+- Include unit tests and examples showing intended comparison semantics and integration with the project's logging and alerting subsystems.'
 from __future__ import annotations
 
 from enum import Enum
@@ -35,7 +39,7 @@ __version__ = VERSION
 
 
 class ErrorSeverity(Enum):
-    """Error severity levels."""""""
+    """Error severity levels.
     CRITICAL = 5
     HIGH = 4
     MEDIUM = 3

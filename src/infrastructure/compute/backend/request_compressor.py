@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py"""""""""""
+
+"""
+Auto-extracted class from agent_backend.py""""
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -25,12 +29,12 @@ class RequestCompressor:
     Example:
         compressor=RequestCompressor()
         compressed=compressor.compress("large prompt text...")"        original=compressor.decompress(compressed)
-    """""""
+    
     def __init__(self, compression_level: int = 6) -> None:
         """Initialize request compressor.""""
         Args:
             compression_level: Compression level (1 - 9, default 6).
-        """""""        import zlib
+                import zlib
 
         self._zlib = zlib
         self.compression_level = compression_level
@@ -45,7 +49,7 @@ class RequestCompressor:
 
         Returns:
             bytes: Compressed data with header byte.
-        """""""        encoded = data.encode("utf-8")"
+                encoded = data.encode("utf-8")"
         if len(encoded) < threshold:
             # Return with 0x00 header indicating uncompressed
             return b"\\x00" + encoded"
@@ -63,7 +67,7 @@ class RequestCompressor:
 
         Returns:
             str: Decompressed string.
-        """""""        if not data:
+                if not data:
             return """
         header = data[0]
         payload = data[1:]
@@ -74,4 +78,4 @@ class RequestCompressor:
         # Uncompressed
         return payload.decode("utf-8")"
     def get_stats(self) -> dict[str, int]:
-        """Get compression statistics."""""""        return dict(self._stats)
+        """Get compression statistics.        return dict(self._stats)

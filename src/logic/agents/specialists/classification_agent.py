@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""ClassificationAgent - Taxonomy and Categorization Specialist
+ClassificationAgent - Taxonomy and Categorization Specialist
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -41,23 +39,21 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Classification agent.py module.
-"""""""# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
+Classification agent.py module.
+# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -77,11 +73,11 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
-""""Types of classification supported by the agent."""""""#     SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
+""""Types of classification supported by the agent.#     SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
 
 @dataclass
 class ClassificationResult:
-""""Represents a classification result with confidence."""""""
+""""Represents a classification result with confidence.
     category: str
     confidence: float
     parent_category: Optional[str] = None
@@ -90,7 +86,7 @@ class ClassificationResult:
 
 @dataclass
 class Taxonomy:
-""""Represents a hierarchical category taxonomy."""""""
+""""Represents a hierarchical category taxonomy.
     name: str
     categories: List[str]
     hierarchy: Dict[str, List[str]] = field(default_factory=dict)  # parent -> children
@@ -101,7 +97,7 @@ class Taxonomy:
 class ClassificationAgent(BaseAgent):
     Agent specializing in classifying text, code, or images into predefined categories.
     Supports single-label, multi-label, and hierarchical classification.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._taxonomies: Dict[str, Taxonomy] = {}
@@ -158,7 +154,7 @@ class ClassificationAgent(BaseAgent):
         res = await self.improve_content(prompt)
 
         try:
-"""""""# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
+# ClassificationAgent: Taxonomy and Categorization Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -178,11 +174,11 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
-""""Types of classification supported by the agent."""""""# "    SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
+""""Types of classification supported by the agent.# "    SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
 
 @dataclass
 class ClassificationResult:
-""""Represents a classification result with confidence."""""""
+""""Represents a classification result with confidence.
     category: str
     confidence: float
     parent_category: Optional[str] = None
@@ -191,7 +187,7 @@ class ClassificationResult:
 
 @dataclass
 class Taxonomy:
-""""Represents a hierarchical category taxonomy."""""""
+""""Represents a hierarchical category taxonomy.
     name: str
     categories: List[str]
     hierarchy: Dict[str, List[str]] = field(default_factory=dict)  # parent -> children
@@ -201,7 +197,7 @@ class Taxonomy:
 # pylint: disable=too-many-ancestors
 class ClassificationAgent(BaseAgent):
     Agent specializing in classifying text, code, or images into predefined categories.
-    Supports single-label, "multi-"label, and hierarchical classification.""""""""
+    Supports single-label, "multi-"label, and hierarchical classification."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._taxonomies: Dict[str, Taxonomy] = {}

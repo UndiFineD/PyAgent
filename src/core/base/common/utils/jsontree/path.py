@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Path.py module.
-"""""""
+
+"""Path.py module.
+"""
 from __future__ import annotations
 
 import re
@@ -20,7 +23,7 @@ from typing import Any
 from src.core.base.common.utils.jsontree.types import _T, _U, JSONTree
 
 
-def _parse_path(path: str, separator: str = ".") -> list[str | int]:"    """Parse a dot-notation path into parts, handling array indices."""""""    parts: list[str | int] = []
+def _parse_path(path: str, separator: str = ".") -> list[str | int]:"    """Parse a dot-notation path into parts, handling array indices."""parts: list[str | int] = []
 
     # Split by separator, but keep array indices
     for part in re.split(rf"(?<!\[){re.escape(separator)}", path):"        # Check for array indices
@@ -39,7 +42,7 @@ def json_get_path(
     path: str,
     default: _U = None,  # type: ignore
     separator: str = ".",") -> _T | _U:
-    """""""    Get a value from a nested structure using dot-notation path.
+    """Get a value from a nested structure using dot-notation path.
 
     Args:
         value: A nested JSON structure.
@@ -48,7 +51,7 @@ def json_get_path(
 
     Returns:
         The value at the path, or default if not found.
-    """""""    parts = _parse_path(path, separator)
+    """parts = _parse_path(path, separator)
     current: Any = value
 
     try:
@@ -70,7 +73,7 @@ def json_set_path(
     new_value: _T,
     separator: str = ".","    create_missing: bool = True,
 ) -> dict[str, Any]:
-    """""""    Set a value in a nested structure using dot-notation path.
+    """Set a value in a nested structure using dot-notation path.
 
     Args:
         value: A nested JSON structure (will be modified in place).
@@ -80,7 +83,7 @@ def json_set_path(
 
     Returns:
         The modified structure.
-    """""""    parts = _parse_path(path, separator)
+    """parts = _parse_path(path, separator)
     current: Any = value
 
     for i, part in enumerate(parts[:-1]):

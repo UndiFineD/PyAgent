@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Batch Docstring Formatter for PyAgent.
+
+Batch Docstring Formatter for PyAgent.
 Systematically checks and fixes docstring formatting across all Python files.
-"""""""
+
 from __future__ import annotations
 
 import argparse
@@ -24,7 +27,7 @@ from typing import Any, Dict, List
 
 
 class DocstringStandards:
-    """PyAgent docstring formatting standards and validation."""""""
+    """PyAgent docstring formatting standards and validation.
     # Standard format patterns
     MODULE_DOCSTRING_PATTERN = re.compile(
         r'"""[\\s\\S]*?"""\\s*$',  # Module docstring at top of file""""'        re.MULTILINE
@@ -43,7 +46,7 @@ class DocstringStandards:
     FUNCTION_REQUIRED_SECTIONS = ["Args:", "Returns:", "Raises:"]  # For complex functions"    CLASS_REQUIRED_SECTIONS = ["Attributes:"]  # For complex classes"
     @staticmethod
     def validate_google_style_docstring(content: str) -> Dict[str, Any]:
-        """""""        Validates if a docstring follows Google-style formatting.
+                Validates if a docstring follows Google-style formatting.
 
         Args:
             content: The docstring content to validate.
@@ -53,7 +56,7 @@ class DocstringStandards:
             - valid: bool
             - issues: List[str]
             - sections: List[str]
-        """""""        issues = []
+                issues = []
 
         # Check for basic structure
         if not content.strip():
@@ -75,21 +78,21 @@ class DocstringStandards:
             "valid": len(issues) == 0,"            "issues": issues,"            "sections": found_sections"        }
 
     @staticmethod
-    def format_docstring(content: str, style: str = "google") -> str:"        """""""        Formats a docstring according to the specified style.
+    def format_docstring(content: str, style: str = "google") -> str:"                Formats a docstring according to the specified style.
 
         Args:
             content: Raw docstring content.
             style: Documentation style ("google", "numpy", "sphinx")."
         Returns:
             Formatted docstring.
-        """""""        if style == "google":"            return DocstringStandards._format_google_style(content)
+                if style == "google":"            return DocstringStandards._format_google_style(content)
         elif style == "numpy":"            return DocstringStandards._format_numpy_style(content)
         else:
             return content  # Return as-is for unknown styles
 
     @staticmethod
     def _format_google_style(content: str) -> str:
-        """Formats content into Google-style docstring."""""""        lines = content.strip().split('\\n')'        formatted_lines = []
+        """Formats content into Google-style docstring.        lines = content.strip().split('\\n')'        formatted_lines = []
 
         for i, line in enumerate(lines):
             if i == 0:
@@ -104,24 +107,24 @@ class DocstringStandards:
         return '\\n'.join(formatted_lines)'
     @staticmethod
     def _format_numpy_style(content: str) -> str:
-        """Formats content into NumPy-style docstring."""""""        # Basic NumPy formatting - can be enhanced
+        """Formats content into NumPy-style docstring.        # Basic NumPy formatting - can be enhanced
         return content.strip()
 
 
 class DocstringAnalyzer:
-    """Analyzes Python files for docstring issues."""""""
+    """Analyzes Python files for docstring issues.
     def __init__(self, standards: DocstringStandards):
         self.standards = standards
 
     def analyze_file(self, file_path: str) -> Dict[str, Any]:
-        """""""        Analyzes a Python file for docstring issues.
+                Analyzes a Python file for docstring issues.
 
         Args:
             file_path: Path to the Python file to analyze.
 
         Returns:
             Dict containing analysis results.
-        """""""        try:
+                try:
             with open(file_path, 'r', encoding='utf-8') as f:'                content = f.read()
         except Exception as e:
             return {
@@ -159,7 +162,7 @@ class DocstringAnalyzer:
             "file": file_path,"            "issues": issues,"            "tree": tree"        }
 
     def _analyze_function_docstring(self, node: ast.FunctionDef, issues: List[Dict[str, Any]]) -> None:
-        """Analyzes a function's docstring."""""""'        docstring = ast.get_docstring(node)
+        """Analyzes a function's docstring.'        docstring = ast.get_docstring(node)
         if not docstring:
             # Only flag missing docstrings for non-trivial functions
             if len(node.body) > 1 or self._is_complex_function(node):
@@ -171,7 +174,7 @@ class DocstringAnalyzer:
                     "type": "Malformed Function Docstring","                    "message": f"Function '{node.name}' docstring formatting issues: {', '.join(validation['issues'])}","'                    "line": node.lineno,"                    "severity": "low""                })
 
     def _analyze_class_docstring(self, node: ast.ClassDef, issues: List[Dict[str, Any]]) -> None:
-        """Analyzes a class's docstring."""""""'        docstring = ast.get_docstring(node)
+        """Analyzes a class's docstring.'        docstring = ast.get_docstring(node)
         if not docstring:
             # Only flag missing docstrings for non-trivial classes
             if len(node.body) > 1 or any(isinstance(n, ast.FunctionDef) for n in node.body):
@@ -183,7 +186,7 @@ class DocstringAnalyzer:
                     "type": "Malformed Class Docstring","                    "message": f"Class '{node.name}' docstring formatting issues: {', '.join(validation['issues'])}","'                    "line": node.lineno,"                    "severity": "low""                })
 
     def _is_complex_function(self, node: ast.FunctionDef) -> bool:
-        """Determines if a function is complex enough to require a docstring."""""""        # Consider functions complex if they have parameters, are longer than 5 lines, or contain loops/control flow
+        """Determines if a function is complex enough to require a docstring.        # Consider functions complex if they have parameters, are longer than 5 lines, or contain loops/control flow
         has_params = len(node.args.args) > 1  # More than just 'self''        is_long = len(node.body) > 5
         has_control_flow = any(isinstance(n, (ast.If, ast.For, ast.While, ast.Try)) for n in ast.walk(node))
 
@@ -191,12 +194,12 @@ class DocstringAnalyzer:
 
 
 class DocstringFixer:
-    """Fixes docstring issues in Python files."""""""
+    """Fixes docstring issues in Python files.
     def __init__(self, standards: DocstringStandards):
         self.standards = standards
 
     def fix_file(self, file_path: str, issues: List[Dict[str, Any]], dry_run: bool = True) -> Dict[str, Any]:
-        """""""        Attempts to fix docstring issues in a file.
+                Attempts to fix docstring issues in a file.
 
         Args:
             file_path: Path to the file to fix.
@@ -205,7 +208,7 @@ class DocstringFixer:
 
         Returns:
             Dict containing fix results.
-        """""""        fixes_applied = []
+                fixes_applied = []
         fixes_failed = []
 
         try:
@@ -234,7 +237,7 @@ class DocstringFixer:
             "file": file_path,"            "fixes_applied": fixes_applied,"            "fixes_failed": fixes_failed,"            "content_changed": modified_content != content"        }
 
     def _add_module_docstring(self, content: str, file_path: str) -> Dict[str, Any]:
-        """Adds a module docstring to a file."""""""        lines = content.split('\\n')'
+        """Adds a module docstring to a file.        lines = content.split('\\n')'
         # Find the first non-comment, non-empty line
         insert_index = 0
         for i, line in enumerate(lines):
@@ -255,7 +258,7 @@ class DocstringFixer:
             "success": True,"            "content": '\\n'.join(new_lines)"'        }
 
     def _fix_malformed_docstring(self, content: str, issue: Dict[str, Any]) -> Dict[str, Any]:
-        """""""        Attempts to fix a malformed docstring by adding missing closing quotes.
+                Attempts to fix a malformed docstring by adding missing closing quotes.
 
         Args:
             content: File content.
@@ -263,7 +266,7 @@ class DocstringFixer:
 
         Returns:
             Dict with success status and modified content.
-        """""""        lines = content.split('\\n')'        line_num = issue.get("line", 1) - 1  # Convert to 0-based indexing"
+                lines = content.split('\\n')'        line_num = issue.get("line", 1) - 1  # Convert to 0-based indexing"
         # Find the docstring start
         docstring_start = -1
         quote_type = None
@@ -311,7 +314,7 @@ class DocstringFixer:
 
 
 def main():
-    """Main entry point for the docstring batch processor."""""""    parser = argparse.ArgumentParser(description="Batch docstring formatter for PyAgent")"    parser.add_argument("path", help="Path to file or directory to process")"    parser.add_argument("--fix", action="store_true", help="Apply fixes (default is dry run)")"    parser.add_argument("--recursive", "-r", action="store_true", help="Process directories recursively")"    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")"    parser.add_argument("--style", choices=["google", "numpy", "sphinx"], default="google","                        help="Docstring style to enforce (default: google)")"
+    """Main entry point for the docstring batch processor.    parser = argparse.ArgumentParser(description="Batch docstring formatter for PyAgent")"    parser.add_argument("path", help="Path to file or directory to process")"    parser.add_argument("--fix", action="store_true", help="Apply fixes (default is dry run)")"    parser.add_argument("--recursive", "-r", action="store_true", help="Process directories recursively")"    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")"    parser.add_argument("--style", choices=["google", "numpy", "sphinx"], default="google","                        help="Docstring style to enforce (default: google)")"
     args = parser.parse_args()
 
     # Initialize components

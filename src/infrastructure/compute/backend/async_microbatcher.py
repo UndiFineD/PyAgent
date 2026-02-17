@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""AsyncMicrobatcher - Async micro-batching for LLM operations.
+
+AsyncMicrobatcher - Async micro-batching for LLM operations.
 
 Inspired by vLLM's AsyncMicrobatchTokenizer patterns for efficient batching'with configurable batch size and timeout.
 
 Phase 17: vLLM Pattern Integration
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -30,7 +33,7 @@ T = TypeVar("T")  # Input type"R = TypeVar("R")  # Result type"
 
 @dataclass
 class BatchItem(Generic[T, R]):
-    """A single item in a batch with its associated future."""""""
+    """A single item in a batch with its associated future.
     data: T
     future: asyncio.Future[R]
     timestamp: float = field(default_factory=time.time)
@@ -38,7 +41,7 @@ class BatchItem(Generic[T, R]):
 
 @dataclass
 class BatchStats:
-    """Statistics for batching performance."""""""
+    """Statistics for batching performance.
     total_items: int = 0
     total_batches: int = 0
     total_wait_time_ms: float = 0.0
@@ -46,13 +49,13 @@ class BatchStats:
 
     @property
     def avg_batch_size(self) -> float:
-        """Average items per batch."""""""        if self.total_batches == 0:
+        """Average items per batch.        if self.total_batches == 0:
             return 0.0
         return self.total_items / self.total_batches
 
     @property
     def avg_wait_time_ms(self) -> float:
-        """Average wait time per item in milliseconds."""""""        if self.total_items == 0:
+        """Average wait time per item in milliseconds.        if self.total_items == 0:
             return 0.0
         return self.total_wait_time_ms / self.total_items
 
@@ -62,7 +65,7 @@ class BatchStats:
 
 
 class AsyncMicrobatcher(Generic[T, R]):
-    """""""    Async micro-batcher that collects items and processes them in batches.
+        Async micro-batcher that collects items and processes them in batches.
 
     This is useful for batching LLM requests, tokenization, or any operation
     that benefits from batch processing.
@@ -77,21 +80,21 @@ class AsyncMicrobatcher(Generic[T, R]):
         ...     batch_wait_timeout_s=0.002,
         ... )
         >>>
-        >>> # Submit items (they'll be batched automatically)'        >>> result = await batcher.submit("hello")"    """""""
+        >>> # Submit items (they'll be batched automatically)'        >>> result = await batcher.submit("hello")"    
     def __init__(
         self,
         batch_fn: Callable[[list[T]], Awaitable[list[R]]],
         max_batch_size: int = 32,
         batch_wait_timeout_s: float = 0.002,
         name: str = "microbatcher","    ) -> None:
-        """""""        Initialize the micro-batcher.
+                Initialize the micro-batcher.
 
         Args:
             batch_fn: Async function that processes a batch of items
             max_batch_size: Maximum items per batch
             batch_wait_timeout_s: How long to wait for batch to fill (seconds)
             name: Name for logging/debugging
-        """""""        self._batch_fn = batch_fn
+                self._batch_fn = batch_fn
         self._max_batch_size = max_batch_size
         self._batch_wait_timeout_s = batch_wait_timeout_s
         self._name = name
@@ -104,21 +107,21 @@ class AsyncMicrobatcher(Generic[T, R]):
 
     @property
     def stats(self) -> BatchStats:
-        """Get batching statistics."""""""        return self._stats
+        """Get batching statistics.        return self._stats
 
     @property
     def is_running(self) -> bool:
-        """Check if the batcher is running."""""""        return self._running
+        """Check if the batcher is running.        return self._running
 
     async def start(self) -> None:
-        """Start the batch processing loop."""""""        if self._running:
+        """Start the batch processing loop.        if self._running:
             return
 
         self._running = True
         self._task = asyncio.create_task(self._process_loop())
 
     async def stop(self) -> None:
-        """Stop the batch processing loop gracefully."""""""        self._running = False
+        """Stop the batch processing loop gracefully.        self._running = False
         if self._task:
             # Give pending items a chance to complete
             try:
@@ -128,7 +131,7 @@ class AsyncMicrobatcher(Generic[T, R]):
             self._task = None
 
     async def submit(self, item: T) -> R:
-        """""""        Submit an item for batch processing.
+                Submit an item for batch processing.
 
         The item will be batched with other items and processed together.
 
@@ -137,7 +140,7 @@ class AsyncMicrobatcher(Generic[T, R]):
 
         Returns:
             Result from the batch function
-        """""""        if not self._running:
+                if not self._running:
             await self.start()
 
         loop = asyncio.get_running_loop()
@@ -149,18 +152,18 @@ class AsyncMicrobatcher(Generic[T, R]):
         return await future
 
     async def submit_many(self, items: list[T]) -> list[R]:
-        """""""        Submit multiple items for batch processing.
+                Submit multiple items for batch processing.
 
         Args:
             items: Items to process
 
         Returns:
             Results from the batch function
-        """""""        futures = [self.submit(item) for item in items]
+                futures = [self.submit(item) for item in items]
         return await asyncio.gather(*futures)
 
     async def _process_loop(self) -> None:
-        """Main processing loop that collects and processes batches."""""""        while self._running or not self._queue.empty():
+        """Main processing loop that collects and processes batches.        while self._running or not self._queue.empty():
             batch = await self._collect_batch()
 
             if not batch:
@@ -169,7 +172,7 @@ class AsyncMicrobatcher(Generic[T, R]):
             await self._process_batch(batch)
 
     async def _collect_batch(self) -> list[BatchItem[T, R]]:
-        """Collect items into a batch with timeout."""""""        batch: list[BatchItem[T, R]] = []
+        """Collect items into a batch with timeout.        batch: list[BatchItem[T, R]] = []
         deadline = time.time() + self._batch_wait_timeout_s
 
         # Wait for at least one item
@@ -182,7 +185,7 @@ class AsyncMicrobatcher(Generic[T, R]):
         return batch
 
     async def _wait_for_first_item(self, batch: list[BatchItem[T, R]], deadline: float) -> bool:
-        """Wait for the first item in the batch."""""""        try:
+        """Wait for the first item in the batch.        try:
             timeout = self._batch_wait_timeout_s if self._running else 0.1
             item = await asyncio.wait_for(self._queue.get(), timeout=timeout)
             batch.append(item)
@@ -191,7 +194,7 @@ class AsyncMicrobatcher(Generic[T, R]):
             return False
 
     async def _collect_remaining_items(self, batch: list[BatchItem[T, R]], deadline: float) -> None:
-        """Collect remaining items to fill the batch."""""""        while len(batch) < self._max_batch_size:
+        """Collect remaining items to fill the batch.        while len(batch) < self._max_batch_size:
             remaining = deadline - time.time()
             if remaining <= 0:
                 break
@@ -203,7 +206,7 @@ class AsyncMicrobatcher(Generic[T, R]):
                 break
 
     async def _process_batch(self, batch: list[BatchItem[T, R]]) -> None:
-        """Process a batch of items and resolve their futures."""""""        if not batch:
+        """Process a batch of items and resolve their futures.        if not batch:
             return
 
         now = time.time()
@@ -238,10 +241,10 @@ class AsyncMicrobatcher(Generic[T, R]):
 
 
 class SyncMicrobatcher(Generic[T, R]):
-    """""""    Synchronous micro-batcher using a background thread.
+        Synchronous micro-batcher using a background thread.
 
     For use in synchronous code that needs batching.
-    """""""
+    
     def __init__(
         self,
         batch_fn: Callable[[list[T]], list[R]],
@@ -264,7 +267,7 @@ class SyncMicrobatcher(Generic[T, R]):
         return self._stats
 
     def start(self) -> None:
-        """Start the batch processing thread."""""""        if self._running:
+        """Start the batch processing thread.        if self._running:
             return
 
         self._running = True
@@ -272,13 +275,13 @@ class SyncMicrobatcher(Generic[T, R]):
         self._thread.start()
 
     def stop(self) -> None:
-        """Stop the batch processing thread."""""""        self._running = False
+        """Stop the batch processing thread.        self._running = False
         if self._thread:
             self._thread.join(timeout=1.0)
             self._thread = None
 
     def submit(self, item: T) -> R:
-        """Submit an item for batch processing (blocking)."""""""        if not self._running:
+        """Submit an item for batch processing (blocking).        if not self._running:
             self.start()
 
         event = threading.Event()
@@ -293,13 +296,13 @@ class SyncMicrobatcher(Generic[T, R]):
         return result_holder[0]
 
     def _process_loop(self) -> None:
-        """Main processing loop."""""""        while self._running or not self._queue.empty():
+        """Main processing loop.        while self._running or not self._queue.empty():
             batch = self._collect_batch()
             if batch:
                 self._process_batch(batch)
 
     def _collect_batch(self) -> list[tuple[T, threading.Event, list]]:
-        """Collect items into a batch."""""""        batch = []
+        """Collect items into a batch.        batch = []
         deadline = time.time() + self._batch_wait_timeout_s
 
         try:
@@ -321,7 +324,7 @@ class SyncMicrobatcher(Generic[T, R]):
         return batch
 
     def _process_batch(self, batch: list[tuple[T, threading.Event, list]]) -> None:
-        """Process a batch."""""""        if not batch:
+        """Process a batch.        if not batch:
             return
 
         self._update_stats(batch)

@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Phase 45: P2C Load Balancer
+
+Phase 45: P2C Load Balancer
 Power of Two Choices algorithm for engine client selection.
-"""""""
+
 from __future__ import annotations
 
 import random
@@ -26,7 +29,7 @@ if TYPE_CHECKING:
 
 
 class P2CLoadBalancer:
-    """""""    Power of Two Choices load balancer.
+        Power of Two Choices load balancer.
 
     vLLM Pattern: DPLBAsyncMPClient worker selection
 
@@ -34,14 +37,14 @@ class P2CLoadBalancer:
     1. Randomly sample 2 workers
     2. Select the one with fewer pending requests
     3. Tie-break by latency
-    """""""
+    
     def __init__(self, workers: list[WorkerInfo], sample_size: int = 2) -> None:
         self.workers = workers
         self.sample_size = min(sample_size, len(workers))
         self._lock = threading.Lock()
 
     def select_worker(self) -> WorkerInfo:
-        """Select best worker using P2C algorithm."""""""        with self._lock:
+        """Select best worker using P2C algorithm.        with self._lock:
             # Filter healthy workers
             healthy = [w for w in self.workers if w.state in (WorkerState.HEALTHY, WorkerState.DEGRADED)]
 
@@ -61,7 +64,7 @@ class P2CLoadBalancer:
             return best
 
     def update_worker(self, worker_id: int, pending_delta: int = 0, latency_ms: Optional[float] = None) -> None:
-        """Update worker statistics."""""""        with self._lock:
+        """Update worker statistics.        with self._lock:
             for worker in self.workers:
                 if worker.worker_id == worker_id:
                     worker.pending_requests = max(0, worker.pending_requests + pending_delta)

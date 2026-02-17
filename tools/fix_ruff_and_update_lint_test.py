@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """Normalize lint results, run `ruff --fix` on files with `ruff` entries,
 update `mypy` and `flake8` for changed files, and remove fully-fixed files
 from the results.

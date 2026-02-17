@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Predictive Workspace Manager (Phase 58).
+
+Predictive Workspace Manager (Phase 58).
 Predicts upcoming batch memory requirements and pre-allocates resources.
-"""""""
+
 import logging
 import time
 from collections import deque
@@ -24,9 +27,9 @@ logger = logging.getLogger(__name__)
 
 
 class PredictiveWorkspace:
-    """""""    Analyzes historical allocation patterns to pre-warm memory buffers.
+        Analyzes historical allocation patterns to pre-warm memory buffers.
     Reduces allocation latency in high-throughput streaming scenarios.
-    """""""
+    
     def __init__(self, workspace_manager: Any, window_size: int = 50) -> None:
         self.workspace = workspace_manager
         self.history = deque(maxlen=window_size)
@@ -38,12 +41,12 @@ class PredictiveWorkspace:
         self.cache_misses = 0
 
     def record_allocation(self, size: int) -> None:
-        """Records a successful allocation to refine future predictions."""""""        self.history.append(size)
+        """Records a successful allocation to refine future predictions.        self.history.append(size)
 
     def predict_next_batch_requirement(self) -> int:
-        """""""        Predicts the memory required for the next inference wave.
+                Predicts the memory required for the next inference wave.
         Uses a weighted moving average of the last N allocations.
-        """""""        if not self.history:
+                if not self.history:
             return 0
 
         # Weighted average favors recent requests
@@ -52,8 +55,8 @@ class PredictiveWorkspace:
         return int(avg_size * self.prediction_margin)
 
     async def pre_warm_buffers(self, sizes: List[int]) -> None:
-        """""""        Pre-allocates buffers of specific sizes into the warm pool.
-        """""""        for size in sizes:
+                Pre-allocates buffers of specific sizes into the warm pool.
+                for size in sizes:
             name = f"prewarm_{size}_{time.time_ns()}""            buf = self.workspace.allocate_dbo(name, size)
             if buf:
                 if size not in self.pre_allocated_buffers:
@@ -61,9 +64,9 @@ class PredictiveWorkspace:
                 self.pre_allocated_buffers[size].append(buf)
                 logger.debug(f"Pre-warmed buffer of size {size}")"
     def get_buffered_allocation(self, size: int) -> Optional[memoryview]:
-        """""""        Tries to retrieve a pre-allocated buffer of the requested size.
+                Tries to retrieve a pre-allocated buffer of the requested size.
         Exact match for Phase 58, fuzzy match for Phase 59.
-        """""""        # Simple exact match for now
+                # Simple exact match for now
         if size in self.pre_allocated_buffers and self.pre_allocated_buffers[size]:
             self.cache_hits += 1
             return self.pre_allocated_buffers[size].pop(0)
@@ -72,7 +75,7 @@ class PredictiveWorkspace:
         return None
 
     def analyze_patterns(self) -> Dict[str, Any]:
-        """Analyzes recent traffic to identify recurring batch sizes."""""""        if not self.history:
+        """Analyzes recent traffic to identify recurring batch sizes.        if not self.history:
             return {}
 
         # Count frequency of sizes (binned to nearest 1KB)

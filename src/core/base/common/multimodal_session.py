@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Multimodal session management."""""""
+
+"""Multimodal session management."""
 import time
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
@@ -22,9 +25,9 @@ if TYPE_CHECKING:
 
 
 class MultimodalStreamSession:
-    """""""    High-level manager for a single multimodal interaction session.
+    """High-level manager for a single multimodal interaction session.
     Orchestrates live input processing and compressed output generation.
-    """""""
+    """
     def __init__(self, core: "MultimodalCore") -> None:"        self.core = core
         self.audio_proc = StreamingAudioProcessor()
         self.vision_enc = StreamingVisionEncoder()
@@ -35,20 +38,20 @@ class MultimodalStreamSession:
         self.modificators: List[Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]]] = []
 
     def add_modificator(self, mod: Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]]) -> None:
-        """Add a hook to modify fragments before they reach the channel filter."""""""        self.modificators.append(mod)
+        """Add a hook to modify fragments before they reach the channel filter."""self.modificators.append(mod)
 
     def process_120fps_pulse(self, audio: bytes, video: bytes, text: str) -> bytes:
-        """""""        Specialized 120fps pulse handler for Phase 51 Multimedia & Attention.
+        """Specialized 120fps pulse handler for Phase 51 Multimedia & Attention.
         Muxes separate modalities and prepares for hardware-accelerated delivery.
-        """""""        packet = self.core.mux_dvd_channels(audio, video, text)
+        """packet = self.core.mux_dvd_channels(audio, video, text)
         return packet
 
     def process_input_frame(
         self, audio: List[float], image: Optional[bytes] = None, width: int = 640, height: int = 480
     ) -> Dict[str, Any]:
-        """""""        Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame).
+        """Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame).
         Includes smart dynamic focus and adaptive bandwidth.
-        """""""        # Update temporal memory
+        """# Update temporal memory
         timestamp = time.time()
 
         if image:
@@ -83,12 +86,12 @@ class MultimodalStreamSession:
         return result
 
     def set_output_channel(self, modality: str, channel_id: str) -> None:
-        """Switch the tracked channel (e.g. swap audio to 'FR')."""""""'        self.channels[modality] = channel_id
+        """Switch the tracked channel (e.g. swap audio to 'FR')."""'        self.channels[modality] = channel_id
 
     def filter_response(self, raw_stream: str) -> List[Dict[str, Any]]:
-        """""""        Parses an LLM response chunk and filters it according to current DVD-style channels.
+        """Parses an LLM response chunk and filters it according to current DVD-style channels.
         Example: Hides <Thought> tags if directed.
-        """""""        fragments = self.core.parse_stream(raw_stream)
+        """fragments = self.core.parse_stream(raw_stream)
 
         # Feedback loop for channel modifications
         # Allows modifications to "feed back" into the parsing logic"        # before the final channel selector (filter) is applied.
@@ -110,7 +113,7 @@ class MultimodalStreamSession:
         return filtered
 
     def _reparse_if_needed(self, fragments: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Scans for text fragments that might contain newly injected tags."""""""        new_list = []
+        """Scans for text fragments that might contain newly injected tags."""new_list = []
         for f in fragments:
             if (
                 f["type"] == "text""                and isinstance(f.get("content"), str)"                and "<" in f["content"]"                and ">" in f["content"]"            ):
@@ -120,7 +123,7 @@ class MultimodalStreamSession:
         return new_list
 
     def get_compressed_video_stream(self, frames: List[bytes]) -> List[Any]:
-        """Use the Rust acceleration to generate a stream of visual deltas."""""""        stream = []
+        """Use the Rust acceleration to generate a stream of visual deltas."""stream = []
         if not frames:
             return stream
 

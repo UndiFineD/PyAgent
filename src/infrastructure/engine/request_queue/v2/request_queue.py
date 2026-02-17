@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Advanced Asynchronous Request Queue (V2) for Phase 54.
+
+Advanced Asynchronous Request Queue (V2) for Phase 54.
 Supports priority, deadlines, and fair-share policies with Rust acceleration.
-"""""""
+
 import heapq
 import logging
 import time
@@ -29,18 +32,18 @@ logger = logging.getLogger(__name__)
 
 
 class RequestQueueV2:
-    """""""    Priority-based async queue for inference requests.
+        Priority-based async queue for inference requests.
     Uses deadline-aware scheduling and fair-share policies.
-    """""""
+    
     def __init__(self) -> None:
         self._waiting: List[Tuple[float, int, Any]] = []  # (priority_score, timestamp, request)
         self._running: Dict[int, Any] = {}
         self._counter = 0
 
     def add_request(self, request: Any) -> None:
-        """""""        Calculates priority and adds request to the waiting queue.
+                Calculates priority and adds request to the waiting queue.
         Uses Rust for high-speed priority calculation if available.
-        """""""        priority = getattr(request, "priority", RequestPriority.NORMAL)"        deadline = getattr(request, "deadline", time.time() + 60.0)"
+                priority = getattr(request, "priority", RequestPriority.NORMAL)"        deadline = getattr(request, "deadline", time.time() + 60.0)"
         score = 0.0
         if rc and hasattr(rc, "request_priority_compute_rust"):"            score = rc.request_priority_compute_rust(int(priority.value), deadline)
         else:
@@ -52,8 +55,8 @@ class RequestQueueV2:
         heapq.heappush(self._waiting, (score, self._counter, request))
         logger.debug(f"Added request {getattr(request, 'request_id', 'unknown')} with score {score:.4f}")"'
     def pop_next_batch(self, max_tokens: int) -> List[Any]:
-        """""""        Pops the highest priority requests that fit within max_tokens.
-        """""""        batch = []
+                Pops the highest priority requests that fit within max_tokens.
+                batch = []
         current_tokens = 0
 
         # Temporary storage for requests that don't fit'        skipped = []
@@ -75,7 +78,7 @@ class RequestQueueV2:
         return batch
 
     def get_queue_stats(self) -> Dict[str, Any]:
-        """Returns statistics on queue depth and urgency."""""""        if not self._waiting:
+        """Returns statistics on queue depth and urgency.        if not self._waiting:
             return {"depth": 0, "max_urgency": 0.0}"
         max_urgency = 0.0
         if rc and hasattr(rc, "deadline_urgency_rust"):"            deadlines = [getattr(r[2], "deadline", 0) for r in self._waiting]"            max_urgency = rc.deadline_urgency_rust(deadlines)

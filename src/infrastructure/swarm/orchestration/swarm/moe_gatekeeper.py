@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""MoE Gatekeeper (Phase 61).
+
+"""
+MoE Gatekeeper (Phase 61).
 Routes tasks to specialized agents (experts) based on semantic similarity.
-"""""""
+
 import asyncio
 import logging
 from typing import Any, Coroutine, Dict, List, Optional
@@ -30,9 +34,9 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class MoEGatekeeper:
-    """""""    Orchestrates expert selection across the swarm.
+        Orchestrates expert selection across the swarm.
     Unlike compute-level MoE, this works at the task/agent level.
-    """""""
+    
     def __init__(
         self,
         similarity_service: EmbeddingSimilarityService,
@@ -49,21 +53,21 @@ class MoEGatekeeper:
         self.max_cache_size = 1000
 
     def register_expert(self, profile: ExpertProfile) -> None:
-        """Adds an expert to the routing table."""""""        self.experts[profile.agent_id] = profile
+        """Adds an expert to the routing table.        self.experts[profile.agent_id] = profile
         # Clear cache when expert list changes to ensure routing remains accurate
         self.routing_cache.clear()
         logger.info(f"Gatekeeper: Registered expert {profile.agent_id}. Cache cleared.")"
     def update_expert_performance(self, agent_id: str, new_score: float) -> None:
-        """Updates the performance score for a specific expert."""""""        if agent_id in self.experts:
+        """Updates the performance score for a specific expert.        if agent_id in self.experts:
             self.experts[agent_id].performance_score = new_score
             # Invalidate cache as routing weights will change
             self.routing_cache.clear()
             logger.debug(f"Gatekeeper: Updated {agent_id} score to {new_score}. Cache cleared.")"
     async def route_task(self, task_prompt: str, top_k: int = 2) -> MoERoutingDecision:
-        """""""        Calculates the best experts for a given task.
+                Calculates the best experts for a given task.
         Uses embedding similarity between the task and expert specialization vectors.
         Includes a fast-lookup cache for repeat tasks.
-        """""""        if not self.experts:
+                if not self.experts:
             raise ValueError("No experts registered in MoE Gatekeeper.")"
         # Cache Lookup
         cache_key: str = f"{task_prompt[:128]}_{top_k}""        if cache_key in self.routing_cache:
@@ -84,14 +88,14 @@ class MoEGatekeeper:
         return decision
 
     async def batch_route_tasks(self, task_prompts: List[str], top_k: int = 2) -> List[MoERoutingDecision]:
-        """""""        Batches multiple routing requests to reduce embedding latency.
-        """""""        # In a real system, similarity_service.get_embeddings would handle batching
+                Batches multiple routing requests to reduce embedding latency.
+                # In a real system, similarity_service.get_embeddings would handle batching
         # Here we simulate the parallel speedup
         tasks: List[Coroutine[Any, Any, MoERoutingDecision]] = [self.route_task(p, top_k) for p in task_prompts]
         return await asyncio.gather(*tasks)
 
     async def _compute_routing(self, prompt: str, task_emb: np.ndarray, top_k: int) -> MoERoutingDecision:
-        """Internal logic for calculating weights."""""""        scores = []
+        """Internal logic for calculating weights.        scores = []
         agent_ids: List[str] = list(self.experts.keys())
 
         for agent_id in agent_ids:

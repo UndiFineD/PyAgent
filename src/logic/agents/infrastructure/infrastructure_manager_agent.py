@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Infrastructure Manager Agent - Proxmox & HomeAssistant orchestration
+# Infrastructure Manager Agent - Proxmox & HomeAssistant orchestration
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -33,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
 Provides tools for remote system administration and automated environment scaling.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -48,7 +50,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
-""""Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""""""
+""""Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -60,7 +62,7 @@ class InfrastructureManagerAgent(BaseAgent):
             host: Proxmox host IP or domain.
             _token_id: API Token ID.
             _secret: API Secret.
-"""""""        logging.info(fINFRA: Listing ProxMox VMs" on {host}")"        # Simulation of Proxmox API call
+        logging.info(fINFRA: Listing ProxMox VMs" on {host}")"        # Simulation of Proxmox API call
 #         # url = fhttps://{host}:8006/api2/json/nodes
         # headers = {"Authorization": fPVEAPIToken={_token_id}={_secret}"}"
         return (
@@ -71,13 +73,13 @@ class InfrastructureManagerAgent(BaseAgent):
         "Controls a HomeAssistant device (light," switch, etc.)."        Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').'            action: 'turn_on', 'turn_off', 'toggle'.'            api_url: HA Base URL.
             _token: Long-lived access token.
-"""""""        logging.info(fINFRA: HomeAssistant {action}" for {entity_id}")"        # Simulation of HA REST API call
+        logging.info(fINFRA: HomeAssistant {action}" for {entity_id}")"        # Simulation of HA REST API call
 #         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}"'        # headers = {"Authorization": fBearer {_token}"}"
 #         return fSuccessfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}.
 
     @as_tool
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
-""""Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""""""        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
+""""Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP.        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
         return {
             "server": server_ip,"            "cpu_usage": "15%","            "ram_free": "8.2GB","            "disk_status": "Healthy","            "uptime": "14 days, 3 hours","        }
 
@@ -89,7 +91,7 @@ class InfrastructureManagerAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(InfrastructureManagerAgent, "Infra" Manager", "Infra logs")"    main()
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -104,7 +106,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
-""""Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""""""
+""""Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -116,7 +118,7 @@ class InfrastructureManagerAgent(BaseAgent):
             host: Proxmox host IP or domain.
             _token_id: API Token ID.
             _secret: API Secret.
-"""""""        logging.info(fINFRA: Listing ProxMox VMs on {host}")"        # Simulation of Proxmox API call
+        logging.info(fINFRA: Listing ProxMox VMs on {host}")"        # Simulation of Proxmox API call
 #         # url = fhttps://{host}:8006/api2/json/nodes
         # headers = {"Authorization": fPVEAPIToken={_token_id}={_secret}"}"
         return (
@@ -127,13 +129,13 @@ class InfrastructureManagerAgent(BaseAgent):
         "Controls a HomeAssistant device (light, switch, etc.)."        Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').'            action: 'turn_on', 'turn_off', 'toggle'.'            api_url: HA Base URL.
             _token: Long-lived access token.
-"""""""        logging.info(fINFRA": HomeAssistant {action} for {entity_id}")"        # Simulation of HA REST API call
+        logging.info(fINFRA": HomeAssistant {action} for {entity_id}")"        # Simulation of HA REST API call
 #         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}"'        # headers = {"Authorization": fBearer {_token}"}"
 #         return fSuccessfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}.
 
     @as_tool
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
-""""Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""""""        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
+""""Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP.        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
         return {
             "server": server_ip,"            "cpu_usage": "15%","            "ram_free": "8.2GB","            "disk_status": "Healthy","            "uptime": "14 days, 3 hours","        }
 

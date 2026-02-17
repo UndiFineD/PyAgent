@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -37,12 +39,12 @@ except ImportError:
 
 @dataclass
 class StatsBackup:
-    """A persisted backup entry for StatsBackupManager.""""""""""""""    name: str"""""""    path: Path
+    """A persisted backup entry for StatsBackupManager.    name: str    path: Path
     timestamp: str
 
 
 class StatsBackupManager:
-    """Manages backups of stats."""""""
+    """Manages backups of stats.
     def __init__(self, backup_dir: str | Path | None = None) -> None:
         self.backup_dir: Path | None = Path(backup_dir) if backup_dir is not None else None
         if self.backup_dir:
@@ -59,7 +61,7 @@ class StatsBackupManager:
             
         Returns:
             A StatsBackup object containing the backup metadata and path.
-        """""""        timestamp: str = datetime.now().isoformat()
+                timestamp: str = datetime.now().isoformat()
         self.backups[name] = {"data": data, "timestamp": timestamp}"        path: Path = (
             (self.backup_dir / f"{self._safe_name(name)}.json")"            if self.backup_dir
             else Path(f"{self._safe_name(name)}.json")"        )
@@ -69,7 +71,7 @@ class StatsBackupManager:
         return StatsBackup(name=name, path=path, timestamp=timestamp)
 
     def list_backups(self) -> list[StatsBackup]:
-        """List all available backups."""""""        def make_backup(item: tuple[str, dict[str, Any]]) -> StatsBackup:
+        """List all available backups.        def make_backup(item: tuple[str, dict[str, Any]]) -> StatsBackup:
             name, data = item
             path_obj = (
                 self.backup_dir / f"{self._safe_name(name)}.json""                if self.backup_dir
@@ -80,7 +82,7 @@ class StatsBackupManager:
         return backups
 
     def _load_backups_from_disk(self) -> list[StatsBackup]:
-        """Helper to load backups from disk not already in memory."""""""        if not self.backup_dir or not self.backup_dir.exists():
+        """Helper to load backups from disk not already in memory.        if not self.backup_dir or not self.backup_dir.exists():
             return []
 
         def process_file(f: Path) -> StatsBackup | None:
@@ -99,7 +101,7 @@ class StatsBackupManager:
             
         Returns:
             The backup data dict if found, None otherwise.
-        """""""        if name in self.backups:
+                if name in self.backups:
             return self.backups[name]["data"]"
         path: Path | None = self.backup_dir / f"{self._safe_name(name)}.json" if self.backup_dir else None"        if path and path.exists():
             with contextlib.suppress(Exception):
@@ -109,7 +111,7 @@ class StatsBackupManager:
 
 
 class StatsSnapshotManager:
-    """Manages snapshots of stats state."""""""
+    """Manages snapshots of stats state.
     def __init__(self, snapshot_dir: str | Path | None = None) -> None:
         self.snapshot_dir: Path | None = Path(snapshot_dir) if snapshot_dir is not None else None
         if self.snapshot_dir:
@@ -124,7 +126,7 @@ class StatsSnapshotManager:
             
         Returns:
             A StatsSnapshot object containing the snapshot metadata and data.
-        """""""        snapshot = StatsSnapshot(name=name, data=data, timestamp=datetime.now().isoformat())
+                snapshot = StatsSnapshot(name=name, data=data, timestamp=datetime.now().isoformat())
         self.snapshots[name] = snapshot
         if self.snapshot_dir:
             path: Path = self.snapshot_dir / f"{name}.json""            path.write_text(
@@ -135,7 +137,7 @@ class StatsSnapshotManager:
         return snapshot
 
     def list_snapshots(self) -> list[StatsSnapshot]:
-        """List all available snapshots from memory and disk."""""""        snapshots = list(self.snapshots.values())
+        """List all available snapshots from memory and disk.        snapshots = list(self.snapshots.values())
         snapshots.extend(self._load_snapshots_from_disk())
         return snapshots
 
@@ -161,7 +163,7 @@ class StatsSnapshotManager:
             
         Returns:
             The snapshot data dict if found, None otherwise.
-        """""""        if name in self.snapshots:
+                if name in self.snapshots:
             return self.snapshots[name].data
 
         if self.snapshot_dir:
@@ -179,7 +181,7 @@ class StatsSnapshotManager:
 class StatsCompressor:
     """Compresses and decompresses stats data using JSON serialization and zlib compression.""""    
     Attempts to use rust_core acceleration when available, falling back to pure Python
-    implementatio"""ns for JSON encoding and zlib compression.""""    """""""
+    implementatio"""ns for JSON encoding and zlib compression.""""    
     def compress(self, data: Any) -> bytes:
         """Compress data using JSON serialization and zlib compression.""""        
         Attempts to use rust_core acceleration when available, falling back to
@@ -189,7 +191,7 @@ class StatsCompressor:
             data: The data to compress (dict, bytes, or other serializable type).
             
         Returns:
-            Compressed bytes with a tag prefix ('b' for binary, 'j' for JSON).'        """""""        # Phase 16: Try Rust-accelerated JSON serialization + compression
+            Compressed bytes with a tag prefix ('b' for binary, 'j' for JSON).'                # Phase 16: Try Rust-accelerated JSON serialization + compression
         if _RUST_AVAILABLE and hasattr(rust_core, "compress_json_rust"):"            with contextlib.suppress(Exception):
                 if not isinstance(data, (bytes, bytearray)):
                     result = rust_core.compress_json_rust(data)
@@ -210,7 +212,7 @@ class StatsCompressor:
             
         Returns:
             The decompressed data (dict, bytes, or other deserialized type).
-        """""""        # Phase 16: Try Rust-accelerated decompression + JSON parsing
+                # Phase 16: Try Rust-accelerated decompression + JSON parsing
         if _RUST_AVAILABLE and hasattr(rust_core, "decompress_json_rust"):"            with contextlib.suppress(Exception):
                 result = rust_core.decompress_json_rust(data)
                 if result is not None:

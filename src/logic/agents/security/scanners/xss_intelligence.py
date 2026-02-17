@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -20,8 +22,8 @@ from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 class XssIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Refactored XSS detection logic from various external tools (AutoRecon-XSS, etc)."""""""#     Focuses on reflected XSS by verifying payload reflection in responses.
-"""""""
+"""Refactored XSS detection logic from various external tools (AutoRecon-XSS, etc).#     Focuses on reflected XSS by verifying payload reflection in responses.
+
     DEFAULT_PAYLOADS = [
         "<script>alert(1)</script>","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#         '"><script>alert(1)</script>',"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
@@ -31,9 +33,9 @@ class XssIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def verify_reflection(cls, url: str, payloads: Optional[List[str]] = None) -> List[str]:"""""""""""        Injects payloads into URL parameters and checks if they are reflected in the response.
+"""     async def verify_reflection(cls, url: str, payloads: Optional[List[str]] = None) -> List[str]:""""        Injects payloads into URL parameters and checks if they are reflected in the response.
         Inspired by AutoRecon-XSS and qsreplace workflows.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 #         if not "payloads:"  # [BATCHFIX] closed string"            payloads = cls.DEFAULT_PAYLOADS
 
         parsed = urlparse(url)
@@ -72,9 +74,9 @@ class XssIntelligence:
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def scan_dom_xss(cls, url: str) -> List[str]:"""""""""""# [BATCHFIX] Commented metadata/non-Python
+"""     async def scan_dom_xss(cls, url: str) -> List[str]:""""# [BATCHFIX] Commented metadata/non-Python
 #         Heuristic scan for DOM-based XSS by looking for dangerous "sinks in JS."  # [BATCHFIX] closed string"        Logic adapted from various DOM XSS scripts.
-"""""""        # Patterns for dangerous sinks and sources
+        # Patterns for dangerous sinks and sources
         SINKS = re.compile(r"(eval|setTimeout|setInterval|innerHTML|outerHTML|document\\.write|docment\\.writeln)\\\\s*\(")"        SOURCES = re.compile(r"(location\\.(search|hash|href|pathname)|document\\.(URL|referrer|cookie)|window\\.name)")"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python

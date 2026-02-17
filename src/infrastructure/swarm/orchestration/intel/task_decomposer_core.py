@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -28,7 +30,7 @@ __version__ = VERSION
 
 @dataclass
 class PlanStep:
-    """Represents a single step in a decomposed task plan."""""""
+    """Represents a single step in a decomposed task plan.
     agent: str
     action: str
     args: list[Any] = field(default_factory=list)
@@ -36,13 +38,13 @@ class PlanStep:
 
 
 class TaskDecomposerCore:
-    """""""    Pure logic for task decomposition.
+        Pure logic for task decomposition.
     Handles heuristic-based planning and plan summarization.
-    """""""
+    
     def generate_plan(self, request: str) -> list[dict[str, Any]]:
-        """""""        Core planning logic.
+                Core planning logic.
         Uses expanded heuristics and dependency analysis (Phase 119).
-        """""""        if rc:
+                if rc:
             try:
                 # Use Rust implementation for high-speed heuristic planning
                 return rc.generate_heuristic_plan(request)  # type: ignore[attr-defined]
@@ -89,9 +91,9 @@ class TaskDecomposerCore:
         return [self._to_dict(s) for s in steps]
 
     def _to_dict(self, step: PlanStep) -> dict[str, Any]:
-        """Helper to convert PlanStep dataclass to dict."""""""        return {
+        """Helper to convert PlanStep dataclass to dict.        return {
             "agent": step.agent,"            "action": step.action,"            "args": step.args,"            "metadata": step.metadata,"        }
 
     def summarize_plan(self, steps: list[dict[str, Any]]) -> str:
-        """Core summary logic."""""""        summary_lines = ["# 📋 Task Execution Plan"]"        for i, step in enumerate(steps):
+        """Core summary logic.        summary_lines = ["# 📋 Task Execution Plan"]"        for i, step in enumerate(steps):
             meta = step.get("metadata", {})"            pri = meta.get("priority", 5)"            summary_lines.append(f"{i + 1}. **{step.get('agent')}** :: `{step.get('action')}` (P{pri})")"'        return "\\n".join(summary_lines)"

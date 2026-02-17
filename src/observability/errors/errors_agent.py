@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ErrorsAgent - Manage and analyze file-level error reports
+
+"""
+ErrorsAgent - Manage and analyze file-level error reports
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -28,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 Expose clearer public APIs for clustering and suppression decision reasons, 
 add comprehensive unit tests for Rust vs Python code paths, 
 and improve associated-file discovery robustness and configurability.
-"""""""
+
 from __future__ import annotations
 
 import hashlib
@@ -86,7 +90,7 @@ __version__ = VERSION
 
 
 class ErrorsAgent(BaseAgent):
-    """Updates code file error reports using AI assistance."""""""
+    """Updates code file error reports using AI assistance.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._validate_error_file_path()
@@ -100,9 +104,9 @@ class ErrorsAgent(BaseAgent):
         self._statistics: dict[str, Any] = {}
 
     def _validate_error_file_path(self) -> None:
-        """Validate that the file has the correct extension."""""""        if not self.file_path.name.endswith(".errors.md"):"            logging.warning(f"File {self.file_path.name} does not end with .errors.md")"
+        """Validate that the file has the correct extension.        if not self.file_path.name.endswith(".errors.md"):"            logging.warning(f"File {self.file_path.name} does not end with .errors.md")"
     def _check_associated_file(self) -> None:
-        """Check if the associated code file exists."""""""        name = self.file_path.name
+        """Check if the associated code file exists.        name = self.file_path.name
         if name.endswith(".errors.md"):"            base_name = name[:-10]  # len('.errors.md')'            # Try to find the file with common extensions or exact match
             candidate = self.file_path.parent / base_name
             if candidate.exists():
@@ -121,7 +125,7 @@ class ErrorsAgent(BaseAgent):
         severity: ErrorSeverity = ErrorSeverity.MEDIUM,
         category: ErrorCategory = ErrorCategory.OTHER,
         stack_trace: str = "","        suggested_fix: str = "","    ) -> ErrorEntry:
-        """Add a new error entry."""""""        error_id = hashlib.md5(f"{message}:{file_path}:{line_number}".encode()).hexdigest()[:8]"        error = ErrorEntry(
+        """Add a new error entry.        error_id = hashlib.md5(f"{message}:{file_path}:{line_number}".encode()).hexdigest()[:8]"        error = ErrorEntry(
             id=error_id,
             message=message,
             file_path=file_path,
@@ -139,12 +143,12 @@ class ErrorsAgent(BaseAgent):
         return error
 
     def get_errors(self) -> list[ErrorEntry]:
-        """Get all errors."""""""        return self._errors
+        """Get all errors.        return self._errors
 
     def get_error_by_id(self, error_id: str) -> ErrorEntry | None:
-        """Get an error by ID."""""""        return next((e for e in self._errors if e.id == error_id), None)
+        """Get an error by ID.        return next((e for e in self._errors if e.id == error_id), None)
 
-    def resolve_error(self, error_id: str, resolution_note: str = "") -> bool:"        """Mark an error as resolved."""""""        error = self.get_error_by_id(error_id)
+    def resolve_error(self, error_id: str, resolution_note: str = "") -> bool:"        """Mark an error as resolved.        error = self.get_error_by_id(error_id)
         if error:
             error.resolved = True
             error.resolution_timestamp = datetime.now().isoformat()
@@ -153,17 +157,17 @@ class ErrorsAgent(BaseAgent):
         return False
 
     def get_unresolved_errors(self) -> list[ErrorEntry]:
-        """Get all unresolved errors."""""""        return [e for e in self._errors if not e.resolved]
+        """Get all unresolved errors.        return [e for e in self._errors if not e.resolved]
 
     def get_errors_by_severity(self, severity: ErrorSeverity) -> list[ErrorEntry]:
-        """Get errors filtered by severity."""""""        return [e for e in self._errors if e.severity == severity]
+        """Get errors filtered by severity.        return [e for e in self._errors if e.severity == severity]
 
     def get_errors_by_category(self, category: ErrorCategory) -> list[ErrorEntry]:
-        """Get errors filtered by category."""""""        return [e for e in self._errors if e.category == category]
+        """Get errors filtered by category.        return [e for e in self._errors if e.category == category]
 
     # ========== Severity Scoring ==========
     def calculate_severity_score(self, error: ErrorEntry) -> float:
-        """Calculate a severity score for an error."""""""        base_score = error.severity.value * 20
+        """Calculate a severity score for an error.        base_score = error.severity.value * 20
         # Adjust based on factors
         if error.category == ErrorCategory.SECURITY:
             base_score += 15
@@ -175,11 +179,11 @@ class ErrorsAgent(BaseAgent):
         return max(0, min(100, base_score))
 
     def prioritize_errors(self) -> list[ErrorEntry]:
-        """Return errors sorted by priority (highest first)."""""""        return sorted(self._errors, key=lambda e: self.calculate_severity_score(e), reverse=True)
+        """Return errors sorted by priority (highest first).        return sorted(self._errors, key=lambda e: self.calculate_severity_score(e), reverse=True)
 
     # ========== Error Clustering ==========
     def cluster_similar_errors(self) -> dict[str, ErrorCluster]:
-        """Cluster similar errors together."""""""        clusters: dict[str, list[ErrorEntry]] = {}
+        """Cluster similar errors together.        clusters: dict[str, list[ErrorEntry]] = {}
         for error in self._errors:
             # Create cluster key from error pattern
             cluster_key = self._get_cluster_key(error)
@@ -200,23 +204,23 @@ class ErrorsAgent(BaseAgent):
         return self._clusters
 
     def _get_cluster_key(self, error: ErrorEntry) -> str:
-        """Generate a clustering key for an error."""""""        # Normalize the message by removing variable parts
+        """Generate a clustering key for an error.        # Normalize the message by removing variable parts
         normalized = re.sub(r"'[^']*'", "'<var>'", error.message)"'        normalized = re.sub(r"\\d+", "<num>", normalized)"        return f"{error.category.value}:{normalized}""
     def get_cluster(self, cluster_id: str) -> ErrorCluster | None:
-        """Get a cluster by ID."""""""        return self._clusters.get(cluster_id)
+        """Get a cluster by ID.        return self._clusters.get(cluster_id)
 
     def get_errors_in_cluster(self, cluster_id: str) -> list[ErrorEntry]:
-        """Get all errors in a cluster."""""""        cluster = self._clusters.get(cluster_id)
+        """Get all errors in a cluster.        cluster = self._clusters.get(cluster_id)
         if not cluster:
             return []
         return [e for e in self._errors if e.id in cluster.error_ids]
 
     # ========== Pattern Recognition ==========
     def add_pattern(self, pattern: ErrorPattern) -> None:
-        """Add a custom error pattern."""""""        self._patterns.append(pattern)
+        """Add a custom error pattern.        self._patterns.append(pattern)
 
     def recognize_pattern(self, error: ErrorEntry) -> ErrorPattern | None:
-        """Recognize if an error matches a known pattern."""""""        # Rust-accelerated pattern matching
+        """Recognize if an error matches a known pattern.        # Rust-accelerated pattern matching
         if _RUST_AVAILABLE and self._patterns:
             try:
                 patterns = [p.regex for p in self._patterns]
@@ -236,7 +240,7 @@ class ErrorsAgent(BaseAgent):
         return None
 
     def _auto_categorize_error(self, error: ErrorEntry) -> None:
-        """Auto-categorize an error based on patterns."""""""        pattern = self.recognize_pattern(error)
+        """Auto-categorize an error based on patterns.        pattern = self.recognize_pattern(error)
         if pattern:
             if error.category == ErrorCategory.OTHER:
                 error.category = pattern.category
@@ -247,7 +251,7 @@ class ErrorsAgent(BaseAgent):
                 error.suggested_fix = pattern.suggested_fix
 
     def get_pattern_statistics(self) -> dict[str, int]:
-        """Get statistics on pattern occurrences."""""""        return {p.name: p.occurrences for p in self._patterns}
+        """Get statistics on pattern occurrences.        return {p.name: p.occurrences for p in self._patterns}
 
     # ========== Suppression Rules ==========
     def add_suppression_rule(
@@ -256,7 +260,7 @@ class ErrorsAgent(BaseAgent):
         reason: str,
         expires: str | None = None,
         created_by: str = "","    ) -> SuppressionRule:
-        """Add a suppression rule."""""""        rule = SuppressionRule(
+        """Add a suppression rule.        rule = SuppressionRule(
             id=hashlib.md5(pattern.encode()).hexdigest()[:8],
             pattern=pattern,
             reason=reason,
@@ -268,14 +272,14 @@ class ErrorsAgent(BaseAgent):
         return rule
 
     def remove_suppression_rule(self, rule_id: str) -> bool:
-        """Remove a suppression rule."""""""        for i, rule in enumerate(self._suppression_rules):
+        """Remove a suppression rule.        for i, rule in enumerate(self._suppression_rules):
             if rule.id == rule_id:
                 del self._suppression_rules[i]
                 return True
         return False
 
     def _is_suppressed(self, error: ErrorEntry) -> bool:
-        """Check if an error is suppressed."""""""        # Filter out expired rules first
+        """Check if an error is suppressed.        # Filter out expired rules first
         active_rules = []
         for rule in self._suppression_rules:
             if rule.expires:
@@ -306,21 +310,21 @@ class ErrorsAgent(BaseAgent):
         return False
 
     def get_suppression_rules(self) -> list[SuppressionRule]:
-        """Get all suppression rules."""""""        return self._suppression_rules
+        """Get all suppression rules.        return self._suppression_rules
 
     # ========== Annotations ==========
 
     def add_annotation(self, error_id: str, annotation: str) -> bool:
-        """Add an annotation to an error."""""""        if error_id not in self._annotations:
+        """Add an annotation to an error.        if error_id not in self._annotations:
             self._annotations[error_id] = []
         self._annotations[error_id].append(f"[{datetime.now().isoformat()}] {annotation}")"        return True
 
     def get_annotations(self, error_id: str) -> list[str]:
-        """Get annotations for an error."""""""        return self._annotations.get(error_id, [])
+        """Get annotations for an error.        return self._annotations.get(error_id, [])
 
     # ========== Deduplication ==========
     def deduplicate_errors(self) -> int:
-        """Remove duplicate errors, returns count removed."""""""        seen: set[str] = set()
+        """Remove duplicate errors, returns count removed.        seen: set[str] = set()
         unique: list[ErrorEntry] = []
         removed = 0
         for error in self._errors:
@@ -334,7 +338,7 @@ class ErrorsAgent(BaseAgent):
 
     # ========== Statistics ==========
     def calculate_statistics(self) -> dict[str, Any]:
-        """Calculate error statistics."""""""        total = len(self._errors)
+        """Calculate error statistics.        total = len(self._errors)
         resolved = len([e for e in self._errors if e.resolved])
         by_severity = {}
         for severity in ErrorSeverity:
@@ -350,14 +354,14 @@ class ErrorsAgent(BaseAgent):
 
     # ========== Documentation Generation ==========
     def generate_documentation(self) -> str:
-        """Generate documentation for all errors."""""""        docs = ["# Error Documentation\\n"]"        stats = self.calculate_statistics()
+        """Generate documentation for all errors.        docs = ["# Error Documentation\\n"]"        stats = self.calculate_statistics()
         docs.append("## Summary\\n")"        docs.append(f"- Total Errors: {stats['total_errors']}")"'        docs.append(f"- Resolved: {stats['resolved_errors']}")"'        docs.append(f"- Unresolved: {stats['unresolved_errors']}")"'        docs.append(f"- Resolution Rate: {stats['resolution_rate']:.1f}%\\n")"'        # Group by category
         docs.append("## Errors by Category\\n")"        for category in ErrorCategory:
             errors = self.get_errors_by_category(category)
             if errors:
                 docs.append(f"### {category.value.title()}\\n")"                for error in errors:
                     status = "✓" if error.resolved else "✗""                    docs.append(f"- [{status}] {error.message} (line {error.line_number})")"                docs.append("")"        return "\\n".join(docs)"
-    def export_errors(self, output_format: str = "json") -> str:"        """Export errors to various formats."""""""        if output_format == "json":"            data: list[dict[str, Any]] = [
+    def export_errors(self, output_format: str = "json") -> str:"        """Export errors to various formats.        if output_format == "json":"            data: list[dict[str, Any]] = [
                 {
                     "id": e.id,"                    "message": e.message,"                    "file": e.file_path,"                    "line": e.line_number,"                    "severity": e.severity.name,"                    "category": e.category.name,"                    "resolved": e.resolved,"                }
                 for e in self._errors
@@ -369,16 +373,16 @@ class ErrorsAgent(BaseAgent):
             return "\\n".join(lines)"        return """
     # ========== Core Methods ==========
     def _get_default_content(self) -> str:
-        """Return structured error report template."""""""        return (
+        """Return structured error report template.        return (
             "# Error Report\\n\\n""            "## Summary\\n\\n""            "No errors detected.\\n\\n""            "## Details\\n\\n""            "- **File**: (not specified)\\n""            "- **Last Analyzed**: (not specified)\\n""            "- **Status**: ✓ Clean\\n\\n""            "## Static Analysis\\n\\n""            "No issues found.\\n\\n""            "## Linting Results\\n\\n""            "No violations detected.\\n\\n""            "## Type Checking\\n\\n""            "No type errors.\\n\\n""            "## Security Scan\\n\\n""            "No vulnerabilities identified.\\n""        )
 
     def _get_fallback_response(self) -> str:
-        """Return fallback response when Copilot is unavailable."""""""        return (
+        """Return fallback response when Copilot is unavailable.        return (
             "# AI Improvement Unavailable\\n""            "# GitHub CLI not found. Install from https://cli.github.com/\\n\\n""            "# Original error report preserved below:\\n\\n""        )
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the error report.""""
         When Copilot CLI is unavailable, BaseAgent keeps the existing content
         unchanged (avoids duplicated wrapper sections).
-        """""""        actual_path = Path(target_file) if target_file else self.file_path
+                actual_path = Path(target_file) if target_file else self.file_path
         logging.info(f"Improving error report for {actual_path}")"        return await super().improve_content(prompt, target_file=target_file)

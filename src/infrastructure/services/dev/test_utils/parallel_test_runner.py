@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py"""""""""""
+
+"""
+Auto-extracted class from agent_test_utils.py""""
 from __future__ import annotations
 
 import time
@@ -31,12 +35,12 @@ class ParallelTestRunner:
     Example:
         runner=ParallelTestRunner(workers=4)
         runner.add_test("test1", test_func1)"        runner.add_test("test2", test_func2)"        results=runner.run_all()
-    """""""
+    
     def __init__(self, workers: int = 4) -> None:
         """Initialize runner.""""
         Args:
             workers: Number of worker threads.
-        """""""        self.workers = workers
+                self.workers = workers
         self._tests: dict[str, Callable[[], None]] = {}
         self._results: list[ParallelTestResult] = []
         self.success_count = 0
@@ -47,7 +51,7 @@ class ParallelTestRunner:
         Args:
             name: Test name.
             test_fn: Test function.
-        """""""        self._tests[name] = test_fn
+                self._tests[name] = test_fn
 
     def run(self, test_functions: list[Callable[[], Any]], fail_fast: bool = True) -> list[Any]:
         """Run tests in parallel.""""
@@ -57,7 +61,7 @@ class ParallelTestRunner:
 
         Returns:
             List of results from test functions.
-        """""""        from concurrent.futures import ThreadPoolExecutor, as_completed
+                from concurrent.futures import ThreadPoolExecutor, as_completed
 
         self.success_count = 0
         self.failure_count = 0
@@ -83,7 +87,7 @@ class ParallelTestRunner:
         test_fn: Callable[[], None],
         worker_id: int,
     ) -> ParallelTestResult:
-        """Run a single test."""""""        start = time.time()
+        """Run a single test.        start = time.time()
         try:
             test_fn()
             return ParallelTestResult(
@@ -105,7 +109,7 @@ class ParallelTestRunner:
         """Run all tests in parallel.""""
         Returns:
             List of test results.
-        """""""        from concurrent.futures import Future, ThreadPoolExecutor, as_completed
+                from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 
         self._results = []
 
@@ -123,7 +127,7 @@ class ParallelTestRunner:
         return self._results
 
     def get_summary(self) -> dict[str, Any]:
-        """Get summary of parallel test execution."""""""        total = len(self._results)
+        """Get summary of parallel test execution.        total = len(self._results)
         passed = sum(1 for r in self._results if r.passed)
         return {
             "total": total,"            "passed": passed,"            "failed": total - passed,"            "total_duration_ms": sum(r.duration_ms for r in self._results),"        }

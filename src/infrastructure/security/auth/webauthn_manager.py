@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""WebAuthn (FIDO2) Authentication Manager for PyAgent.
+
+WebAuthn (FIDO2) Authentication Manager for PyAgent.
 Handles registration and authentication ceremonies for biometric hardware keys.
-"""""""
+
 import logging
 import base64
 import os
@@ -43,7 +46,7 @@ logger = logging.getLogger(__name__)
 
 
 class WebAuthnManager:
-    """Manages WebAuthn registration and authentication logic."""""""
+    """Manages WebAuthn registration and authentication logic.
     def __init__(self, rp_id: str = "localhost", rp_name: str = "PyAgent"):"        self.rp_id = rp_id
         self.rp_name = rp_name
         self.users: Dict[str, Dict[str, Any]] = {}  # Mock DB: username -> credential data
@@ -57,7 +60,7 @@ class WebAuthnManager:
             api_base_url='https://api.github.com/','            client_kwargs={'scope': 'user:email'},'        )
 
     def get_registration_options(self, username: str) -> Dict[str, Any]:
-        """Generates options for a new WebAuthn registration."""""""        if not HAS_WEBAUTHN:
+        """Generates options for a new WebAuthn registration.        if not HAS_WEBAUTHN:
             logger.warning("webauthn library not installed. Returning mock options.")"            return {"mock": True, "challenge": base64.b64encode(os.urandom(32)).decode()}"
         user_id = os.urandom(16)
         options = generate_registration_options(
@@ -77,7 +80,7 @@ class WebAuthnManager:
         return json.loads(options_to_json(options))
 
     def verify_registration(self, username: str, response: Dict[str, Any]) -> bool:
-        """Verifies a WebAuthn registration response."""""""        if not HAS_WEBAUTHN:
+        """Verifies a WebAuthn registration response.        if not HAS_WEBAUTHN:
             logger.warning("webauthn library not installed. Mocking success.")"            return True
 
         challenge = self.challenges.get(username)
@@ -100,7 +103,7 @@ class WebAuthnManager:
             logger.error(f"WebAuthn: Registration verification failed: {e}")"            return False
 
     def get_authentication_options(self, username: str) -> Dict[str, Any]:
-        """Generates options for a WebAuthn authentication ceremony."""""""        if not HAS_WEBAUTHN:
+        """Generates options for a WebAuthn authentication ceremony.        if not HAS_WEBAUTHN:
             return {"mock": True, "challenge": "mock_challenge"}"
         user_data = self.users.get(username)
         if not user_data:
@@ -117,7 +120,7 @@ class WebAuthnManager:
         return json.loads(options_to_json(options))
 
     def verify_authentication(self, username: str, response: Dict[str, Any]) -> bool:
-        """Verifies a WebAuthn authentication response."""""""        if not HAS_WEBAUTHN:
+        """Verifies a WebAuthn authentication response.        if not HAS_WEBAUTHN:
             return True
 
         challenge = self.challenges.get(username)

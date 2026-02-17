@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-# "QuantumCore logic for Quantum-Ready Reasoning (Phase 177).""""""""Mathematical models for "Superposition Prompting" and probability modeling"for high-dimensional intent spaces.
-"""""""
+# "QuantumCore logic for Quantum-Ready Reasoning (Phase 177)."Mathematical models for "Superposition Prompting" and probability modeling"for high-dimensional intent spaces.
+
 from __future__ import annotations
 import math
 
@@ -26,7 +24,7 @@ __version__ = VERSION
 
 
 class QuantumCore:
-""""Logic for quantum-inspired probability modeling."""""""
+""""Logic for quantum-inspired probability modeling.
     @staticmethod
     def calculate_superposition_weights(
         prompts: list[str], constraints: dict[str, float] | None = None
@@ -41,7 +39,7 @@ class QuantumCore:
 
         Returns:
             List of normalized weights.
-"""""""        _ = constraints  # Fallback for now
+        _ = constraints  # Fallback for now
 
         try:
             from rust_core import (
@@ -76,7 +74,7 @@ class QuantumCore:
 
         Returns:
             Shannon entropy of the weight distribution.
-"""""""        try:
+        try:
             from rust_core import simulate_interference_pattern as simulate_rust  # type: ignore[attr-defined]
 
             return simulate_rust(weights)

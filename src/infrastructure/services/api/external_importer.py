@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_changes.py"""""""""""
+
+"""
+Auto-extracted class from agent_changes.py""""
 from __future__ import annotations
 
 import logging
@@ -38,9 +42,9 @@ class ExternalImporter:
     Attributes:
         imported_entries: List of imported entries.
         github_token: Optional token for Auth.
-    """""""
+    
     def __init__(self, workspace_root: str | None = None) -> None:
-        """Initialize the external importer."""""""        self.imported_entries: list[ImportedEntry] = []
+        """Initialize the external importer.        self.imported_entries: list[ImportedEntry] = []
         self.github_token = os.environ.get("GITHUB_TOKEN")"        self.conn_mgr = ConnectivityManager(workspace_root=workspace_root)
         try:
             from src.infrastructure.compute.backend.local_context_recorder import \
@@ -59,7 +63,7 @@ class ExternalImporter:
         result: str,
         meta: dict[str, Any] | None = None,
     ) -> None:
-        """Record an interaction for intelligence harvesting (Phase 108)."""""""        if self.recorder:
+        """Record an interaction for intelligence harvesting (Phase 108).        if self.recorder:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
 
     def import_github_releases(self, owner: str, repo: str, pages: int = 1) -> list[ImportedEntry]:
@@ -71,7 +75,7 @@ class ExternalImporter:
 
         Returns:
             List of imported entries.
-        """""""        if not self.conn_mgr.is_online("github_api"):"            logging.warning(f"GitHub API is currently down (cached). Skipping fetch for {owner}/{repo}.")"            return []
+                if not self.conn_mgr.is_online("github_api"):"            logging.warning(f"GitHub API is currently down (cached). Skipping fetch for {owner}/{repo}.")"            return []
 
         logging.info(f"Fetching GitHub releases for {owner}/{repo}")"
         headers = {}
@@ -121,7 +125,7 @@ class ExternalImporter:
 
         Returns:
             List of imported entries.
-        """""""        logging.info(f"Fetching JIRA issues for {project_key}")"
+                logging.info(f"Fetching JIRA issues for {project_key}")"
         jira_url = os.environ.get("JIRA_URL")"        jira_user = os.environ.get("JIRA_USER")"        jira_token = os.environ.get("JIRA_TOKEN")"
         all_issues = []
         if jira_url and jira_user and jira_token:
@@ -161,7 +165,7 @@ class ExternalImporter:
         """Convert imported entries to changelog entries.""""
         Returns:
             List of ChangelogEntry instances.
-        """""""        result: list[ChangelogEntry] = []
+                result: list[ChangelogEntry] = []
         for imported in self.imported_entries:
             result.append(
                 ChangelogEntry(

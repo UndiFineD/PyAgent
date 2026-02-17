@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""notification_config.py - Defines NotificationConfig dataclass for error notification settings
+
+"""
+notification_config.py - Defines NotificationConfig dataclass for error notification settings
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -30,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Support multiple endpoints and per-channel credential/headers (secure storage for API keys) rather than a single plaintext endpoint string.
 - Allow richer templating (e.g., Jinja2) and include structured context (timestamps, run IDs), plus pluggable serializers and async delivery options.
 - Emit introspection or schema metadata (e.g., to integrate with a config UI) and provide unit tests for edge cases like disabled notification flow.
-"""""""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -52,7 +56,7 @@ class NotificationConfig:
         min_severity: Minimum severity to notify.
         enabled: Whether notifications are enabled.
         template: Message template.
-    """""""
+    
     channel: NotificationChannel
     endpoint: str
     min_severity: ErrorSeverity = ErrorSeverity.HIGH

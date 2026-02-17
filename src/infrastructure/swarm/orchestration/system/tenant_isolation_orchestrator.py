@@ -1,17 +1,21 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Tenant isolation orchestrator.py module.
-"""""""
+
+"""
+Tenant isolation orchestrator.py module.
+
 
 from __future__ import annotations
 
@@ -25,32 +29,32 @@ __version__ = VERSION
 
 
 class TenantIsolationOrchestrator:
-    """""""    Phase 51: Managed isolation for multi-tenant fleets.
+        Phase 51: Managed isolation for multi-tenant fleets.
     Ensures compute resources, memory shards, and context windows are strictly segregated.
-    """""""
+    
     def __init__(self, tenant_manager: Any) -> None:
         self.tenant_manager = tenant_manager
         self.resource_limits: dict[str, dict[str, float]] = {}
         self.context_vaults: dict[str, bytes] = {}  # Simulated encrypted vaults
 
     def set_resource_limits(self, tenant_id: str, max_tokens: int, max_nodes: int) -> str:
-        """Sets compute quotas for a specific tenant."""""""        self.resource_limits[tenant_id] = {
+        """Sets compute quotas for a specific tenant.        self.resource_limits[tenant_id] = {
             "max_tokens": max_tokens,"            "max_nodes": max_nodes,"            "used_tokens": 0,"        }
 
     def encrypt_knowledge_shard(self, tenant_id: str, data: str) -> str:
-        """Simulates ZK-Encryption for a knowledge shard."""""""        # In a real system, we'd use libsodium or similar'        nonce = os.urandom(16).hex()
+        """Simulates ZK-Encryption for a knowledge shard.        # In a real system, we'd use libsodium or similar'        nonce = os.urandom(16).hex()
         vault_id = hashlib.sha256(f"{tenant_id}:{nonce}".encode()).hexdigest()"        self.context_vaults[vault_id] = data.encode()  # Mock storage
         return vault_id
 
     def fuse_knowledge_zk(self, vault_ids: list[str]) -> str:
-        """""""        Simulates Zero-Knowledge Knowledge Fusion.
+                Simulates Zero-Knowledge Knowledge Fusion.
         Aggregates insights without exposing the raw data of individual tenants.
-        """""""        # Mock aggregation of "high-level insights""        insights = []
+                # Mock aggregation of "high-level insights""        insights = []
         for vid in vault_ids:
             if vid in self.context_vaults:
                 # In ZK, we would extract features without decrypting
                 insights.append(f"Insight from {vid[:8]}")"
         return " | ".join(insights)"
     def validate_access(self, tenant_id: str, resource_id: str) -> bool:
-        """Checks if a tenant has authorization for a specific resource."""""""        # Simple domain-based validation
+        """Checks if a tenant has authorization for a specific resource.        # Simple domain-based validation
         return resource_id.startswith(tenant_id)

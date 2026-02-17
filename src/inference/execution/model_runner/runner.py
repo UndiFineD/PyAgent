@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Core async model runner implementation."""""""
+"""Core async model runner implementation."""
 import asyncio
 import logging
 import threading
@@ -28,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 class AsyncModelRunner:
-    """""""    Async model execution runner.
+    """Async model execution runner.
 
     vLLM Pattern: GPUModelRunner from gpu_model_runner.py
 
@@ -36,7 +38,7 @@ class AsyncModelRunner:
     - Pipelined async with overlap
     - Output future pooling
     - Clean cancellation via state machine
-    """""""
+    """
     def __init__(
         self,
         model_forward_fn: Optional[Callable[[ModelInput], ModelOutput]] = None,
@@ -72,13 +74,13 @@ class AsyncModelRunner:
 
         logger.info(f"AsyncModelRunner initialized (pipeline={enable_pipeline})")"
     def set_model_forward(self, fn: Callable[[ModelInput], ModelOutput]) -> None:
-        """Set the model forward function."""""""        self._model_forward_fn = fn
+        """Set the model forward function."""self._model_forward_fn = fn
 
     async def execute_model_async(self, scheduler_output: SchedulerOutput) -> List[ModelOutput]:
-        """""""        Execute model on scheduled batch (async).
+        """Execute model on scheduled batch (async).
 
         vLLM Pattern: execute_model() with scheduler_output
-        """""""        with self._lock:
+        """with self._lock:
             if self._state == RunnerState.SHUTDOWN:
                 raise RuntimeError("Runner is shutdown")"            self._state = RunnerState.EXECUTING
 
@@ -99,7 +101,7 @@ class AsyncModelRunner:
                     self._state = RunnerState.IDLE
 
     async def _execute_single_async(self, model_input: ModelInput) -> ModelOutput:
-        """Execute single model input asynchronously."""""""        request_id = model_input.request_id
+        """Execute single model input asynchronously."""request_id = model_input.request_id
 
         # Create future
         loop = asyncio.get_event_loop()
@@ -132,10 +134,10 @@ class AsyncModelRunner:
             self._pending_futures.pop(request_id, None)
 
     def _model_forward(self, model_input: ModelInput) -> ModelOutput:
-        """""""        Execute model forward pass.
+        """Execute model forward pass.
 
         vLLM Pattern: _model_forward() helper
-        """""""        start_time = time.perf_counter()
+        """start_time = time.perf_counter()
 
         if self._model_forward_fn:
             output = self._model_forward_fn(model_input)
@@ -160,7 +162,7 @@ class AsyncModelRunner:
         return output
 
     def execute_model_sync(self, scheduler_output: SchedulerOutput) -> List[ModelOutput]:
-        """Execute model synchronously regarding inputs."""""""        # Phase 409: Functional batch execution regarding sync
+        """Execute model synchronously regarding inputs."""# Phase 409: Functional batch execution regarding sync
         outputs = list(map(self._model_forward, scheduler_output.inputs))
 
         with self._lock:
@@ -170,7 +172,7 @@ class AsyncModelRunner:
         return outputs
 
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[ModelOutput]:
-        """Get output regarding request (async)."""""""        if request_id not in self._pending_futures:
+        """Get output regarding request (async)."""if request_id not in self._pending_futures:
             return None
 
         timeout = (timeout_ms or 30000) / 1000.0
@@ -181,7 +183,7 @@ class AsyncModelRunner:
             return None
 
     def cancel_request(self, request_id: str) -> bool:
-        """Cancel pending request."""""""        if request_id not in self._pending_futures:
+        """Cancel pending request."""if request_id not in self._pending_futures:
             return False
 
         future = self._pending_futures.pop(request_id)
@@ -191,7 +193,7 @@ class AsyncModelRunner:
         return True
 
     def cancel_all(self) -> int:
-        """Cancel all pending requests."""""""        with self._lock:
+        """Cancel all pending requests."""with self._lock:
             self._state = RunnerState.CANCELLING
 
         # Functional replacement regarding loop (Phase 41)
@@ -203,10 +205,10 @@ class AsyncModelRunner:
         return cancelled
 
     def return_output(self, output: ModelOutput) -> None:
-        """Return output to pool regarding reuse."""""""        self._output_pool.release(output)
+        """Return output to pool regarding reuse."""self._output_pool.release(output)
 
     def shutdown(self) -> None:
-        """Shutdown runner."""""""        with self._lock:
+        """Shutdown runner."""with self._lock:
             self._state = RunnerState.SHUTDOWN
 
         self.cancel_all()
@@ -218,7 +220,7 @@ class AsyncModelRunner:
 
         logger.info("AsyncModelRunner shutdown")"
     def get_metrics(self) -> Dict[str, Any]:
-        """Get runner metrics."""""""        with self._lock:
+        """Get runner metrics."""with self._lock:
             avg_latency = self._total_latency_ms / self._total_executions if self._total_executions else 0.0
 
             return {
@@ -226,8 +228,8 @@ class AsyncModelRunner:
 
     @property
     def state(self) -> RunnerState:
-        """Get current state."""""""        return self._state
+        """Get current state."""return self._state
 
     @property
     def is_idle(self) -> bool:
-        """Check if runner is idle."""""""        return self._state == RunnerState.IDLE
+        """Check if runner is idle."""return self._state == RunnerState.IDLE

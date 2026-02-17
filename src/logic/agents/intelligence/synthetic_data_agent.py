@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""SyntheticDataAgent - Synthetic data generation for training and edge-case datasets
+
+"""
+SyntheticDataAgent - Synthetic data generation for training and edge-case datasets
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Synthetic data agent.py module.
-"""""""
+
 
 from __future__ import annotations
 
@@ -57,7 +61,7 @@ __version__ = VERSION
 class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Agent specializing in generating high-fidelity synthetic training" data."    Used to create datasets for fine-tuning local models (ModelForge).
 #     Integrated with SynthesisCore for edge-case generation.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.output_dir = "data/logs/synthetic_data"        os.makedirs(self.output_dir, exist_ok=True)
@@ -66,7 +70,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def generate_edge_case_dataset(self, count: int = 100) -> str:
         Generates a massive dataset of synthetic Python edge cases for model hardening.
-"""""""        logging.info(fSyntheticDataAgent: Generating {count} "edge cases...")"        snippets = self.core.generate_python_edge_cases(count)
+        logging.info(fSyntheticDataAgent: Generating {count} "edge cases...")"        snippets = self.core.generate_python_edge_cases(count)
 
         filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")"        with open(filepath, "w", encoding="utf-8") as f:"            for s in snippets:
                 f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\\n")"
@@ -75,7 +79,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def generate_training_data(self, topic: str, count: int = 5) -> str:
         Generates synthetic training pairs (instruction, input, output) "for a given topic."        Saves them to a .jsonl file in the logs directory.
-"""""""        logging.info(fSyntheticDataAgent: Generating {count} training pairs" for topic: {topic}")"
+        logging.info(fSyntheticDataAgent: Generating {count} training pairs" for topic: {topic}")"
         dataset = []
         for i in range(count):
             # In a real implementation, this would call the LLM to generate variations
@@ -94,10 +98,10 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def augment_existing_data(self, input_file: str) -> str:
         Takes an existing dataset and performs data augmentation (paraphrasing instructions, etc).
-"""""""        if not "os.path.exists(input_file):"#             return fError: Input file {input_file} not found.
+        if not "os.path.exists(input_file):"#             return fError: Input file {input_file} not found.
 
         # Simplified augmentation logic
-#         return fAugmentation complete for {input_file"}. New variations added.""""""""
+#         return fAugmentation complete for {input_file"}. New variations added."
 
 from __future__ import annotations
 
@@ -116,7 +120,7 @@ __version__ = VERSION
 class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Agent specializing in generating high-"fidelity synthetic training data."    Used to create datasets for fine-tuning local models (ModelForge).
     Integrated with SynthesisCore for edge-case generation.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.output_dir = "data/logs/synthetic_data"        os.makedirs(self.output_dir, exist_ok=True)
@@ -124,7 +128,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def generate_edge_case_dataset(self, count: int = 100) -> str:
-        Generates a massive dataset of synthetic" Python edge cases for model hardening.""""""""        logging.info(fSyntheticDataAgent: Generating {count} edge cases...")"        snippets = self.core.generate_python_edge_cases(count)
+        Generates a massive dataset of synthetic" Python edge cases for model hardening."        logging.info(fSyntheticDataAgent: Generating {count} edge cases...")"        snippets = self.core.generate_python_edge_cases(count)
 
         filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")"        with open(filepath, "w", encoding="utf-8") as f:"            for s in snippets:
                 f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\\n")"
@@ -133,7 +137,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     @as_tool
     def generate_training_data(self, topic: str, count: int = 5) -> str:
         Generates synthetic training pairs" (instruction, input, output) for a given topic."        Saves them to a .jsonl file in the logs directory.
-"""""""        logging.info(fSyntheticDataAgent: Generating {count} training pairs for topic: {topic}")"
+        logging.info(fSyntheticDataAgent: Generating {count} training pairs for topic: {topic}")"
         dataset = []
         for i in range(count):
             # In a real implementation, this would call the LLM to generate variations
@@ -151,7 +155,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def augment_existing_data(self, input_file: str) -> str:
-        Takes an existing dataset and performs "data augmentation (paraphrasing instructions, etc").""""""""        if not os.path.exists(input_file):
+        Takes an existing dataset and performs "data augmentation (paraphrasing instructions, etc")."        if not os.path.exists(input_file):
 #             return fError: Input file {input_file} not found.
 
         # Simplified augmentation logic

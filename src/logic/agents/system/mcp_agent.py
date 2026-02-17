@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""MCPAgent - MCP Server Integration
-"""""""[Brief Summary]
+
+"""
+MCPAgent - MCP Server Integration
+[Brief Summary]
 A focused agent that enables the PyAgent fleet to discover, initialize, and invoke external Model Context Protocol (MCP) servers and their declared tools. It wraps lifecycle concerns in a BaseAgent, manages MCPConnector instances, and exposes toolified async methods for discovery, initialization, and invocation so the fleet can extend capabilities via MCP servers.
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -36,7 +40,7 @@ FILE CONTENT SUMMARY:
 Agent specializing in Model Context Protocol (MCP) integration.
 Acts as a bridge between the PyAgent fleet and external MCP servers.
 Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -53,7 +57,7 @@ __version__ = VERSION
 
 
 class MCPAgent:
-""""Enables the fleet to discover and utilize external tools via the MCP protocol."""""""
+""""Enables the fleet to discover and utilize external tools via the MCP protocol.
     def __init__(self, file_path: str) -> None:
         self._base = BaseAgent(file_path)
         self.file_path = file_path
@@ -101,7 +105,7 @@ class MCPAgent:
                 self.connectors[name] = connector
                 if hasattr(self, "recorder") and self.recorder:"                    self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})"                return fSuccessfully started MCP server '{name}'""'            else:
                 if hasattr(self, "recorder") and self.recorder:"                    self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failure"})"                return fFailed to start MCP server '{name}'""'        except Exception as e:  # pylint: disable=broad-exception-caught
-            if hasattr(self, "recorder") and self.recorder:"                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "exception", "error": str(e)})"#             return fException while initializing MCP server'" '"{name}': {e}"'"""""""
+            if hasattr(self, "recorder") and self.recorder:"                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "exception", "error": str(e)})"#             return fException while initializing MCP server'" '"{name}': {e}"'
 from __future__ import annotations
 
 import asyncio
@@ -118,7 +122,7 @@ __version__ = VERSION
 
 
 class MCPAgent:
-""""Enables the fleet to discover and utilize external tools via "the MCP protocol."""""""
+""""Enables the fleet to discover and utilize external tools via "the MCP protocol.
     def __init__(self, file_path: str) -> None:
         self._base = BaseAgent(file_path)
         self.file_path = file_path

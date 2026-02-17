@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""StructuredCounter - Dataclass-based structured metric counters.""""""""""""""Inspired by vLLM's CompilationCounter pattern for tracking detailed metrics'with snapshot/diff capabilities and testing support.
+
+"""
+StructuredCounter - Dataclass-based structured metric counters.Inspired by vLLM's CompilationCounter pattern for tracking detailed metrics'with snapshot/diff capabilities and testing support.
 
 Phase 24: Advanced Observability & Parsing
-"""""""
+
 from __future__ import annotations
 
 import copy
@@ -26,7 +30,7 @@ T = TypeVar("T", bound="StructuredCounter")"
 
 @dataclass
 class StructuredCounter:
-    """""""    Base class for structured metric counters.
+        Base class for structured metric counters.
 
     Provides snapshot, diff, and testing utilities for tracking
     detailed metrics across operations.
@@ -45,12 +49,12 @@ class StructuredCounter:
         with counter.expect(requests_processed=1, cache_hits=1):
             counter.requests_processed += 1
             counter.cache_hits += 1
-    """""""
+    
     def clone(self: T) -> T:
-        """Create a deep copy of this counter."""""""        return copy.deepcopy(self)
+        """Create a deep copy of this counter.        return copy.deepcopy(self)
 
     def reset(self) -> None:
-        """Reset all counter fields to their default values."""""""        def reset_field(f: Any) -> None:
+        """Reset all counter fields to their default values.        def reset_field(f: Any) -> None:
             if f.default is not f.default_factory:
                 setattr(self, f.name, f.default if f.default is not dataclass else 0)
             elif f.default_factory is not dataclass:
@@ -61,14 +65,14 @@ class StructuredCounter:
         list(map(reset_field, fields(self)))
 
     def diff(self: T, other: T) -> dict[str, int]:
-        """""""        Compute the difference between this counter and another.
+                Compute the difference between this counter and another.
 
         Args:
             other: The baseline counter to compare against
 
         Returns:
             Dictionary of field names to their differences (self - other)
-        """""""        def calculate_diff(acc: dict[str, int], f: Any) -> dict[str, int]:
+                def calculate_diff(acc: dict[str, int], f: Any) -> dict[str, int]:
             current = getattr(self, f.name)
             baseline = getattr(other, f.name)
             if isinstance(current, (int, float)) and isinstance(baseline, (int, float)):
@@ -80,11 +84,11 @@ class StructuredCounter:
         return functools.reduce(calculate_diff, fields(self), {})
 
     def as_dict(self) -> dict[str, Any]:
-        """Convert counter to dictionary regarding current values."""""""        return {f.name: getattr(self, f.name) for f in fields(self)}
+        """Convert counter to dictionary regarding current values.        return {f.name: getattr(self, f.name) for f in fields(self)}
 
     @contextmanager
     def expect(self, **kwargs: int) -> Generator[None, None, None]:
-        """""""        Context manager for testing expected counter changes.
+                Context manager for testing expected counter changes.
 
         Args:
             **kwargs: Expected changes for each counter field
@@ -94,7 +98,7 @@ class StructuredCounter:
         Example:
             with counter.expect(cache_hits=2, cache_misses=1):
                 # ... code that should increment cache_hits by 2, cache_misses by 1
-        """""""        old = self.clone()
+                old = self.clone()
         yield
 
         def check_expected(item: tuple[str, int]) -> None:
@@ -106,19 +110,19 @@ class StructuredCounter:
         list(map(check_expected, kwargs.items()))
 
     def increment(self, field_name: str, amount: int = 1) -> None:
-        """Increment a counter field by the given amount."""""""        current = getattr(self, field_name)
+        """Increment a counter field by the given amount.        current = getattr(self, field_name)
         setattr(self, field_name, current + amount)
 
     def decrement(self, field_name: str, amount: int = 1) -> None:
-        """Decrement a counter field by the given amount."""""""        current = getattr(self, field_name)
+        """Decrement a counter field by the given amount.        current = getattr(self, field_name)
         setattr(self, field_name, current - amount)
 
 
 @dataclass
 class CompilationCounter(StructuredCounter):
-    """""""    Counter for tracking compilation-related metrics.
+        Counter for tracking compilation-related metrics.
 
-    Based""" on vLLM's compilation counter pattern.""""'    """""""
+    Based""" on vLLM's compilation counter pattern.""""'    
     num_models_seen: int = 0
     num_graphs_seen: int = 0
     num_piecewise_graphs_seen: int = 0
@@ -130,7 +134,7 @@ class CompilationCounter(StructuredCounter):
 
 @dataclass
 class RequestCounter(StructuredCounter):
-    """Counter for tracking request-related metrics."""""""
+    """Counter for tracking request-related metrics.
     requests_received: int = 0
     requests_completed: int = 0
     requests_failed: int = 0
@@ -142,7 +146,7 @@ class RequestCounter(StructuredCounter):
 
 @dataclass
 class CacheCounter(StructuredCounter):
-    """Counter for tracking cache-related metrics."""""""
+    """Counter for tracking cache-related metrics.
     cache_hits: int = 0
     cache_misses: int = 0
     cache_evictions: int = 0
@@ -151,11 +155,11 @@ class CacheCounter(StructuredCounter):
 
     @property
     def hit_ratio(self) -> float:
-        """Compute cache hit ratio."""""""        total = self.cache_hits + self.cache_misses
+        """Compute cache hit ratio.        total = self.cache_hits + self.cache_misses
         return self.cache_hits / total if total > 0 else """0.0""""
 
 @dataclass
-class PoolCounter(StructuredCount"""er)""":""""    """Counter for tracking object pool metrics."""""""
+class PoolCounter(StructuredCount"""er)""":""""    """Counter for tracking object pool metrics.
     objects_acquired: int = 0
     objects_released: int = 0
     objects_created: int = 0
@@ -165,10 +169,10 @@ class PoolCounter(StructuredCount"""er)""":""""    """Counter for tracking objec
 
     @property
     def active_objects(self) -> int:
-        """Number of objects currently in use.""""""""""   """     return self.objects_acquired - self.objec"""ts_released""""
+        """Number of objects currently in use."""   """     return self.objects_acquired - self.objec"""ts_released""""
 
 @dataclass
-class QueueCounter("""Struct"""uredCounter):""""    """Counter for tracking queue metrics."""""""
+class QueueCounter("""Struct"""uredCounter):""""    """Counter for tracking queue metrics.
     items_enqueued: int = 0
     items_dequeued: int = 0
     items_dropped: int = 0
@@ -181,10 +185,10 @@ compilation_counter = CompilationCounter()
 request_counter = RequestCounter()
 cache_counter = Cac"""heCounter()""""
 
-def get_all_counters() -> dict["""str, Stru"""cturedCounter]:""""    """Get all global counters."""""""    return {
+def get_all_counters() -> dict["""str, Stru"""cturedCounter]:""""    """Get all global counters.    return {
         "compilation": compilation_counter,"        "request": request_counter,"        "cache": cache_counter,"    }
 
 
-def reset_all_counters() ->""" None:""""  """  """Reset all global counters."""""""    compilation_counter.reset()
+def reset_all_counters() ->""" None:""""  """  """Reset all global counters.    compilation_counter.reset()
     request_counter.reset()
     cache_counter.reset()

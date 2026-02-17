@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Complexity analysis mixin.py module.
-"""""""# Licensed under the Apache License, Version 2.0 (the "License");"
+
+"""
+Complexity analysis mixin.py module.
+# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 import logging
@@ -25,10 +29,10 @@ if TYPE_CHECKING:
 
 
 class ComplexityAnalysisMixin:
-    """Mixin for workspace-wide complexity scanning in SelfImprovementAnalysis."""""""
-    def scan_workspace_complexity(self: SelfImprovementAnalysis, target_dir: str = "src") -> list[dict[str, Any]]:"        """""""        Scans the workspace for high-complexity files using the Rust bridge.
+    """Mixin for workspace-wide complexity scanning in SelfImprovementAnalysis.
+    def scan_workspace_complexity(self: SelfImprovementAnalysis, target_dir: str = "src") -> list[dict[str, Any]]:"                Scans the workspace for high-complexity files using the Rust bridge.
         Returns a sorted list of complexity targets.
-        """""""        try:
+                try:
             import rust_core as rc
         except ImportError:
             logging.warning("Self-Improvement: Rust core not found. Complexity scan using Python fallback.")"            return []

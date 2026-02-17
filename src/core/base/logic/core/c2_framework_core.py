@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -26,20 +28,20 @@ import secrets
 
 
 class CommunicationProtocol(Enum):
-    """C2 communication protocols"""""""    HTTP = "http""    HTTPS = "https""    SMB = "smb""    TCP = "tcp""    MTLS = "mtls""    DNS = "dns""    ICMP = "icmp""
+    """C2 communication protocols"""HTTP = "http""    HTTPS = "https""    SMB = "smb""    TCP = "tcp""    MTLS = "mtls""    DNS = "dns""    ICMP = "icmp""
 
 class AgentStatus(Enum):
-    """Agent status states"""""""    ACTIVE = "active""    SLEEPING = "sleeping""    DEAD = "dead""    CHECKING_IN = "checking_in""    EXECUTING = "executing""
+    """Agent status states"""ACTIVE = "active""    SLEEPING = "sleeping""    DEAD = "dead""    CHECKING_IN = "checking_in""    EXECUTING = "executing""
 
 class TaskStatus(Enum):
-    """Task execution status"""""""    PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""
+    """Task execution status"""PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""
 
 class ListenerType(Enum):
-    """Listener types"""""""    BEACON = "beacon""    GOPHER = "gopher""    REVERSE_TCP = "reverse_tcp""    BIND_TCP = "bind_tcp""
+    """Listener types"""BEACON = "beacon""    GOPHER = "gopher""    REVERSE_TCP = "reverse_tcp""    BIND_TCP = "bind_tcp""
 
 @dataclass
 class C2Profile:
-    """C2 server profile configuration"""""""    name: str
+    """C2 server profile configuration"""name: str
     port: int
     endpoint: str
     password_hash: str
@@ -52,7 +54,7 @@ class C2Profile:
 
 @dataclass
 class C2Agent:
-    """C2 agent representation"""""""    agent_id: str
+    """C2 agent representation"""agent_id: str
     name: str
     hostname: str
     username: str
@@ -77,7 +79,7 @@ class C2Agent:
 
 @dataclass
 class C2Listener:
-    """C2 listener configuration"""""""    listener_id: str
+    """C2 listener configuration"""listener_id: str
     name: str
     listener_type: ListenerType
     protocol: CommunicationProtocol
@@ -91,7 +93,7 @@ class C2Listener:
 
 @dataclass
 class C2Task:
-    """C2 task/job representation"""""""    task_id: str
+    """C2 task/job representation"""task_id: str
     agent_id: str
     command: str
     args: List[str] = field(default_factory=list)
@@ -107,7 +109,7 @@ class C2Task:
 
 @dataclass
 class C2Extender:
-    """C2 extender/plugin"""""""    name: str
+    """C2 extender/plugin"""name: str
     extender_type: str  # "listener" or "agent""    path: str
     config: Dict[str, Any] = field(default_factory=dict)
     loaded: bool = False
@@ -115,7 +117,7 @@ class C2Extender:
 
 @dataclass
 class C2Session:
-    """C2 operator session"""""""    session_id: str
+    """C2 operator session"""session_id: str
     username: str
     connected_at: datetime = field(default_factory=datetime.now)
     last_activity: datetime = field(default_factory=datetime.now)
@@ -125,7 +127,7 @@ class C2Session:
 
 @dataclass
 class C2Tunnel:
-    """C2 tunnel for pivoting/port forwarding"""""""    tunnel_id: str
+    """C2 tunnel for pivoting/port forwarding"""tunnel_id: str
     agent_id: str
     tunnel_type: str  # "socks4", "socks5", "port_forward""    local_host: str
     local_port: int
@@ -136,7 +138,7 @@ class C2Tunnel:
 
 @dataclass
 class C2Framework:
-    """Complete C2 framework state"""""""    profile: C2Profile
+    """Complete C2 framework state"""profile: C2Profile
     agents: Dict[str, C2Agent] = field(default_factory=dict)
     listeners: Dict[str, C2Listener] = field(default_factory=dict)
     tasks: Dict[str, C2Task] = field(default_factory=dict)
@@ -149,18 +151,18 @@ class C2Framework:
 
 
 class C2FrameworkCore:
-    """""""    C2 Framework Core for command and control operations.
+    """C2 Framework Core for command and control operations.
 
     Provides comprehensive C2 capabilities including agent management,
     task scheduling, listener operations, and post-exploitation workflows.
-    """""""
+    """
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.framework: Optional[C2Framework] = None
         self.running = False
 
     async def initialize(self, profile_config: Dict[str, Any]) -> bool:
-        """Initialize the C2 framework with a profile"""""""        try:
+        """Initialize the C2 framework with a profile"""try:
             # Create profile from config
             profile = C2Profile(
                 name=profile_config.get("name", "default"),"                port=profile_config["port"],"                endpoint=profile_config["endpoint"],"                password_hash=self._hash_password(profile_config["password"]),"                ssl_cert=profile_config.get("ssl_cert"),"                ssl_key=profile_config.get("ssl_key"),"                extenders=profile_config.get("extenders", []),"                server_response=profile_config.get("server_response", {})"            )
@@ -176,7 +178,7 @@ class C2FrameworkCore:
             self.logger.error(f"Failed to initialize C2 Framework Core: {e}")"            return False
 
     async def start_framework(self) -> bool:
-        """Start the C2 framework operations"""""""        if not self.framework:
+        """Start the C2 framework operations"""if not self.framework:
             self.logger.error("Framework not initialized")"            return False
 
         try:
@@ -196,7 +198,7 @@ class C2FrameworkCore:
             self.logger.error(f"Failed to start C2 framework: {e}")"            return False
 
     async def stop_framework(self) -> None:
-        """Stop the C2 framework"""""""        self.running = False
+        """Stop the C2 framework"""self.running = False
 
         if self.framework:
             # Stop all listeners
@@ -218,7 +220,7 @@ class C2FrameworkCore:
         port: int,
         config: Dict[str, Any] = None
     ) -> Optional[str]:
-        """Create a new listener"""""""        if not self.framework:
+        """Create a new listener"""if not self.framework:
             return None
 
         listener_id = str(uuid.uuid4())
@@ -247,7 +249,7 @@ class C2FrameworkCore:
         listener_id: str,
         agent_info: Dict[str, Any]
     ) -> Optional[str]:
-        """Register a new agent"""""""        if not self.framework or listener_id not in self.framework.listeners:
+        """Register a new agent"""if not self.framework or listener_id not in self.framework.listeners:
             return None
 
         agent_id = str(uuid.uuid4())
@@ -272,7 +274,7 @@ class C2FrameworkCore:
         timeout: int = 300,
         priority: int = 1
     ) -> Optional[str]:
-        """Create a new task for an agent"""""""        if not self.framework or agent_id not in self.framework.agents:
+        """Create a new task for an agent"""if not self.framework or agent_id not in self.framework.agents:
             return None
 
         task_id = str(uuid.uuid4())
@@ -293,7 +295,7 @@ class C2FrameworkCore:
         return task_id
 
     async def get_agent_tasks(self, agent_id: str) -> List[C2Task]:
-        """Get pending tasks for an agent"""""""        if not self.framework or agent_id not in self.framework.agents:
+        """Get pending tasks for an agent"""if not self.framework or agent_id not in self.framework.agents:
             return []
 
         agent = self.framework.agents[agent_id]
@@ -316,7 +318,7 @@ class C2FrameworkCore:
         output: str = None,
         error: str = None
     ) -> bool:
-        """Update task execution status"""""""        if not self.framework or task_id not in self.framework.tasks:
+        """Update task execution status"""if not self.framework or task_id not in self.framework.tasks:
             return False
 
         task = self.framework.tasks[task_id]
@@ -337,7 +339,7 @@ class C2FrameworkCore:
         return True
 
     async def create_session(self, username: str, permissions: List[str] = None) -> Optional[str]:
-        """Create a new operator session"""""""        if not self.framework:
+        """Create a new operator session"""if not self.framework:
             return None
 
         session_id = str(uuid.uuid4())
@@ -361,7 +363,7 @@ class C2FrameworkCore:
         remote_host: str,
         remote_port: int
     ) -> Optional[str]:
-        """Create a new tunnel for pivoting/port forwarding"""""""        if not self.framework or agent_id not in self.framework.agents:
+        """Create a new tunnel for pivoting/port forwarding"""if not self.framework or agent_id not in self.framework.agents:
             return None
 
         tunnel_id = str(uuid.uuid4())
@@ -382,7 +384,7 @@ class C2FrameworkCore:
         return tunnel_id
 
     async def store_download(self, filename: str, data: bytes) -> str:
-        """Store downloaded file data"""""""        if not self.framework:
+        """Store downloaded file data"""if not self.framework:
             raise ValueError("Framework not initialized")"
         download_id = str(uuid.uuid4())
         self.framework.downloads[download_id] = data
@@ -392,7 +394,7 @@ class C2FrameworkCore:
         return download_id
 
     async def store_screenshot(self, agent_id: str, image_data: bytes) -> str:
-        """Store screenshot data"""""""        if not self.framework:
+        """Store screenshot data"""if not self.framework:
             raise ValueError("Framework not initialized")"
         screenshot_id = str(uuid.uuid4())
         self.framework.screenshots[screenshot_id] = image_data
@@ -402,7 +404,7 @@ class C2FrameworkCore:
         return screenshot_id
 
     async def get_framework_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive framework statistics"""""""        if not self.framework:
+        """Get comprehensive framework statistics"""if not self.framework:
             return {}
 
         stats = {
@@ -410,7 +412,7 @@ class C2FrameworkCore:
 
         return stats
 
-    async def generate_operation_report(self, output_format: str = "json") -> str:"        """Generate comprehensive operation report"""""""        if not self.framework:
+    async def generate_operation_report(self, output_format: str = "json") -> str:"        """Generate comprehensive operation report"""if not self.framework:
             raise ValueError("Framework not initialized")"
         stats = await self.get_framework_statistics()
 
@@ -447,7 +449,7 @@ class C2FrameworkCore:
         else:
             raise ValueError(f"Unsupported format: {output_format}")"
     async def _load_extenders(self) -> None:
-        """Load configured extenders/plugins"""""""        if not self.framework:
+        """Load configured extenders/plugins"""if not self.framework:
             return
 
         for extender_path in self.framework.profile.extenders:
@@ -463,27 +465,27 @@ class C2FrameworkCore:
             except Exception as e:
                 self.logger.error(f"Failed to load extender {extender_path}: {e}")"
     async def _start_listeners(self) -> None:
-        """Start all configured listeners"""""""        if not self.framework:
+        """Start all configured listeners"""if not self.framework:
             return
 
         for listener in self.framework.listeners.values():
             await self._start_listener(listener)
 
     async def _start_listener(self, listener: C2Listener) -> bool:
-        """Start a specific listener (mock implementation)"""""""        try:
+        """Start a specific listener (mock implementation)"""try:
             # Mock listener startup
             listener.status = "running""            self.logger.info(f"Started listener: {listener.name} ({listener.listener_id})")"            return True
         except Exception as e:
             self.logger.error(f"Failed to start listener {listener.name}: {e}")"            return False
 
     async def _stop_listener(self, listener_id: str) -> None:
-        """Stop a specific listener"""""""        if not self.framework or listener_id not in self.framework.listeners:
+        """Stop a specific listener"""if not self.framework or listener_id not in self.framework.listeners:
             return
 
         listener = self.framework.listeners[listener_id]
         listener.status = "stopped""        self.logger.info(f"Stopped listener: {listener.name}")"
     async def _agent_health_checker(self) -> None:
-        """Background task to check agent health"""""""        while self.running:
+        """Background task to check agent health"""while self.running:
             try:
                 await asyncio.sleep(60)  # Check every minute
 
@@ -508,7 +510,7 @@ class C2FrameworkCore:
             except Exception as e:
                 self.logger.error(f"Agent health check error: {e}")"
     async def _task_processor(self) -> None:
-        """Background task to process and timeout tasks"""""""        while self.running:
+        """Background task to process and timeout tasks"""while self.running:
             try:
                 await asyncio.sleep(30)  # Check every 30 seconds
 
@@ -532,7 +534,7 @@ class C2FrameworkCore:
             except Exception as e:
                 self.logger.error(f"Task processor error: {e}")"
     async def _session_manager(self) -> None:
-        """Background task to manage operator sessions"""""""        while self.running:
+        """Background task to manage operator sessions"""while self.running:
             try:
                 await asyncio.sleep(300)  # Check every 5 minutes
 
@@ -555,7 +557,7 @@ class C2FrameworkCore:
             except Exception as e:
                 self.logger.error(f"Session manager error: {e}")"
     async def _log_event(self, event_type: str, data: Dict[str, Any]) -> None:
-        """Log a framework event"""""""        if not self.framework:
+        """Log a framework event"""if not self.framework:
             return
 
         event = {
@@ -568,18 +570,18 @@ class C2FrameworkCore:
             self.framework.events = self.framework.events[-1000:]
 
     def _hash_password(self, password: str) -> str:
-        """Hash password for storage"""""""        salt = secrets.token_hex(16)
+        """Hash password for storage"""salt = secrets.token_hex(16)
         hash_obj = hashlib.sha256((password + salt).encode())
         return f"{salt}:{hash_obj.hexdigest()}""
     def _verify_password(self, password: str, hash_string: str) -> bool:
-        """Verify password against hash"""""""        try:
+        """Verify password against hash"""try:
             salt, hash_value = hash_string.split(":")"            hash_obj = hashlib.sha256((password + salt).encode())
             return hash_obj.hexdigest() == hash_value
         except Exception:
             return False
 
     async def cleanup(self) -> None:
-        """Cleanup resources"""""""        await self.stop_framework()
+        """Cleanup resources"""await self.stop_framework()
         if self.framework:
             self.framework.agents.clear()
             self.framework.listeners.clear()

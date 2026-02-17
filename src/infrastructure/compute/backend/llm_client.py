@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Centralized LLM client for various backends."""""""
+
+"""Centralized LLM client for various backends.
 from __future__ import annotations
 
 import logging
@@ -34,7 +37,7 @@ from .local_context_recorder import LocalContextRecorder
 
 class LLMClient:
     """Handles direct HTTP calls to LLM providers.""""    Enhanced with PoolingCore for prompt compression and connection optimization.
-    """""""
+    
     def __init__(self, requests_lib: Any, workspace_root: str | None = None) -> None:
         self.requests = requests_lib
         self.pooling_core = PoolingCore()
@@ -71,13 +74,13 @@ class LLMClient:
             "lmstudio": LMStudioBackend(self.session, self.connectivity, self.recorder),"        }
 
     def _is_backend_disabled(self, backend_name: str) -> bool:
-        """Check if a backend is disabled via environment variables."""""""        disabled_backends = os.environ.get("DV_DISABLED_BACKENDS", "").strip()"        if not disabled_backends:
+        """Check if a backend is disabled via environment variables.        disabled_backends = os.environ.get("DV_DISABLED_BACKENDS", "").strip()"        if not disabled_backends:
             return False
 
         # Split by comma and strip whitespace
         disabled_list = [b.strip().lower() for b in disabled_backends.split(",")]"        return backend_name.lower() in disabled_list
 
-    def chat(self, _provider: str, _model: str, prompt: str, system_prompt: str = "") -> str:"        """Central entry point for chat completion. Compresses prompt before sending."""""""        # 1. Compress system prompt via Core
+    def chat(self, _provider: str, _model: str, prompt: str, system_prompt: str = "") -> str:"        """Central entry point for chat completion. Compresses prompt before sending.        # 1. Compress system prompt via Core
         self.pooling_core.compress_prompt(system_prompt)
 
         # 2. Logic to invoke backends (simplified for this edit)
@@ -97,10 +100,10 @@ class LLMClient:
         pass
 
     def _is_connection_working(self, provider_id: str) -> bool:
-        """Checks if the connection is known to be working via central ConnectivityManager."""""""        return self.connectivity.is_endpoint_available(provider_id)
+        """Checks if the connection is known to be working via central ConnectivityManager.        return self.connectivity.is_endpoint_available(provider_id)
 
     def _update_connection_status(self, provider_id: str, working: bool) -> None:
-        """Updates the connection status via central ConnectivityManager."""""""        self.connectivity.update_status(provider_id, working)
+        """Updates the connection status via central ConnectivityManager.        self.connectivity.update_status(provider_id, working)
 
     def _record(
         self,
@@ -109,9 +112,9 @@ class LLMClient:
         prompt: str,
         result: str,
         system_prompt: str = "","    ) -> str:
-        """""""        Helper to record interactions if recorder is active.
+                Helper to record interactions if recorder is active.
         Optimized for future trillion-parameter community data ingestion.
-        """""""        if self.recorder:
+                if self.recorder:
             try:
                 # Include system prompt and metadata for future fine-tuning
                 meta = {
@@ -125,39 +128,39 @@ class LLMClient:
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Call a GitHub Models OpenAI-compatible chat endpoint."""""""        return self.backends["github_models"].chat(prompt, model, system_prompt, **kwargs)"
+        """Call a GitHub Models OpenAI-compatible chat endpoint.        return self.backends["github_models"].chat(prompt, model, system_prompt, **kwargs)"
     def llm_chat_via_ollama(
         self,
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Call a local Ollama instance."""""""        return self.backends["ollama"].chat(prompt, model, system_prompt, **kwargs)"
+        """Call a local Ollama instance.        return self.backends["ollama"].chat(prompt, model, system_prompt, **kwargs)"
     def llm_chat_via_vllm(
         self,
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Call a local vLLM instance (OpenAI-compatible)."""""""        return self.backends["vllm"].chat(prompt, model, system_prompt, **kwargs)"
+        """Call a local vLLM instance (OpenAI-compatible).        return self.backends["vllm"].chat(prompt, model, system_prompt, **kwargs)"
     def llm_chat_via_vllm_native(
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.","        model: str = "vllm-native","        **kwargs,
     ) -> str:
-        """Uses the locally installed vLLM library (Native Engine) for maximum performance."""""""        return self.backends["vllm_native"].chat(prompt, model, system_prompt, **kwargs)"
+        """Uses the locally installed vLLM library (Native Engine) for maximum performance.        return self.backends["vllm_native"].chat(prompt, model, system_prompt, **kwargs)"
     def llm_chat_via_copilot_cli(
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.","        model: str = "copilot-cli","        **kwargs,
     ) -> str:
-        """Calls the GitHub Copilot CLI (copilot)."""""""        return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)"
+        """Calls the GitHub Copilot CLI (copilot).        return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)"
     def llm_chat_via_lmstudio(
         self,
         prompt: str,
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """""""        Call LM Studio local inference server (Phase 21).
+                Call LM Studio local inference server (Phase 21).
 
         Uses the lmstudio SDK for WebSocket-based communication.
         Supports streaming, tool calling, and embeddings.
@@ -170,14 +173,14 @@ class LLMClient:
 
         Returns:
             Generated response text
-        """""""        return self.backends["lmstudio"].chat(prompt, model, system_prompt, **kwargs)"
+                return self.backends["lmstudio"].chat(prompt, model, system_prompt, **kwargs)"
     def smart_chat(
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.","        preference: str = "local","        local_model: str = "","        external_model: str = "Meta-Llama-3.1-8B-Instruct","    ) -> str:
-        """""""        Smartly chooses between local and external AI models.
+                Smartly chooses between local and external AI models.
         'local' preference attempts Native vLLM, then remote vLLM/Ollama, then Copilot CLI.'        Implements Phase 108 Result Caching for extreme speed.
-        """""""        # Ensure local_model has a default value if empty - read from environment for Ollama
+                # Ensure local_model has a default value if empty - read from environment for Ollama
         if not local_model:
             # Read from DV_OLLAMA_MODEL environment variable, default to tinyllama
             env_model = os.environ.get("DV_OLLAMA_MODEL", "tinyllama").strip("'\"")"'            # Map 'tinyllama' to 'tinyllama:latest' to match Ollama's model tag'            if env_model == "tinyllama":"                env_model = "tinyllama:latest""            local_model = env_model

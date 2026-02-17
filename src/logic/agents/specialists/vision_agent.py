@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""VisionAgent - Image analysis, OCR, and code-screenshot analysis
+VisionAgent - Image analysis, OCR, and code-screenshot analysis
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -35,22 +33,20 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-"""""""Vision agent.py module.
-"""""""# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
+Vision agent.py module.
+# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -69,7 +65,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VisionAgent(BaseAgent):
-    Agent specializing in image description, OCR, diagram "analysis,"    and visual pattern recognition using multi-modal model "backends.""""""""
+    Agent specializing in image description, OCR, diagram "analysis,"    and visual pattern recognition using multi-modal model "backends."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -77,8 +73,8 @@ class VisionAgent(BaseAgent):
         self._analysis_cache: Dict[str, Dict] = {}
 
     @as_tool
-    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:""""""""        Analyzes an image and answers a "query about it."        image_source: Either a base64 string, file path, or URL.
-"""""""        b64_data = await self._resolve_image_source(image_source)
+    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:"        Analyzes an image and answers a "query about it."        image_source: Either a base64 string, file path, or URL.
+        b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
             return {"error": "Could not load image", "status": "failed"}"
         # Check cache
@@ -120,7 +116,7 @@ class VisionAgent(BaseAgent):
 #         language = "unknown"        lang_patterns = {
             "python": r"\\b(def |import |class |print\()","            "javascript": r"\\b(function |const |let |var |=>)","            "rust": r"\\b(fn |let |mut |impl |struct )","            "java": r"\\b(public |private |class |void |static )","        }
         for lang, pattern in lang_patterns.items
-"""""""# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
+# VisionAgent: Image Analysis and Computer Vision Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -140,7 +136,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class VisionAgent(BaseAgent):
     Agent specializing in image description, OCR, diagram analysis,
-    and visual pattern recognition "using "multi-modal model backends.""""""""
+    and visual pattern recognition "using "multi-modal model backends."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -148,8 +144,8 @@ class VisionAgent(BaseAgent):
         self._analysis_cache: Dict[str, Dict] = {}
 
     @as_tool
-    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:""""""""        Analyzes" an" image and answers a query about it."        image_source: Either a base64 string, file path, or URL.
-"""""""        b64_data = await self._resolve_image_source(image_source)
+    async def analyze_image(self, image_source: str, query: str = "Describe this image in detail.") -> Dict[str, Any]:"        Analyzes" an" image and answers a query about it."        image_source: Either a base64 string, file path, or URL.
+        b64_data = await self._resolve_image_source(image_source)
         if not b64_data:
             return {"error": "Could not load image", "status": "failed"}"
         # Check cache

@@ -1,16 +1,19 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Knowledge engine.py module.
-"""""""
+
+"""Knowledge engine.py module.
+"""
 
 from __future__ import annotations
 
@@ -29,10 +32,10 @@ __version__ = VERSION
 
 
 class KnowledgeEngine:
-    """""""    Central engine for managing multi-modal knowledge storage.
+    """Central engine for managing multi-modal knowledge storage.
     Delegates to MemoryCore for infrastructure and utility scoring.
     Automatically routes data to B-Tree, Vector, or Graph stores.
-    Supports recursive compression of 'cold' memory blocks (Phase 128).'    """""""
+    Supports recursive compression of 'cold' memory blocks (Phase 128).'    """
     def __init__(self, agent_id: str, base_path: Path) -> None:
         self.agent_id = agent_id
         self.base_path = base_path / agent_id
@@ -43,7 +46,7 @@ class KnowledgeEngine:
         self._compressor = None
 
     def _get_compressor(self) -> bool:
-        """Lazy loading of CompressionAgent to avoid circular imports."""""""        if self._compressor is None:
+        """Lazy loading of CompressionAgent to avoid circular imports."""if self._compressor is None:
             try:
                 from src.logic.agents.system.compression_agent import \
                     CompressionAgent
@@ -54,9 +57,9 @@ class KnowledgeEngine:
                 logging.error(f"KnowledgeEngine: Failed to load CompressionAgent: {e}")"        return self._compressor
 
     def compress_memory(self, key: str) -> bool:
-        """""""        Retrieves content for a key, compresses it via CompressionAgent,
+        """Retrieves content for a key, compresses it via CompressionAgent,
         and replaces the original content with the dense summary.
-        """""""        compressor = self._get_compressor()
+        """compressor = self._get_compressor()
         if not compressor:
             return False
 
@@ -74,15 +77,15 @@ class KnowledgeEngine:
         # update metadata or content to indicate compression
         metadata = {"compressed": True, "original_len": len(str(content))}"        self.store(summary, mode="btree", key=key, metadata=metadata)"        return True
 
-    def store(self, content: Any, mode: str = "vector", **kwargs) -> bool:"        """""""        Store knowledge in the specified mode.
-        modes: 'vector', 'btree', 'graph''        """""""        key = kwargs.get("key", str(hash(content)))"        self.pruning.log_access(key)  # Mark as vital on store
+    def store(self, content: Any, mode: str = "vector", **kwargs) -> bool:"        """Store knowledge in the specified mode.
+        modes: 'vector', 'btree', 'graph''        """key = kwargs.get("key", str(hash(content)))"        self.pruning.log_access(key)  # Mark as vital on store
 
         # Delegate to specialized stores which now use MemoryCore backend
         if mode == "vector":"            return self.vector.store(key, content, kwargs.get("metadata"))"        if mode == "btree":"            return self.btree.store(key, content, kwargs.get("metadata"))"        if mode == "graph":"            return self.graph.store(key, content, {"relationship": kwargs.get("relationship", "related_to")})"
         # General store via MemoryCore if mode is generic
         return self._memory_core.store_knowledge(self.agent_id, key, content, mode)
 
-    def query(self, query: Any, mode: str = "vector", limit: int = 5) -> list[Any]:"        """Query knowledge using specialized or generic mechanisms."""""""        self.pruning.log_access(str(query))
+    def query(self, query: Any, mode: str = "vector", limit: int = 5) -> list[Any]:"        """Query knowledge using specialized or generic mechanisms."""self.pruning.log_access(str(query))
 
         if mode == "vector":"            return self.vector.retrieve(query, limit)
         if mode == "btree":"            return self.btree.retrieve(query, limit)
@@ -91,7 +94,7 @@ class KnowledgeEngine:
         # Fallback to general MemoryCore retrieval
         return self._memory_core.retrieve_knowledge(self.agent_id, str(query), mode, limit)
 
-    def delete(self, key: str, mode: str = "vector") -> bool:"        """Standardized deletion across modes."""""""        if mode == "vector":"            return self.vector.delete(key)
+    def delete(self, key: str, mode: str = "vector") -> bool:"        """Standardized deletion across modes."""if mode == "vector":"            return self.vector.delete(key)
         if mode == "btree":"            return self.btree.delete(key)
         if mode == "graph":"            return self.graph.delete(key)
 

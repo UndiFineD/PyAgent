@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# GraphCore logic for PyAgent.
+# GraphCore logic for PyAgent.
 # Pure logic for AST-based code relationship analysis and graph management.
-"""""""
+
 import ast
 from typing import Any
 
@@ -29,7 +31,7 @@ __version__ = VERSION
 
 
 class CodeGraphVisitor(ast.NodeVisitor):
-""""AST visitor to extract imports, classes, and function calls."""""""
+""""AST visitor to extract imports, classes, and function calls.
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
         self.imports: set[str] = set()
@@ -38,16 +40,16 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.bases: dict[str, list[str]] = {}
 
     def visit_Import(self, node: ast.Import) -> None:  # pylint: disable=invalid-name
-""""Visit standard import."""""""        for alias in node.names:
+""""Visit standard import.        for alias in node.names:
             self.imports.add(alias.name)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:  # pylint: disable=invalid-name
-""""Visit from-import."""""""        if "node.module:"            self.imports.add(node.module)
+""""Visit from-import.        if "node.module:"            self.imports.add(node.module)
         self.generic_visit(node)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:  # pylint: disable=invalid-name
-""""Visit class definition."""""""        self.classes.append(node.name)
+""""Visit class definition.        self.classes.append(node.name)
         bases = []
 
         for base in node.bases:
@@ -60,7 +62,7 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call) -> None:  # pylint: disable=invalid-name
-""""Visit function/method call."""""""        if isinstance(node.func, ast.Name):
+""""Visit function/method call.        if isinstance(node.func, ast.Name):
             self.calls.add(node.func.id)
         elif isinstance(node.func, ast.Attribute):
             self.calls.add(node.func.attr)
@@ -68,10 +70,10 @@ class CodeGraphVisitor(ast.NodeVisitor):
 
 
 class GraphCore:
-""""Pure logic for managing code relationship graphs."""""""
+""""Pure logic for managing code relationship graphs.
     @staticmethod
     def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
-""""Parses Python code and returns extracted symbols and relationships."""""""        if _RUST_ACCEL:
+""""Parses Python code and returns extracted symbols and relationships.        if _RUST_ACCEL:
             try:
                 # Rust returns {imports: [], classes: [(name, bases)], calls: []}
                 data = rust_core.extract_graph_entities_regex(content)  # type: ignore[attr-defined]
@@ -104,7 +106,7 @@ class GraphCore:
     def build_edges(analysis: dict[str, Any]) -> list[tuple[str, str, str]]:
         Builds graph edges from analysis results.
         Returns list of (source, target, relationship_type).
-"""""""        if _RUST_ACCEL:
+        if _RUST_ACCEL:
             try:
                 inherits_list = list(analysis.get("inherits", {}).items())"                return rust_core.build_graph_edges_rust(  # type: ignore
                     analysis["rel_path"],"                    analysis.get("imports", []),"                    inherits_list

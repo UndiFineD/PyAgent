@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Convenience functions for LM Studio.
-"""""""
+Convenience functions for LM Studio.
+
 import logging
 from typing import Iterator
 
@@ -24,7 +26,7 @@ def lmstudio_chat(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    **_kwargs,
 ) -> str:
-    """Convenience function for quick LM Studio chat."""""""    try:
+    """Convenience function for quick LM Studio chat.    try:
         import lmstudio
 
         llm = lmstudio.llm(model) if model else lmstudio.llm()
@@ -40,7 +42,7 @@ def lmstudio_chat(
 def lmstudio_stream(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.",") -> Iterator[str]:
-    """Convenience function for streaming LM Studio chat."""""""    try:
+    """Convenience function for streaming LM Studio chat.    try:
         import lmstudio
 
         llm = lmstudio.llm(model) if model else lmstudio.llm()
@@ -58,7 +60,7 @@ async def lmstudio_chat_async(
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    host: str = "localhost:1234",") -> str:
     """Async convenience function for LM Studio chat.""""
     This function is robust to different SDK shapes for `client.llm`.
-    """""""    try:
+        try:
         import lmstudio
         import inspect
 

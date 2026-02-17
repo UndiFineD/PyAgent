@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
-"""""""Pruning Orchestrator - Synaptic Decay & Knowledge Pruning
+Pruning Orchestrator - Synaptic Decay & Knowledge Pruning
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -52,7 +54,7 @@ FILE CONTENT SUMMARY:
 Module: pruning_orchestrator
 Implements Pillar 6: Synaptic Decay & Knowledge Pruning for context
 lifecycle management.
-"""""""
+
 from __future__ import annotations
 import logging
 import asyncio
@@ -66,17 +68,17 @@ logger = logging.getLogger(__name__)
 
 
 class PruningOrchestrator:
-    """""""    Coordinates the pruning of idle knowledge paths and KV-cache blocks.
-    Ensures that long-running reasoning threads don't cause context bloat.'    """""""
+        Coordinates the pruning of idle knowledge paths and KV-cache blocks.
+    Ensures that long-running reasoning threads don't cause context bloat.'    
     def __init__(self, fleet: FleetManager, decay_rate: float = 0.08):
         self.fleet = fleet
         self.decay_engine = SynapticDecay(decay_rate=decay_rate)
         self.pruning_interval = 1800  # 30 mins
 
     async def run_pruning_cycle(self, threshold: float = 0.2):
-        """""""        Executes a swarm-wide pruning cycle.
+                Executes a swarm-wide pruning cycle.
         Identifies stale LSH buckets and low-utility landmarks.
-        """""""        logger.info("PruningOrchestrator: Starting Synaptic Decay cycle (Phase 92)...")"
+                logger.info("PruningOrchestrator: Starting Synaptic Decay cycle (Phase 92)...")"
         # 1. Prune Global Knowledge Cache
         knowledge_keys = list(self.fleet.memory_core.get_active_indices()) if hasattr(self.fleet, "memory_core") else []"        dead_keys = self.decay_engine.process_decay(knowledge_keys)
 
@@ -90,7 +92,7 @@ class PruningOrchestrator:
 
         logger.info("PruningOrchestrator: Synaptic cycle complete.")"
     async def _trigger_distributed_pruning(self):
-        """Broadcasts a pruning signal to all neighbor nodes."""""""        if not hasattr(self.fleet, "voyager_transport"):"            return
+        """Broadcasts a pruning signal to all neighbor nodes.        if not hasattr(self.fleet, "voyager_transport"):"            return
 
         # Phase 91: Localized Semantic Invalidation signal
         pruning_msg = {
@@ -101,7 +103,7 @@ class PruningOrchestrator:
                 await self.fleet.voyager_transport.send_message(node_id, pruning_msg)
 
     async def start_background_loop(self):
-        """Background daemon for continuous context maintenance."""""""        while True:
+        """Background daemon for continuous context maintenance.        while True:
             await self.run_pruning_cycle()
             await asyncio.sleep(self.pruning_interval)
 

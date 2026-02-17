@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Configuration and state enums for distributed coordination.
-"""""""
+Configuration and state enums for distributed coordination.
+
 from __future__ import annotations
 
 import uuid
@@ -23,7 +25,7 @@ from enum import Enum, auto
 
 
 class EngineState(Enum):
-    """State of a distributed engine instance."""""""
+    """State of a distributed engine instance.
     INITIALIZING = auto()  # Engine is starting up
     READY = auto()  # Engine is ready to process
     BUSY = auto()  # Engine is processing requests
@@ -33,7 +35,7 @@ class EngineState(Enum):
 
 
 class WorkerState(Enum):
-    """State of a worker process."""""""
+    """State of a worker process.
     STARTING = auto()
     RUNNING = auto()
     PAUSED = auto()
@@ -43,7 +45,7 @@ class WorkerState(Enum):
 
 
 class LoadBalancingStrategy(Enum):
-    """Load balancing strategies for data parallel."""""""
+    """Load balancing strategies for data parallel.
     ROUND_ROBIN = auto()
     LEAST_LOADED = auto()
     RANDOM = auto()
@@ -62,7 +64,7 @@ class ParallelConfig:
         distributed_executor_backend: Backend type (mp, ray).
         worker_use_ray: Whether workers use Ray.
         max_parallel_loading: Max workers loading simultaneously.
-    """""""
+    
     data_parallel_size: int = 1
     tensor_parallel_size: int = 1
     pipeline_parallel_size: int = 1
@@ -71,11 +73,11 @@ class ParallelConfig:
 
     @property
     def world_size(self) -> int:
-        """Total number of distributed ranks."""""""        return self.data_parallel_size * self.tensor_parallel_size * self.pipeline_parallel_size
+        """Total number of distributed ranks.        return self.data_parallel_size * self.tensor_parallel_size * self.pipeline_parallel_size
 
     @property
     def is_distributed(self) -> bool:
-        """Check if running in distributed mode."""""""        return self.world_size > 1
+        """Check if running in distributed mode.        return self.world_size > 1
 
 
 @dataclass
@@ -87,7 +89,7 @@ class EngineIdentity:
         dp_size: Data parallel world size.
         address: Network address.
         engine_id: Unique engine identifier.
-    """""""
+    
     dp_rank: int
     dp_size: int
     address: str = """    engine_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
@@ -97,7 +99,7 @@ class EngineIdentity:
 
 @dataclass
 class WorkerIdentity:
-    """Identity of a worker process."""""""
+    """Identity of a worker process.
     worker_id: int
     engine_id: str
     rank: int

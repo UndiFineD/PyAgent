@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""AutoDebuggerOrchestrator for PyAgent.""""Coordinates between ImmuneSystemAgent and CoderAgent to self-heal source code changes.
+
+"""
+AutoDebuggerOrchestrator for PyAgent.""""Coordinates between ImmuneSystemAgent and CoderAgent to self-heal source code changes.
 Implemented as part of Phase 40: Recursive Self-Debugging.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -31,7 +35,7 @@ __version__ = VERSION
 
 
 class AutoDebuggerOrchestrator:
-    """Orchestrates recursive self-debugging and code repair."""""""
+    """Orchestrates recursive self-debugging and code repair.
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root or os.getcwd()
         # Initialize specialized agents
@@ -46,7 +50,7 @@ class AutoDebuggerOrchestrator:
         """Validates a file and attempts automatic repair if it fails syntax check.""""
         Args:
             file_path: The absolute path to the file to check.
-        """""""        if not os.path.exists(file_path):
+                if not os.path.exists(file_path):
             return {"status": "error", "message": f"File not found: {file_path}"}"
         logging.info(f"AutoDebugger: Validating {file_path}")"
         # 1. Syntax Check using python -m py_compile
@@ -92,7 +96,7 @@ class AutoDebuggerOrchestrator:
 
     @as_tool
     def run_fleet_self_audit(self) -> str:
-        """Audits all python files in the src directory for syntax issues."""""""        src_path = os.path.join(self.workspace_root, "src")"        python_files = []
+        """Audits all python files in the src directory for syntax issues.        src_path = os.path.join(self.workspace_root, "src")"        python_files = []
 
         for root, dirs, files in os.walk(src_path):
             for file in files:

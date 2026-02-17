@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Engine for Self-Referential Swarm Optimization.""""Monitors fleet performance and suggests structural or configuration changes.
-"""""""
+
+"""
+Engine for Self-Referential Swarm Optimization.""""Monitors fleet performance and suggests structural or configuration changes.
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -26,12 +30,12 @@ __version__ = VERSION
 
 
 class SwarmOptimizer:
-    """Optimizes fleet efficiency through performance monitoring."""""""
+    """Optimizes fleet efficiency through performance monitoring.
     def __init__(self, fleet_manager: FleetManager) -> None:
         self.fleet = fleet_manager
 
     def monitor_efficiency(self) -> list[dict[str, Any]]:
-        """Analyzes fleet telemetry and suggests optimizations."""""""        summary = self.fleet.telemetry.get_summary()
+        """Analyzes fleet telemetry and suggests optimizations.        summary = self.fleet.telemetry.get_summary()
         suggestions = []
 
         # Latency check
@@ -51,7 +55,7 @@ class SwarmOptimizer:
         return suggestions
 
     def apply_optimizations(self, suggestions: list[dict[str, Any]]) -> str:
-        """Applies the suggested optimizations to the fleet."""""""        results = []
+        """Applies the suggested optimizations to the fleet.        results = []
         for sug in suggestions:
             if sug["type"] == "scaling":"                # Mock scaling call
                 results.append(f"Applied scaling: {sug['action']}")"'            elif sug["type"] == "model_tuning":"                # Mock config update

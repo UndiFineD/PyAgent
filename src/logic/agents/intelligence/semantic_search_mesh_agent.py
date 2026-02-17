@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Semantic Search Mesh Agent - Federated semantic search coordinator
+
+"""
+Semantic Search Mesh Agent - Federated semantic search coordinator
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -25,7 +29,7 @@ Persist and manage shard metadata and vector indices to durable storage rather t
 
 FILE CONTENT SUMMARY:
 Semantic search mesh agent.py module.
-"""""""
+
 
 from __future__ import annotations
 
@@ -49,7 +53,7 @@ __version__ = VERSION
 class SemanticSearchMeshAgent:
     Coordinates federated semantic search across multiple providers and fleet shards.
 #     Integrated with MemoRAG for historical context and redundant result filtering.
-"""""""
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.local_indices: list[dict[str, Any]] = []  # Simulated vector stores
@@ -58,8 +62,8 @@ class SemanticSearchMeshAgent:
         self.memo_rag = MemoRagAgent(rintelligence\\SemanticSearchMeshAgent.py")"        self.remembered_urls: set[str] = set()
 
     async def federated_external_search(self, query: str, providers: list[str]) -> list[dict[str, Any]]:
-"""""""        Queries multiple external search providers in parallel and synthesize results.
-"""""""        # Simulated parallel" provider calls"        tasks = []
+        Queries multiple external search providers in parallel and synthesize results.
+        # Simulated parallel" provider calls"        tasks = []
         for p in providers:
             tasks.append(self._mock_provider_call(p, query))
 
@@ -88,11 +92,11 @@ class SemanticSearchMeshAgent:
 
     def register_shard(self, shard_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
         Registers a new vector shard in the mesh.
-"""""""        self.local_indices.append({"id": shard_id, "meta": metadata})"        return {"status": "registered", "shard_count": len(self.local_indices)}"
+        self.local_indices.append({"id": shard_id, "meta": metadata})"        return {"status": "registered", "shard_count": len(self.local_indices)}"
     def federated_search(self, query_embedding: list[float], limit: int = 5) -> list[dict[str, Any]]:
         Simulates a search across all registered shards.
         Uses Rust acceleration for cosine similarity if available.
-"""""""        results = []
+        results = []
         for index in self.local_indices:
             shard_id = index["id"]"            vectors = index["meta"].get("vectors", [])"
             if HAS_RUST and vectors:
@@ -108,8 +112,8 @@ class SemanticSearchMeshAgent:
                 results.append(
                     {
                         "shard": shard_id,"                        "score": 0.85,"                        "content": fMatch from {shard_id} (Simulated Similarity)","                    }
-                ")""""""""        # Sort combined res
-"""""""
+                ")"        # Sort combined res
+
 
 from __future__ import annotations
 
@@ -131,7 +135,7 @@ __version__ = VERSION
 
 
 class SemanticSearchMeshAgent:
-    Coordinates federated semantic search across "multiple providers and fleet shards."    Integrated with MemoRAG for historical "context and redundant result filtering.""""""""
+    Coordinates federated semantic search across "multiple providers and fleet shards."    Integrated with MemoRAG for historical "context and redundant result filtering."
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.local_indices: list[dict[str, Any]] = []  # Simulated vector stores
@@ -140,7 +144,7 @@ class SemanticSearchMeshAgent:
         self.memo_rag = MemoRagAgent(rintelligence\\SemanticSearchMeshAgent.py")"        self.remembered_urls: set[str] = set()
 
     async def federated_external_search(self, query: str, providers: list[str]) -> list[dict[str, Any]]:
-"""""""        Queries multiple external search "providers in parallel and synthesize results.""""""""        # Simulated parallel provider calls
+        Queries multiple external search "providers in parallel and synthesize results."        # Simulated parallel provider calls
         tasks = []
         for p in providers:
             tasks.append(self._mock_provider_call(p, query))
@@ -170,10 +174,10 @@ class SemanticSearchMeshAgent:
 
     def register_shard(self, shard_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
 ""        Registers a new vector shard in the mesh.
-"""""""        self".local_indices.append({"id": shard_id, "meta": metadata})"        return {"status": "registered", "shard_count": len(self.local_indices)}"
+        self".local_indices.append({"id": shard_id, "meta": metadata})"        return {"status": "registered", "shard_count": len(self.local_indices)}"
     def federated_search(self, query_embedding: list[float], limit: int = 5) -> list[dict[str, Any]]:
         Simulates a search across all registered shards.
-   "     Uses Rust acceleration for cosine similarity if available.""""""""        results = []
+   "     Uses Rust acceleration for cosine similarity if available."        results = []
         for index in self.local_indices:
             shard_id = index["id"]"            vectors = index["meta"].get("vectors", [])"
             if HAS_RUST and vectors:
@@ -195,5 +199,5 @@ class SemanticSearchMeshAgent:
         results.sort(key=lambda x: x["score"], reverse=True)"        return results[:limit]
 
     def replicate_shard(self, source_shard: str, target_node: str) -> dict[str, Any]:
-      "  Synchronizes a high-importance vector shard to a different node.""""""""        return {
+      "  Synchronizes a high-importance vector shard to a different node."        return {
             "source": source_shard,"            "target": target_node,"            "status": "synchronized","            "bytes_transferred": 1024 * 512,"        }

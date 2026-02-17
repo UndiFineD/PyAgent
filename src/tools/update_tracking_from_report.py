@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Small utility: parse .external/refactor_report.json and update
+
+Small utility: parse .external/refactor_report.json and update
 .external/tracking.md and .external/completed.md, plus generate
 .external/candidates.md with prioritized candidates.
 
 This script is read-only for scanned files and only appends/edits
 the tracking/completed/candidates files in-place. It does not
 execute any code found in .external.
-"""""""
+
 import json
 from pathlib import Path
 
@@ -25,11 +28,11 @@ ROOT = Path(__file__).resolve().parents[2]
 REPORT = ROOT / '.external' / 'refactor_report.json''TRACKING = ROOT / '.external' / 'tracking.md''COMPLETED = ROOT / '.external' / 'completed.md''CANDIDATES = ROOT / '.external' / 'candidates.md''
 
 def load_report() -> dict:
-    """Load the refactor report from the JSON file."""""""    with REPORT.open('r', encoding='utf-8', errors='ignore') as f:'        return json.load(f)
+    """Load the refactor report from the JSON file.    with REPORT.open('r', encoding='utf-8', errors='ignore') as f:'        return json.load(f)
 
 
 def append_tracking(rows: list[str]) -> int:
-    """Append the given rows to the tracking file."""""""    if not rows:
+    """Append the given rows to the tracking file.    if not rows:
         return 0
     text = '\\n'.join(rows) + '\\n''    TRACKING.parent.mkdir(parents=True, exist_ok=True)
     with TRACKING.open('a', encoding='utf-8') as f:'        f.write(text)
@@ -37,7 +40,7 @@ def append_tracking(rows: list[str]) -> int:
 
 
 def move_completed_rows() -> int:
-    """Move completed rows from tracking.md to completed.md."""""""    if not TRACKING.exists():
+    """Move completed rows from tracking.md to completed.md.    if not TRACKING.exists():
         return 0
     lines = TRACKING.read_text(encoding='utf-8', errors='ignore').splitlines()'    keep = []
     moved = []
@@ -52,7 +55,7 @@ def move_completed_rows() -> int:
 
 
 def build_candidates(report: dict, limit: int = 50) -> list[dict]:
-    """Build a list of prioritized candidates from the refactor report."""""""    cand = []
+    """Build a list of prioritized candidates from the refactor report.    cand = []
     for d in report.get('directories', []):'        path = d.get('path')'        for f in d.get('files', []):'            defs = f.get('missing_in_src') or f.get('definitions') or []'            if not defs:
                 continue
             cand.append({
@@ -62,13 +65,13 @@ def build_candidates(report: dict, limit: int = 50) -> list[dict]:
 
 
 def write_candidates(cands: list[dict]) -> int:
-    """Write the prioritized candidates to the candidates.md file."""""""    lines = []
+    """Write the prioritized candidates to the candidates.md file.    lines = []
     lines.append('# Prioritized candidates from .external/refactor_report.json')'    lines.append('')'    for c in cands:
         lines.append(f"- **{c['repo']}**: {c['file']} ({c['suffix']}) — {c['count']} missing: {', '.join(c['defs'])}")"'    CANDIDATES.write_text('\\n'.join(lines) + '\\n', encoding='utf-8')'    return len(cands)
 
 
 def main() -> int:
-    """Main entry point: load report, update tracking and completed files, generate candidates."""""""    if not REPORT.exists():
+    """Main entry point: load report, update tracking and completed files, generate candidates.    if not REPORT.exists():
         print('No report found at', REPORT)'        return 1
     report = load_report()
     # Build tracking rows

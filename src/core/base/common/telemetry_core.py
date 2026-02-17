@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Centralized Telemetry and Metrics Core.
+
+"""Centralized Telemetry and Metrics Core.
 Provides high-performance aggregation, alerting, and cross-tier observability.
-"""""""
+"""
 from __future__ import annotations
 
 import logging
@@ -31,12 +34,12 @@ from .base_core import BaseCore
 logger = logging.getLogger("pyagent.telemetry")"
 
 class MetricType(Enum):
-    """Enumeration of supported metric types."""""""
+    """Enumeration of supported metric types."""
     COUNTER = "counter""    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary""
 
 @dataclass
 class Metric:
-    """Representation of a single metric data point."""""""
+    """Representation of a single metric data point."""
     name: str
     value: float
     metric_type: MetricType = MetricType.GAUGE
@@ -53,9 +56,9 @@ class Metric:
 
 
 class TelemetryCore(BaseCore):
-    """""""    Authoritative engine for system metrics and event tracking.
+    """Authoritative engine for system metrics and event tracking.
     Standardizes how agents and infrastructure report health and performance.
-    """""""
+    """
     def __init__(self) -> None:
         super().__init__()
         self._metrics_buffer: List[Metric] = []
@@ -64,7 +67,7 @@ class TelemetryCore(BaseCore):
     def record_metric(
         self, name: str, value: float, mtype: MetricType = MetricType.GAUGE, tags: Optional[Dict[str, str]] = None
     ) -> None:
-        """Records a single metric point."""""""        metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
+        """Records a single metric point."""metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
         self._metrics_buffer.append(metric)
 
         # Trim buffer if too large (10k points)
@@ -72,9 +75,9 @@ class TelemetryCore(BaseCore):
             self._metrics_buffer = self._metrics_buffer[-5000:]
 
     def get_rollups(self, metric_name: str, window_seconds: int = 3600) -> Dict[str, float]:
-        """""""        Calculates basic stats for a metric.
+        """Calculates basic stats for a metric.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
-        """""""        if rc and hasattr(rc, "calculate_rollups"):"            try:
+        """if rc and hasattr(rc, "calculate_rollups"):"            try:
                 # Optimized Rust rollup calculation
                 return rc.calculate_rollups(  # pylint: disable=no-member
                     [(m.name, m.timestamp, m.value) for m in self._metrics_buffer],
@@ -93,11 +96,11 @@ class TelemetryCore(BaseCore):
             return {"avg": 0.0, "max": 0.0, "count": 0}"
         return {"avg": sum(relevant) / len(relevant), "max": max(relevant), "count": len(relevant)}"
     def get_cluster_health_score(self) -> float:
-        """Calculates a unified health score (0.0 - 1.0) for the local machine or cluster."""""""        cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)"        mem_avg = self.get_rollups("swarm.node.memory_percent", window_seconds=60).get("avg", 0.0)"
+        """Calculates a unified health score (0.0 - 1.0) for the local machine or cluster."""cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)"        mem_avg = self.get_rollups("swarm.node.memory_percent", window_seconds=60).get("avg", 0.0)"
         # Invert the load to get a 'health' score'        # (e.g. 20% CPU + 30% MEM -> 0.75 health)
         load = (cpu_avg + mem_avg) / 2.0
         return max(0.0, min(1.0, 1.0 - (load / 100.0)))
 
     def clear(self) -> None:
-        """Clears all buffered metrics and alerts."""""""        self._metrics_buffer.clear()
+        """Clears all buffered metrics and alerts."""self._metrics_buffer.clear()
         self._alerts.clear()

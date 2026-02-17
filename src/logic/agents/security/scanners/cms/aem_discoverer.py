@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -89,7 +91,7 @@ def content_type(ct):
 @register
 def by_login_page(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
-"""LOGIN_PAGE = "/libs/granite/core/content/login.html"""""""    url = normalize_url(base_url, LOGIN_PAGE)
+"""LOGIN_PAGE = "/libs/granite/core/content/login.html    url = normalize_url(base_url, LOGIN_PAGE)
 
     try:
         resp = http_request(url, proxy=proxy)
@@ -102,7 +104,7 @@ def by_login_page(base_url, debug, proxy=None):
 @register
 def by_csrf_token(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
-"""CSRF_TOKEN = "/libs/granite/csrf/token.json"""""""    url = normalize_url(base_url, CSRF_TOKEN)
+"""CSRF_TOKEN = "/libs/granite/csrf/token.json    url = normalize_url(base_url, CSRF_TOKEN)
 
     try:
         resp = http_request(url, proxy=proxy)
@@ -116,7 +118,7 @@ def by_csrf_token(base_url, debug, proxy=None):
 @register
 def by_geometrixx_page(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
-"""GEOMETRIXX = "/content/geometrixx/en.html"""""""    url = normalize_url(base_url, GEOMETRIXX)
+"""GEOMETRIXX = "/content/geometrixx/en.html    url = normalize_url(base_url, GEOMETRIXX)
 
     try:
         resp = http_request(url, proxy=proxy)

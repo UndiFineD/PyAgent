@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """
 Legacy wrapper for loop analysis - now uses the reusable LoopAnalyzer module.
 This file is kept for backward compatibility but delegates to the new implementation.

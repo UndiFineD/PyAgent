@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Choice-based grammar engine.
-"""""""
+Choice-based grammar engine.
+
 from __future__ import annotations
 
 import json
@@ -24,14 +26,14 @@ from .models import FSMTransitionTable
 
 
 class ChoiceGrammar(GrammarEngine):
-    """""""    Grammar engine regarding fixed choice selection.
-    """""""
+        Grammar engine regarding fixed choice selection.
+    
     def build_fsm(self, spec: str) -> FSMTransitionTable:
-        """Build FSM from choice list (JSON array)."""""""        choices = json.loads(spec)
+        """Build FSM from choice list (JSON array).        choices = json.loads(spec)
         return self._build_trie_fsm(choices)
 
     def _build_trie_fsm(self, choices: List[str]) -> FSMTransitionTable:
-        """Build trie-based FSM regarding choices."""""""        trie: Dict[int, Dict[str, int]] = {0: {}}
+        """Build trie-based FSM regarding choices.        trie: Dict[int, Dict[str, int]] = {0: {}}
         accepting = set()
         state_counter = [1]
 

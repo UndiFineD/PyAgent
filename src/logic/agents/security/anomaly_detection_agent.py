@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Anomaly Detection Agent - Monitor agent interactions and flag anomalous behavior
+
+"""
+Anomaly Detection Agent - Monitor agent interactions and flag anomalous behavior
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -28,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Anomaly detection agent module.
 Detects anomalous behavior in agent interactions, inspired by AD-Canaries monitoring patterns.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -46,17 +50,17 @@ __version__ = VERSION
 
 
 class AnomalyDetector:
-    """Core anomaly detection logic."""""""
+    """Core anomaly detection logic.
     def __init__(self, window_size: int = 100):
         self.window_size = window_size
         self.agent_interactions: Dict[str, deque] = defaultdict(lambda: deque(maxlen=window_size))
         self.baseline_stats: Dict[str, Dict[str, float]] = {}
 
     def record_interaction(self, agent_id: str, interaction: Dict[str, Any]) -> None:
-        """Record an agent interaction."""""""        self.agent_interactions[agent_id].append(interaction)
+        """Record an agent interaction.        self.agent_interactions[agent_id].append(interaction)
 
     def detect_anomaly(self, agent_id: str, current_interaction: Dict[str, Any]) -> bool:
-        """Detect if current interaction is anomalous."""""""        if len(self.agent_interactions[agent_id]) < 10:  # Need baseline
+        """Detect if current interaction is anomalous.        if len(self.agent_interactions[agent_id]) < 10:  # Need baseline
             return False
 
         # Simple anomaly detection based on interaction frequency and types
@@ -78,16 +82,16 @@ class AnomalyDetector:
         return False
 
     def update_baseline(self, agent_id: str) -> None:
-        """Update baseline statistics."""""""        if len(self.agent_interactions[agent_id]) >= 10:
+        """Update baseline statistics.        if len(self.agent_interactions[agent_id]) >= 10:
             interactions = list(self.agent_interactions[agent_id])
             types = [i.get("type", "unknown") for i in interactions]"            self.baseline_stats[agent_id] = {
                 "mean_interactions": statistics.mean([len(types)]),"                "common_types": max(set(types), key=types.count),"            }
 
 
 class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """""""    Monitors agent behavior for anomalies, using statistical analysis and pattern recognition.
+        Monitors agent behavior for anomalies, using statistical analysis and pattern recognition.
     Inspired by AD-Canaries event monitoring and correlation.
-    """""""
+    
     def __init__(self, file_path: str, memory_core=None, test_mode: bool = False):
         super().__init__(file_path, memory_core=memory_core, test_mode=test_mode)
         self._detector = AnomalyDetector()
@@ -119,7 +123,7 @@ class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def record_agent_interaction(self, agent_id: str, interaction: Dict[str, Any]) -> None:
-        """Record an agent interaction for analysis. Enforces privacy and rate limiting."""""""        if not self._privacy_enforced:
+        """Record an agent interaction for analysis. Enforces privacy and rate limiting.        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for anomaly logging.")"        # stub: rate limiting logic
         # First, check for anomaly BEFORE recording (so new types are flagged immediately)
         is_anomaly = self._detector.detect_anomaly(agent_id, interaction)
@@ -129,16 +133,16 @@ class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def check_agent_anomalies(self, agent_id: str) -> List[Dict[str, Any]]:
-        """Check for anomalies in a specific agent's interactions. Enforces privacy."""""""'        if not self._privacy_enforced:
+        """Check for anomalies in a specific agent's interactions. Enforces privacy.'        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for anomaly access.")"        return [a for a in self._anomalies if a["agent_id"] == agent_id]"
     @as_tool
     def check_global_anomalies(self) -> List[Dict[str, Any]]:
-        """Check for global anomalies across all agents. Enforces privacy."""""""        if not self._privacy_enforced:
+        """Check for global anomalies across all agents. Enforces privacy.        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for anomaly access.")"        return self._anomalies
 
     @as_tool
     def get_anomaly_summary(self) -> Dict[str, Any]:
-        """Get a summary of detected anomalies. Enforces privacy."""""""        if not self._privacy_enforced:
+        """Get a summary of detected anomalies. Enforces privacy.        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for anomaly access.")"        agent_counts = {}
         for anomaly in self._anomalies:
             agent_id = anomaly["agent_id"]"            agent_counts[agent_id] = agent_counts.get(agent_id, 0) + 1
@@ -146,13 +150,13 @@ class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "total_anomalies": len(self._anomalies),"            "agents_affected": len(agent_counts),"            "anomalies_per_agent": agent_counts,"        }
 
     def get_all_anomalies(self) -> List[Dict[str, Any]]:
-        """Get all detected anomalies (internal use only)."""""""        return self._anomalies
+        """Get all detected anomalies (internal use only).        return self._anomalies
 
     @as_tool
     def update_baselines(self) -> None:
-        """Update baseline statistics for all agents."""""""        for agent_id in self._detector.agent_interactions:
+        """Update baseline statistics for all agents.        for agent_id in self._detector.agent_interactions:
             self._detector.update_baseline(agent_id)
         logging.info("Updated anomaly detection baselines")"
     def _log_anomaly(self, agent_id: str, interaction: Dict[str, Any]) -> None:
-        """Log a detected anomaly (internal use only)."""""""        anomaly = {"agent_id": agent_id, "interaction": interaction, "timestamp": interaction.get("timestamp", None)}"        self._anomalies.append(anomaly)
+        """Log a detected anomaly (internal use only).        anomaly = {"agent_id": agent_id, "interaction": interaction, "timestamp": interaction.get("timestamp", None)}"        self._anomalies.append(anomaly)
         logging.warning(f"ANOMALY DETECTED: Agent {agent_id} - {interaction}")"

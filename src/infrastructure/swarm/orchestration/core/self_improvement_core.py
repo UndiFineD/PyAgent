@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""SelfImprovementCore: Pure logic for fleet self-improvement analysis.
+
+"""
+SelfImprovementCore: Pure logic for fleet self-improvement analysis.
 Extracted from SelfImprovementOrchestrator for Rust-readiness.
-"""""""
+
 from __future__ import annotations
 
 import re
@@ -33,9 +37,9 @@ except ImportError:
 
 
 class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMixin):
-    """""""    Pure logic core for identifying tech debt, security risks, and quality issues.
+        Pure logic core for identifying tech debt, security risks, and quality issues.
     This class contains no I/O and is suitable for Rust oxidation.
-    """""""
+    
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
         self._RUST_ACCEL = _RUST_ACCEL
@@ -54,9 +58,9 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
 
     def analyze_content(self, content: str, file_path_rel: str,
                         allow_triton_check: bool = True) -> List[Dict[str, Any]]:
-        """""""        Performs multi-dimensional analysis on file content using Rust if available.
+                Performs multi-dimensional analysis on file content using Rust if available.
         Returns a list of findings.
-        """""""        import json
+                import json
         if _RUST_ACCEL and rc is not None:
             try:
                 # Use the Rust PyO3 function directly
@@ -79,7 +83,7 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         return findings
 
     def _analyze_via_rust(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        """Uses Rust accelerator for high-performance analysis."""""""        try:
+        """Uses Rust accelerator for high-performance analysis.        try:
             rust_findings = rc.analyze_code_quality_rust(content, file_path_rel, self.dangerous_patterns)
             findings = []
             for issue_type, message, line_num in rust_findings:
@@ -92,8 +96,8 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
             return []
 
     def generate_simple_fix(self, issue_type: str, content: str) -> Optional[str]:
-        """""""        Applies non-AI assisted simple fixes using Rust if available.
-        """""""        if _RUST_ACCEL and rc is not None:
+                Applies non-AI assisted simple fixes using Rust if available.
+                if _RUST_ACCEL and rc is not None:
             result = rc.generate_simple_fix(issue_type, content)
             return result if result is not None else None
 

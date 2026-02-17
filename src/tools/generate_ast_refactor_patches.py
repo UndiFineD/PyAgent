@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Generate conservative AST-based refactor patch proposals for top-priority files.
+
+Generate conservative AST-based refactor patch proposals for top-priority files.
 
 This script:
 - Loads the bandit report (.external/static_checks/bandit.json) or uses the prepared
@@ -22,7 +25,7 @@ This script:
 
 Notes:
 - This only writes patch proposals and does not modify source files.
-"""""""
+
 from __future__ import annotations
 import json
 from pathlib import Path
@@ -34,9 +37,9 @@ ROOT = Path(__file__).resolve().parents[2]
 BANDIT_JSON = ROOT / '.external' / 'static_checks' / 'bandit.json''PATCH_DIR = ROOT / '.external' / 'patches_ast''TARGET_PREFIX = ROOT / 'src' / 'external_candidates' / 'auto''
 
 def load_bandit_results():
-    """""""    Loads the bandit results from the JSON file, 
+        Loads the bandit results from the JSON file, 
     returning an empty dict if not found or on error.
-    """""""    if not BANDIT_JSON.exists():
+        if not BANDIT_JSON.exists():
         return {}
     try:
         return json.loads(BANDIT_JSON.read_text(encoding='utf-8'))'    except Exception:
@@ -44,7 +47,7 @@ def load_bandit_results():
 
 
 def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
-    """Extracts the top N files with the highest weighted issue severity from bandit results."""""""    files: dict[str, int] = {}
+    """Extracts the top N files with the highest weighted issue severity from bandit results.    files: dict[str, int] = {}
     for r in results.get('results', []):'        fn = r.get('filename')'        sev = r.get('issue_severity', 'LOW').upper()'        weight = {'LOW': 1, 'MEDIUM': 5, 'HIGH': 10}.get(sev, 1)'        files.setdefault(fn, 0)
         files[fn] += weight
     items = sorted(files.items(), key=lambda kv: kv[1], reverse=True)
@@ -52,11 +55,11 @@ def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
 
 
 class SubprocessTransformer(ast.NodeTransformer):
-    """AST transformer that replaces subprocess calls with a safe wrapper."""""""    DANGEROUS_ATTRS = {'Popen', 'call', 'run', 'check_output'}'
+    """AST transformer that replaces subprocess calls with a safe wrapper.    DANGEROUS_ATTRS = {'Popen', 'call', 'run', 'check_output'}'
     def visit_Call(self, node):
-        """""""        Transforms calls to subprocess.<attr>(...) or direct Popen(...) 
+                Transforms calls to subprocess.<attr>(...) or direct Popen(...) 
         into safe_subprocess_run(...).
-        """""""        # transform subprocess.<attr>(...) -> safe_subprocess_run(...)
+                # transform subprocess.<attr>(...) -> safe_subprocess_run(...)
         func = node.func
         if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
             if func.value.id == 'subprocess' and func.attr in self.DANGEROUS_ATTRS:'                new = ast.copy_location(
@@ -81,11 +84,11 @@ class SubprocessTransformer(ast.NodeTransformer):
 
 
 SAFE_WRAPPER_SRC = '''def safe_subprocess_run(*args, **kwargs):''''    """Conservative placeholder: replace with secure implementation.""""    This wrapper intentionally raises at runtime to force human review before enabling.
-    """""""    raise RuntimeError('Refactor required: replace safe_subprocess_run with a secure executor')'
+        raise RuntimeError('Refactor required: replace safe_subprocess_run with a secure executor')'
 '''''''
 
 def create_patch_for_file(path: Path) -> Path | None:
-    """Creates a unified diff patch for the given file if transformations are applied."""""""    try:
+    """Creates a unified diff patch for the given file if transformations are applied.    try:
         src = path.read_text(encoding='utf-8', errors='ignore')'        tree = ast.parse(src)
     except Exception:
         return None
@@ -112,8 +115,8 @@ def create_patch_for_file(path: Path) -> Path | None:
 
 
 def main() -> int:
-    """""""    Main entry point for AST-based refactor patch generation.
-    """""""    results = load_bandit_results()
+        Main entry point for AST-based refactor patch generation.
+        results = load_bandit_results()
     top_files = top_files_from_bandit(results, top_n=40)
     created = 0
     for f in top_files:

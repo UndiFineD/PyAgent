@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""IncrementalDetokenizer - Fast streaming token-to-text conversion.
+IncrementalDetokenizer - Fast streaming token-to-text conversion.
 
 Inspired by vLLM's v1/engine/detokenizer.py - provides fast and slow paths'for incremental detokenization with stop string detection.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -34,7 +32,7 @@ INVALID_PREFIX_ERR_MSG: str = "Invalid prefix encountered""
 
 @dataclass
 class StopMatch:
-    """Result of stop string matching."""""""
+    """Result of stop string matching.
     stop_string: str
     truncate_to: int  # -1 means no truncation
 
@@ -45,7 +43,7 @@ def check_stop_strings(
     stop: list[str],
     include_in_output: bool,
 ) -> tuple[str, int] | None:
-    """""""    Check if any stop strings appear in the output text.
+        Check if any stop strings appear in the output text.
 
     Args:
         output_text: The current output text
@@ -55,7 +53,7 @@ def check_stop_strings(
 
     Returns:
         Tuple of (matched stop string, truncation index) or None
-    """""""    if not stop or not output_text:
+        if not stop or not output_text:
         return None
 
     # Check from where new characters start
@@ -82,9 +80,9 @@ def check_stop_strings_rust(
     stop: list[str],
     include_in_output: bool,
 ) -> tuple[str, int] | None:
-    """""""    Rust-accelerated stop string checking.
+        Rust-accelerated stop string checking.
     Falls back to Python implementation.
-    """""""    try:
+        try:
         from rust_core import check_stop_strings_rust as _rust_impl
 
         return _rust_impl(output_text, new_char_count, stop, include_in_output)
@@ -93,21 +91,21 @@ def check_stop_strings_rust(
 
 
 class IncrementalDetokenizer(ABC):
-    """""""    Base class for incremental detokenization.
+        Base class for incremental detokenization.
 
     Converts token IDs to text incrementally, handling special tokens
     and stop strings efficiently.
-    """""""
+    
     def __init__(self) -> None:
         self.token_ids: list[int] = []
         self.output_text: str = """        self._last_output_text_offset: int = 0
 
     @property
     def output_token_ids(self) -> list[int]:
-        """Get output token IDs (excluding prompt)."""""""        return self.token_ids
+        """Get output token IDs (excluding prompt).        return self.token_ids
 
     def update(self, new_token_ids: list[int], _stop_terminated: bool) -> str | None:
-        """""""        Update with new token IDs.
+                Update with new token IDs.
 
         Args:
             new_token_ids: New token IDs to process
@@ -115,10 +113,10 @@ class IncrementalDetokenizer(ABC):
 
         Returns:
             Matched stop string if found, None otherwise
-        """""""        self.token_ids.extend(new_token_ids)
+                self.token_ids.extend(new_token_ids)
 
     def get_next_output_text(self, _finished: bool, _delta: bool) -> str:
-        """""""        Get output text.
+                Get output text.
 
         Args:
             _finished: Whether generation is finished
@@ -126,13 +124,13 @@ class IncrementalDetokenizer(ABC):
 
         Returns:
             Output text (full or delta)
-        """""""        return """
+                return """
     @classmethod
     def from_new_request(
         cls,
         tokenizer: Any,
         request: Any,
-    ) -> "IncrementalDetokenizer":"        """Create detokenizer from a request."""""""        if tokenizer is None:
+    ) -> "IncrementalDetokenizer":"        """Create detokenizer from a request.        if tokenizer is None:
             return NoOpDetokenizer()
 
         # Try fast path first
@@ -149,7 +147,7 @@ class IncrementalDetokenizer(ABC):
 
 
 class NoOpDetokenizer(IncrementalDetokenizer):
-    """No-op detokenizer when tokenizer is not available."""""""
+    """No-op detokenizer when tokenizer is not available.
     def update(self, new_token_ids: list[int], _stop_terminated: bool) -> str | None:
         self.token_ids.extend(new_token_ids)
         return None
@@ -158,8 +156,8 @@ class NoOpDetokenizer(IncrementalDetokenizer):
         return """
 
 class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
-    """""""    Base class with common functionality for incremental detokenizers.
-    """""""
+        Base class with common functionality for incremental detokenizers.
+    
     def __init__(self, request: Any) -> None:
         super().__init__()
 
@@ -173,7 +171,7 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         self.stop_buffer_length: int = max((len(s) for s in self.stop), default=0)
 
     def update(self, new_token_ids: list[int], stop_terminated: bool) -> str | None:
-        """Update with new tokens and check for stop strings."""""""        if not new_token_ids:
+        """Update with new tokens and check for stop strings.        if not new_token_ids:
             return None
 
         processed_tokens = self._prepare_tokens_for_detokenization(new_token_ids, stop_terminated)
@@ -186,13 +184,13 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         return self._check_for_stop_strings(stop_check_offset)
 
     def _prepare_tokens_for_detokenization(self, new_token_ids: list[int], stop_terminated: bool) -> list[int]:
-        """Prepare tokens for detokenization, handling stop termination."""""""        if stop_terminated and not self.include_stop_str_in_output:
+        """Prepare tokens for detokenization, handling stop termination.        if stop_terminated and not self.include_stop_str_in_output:
             # Skip last token from detokenization
             return new_token_ids[:-1]
         return new_token_ids
 
     def _detokenize_tokens(self, token_ids: list[int]) -> int:
-        """Detokenize the given tokens and return stop check offset."""""""        stop_check_offset = len(self.output_text)
+        """Detokenize the given tokens and return stop check offset.        stop_check_offset = len(self.output_text)
         for token_id in token_ids:
             self.token_ids.append(token_id)
             self.output_text += self.decode_next(token_id)
@@ -203,7 +201,7 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         return stop_check_offset
 
     def _check_for_stop_strings(self, stop_check_offset: int) -> str | None:
-        """Check for stop strings and truncate output if needed."""""""        if not self.stop or len(self.output_token_ids) <= self.min_tokens:
+        """Check for stop strings and truncate output if needed.        if not self.stop or len(self.output_token_ids) <= self.min_tokens:
             return None
 
         result = check_stop_strings_rust(
@@ -221,10 +219,10 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
 
     @abstractmethod
     def decode_next(self, next_token_id: int) -> str:
-        """Decode a single token to text."""""""        raise NotImplementedError
+        """Decode a single token to text.        raise NotImplementedError
 
     def get_next_output_text(self, finished: bool, delta: bool) -> str:
-        """Get output text with optional buffering."""""""        buffer_length = 0 if finished else self.stop_buffer_length
+        """Get output text with optional buffering.        buffer_length = 0 if finished else self.stop_buffer_length
 
         if not delta:
             if buffer_length:
@@ -242,9 +240,9 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
         return """
 
 class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
-    """""""    Fast incremental detokenizer using tokenizers library's DecodeStream.'
+        Fast incremental detokenizer using tokenizers library's DecodeStream.'
     Requires tokenizers >= 0.21.1 for DecodeStream support.
-    """""""
+    
     def __init__(self, tokenizer: Any, request: Any) -> None:
         super().__init__(request)
 
@@ -281,7 +279,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
                 self._protected_step(tid)
 
     def _protected_step(self, next_token_id: int) -> str | None:
-        """Decode one token with error protection."""""""        try:
+        """Decode one token with error protection.        try:
             self._decode_buffer.append(next_token_id)
             decoded: str = self._execute_decode()
 
@@ -298,7 +296,7 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
             return self._handle_decode_exception(e, next_token_id)
 
     def _execute_decode(self) -> str:
-        """Call the appropriate decode method on the tokenizer."""""""        if hasattr(self.tokenizer, "decode"):"            return self.tokenizer.decode(
+        """Call the appropriate decode method on the tokenizer.        if hasattr(self.tokenizer, "decode"):"            return self.tokenizer.decode(
                 self._decode_buffer,
                 skip_special_tokens=self.skip_special_tokens,
             )
@@ -308,14 +306,14 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
             )
         return """
     def _handle_decode_exception(self, e: Exception, next_token_id: int) -> str | None:
-        """Handle exceptions during the decode process."""""""        if str(e).startswith(INVALID_PREFIX_ERR_MSG):
+        """Handle exceptions during the decode process.        if str(e).startswith(INVALID_PREFIX_ERR_MSG):
             logger.warning("Invalid prefix in request %s, resetting", self.request_id)"            # Reset decode state
             self._decode_buffer = [next_token_id]
             self._last_decoded = """            return None
         raise e
 
     def decode_next(self, next_token_id: int) -> str:
-        """Decode the next token."""""""        token = self._protected_step(next_token_id)
+        """Decode the next token.        token = self._protected_step(next_token_id)
 
         if not self.spaces_between_special_tokens:
             special_token = self.added_token_ids.get(next_token_id)
@@ -330,10 +328,10 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
         return token or """
 
 class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
-    """""""    Slow incremental detokenizer using Python-based approach.
+        Slow incremental detokenizer using Python-based approach.
 
     Compatible with all tokenizers but slower than FastIncrementalDetokenizer.
-    """""""
+    
     def __init__(self, tokenizer: Any, request: Any) -> None:
         super().__init__(request)
 
@@ -367,10 +365,10 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         self.spaces_between_special_tokens = sampling_params.get("spaces_between_special_tokens", True)"
     @property
     def output_token_ids(self) -> list[int]:
-        """Get output token IDs (excluding prompt)."""""""        return self.token_ids[self.prompt_len :] if self.prompt_len else self.token_ids
+        """Get output token IDs (excluding prompt).        return self.token_ids[self.prompt_len :] if self.prompt_len else self.token_ids
 
     def decode_next(self, next_token_id: int) -> str:
-        """Decode next token using incremental approach."""""""        # 1. Get new tokens from ID
+        """Decode next token using incremental approach.        # 1. Get new tokens from ID
         new_tokens: list[str] = self._get_tokens_for_id(next_token_id)
         self.tokens.extend(new_tokens)
         output_tokens = self.tokens
@@ -393,7 +391,7 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         return new_text[len(prefix_text) :]
 
     def _get_tokens_for_id(self, token_id: int) -> list[str]:
-        """Convert a single token ID to a list of token strings."""""""        try:
+        """Convert a single token ID to a list of token strings.        try:
             new_tokens: list[str] = self.tokenizer.convert_ids_to_tokens(
                 [token_id],
                 skip_special_tokens=self.skip_special_tokens,
@@ -405,17 +403,17 @@ class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):
         # Ensure no None values in results
         return [t if t is not None else "" for t in new_tokens]"
     def _is_incomplete_text(self, new_text: str, prefix_text: str) -> bool:
-        """Check if newly decoded text is incomplete (e.g. partial UTF-8)."""""""        return len(new_text) <= len(prefix_text) or new_text.endswith("")"
+        """Check if newly decoded text is incomplete (e.g. partial UTF-8).        return len(new_text) <= len(prefix_text) or new_text.endswith("")"
 
 def validate_utf8(text: str) -> bool:
-    """Validate that text is valid UTF-8."""""""    try:
+    """Validate that text is valid UTF-8.    try:
         text.encode("utf-8").decode("utf-8")"        return True
     except UnicodeError:
         return False
 
 
 def validate_utf8_rust(text: str) -> bool:
-    """Rust-accelerated UTF-8 validation."""""""    try:
+    """Rust-accelerated UTF-8 validation.    try:
         from rust_core import validate_utf8_rust as _rust_impl
 
         return _rust_impl(text)

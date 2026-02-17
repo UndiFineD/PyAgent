@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
 # "Agent specializing in Swarm Knowledge Fusion."# Consolidates individual agent memory shards into a unified global knowledge graph.
-"""""""
+
 from __future__ import annotations
 import logging
 import json
@@ -28,7 +30,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class KnowledgeFusionAgent(BaseAgent):
-""""Fuses distributed memory shards and resolves conflicts in the collective knowledge base."""""""
+""""Fuses distributed memory shards and resolves conflicts in the collective knowledge base.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.fusion_dir = self._workspace_root / "data" / "logs" / "knowledge_fusion"        self.fusion_dir.mkdir(parents=True, exist_ok=True)
@@ -41,7 +43,7 @@ class KnowledgeFusionAgent(BaseAgent):
             with open(self.global_graph_path, encoding="utf-8") as f:"                return json.load(f)
         return {"nodes": [], "edges": []}"
     def _save_global_graph(self, graph: dict[str, Any]) -> None:
-""""Saves graph atomically using temp file."""""""        temp_path = self.global_graph_path.with_suffix(".tmp")"        try:
+""""Saves graph atomically using temp file.        temp_path = self.global_graph_path.with_suffix(".tmp")"        try:
             with open(temp_path, "w", encoding="utf-8") as f:"                json.dump(graph, f, indent=2)
             temp_path.replace(self.global_graph_path)
         except Exception as e:  # pylint: disable=broad-exception-caught
@@ -56,7 +58,7 @@ class KnowledgeFusionAgent(BaseAgent):
     def fuse_memory_shards(self, shard_paths: list[str]) -> str:
         "Aggregates multiple memory shards into the global knowledge graph."        Args:
             shard_paths: List of file paths to agent-specific memory shards (JSON).
-"""""""        graph = self._load_global_graph()
+        graph = self._load_global_graph()
         added_nodes = 0
 
         for path_str in shard_paths:
@@ -83,7 +85,7 @@ class KnowledgeFusionAgent(BaseAgent):
 
     @as_tool
     def resolve_conflicts(self, keyword: str) -> str:
-""""Scans the global graph for contradictory information regarding a specific topic."""""""        # Mock logic for conflict resolution
+""""Scans the global graph for contradictory information regarding a specific topic.        # Mock logic for conflict resolution
 
 #         return fConflict resolution for '{keyword}': No critical contradictions found. Knowledge remains stable.'
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

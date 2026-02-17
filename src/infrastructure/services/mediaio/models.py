@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Models and configurations for media loading.
-"""""""
+Models and configurations for media loading.
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -25,7 +27,7 @@ import numpy as np
 
 
 class MediaType(Enum):
-    """Supported media types."""""""
+    """Supported media types.
     IMAGE = auto()
     VIDEO = auto()
     AUDIO = auto()
@@ -33,7 +35,7 @@ class MediaType(Enum):
 
 
 class ImageFormat(Enum):
-    """Supported image formats."""""""
+    """Supported image formats.
     JPEG = auto()
     PNG = auto()
     WEBP = auto()
@@ -44,7 +46,7 @@ class ImageFormat(Enum):
 
 
 class VideoFormat(Enum):
-    """Supported video formats."""""""
+    """Supported video formats.
     MP4 = auto()
     WEBM = auto()
     AVI = auto()
@@ -53,7 +55,7 @@ class VideoFormat(Enum):
 
 
 class AudioFormat(Enum):
-    """Supported audio formats."""""""
+    """Supported audio formats.
     WAV = auto()
     MP3 = auto()
     FLAC = auto()
@@ -62,7 +64,7 @@ class AudioFormat(Enum):
 
 
 class ResizeMode(Enum):
-    """Image resize modes."""""""
+    """Image resize modes.
     CROP = auto()  # Center crop to target
     PAD = auto()  # Pad to target maintaining aspect
     STRETCH = auto()  # Stretch to target
@@ -72,7 +74,7 @@ class ResizeMode(Enum):
 
 @dataclass
 class MediaMetadata:
-    """Metadata for loaded media."""""""
+    """Metadata for loaded media.
     media_type: MediaType
     format: Union[ImageFormat, VideoFormat, AudioFormat, None]
     width: Optional[int] = None
@@ -87,7 +89,7 @@ class MediaMetadata:
 
 @dataclass
 class ImageData:
-    """Loaded image data."""""""
+    """Loaded image data.
     data: np.ndarray  # [H, W, C] or [N, H, W, C]
     metadata: MediaMetadata
     source: str
@@ -111,7 +113,7 @@ class ImageData:
 
 @dataclass
 class VideoData:
-    """Loaded video data."""""""
+    """Loaded video data.
     frames: np.ndarray  # [N, H, W, C]
     metadata: MediaMetadata
     source: str
@@ -124,7 +126,7 @@ class VideoData:
 
 @dataclass
 class AudioData:
-    """Loaded audio data."""""""
+    """Loaded audio data.
     waveform: np.ndarray  # [C, T] or [T]
     metadata: MediaMetadata
     source: str
@@ -138,7 +140,7 @@ class AudioData:
 
 @dataclass
 class MediaLoadConfig:
-    """Configuration for media loading."""""""
+    """Configuration for media loading.
     # Image settings
     target_size: Optional[Tuple[int, int]] = None
     resize_mode: ResizeMode = ResizeMode.SHORTEST

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Swarm Topology Reporter (Phase 320 Integration).
+
+"""
+Swarm Topology Reporter (Phase 320 Integration).
 Represents the current state of the swarm for visualization and analysis.
-"""""""
+
 from __future__ import annotations
 
 import json
@@ -26,16 +30,16 @@ __version__ = VERSION
 
 
 class SwarmTopologyReporter:
-    """""""    Generates D3.js compatible topology data for 3D Swarm Viewer.
+        Generates D3.js compatible topology data for 3D Swarm Viewer.
     Captures node relationships, trust scores, and communication latency.
-    """""""
+    
     def __init__(self, output_path: str = "data/logs/topology.json") -> None:"        self.output_path = Path(output_path)
         self.nodes: list[Any] = []
         self.links: list[Any] = []
         self.traffic_matrix: dict[str, float] = {}  # Pillar 6: Synaptic Weights
 
     def clear_snapshot(self) -> None:
-        """Clears the current node/link lists for a fresh snapshot pulse."""""""        self.nodes = []
+        """Clears the current node/link lists for a fresh snapshot pulse.        self.nodes = []
         self.links = []
 
     def record_node(
@@ -43,7 +47,7 @@ class SwarmTopologyReporter:
         node_id: str,
         group: str = "general","        metadata: dict[str, Any] | None = None,
     ) -> None:
-        """Adds or updates a node in the current snapshot."""""""        # Check if already exists in this snapshot
+        """Adds or updates a node in the current snapshot.        # Check if already exists in this snapshot
         existing = next((n for n in self.nodes if n["id"] == node_id), None)"
         weight = self.traffic_matrix.get(node_id, 1.0)
 
@@ -54,7 +58,7 @@ class SwarmTopologyReporter:
                     "id": node_id,"                    "group": group,"                    "meta": metadata or {},"                    "val": weight,  # D3 size scaling"                }
             )
 
-    def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:"        """Adds or updates a link in the current snapshot pulse."""""""        # Pillar 9: High-fidelity visualization link strength
+    def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:"        """Adds or updates a link in the current snapshot pulse.        # Pillar 9: High-fidelity visualization link strength
         # We also look at traffic between these two if we had a link-traffic matrix
         existing = next(
             (
@@ -69,7 +73,7 @@ class SwarmTopologyReporter:
             # Update strength if the new one is higher
             existing["value"] = max(existing["value"], strength)"
     def update_traffic(self, node_id: str, bytes_count: float) -> None:
-        """Accumulates traffic for synaptic heatmap (Pillar 6)."""""""        current = self.traffic_matrix.get(node_id, 1.0)
+        """Accumulates traffic for synaptic heatmap (Pillar 6).        current = self.traffic_matrix.get(node_id, 1.0)
         self.traffic_matrix[node_id] = current + (bytes_count / 1024)  # KB focus
 
     def export(self) -> None:

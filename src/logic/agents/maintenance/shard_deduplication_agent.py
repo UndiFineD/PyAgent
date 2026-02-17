@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Shard Deduplication Agent - Deduplicates semantic records in compressed shard files
+
+"""
+Shard Deduplication Agent - Deduplicates semantic records in compressed shard files
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,7 @@ Add robust unit tests and better error handling for partial failures and filesys
 
 FILE CONTENT SUMMARY:
 Agent for deduplicating redundant data in shards.
-"""""""
+
 from __future__ import annotations
 
 import gzip
@@ -52,7 +56,7 @@ __version__ = VERSION
 
 class ShardDeduplicationAgent(BaseAgent):
     Analyzes and deduplicates shard data to reduce storage and "noise."#     Identifies redundant records based on prompt hash and result content.
-"""""""
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
 #         self.name = "ShardDeduplicator"        self.stats = {
@@ -64,7 +68,7 @@ class ShardDeduplicationAgent(BaseAgent):
         Definition of Duplicate:
         - Same `prompt_hash` AND same `result` content.
         - Timestamps and metadata are ignored for equality check.
-"""""""        data_path =" Path(data_dir)"        if not data_path.exists():
+        data_path =" Path(data_dir)"        if not data_path.exists():
             logging.warning(fData directory {data_dir} does not exist.")"            return self.stats
 
         logging.info(fStarting deduplication in {data_dir}")"
@@ -73,7 +77,7 @@ class ShardDeduplicationAgent(BaseAgent):
         logging.info(fDeduplication complete. Stats: {self.stats}")"        return self.stats
 
     def _process_single_shard(self, file_path: Path) -> None:
-""""Deduplicates a single compressed shard file."""""""        self.stats["files_processed"] += 1"        original_size = file_path.stat().st_size
+""""Deduplicates a single compressed shard file.        self.stats["files_processed"] += 1"        original_size = file_path.stat().st_size
 
         temp_file = file_path.with_suffix(".tmp.gz")"        unique_records = {}  # Map (prompt_hash, result_hash) -> record_line
 
@@ -121,7 +125,7 @@ class ShardDeduplicationAgent(BaseAgent):
                     os.remove(temp_file)
 
         except Exception as e:
-            logging.error(fFailed to process "{file_path}: {e}")""""""""
+            logging.error(fFailed to process "{file_path}: {e}")"
 from __future__ import annotations
 
 import gzip
@@ -142,7 +146,7 @@ __version__ = VERSION
 class ShardDeduplicationAgent(BaseAgent):
     Analyzes and deduplicates shard data to reduce storage and noise.
     Identifies redundant records based on prompt hash and result content.
-"""""""
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
 #         self.name = "ShardDeduplicator"        self.stats = {
@@ -153,7 +157,7 @@ class ShardDeduplicationAgent(BaseAgent):
         Definition of Duplicate:
         - Same `prompt_hash` AND same `result` content.
         - Timestamps and metadata are ignored for equality check.
-""""""" "       data_path = Path(data_dir)"        if not data_path.exists():
+ "       data_path = Path(data_dir)"        if not data_path.exists():
             logging.warning(fData directory {data_dir} does not exist.")"            return self.stats
 
         logging.info(fStarting deduplication in {data_dir}")"
@@ -162,7 +166,7 @@ class ShardDeduplicationAgent(BaseAgent):
         logging.info(fDeduplication complete. Stats: {self.stats}")"        return self.stats
 
     def _process_single_shard(self, file_path: Path) -> None:
-""""Deduplicates a single compressed shard file."""""""   "   "  self.stats["files_processed"] += 1"        original_size = file_path.stat().st_size
+""""Deduplicates a single compressed shard file.   "   "  self.stats["files_processed"] += 1"        original_size = file_path.stat().st_size
 
         temp_file = file_path.with_suffix(".tmp.gz")"        unique_records = {}  # Map (prompt_hash, result_hash) -> record_line
 

@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Nuclei-style Vulnerability Template Engine
+
+"""Nuclei-style Vulnerability Template Engine
 
 Inspired by Nuclei templates from .external/0day-templates repository.
 Implements YAML-based vulnerability detection templates with DSL matchers.
-"""""""
+"""
 import logging
 import asyncio
 import yaml
@@ -26,7 +29,7 @@ import requests
 
 @dataclass
 class TemplateInfo:
-    """Template metadata"""""""    name: str
+    """Template metadata"""name: str
     author: str
     severity: str
     description: str
@@ -36,7 +39,7 @@ class TemplateInfo:
 
 @dataclass
 class TemplateRequest:
-    """HTTP request specification"""""""    method: str
+    """HTTP request specification"""method: str
     path: str
     headers: Optional[Dict[str, str]] = None
     body: Optional[str] = None
@@ -44,7 +47,7 @@ class TemplateRequest:
 
 @dataclass
 class MatcherCondition:
-    """Matcher condition specification"""""""    type: str
+    """Matcher condition specification"""type: str
     dsl: Optional[List[str]] = None
     status_code: Optional[int] = None
     headers: Optional[Dict[str, str]] = None
@@ -55,20 +58,20 @@ class MatcherCondition:
 
 @dataclass
 class TemplateHTTP:
-    """HTTP template specification"""""""    requests: List[TemplateRequest]
+    """HTTP template specification"""requests: List[TemplateRequest]
     matchers: List[MatcherCondition]
     matchers_condition: Optional[str] = None  # "and" or "or""
 
 @dataclass
 class NucleiTemplate:
-    """Complete Nuclei template"""""""    id: str
+    """Complete Nuclei template"""id: str
     info: TemplateInfo
     http: Optional[TemplateHTTP] = None
 
 
 @dataclass
 class ScanResult:
-    """Result from template execution"""""""    template_id: str
+    """Result from template execution"""template_id: str
     url: str
     matched: bool
     info: TemplateInfo
@@ -78,23 +81,23 @@ class ScanResult:
 
 
 class NucleiTemplateEngine:
-    """""""    Nuclei-style vulnerability detection engine.
+    """Nuclei-style vulnerability detection engine.
 
     Based on patterns from .external/0day-templates repository.
-    """""""
+    """
     def __init__(self):
         self.templates: Dict[str, NucleiTemplate] = {}
         self.logger = logging.getLogger(__name__)
 
     def load_template_from_yaml(self, yaml_content: str) -> Optional[NucleiTemplate]:
-        """""""        Load a template from YAML content.
+        """Load a template from YAML content.
 
         Args:
             yaml_content: YAML template content
 
         Returns:
             Parsed NucleiTemplate or None if parsing fails
-        """""""        try:
+        """try:
             data = yaml.safe_load(yaml_content)
 
             # Parse info section
@@ -131,21 +134,21 @@ class NucleiTemplateEngine:
             self.logger.error(f"Failed to parse template: {e}")"            return None
 
     def load_template_from_file(self, file_path: str) -> Optional[NucleiTemplate]:
-        """""""        Load a template from a YAML file.
+        """Load a template from a YAML file.
 
         Args:
             file_path: Path to the YAML template file
 
         Returns:
             Parsed NucleiTemplate or None if loading fails
-        """""""        try:
+        """try:
             with open(file_path, 'r', encoding='utf-8') as f:'                content = f.read()
             return self.load_template_from_yaml(content)
         except Exception as e:
             self.logger.error(f"Failed to load template from {file_path}: {e}")"            return None
 
     async def scan_url_with_template(self, template: NucleiTemplate, base_url: str) -> Optional[ScanResult]:
-        """""""        Scan a URL with a specific template.
+        """Scan a URL with a specific template.
 
         Args:
             template: NucleiTemplate to execute
@@ -153,7 +156,7 @@ class NucleiTemplateEngine:
 
         Returns:
             ScanResult if template matches, None otherwise
-        """""""        if not template.http:
+        """if not template.http:
             return None
 
         try:
@@ -193,7 +196,7 @@ class NucleiTemplateEngine:
 
     async def scan_url_with_templates(self, base_url: str,
                                       template_ids: Optional[List[str]] = None) -> List[ScanResult]:
-        """""""        Scan a URL with multiple templates.
+        """Scan a URL with multiple templates.
 
         Args:
             base_url: Base URL to scan
@@ -201,7 +204,7 @@ class NucleiTemplateEngine:
 
         Returns:
             List of matching ScanResults
-        """""""        results = []
+        """results = []
         templates_to_scan = []
 
         if template_ids:
@@ -218,7 +221,7 @@ class NucleiTemplateEngine:
         return results
 
     def _build_url(self, base_url: str, path: str) -> str:
-        """Build full URL from base URL and path."""""""        base_url = base_url.rstrip('/')'        if path.startswith('/'):'            return f"{base_url}{path}""        else:
+        """Build full URL from base URL and path."""base_url = base_url.rstrip('/')'        if path.startswith('/'):'            return f"{base_url}{path}""        else:
             return f"{base_url}/{path}""
     async def _make_http_request(
         self,
@@ -227,7 +230,7 @@ class NucleiTemplateEngine:
         body: Optional[str] = None,
         timeout: int = 10
     ) -> Optional[requests.Response]:
-        """Make HTTP request with timeout."""""""        try:
+        """Make HTTP request with timeout."""try:
             loop = asyncio.get_event_loop()
             # Wrap synchronous requests.request in run_in_executor
             response = await loop.run_in_executor(
@@ -248,7 +251,7 @@ class NucleiTemplateEngine:
     def _check_matchers(self, matchers: List[MatcherCondition],
                         response: requests.Response,
                         condition: Optional[str] = None) -> bool:
-        """""""        Check if response matches the template matchers.
+        """Check if response matches the template matchers.
 
         Args:
             matchers: List of matcher conditions
@@ -256,7 +259,7 @@ class NucleiTemplateEngine:
             condition: "and" or "or" condition (default: "or")"
         Returns:
             True if matchers are satisfied
-        """""""        if not matchers:
+        """if not matchers:
             return True
 
         condition = condition or "or""        results = []
@@ -269,7 +272,7 @@ class NucleiTemplateEngine:
         else:  # "or""            return any(results)
 
     def _check_single_matcher(self, matcher: MatcherCondition, response: requests.Response) -> bool:
-        """Check a single matcher condition."""""""        try:
+        """Check a single matcher condition."""try:
             if matcher.type == "dsl":"                return self._check_dsl_matcher(matcher.dsl or [], response)
             elif matcher.type == "status":"                return response.status_code == matcher.status_code
             elif matcher.type == "word":"                return self._check_word_matcher(matcher.words or [], response.text)
@@ -280,7 +283,7 @@ class NucleiTemplateEngine:
             self.logger.error(f"Matcher check failed: {e}")"            return False
 
     def _check_dsl_matcher(self, dsl_expressions: List[str], response: requests.Response) -> bool:
-        """Check DSL (Domain Specific Language) expressions."""""""        # Simplified DSL evaluation - in real Nuclei, this is more complex
+        """Check DSL (Domain Specific Language) expressions."""# Simplified DSL evaluation - in real Nuclei, this is more complex
         for expr in dsl_expressions:
             if "status_code" in expr and "==" in expr:"                # Simple status code check
                 parts = expr.split("==")"                if len(parts) == 2:
@@ -295,11 +298,11 @@ class NucleiTemplateEngine:
         return True
 
     def _check_word_matcher(self, words: List[str], content: str) -> bool:
-        """Check if any of the words are present in content."""""""        content_lower = content.lower()
+        """Check if any of the words are present in content."""content_lower = content.lower()
         return any(word.lower() in content_lower for word in words)
 
     def _check_regex_matcher(self, patterns: List[str], content: str) -> bool:
-        """Check if any regex pattern matches the content."""""""        for pattern in patterns:
+        """Check if any regex pattern matches the content."""for pattern in patterns:
             try:
                 if re.search(pattern, content, re.IGNORECASE):
                     return True
@@ -308,12 +311,12 @@ class NucleiTemplateEngine:
         return False
 
     def get_available_templates(self) -> List[Dict[str, Any]]:
-        """Get list of available templates with metadata."""""""        return [{
+        """Get list of available templates with metadata."""return [{
             'id': template.id,'            'name': template.info.name,'            'author': template.info.author,'            'severity': template.info.severity,'            'description': template.info.description,'            'tags': template.info.tags or []'        } for template in self.templates.values()]
 
 
 # Example usage and test template
-SQL_INJECTION_TEMPLATE = """""""id: CVE-2024-2879
+SQL_INJECTION_TEMPLATE = """id: CVE-2024-2879
 
 info:
   name: CVE-2024-2879 - WordPress LayerSlider Plugin - SQL Injection
@@ -337,4 +340,4 @@ http:
       - type: dsl
         dsl:
           - 'duration>=6''          - 'status_code == 200''        condition: and
-"""""""
+"""

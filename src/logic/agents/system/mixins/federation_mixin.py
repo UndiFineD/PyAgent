@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FederationMixin - Index and merge external project graphs
+
+"""
+FederationMixin - Index and merge external project graphs
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -27,7 +31,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Federation mixin.py module.
-"""""""# Copyright 2026 PyAgent Authors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
@@ -42,10 +46,10 @@ if TYPE_CHECKING:
 
 
 class FederationMixin:
-""""Mixin for multi-project federation in TopologicalNavigator."""""""
+""""Mixin for multi-project federation in TopologicalNavigator.
     @as_tool
     def federate_with_external_project(self: TopologicalNavigator, external_root: str) -> str:
-        "Indexes an external project and merges its graph into the current map."        This enables 'Federated Project Intelligence' for multi-repo ecosystems.'"""""""        ext_path = Path(external_root)
+        "Indexes an external project and merges its graph into the current map."        This enables 'Federated Project Intelligence' for multi-repo ecosystems.'        ext_path = Path(external_root)
         if not ext_path.exists():
 #             return fError: External path {external_root} not found.
 
@@ -57,7 +61,7 @@ class FederationMixin:
             report = self.build_dependency_map(".")"#             return fFederation Success: {report} (External Root: {external_root})
         finally:
             self.root_dir = original_root
-"""""""# Copyright 2026 "PyAgent Authors"# Licensed under the Apache License, Version 2.0 (the "License");"
+# Copyright 2026 "PyAgent Authors"# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 from pathlib import Path
@@ -71,10 +75,10 @@ if TYPE_CHECKING:
 
 
 class FederationMixin:
-""""Mixin for multi-project federation in TopologicalNavigator."""""""
+""""Mixin for multi-project federation in TopologicalNavigator.
     @as_tool
     def federate_with_external_project(self: TopologicalNavigator, external_root: str) -> str:
-        "Indexes an external project and merges its graph "into the current map."        This enables 'Federated Project Intelligence' for multi-repo ecosystems.'"""""""        ext_path = Path(external_root)
+        "Indexes an external project and merges its graph "into the current map."        This enables 'Federated Project Intelligence' for multi-repo ecosystems.'        ext_path = Path(external_root)
         if not ext_path.exists():
 #             return fError: External path {external_root} not found.
 

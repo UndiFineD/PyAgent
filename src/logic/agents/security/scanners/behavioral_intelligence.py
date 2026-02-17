@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -16,12 +18,12 @@ from typing import Dict, List, Any
 class BehavioralIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Intelligence engine for Windows behavioral indicators and TTPs."""""""#     Ported from Fibratus rules and various EDR detection sets.
-"""""""
+"""Intelligence engine for Windows behavioral indicators and TTPs.#     Ported from Fibratus rules and various EDR detection sets.
+
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_detection_rules() -> Dict[str, Any]:""""""""High-fidelity detection rules for Windows security events."""""""        return {
+"""     def get_detection_rules() -> Dict[str, Any]:"High-fidelity detection rules for Windows security events.        return {
             "RID Hijacking": {"                "description": "Modification of RID (Relative ID) in SAM for low-privilege accounts.","                "indicators": {"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#                     "registry_path": rHKEY_LOCAL_MACHINE\\SAM\\SAM\\\\Domains\\Account\\Users\*\\F","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -45,7 +47,7 @@ class BehavioralIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_persistence_indicators() -> List[Dict[str, str]]:""""""""Registry and file system indicators for advanced persistence."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_persistence_indicators() -> List[Dict[str, str]]:"Registry and file system indicators for advanced persistence.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#        " return ["  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 #             {"path": rHKCU\\Software\\Classes\*\\\\shell\\open\\\\command", "name": "Registry Shell Command Hijack"},"  # [BATCHFIX] closed string"            {
 # [BATCHFIX] Commented metadata/non-Python

@@ -1,16 +1,19 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Local context recorder.py module.
-"""""""
+
+Local context recorder.py module.
+
 
 from __future__ import annotations
 
@@ -27,10 +30,10 @@ __version__ = VERSION
 
 
 class LocalContextRecorder(ContextRecorderInterface):
-    """""""    Records LLM prompts and results for future training/fine-tuning.
+        Records LLM prompts and results for future training/fine-tuning.
     Stores data in JSONL format with monthly and hash-based sharding.
     Optimized for trillion-parameter data harvesting (Phase 105).
-    """""""
+    
     def __init__(
         self,
         workspace_root: Path | None = None,
@@ -55,10 +58,10 @@ class LocalContextRecorder(ContextRecorderInterface):
         result: str,
         meta: dict[str, Any] | None = None,
     ) -> None:
-        """""""        Appends a new interaction record.
+                Appends a new interaction record.
         Includes unique context hashing for future deduplication and sharded storage.
         Optimized for high-throughput and low-latency disk writes.
-        """""""        import gzip
+                import gzip
         import hashlib
 
         # Stability: generate a stable hash for the prompt to allow O(1) deduplication
@@ -93,13 +96,13 @@ class LocalContextRecorder(ContextRecorderInterface):
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to record interaction to shard {shard_id}: {e}")"
     def record_lesson(self, tag: str, data: dict[str, Any]) -> None:
-        """Alias for general logic harvesting to satisfy intelligence scanners."""""""        self.record_interaction(
+        """Alias for general logic harvesting to satisfy intelligence scanners.        self.record_interaction(
             provider="Internal","            model=tag,
             prompt=json.dumps(data),
             result="Harvested","            meta={"tag": tag},"        )
 
     def _update_index(self, prompt_hash: str, filename: str) -> None:
-        """Simple index updates to avoid scanning all shards for a specific query."""""""        index_file = self.log_dir / "shards_lookup.index""        try:
+        """Simple index updates to avoid scanning all shards for a specific query.        index_file = self.log_dir / "shards_lookup.index""        try:
             # Atomic append for the index
             with open(index_file, "a", encoding="utf-8") as f:"                f.write(f"{prompt_hash}:{filename}\\n")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to update shard index: {e}")"

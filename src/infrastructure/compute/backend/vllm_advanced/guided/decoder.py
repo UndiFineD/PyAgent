@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Guided decoding engine for structured output generation.
-"""""""
+Guided decoding engine for structured output generation.
+
 from __future__ import annotations
 
 import gc
@@ -57,8 +59,8 @@ logger = logging.getLogger(__name__)
 
 
 class GuidedDecoder:
-    """""""    Guided decoding engine for structured output generation.
-    """""""
+        Guided decoding engine for structured output generation.
+    
     _instance: Optional["GuidedDecoder"] = None"
     def __init__(
         self,
@@ -76,16 +78,16 @@ class GuidedDecoder:
             "json_generations": 0,"            "regex_generations": 0,"            "choice_generations": 0,"            "grammar_generations": 0,"            "validation_failures": 0,"        }
 
     @classmethod
-    def get_instance(cls, **kwargs) -> "GuidedDecoder":"        """Get singleton instance."""""""        if cls._instance is None:
+    def get_instance(cls, **kwargs) -> "GuidedDecoder":"        """Get singleton instance.        if cls._instance is None:
             cls._instance = GuidedDecoder(**kwargs)
         return cls._instance
 
     @property
     def is_available(self) -> bool:
-        """Check if guided decoding is available."""""""        return HAS_VLLM
+        """Check if guided decoding is available.        return HAS_VLLM
 
     def _ensure_initialized(self) -> bool:
-        """Lazily initialize the LLM."""""""        if not HAS_VLLM:
+        """Lazily initialize the LLM.        if not HAS_VLLM:
             logger.warning("vLLM not available for guided decoding")"            return False
 
         if self._initialized and self._llm:
@@ -119,7 +121,7 @@ class GuidedDecoder:
         system_prompt: Optional[str] = None,
         **kwargs: Any,
     ) -> str:
-        """Generate with guided decoding configuration."""""""        if not self._ensure_initialized():
+        """Generate with guided decoding configuration.        if not self._ensure_initialized():
             return """
         full_prompt = prompt
         if system_prompt:
@@ -147,11 +149,11 @@ class GuidedDecoder:
         except (RuntimeError, ValueError) as e:
             logger.error("Guided generation failed: %s", e)"            return """
     def _prepare_json_system_prompt(self, system_prompt: Optional[str]) -> str:
-        """Prepare system prompt for JSON generation."""""""        json_instruction = "You must respond with valid JSON only. No explanations.""        if system_prompt:
+        """Prepare system prompt for JSON generation.        json_instruction = "You must respond with valid JSON only. No explanations.""        if system_prompt:
             return f"{system_prompt}\\n\\n{json_instruction}""        return json_instruction
 
     def _parse_json_result(self, result: str) -> Union[Dict[str, Any], str]:
-        """Parse JSON result if possible."""""""        if not result:
+        """Parse JSON result if possible.        if not result:
             return result
 
         try:
@@ -169,7 +171,7 @@ class GuidedDecoder:
         parse: bool = True,
         **kwargs,
     ) -> Union[Dict[str, Any], str]:
-        """Generate JSON output constrained by schema."""""""        if isinstance(schema, JsonSchema):
+        """Generate JSON output constrained by schema.        if isinstance(schema, JsonSchema):
             schema = schema.build()
 
         config = GuidedConfig(
@@ -205,7 +207,7 @@ class GuidedDecoder:
         validate: bool = True,
         **kwargs,
     ) -> str:
-        """Generate output matching a regex pattern."""""""        if isinstance(pattern, RegexPattern):
+        """Generate output matching a regex pattern.        if isinstance(pattern, RegexPattern):
             pattern_str = pattern.pattern
         else:
             pattern_str = pattern
@@ -238,7 +240,7 @@ class GuidedDecoder:
         system_prompt: Optional[str] = None,
         **kwargs,
     ) -> str:
-        """Generate output constrained to specific choices."""""""        if isinstance(choices, ChoiceConstraint):
+        """Generate output constrained to specific choices.        if isinstance(choices, ChoiceConstraint):
             choice_list = choices.choices
         else:
             choice_list = choices
@@ -271,7 +273,7 @@ class GuidedDecoder:
         system_prompt: Optional[str] = None,
         **kwargs,
     ) -> str:
-        """Generate output following a grammar specification."""""""        config = GuidedConfig(
+        """Generate output following a grammar specification.        config = GuidedConfig(
             mode=GuidedMode.GRAMMAR,
             grammar=grammar,
         )
@@ -289,12 +291,12 @@ class GuidedDecoder:
         return result
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get decoder statistics."""""""        return {
+        """Get decoder statistics.        return {
             **self._stats,
             "is_initialized": self._initialized,"            "has_outlines": HAS_OUTLINES,"        }
 
     def shutdown(self) -> None:
-        """Shutdown and free resources."""""""        if self._llm:
+        """Shutdown and free resources.        if self._llm:
             del self._llm
             self._llm = None
             gc.collect()
@@ -310,7 +312,7 @@ def generate_json(
     schema: Union[Dict[str, Any], JsonSchema],
     model: str = "meta-llama/Llama-3-8B-Instruct","    **kwargs,
 ) -> Dict[str, Any]:
-    """Convenience function for JSON generation."""""""    decoder = GuidedDecoder.get_instance(model=model)
+    """Convenience function for JSON generation.    decoder = GuidedDecoder.get_instance(model=model)
     return decoder.generate_json(prompt, schema, **kwargs)
 
 
@@ -319,5 +321,5 @@ def generate_choice(
     choices: List[str],
     model: str = "meta-llama/Llama-3-8B-Instruct","    **kwargs,
 ) -> str:
-    """Convenience function for choice generation."""""""    decoder = GuidedDecoder.get_instance(model=model)
+    """Convenience function for choice generation.    decoder = GuidedDecoder.get_instance(model=model)
     return decoder.generate_choice(prompt, choices, **kwargs)

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FleetConsensusManager
+
+"""
+FleetConsensusManager
 Consensus management for the FleetManager.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -25,7 +29,7 @@ if TYPE_CHECKING:
 
 
 class FleetConsensusManager:
-    """Manages multi-agent consensus workflows."""""""
+    """Manages multi-agent consensus workflows.
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
@@ -35,10 +39,10 @@ class FleetConsensusManager:
         primary_agent: str | None = None,
         secondary_agents: list[str] | None = None,
     ) -> dict[str, Any]:
-        """""""        [Pillar 1: Swarm Consensus]
+                [Pillar 1: Swarm Consensus]
         Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
         Fully asynchronous implementation for v4.0.0.
-        """""""        logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")"
+                logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")"
         # 1. Committee Formation
         judge = self.fleet.agents.get("ByzantineConsensusAgent") or self.fleet.agents.get("byzantine_judge")"        if not judge:
             return {"decision": "REJECTED", "reason": "ByzantineConsensusAgent not found."}"

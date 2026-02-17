@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""In-memory and specialized multimodal cache implementations."""""""
+"""In-memory and specialized multimodal cache implementations.
 import threading
 from collections import Counter, OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Tuple
@@ -24,8 +26,8 @@ from .data import CacheEntry, MediaHash
 
 
 class MemoryMultiModalCache(MultiModalCache):
-    """""""    In-memory LRU cache for multimodal content.
-    """""""
+        In-memory LRU cache for multimodal content.
+    
     def __init__(
         self,
         max_size_bytes: int = 1024 * 1024 * 1024,
@@ -37,7 +39,7 @@ class MemoryMultiModalCache(MultiModalCache):
         self._current_size = 0
 
     def get(self, key: MediaHash) -> Optional[CacheEntry]:
-        """Get entry, moving to end for LRU."""""""        with self._lock:
+        """Get entry, moving to end for LRU.        with self._lock:
             key_str = key.value
             if key_str not in self._cache:
                 self._stats.misses += 1
@@ -50,7 +52,7 @@ class MemoryMultiModalCache(MultiModalCache):
             return entry
 
     def put(self, key: MediaHash, data: Any, metadata: Optional[Dict] = None) -> CacheEntry:
-        """Put entry, evicting if necessary."""""""        with self._lock:
+        """Put entry, evicting if necessary.        with self._lock:
             key_str = key.value
 
             # Calculate size
@@ -80,7 +82,7 @@ class MemoryMultiModalCache(MultiModalCache):
             return entry
 
     def evict(self, count: int = 1) -> int:
-        """Evict least recently used entries."""""""        evicted = 0
+        """Evict least recently used entries.        evicted = 0
         with self._lock:
             for _ in range(count):
                 if not self._cache:
@@ -95,23 +97,23 @@ class MemoryMultiModalCache(MultiModalCache):
         return evicted
 
     def clear(self) -> None:
-        """Clear all entries."""""""        with self._lock:
+        """Clear all entries.        with self._lock:
             self._cache.clear()
             self._current_size = 0
             self._stats.entry_count = 0
             self._stats.total_size_bytes = 0
 
     def contains(self, key: MediaHash) -> bool:
-        """Check if key exists."""""""        return key.value in self._cache
+        """Check if key exists.        return key.value in self._cache
 
     def keys(self) -> List[MediaHash]:
-        """Get all cache keys."""""""        with self._lock:
+        """Get all cache keys.        with self._lock:
             return [entry.key for entry in self._cache.values()]
 
 
 class PerceptualCache(MemoryMultiModalCache):
-    """""""    Cache with perceptual similarity matching.
-    """""""
+        Cache with perceptual similarity matching.
+    
     def __init__(
         self,
         max_size_bytes: int = 1024 * 1024 * 1024,
@@ -125,14 +127,14 @@ class PerceptualCache(MemoryMultiModalCache):
     def put_with_perceptual(
         self, content_hash: MediaHash, data: Any, perceptual_hash: str, metadata: Optional[Dict] = None
     ) -> CacheEntry:
-        """Put with perceptual hash index."""""""        entry = self.put(content_hash, data, metadata)
+        """Put with perceptual hash index.        entry = self.put(content_hash, data, metadata)
         if perceptual_hash not in self._perceptual_index:
             self._perceptual_index[perceptual_hash] = []
         self._perceptual_index[perceptual_hash].append(content_hash.value)
         return entry
 
     def find_similar(self, perceptual_hash: str) -> List[CacheEntry]:
-        """Find entries with similar perceptual hash."""""""        similar = []
+        """Find entries with similar perceptual hash.        similar = []
         if perceptual_hash in self._perceptual_index:
             for content_key in self._perceptual_index[perceptual_hash]:
                 if content_key in self._cache:
@@ -157,8 +159,8 @@ class PerceptualCache(MemoryMultiModalCache):
 
 
 class PrefetchMultiModalCache(MemoryMultiModalCache):
-    """""""    Cache with async prefetch support.
-    """""""
+        Cache with async prefetch support.
+    
     def __init__(
         self,
         max_size_bytes: int = 1024 * 1024 * 1024,
@@ -172,14 +174,14 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
         self._prefetch_lock = threading.Lock()
 
     def record_access(self, key: MediaHash, subsequent_key: Optional[MediaHash] = None) -> None:
-        """Record access pattern."""""""        key_str = key.value
+        """Record access pattern.        key_str = key.value
         if subsequent_key:
             if key_str not in self._access_patterns:
                 self._access_patterns[key_str] = []
             self._access_patterns[key_str].append(subsequent_key.value)
 
     def predict_next(self, key: MediaHash) -> List[str]:
-        """Predict likely next accesses."""""""        key_str = key.value
+        """Predict likely next accesses.        key_str = key.value
         if key_str not in self._access_patterns:
             return []
         subsequent = self._access_patterns[key_str]
@@ -187,7 +189,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
         return [k for k, _ in counter.most_common(5)]
 
     def schedule_prefetch(self, key: MediaHash, loader: Callable[[], Any], priority: float = 0.5) -> None:
-        """Schedule content for prefetch."""""""        with self._prefetch_lock:
+        """Schedule content for prefetch.        with self._prefetch_lock:
             if len(self._prefetch_queue) >= self.max_prefetch_queue:
                 self._prefetch_queue.sort(key=lambda x: x[2], reverse=True)
                 self._prefetch_queue.pop()
@@ -195,7 +197,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
             self._prefetch_queue.sort(key=lambda x: x[2], reverse=True)
 
     def execute_prefetch(self, count: int = 1) -> int:
-        """Execute pending prefetches."""""""        executed = 0
+        """Execute pending prefetches.        executed = 0
         with self._prefetch_lock:
             for _ in range(min(count, len(self._prefetch_queue))):
                 if not self._prefetch_queue:

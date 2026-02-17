@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - JSON Parser
 
-"""""""Generic JSON tool call parser.
+Generic JSON tool call parser.
 
 Parses JSON objects emitted by LLMs when tool calls are requested.
 Provides robust handling for OpenAI-style `function` objects and direct
-`{"name": ..., "arguments": {...}}` formats.""""""""
+`{"name": ..., "arguments": {...}}` formats."
 from __future__ import annotations
 
 import json
@@ -29,11 +31,11 @@ from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
 
 
 class JsonToolParser(ToolParser):
-    """""""    Generic JSON tool call parser.
+        Generic JSON tool call parser.
 
     Expects format:
     {"name": "function_name", "arguments": {...}}"    or
-    {"function": {"name": "...", "arguments": {...}}}"    """""""
+    {"function": {"name": "...", "arguments": {...}}}"    
     @property
     def parser_type(self) -> ToolParserType:
         return ToolParserType.GENERIC_JSON
@@ -51,7 +53,7 @@ class JsonToolParser(ToolParser):
         return result
 
     def _process_json_matches(self, json_matches: List[str], result: ToolParseResult) -> None:
-        """Process a list of JSON matches and add valid tool calls to the result."""""""        for i, json_str in enumerate(json_matches):
+        """Process a list of JSON matches and add valid tool calls to the result.        for i, json_str in enumerate(json_matches):
             try:
                 data = json.loads(json_str)
                 tool_call = self._parse_json_object(data, i)
@@ -64,7 +66,7 @@ class JsonToolParser(ToolParser):
         data: Dict[str, Any],
         index: int,
     ) -> Optional[ToolCall]:
-        """Parse a JSON object as a tool call."""""""        # OpenAI format
+        """Parse a JSON object as a tool call.        # OpenAI format
         if "function" in data and isinstance(data["function"], dict):"            func = data["function"]"            name = func.get("name", "")"            args_raw = func.get("arguments", "{}")"
             if isinstance(args_raw, str):
                 try:
@@ -95,7 +97,7 @@ class JsonToolParser(ToolParser):
         text: str,
         json_matches: List[str],
     ) -> str:
-        """Extract non-JSON content."""""""        content = text
+        """Extract non-JSON content.        content = text
         for match in json_matches:
             content = content.replace(match, "", 1)"        return content.strip()
 
@@ -133,7 +135,7 @@ class JsonToolParser(ToolParser):
         return state, completed_tool
 
     def _extract_last_json(self, text: str) -> Optional[str]:
-        """Extract the last complete JSON object."""""""        brace_depth = 0
+        """Extract the last complete JSON object.        brace_depth = 0
         start = -1
         in_string = False
 

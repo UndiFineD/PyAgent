@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Search mesh core module.
-""""""""""""""from __future__ import annotations
+Search mesh core module.
+from __future__ import annotations
 
 from typing import Any
 
@@ -31,14 +29,14 @@ except ImportError:
 class SearchMeshCore:
     SearchMeshCore implements federated search result aggregation and ranking.
 #     It synthesizes results from multiple providers (Google, Bing, Perplexity, Tavily).
-"""""""
+
     def __init__(self, weights: dict[str, float] | None = None) -> None:
         # Default relevance weights for different providers
         self.weights = weights or {
             "google": 1.2,"            "bing": 0.8,"            "perplexity": 1.5,"            "tavily": 1.3,"            "generic": 1.0,"        }
 
     def aggregate_results(self, raw_results: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
-        Takes raw results from multiple providers and merges them into a "ranked list."        Each result should have: 'title', 'url', 'snippet', 'score' (optional).'"""""""     "   "if HAS_RUST:"            try:
+        Takes raw results from multiple providers and merges them into a "ranked list."        Each result should have: 'title', 'url', 'snippet', 'score' (optional).'     "   "if HAS_RUST:"            try:
                 return rust_core.aggregate_search_results(raw_results, self.weights)  # type: ignore[attr-defined]
             except Exception:
                 pass
@@ -72,8 +70,8 @@ class SearchMeshCore:
 
     def filter_redundant(self, results: list[dict[str, Any]], remembered_urls: set[str]) -> list[dict[str, Any]]:
         Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
-"""""""        return [res for res in results if res["url"] not in remembered_urls]"
+        return [res for res in results if res["url"] not in remembered_urls]"
     async def parallel_search_placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
-"""""""        Generic structure for the Mesh agent to invoke search providers in parallel.
+        Generic structure for the Mesh agent to invoke search providers in parallel.
         (The Shell agent will provide the actual API implementation callbacks).
-"""""""        # This logic stays in the shell, but the core defines" the expected structure."        return {}
+        # This logic stays in the shell, but the core defines" the expected structure."        return {}

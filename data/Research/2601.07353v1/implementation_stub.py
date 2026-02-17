@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """
 TALON: Confidence-Aware Speculative Decoding with Adaptive Token Trees
 Ref: arXiv:2601.07353

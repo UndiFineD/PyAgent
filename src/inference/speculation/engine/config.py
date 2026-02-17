@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Configuration and enums regarding speculative decoding."""""""
+"""Configuration and enums regarding speculative decoding.
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional
@@ -23,7 +25,7 @@ __version__ = VERSION
 
 
 class SpecMethod(Enum):
-    """Speculative decoding method types."""""""
+    """Speculative decoding method types.
     NGRAM = auto()  # N-gram based prediction
     EAGLE = auto()  # EAGLE draft model
     EAGLE3 = auto()  # EAGLE3 draft model
@@ -36,7 +38,7 @@ class SpecMethod(Enum):
 
 @dataclass
 class SpeculativeConfig:
-    """Configuration regarding speculative decoding."""""""
+    """Configuration regarding speculative decoding.
     method: SpecMethod = SpecMethod.NGRAM
     num_speculative_tokens: int = 5
 
@@ -63,4 +65,4 @@ class SpeculativeConfig:
     acceptance_rate_threshold: float = 0.3
 
     def use_eagle(self) -> bool:
-        """Check if using EAGLE-based speculation."""""""        return self.method in (SpecMethod.EAGLE, SpecMethod.EAGLE3, SpecMethod.MTP)
+        """Check if using EAGLE-based speculation.        return self.method in (SpecMethod.EAGLE, SpecMethod.EAGLE3, SpecMethod.MTP)

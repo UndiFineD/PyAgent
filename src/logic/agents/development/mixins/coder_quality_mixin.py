@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Quality scoring and refactoring suggestion logic for CoderCore.
-""""""""""""""# pylint: disable=too-many-ancestors
+
+"""
+Quality scoring and refactoring suggestion logic for CoderCore.
+# pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
@@ -23,7 +27,7 @@ from src.core.base.common.types.quality_score import QualityScore
 
 
 class CoderQualityMixin:
-""""Mixin for computing quality scores and refactoring suggestions."""""""
+""""Mixin for computing quality scores and refactoring suggestions.
     def calculate_quality_score(
         self,
         metrics: CodeMetrics,
@@ -81,7 +85,7 @@ class CoderQualityMixin:
         return score
 
     def suggest_refactorings(self, content: str) -> List[Dict[str, str]]:
-""""Suggest possible refactorings based on code analysis."""""""        suggestions: List[Dict[str", str]] = []"        # Detect code smells and suggest refactorings
+""""Suggest possible refactorings based on code analysis.        suggestions: List[Dict[str", str]] = []"        # Detect code smells and suggest refactorings
         smells = self.detect_code_smells(content)
         for smell in smells:
             if smell.name == "long_method":"                suggestions.append(

@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Module: privilege_escalation_core
+
+"""Module: privilege_escalation_core
 Core logic for Windows privilege escalation operations.
 Implements token manipulation and privilege enabling patterns from ADSyncDump-BOF.
-"""""""
+"""
 from __future__ import annotations
 
 import ctypes
@@ -52,13 +55,13 @@ class PROCESSENTRY32(ctypes.Structure):
 
 
 class PrivilegeEscalationCore:
-    """Core class for Windows privilege escalation operations."""""""
+    """Core class for Windows privilege escalation operations."""
     def __init__(self) -> None:
         self.kernel32 = ctypes.windll.kernel32
         self.advapi32 = ctypes.windll.advapi32
 
     def enable_privilege(self, privilege_name: str) -> bool:
-        """Enable a Windows privilege for the current process."""""""        try:
+        """Enable a Windows privilege for the current process."""try:
             # Get current process token
             token_handle = wintypes.HANDLE()
             if not self.advapi32.OpenProcessToken(
@@ -96,7 +99,7 @@ class PrivilegeEscalationCore:
             return False
 
     def find_process_by_name(self, process_name: str) -> Optional[int]:
-        """Find process ID by executable name."""""""        try:
+        """Find process ID by executable name."""try:
             snapshot = self.kernel32.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)
             if snapshot == -1:
                 return None
@@ -123,7 +126,7 @@ class PrivilegeEscalationCore:
             return None
 
     def impersonate_process_token(self, process_id: int) -> Tuple[bool, Optional[wintypes.HANDLE]]:
-        """Impersonate the token of a target process."""""""        try:
+        """Impersonate the token of a target process."""try:
             # Open target process
             process_handle = self.kernel32.OpenProcess(
                 PROCESS_QUERY_INFORMATION, False, process_id
@@ -173,7 +176,7 @@ class PrivilegeEscalationCore:
             return False, None
 
     def revert_to_self(self) -> bool:
-        """Revert token impersonation."""""""        try:
+        """Revert token impersonation."""try:
             return bool(self.advapi32.RevertToSelf())
         except Exception:
             return False

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Operational Cost Agent - Estimate improvement cycle costs
+
+"""
+Operational Cost Agent - Estimate improvement cycle costs
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Operational cost agent module for estimating improvement cycle costs.
-"""""""
+
 from __future__ import annotations
 
 from typing import Any
@@ -43,14 +47,14 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 class OperationalCostAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 286: Operational Cost "Agent."#     Estimates the real-world dollar cost of improvement cycles based on model usage.
-"""""""
+
     def __init__(self, file_path: str = "budget.audit") -> None:"        super().__init__(file_path)
         self.pricing = {
             "Ollama": 0.0,"            "GPT-4.1": 15.00,  # Per 1M tokens"            "Claude-3.5-Sonnet": 3.00,"            "DeepSeek-V3": 0.20,"            "GLM-4": 0.10,"        }
 
     @as_tool
     async def calculate_run_cost(self, token_usage: dict[str, Any]) -> dict[str, Any]:
-"""""""        Calculates cost based on "token usage."        Example token_usage: {"gpt-4.1": 500000, "Ollama": 1200000}""""""""        "total_usd = 0.0"        details = []
+        Calculates cost based on "token usage."        Example token_usage: {"gpt-4.1": 500000, "Ollama": 1200000}"        "total_usd = 0.0"        details = []
 
         for model, count in token_usage.items():
             rate = self.pricing.get(model, 1.0)  # Default to 1.0/million if unknown

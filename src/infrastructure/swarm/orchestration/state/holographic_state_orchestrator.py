@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -27,10 +29,10 @@ logger = logging.getLogger(__name__)
 
 
 class HolographicStateOrchestrator:
-    """""""    Manages multi-perspective state distribution across the fleet.
+        Manages multi-perspective state distribution across the fleet.
     Implements Holographic State Mirroring: data is split and mirrored such that
     any node can reconstruct a specific perspective by querying neighbors.
-    """""""
+    
     def __init__(self, fleet=None) -> None:
         self.fleet = fleet
         self.version = VERSION
@@ -43,9 +45,9 @@ class HolographicStateOrchestrator:
         self.local_holograms: Dict[str, Dict[str, Any]] = {}
         logger.info("HolographicStateOrchestrator: Initialized (Phase 330).")"
     async def shard_hologram(self, hologram_id: str, hologram_data: dict, redundancy: int = 2) -> dict:
-        """""""        Shards a multi-perspective hologram across the fleet.
+                Shards a multi-perspective hologram across the fleet.
         Each perspective is treated as an independent shard set.
-        """""""        logger.info(f"Holographic: Sharding hologram '{hologram_id}' across fleet.")"'
+                logger.info(f"Holographic: Sharding hologram '{hologram_id}' across fleet.")"'
         perspectives = hologram_data.get("perspectives", {})"        if not perspectives:
             # Fallback to source data if no perspectives provided
             perspectives = {"default": hologram_data.get("source_data", hologram_data)}"
@@ -72,8 +74,8 @@ class HolographicStateOrchestrator:
             "status": "holographic_sharded","            "hologram_id": hologram_id,"            "perspectives_count": len(perspectives),"            "total_shards": shards_created"        }
 
     async def reconstruct_perspective(self, hologram_id: str, angle: str) -> Optional[Dict[str, Any]]:
-        """""""        Reconstructs a specific architectural perspective by gathering shards from neighbors.
-        """""""        local_key = f"{hologram_id}_{angle}""        if local_key in self.local_holograms:
+                Reconstructs a specific architectural perspective by gathering shards from neighbors.
+                local_key = f"{hologram_id}_{angle}""        if local_key in self.local_holograms:
             return self.local_holograms[local_key]
 
         logger.info(f"Holographic: Reconstructing perspective '{angle}' for '{hologram_id}' from swarm...")"'
@@ -89,13 +91,13 @@ class HolographicStateOrchestrator:
         return None
 
     async def handle_projection(self, projection_msg: Dict[str, Any]):
-        """Handles incoming metadata 'projections' from peers."""""""'        hologram_id = projection_msg.get("hologram_id")"        angles = projection_msg.get("angles", [])"        source = projection_msg.get("sender_id")"
+        """Handles incoming metadata 'projections' from peers.'        hologram_id = projection_msg.get("hologram_id")"        angles = projection_msg.get("angles", [])"        source = projection_msg.get("sender_id")"
         logger.info(f"Holographic: Peer {source} projected hologram {hologram_id[:8]} (Angles: {angles})")"
     async def find_local_hologram_shards(self, hologram_id: str) -> List[Dict[str, Any]]:
-        """Returns shards stored locally for a given hologram ID."""""""        return self.backup_node.get_local_shards_for_hash(hologram_id)
+        """Returns shards stored locally for a given hologram ID.        return self.backup_node.get_local_shards_for_hash(hologram_id)
 
     async def _mirror_to_neighbors(self, shards: List[Dict[str, Any]]):
-        """Sends shards to different neighbor nodes for redundancy."""""""        if not self.fleet or not hasattr(self.fleet, "voyager_discovery"):"            return
+        """Sends shards to different neighbor nodes for redundancy.        if not self.fleet or not hasattr(self.fleet, "voyager_discovery"):"            return
 
         peers = self.fleet.voyager_discovery.get_active_peers()
         if not peers:
@@ -114,7 +116,7 @@ class HolographicStateOrchestrator:
             asyncio.create_task(self.fleet.voyager_transport.send_to_peer(addr, port, msg))
 
     async def _broadcast_projection(self, hologram_id: str, angles: List[str]):
-        """Broadcasts a compact 'projection' of the hologram metadata (Pillar 8)."""""""'        if self.fleet and hasattr(self.fleet, "workspace_root"):"            sender_id = f"fleet-{self.fleet.workspace_root.name}""        else:
+        """Broadcasts a compact 'projection' of the hologram metadata (Pillar 8).'        if self.fleet and hasattr(self.fleet, "workspace_root"):"            sender_id = f"fleet-{self.fleet.workspace_root.name}""        else:
             sender_id = self.agent_id
 
         projection = {
@@ -125,6 +127,6 @@ class HolographicStateOrchestrator:
                 addr = peer.get("addr")"                port = peer.get("port", 5555)"                asyncio.create_task(self.fleet.voyager_transport.send_to_peer(addr, port, projection))
 
     def shard_state(self, state_id: str, state_dict: dict, redundant_factor: int = 1) -> dict:
-        """Legacy compatibility wrapper for BaseAgent sharding."""""""        return {"status": "legacy_sharded", "id": state_id}"
+        """Legacy compatibility wrapper for BaseAgent sharding.        return {"status": "legacy_sharded", "id": state_id}"
     def reconstruct_state(self, state_id: str) -> str:
-        """Legacy compatibility wrapper."""""""        return json.dumps({"status": "error", "message": "Use reconstruct_perspective instead"})"
+        """Legacy compatibility wrapper.        return json.dumps({"status": "error", "message": "Use reconstruct_perspective instead"})"

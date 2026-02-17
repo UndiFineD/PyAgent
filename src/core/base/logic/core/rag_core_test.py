@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Tests for RAGCore
+
+"""Tests for RAGCore
 
 Tests advanced RAG functionality based on AgentCloud patterns.
-"""""""
+"""
 import pytest
 
 from src.core.base.logic.core.rag_core import (
@@ -30,14 +33,14 @@ from src.core.base.logic.core.rag_core import (
 
 
 class TestRAGCore:
-    """Test suite for RAGCore."""""""
+    """Test suite for RAGCore."""
     @pytest.fixture
     def core(self):
-        """Create a fresh RAG core instance for each test."""""""        return RAGCore()
+        """Create a fresh RAG core instance for each test."""return RAGCore()
 
     @pytest.mark.asyncio
     async def test_register_vector_store(self, core):
-        """Test vector store registration."""""""        store_id = await core.register_vector_store(
+        """Test vector store registration."""store_id = await core.register_vector_store(
             store_id="test_store","            store_type=VectorStoreType.QDRANT,
             config={"host": "localhost", "port": 6333}"        )
 
@@ -46,7 +49,7 @@ class TestRAGCore:
 
     @pytest.mark.asyncio
     async def test_create_rag_tool(self, core):
-        """Test RAG tool creation."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"
+        """Test RAG tool creation."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"
         tool = await core.create_rag_tool(
             tool_id="test_tool","            name="Test RAG Tool","            description="A test RAG tool","            vector_store_id="test_store","            collection_name="test_collection""        )
 
@@ -54,12 +57,12 @@ class TestRAGCore:
 
     @pytest.mark.asyncio
     async def test_create_rag_tool_invalid_store(self, core):
-        """Test creating RAG tool with invalid vector store."""""""        with pytest.raises(ValueError, match="Vector store nonexistent not found"):"            await core.create_rag_tool(
+        """Test creating RAG tool with invalid vector store."""with pytest.raises(ValueError, match="Vector store nonexistent not found"):"            await core.create_rag_tool(
                 tool_id="test_tool","                name="Test Tool","                description="Test","                vector_store_id="nonexistent","                collection_name="test""            )
 
     @pytest.mark.asyncio
     async def test_create_rag_tool_duplicate(self, core):
-        """Test creating duplicate RAG tool."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"
+        """Test creating duplicate RAG tool."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"
         await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test""        )
 
@@ -68,7 +71,7 @@ class TestRAGCore:
 
     @pytest.mark.asyncio
     async def test_add_documents(self, core):
-        """Test adding documents to RAG tool."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test adding documents to RAG tool."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         documents = [
@@ -83,7 +86,7 @@ class TestRAGCore:
         assert "doc1" in doc_ids"        assert "doc2" in doc_ids"        assert "doc1" in core.documents"        assert "doc2" in core.documents"
     @pytest.mark.asyncio
     async def test_add_documents_with_chunking(self, core):
-        """Test adding documents with chunking."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test adding documents with chunking."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store","            chunk_size=50,  # Small chunk size for testing
             chunk_overlap=10
         )
@@ -98,7 +101,7 @@ class TestRAGCore:
         assert all(doc_id.startswith("long_doc_chunk_") for doc_id in doc_ids)"
     @pytest.mark.asyncio
     async def test_retrieve_similarity(self, core):
-        """Test similarity-based retrieval."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test similarity-based retrieval."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         # Add test documents
@@ -114,7 +117,7 @@ class TestRAGCore:
 
     @pytest.mark.asyncio
     async def test_retrieve_mmr(self, core):
-        """Test MMR (Maximal Marginal Relevance) retrieval."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test MMR (Maximal Marginal Relevance) retrieval."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         # Add test documents
@@ -128,7 +131,7 @@ class TestRAGCore:
         assert result.metadata["strategy"] == "mmr""
     @pytest.mark.asyncio
     async def test_retrieve_multi_query(self, core):
-        """Test multi-query retrieval."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test multi-query retrieval."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         # Add test documents
@@ -142,7 +145,7 @@ class TestRAGCore:
         assert result.metadata["strategy"] == "multi_query""
     @pytest.mark.asyncio
     async def test_retrieve_with_filters(self, core):
-        """Test retrieval with metadata filters."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test retrieval with metadata filters."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         # Add test documents with metadata
@@ -155,7 +158,7 @@ class TestRAGCore:
         assert all(doc.metadata.get("topic") == "programming" for doc in result.documents)"
     @pytest.mark.asyncio
     async def test_rag_query(self, core):
-        """Test complete RAG query with response generation."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test complete RAG query with response generation."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         # Add test document
@@ -165,7 +168,7 @@ class TestRAGCore:
         assert result["query"] == "What is Python?""        assert isinstance(result["retrieval_result"], RetrievalResult)"        assert "generated_response" in result"        assert "Python is a programming language" in result["generated_response"]"
     @pytest.mark.asyncio
     async def test_update_document(self, core):
-        """Test document updating."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test document updating."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         # Add document
@@ -176,7 +179,7 @@ class TestRAGCore:
         assert core.documents["doc1"].content == "Updated content""        assert core.documents["doc1"].metadata["version"] == "2""
     @pytest.mark.asyncio
     async def test_delete_documents(self, core):
-        """Test document deletion."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test document deletion."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         # Add documents
@@ -189,17 +192,17 @@ class TestRAGCore:
         assert "doc1" not in core.documents"        assert "doc2" not in core.documents"
     @pytest.mark.asyncio
     async def test_get_tool_stats(self, core):
-        """Test getting tool statistics."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test getting tool statistics."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test RAG Tool","            description="A test tool","            vector_store_id="test_store","            collection_name="test_store""        )
 
         stats = await core.get_tool_stats("test_tool")"
         assert stats["tool_id"] == "test_tool""        assert stats["name"] == "Test RAG Tool""        assert stats["document_count"] == 0  # No documents added yet"        assert stats["vector_store_type"] == "qdrant""        assert stats["collection_name"] == "test_store""
     @pytest.mark.asyncio
     async def test_retrieve_invalid_tool(self, core):
-        """Test retrieval with invalid tool ID."""""""        with pytest.raises(ValueError, match="RAG tool nonexistent not found"):"            await core.retrieve("nonexistent", "test query")"
+        """Test retrieval with invalid tool ID."""with pytest.raises(ValueError, match="RAG tool nonexistent not found"):"            await core.retrieve("nonexistent", "test query")"
     @pytest.mark.asyncio
     async def test_pre_processors(self, core):
-        """Test pre-processor functionality."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test pre-processor functionality."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store","            pre_processors=[lambda q: f"processed: {q}"]"        )
 
         # Add document
@@ -210,7 +213,7 @@ class TestRAGCore:
 
     @pytest.mark.asyncio
     async def test_chunk_document(self, core):
-        """Test document chunking functionality."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"
+        """Test document chunking functionality."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"
         tool_config = RAGToolConfig(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_type=VectorStoreType.QDRANT,
             collection_name="test_store","            chunk_size=50,
@@ -232,7 +235,7 @@ class TestRAGCore:
 
     @pytest.mark.asyncio
     async def test_cleanup(self, core):
-        """Test cleanup functionality."""""""        await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
+        """Test cleanup functionality."""await core.register_vector_store("test_store", VectorStoreType.QDRANT, {})"        await core.create_rag_tool(
             tool_id="test_tool","            name="Test Tool","            description="Test","            vector_store_id="test_store","            collection_name="test_store""        )
 
         # Add some data

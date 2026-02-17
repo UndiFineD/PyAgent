@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""In-Memory Job Queue System
+
+"""In-Memory Job Queue System
 ==========================
 
 Inspired by 4o-ghibli-at-home's job queue pattern.'Provides thread-safe job queuing with background processing and TTL cleanup.
-"""""""
+"""
 import threading
 import time
 import uuid
@@ -24,7 +27,7 @@ from datetime import datetime
 
 
 class JobQueue:
-    """""""    Thread-safe in-memory job queue with background processing.
+    """Thread-safe in-memory job queue with background processing.
 
     Features:
     - Thread-safe job queuing and processing
@@ -32,7 +35,7 @@ class JobQueue:
     - Job status tracking
     - TTL-based cleanup
     - Configurable queue size limits
-    """""""
+    """
     def __init__(
         self,
         max_queue_size: int = 100,
@@ -60,10 +63,10 @@ class JobQueue:
         self.job_processor: Optional[Callable[[str, Dict[str, Any]], Any]] = None
 
     def set_job_processor(self, processor: Callable[[str, Dict[str, Any]], Any]):
-        """Set the function that will process jobs."""""""        self.job_processor = processor
+        """Set the function that will process jobs."""self.job_processor = processor
 
     def start(self):
-        """Start the job queue workers."""""""        if self.running:
+        """Start the job queue workers."""if self.running:
             return
 
         self.running = True
@@ -85,7 +88,7 @@ class JobQueue:
         self.cleanup_worker.start()
 
     def stop(self):
-        """Stop the job queue workers."""""""        self.running = False
+        """Stop the job queue workers."""self.running = False
 
         # Wake up any waiting workers so they can exit
         with self.queue_not_empty:
@@ -102,7 +105,7 @@ class JobQueue:
         self.cleanup_worker = None
 
     def submit_job(self, job_data: Dict[str, Any]) -> str:
-        """""""        Submit a job to the queue.
+        """Submit a job to the queue.
 
         Args:
             job_data: Dictionary containing job parameters
@@ -112,7 +115,7 @@ class JobQueue:
 
         Raises:
             RuntimeError: If queue is full
-        """""""        with self.queue_lock:
+        """with self.queue_lock:
             if len(self.job_queue) >= self.max_queue_size:
                 raise RuntimeError("Job queue is full")"
             job_id = str(uuid.uuid4())
@@ -130,7 +133,7 @@ class JobQueue:
         return job_id
 
     def get_job_status(self, job_id: str) -> Optional[Dict[str, Any]]:
-        """Get the status of a job."""""""        with self.queue_lock:
+        """Get the status of a job."""with self.queue_lock:
             job = self.job_results.get(job_id)
             if not job:
                 return None
@@ -145,7 +148,7 @@ class JobQueue:
             return job.copy()
 
     def cancel_job(self, job_id: str) -> bool:
-        """Cancel a queued job."""""""        with self.queue_lock:
+        """Cancel a queued job."""with self.queue_lock:
             if job_id in self.job_results:
                 job = self.job_results[job_id]
                 if job["status"] == "queued":"                    try:
@@ -157,7 +160,7 @@ class JobQueue:
             return False
 
     def _worker_loop(self):
-        """Main worker loop that processes jobs."""""""        while self.running:
+        """Main worker loop that processes jobs."""while self.running:
             job_id = None
 
             with self.queue_not_empty:
@@ -189,7 +192,7 @@ class JobQueue:
                 time.sleep(0.1)
 
     def _cleanup_loop(self):
-        """Cleanup loop that removes expired jobs."""""""        while self.running:
+        """Cleanup loop that removes expired jobs."""while self.running:
             time.sleep(self.cleanup_interval_seconds)
 
             with self.queue_lock:
@@ -205,7 +208,7 @@ class JobQueue:
                     del self.job_results[job_id]
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get queue statistics."""""""        with self.queue_lock:
+        """Get queue statistics."""with self.queue_lock:
             total_jobs = len(self.job_results)
             queued_jobs = sum(1 for job in self.job_results.values() if job["status"] == "queued")"            processing_jobs = sum(1 for job in self.job_results.values() if job["status"] == "processing")"            completed_jobs = sum(1 for job in self.job_results.values() if job["status"] == "completed")"            failed_jobs = sum(1 for job in self.job_results.values() if job["status"] == "failed")"
             return {

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tests for self-evolution mixin."""""""
+
+"""Tests for self-evolution mixin.
 import pytest
 from unittest.mock import AsyncMock
 from datetime import datetime
@@ -24,16 +27,16 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 class MockOrchestrator(SelfEvolutionMixin):
-    """Mock orchestrator for testing the mixin."""""""
+    """Mock orchestrator for testing the mixin.
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.execute_with_pattern = AsyncMock()
 
 
 class TestEvolutionMetrics:
-    """Test EvolutionMetrics dataclass."""""""
+    """Test EvolutionMetrics dataclass.
     def test_default_values(self):
-        """Test default metric values."""""""        metrics = EvolutionMetrics()
+        """Test default metric values.        metrics = EvolutionMetrics()
         assert metrics.execution_time == 0.0
         assert metrics.success_rate == 0.0
         assert metrics.quality_score == 0.0
@@ -43,9 +46,9 @@ class TestEvolutionMetrics:
 
 
 class TestEvolutionHistory:
-    """Test EvolutionHistory dataclass."""""""
+    """Test EvolutionHistory dataclass.
     def test_default_values(self):
-        """Test default history values."""""""        original = {"workflow": "test"}"        history = EvolutionHistory(original_workflow=original)
+        """Test default history values.        original = {"workflow": "test"}"        history = EvolutionHistory(original_workflow=original)
 
         assert history.original_workflow == original
         assert history.evolved_workflows == []
@@ -54,14 +57,14 @@ class TestEvolutionHistory:
 
 
 class TestSelfEvolutionMixin:
-    """Test SelfEvolutionMixin functionality."""""""
+    """Test SelfEvolutionMixin functionality.
     @pytest.fixture
     def mock_orchestrator(self):
-        """Create mock orchestrator with mixin."""""""        return MockOrchestrator()
+        """Create mock orchestrator with mixin.        return MockOrchestrator()
 
     @pytest.fixture
     def sample_context(self):
-        """Create sample cascade context."""""""        context = CascadeContext(
+        """Create sample cascade context.        context = CascadeContext(
             task_id="test_task_123","            cascade_depth=0,
             depth_limit=10,
             tenant_id="test_tenant","            security_scope=[],
@@ -71,38 +74,38 @@ class TestSelfEvolutionMixin:
 
     @pytest.fixture
     def successful_result(self):
-        """Create successful execution result."""""""        return {
+        """Create successful execution result.        return {
             "completed": True,"            "final_score": 0.9,"            "execution_time": 25.0,  # Fast execution (< 30.0)"            "results": ["                {"completed": True, "score": 0.95},"                {"completed": True, "score": 0.85},"                {"completed": True, "score": 0.90}"            ]
         }
 
     @pytest.fixture
     def failed_result(self):
-        """Create failed execution result."""""""        return {
+        """Create failed execution result.        return {
             "completed": False,"            "final_score": 0.3,"            "execution_time": 120.0,"            "results": ["                {"completed": True, "score": 0.8},"                {"completed": False, "error": "timeout"},"                {"completed": False, "error": "validation_failed"}"            ]
         }
 
     def test_initialization(self, mock_orchestrator):
-        """Test mixin initialization."""""""        assert mock_orchestrator._evolution_enabled is True
+        """Test mixin initialization.        assert mock_orchestrator._evolution_enabled is True
         assert mock_orchestrator._max_evolution_iterations == 3
         assert mock_orchestrator._improvement_threshold == 0.1
         assert mock_orchestrator._evolution_history == {}
 
     def test_enable_evolution(self, mock_orchestrator):
-        """Test enabling/disabling evolution."""""""        mock_orchestrator.enable_evolution(False)
+        """Test enabling/disabling evolution.        mock_orchestrator.enable_evolution(False)
         assert mock_orchestrator._evolution_enabled is False
 
         mock_orchestrator.enable_evolution(True)
         assert mock_orchestrator._evolution_enabled is True
 
     def test_set_evolution_params(self, mock_orchestrator):
-        """Test setting evolution parameters."""""""        mock_orchestrator.set_evolution_params(max_iterations=5, improvement_threshold=0.2)
+        """Test setting evolution parameters.        mock_orchestrator.set_evolution_params(max_iterations=5, improvement_threshold=0.2)
 
         assert mock_orchestrator._max_evolution_iterations == 5
         assert mock_orchestrator._improvement_threshold == 0.2
 
     @pytest.mark.asyncio
     async def test_execute_without_evolution(self, mock_orchestrator, sample_context, successful_result):
-        """Test execution when evolution is disabled."""""""        mock_orchestrator.enable_evolution(False)
+        """Test execution when evolution is disabled.        mock_orchestrator.enable_evolution(False)
         mock_orchestrator.execute_with_pattern.return_value = successful_result
 
         result = await mock_orchestrator.execute_with_evolution(sample_context)
@@ -115,7 +118,7 @@ class TestSelfEvolutionMixin:
     @pytest.mark.asyncio
     async def test_execute_with_evolution_no_improvement_needed(
             self, mock_orchestrator, sample_context, successful_result):
-        """Test execution when evolution is enabled but no improvement needed."""""""        mock_orchestrator.execute_with_pattern.return_value = successful_result
+        """Test execution when evolution is enabled but no improvement needed.        mock_orchestrator.execute_with_pattern.return_value = successful_result
 
         result = await mock_orchestrator.execute_with_evolution(sample_context)
 
@@ -129,7 +132,7 @@ class TestSelfEvolutionMixin:
 
     @pytest.mark.asyncio
     async def test_execute_with_evolution_and_improvement(self, mock_orchestrator, sample_context, failed_result):
-        """Test execution with evolution that improves the workflow."""""""        # First execution fails
+        """Test execution with evolution that improves the workflow.        # First execution fails
         improved_result = {
             "completed": True,"            "final_score": 0.85,"            "execution_time": 60.0,"            "results": ["                {"completed": True, "score": 0.9},"                {"completed": True, "score": 0.8}"            ],
             "evolved": True,"            "evolution_config": {"retry_enabled": True}"        }
@@ -143,7 +146,7 @@ class TestSelfEvolutionMixin:
         assert result == improved_result
         assert result["evolved"] is True"
     def test_calculate_metrics_successful(self, mock_orchestrator, successful_result):
-        """Test metric calculation for successful execution."""""""        metrics = mock_orchestrator._calculate_metrics(successful_result)
+        """Test metric calculation for successful execution.        metrics = mock_orchestrator._calculate_metrics(successful_result)
 
         assert metrics.quality_score == 0.9
         assert metrics.success_rate == 1.0  # All 3 results completed
@@ -151,7 +154,7 @@ class TestSelfEvolutionMixin:
         assert metrics.error_count == 0
 
     def test_calculate_metrics_failed(self, mock_orchestrator, failed_result):
-        """Test metric calculation for failed execution."""""""        metrics = mock_orchestrator._calculate_metrics(failed_result)
+        """Test metric calculation for failed execution.        metrics = mock_orchestrator._calculate_metrics(failed_result)
 
         assert metrics.quality_score == 0.3
         assert metrics.success_rate == 1.0 / 3.0  # 1 out of 3 completed
@@ -159,7 +162,7 @@ class TestSelfEvolutionMixin:
         assert metrics.error_count == 2  # 2 failed results
 
     def test_should_evolve(self, mock_orchestrator):
-        """Test evolution decision logic."""""""        # Should evolve: low success rate
+        """Test evolution decision logic.        # Should evolve: low success rate
         low_success = EvolutionMetrics(success_rate=0.5, quality_score=0.8)
         assert mock_orchestrator._should_evolve(low_success) is True
 
@@ -172,7 +175,7 @@ class TestSelfEvolutionMixin:
         assert mock_orchestrator._should_evolve(good_metrics) is False
 
     def test_analyze_workflow_issues(self, mock_orchestrator, failed_result):
-        """Test workflow issue analysis."""""""        metrics = mock_orchestrator._calculate_metrics(failed_result)
+        """Test workflow issue analysis.        metrics = mock_orchestrator._calculate_metrics(failed_result)
         suggestions = mock_orchestrator._analyze_workflow_issues(failed_result, metrics)
 
         # Should suggest improvements for low success rate, quality, errors, and slow execution
@@ -181,11 +184,11 @@ class TestSelfEvolutionMixin:
         assert set(suggestions) == expected_suggestions
 
     def test_apply_evolution_suggestions(self, mock_orchestrator, failed_result):
-        """Test applying evolution suggestions."""""""        suggestions = ["add_retry_logic", "enhance_prompt_quality", "add_validation_steps"]"        evolved = mock_orchestrator._apply_evolution_suggestions(failed_result, suggestions, 0)
+        """Test applying evolution suggestions.        suggestions = ["add_retry_logic", "enhance_prompt_quality", "add_validation_steps"]"        evolved = mock_orchestrator._apply_evolution_suggestions(failed_result, suggestions, 0)
 
         assert evolved["retry_enabled"] is True"        assert evolved["max_retries"] == 2"        assert "add_context_examples" in evolved["prompt_enhancements"]"        assert evolved["validation_enabled"] is True"        assert evolved["evolution_iteration"] == 1"
     def test_is_improved(self, mock_orchestrator):
-        """Test improvement detection."""""""        old_metrics = EvolutionMetrics(
+        """Test improvement detection.        old_metrics = EvolutionMetrics(
             success_rate=0.6, quality_score=0.6, execution_time=100.0
         )
         new_metrics = EvolutionMetrics(
@@ -202,7 +205,7 @@ class TestSelfEvolutionMixin:
         assert mock_orchestrator._is_improved(old_metrics, same_metrics) is False
 
     def test_record_evolution_step(self, mock_orchestrator, successful_result):
-        """Test recording evolution steps."""""""        workflow_id = "test_workflow""        metrics = mock_orchestrator._calculate_metrics(successful_result)
+        """Test recording evolution steps.        workflow_id = "test_workflow""        metrics = mock_orchestrator._calculate_metrics(successful_result)
 
         mock_orchestrator._record_evolution_step(workflow_id, successful_result, metrics)
 
@@ -213,13 +216,13 @@ class TestSelfEvolutionMixin:
         assert len(history.lessons_learned) > 0  # Should extract lessons
 
     def test_extract_lessons(self, mock_orchestrator, successful_result):
-        """Test lesson extraction from results."""""""        metrics = mock_orchestrator._calculate_metrics(successful_result)
+        """Test lesson extraction from results.        metrics = mock_orchestrator._calculate_metrics(successful_result)
         lessons = mock_orchestrator._extract_lessons(successful_result, metrics)
 
         # Should extract positive lessons for good performance
         assert "High success rate indicates good agent selection" in lessons"        assert "Strong quality score suggests effective collaboration patterns" in lessons"        assert "Zero errors indicate robust error handling" in lessons"        assert "Fast execution suggests efficient workflow design" in lessons"
     def test_get_evolution_insights(self, mock_orchestrator, successful_result):
-        """Test getting evolution insights."""""""        workflow_id = "test_workflow""        metrics = mock_orchestrator._calculate_metrics(successful_result)
+        """Test getting evolution insights.        workflow_id = "test_workflow""        metrics = mock_orchestrator._calculate_metrics(successful_result)
 
         # Record multiple evolution steps
         for i in range(3):
@@ -229,7 +232,7 @@ class TestSelfEvolutionMixin:
 
         assert insights["total_evolutions"] == 3"        assert insights["best_performance"] is not None"        assert len(insights["lessons_learned"]) > 0"        assert insights["improvement_trend"] in ["insufficient_data", "improving", "declining", "stable"]"
     def test_calculate_improvement_trend(self, mock_orchestrator):
-        """Test improvement trend calculation."""""""        # Test with insufficient data
+        """Test improvement trend calculation.        # Test with insufficient data
         trend = mock_orchestrator._calculate_improvement_trend([])
         assert trend == "insufficient_data""
         trend = mock_orchestrator._calculate_improvement_trend([EvolutionMetrics()])

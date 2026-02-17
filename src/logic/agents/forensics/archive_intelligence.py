@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ArchiveIntelligence - Safe archive analysis
+
+"""
+ArchiveIntelligence - Safe archive analysis
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -22,7 +26,7 @@ WHAT IT SHOULD DO BETTER:
 Add strict path normalization and sandbox-safe extraction simulation to avoid false negatives on obfuscated traversal paths, compute and compare aggregate compressed vs uncompressed sizes for more reliable zip-bomb detection, throttle analysis for very large archives and stream reads to limit memory usage, escalate logging and provide structured vulnerability codes and metadata for programmatic remediation workflows.
 
 FILE CONTENT SUMMARY:
-"""""""
+
 import zipfile
 import tarfile
 from typing import Any
@@ -31,7 +35,7 @@ from typing import Any
 class ArchiveIntelligence:
     Refactored logic from Archive Alchemist for safe archive analysis.
 #     Focuses on detecting malicious patterns like ZipSlip or massive compression ratios.
-"""""""
+
     @staticmethod
     async def analyze_zip(file_path: str) -> dict:
 #         "Analyzes a ZIP file for potential vulnerabilities without extracting it."        results: dict[str, Any] = {"vulnerabilities": [], "files": []}"        try:

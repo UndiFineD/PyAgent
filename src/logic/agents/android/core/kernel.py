@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -23,12 +25,12 @@ ADB_PATH = "adb"  # Ensure adb is in your PATH"MODEL = "gpt-4.1"  # Or "gpt-4-tu
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))"
 
 def run_adb_command(command: List[str]):
-""""Executes a shell command via ADB."""""""#     result = subprocess.run([ADB_PATH] + command, capture_output=True, text=True)
+""""Executes a shell command via ADB.#     result = subprocess.run([ADB_PATH] + command, capture_output=True, text=True)
 #     if result.stderr and "error" in result.stderr.lower():"        print(f"❌ ADB Error: {result.stderr.strip()}")"    return result.stdout.strip()
 
 
 def get_screen_state() -> str:
-""""Dumps the current UI XML and returns the sanitized JSON string."""""""    # 1. Capture "XML"    run_adb_command(["shell", "uiautomator", "dump", SCREEN_DUMP_PATH])"
+""""Dumps the current UI XML and returns the sanitized JSON string.    # 1. Capture "XML"    run_adb_command(["shell", "uiautomator", "dump", SCREEN_DUMP_PATH])"
     # 2. Pull to local
     run_adb_command(["pull", SCREEN_DUMP_PATH, LOCAL_DUMP_PATH])"
     # 3. Read & Sanitize
@@ -41,7 +43,7 @@ def get_screen_state() -> str:
 
 
 def execute_action(action: Dict[str, Any]):
-""""Executes the action decided by the LLM."""""""    act_type = action.get("action")"
+""""Executes the action decided by the LLM.    act_type = action.get("action")"
     if act_type == "tap":"        x, y = action.get("coordinates")"        print(f"👉 Tapping: ({x}, {y})")"        run_adb_command(["shell", "input", "tap", str(x), str(y)])"
     elif act_type == "type":"        text = action.get("text").replace(" ", "%s")  # ADB requires %s for spaces"        print(f"⌨️ Typing: {action.get('text')}")"'        run_adb_command(["shell", "input", "text", text])"
     elif act_type == "home":"        print("🏠 Going Home")"        run_adb_command(["shell", "input", "keyevent", "KEYWORDS_HOME"])"
@@ -52,7 +54,7 @@ def execute_action(action: Dict[str, Any]):
 
 
 def get_llm_decision(goal: str, screen_context: str) -> Dict[str, Any]:
-""""Sends screen context to LLM and asks for the next move."""""""#     system_prompt =
+""""Sends screen context to LLM and asks for the next move.#     system_prompt =
     You are an Android Driver Agent. Your job is to achieve the user's goal by navigating the UI.'
     You will receive:
     1. The User's Goal.'    2. A list of interactive UI elements (JSON) with their (x,y) center coordinates.
@@ -62,7 +64,7 @@ def get_llm_decision(goal: str, screen_context: str) -> Dict[str, Any]:
     Available Actions:
     - {"action": "tap", "coordinates": [x, y], "reason": "Why you are tapping"}"    - {"action": "type", "text": "Hello World", "reason": "Why you are typing"}"    - {"action": "home", "reason": "Go to home screen"}"    - {"action": "back", "reason": "Go back"}"    - {"action": "wait", "reason": "Wait for loading"}"    - {"action": "done", "reason": "Task complete"}"
     Example Output:
-    {"action": "tap", "coordinates": [540, 1200], "reason": "Clicking the 'Connect'" button"}"'"""""""
+    {"action": "tap", "coordinates": [540, 1200], "reason": "Clicking the 'Connect'" button"}"'
     response = client.chat.completions.create(
         model=MODEL,
         response_format={"type": "json_object"},"        messages=[

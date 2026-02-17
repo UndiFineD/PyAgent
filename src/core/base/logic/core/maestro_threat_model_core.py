@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -30,10 +32,10 @@ class AgentThreat(BaseModel):
 
 
 class MaestroThreatModelCore:
-    """""""    Evaluates agentic systems against the MAESTRO security framework.
+    """Evaluates agentic systems against the MAESTRO security framework.
     (Multi-Agent Environment, Security, Threat Risk, and Outcome).
     Pattern harvested from Agent-Wiz.
-    """""""
+    """
     THREAT_CATALOG = {
         MaestroLayer.AGENT_ECOSYSTEM: [
             "Compromised Agents", "Agent Impersonation", "Agent Tool Misuse","            "Agent Goal Manipulation", "Marketplace Manipulation""        ],
@@ -55,9 +57,9 @@ class MaestroThreatModelCore:
         self.active_threats: List[AgentThreat] = []
 
     def perform_scan(self, system_config: Dict[str, Any]) -> List[AgentThreat]:
-        """""""        Simulates a security scan against the MAESTRO layers.
+        """Simulates a security scan against the MAESTRO layers.
         In a production system, this would interface with Garak, PyRIT, or Vigil.
-        """""""        threatsFound = []
+        """threatsFound = []
 
         # Example Logic: Check for tool availability without sandboxing
         if system_config.get("tools_sandboxed") is False:"            threatsFound.append(AgentThreat(
@@ -81,7 +83,7 @@ class MaestroThreatModelCore:
         return threatsFound
 
     def generate_maestro_report(self) -> str:
-        """Generates a Markdown report of the threat landscape."""""""        if not self.active_threats:
+        """Generates a Markdown report of the threat landscape."""if not self.active_threats:
             return "# MAESTRO Security Report\\n\\n[✓] No critical threats detected in current architecture.""
         report = "# MAESTRO Security Report\\n\\n""        report += f"Total Threats Detected: {len(self.active_threats)}\\n\\n""
         for layer in MaestroLayer:

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -18,7 +20,7 @@ from typing import List, Optional
 class ProxyIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Intelligence engine for proxy discovery and validation.""""""""""""""#     SOURCES = [
+""""Intelligence engine for proxy discovery and validation.#     SOURCES = [
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#         (
 # [BATCHFIX] Commented metadata/non-Python
@@ -63,6 +65,6 @@ class ProxyIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_proxy_evasion_tips() -> List[str]:""""""""Tips for using proxies to evade detection."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_proxy_evasion_tips() -> List[str]:"Tips for using proxies to evade detection.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#        " return ["  # [BATCHFIX] closed string"            "Use SOCKS5 for better protocol support and encryption","            "Rotate proxies every 10-50 requests","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#             "Match the proxy location with the target domain's CDN edge if possible","  # [BATCHFIX] closed string"'            "Check headers for leaking 'X-Forwarded-For' or 'Via'","'            "Use residential proxies to bypass datacenter IP blocks","        ]

@@ -1,17 +1,21 @@
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FastAPI-based API gateway for the PyAgent fleet.
-"""""""
+
+"""
+FastAPI-based API gateway for the PyAgent fleet.
+
 from __future__ import annotations
 
 import sys
@@ -50,7 +54,7 @@ load_balancer = FleetLoadBalancer(fleet)
 
 
 class TaskRequest(BaseModel):
-    """Schema for incoming task requests via the REST API."""""""
+    """Schema for incoming task requests via the REST API.
     agent_id: str
 
     task: str
@@ -59,7 +63,7 @@ class TaskRequest(BaseModel):
     interface: str | None = "Web"  # Default to web if not specified"
 
 class TelemetryManager:
-    """Manages WebSocket connections for real-time fleet telemetry."""""""
+    """Manages WebSocket connections for real-time fleet telemetry.
     def __init__(self) -> None:
         self.active_connections: list[WebSocket] = []
 
@@ -91,10 +95,10 @@ telemetry = TelemetryManager()
     return {"agents": [{"id": k, "type": v["type"]} for k, v in metadata.items()]}"
 
 @app.get("/discovery/peers")"async def list_discovery_peers() -> dict[str, Any]:
-    """Returns the list of peers discovered on the LAN."""""""    return {"peers": [p.to_dict() for p in fleet.get_lan_peers()]}"
+    """Returns the list of peers discovered on the LAN.    return {"peers": [p.to_dict() for p in fleet.get_lan_peers()]}"
 
 @app.get("/discovery/peers/fastest")"async def list_fastest_peers() -> dict[str, Any]:
-    """Returns the top 5 lowest-latency peers discovered."""""""    return {"peers": [p.to_dict() for p in fleet.get_fastest_peers()]}"
+    """Returns the top 5 lowest-latency peers discovered.    return {"peers": [p.to_dict() for p in fleet.get_fastest_peers()]}"
 
 @app.post("/task")"async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
     # Route through Load Balancer

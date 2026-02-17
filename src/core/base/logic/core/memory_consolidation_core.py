@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""Core logic regarding Memory Consolidation.
+
+"""Core logic regarding Memory Consolidation.
 Implements dream-inspired memory processing:
 - Exponential decay for aging memories.
 - Creative association discovery (REM-like).
 - Semantic clustering for memory compression.
-"""""""
+"""
 import math
 import logging
 from typing import Any, Dict, List, Optional
@@ -25,9 +28,9 @@ logger = logging.getLogger(__name__)
 
 
 class MemoryConsolidationCore:
-    """""""    Core engine for consolidating agent memories.
+    """Core engine for consolidating agent memories.
     Inspired by biological memory patterns.
-    """""""
+    """
     DEFAULT_PROTECTED_TYPES = {"Decision", "Insight", "SystemPrompt"}"
     def __init__(
         self,
@@ -51,8 +54,8 @@ class MemoryConsolidationCore:
         confidence: float = 0.5,
         current_time: Optional[datetime] = None
     ) -> float:
-        """""""        Calculate mathematical relevance of a memory based on decay and reinforcement.
-        """""""        if current_time is None:
+        """Calculate mathematical relevance of a memory based on decay and reinforcement.
+        """if current_time is None:
             current_time = datetime.now(timezone.utc)
 
         # 1. Time decay (Exponential)
@@ -84,9 +87,9 @@ class MemoryConsolidationCore:
         memories: List[Dict[str, Any]],
         similarity_threshold: float = 0.85
     ) -> List[Dict[str, Any]]:
-        """""""        Identify potential relationships (associations) between existing memories.
+        """Identify potential relationships (associations) between existing memories.
         Ported from automem-ai-memory.
-        """""""        associations = []
+        """associations = []
         # In a real system, this would use vector search.
         # Here we provide the logic for determining the association type.
         for i, mem1 in enumerate(memories):
@@ -103,7 +106,7 @@ class MemoryConsolidationCore:
         return associations
 
     def _calculate_similarity(self, vec1: Optional[List[float]], vec2: Optional[List[float]]) -> float:
-        """Simple cosine similarity for internal association discovery."""""""        if not vec1 or not vec2 or len(vec1) != len(vec2):
+        """Simple cosine similarity for internal association discovery."""if not vec1 or not vec2 or len(vec1) != len(vec2):
             return 0.0
 
         dot = sum(a * b for a, b in zip(vec1, vec2))
@@ -121,8 +124,8 @@ class MemoryConsolidationCore:
         age_days: int,
         is_manually_protected: bool = False
     ) -> bool:
-        """""""        Determine if a memory should be protected from archival/deletion.
-        """""""        if is_manually_protected:
+        """Determine if a memory should be protected from archival/deletion.
+        """if is_manually_protected:
             return True
 
         if importance >= self.importance_protection_threshold:
@@ -137,13 +140,13 @@ class MemoryConsolidationCore:
         return False
 
     async def cluster_memories(self, memories: List[Dict[str, Any]]) -> List[List[str]]:
-        """""""        Identify semantic clusters of memories for potential compression (summarization).
+        """Identify semantic clusters of memories for potential compression (summarization).
         Placeholder for vector similarity measurement logic.
-        """""""        # This would typically rely on a Vector Database or local embeddings
+        """# This would typically rely on a Vector Database or local embeddings
         # For the core, we just provide the architectural slot
         return []
 
     def get_summary_prompt(self, cluster: List[Dict[str, Any]]) -> str:
-        """""""        Generate a prompt to summarize a cluster of memories into a single high-level insight.
-        """""""        content_block = "\\n---\\n".join([m.get("content", "") for m in cluster])"        return (
+        """Generate a prompt to summarize a cluster of memories into a single high-level insight.
+        """content_block = "\\n---\\n".join([m.get("content", "") for m in cluster])"        return (
             "Summarize the following related memories into a single, concise 'Synthetic Insight'.\\n""'            "Preserve key facts and dates, but remove redundant emotional context or duplicates.\\n\\n""            f"{content_block}\\n\\n""            "Synthetic Insight:""        )

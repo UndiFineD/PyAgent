@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Handy Terminal Mixin - Terminal execution and slash-command handling
+
+"""
+Handy Terminal Mixin - Terminal execution and slash-command handling
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -28,7 +32,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Handy terminal mixin.py module.
-"""""""# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 import subprocess
@@ -41,10 +45,10 @@ if TYPE_CHECKING:
 
 
 class HandyTerminalMixin:
-""""Mixin for terminal execution and slash command handling in HandyAgent."""""""
+""""Mixin for terminal execution and slash command handling in HandyAgent.
     @as_tool
     def terminal_slash_command(self: HandyAgent, command: str, args: list[str]) -> str:
-""""Handles agentic slash commands like /fix, /test, /summarize directly from a CLI."""""""#        " res ="        if command == "/fix":"#             res = f"### 🔧 Triggered /fix for {args}\\nAnalyzing errors and proposing patches..."        elif command == "/test":"#             res = f"### 🧪 Triggered /test for {args}\\nRunning pytest and coverage analysis..."        elif command == "/summarize":"#             res = f"### 📝 Triggered /summarize for {args}\\nGenerating high-level architectural overview..."        else:
+""""Handles agentic slash commands like /fix, /test, /summarize directly from a CLI.#        " res ="        if command == "/fix":"#             res = f"### 🔧 Triggered /fix for {args}\\nAnalyzing errors and proposing patches..."        elif command == "/test":"#             res = f"### 🧪 Triggered /test for {args}\\nRunning pytest and coverage analysis..."        elif command == "/summarize":"#             res = f"### 📝 Triggered /summarize for {args}\\nGenerating high-level architectural overview..."        else:
 #             res = fUnknown slash command: {command}. Available: /fix, /test, /summarize
 
         self._record("slash_command", {"cmd": command, "args": args}, res)"        return res
@@ -54,7 +58,7 @@ class HandyTerminalMixin:
         "Executes a command and automatically analyzes errors "if it fails."
         WARNING: This executes arbitrary shell commands. Use with caution.
         Includes a basic blocklist for catastrophic commands.
-"""""""        # Improved Security Blocklist (Phase 104)
+        # Improved Security Blocklist (Phase 104)
         blocklist = [
             "rm -rf /","            "mkfs","            "dd if=","            "> /dev/sda","            "chmod -R 777 /","            ":(){ :|:& };:","            "del /s /q c:/","            "format c:","        ]
         if any(b in command.lower() for b in blocklist):
@@ -76,7 +80,7 @@ class HandyTerminalMixin:
         except (subprocess.SubprocessError, IOError, OSError, ValueError) as e:
 #             err_msg = fExecution error: {e}
             self._record("execute_error", command, err_msg)"            return err_msg
-"""""""# Licensed under the Apache License, Version 2."0 (the "License");"
+# Licensed under the Apache License, Version 2."0 (the "License");"
 from __future__ import annotations
 
 import subprocess
@@ -89,10 +93,10 @@ if TYPE_CHECKING:
 
 
 class HandyTerminalMixin:
-""""Mixin for terminal execution and slash command handling in HandyAgent."""""""
+""""Mixin for terminal execution and slash command handling in HandyAgent.
     @as_tool
     def terminal_slash_command(self: HandyAgent, command: str, args: list[str]) -> str:
-""""Handles agentic slash commands like /fix, /test, /summarize directly from a "CLI."""""""#         res =
+""""Handles agentic slash commands like /fix, /test, /summarize directly from a "CLI.#         res =
         if command == "/fix":"#             res = f"### 🔧 Triggered /fix for {args}\\nAnalyzing errors and proposing patches..."        elif command == "/test":"#             res = f"### 🧪 Triggered /test for {args}\\nRunning pytest and coverage analysis..."        elif command == "/summarize":"#             res = f"### 📝 Triggered /summarize for {args}\\nGenerating high-level architectural overview..."        else:
 #             res = fUnknown slash command: {command}. Available: /fix, /test, /summarize
 
@@ -103,7 +107,7 @@ class HandyTerminalMixin:
         "Executes a command and automatically analyzes errors if it fails."
         WARNING: This executes arbitrary shell commands. Use with caution.
         Includes a basic blocklist for catastrophic commands.
-"""""""        # Improved "Security Blocklist (Phase 104)"        blocklist = [
+        # Improved "Security Blocklist (Phase 104)"        blocklist = [
             "rm -rf /","            "mkfs","            "dd if=","            "> /dev/sda","            "chmod -R 777 /","            ":(){ :|:& };:","            "del /s /q c:/","            "format c:","        ]
         if any(b in command.lower() for b in blocklist):
 #             msg = "### ⚠️ Security Block: Potentially catastrophic command detected."            self._record("execute_fail", command, msg)"            return msg

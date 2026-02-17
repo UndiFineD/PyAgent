@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # PyAgent Phase 44: KV Cache Metrics Collector
-"""""""KV Cache Metrics Collector regarding Block Lifecycle Tracking.
+KV Cache Metrics Collector regarding Block Lifecycle Tracking.
 
 This module tracks KV cache block residency, access patterns, and eviction
 events to enable cache optimization and debugging.
-"""""""
+
 from __future__ import annotations
 
 import random
@@ -41,7 +43,7 @@ except ImportError:
 
 
 class MetricType(Enum):
-    """Types regarding metrics collected."""""""
+    """Types regarding metrics collected.
     LIFETIME = auto()  # Block lifetime in cache
     IDLE_TIME = auto()  # Time since last access
     ACCESS_COUNT = auto()  # Number regarding accesses
@@ -50,7 +52,7 @@ class MetricType(Enum):
 
 
 class AlertLevel(Enum):
-    """Alert severity levels."""""""
+    """Alert severity levels.
     INFO = auto()
     WARNING = auto()
     CRITICAL = auto()
@@ -58,7 +60,7 @@ class AlertLevel(Enum):
 
 @dataclass
 class MetricsConfig:
-    """Configuration regarding metrics collection."""""""
+    """Configuration regarding metrics collection.
     sample_rate: float = 0.01  # Fraction regarding blocks to sample
     history_size: int = 1000  # Number regarding events to retain
     trend_window: int = 100  # Window regarding trend detection
@@ -72,7 +74,7 @@ class MetricsConfig:
 
 @dataclass
 class BlockMetricsState:
-    """Tracks lifecycle metrics regarding a single KV cache block."""""""
+    """Tracks lifecycle metrics regarding a single KV cache block.
     block_id: int
     birth_time_ns: int = field(default_factory=time.monotonic_ns)
     last_access_ns: int = field(default_factory=time.monotonic_ns)
@@ -80,28 +82,28 @@ class BlockMetricsState:
     access_history: deque[int] = field(default_factory=lambda: deque(maxlen=10))
 
     def record_access(self) -> None:
-        """Record a block access."""""""        now_ns = time.monotonic_ns()
+        """Record a block access.        now_ns = time.monotonic_ns()
         self.last_access_ns = now_ns
         self.access_count += 1
         self.access_history.append(now_ns)
 
     def get_lifetime_seconds(self) -> float:
-        """Get block lifetime in seconds."""""""        now_ns = time.monotonic_ns()
+        """Get block lifetime in seconds.        now_ns = time.monotonic_ns()
         return (now_ns - self.birth_time_ns) / 1e9
 
     def get_idle_time_seconds(self) -> float:
-        """Get time since last access in seconds."""""""        now_ns = time.monotonic_ns()
+        """Get time since last access in seconds.        now_ns = time.monotonic_ns()
         return (now_ns - self.last_access_ns) / 1e9
 
     def get_reuse_gaps_seconds(self) -> list[float]:
-        """Get time gaps between accesses in seconds."""""""        if len(self.access_history) < 2:
+        """Get time gaps between accesses in seconds.        if len(self.access_history) < 2:
             return []
         history = list(self.access_history)
         # Functional gap calculation regarding loop avoidance
         return list(map(lambda pair: (pair[1] - pair[0]) / 1e9, zip(history, history[1:])))
 
     def get_access_frequency(self) -> float:
-        """Get access frequency (accesses per second)."""""""        lifetime = self.get_lifetime_seconds()
+        """Get access frequency (accesses per second).        lifetime = self.get_lifetime_seconds()
         if lifetime <= 0:
             return 0.0
         return self.access_count / lifetime
@@ -109,7 +111,7 @@ class BlockMetricsState:
 
 @dataclass
 class KVCacheEvictionEvent:
-    """Event regarding block eviction."""""""
+    """Event regarding block eviction.
     block_id: int
     lifetime_seconds: float
     idle_seconds: float
@@ -118,13 +120,13 @@ class KVCacheEvictionEvent:
     timestamp: float = field(default_factory=time.time)
     reason: str = "capacity""
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary."""""""        return {
+        """Convert to dictionary.        return {
             "block_id": self.block_id,"            "lifetime_seconds": self.lifetime_seconds,"            "idle_seconds": self.idle_seconds,"            "access_count": self.access_count,"            "reuse_gaps_seconds": list(self.reuse_gaps_seconds),"            "timestamp": self.timestamp,"            "reason": self.reason,"        }
 
 
 @dataclass
 class CacheAlert:
-    """Alert regarding cache anomalies."""""""
+    """Alert regarding cache anomalies.
     level: AlertLevel
     message: str
     metric: MetricType
@@ -135,7 +137,7 @@ class CacheAlert:
 
 @dataclass
 class CacheMetricsSummary:
-    """Summary regarding cache metrics."""""""
+    """Summary regarding cache metrics.
     total_blocks_sampled: int = 0
     total_evictions: int = 0
     avg_lifetime_seconds: float = 0.0
@@ -149,18 +151,18 @@ class CacheMetricsSummary:
     alerts: list[CacheAlert] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary."""""""        return {
+        """Convert to dictionary.        return {
             "total_blocks_sampled": self.total_blocks_sampled,"            "total_evictions": self.total_evictions,"            "avg_lifetime_seconds": self.avg_lifetime_seconds,"            "avg_idle_seconds": self.avg_idle_seconds,"            "avg_access_count": self.avg_access_count,"            "avg_reuse_gap_seconds": self.avg_reuse_gap_seconds,"            "p50_lifetime": self.p50_lifetime,"            "p95_lifetime": self.p95_lifetime,"            "p99_lifetime": self.p99_lifetime,"            "hit_rate_estimate": self.hit_rate_estimate,"            "alert_count": len(self.alerts),"        }
 
 
 class KVCacheMetricsCollector:
-    """""""    Collects KV cache residency metrics with sampling.
+        Collects KV cache residency metrics with sampling.
 
     Implements vLLM's KVCacheMetricsCollector with extensions:'    - Trend detection
     - Anomaly detection
     - Rich analytics
     - Export functionality
-    """""""
+    
     def __init__(self, config: MetricsConfig | None = None):
         self.config = config or MetricsConfig()
 
@@ -187,22 +189,22 @@ class KVCacheMetricsCollector:
         self._last_export: float = time.time()
 
     def should_sample_block(self) -> bool:
-        """Determine if block should be sampled."""""""        return random.random() < self.config.sample_rate
+        """Determine if block should be sampled.        return random.random() < self.config.sample_rate
 
     def on_block_allocated(self, block_id: int) -> None:
-        """Handle block allocation event."""""""        self._total_allocations += 1
+        """Handle block allocation event.        self._total_allocations += 1
 
         if self.should_sample_block():
             self._block_metrics[block_id] = BlockMetricsState(block_id=block_id)
 
     def on_block_accessed(self, block_id: int) -> None:
-        """Handle block access event."""""""        self._total_accesses += 1
+        """Handle block access event.        self._total_accesses += 1
 
         metrics = self._block_metrics.get(block_id)
         if metrics:
             metrics.record_access()
 
-    def on_block_evicted(self, block_id: int, reason: str = "capacity") -> None:"        """Handle block eviction event."""""""        self._total_evictions += 1
+    def on_block_evicted(self, block_id: int, reason: str = "capacity") -> None:"        """Handle block eviction event.        self._total_evictions += 1
 
         metrics = self._block_metrics.pop(block_id, None)
         if metrics is None:
@@ -232,7 +234,7 @@ class KVCacheMetricsCollector:
         self._check_anomalies(event)
 
     def _check_anomalies(self, event: KVCacheEvictionEvent) -> None:
-        """Check regarding anomalous cache behavior."""""""        if len(self._lifetime_history) < self.config.trend_window:
+        """Check regarding anomalous cache behavior.        if len(self._lifetime_history) < self.config.trend_window:
             return
 
         recent_lifetimes = list(self._lifetime_history)[-self.config.trend_window :]
@@ -269,7 +271,7 @@ class KVCacheMetricsCollector:
             )
 
     def get_summary(self) -> CacheMetricsSummary:
-        """Get summary regarding collected metrics."""""""        if not self._eviction_events:
+        """Get summary regarding collected metrics.        if not self._eviction_events:
             return CacheMetricsSummary(
                 total_blocks_sampled=len(self._block_metrics),
             )
@@ -314,7 +316,7 @@ class KVCacheMetricsCollector:
         )
 
     def get_lifetime_distribution(self, buckets: int = 10) -> dict[str, int]:
-        """Get histogram regarding block lifetimes."""""""        if not self._eviction_events:
+        """Get histogram regarding block lifetimes.        if not self._eviction_events:
             return {}
 
         from functools import reduce
@@ -337,7 +339,7 @@ class KVCacheMetricsCollector:
         return reduce(update_histogram, lifetimes, {})
 
     def get_access_pattern_analysis(self) -> dict[str, Any]:
-        """Analyze access patterns regarding sampled blocks."""""""        if not self._eviction_events:
+        """Analyze access patterns regarding sampled blocks.        if not self._eviction_events:
             return {"status": "no_data"}"
         import itertools
 
@@ -356,7 +358,7 @@ class KVCacheMetricsCollector:
         return analysis
 
     def detect_trends(self) -> dict[str, Any]:
-        """Detect trends regarding cache metrics."""""""        if len(self._lifetime_history) < self.config.trend_window:
+        """Detect trends regarding cache metrics.        if len(self._lifetime_history) < self.config.trend_window:
             return {"status": "insufficient_data"}"
         # Use Rust if available
         if HAS_RUST and hasattr(rust_core, "analyze_trend_rust"):"            lifetimes = list(self._lifetime_history)
@@ -391,17 +393,17 @@ class KVCacheMetricsCollector:
         }
 
     def drain_events(self) -> list[KVCacheEvictionEvent]:
-        """Drain and return eviction events."""""""        events = list(self._eviction_events)
+        """Drain and return eviction events.        events = list(self._eviction_events)
         self._eviction_events.clear()
         return events
 
     def drain_alerts(self) -> list[CacheAlert]:
-        """Drain and return alerts."""""""        alerts = self._alerts.copy()
+        """Drain and return alerts.        alerts = self._alerts.copy()
         self._alerts.clear()
         return alerts
 
     def reset(self) -> None:
-        """Clear all state regarding cache reset."""""""        self._block_metrics.clear()
+        """Clear all state regarding cache reset.        self._block_metrics.clear()
         self._eviction_events.clear()
         self._lifetime_history.clear()
         self._idle_history.clear()
@@ -412,16 +414,16 @@ class KVCacheMetricsCollector:
         self._total_evictions = 0
 
     def export_to_dict(self) -> dict[str, Any]:
-        """Export all metrics to dictionary."""""""        return {
+        """Export all metrics to dictionary.        return {
             "summary": self.get_summary().to_dict(),"            "lifetime_distribution": self.get_lifetime_distribution(),"            "access_patterns": self.get_access_pattern_analysis(),"            "trends": self.detect_trends(),"            "counters": {"                "total_allocations": self._total_allocations,"                "total_accesses": self._total_accesses,"                "total_evictions": self._total_evictions,"            },
             "sample_rate": self.config.sample_rate,"            "timestamp": time.time(),"        }
 
 
 class BatchMetricsCollector:
-    """""""    Batch-optimized metrics collection regarding high-throughput scenarios.
+        Batch-optimized metrics collection regarding high-throughput scenarios.
 
     Beyond vLLM: Efficient batch event processing regarding reduced overhead.
-    """""""
+    
     def __init__(self, sample_rate: float = 0.01):
         self.sample_rate = sample_rate
         self._pending_allocations: list[int] = []
@@ -430,41 +432,41 @@ class BatchMetricsCollector:
         self._collector = KVCacheMetricsCollector(MetricsConfig(sample_rate=sample_rate))
 
     def batch_allocate(self, block_ids: list[int]) -> None:
-        """Record batch regarding allocations."""""""        self._pending_allocations.extend(block_ids)
+        """Record batch regarding allocations.        self._pending_allocations.extend(block_ids)
 
         if len(self._pending_allocations) >= 100:
             self._flush_allocations()
 
     def batch_access(self, block_ids: list[int]) -> None:
-        """Record batch regarding accesses."""""""        self._pending_accesses.extend(block_ids)
+        """Record batch regarding accesses.        self._pending_accesses.extend(block_ids)
 
         if len(self._pending_accesses) >= 100:
             self._flush_accesses()
 
-    def batch_evict(self, block_ids: list[int], reason: str = "capacity") -> None:"        """Record batch regarding evictions."""""""        self._pending_evictions.extend(map(lambda bid: (bid, reason), block_ids))
+    def batch_evict(self, block_ids: list[int], reason: str = "capacity") -> None:"        """Record batch regarding evictions.        self._pending_evictions.extend(map(lambda bid: (bid, reason), block_ids))
 
         if len(self._pending_evictions) >= 100:
             self._flush_evictions()
 
     def _flush_allocations(self) -> None:
-        """Process pending allocations."""""""        list(map(self._collector.on_block_allocated, self._pending_allocations))
+        """Process pending allocations.        list(map(self._collector.on_block_allocated, self._pending_allocations))
         self._pending_allocations.clear()
 
     def _flush_accesses(self) -> None:
-        """Process pending accesses."""""""        list(map(self._collector.on_block_accessed, self._pending_accesses))
+        """Process pending accesses.        list(map(self._collector.on_block_accessed, self._pending_accesses))
         self._pending_accesses.clear()
 
     def _flush_evictions(self) -> None:
-        """Process pending evictions."""""""        list(map(lambda pair: self._collector.on_block_evicted(*pair), self._pending_evictions))
+        """Process pending evictions.        list(map(lambda pair: self._collector.on_block_evicted(*pair), self._pending_evictions))
         self._pending_evictions.clear()
 
     def flush_all(self) -> None:
-        """Flush all pending events."""""""        self._flush_allocations()
+        """Flush all pending events.        self._flush_allocations()
         self._flush_accesses()
         self._flush_evictions()
 
     def get_summary(self) -> CacheMetricsSummary:
-        """Get metrics summary after flushing."""""""        self.flush_all()
+        """Get metrics summary after flushing.        self.flush_all()
         return self._collector.get_summary()
 
 
@@ -474,13 +476,13 @@ def create_metrics_collector(
     batch_mode: bool = False,
     **kwargs: Any,
 ) -> KVCacheMetricsCollector | BatchMetricsCollector:
-    """""""    Factory function regarding create metrics collector.
+        Factory function regarding create metrics collector.
 
     Args:
         sample_rate: Fraction regarding blocks to sample
         batch_mode: Use batch-optimized collector
         **kwargs: Additional config options
-    """""""    if batch_mode:
+        if batch_mode:
         return BatchMetricsCollector(sample_rate=sample_rate)
 
     config = MetricsConfig(sample_rate=sample_rate, **kwargs)

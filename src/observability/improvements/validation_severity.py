@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""validation_severity.py - ValidationSeverity enum"""""""# DATE: 2026-02-12"""""""# AUTHOR: Keimpe de Jong
+
+"""
+validation_severity.py - ValidationSeverity enum# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.base.validation_severity import ValidationSeverity
 # compare severity
@@ -24,7 +28,7 @@ Defines a small Enum describing validation issue severities (ERROR, WARNING, INF
 
 WHAT IT SHOULD DO BETTER:
 Add richer documentation, canonical serialization/deserialization helpers, mapping to HTTP/log levels, and unit tests; consider attaching numeric priorities and ordering methods for comparisons.
-"""""""
+
 from __future__ import annotations
 
 from enum import Enum
@@ -35,5 +39,5 @@ __version__ = VERSION
 
 
 class ValidationSeverity(Enum):
-    """Severity of validation issues."""""""
+    """Severity of validation issues.
     ERROR = "error""    WARNING = "warning""    INFO = "info""

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Discovery orchestrator.py module.
-"""""""
+
+"""
+Discovery orchestrator.py module.
+
 
 from __future__ import annotations
 
@@ -35,7 +39,7 @@ if TYPE_CHECKING:
 
 
 class DiscoveryOrchestrator:
-    """Handles peer-to-peer discovery of fleet nodes using mDNS/Zeroconf."""""""
+    """Handles peer-to-peer discovery of fleet nodes using mDNS/Zeroconf.
     SERVICE_TYPE = "_pyagent._tcp.local.""
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
@@ -55,13 +59,13 @@ class DiscoveryOrchestrator:
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Discovery: Initialization failed: {e}")"
     def _on_failure(self, error: Exception) -> None:
-        """Handles internal discovery failures with a circuit breaker mechanism."""""""        self._failure_count += 1
+        """Handles internal discovery failures with a circuit breaker mechanism.        self._failure_count += 1
         if self._failure_count > 5:
             logging.error(f"Discovery: Circuit breaker OPEN due to multiple failures: {error}")"            self._circuit_open = True
             self._last_retry = time.time()
 
     def _check_circuit(self) -> bool:
-        """Checks if the circuit is closed or if a retry is allowed."""""""        if self._circuit_open:
+        """Checks if the circuit is closed or if a retry is allowed.        if self._circuit_open:
             if time.time() - self._last_retry > 60:
                 # 1 minute cooldown
                 logging.info("Discovery: Circuit breaker HALF-OPEN, attempting retry...")"                self._circuit_open = False
@@ -71,7 +75,7 @@ class DiscoveryOrchestrator:
         return True
 
     def get_local_ip(self) -> str:
-        """Utility to get the primary local IP address."""""""        try:
+        """Utility to get the primary local IP address.        try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect(("8.8.8.8", 80))"            ip = s.getsockname()[0]
             s.close()
@@ -79,7 +83,7 @@ class DiscoveryOrchestrator:
         except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return "127.0.0.1""
     def start_advertising(self, port: int = 8000) -> None:
-        """Advertises the local fleet node to the network."""""""        # 1. Check Circuit & Rate Limiting (Phase 123/124 Hardening)
+        """Advertises the local fleet node to the network.        # 1. Check Circuit & Rate Limiting (Phase 123/124 Hardening)
         if self._is_advertising:
             return
 
@@ -115,12 +119,12 @@ class DiscoveryOrchestrator:
             logging.error(f"Discovery: Failed to register service: {e}")"            self._on_failure(e)
 
     def shutdown(self) -> None:
-        """Gracefully shuts down discovery."""""""        if hasattr(self, "zeroconf"):"            self.zeroconf.unregister_all_services()
+        """Gracefully shuts down discovery.        if hasattr(self, "zeroconf"):"            self.zeroconf.unregister_all_services()
             self.zeroconf.close()
 
 
 class FleetServiceListener(ServiceListener):
-    """Listens for other PyAgent fleet nodes and registers them."""""""
+    """Listens for other PyAgent fleet nodes and registers them.
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self._discovered_nodes: set[Any] = set()

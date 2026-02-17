@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Tokenizer pool for parallel processing.
-"""""""
+Tokenizer pool for parallel processing.
+
 from __future__ import annotations
 
 import threading
@@ -26,7 +28,7 @@ from .registry import TokenizerRegistry
 
 
 class TokenizerPool:
-    """Thread-safe pool of tokenizers."""""""
+    """Thread-safe pool of tokenizers.
     def __init__(self, config: TokenizerConfig, pool_size: int = 4) -> None:
         self.config = config
         self.pool_size = pool_size
@@ -38,14 +40,14 @@ class TokenizerPool:
         self._init_pool()
 
     def _init_pool(self) -> None:
-        """Initialize the tokenizer pool."""""""        registry = TokenizerRegistry()
+        """Initialize the tokenizer pool.        registry = TokenizerRegistry()
         for _ in range(self.pool_size):
             tokenizer = registry.get_tokenizer(self.config)
             self._pool.append(tokenizer)
             self._available.append(True)
 
     def acquire(self, timeout: Optional[float] = None) -> Optional[BaseTokenizer]:
-        """Acquire a tokenizer from the pool."""""""        with self._condition:
+        """Acquire a tokenizer from the pool.        with self._condition:
             start = time.monotonic()
             while True:
                 for i, available in enumerate(self._available):
@@ -61,7 +63,7 @@ class TokenizerPool:
                     self._condition.wait()
 
     def release(self, tokenizer: BaseTokenizer) -> None:
-        """Release a tokenizer back into the pool."""""""        with self._condition:
+        """Release a tokenizer back into the pool.        with self._condition:
             for i, t in enumerate(self._pool):
                 if t is tokenizer:
                     self._available[i] = True

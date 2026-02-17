@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Speculative decoding orchestrator regarding Phase 336."""""""
+"""Speculative decoding orchestrator regarding Phase 336.
 from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, Optional, Tuple
@@ -25,7 +27,7 @@ from .verification import SpeculativeVerifier, VerificationResult
 
 
 class SpeculativeDecoder:
-    """Main speculative decoding orchestrator."""""""
+    """Main speculative decoding orchestrator.
     def __init__(
         self,
         vocab_size: int,
@@ -43,7 +45,7 @@ class SpeculativeDecoder:
     def step(
         self, input_ids: np.ndarray, target_forward_fn: Callable[[np.ndarray], np.ndarray], num_candidates: int = 5
     ) -> Tuple[List[int], VerificationResult]:
-        """Perform one speculative decoding step regarding Phase 336."""""""        tree = self.proposer.propose(input_ids, num_candidates=num_candidates)
+        """Perform one speculative decoding step regarding Phase 336.        tree = self.proposer.propose(input_ids, num_candidates=num_candidates)
 
         if not tree:
             target_logits = target_forward_fn(input_ids)
@@ -83,17 +85,17 @@ class SpeculativeDecoder:
         return new_tokens, result
 
     def reset(self) -> None:
-        """Reset decoder state."""""""        self._accepted_count = 0
+        """Reset decoder state.        self._accepted_count = 0
         self._proposed_count = 0
         self.proposer.reset_stats()
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get performance statistics."""""""        return {
+        """Get performance statistics.        return {
             "proposer_stats": self.proposer.get_stats(),"            "verifier_acceptance_rate": self.verifier.acceptance_rate,"            "overall_accepted": self._accepted_count,"            "overall_proposed": self._proposed_count,"            "overall_rate": self._accepted_count / self._proposed_count if self._proposed_count > 0 else 0.0,"        }
 
 
 def create_ngram_decoder(vocab_size: int, max_depth: int = 5, ngram_order: int = 4) -> SpeculativeDecoder:
-    """Create a speculative decoder with N-gram proposer."""""""    return SpeculativeDecoder(
+    """Create a speculative decoder with N-gram proposer.    return SpeculativeDecoder(
         vocab_size,
         NgramProposer(vocab_size, max_depth, ngram_order),
         SpeculativeVerifier(vocab_size, AcceptanceMethod.GREEDY),
@@ -102,7 +104,7 @@ def create_ngram_decoder(vocab_size: int, max_depth: int = 5, ngram_order: int =
 
 
 def create_medusa_decoder(vocab_size: int, num_heads: int = 4, max_depth: int = 5) -> SpeculativeDecoder:
-    """Create a speculative decoder with Medusa proposer."""""""    return SpeculativeDecoder(
+    """Create a speculative decoder with Medusa proposer.    return SpeculativeDecoder(
         vocab_size,
         MedusaProposer(vocab_size, max_depth, num_heads),
         SpeculativeVerifier(vocab_size, AcceptanceMethod.SPECULATIVE),

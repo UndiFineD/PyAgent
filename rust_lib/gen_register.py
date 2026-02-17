@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """Script to automatically generate PyO3 module registration code."""
 import re
 import sys

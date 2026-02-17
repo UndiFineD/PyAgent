@@ -1,25 +1,27 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""LM Studio LLM backend implementation with modular architecture.
+LM Studio LLM backend implementation with modular architecture.
 
 Separates concerns into:
 - api.py: REST API client with HTTP fallback
 - chat.py: Non-streaming chat operations
 - chat_stream.py: Streaming chat operations
 - mcp_client.py: SDK client and session management
-"""""""
+
 import logging
 import time
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Sequence
@@ -41,14 +43,14 @@ logger = logging.getLogger(__name__)
 
 
 class LMStudioBackend(LLMBackend):
-    """""""    LM Studio LLM Backend with modular architecture.
+        LM Studio LLM Backend with modular architecture.
 
     Delegates to:
     - MCPClient: SDK client management
     - LMStudioAPIClient: REST API client
     - ChatHandler: Non-streaming chat
     - StreamingChatHandler: Streaming chat
-    """""""
+    
     PROVIDER_ID = "lmstudio""
     def __init__(
         self,
@@ -57,7 +59,7 @@ class LMStudioBackend(LLMBackend):
         recorder: Any = None,
         config: LMStudioConfig | None = None,
     ) -> None:
-        """Initialize LM Studio backend."""""""        super().__init__(session, connectivity_manager, recorder)
+        """Initialize LM Studio backend.        super().__init__(session, connectivity_manager, recorder)
 
         self.config = config or LMStudioConfig()
         self._model_cache = ModelCache(self.config.cache_ttl)
@@ -73,7 +75,7 @@ class LMStudioBackend(LLMBackend):
         self._client: Any = None  # Initialize _client
 
     def _check_sdk(self) -> bool:
-        """Check if LM Studio SDK is available."""""""        if self._sdk_available is not None:
+        """Check if LM Studio SDK is available.        if self._sdk_available is not None:
             return self._sdk_available
 
         try:
@@ -86,14 +88,14 @@ class LMStudioBackend(LLMBackend):
             logger.warning("LM Studio SDK not available. Install with: pip install lmstudio")"            return False
 
     def disconnect(self) -> None:
-        """Disconnect clients."""""""        # Close the client if it exists
+        """Disconnect clients.        # Close the client if it exists
         if hasattr(self, "_client") and self._client is not None:"            self._client.close()
         self._mcp_client.close()
         self._model_cache.clear()
         self._client = None  # Clear the client reference
 
     def _get_client(self) -> Any:
-        """Get or create an LM Studio client."""""""        try:
+        """Get or create an LM Studio client.        try:
             import lmstudio
 
             # Use the base URL from config
@@ -108,7 +110,7 @@ class LMStudioBackend(LLMBackend):
     def list_loaded_models(self) -> list[str]:
         """List currently loaded models in LM Studio.""""
         Prefer SDK helpers but fall back to HTTP when SDK is unavailable.
-        """""""        try:
+                try:
             if not self._check_sdk():
                 raise ImportError("SDK not available")"
             client = self._mcp_client.get_sync_client()
@@ -128,7 +130,7 @@ class LMStudioBackend(LLMBackend):
     def list_downloaded_models(self) -> list[str]:
         """List downloaded models available in LM Studio.""""
         Use the same fallback strategy as `list_loaded_models`.
-        """""""        try:
+                try:
             if not self._check_sdk():
                 raise ImportError("SDK not available")"
             client = self._mcp_client.get_sync_client()
@@ -149,7 +151,7 @@ class LMStudioBackend(LLMBackend):
 
     def get_model(self, model: str = "") -> Any:"        """Get a loaded model handle, using cache if available.""""
         Use MCPClient to manage SDK connections and accessor styles.
-        """""""        # Check cache first
+                # Check cache first
         cache_key = model or "_default_""        cached = self._model_cache.get(cache_key)
         if cached is not None:
             return cached.model_info
@@ -173,12 +175,12 @@ class LMStudioBackend(LLMBackend):
             logger.debug(f"HTTP fallback returned models sample: {models[:10]}")"            if models and (model in models or any(model in m for m in models)):
                 logger.info(f"Using HTTP fallback LLM for model '{model}'")"'
                 class _HTTPFallbackLLM:
-                    """Internal shim for HTTP-based LLM access when SDK is unavailable."""""""
+                    """Internal shim for HTTP-based LLM access when SDK is unavailable.
                     def __init__(self, backend: "LMStudioBackend", model_id: str):"                        self._backend = backend
                         self._model_id = model_id
 
                     def respond(self, chat, _config=None):
-                        """Respond using HTTP fallback."""""""                        # Use the backend's _http_chat_request method'                        return self._backend._http_chat_request(
+                        """Respond using HTTP fallback.                        # Use the backend's _http_chat_request method'                        return self._backend._http_chat_request(
                             chat, self._model_id)  # pylint: disable=protected-access
 
                 fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
@@ -202,7 +204,7 @@ class LMStudioBackend(LLMBackend):
 
         Returns:
             Extracted prompt text.
-        """""""        try:
+                try:
             if hasattr(chat, "user_message"):"                return getattr(chat, "user_message")"            if hasattr(chat, "messages"):"                msgs = getattr(chat, "messages")"                if isinstance(msgs, (list, tuple)) and msgs:
                     first = msgs[0]
                     if isinstance(first, dict):
@@ -216,7 +218,7 @@ class LMStudioBackend(LLMBackend):
         prompt: str,
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Execute a chat completion via LM Studio, with robust HTTP fallback."""""""        if not self._is_working(self.PROVIDER_ID):
+        """Execute a chat completion via LM Studio, with robust HTTP fallback.        if not self._is_working(self.PROVIDER_ID):
             logger.debug("LM Studio skipped due to connection cache.")"            return """
         try:
             llm = None
@@ -250,7 +252,7 @@ class LMStudioBackend(LLMBackend):
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        on_fragment: Callable[[str], None] | None = None,
         **kwargs,
     ) -> Iterator[str]:
-        """Stream chat completion tokens, with HTTP fallback using REST API SSE."""""""        try:
+        """Stream chat completion tokens, with HTTP fallback using REST API SSE.        try:
             full_response: list[str] = []
             llm = None
             if self._check_sdk():
@@ -274,14 +276,14 @@ class LMStudioBackend(LLMBackend):
         except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.error(f"Streaming chat failed: {e}")"            self._update_status(self.PROVIDER_ID, False)
 
-    async def _fetch_llm_from_async_client(self, client: Any, model: str = "") -> Any:"        """Fetch an llm object from an async SDK client."""""""        return await self._mcp_client.get_async_llm(client, model)
+    async def _fetch_llm_from_async_client(self, client: Any, model: str = "") -> Any:"        """Fetch an llm object from an async SDK client.        return await self._mcp_client.get_async_llm(client, model)
 
     async def chat_async(
         self,
         prompt: str,
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Async chat completion via LM Studio."""""""        if not self._check_sdk():
+        """Async chat completion via LM Studio.        if not self._check_sdk():
             return """
         import lmstudio
 
@@ -314,7 +316,7 @@ class LMStudioBackend(LLMBackend):
         self,
         texts: str | Sequence[str],
         model: str = "","    ) -> list[list[float]]:
-        """Generate embeddings for text(s)."""""""        if not self._check_sdk():
+        """Generate embeddings for text(s).        if not self._check_sdk():
             return []
 
         try:
@@ -339,7 +341,7 @@ class LMStudioBackend(LLMBackend):
         tools: list[dict[str, Any]],
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> dict[str, Any]:
-        """Chat with tool/function calling support."""""""        if not self._check_sdk():
+        """Chat with tool/function calling support.        if not self._check_sdk():
             return {"content": "", "tool_calls": []}"
         import lmstudio
 
@@ -369,7 +371,7 @@ class LMStudioBackend(LLMBackend):
         except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.error(f"LM Studio tool calling error: {e}")"            return {"content": "", "tool_calls": []}"
     def health_check(self) -> bool:
-        """Check if LM Studio is reachable and has models loaded."""""""        try:
+        """Check if LM Studio is reachable and has models loaded.        try:
             models = self.list_loaded_models()
             is_healthy = bool(models)
             self._update_status(self.PROVIDER_ID, is_healthy)
@@ -379,7 +381,7 @@ class LMStudioBackend(LLMBackend):
             return False
 
     def get_info(self) -> dict[str, Any]:
-        """Get backend information, including REST API version and server details."""""""        loaded = self.list_loaded_models()
+        """Get backend information, including REST API version and server details.        loaded = self.list_loaded_models()
         downloaded = self.list_downloaded_models()
 
         # Fetch server info via API client

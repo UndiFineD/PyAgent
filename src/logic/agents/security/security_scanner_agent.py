@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# SecurityScannerAgent - Scans code for security vulnerabilities
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# SecurityScannerAgent - Scans code for security vulnerabilities
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -35,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-"""""""
+
 from __future__ import annotations
 
 import re
@@ -52,7 +54,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#     "Scans code for security vulnerabilities."  # [BATCHFIX] closed string"
 #     Identifies common security issues and provides remediation guidance.
-"""""""
+
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""# [BATCHFIX] Commented metadata/non-Python
@@ -88,7 +90,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
-""""Initialize the security scanner agent."""""""        super().__init__(file_path)
+""""Initialize the security scanner agent.        super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         self.vulnerabilities: list[SecurityVulnerability] = []""""# [BATCHFIX] Commented metadata/non-Python
@@ -102,7 +104,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             List of detected vulnerabilities.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         self.vulnerabilities = []""""
         try:
@@ -146,7 +148,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         # Phase 108: Intelligence Recording
         try:
 # [BATCHFIX] Commented metadata/non-Python
-#             from src."infrastructure.com"  # [BATCHFIX] closed string""""""""
+#             from src."infrastructure.com"  # [BATCHFIX] closed string"
 from __future__ import annotations
 
 import re
@@ -163,7 +165,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#     "Scans code for security vulnerabilities."  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
-#     Identifies common security issues and provides "remediation guidance."  # [BATCHFIX] closed string""""""""
+#     Identifies common security issues and provides "remediation guidance."  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""# [BATCHFIX] Commented metadata/non-Python
@@ -198,7 +200,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
-""""Initialize the security scanner agent."""""""  "   "   super().__init__(file_path)"# [BATCHFIX] Commented metadata/non-Python
+""""Initialize the security scanner agent.  "   "   super().__init__(file_path)"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         self.vulnerabilities: list[SecurityVulnerability] = []""""# [BATCHFIX] Commented metadata/non-Python
 """         self._system_prompt = "You are a Security Scanner Agent."  # [BATCHFIX] closed string"
@@ -211,7 +213,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             List of detected vulnerabilities.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         self.vulnerabilities = []""""
         try:
@@ -269,5 +271,5 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
        " "Get count of critical vulnerabilities."
         Returns:
             Number of critical severity vulnerabilities.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 #         return sum(1 for v in self".vulnerabilities if v.severity == "critical")"  # [BATCHFIX] closed string"

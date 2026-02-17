@@ -35,8 +35,7 @@ class SafeLocalInterpreter:
     """
 safe_executor.py - SafeLocalInterpreter
 
-Brief Summary
-DATE: 2026-02-13
+# DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate SafeLocalInterpreter() and call await interpreter.execute(code_str) from an asyncio context.

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Tool registry.py module.
-"""""""
+
+"""
+Tool registry.py module.
+
 from __future__ import annotations
 
 import asyncio
@@ -28,7 +32,7 @@ if TYPE_CHECKING:
 
 
 class ToolRegistry:
-    """Central registry for managing and invoking PyAgent tools across all specialists."""""""
+    """Central registry for managing and invoking PyAgent tools across all specialists.
     def __init__(self, fleet: FleetManager | None = None) -> None:
         self.fleet = fleet
         self.tools: dict[str, list[dict[str, Any]]] = {}
@@ -40,7 +44,7 @@ class ToolRegistry:
         func: Callable,
         category: str = "general","        priority: int = 1,
     ) -> None:
-        """Adds a tool function to the registry."""""""        name = func.__name__
+        """Adds a tool function to the registry.        name = func.__name__
         if name not in self.tools:
             self.tools[name] = []
 
@@ -54,7 +58,7 @@ class ToolRegistry:
         # Sort by priority desc
         self.tools[name].sort(key=lambda x: x["priority"], reverse=True)"        logging.debug(f"Registered tool: {name} from {owner_name} (Priority: {priority})")"
     def list_tools(self) -> list[Any]:
-        """Returns metadata for all registered tools."""""""        from collections import namedtuple
+        """Returns metadata for all registered tools.        from collections import namedtuple
 
         ToolMeta = namedtuple("ToolMeta", ["name", "owner", "category", "priority", "sync"])"
         meta = []
@@ -68,11 +72,11 @@ class ToolRegistry:
         return meta
 
     def get_tool(self, name: str) -> Callable | None:
-        """Retrieves the highest priority tool function by name."""""""        if name in self.tools and self.tools[name]:
+        """Retrieves the highest priority tool function by name.        if name in self.tools and self.tools[name]:
             return self.tools[name][0]["function"]"        return None
 
     async def call_tool(self, name: str, **kwargs) -> Any:
-        """Invoking a tool by name with provided arguments, filtering for supported ones."""""""        tool = self.get_tool(name)
+        """Invoking a tool by name with provided arguments, filtering for supported ones.        tool = self.get_tool(name)
         if not tool:
             raise ValueError(f"Tool '{name}' not found in registry.")"'
         filtered_kwargs = self.core.filter_arguments(tool, kwargs)

@@ -1,16 +1,19 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Consensus module.py module.
-"""""""
+
+"""Consensus module.py module.
+"""
 from __future__ import annotations
 
 from typing import Any
@@ -19,15 +22,15 @@ from src.core.base.common.base_modules import BaseModule
 
 
 class ConsensusModule(BaseModule):
-    """""""    Consolidated core module for consensus protocols.
+    """Consolidated core module for consensus protocols.
     Migrated from ConsensusCore.
-    """""""
+    """
     def initialize(self) -> bool:
-        """Initialize voting parameters."""""""        self.mode = self.config.get("mode", "plurality")"        return super().initialize()
+        """Initialize voting parameters."""self.mode = self.config.get("mode", "plurality")"        return super().initialize()
 
     def execute(self, proposals: list[str], weights: list[float] | None = None) -> dict[str, Any]:
-        """""""        Executes the consensus protocol to find a winner.
-        """""""        if not self.initialized:
+        """Executes the consensus protocol to find a winner.
+        """if not self.initialized:
             self.initialize()
 
         winner = self.calculate_winner(proposals, weights)
@@ -37,7 +40,7 @@ class ConsensusModule(BaseModule):
             "winner": winner,"            "agreement_score": score,"            "quorum_reached": score >= 0.667,  # BFT 2/3 requirement"        }
 
     def calculate_winner(self, proposals: list[str], weights: list[float] | None = None) -> str:
-        """Determines the winning proposal based on voting rules."""""""        if not proposals:
+        """Determines the winning proposal based on voting rules."""if not proposals:
             return """
         if weights and len(weights) != len(proposals):
             weights = None
@@ -52,10 +55,10 @@ class ConsensusModule(BaseModule):
         return winner
 
     def get_agreement_score(self, proposals: list[str], winner: str) -> float:
-        """Calculates the percentage of agents that agreed with the winner."""""""        if not proposals:
+        """Calculates the percentage of agents that agreed with the winner."""if not proposals:
             return 0.0
         match_count = sum(1 for p in proposals if p == winner)
         return match_count / len(proposals)
 
     def shutdown(self) -> bool:
-        """Cleanup consensus resources."""""""        return super().shutdown()
+        """Cleanup consensus resources."""return super().shutdown()

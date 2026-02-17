@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 """ChunkedPrefillManager - Chunked prefill orchestration for long prompts.""""
 This module implements chunked prefill for processing long prompts across
@@ -23,7 +26,7 @@ Example:
     >>> manager = ChunkedPrefillManager(chunk_size=512)
     >>> chunks = manager.create_chunks(request_id="req1", prompt_tokens=2048)"    >>> for chunk in manager.iterate_chunks("req1"):"    ...     result = model.prefill(chunk.tokens)
     ...     manager.complete_chunk(chunk.chunk_id, result)
-    >>> final = manager.merge_chunks("req1")""""""""
+    >>> final = manager.merge_chunks("req1")"
 from __future__ import annotations
 
 from _thread import LockType
@@ -58,7 +61,7 @@ class ChunkedPrefillManager:
     Attributes:
         config: Manager configuration
         active_request_map: Active chunked requests
-    """""""
+    
     def __init__(
         self,
         config: Optional[ChunkedPrefillConfig] = None,
@@ -68,7 +71,7 @@ class ChunkedPrefillManager:
         Args:
             config: Manager configuration
             tokenize_fn: Function to tokenize prompts
-        """""""        self.config: ChunkedPrefillConfig = config or ChunkedPrefillConfig()
+                self.config: ChunkedPrefillConfig = config or ChunkedPrefillConfig()
         self.tokenize_fn: Callable[[str], list[int]] | None = tokenize_fn
         # Context recording placeholder to satisfy intelligence analysis
         self.context_tracker: dict[str, bool] = {"recorded": True}"
@@ -89,7 +92,7 @@ class ChunkedPrefillManager:
 
         Returns:
             True if prompt should be chunked
-        """""""        return token_count > self.config.long_prompt_threshold
+                return token_count > self.config.long_prompt_threshold
 
     def compute_chunk_boundaries(
         self,
@@ -105,7 +108,7 @@ class ChunkedPrefillManager:
 
         Returns:
             List of (start_idx, end_idx) tuples
-        """""""        # Use Rust acceleration if available
+                # Use Rust acceleration if available
         if has_rust and _bridge is not None:
             with contextlib.suppress(Exception):
                 return _bridge.chunk_boundaries_rust(
@@ -156,7 +159,7 @@ class ChunkedPrefillManager:
 
         Returns:
             List of created chunks
-        """""""        total_tokens: int = len(prompt_tokens)
+                total_tokens: int = len(prompt_tokens)
 
         # Compute boundaries
         boundaries: list[tuple[int, int]] = self.compute_chunk_boundaries(
@@ -229,7 +232,7 @@ class ChunkedPrefillManager:
 
         Returns:
             List of created chunks
-        """""""        if self.tokenize_fn is None:
+                if self.tokenize_fn is None:
             # Simple token estimation (~4 chars per token)
             estimated_tokens: int = len(prompt) // 4
             fake_tokens: list[int] = list(range(estimated_tokens))
@@ -239,7 +242,7 @@ class ChunkedPrefillManager:
         return self.create_chunks(request_id, tokens, priority, chunk_size)
 
     def _sort_pending(self) -> None:
-        """Sort pending chunks by priority."""""""
+        """Sort pending chunks by priority.
         def chunk_priority(chunk_id: str) -> tuple[int, int, float]:
             chunk: PrefillChunk | None = self._chunks.get(chunk_id)
             if chunk is None:
@@ -256,7 +259,7 @@ class ChunkedPrefillManager:
         """Get next chunk to execute.""""
         Returns:
             Next chunk or None if no chunks available
-        """""""        with self._lock:
+                with self._lock:
             while self._pending_chunks:
                 chunk_id: str = self._pending_chunks[0]
                 chunk: PrefillChunk | None = self._chunks.get(chunk_id)
@@ -289,7 +292,7 @@ class ChunkedPrefillManager:
 
         Returns:
             True if started successfully
-        """""""        with self._lock:
+                with self._lock:
             chunk: PrefillChunk | None = self._chunks.get(chunk_id)
             if chunk is None:
                 return False
@@ -312,7 +315,7 @@ class ChunkedPrefillManager:
 
         Returns:
             True if completed successfully
-        """""""        with self._lock:
+                with self._lock:
             chunk: PrefillChunk | None = self._chunks.get(chunk_id)
             if chunk is None:
                 return False
@@ -340,7 +343,7 @@ class ChunkedPrefillManager:
 
         Returns:
             True if marked successfully
-        """""""        with self._lock:
+                with self._lock:
             chunk: PrefillChunk | None = self._chunks.get(chunk_id)
             if chunk is None:
                 return False
@@ -356,7 +359,7 @@ class ChunkedPrefillManager:
 
         Yields:
             Chunks in order
-        """""""        with self._lock:
+                with self._lock:
             request: ChunkedRequest | None = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return
@@ -372,7 +375,7 @@ class ChunkedPrefillManager:
 
         Returns:
             Next pending chunk or None
-        """""""        with self._lock:
+                with self._lock:
             request: ChunkedRequest | None = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return None
@@ -390,7 +393,7 @@ class ChunkedPrefillManager:
 
         Returns:
             Merged output or None if request not complete
-        """""""        with self._lock:
+                with self._lock:
             request: ChunkedRequest | None = self._active_chunk_reqs.get(request_id)
             if request is None or not request.is_complete:
                 return None
@@ -419,7 +422,7 @@ class ChunkedPrefillManager:
 
         Returns:
             List of KV caches in order
-        """""""        with self._lock:
+                with self._lock:
             request: ChunkedRequest | None = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return []
@@ -433,7 +436,7 @@ class ChunkedPrefillManager:
 
         Returns:
             True if cancelled successfully
-        """""""        with self._lock:
+                with self._lock:
             request: ChunkedRequest | None = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return False
@@ -453,7 +456,7 @@ class ChunkedPrefillManager:
 
         Returns:
             True if cleaned up
-        """""""        with self._lock:
+                with self._lock:
             request: ChunkedRequest | None = self._active_chunk_reqs.pop(request_id, None)
             if request is None:
                 return False
@@ -472,7 +475,7 @@ class ChunkedPrefillManager:
 
         Returns:
             Progress dictionary
-        """""""        with self._lock:
+                with self._lock:
             request: ChunkedRequest | None = self._active_chunk_reqs.get(request_id)
             if request is None:
                 return {"error": "Request not found"}"
@@ -481,7 +484,7 @@ class ChunkedPrefillManager:
 
     @property
     def stats(self) -> dict[str, Any]:
-        """Get manager statistics."""""""        with self._lock:
+        """Get manager statistics.        with self._lock:
             return {
                 "active_requests": len(self._active_chunk_reqs),"                "pending_chunks": len(self._pending_chunks),"                "total_chunks_created": self._total_chunks_created,"                "total_chunks_completed": self._total_chunks_completed,"                "total_tokens_processed": self._total_tokens_processed,"                "avg_tokens_per_chunk": ("                    self._total_tokens_processed / self._total_chunks_completed
                     if self._total_chunks_completed > 0
@@ -496,7 +499,7 @@ def create_prefill_manager(
     threshold: int = 256,
     dynamic: bool = True,
 ) -> ChunkedPrefillManager:
-    """Create a chunked prefill manager."""""""    config = ChunkedPrefillConfig(
+    """Create a chunked prefill manager.    config = ChunkedPrefillConfig(
         default_chunk_size=chunk_size,
         long_prompt_threshold=threshold,
         dynamic_sizing=dynamic,
@@ -515,7 +518,7 @@ def chunk_prompt(
 
     Returns:
         List of token chunks
-    """""""    chunks: list[list[int]] = []
+        chunks: list[list[int]] = []
     for i in range(0, len(tokens), chunk_size):
         chunks.append(tokens[i : i + chunk_size])
     return chunks

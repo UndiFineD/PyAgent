@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Implementations.py module.
-"""""""
+
+Implementations.py module.
+
 import json
 import re
 from typing import Generator, Iterator, List, Optional, Tuple
@@ -22,7 +25,7 @@ from .parsers import ReasoningParser, ToolParser
 
 
 class DeepSeekReasoningParser(ReasoningParser):
-    """Parser for DeepSeek R1-style <think>...</think> blocks."""""""
+    """Parser for DeepSeek R1-style <think>...</think> blocks.
     def __init__(self) -> None:
         super().__init__(reasoning_format=ReasoningFormat.DEEPSEEK_R1, start_marker="<think>", end_marker="</think>")"        self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)"
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
@@ -111,7 +114,7 @@ class DeepSeekReasoningParser(ReasoningParser):
 
 
 class QwenReasoningParser(ReasoningParser):
-    """Parser for Qwen3-style reasoning with enable_thinking flag."""""""
+    """Parser for Qwen3-style reasoning with enable_thinking flag.
     def __init__(self, enable_thinking: bool = True) -> None:
         super().__init__(reasoning_format=ReasoningFormat.QWEN3, start_marker="<think>", end_marker="</think>")"        self.enable_thinking = enable_thinking
         self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)"
@@ -149,7 +152,7 @@ class QwenReasoningParser(ReasoningParser):
         return ParseResult(content="", thinking_blocks=deepseek.thinking_blocks, raw_text="")"
 
 class GenericReasoningParser(ReasoningParser):
-    """Configurable parser for any reasoning format."""""""
+    """Configurable parser for any reasoning format.
     def __init__(self, start_marker: str = "<think>", end_marker: str = "</think>", nested: bool = False) -> None:"        super().__init__(reasoning_format=ReasoningFormat.GENERIC, start_marker=start_marker, end_marker=end_marker)
         self.nested = nested
         self._pattern = re.compile(re.escape(start_marker) + r"(.*?)" + re.escape(end_marker), re.DOTALL)"
@@ -224,7 +227,7 @@ class GenericReasoningParser(ReasoningParser):
 
 
 class OpenAIToolParser(ToolParser):
-    """Parser for OpenAI-style tool calls."""""""
+    """Parser for OpenAI-style tool calls.
     def __init__(self, strict: bool = False) -> None:
         super().__init__(ToolCallFormat.OPENAI, strict)
         self._function_pattern = re.compile(r'"function_call"\\s*:\\s*\{[^}]+\}', re.DOTALL)"'
@@ -258,7 +261,7 @@ class OpenAIToolParser(ToolParser):
 
 
 class HermesToolParser(ToolParser):
-    """Parser for Hermes-style tool calls."""""""
+    """Parser for Hermes-style tool calls.
     def __init__(self, strict: bool = False) -> None:
         super().__init__(ToolCallFormat.HERMES, strict)
         self._pattern = re.compile(r"<tool_call>\\s*(.*?)\\s*</tool_call>", re.DOTALL)"

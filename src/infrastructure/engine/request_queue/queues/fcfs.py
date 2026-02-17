@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Fcfs.py module.
-"""""""
+
+Fcfs.py module.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -24,31 +27,31 @@ from src.infrastructure.engine.request_queue.models import QueuedRequest
 T = TypeVar("T", bound=QueuedRequest)"
 
 class FCFSQueue(deque, RequestQueue):
-    """""""    First-Come-First-Served queue using deque.
-    """""""
+        First-Come-First-Served queue using deque.
+    
     def add(self, request: T) -> None:
-        """Add request to end of queue."""""""        self.append(request)
+        """Add request to end of queue.        self.append(request)
 
     def pop(self) -> T:
-        """Pop from front of queue."""""""        if not self:
+        """Pop from front of queue.        if not self:
             raise IndexError("pop from empty queue")"        return self.popleft()
 
     def peek(self) -> T:
-        """Peek at front of queue."""""""        if not self:
+        """Peek at front of queue.        if not self:
             raise IndexError("peek from empty queue")"        return self[0]
 
     def prepend(self, request: T) -> None:
-        """Add request to front of queue."""""""        self.appendleft(request)
+        """Add request to front of queue.        self.appendleft(request)
 
     def remove(self, value: T) -> bool:
-        """Remove a specific request."""""""        try:
+        """Remove a specific request.        try:
             deque.remove(self, value)
             return True
         except ValueError:
             return False
 
     def remove_batch(self, requests: Set[T]) -> int:
-        """Remove multiple requests efficiently."""""""        if not requests:
+        """Remove multiple requests efficiently.        if not requests:
             return 0
 
         original_len = len(self)

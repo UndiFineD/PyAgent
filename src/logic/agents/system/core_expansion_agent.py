@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""CoreExpansionAgent - Autonomous environment expansion
-"""""""Brief Summary
+CoreExpansionAgent - Autonomous environment expansion
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -35,22 +33,20 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""CoreExpansionAgent: System agent for autonomous environment expansion".""""""""
+CoreExpansionAgent: System agent for autonomous environment expansion"."
 
 from __future__ import annotations
 
@@ -68,7 +64,7 @@ __version__ = VERSION
 class CoreExpansionAgent(BaseAgent):
     Agent responsible for autonomous environment expansion.
     Detects missing libraries and installs them into the active Python environment.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -77,7 +73,7 @@ class CoreExpansionAgent(BaseAgent):
     @as_tool
     def install_missing_dependency(self, package_name: str) -> str:
         Attempts to install a missing Python package using pip.
-"""""""        logging.info(fCoreExpansionAgent: Attempting to install package": {package_name}")"
+        logging.info(fCoreExpansionAgent: Attempting to install package": {package_name}")"
         try:
             # Use subprocess to run pip
 #             cmd_str = f"{sys.executable} -m pip install {package_name}"            result = subprocess.run(
@@ -102,7 +98,7 @@ class CoreExpansionAgent(BaseAgent):
     def audit_environment(self) -> list[str]:
         Lists currently installed packages in the environment.
         Uses importlib.metadata with a silent fallback to pkg_resources.
-"""""""        # 1. Try standard importlib.metadata (Python 3.8+)
+        # 1. Try standard importlib.metadata (Python 3.8+)
         try:
             from importlib.metadata import distributions
             results = []
@@ -125,7 +121,7 @@ class CoreExpansionAgent(BaseAgent):
                 warnings.filterwarnings("ignore", category=DeprecationWarning)"                warnings.filterwarnings("ignore", category=UserWarning, message=".*pkg_resources.*")"                import pkg_resources  # pylint: disable=import-outside-toplevel
 
             return [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]"        except (ImportError, AttributeError, Exception):  # pylint: disable=broad-exception-caught
-            return ["Error: Could not retrieve environment metadata."]""""""""
+            return ["Error: Could not retrieve environment metadata."]"
 
 from __future__ import annotations
 
@@ -141,7 +137,7 @@ __version__ = VERSION
 
 
 class CoreExpansionAgent(BaseAgent):
-    Agent responsible for "autonomous environment expansion."    Detects missing libraries and installs them" into "the active Python environment.""""""""
+    Agent responsible for "autonomous environment expansion."    Detects missing libraries and installs them" into "the active Python environment."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -149,7 +145,7 @@ class CoreExpansionAgent(BaseAgent):
 
     @as_tool
     def install_missing_dependency(self, package_name: str) -> str:
-        Attempts to install" a missing Python package using pip.""""""""        logging.info(fCoreExpansionAgent: Attempting to install package: {package_name}")"
+        Attempts to install" a missing Python package using pip."        logging.info(fCoreExpansionAgent: Attempting to install package: {package_name}")"
         try:
             # Use subprocess to run pip
 #             cmd_str = f"{sys.executable} -m pip install {package_name}"            result = subprocess.run(
@@ -173,7 +169,7 @@ class CoreExpansionAgent(BaseAgent):
     @as_tool
     def audit_environment(self) -> list[str]:
         Lists "currently installed packages in the environment."        Uses importlib.metadata with a silent fallback to pkg_resources.
-"""""""       " # 1. "Try standard importlib.metadata (Python 3.8+)"        try:
+       " # 1. "Try standard importlib.metadata (Python 3.8+)"        try:
             from importlib.metadata import distributions
             results = []
             for dist in distributions():

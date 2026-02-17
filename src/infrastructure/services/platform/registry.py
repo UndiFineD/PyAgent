@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Registry for platform implementations.
-"""""""
+Registry for platform implementations.
+
 from __future__ import annotations
 
 import logging
@@ -34,18 +36,18 @@ logger = logging.getLogger(__name__)
 
 
 class PlatformRegistry:
-    """Registry for platform implementations."""""""
+    """Registry for platform implementations.
     _platforms: Dict[PlatformType, Type[Platform]] = {}
     _current: Optional[Platform] = None
     _lock = threading.Lock()
 
     @classmethod
     def register(cls, platform_type: PlatformType, platform_cls: Type[Platform]) -> None:
-        """Register a platform implementation."""""""        cls._platforms[platform_type] = platform_cls
+        """Register a platform implementation.        cls._platforms[platform_type] = platform_cls
 
     @classmethod
     def get_platform(cls, platform_type: PlatformType) -> Optional[Platform]:
-        """Get platform instance by type."""""""        if platform_type not in cls._platforms:
+        """Get platform instance by type.        if platform_type not in cls._platforms:
             return None
         platform_cls = cls._platforms[platform_type]
         if platform_cls.is_available():
@@ -54,7 +56,7 @@ class PlatformRegistry:
 
     @classmethod
     def detect_current(cls) -> Platform:
-        """Detect and return current platform."""""""        with cls._lock:
+        """Detect and return current platform.        with cls._lock:
             if cls._current is not None:
                 return cls._current
 
@@ -78,13 +80,13 @@ class PlatformRegistry:
 
     @classmethod
     def get_current(cls) -> Platform:
-        """Get current platform (cached)."""""""        if cls._current is None:
+        """Get current platform (cached).        if cls._current is None:
             return cls.detect_current()
         return cls._current
 
     @classmethod
     def reset(cls) -> None:
-        """Reset cached platform."""""""        with cls._lock:
+        """Reset cached platform.        with cls._lock:
             cls._current = None
 
 

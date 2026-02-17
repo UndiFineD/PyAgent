@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Swarm Migration Core - Parallel sub-agent execution for large-scale code migrations
+
+"""Swarm Migration Core - Parallel sub-agent execution for large-scale code migrations
 Based on the Swarm Migration Pattern from agentic-patterns repository
-"""""""
+"""
 import asyncio
 import logging
 from abc import ABC, abstractmethod
@@ -27,18 +30,18 @@ logger = logging.getLogger(__name__)
 
 
 class MigrationTask(Enum):
-    """Types of migration tasks supported"""""""    CODE_REFACTORING = "code_refactoring""    LINT_RULE_ENFORCEMENT = "lint_rule_enforcement""    API_MIGRATION = "api_migration""    FRAMEWORK_UPGRADE = "framework_upgrade""    IMPORT_PATH_CHANGES = "import_path_changes""    CODE_MODERNIZATION = "code_modernization""
+    """Types of migration tasks supported"""CODE_REFACTORING = "code_refactoring""    LINT_RULE_ENFORCEMENT = "lint_rule_enforcement""    API_MIGRATION = "api_migration""    FRAMEWORK_UPGRADE = "framework_upgrade""    IMPORT_PATH_CHANGES = "import_path_changes""    CODE_MODERNIZATION = "code_modernization""
 
 @dataclass
 class MigrationTarget:
-    """Represents a single migration target (file, component, etc.)"""""""    identifier: str  # file path, component name, etc.
+    """Represents a single migration target (file, component, etc.)"""identifier: str  # file path, component name, etc.
     content_hash: str  # for change detection
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class MigrationBatch:
-    """A batch of migration targets for a single sub-agent"""""""    batch_id: str
+    """A batch of migration targets for a single sub-agent"""batch_id: str
     targets: List[MigrationTarget]
     instructions: str
     context: Dict[str, Any] = field(default_factory=dict)
@@ -46,7 +49,7 @@ class MigrationBatch:
 
 @dataclass
 class MigrationResult:
-    """Result of a migration batch execution"""""""    batch_id: str
+    """Result of a migration batch execution"""batch_id: str
     success: bool
     changes_made: int
     errors: List[str] = field(default_factory=list)
@@ -55,20 +58,20 @@ class MigrationResult:
 
 
 class MigrationStrategy(ABC):
-    """Abstract base class for migration strategies"""""""
+    """Abstract base class for migration strategies"""
     @abstractmethod
     async def execute_migration(self, batch: MigrationBatch, context: CascadeContext) -> MigrationResult:
-        """Execute migration on a batch of targets"""""""        pass
+        """Execute migration on a batch of targets"""pass
 
     @abstractmethod
     def get_migration_instructions(self) -> str:
-        """Get the migration instructions for this strategy"""""""        pass
+        """Get the migration instructions for this strategy"""pass
 
 
 class SwarmMigrationCore:
-    """""""    Core implementation of the Swarm Migration Pattern
+    """Core implementation of the Swarm Migration Pattern
     Enables parallel execution of large-scale code migrations using multiple sub-agents
-    """""""
+    """
     def __init__(self,
                  max_parallel_agents: int = 10,
                  batch_size: int = 10,
@@ -79,15 +82,15 @@ class SwarmMigrationCore:
         self.migration_strategies: Dict[MigrationTask, MigrationStrategy] = {}
 
     def register_strategy(self, task_type: MigrationTask, strategy: MigrationStrategy):
-        """Register a migration strategy for a specific task type"""""""        self.migration_strategies[task_type] = strategy
+        """Register a migration strategy for a specific task type"""self.migration_strategies[task_type] = strategy
         logger.info(f"Registered migration strategy for {task_type.value}")"
     async def execute_swarm_migration(
         self, targets: List[MigrationTarget], task_type: MigrationTask,
         context: CascadeContext, progress_callback: Optional[Callable] = None
     ) -> OptimizationTrial:
-        """""""        Execute a swarm migration across multiple targets
+        """Execute a swarm migration across multiple targets
         Based on the Swarm Migration Pattern from agentic-patterns
-        """""""        if task_type not in self.migration_strategies:
+        """if task_type not in self.migration_strategies:
             raise ValueError(f"No migration strategy registered for {task_type.value}")"
         strategy = self.migration_strategies[task_type]
 
@@ -167,7 +170,7 @@ class SwarmMigrationCore:
     def _create_migration_batches(
         self, targets: List[MigrationTarget], strategy: MigrationStrategy
     ) -> List[MigrationBatch]:
-        """Create migration batches from targets"""""""        batches = []
+        """Create migration batches from targets"""batches = []
         batch_id_counter = 0
 
         for i in range(0, len(targets), self.batch_size):
@@ -182,7 +185,7 @@ class SwarmMigrationCore:
         return batches
 
     def get_migration_stats(self, trial: OptimizationTrial) -> Dict[str, Any]:
-        """Extract migration statistics from a trial"""""""        stats = {
+        """Extract migration statistics from a trial"""stats = {
             "total_batches": len(trial.performance_results),"            "successful_batches": 0,"            "failed_batches": 0,"            "total_changes": 0,"            "total_errors": 0,"            "avg_execution_time": 0.0"        }
 
         execution_times = []

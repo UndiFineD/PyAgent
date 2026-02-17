@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Google Gemini cloud provider connector.
 
-Provides integration with Google's Gemini API for inference requests.'"""""""
+Google Gemini cloud provider connector.
+
+Provides integration with Google's Gemini API for inference requests.'
 from __future__ import annotations
 
 import os
@@ -26,7 +29,7 @@ from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
 
 
 class GeminiConnector(CloudProviderBase):
-    """""""    Connector for Google Gemini API.
+        Connector for Google Gemini API.
 
     Supports Gemini Pro, Gemini Ultra, and other Gemini model variants.
 
@@ -37,7 +40,7 @@ class GeminiConnector(CloudProviderBase):
 
         response = await connector.complete(request)
         print(response.content)
-    """""""
+    
     # Pricing per 1M tokens (input/output) - approximate
     PRICING: Dict[str, Dict[str, float]] = {
         "gemini-pro": {"input": 0.50, "output": 1.50},"        "gemini-pro-vision": {"input": 0.50, "output": 1.50},"        "gemini-ultra": {"input": 7.00, "output": 21.00},"        "gemini-1.5-pro": {"input": 3.50, "output": 10.50},"        "gemini-1.5-flash": {"input": 0.35, "output": 1.05},"    }
@@ -140,17 +143,17 @@ class GeminiConnector(CloudProviderBase):
                             continue
 
     async def health_check(self) -> bool:
-        """Check if Gemini API is accessible."""""""        return self._api_key is not None
+        """Check if Gemini API is accessible.        return self._api_key is not None
 
     def estimate_cost(self, request: InferenceRequest) -> float:
-        """""""        Estimate cost for a Gemini request.
+                Estimate cost for a Gemini request.
 
         Args:
             request: The inference request.
 
         Returns:
             Estimated cost in USD.
-        """""""        model: str = request.model
+                model: str = request.model
         pricing: Dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 3.0})"
         # Rough estimate: assume 4 chars per token
         input_tokens: int = sum(len(m.get("content", "")) for m in request.messages) // 4"        output_tokens: int = request.max_tokens
@@ -159,10 +162,10 @@ class GeminiConnector(CloudProviderBase):
         return input_cost + output_cost
 
     def _format_messages(self, messages: List[Dict[str, str]]) -> str:
-        """""""        Format messages for Gemini API.
+                Format messages for Gemini API.
 
         Gemini uses a different message format than OpenAI-style APIs.
-        """""""        # TODO: Implement proper message formatting for Gemini
+                # TODO: Implement proper message formatting for Gemini
         # Gemini expects content parts, not OpenAI-style messages
         formatted = []
         for msg in messages:

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_test_utils.py"""""""""""
+
+"""
+Auto-extracted class from agent_test_utils.py""""
 from __future__ import annotations
 
 import time
@@ -32,9 +36,9 @@ class PerformanceTracker:
         tracker=PerformanceTracker()
         with tracker.track("test_function"):"            run_test()
         metrics=tracker.get_metrics()
-    """""""
+    
     def __init__(self) -> None:
-        """Initialize performance tracker."""""""        self._metrics: list[PerformanceMetric] = []
+        """Initialize performance tracker.        self._metrics: list[PerformanceMetric] = []
         self._start_times: dict[str, float] = {}
 
     @contextmanager
@@ -42,7 +46,7 @@ class PerformanceTracker:
         """Track execution time for a test.""""
         Args:
             test_name: Name of the test.
-        """""""        start = time.time()
+                start = time.time()
         self._start_times[test_name] = start
         try:
             yield
@@ -69,7 +73,7 @@ class PerformanceTracker:
             metric_type: Type of metric.
             value: Metric value.
             unit: Unit of measurement.
-        """""""        metric = PerformanceMetric(
+                metric = PerformanceMetric(
             metric_type=metric_type,
             value=value,
             unit=unit,
@@ -78,10 +82,10 @@ class PerformanceTracker:
         self._metrics.append(metric)
 
     def get_metrics(self) -> list[PerformanceMetric]:
-        """Get all recorded metrics."""""""        return list(self._metrics)
+        """Get all recorded metrics.        return list(self._metrics)
 
     def get_summary(self) -> dict[str, Any]:
-        """Get summary of performance metrics."""""""        if not self._metrics:
+        """Get summary of performance metrics.        if not self._metrics:
             return {}
 
         execution_times = [m.value for m in self._metrics if m.metric_type == PerformanceMetricType.EXECUTION_TIME]
@@ -90,5 +94,5 @@ class PerformanceTracker:
             "total_metrics": len(self._metrics),"            "avg_execution_time_ms": (sum(execution_times) / len(execution_times) if execution_times else 0),"            "max_execution_time_ms": max(execution_times) if execution_times else 0,"            "min_execution_time_ms": min(execution_times) if execution_times else 0,"        }
 
     def clear(self) -> None:
-        """Clear all recorded metrics."""""""        self._metrics.clear()
+        """Clear all recorded metrics.        self._metrics.clear()
         self._start_times.clear()

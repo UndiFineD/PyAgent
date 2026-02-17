@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Llama 3 Parser
 
-"""""""Llama 3 tool call parser.
-"""""""
+Llama 3 tool call parser.
+
 from __future__ import annotations
 
 import contextlib
@@ -29,12 +31,12 @@ from .json_parser import JsonToolParser
 
 
 class Llama3ToolParser(ToolParser):
-    """""""    Llama 3 tool call parser.
+        Llama 3 tool call parser.
 
     Format:
     <|python_tag|>function_name(arg1=value1, arg2=value2)
     or
-    {"name": "...", "parameters": {...}}"    """""""
+    {"name": "...", "parameters": {...}}"    
     PYTHON_TAG = "<|python_tag|>""
     @property
     def parser_type(self) -> ToolParserType:
@@ -64,7 +66,7 @@ class Llama3ToolParser(ToolParser):
         text: str,
         index: int,
     ) -> Optional[ToolCall]:
-        """Parse Python-style function call."""""""        # Match function_name(args)
+        """Parse Python-style function call.        # Match function_name(args)
         pattern = re.compile(r"^(\\w+)\((.*)\)$", re.DOTALL)"        match = pattern.match(text.strip())
 
         if not match:
@@ -84,7 +86,7 @@ class Llama3ToolParser(ToolParser):
         )
 
     def _parse_kwargs(self, args_str: str) -> Dict[str, Any]:
-        """Parse keyword arguments."""""""        args = {}
+        """Parse keyword arguments.        args = {}
 
         if not args_str:
             return args
@@ -106,7 +108,7 @@ class Llama3ToolParser(ToolParser):
         return args
 
     def _split_args(self, args_str: str) -> List[str]:
-        """Split arguments respecting quotes and brackets."""""""        parts = []
+        """Split arguments respecting quotes and brackets.        parts = []
         current = """        depth = 0
         in_string = False
         string_char = None
@@ -131,7 +133,7 @@ class Llama3ToolParser(ToolParser):
         return parts
 
     def _parse_value(self, value: str) -> Any:
-        """Parse a value string."""""""        # Try JSON
+        """Parse a value string.        # Try JSON
         try:
             return json.loads(value)
         except json.JSONDecodeError:

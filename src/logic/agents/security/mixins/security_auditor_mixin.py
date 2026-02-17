@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # [BATCHFIX] Commented metadata/non-Python
-""" "Command and script auditing logic for SecurityCore."  # [BATCHFIX] closed string""""""""# from __future__ import annotations
+""" "Command and script auditing logic for SecurityCore."  # [BATCHFIX] closed string"# from __future__ import annotations
 
 import re
 
@@ -19,10 +21,10 @@ import re
 class SecurityAuditorMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Mixin for command and shell script auditing."""""""
+""""Mixin for command and shell script auditing.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def audit_command(self, command: str) -> tuple[str, str]:""""""""Audits a shell command for dangerous operations."""""""        risky_patterns = [
+"""     def audit_command(self, command: str) -> tuple[str, str]:"Audits a shell command for dangerous operations.        risky_patterns = [
 # [BATCHFIX] Commented metadata/non-Python
 #             (rrm\\\\s+-rf\\\\s+/", "CRITICAL: Destructive root deletion requested"),"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 #             (rrm\\\\s+-rf\\\\s+\*", "HIGH: Recursive deletion in current directory"),"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -44,7 +46,7 @@ class SecurityAuditorMixin:
 """         return "LOW", "No obvious security risks detected in command."  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def validate_shell_script(self, script_content: str) -> list[str]:""""""""Analyzes shell scripts for common pitfalls and security bugs."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def validate_shell_script(self, script_content: str) -> list[str]:"Analyzes shell scripts for common pitfalls and security bugs.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         findings = []""""
         # Unquoted variable expansion

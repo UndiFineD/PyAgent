@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auto-extracted class from agent_backend.py"""""""""""
+
+"""
+Auto-extracted class from agent_backend.py""""
 from __future__ import annotations
 
 import json
@@ -33,12 +37,12 @@ class AuditLogger:
 
     Example:
         audit=AuditLogger()
-        audit.log_request("github-models", "prompt", "response", 150)"    """""""
+        audit.log_request("github-models", "prompt", "response", 150)"    
     def __init__(self, log_file: Path | None = None) -> None:
         """Initialize audit logger.""""
         Args:
             log_file: Path to audit log file.
-        """""""        self.log_file = log_file
+                self.log_file = log_file
         self._lock = threading.Lock()
 
     def log_request(
@@ -60,7 +64,7 @@ class AuditLogger:
             success: Whether request succeeded.
             request_id: Optional request ID.
             metadata: Additional metadata.
-        """""""
+        
         entry: dict[str, Any] = {
             "timestamp": datetime.now(UTC).isoformat(),"            "request_id": request_id or str(uuid.uuid4()),"            "backend": backend,"            "prompt_length": len(prompt),"            "prompt_preview": prompt[:100] + "..." if len(prompt) > 100 else prompt,"            "response_length": len(response),"            "latency_ms": latency_ms,"            "success": success,"            "metadata": metadata or {},"        }
         with self._lock:
@@ -75,7 +79,7 @@ class AuditLogger:
 
         Returns:
             List[Dict]: Recent audit entries.
-        """""""        if not self.log_file or not self.log_file.exists():
+                if not self.log_file or not self.log_file.exists():
             return []
 
         entries: list[dict[str, Any]] = []

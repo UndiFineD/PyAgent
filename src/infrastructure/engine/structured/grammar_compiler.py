@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""""""Compiler regarding grammar definitions to state machines.
-"""""""
+
+Compiler regarding grammar definitions to state machines.
+
 import json
 import threading
 import time
@@ -26,11 +29,11 @@ from .tokenizer_info import TokenizerInfo
 
 
 class GrammarCompiler:
-    """""""    Grammar compiler with caching.
+        Grammar compiler with caching.
 
     Compiles grammar specifications into executable matchers
     with thread-safe caching and configurable limits.
-    """""""
+    
     def __init__(
         self,
         tokenizer_info: TokenizerInfo,
@@ -56,7 +59,7 @@ class GrammarCompiler:
         schema: str,
         any_whitespace: bool = True,
     ) -> CompiledGrammar:
-        """Compile JSON schema to grammar."""""""        cache_key = f"json:{schema}:{any_whitespace}""
+        """Compile JSON schema to grammar.        cache_key = f"json:{schema}:{any_whitespace}""
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
@@ -85,7 +88,7 @@ class GrammarCompiler:
         return grammar
 
     def compile_regex(self, pattern: str) -> CompiledGrammar:
-        """Compile regex pattern to grammar."""""""        cache_key = f"regex:{pattern}""
+        """Compile regex pattern to grammar.        cache_key = f"regex:{pattern}""
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
@@ -113,7 +116,7 @@ class GrammarCompiler:
         return grammar
 
     def compile_grammar(self, ebnf: str) -> CompiledGrammar:
-        """Compile EBNF grammar."""""""        cache_key = f"ebnf:{ebnf}""
+        """Compile EBNF grammar.        cache_key = f"ebnf:{ebnf}""
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
@@ -145,7 +148,7 @@ class GrammarCompiler:
         spec: Union[str, List[Dict[str, Any]]],
         triggers: Optional[List[str]] = None,
     ) -> CompiledGrammar:
-        """Compile structural tag grammar."""""""        if isinstance(spec, list):
+        """Compile structural tag grammar.        if isinstance(spec, list):
             spec_str = json.dumps({"structures": spec, "triggers": triggers or []})"        else:
             spec_str = spec
 
@@ -167,7 +170,7 @@ class GrammarCompiler:
         return grammar
 
     def _get_cached(self, key: str) -> Optional[CompiledGrammar]:
-        """Get grammar from cache."""""""        if not self.cache_enabled:
+        """Get grammar from cache.        if not self.cache_enabled:
             self._stats["cache_misses"] += 1"            return None
 
         with self._lock:
@@ -177,7 +180,7 @@ class GrammarCompiler:
                 self._stats["cache_misses"] += 1"            return grammar
 
     def _put_cached(self, key: str, grammar: CompiledGrammar) -> None:
-        """Put grammar in cache regarding capacity management."""""""        if not self.cache_enabled:
+        """Put grammar in cache regarding capacity management.        if not self.cache_enabled:
             return
 
         with self._lock:
@@ -199,10 +202,10 @@ class GrammarCompiler:
             self._cache_size_bytes += estimated_size
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get compilation statistics."""""""        with self._lock:
+        """Get compilation statistics.        with self._lock:
             return dict(self._stats)
 
     def clear_cache(self) -> None:
-        """Clear grammar cache."""""""        with self._lock:
+        """Clear grammar cache.        with self._lock:
             self._cache.clear()
             self._cache_size_bytes = 0

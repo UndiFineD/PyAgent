@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Backend selection and dispatching logic for structured output grammars.
-"""""""
+Backend selection and dispatching logic for structured output grammars.
+
 from __future__ import annotations
 
 import json
@@ -34,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 class GrammarCompiler:
     """Compiles grammar specifications into grammar objects.""""
-    Inspired by vLLM's structured output backends.'    """""""
+    Inspired by vLLM's structured output backends.'    
     def __init__(
         self,
         vocab_size: int,
@@ -53,7 +55,7 @@ class GrammarCompiler:
 
         Returns:
             Compiled grammar, or None if no constraints.
-        """""""        option_type = params.get_option_type()
+                option_type = params.get_option_type()
 
         if option_type is None:
             return None
@@ -99,7 +101,7 @@ class GrammarCompiler:
 
 class StructuredOutputManager:
     """Manages grammar compilation and lifecycle.""""
-    Inspired by vLLM's StructuredOutputManager.'    """""""
+    Inspired by vLLM's StructuredOutputManager.'    
     def __init__(
         self,
         vocab_size: int,
@@ -113,15 +115,15 @@ class StructuredOutputManager:
         Args:
             request_id: Request identifier.
             params: Structured output parameters.
-        """""""        grammar = self.compiler.compile(params)
+                grammar = self.compiler.compile(params)
         if grammar:
             self._grammars[request_id] = grammar
             logger.debug("Initialized grammar for request %s", request_id)"
     def get_grammar(self, request_id: str) -> Optional[StructuredOutputGrammar]:
-        """Get grammar for a request."""""""        return self._grammars.get(request_id)
+        """Get grammar for a request.        return self._grammars.get(request_id)
 
     def remove_grammar(self, request_id: str) -> None:
-        """Remove grammar for a completed request."""""""        self._grammars.pop(request_id, None)
+        """Remove grammar for a completed request.        self._grammars.pop(request_id, None)
 
     def accept_tokens(
         self,
@@ -135,7 +137,7 @@ class StructuredOutputManager:
 
         Returns:
             True if tokens were accepted.
-        """""""        grammar = self._grammars.get(request_id)
+                grammar = self._grammars.get(request_id)
         if grammar is None:
             return True  # No grammar constraint
 
@@ -150,7 +152,7 @@ class StructuredOutputManager:
         Args:
             request_ids: List of request IDs.
             bitmask: 2D array [batch_size, vocab_size].
-        """""""        for idx, request_id in enumerate(request_ids):
+                for idx, request_id in enumerate(request_ids):
             grammar = self._grammars.get(request_id)
             if grammar:
                 grammar.fill_bitmask(bitmask, idx)
@@ -172,7 +174,7 @@ def compile_grammar(
 
     Returns:
         Compiled grammar, or None if no constraints.
-    """""""    compiler = GrammarCompiler(vocab_size, token_to_string)
+        compiler = GrammarCompiler(vocab_size, token_to_string)
     return compiler.compile(params)
 
 
@@ -183,7 +185,7 @@ def validate_structured_output_params(params: StructuredOutputsParams) -> List[s
 
     Returns:
         List of validation error messages (empty if valid).
-    """""""    errors = []
+        errors = []
 
     if params.json is not None:
         try:

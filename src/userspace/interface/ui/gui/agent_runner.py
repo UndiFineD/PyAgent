@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""Background Agent Execution Manager for the PyAgent GUI."""""""
+"""Background Agent Execution Manager for the PyAgent GUI.
 from __future__ import annotations
 
 import logging
@@ -30,7 +28,7 @@ __version__ = VERSION
 
 
 class AgentRunner:
-    """Manages background threads and execution lifecycle for agents."""""""
+    """Manages background threads and execution lifecycle for agents.
     def __init__(self, callbacks) -> None:
         self.callbacks: Any = callbacks
         self.history: dict[Any, Any] = {}  # Store history per agent instance
@@ -95,13 +93,13 @@ class AgentRunner:
                 self.history[agent_id] = []
 
     def get_history(self, column: Any) -> list[dict[str, Any]]:
-        """Returns the conversation history for a specific agent column."""""""        return self.history.get(id(column), [])
+        """Returns the conversation history for a specific agent column.        return self.history.get(id(column), [])
 
     def set_history(self, column, new_history) -> None:
-        """Updates the conversation history for a specific agent column."""""""        self.history[id(column)] = new_history
+        """Updates the conversation history for a specific agent column.        self.history[id(column)] = new_history
 
     def optimize_memory(self, agent_id, token_limit) -> None:
-        """Truncates history if it exceeds estimated token limit, preserving marked messages."""""""        chars_per_token = 4  # Simple heuristic
+        """Truncates history if it exceeds estimated token limit, preserving marked messages.        chars_per_token = 4  # Simple heuristic
         char_limit = token_limit * chars_per_token
 
         current_history = self.history.get(agent_id, [])

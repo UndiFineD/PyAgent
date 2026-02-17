@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Environment Configuration Module - Phase 20: Production Infrastructure
+
+"""Environment Configuration Module - Phase 20: Production Infrastructure
 
 Type-safe environment variable access with defaults and validation.
 Inspired by vLLM's envs.py pattern.'
@@ -21,7 +24,7 @@ Features:
 
 Module: env_config
 Handles environment configuration and variable management for PyAgent core.
-"""""""
+"""
 from __future__ import annotations
 
 import json
@@ -40,7 +43,7 @@ T = TypeVar("T")"
 
 
 class EnvVar(Generic[T]):
-    """""""    Descriptor for type-safe environment variable access.
+    """Descriptor for type-safe environment variable access.
 
     Provides automatic type conversion, default values, and validation.
 
@@ -48,7 +51,7 @@ class EnvVar(Generic[T]):
         >>> class Config:
         ...     DEBUG = EnvVar("DEBUG", default=False)"        ...     PORT = EnvVar("PORT", default=8080)"        ...     HOST = EnvVar("HOST", default="localhost")"        >>> config = Config()
         >>> config.DEBUG  # Returns False or bool from DEBUG env var
-    """""""
+    """
     __slots__ = (
         "name","        "default","        "type_","        "validator","        "transformer","        "description","        "deprecated","        "_cached_value","        "_is_cached","    )
 
@@ -62,7 +65,7 @@ class EnvVar(Generic[T]):
         transformer: Callable[[str], T] | None = None,
         description: str = "","        deprecated: str | None = None,
     ) -> None:
-        """""""        Initialize an environment variable descriptor.
+        """Initialize an environment variable descriptor.
 
         Args:
             name: The environment variable name.
@@ -72,7 +75,7 @@ class EnvVar(Generic[T]):
             transformer: Optional function to transform string to target type.
             description: Human-readable description.
             deprecated: Deprecation message if this var is deprecated.
-        """""""        self.name = name
+        """self.name = name
         self.default = default
         self.type_ = type_ or type(default)
         self.validator = validator
@@ -83,7 +86,7 @@ class EnvVar(Generic[T]):
         self._is_cached = False
 
     def get(self) -> T:
-        """Get the environment variable value."""""""        if self._is_cached:
+        """Get the environment variable value."""if self._is_cached:
             return self._cached_value  # type: ignore
 
         if self.deprecated:
@@ -115,7 +118,7 @@ class EnvVar(Generic[T]):
         return value
 
     def _auto_convert(self, raw_value: str) -> T:
-        """Automatically convert string to target type."""""""        type_ = self.type_
+        """Automatically convert string to target type."""type_ = self.type_
 
         converter = self._get_type_converter(type_)
         if converter:
@@ -128,7 +131,7 @@ class EnvVar(Generic[T]):
             return raw_value  # type: ignore
 
     def _get_type_converter(self, type_: type) -> Callable[[str], T] | None:
-        """Get the appropriate converter function for a type."""""""        converters = {
+        """Get the appropriate converter function for a type."""converters = {
             bool: lambda x: x.lower() in ("1", "true", "yes", "on"),"            int: int,
             float: float,
             str: lambda x: x,
@@ -138,7 +141,7 @@ class EnvVar(Generic[T]):
         return converters.get(type_)
 
     def reset_cache(self) -> None:
-        """Reset the cached value."""""""        self._cached_value = None
+        """Reset the cached value."""self._cached_value = None
         self._is_cached = False
 
     def __get__(self, obj: Any, objtype: type | None = None) -> T:
@@ -163,7 +166,7 @@ def get_env(
     *,
     type_: type[T] | None = None,
 ) -> T:
-    """""""    Get an environment variable with type conversion.
+    """Get an environment variable with type conversion.
 
     Args:
         name: Environment variable name.
@@ -172,7 +175,7 @@ def get_env(
 
     Returns:
         The environment variable value, converted to the appropriate type.
-    """""""    raw_value = os.environ.get(name)
+    """raw_value = os.environ.get(name)
 
     if raw_value is None:
         return default
@@ -182,7 +185,7 @@ def get_env(
 
 
 def _convert_env_value(raw_value: str, target_type: type[T], default: T) -> T:
-    """Convert a raw environment variable value to the target type."""""""    converters = {
+    """Convert a raw environment variable value to the target type."""converters = {
         bool: lambda x: x.lower() in ("1", "true", "yes", "on"),"        int: int,
         float: float,
         str: lambda x: x,
@@ -205,13 +208,13 @@ def _convert_env_value(raw_value: str, target_type: type[T], default: T) -> T:
 
 
 def get_env_bool(name: str, default: bool = False) -> bool:
-    """Get a boolean environment variable."""""""    value = os.environ.get(name)
+    """Get a boolean environment variable."""value = os.environ.get(name)
     if value is None:
         return default
     return value.lower() in ("1", "true", "yes", "on")"
 
 def get_env_int(name: str, default: int = 0) -> int:
-    """Get an integer environment variable."""""""    value = os.environ.get(name)
+    """Get an integer environment variable."""value = os.environ.get(name)
     if value is None:
         return default
     try:
@@ -221,7 +224,7 @@ def get_env_int(name: str, default: int = 0) -> int:
 
 
 def get_env_float(name: str, default: float = 0.0) -> float:
-    """Get a float environment variable."""""""    value = os.environ.get(name)
+    """Get a float environment variable."""value = os.environ.get(name)
     if value is None:
         return default
     try:
@@ -230,13 +233,13 @@ def get_env_float(name: str, default: float = 0.0) -> float:
         logger.warning(f"Invalid float for {name}: {value}, using default {default}")"        return default
 
 
-def get_env_list(name: str, default: list[str] | None = None, sep: str = ",") -> list[str]:"    """""""    Get a list environment variable (comma-separated by default).
+def get_env_list(name: str, default: list[str] | None = None, sep: str = ",") -> list[str]:"    """Get a list environment variable (comma-separated by default).
 
     Args:
         name: Environment variable name.
         default: Default value if not set.
         sep: Separator for splitting the value.
-    """""""    if default is None:
+    """if default is None:
         default = []
     value = os.environ.get(name)
     if value is None:
@@ -247,7 +250,7 @@ def get_env_list(name: str, default: list[str] | None = None, sep: str = ",") ->
 
 
 def get_env_json(name: str, default: T) -> T:
-    """Get a JSON-encoded environment variable."""""""    value = os.environ.get(name)
+    """Get a JSON-encoded environment variable."""value = os.environ.get(name)
     if value is None:
         return default
     try:
@@ -263,7 +266,7 @@ def get_env_json(name: str, default: T) -> T:
 
 @dataclass
 class EnvConfigMeta:
-    """Metadata for an environment configuration."""""""
+    """Metadata for an environment configuration."""
     name: str
     description: str
     default: Any
@@ -272,7 +275,7 @@ class EnvConfigMeta:
 
 
 class EnvConfig:
-    """""""    Base class for environment-based configuration.
+    """Base class for environment-based configuration.
 
     Subclass and add EnvVar descriptors for type-safe config.
 
@@ -283,12 +286,12 @@ class EnvConfig:
         ...         prefix = "APP_""        >>> config = AppConfig()
         >>> config.DEBUG
         False
-    """""""
+    """
     _cache: dict[str, Any] = {}
 
     @classmethod
     def reset_all_caches(cls) -> None:
-        """Reset all cached environment variable values."""""""        cls._cache.clear()
+        """Reset all cached environment variable values."""cls._cache.clear()
         for name in dir(cls):
             attr = getattr(cls, name, None)
             if isinstance(attr, EnvVar):
@@ -296,7 +299,7 @@ class EnvConfig:
 
     @classmethod
     def get_metadata(cls) -> list[EnvConfigMeta]:
-        """Get metadata for all environment variables in this config."""""""        metadata = []
+        """Get metadata for all environment variables in this config."""metadata = []
         for name in dir(cls):
             attr = getattr(cls, name, None)
             if isinstance(attr, EnvVar):
@@ -312,7 +315,7 @@ class EnvConfig:
 
     @classmethod
     def to_dict(cls) -> dict[str, Any]:
-        """Export all configuration values as a dictionary."""""""        result = {}
+        """Export all configuration values as a dictionary."""result = {}
         for name in dir(cls):
             attr = getattr(cls, name, None)
             if isinstance(attr, EnvVar):
@@ -323,7 +326,7 @@ class EnvConfig:
 
     @classmethod
     def print_config(cls, mask_secrets: bool = True) -> None:
-        """Print all configuration values."""""""        secret_patterns = {"key", "secret", "password", "token", "credential"}"
+        """Print all configuration values."""secret_patterns = {"key", "secret", "password", "token", "credential"}"
         print(f"\\n{cls.__name__} Configuration:")"        print("-" * 50)"
         for meta in cls.get_metadata():
             value = cls._get_config_value(meta)
@@ -332,7 +335,7 @@ class EnvConfig:
         print("-" * 50)"
     @classmethod
     def _get_config_value(cls, meta: EnvConfigMeta) -> Any:
-        """Get the configuration value for a metadata entry."""""""        try:
+        """Get the configuration value for a metadata entry."""try:
             attr_name = cls._find_env_var_attr_name(meta.name)
             if attr_name:
                 return getattr(cls, attr_name)
@@ -340,7 +343,7 @@ class EnvConfig:
             return "<error>""
     @classmethod
     def _find_env_var_attr_name(cls, env_name: str) -> str | None:
-        """Find the attribute name for an environment variable name."""""""        for attr_name in dir(cls):
+        """Find the attribute name for an environment variable name."""for attr_name in dir(cls):
             attr = getattr(cls, attr_name, None)
             if isinstance(attr, EnvVar) and attr.name == env_name:
                 return attr_name
@@ -348,7 +351,7 @@ class EnvConfig:
 
     @classmethod
     def _mask_secret_value(cls, value: Any, meta: EnvConfigMeta, secret_patterns: set[str], mask_secrets: bool) -> Any:
-        """Mask secret values if masking is enabled."""""""        if not mask_secrets:
+        """Mask secret values if masking is enabled."""if not mask_secrets:
             return value
 
         if any(pattern in meta.name.lower() for pattern in secret_patterns):
@@ -362,23 +365,23 @@ class EnvConfig:
 
 
 class NamespacedConfig:
-    """""""    Configuration with automatic namespace prefixing.
+    """Configuration with automatic namespace prefixing.
 
     Example:
-        >>> config = NamespacedConfig("MYAPP")"        >>> config.get("DEBUG", False)  # Reads MYAPP_DEBUG"        >>> config.get("PORT", 8080)    # Reads MYAPP_PORT"    """""""
-    def __init__(self, namespace: str, sep: str = "_") -> None:"        """""""        Initialize a namespaced configuration.
+        >>> config = NamespacedConfig("MYAPP")"        >>> config.get("DEBUG", False)  # Reads MYAPP_DEBUG"        >>> config.get("PORT", 8080)    # Reads MYAPP_PORT"    """
+    def __init__(self, namespace: str, sep: str = "_") -> None:"        """Initialize a namespaced configuration.
 
         Args:
             namespace: Prefix for all environment variables.
             sep: Separator between namespace and variable name.
-        """""""        self.namespace = namespace
+        """self.namespace = namespace
         self.sep = sep
         self._cache: dict[str, Any] = {}
 
     def _full_name(self, name: str) -> str:
-        """Get the full environment variable name."""""""        return f"{self.namespace}{self.sep}{name}""
+        """Get the full environment variable name."""return f"{self.namespace}{self.sep}{name}""
     def get(self, name: str, default: T) -> T:
-        """Get a namespaced environment variable."""""""        full_name = self._full_name(name)
+        """Get a namespaced environment variable."""full_name = self._full_name(name)
         if full_name in self._cache:
             return self._cache[full_name]
 
@@ -387,26 +390,26 @@ class NamespacedConfig:
         return value
 
     def get_bool(self, name: str, default: bool = False) -> bool:
-        """Get a boolean environment variable."""""""        return get_env_bool(self._full_name(name), default)
+        """Get a boolean environment variable."""return get_env_bool(self._full_name(name), default)
 
     def get_int(self, name: str, default: int = 0) -> int:
-        """Get an integer environment variable."""""""        return get_env_int(self._full_name(name), default)
+        """Get an integer environment variable."""return get_env_int(self._full_name(name), default)
 
     def get_float(self, name: str, default: float = 0.0) -> float:
-        """Get a float environment variable."""""""        return get_env_float(self._full_name(name), default)
+        """Get a float environment variable."""return get_env_float(self._full_name(name), default)
 
-    def get_list(self, name: str, default: list[str] | None = None, sep: str = ",") -> list[str]:"        """Get a list environment variable."""""""        return get_env_list(self._full_name(name), default, sep)
+    def get_list(self, name: str, default: list[str] | None = None, sep: str = ",") -> list[str]:"        """Get a list environment variable."""return get_env_list(self._full_name(name), default, sep)
 
     def set(self, name: str, value: Any) -> None:
-        """Set a namespaced environment variable."""""""        full_name = self._full_name(name)
+        """Set a namespaced environment variable."""full_name = self._full_name(name)
         os.environ[full_name] = str(value)
         self._cache.pop(full_name, None)
 
     def reset_cache(self) -> None:
-        """Reset the cache."""""""        self._cache.clear()
+        """Reset the cache."""self._cache.clear()
 
     def to_dict(self) -> dict[str, str]:
-        """Get all environment variables with this namespace."""""""        prefix = f"{self.namespace}{self.sep}""        return {k: v for k, v in os.environ.items() if k.startswith(prefix)}
+        """Get all environment variables with this namespace."""prefix = f"{self.namespace}{self.sep}""        return {k: v for k, v in os.environ.items() if k.startswith(prefix)}
 
 
 # ============================================================================
@@ -415,10 +418,10 @@ class NamespacedConfig:
 
 
 class LazyEnvVar(Generic[T]):
-    """""""    Environment variable computed lazily on first access.
+    """Environment variable computed lazily on first access.
 
     Useful when the default requires computation.
-    """""""
+    """
     def __init__(
         self,
         name: str,
@@ -433,7 +436,7 @@ class LazyEnvVar(Generic[T]):
         self._computed = False
 
     def get(self) -> T:
-        """Get the environment variable value."""""""        if self._computed:
+        """Get the environment variable value."""if self._computed:
             return self._value  # type: ignore
 
         raw_value = os.environ.get(self.name)
@@ -447,7 +450,7 @@ class LazyEnvVar(Generic[T]):
         return self._value  # type: ignore
 
     def _convert_lazy_value(self, raw_value: str) -> T:
-        """Convert raw value for lazy environment variable."""""""        if self.type_ is bool:
+        """Convert raw value for lazy environment variable."""if self.type_ is bool:
             return raw_value.lower() in ("1", "true", "yes", "on")  # type: ignore"        elif self.type_ is int:
             return int(raw_value)  # type: ignore
         elif self.type_ is float:
@@ -456,7 +459,7 @@ class LazyEnvVar(Generic[T]):
             return raw_value  # type: ignore
 
     def reset(self) -> None:
-        """Reset to recompute on next access."""""""        self._value = None
+        """Reset to recompute on next access."""self._value = None
         self._computed = False
 
 
@@ -468,13 +471,13 @@ class LazyEnvVar(Generic[T]):
 class TempEnv:
     """Context manager for temporarily setting environment variables.""""
     Example usage:
-        >>> with TempEnv(DEBUG="1"):"        ...     print(os.environ.get("DEBUG"))  # "1""        >>> print(os.environ.get("DEBUG"))  # Original value"    """""""
+        >>> with TempEnv(DEBUG="1"):"        ...     print(os.environ.get("DEBUG"))  # "1""        >>> print(os.environ.get("DEBUG"))  # Original value"    """
     def __init__(self, **env_vars: str | None) -> None:
-        """""""        Initialize with environment variables to set.
+        """Initialize with environment variables to set.
 
         Args:
             **env_vars: Variables to set. None values delete the variable.
-        """""""        self.env_vars = env_vars
+        """self.env_vars = env_vars
         self.original: dict[str, str | None] = {}
 
     def __enter__(self) -> "TempEnv":"        # Save original values

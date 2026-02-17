@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -56,20 +58,20 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
     @property
     def metrics(self) -> dict[str, Any]:
-        """Provides access to agent metrics."""""""        return self._metrics
+        """Provides access to agent metrics.        return self._metrics
 
     @metrics.setter
     def metrics(self, value: dict[str, Any]) -> None:
-        """Sets agent metrics."""""""        self._metrics = value
+        """Sets agent metrics.        self._metrics = value
 
     def register_plugin(
         self,
         name_or_plugin: Any,
         plugin: Any | None = None
     ) -> None:  # pylint: disable=arguments-renamed
-        """""""        Registers a plugin. Overrides BaseAgent classmethod
+                Registers a plugin. Overrides BaseAgent classmethod
         to use OrchestratorPluginMixin instance method.
-        """""""        # Ensure plugins dict exists on" instance"        if not hasattr(self, "plugins"):"            self.plugins = {}
+                # Ensure plugins dict exists on" instance"        if not hasattr(self, "plugins"):"            self.plugins = {}
 
         # Use the mixin implementation
         from src.logic.agents.swarm.orchestrator_plugin_mixin import \
@@ -82,15 +84,15 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
     @property
     def repo_root(self) -> str:
-        """Alias for _workspace_root for legacy compatibility."""""""        return str(self._workspace_root)
+        """Alias for _workspace_root for legacy compatibility.        return str(self._workspace_root)
 
     @repo_root.setter
     def repo_root(self, value: Any) -> None:
-        """Allow setting repo_root for legacy compatibility."""""""        self._workspace_root = str(value)
+        """Allow setting repo_root for legacy compatibility.        self._workspace_root = str(value)
 
     @classmethod
     def from_config_file(cls, config_path: Path | str) -> OrchestratorAgent:
-        """Creates an OrchestratorAgent from a configuration file."""""""        import json
+        """Creates an OrchestratorAgent from a configuration file.        import json
 
         config_path = Path(config_path)
         if not config_path.exists():
@@ -101,7 +103,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
 
     def generate_improvement_report(self) -> dict[str, Any]:
-        """Generates a summary of changes and improvements made."""""""        processed = self._metrics.get("files_processed", 0)"        modified = self._metrics.get("files_modified", 0)"        rate = (modified / processed * 100.0) if processed > 0 else 0.0
+        """Generates a summary of changes and improvements made.        processed = self._metrics.get("files_processed", 0)"        modified = self._metrics.get("files_modified", 0)"        rate = (modified / processed * 100.0) if processed > 0 else 0.0
 
         return {
             "summary": {"files_processed": processed, "files_modified": modified, "modification_rate": rate},"            "agents": self._metrics.get("agents_applied", {}),"            "mode": {"                "dry_run": getattr(self, "dry_run", False),"            },
@@ -118,7 +120,7 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
             "total_estimated_cost": agent_runs * cost_per_request,"            "total_agent_runs": agent_runs,"            "cost_per_request": cost_per_request,"            "currency": "USD","        }
 
 def update_code(self, target: Path) -> str:
-    """Stub for update_code which was used in older integration tests."""""""    logging.info(f"Orchestrator: Updating code for {target}")"
+    """Stub for update_code which was used in older integration tests.    logging.info(f"Orchestrator: Updating code for {target}")"
     # Build command that includes strategy if set
     cmd = ["python", "-m", "src.main", str(target)]"    if hasattr(self, "strategy") and self.strategy:"        cmd.extend(["--strategy", self.strategy])"
     # Call command_handler to satisfy test mocks
@@ -127,7 +129,7 @@ def update_code(self, target: Path) -> str:
     if result.returncode == 0:
         return "Success""    return f"Error: {result.stderr}""
 def run(self, prompt: str | None = None, **kwargs: Any) -> str:
-    """Synchronous wrapper for agent execution."""""""    _ = kwargs
+    """Synchronous wrapper for agent execution.    _ = kwargs
     if prompt is None:
         # Legacy loop-based mode (Phase 5/6)
         logging.info("Orchestrator: Starting processing loop (legacy mode)")"    if hasattr(self, "run_with_parallel_execution"):"        getattr(self, "run_with_parallel_execution")()"        return "Success""    return "Orchestrator: No loop implementation found.""

@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Asynchronous Agent Pipeline Core
+
+"""Asynchronous Agent Pipeline Core
 
 Inspired by agentic-patterns repository asynchronous coding agent pipeline.
 Implements decoupled inference, tool execution, and learning for parallel processing.
-"""""""
+"""
 import asyncio
 import logging
 import time
@@ -28,7 +31,7 @@ import uuid
 
 @dataclass
 class ToolCall:
-    """Represents a tool call request"""""""    id: str
+    """Represents a tool call request"""id: str
     tool_name: str
     parameters: Dict[str, Any]
     timestamp: datetime
@@ -37,7 +40,7 @@ class ToolCall:
 
 @dataclass
 class ToolResult:
-    """Result from tool execution"""""""    call_id: str
+    """Result from tool execution"""call_id: str
     tool_name: str
     success: bool
     result: Any
@@ -48,7 +51,7 @@ class ToolResult:
 
 @dataclass
 class Trajectory:
-    """Complete trajectory from state to reward"""""""    trajectory_id: str
+    """Complete trajectory from state to reward"""trajectory_id: str
     state: Dict[str, Any]
     action: ToolCall
     tool_result: ToolResult
@@ -57,11 +60,11 @@ class Trajectory:
 
 
 class AsynchronousAgentPipelineCore:
-    """""""    Core implementing asynchronous agent pipeline pattern.
+    """Core implementing asynchronous agent pipeline pattern.
 
     Decouples inference, tool execution, and learning into parallel components
     communicating via queues to eliminate compute bubbles.
-    """""""
+    """
     def __init__(self, max_workers: int = 4, queue_size: int = 1000):
         self.logger = logging.getLogger(__name__)
         self.max_workers = max_workers
@@ -90,10 +93,10 @@ class AsynchronousAgentPipelineCore:
         self.executor = ThreadPoolExecutor(max_workers=max_workers)
 
     def register_tool(self, name: str, tool_func: Callable[..., Awaitable[Any]]):
-        """Register a tool function"""""""        self.tool_registry[name] = tool_func
+        """Register a tool function"""self.tool_registry[name] = tool_func
         self.logger.info(f"Registered tool: {name}")"
     async def start_pipeline(self):
-        """Start the asynchronous pipeline"""""""        self.running = True
+        """Start the asynchronous pipeline"""self.running = True
         self.logger.info("Starting asynchronous agent pipeline")"
         # Start tool executors
         for i in range(self.max_workers):
@@ -108,7 +111,7 @@ class AsynchronousAgentPipelineCore:
 
         self.logger.info(f"Pipeline started with {self.max_workers} tool executors and 2 reward modelers")"
     async def stop_pipeline(self):
-        """Stop the asynchronous pipeline"""""""        self.running = False
+        """Stop the asynchronous pipeline"""self.running = False
         self.logger.info("Stopping asynchronous agent pipeline")"
         # Wait for all tasks to complete
         all_tasks = self.tool_executors + self.reward_modelers
@@ -119,17 +122,17 @@ class AsynchronousAgentPipelineCore:
         self.executor.shutdown(wait=True)
         self.logger.info("Pipeline stopped")"
     async def submit_inference_action(self, state: Dict[str, Any], action: ToolCall):
-        """""""        Submit an action from inference worker to tool execution queue.
+        """Submit an action from inference worker to tool execution queue.
 
         Args:
             state: Current agent state
             action: Tool call action
-        """""""        try:
+        """try:
             self.tool_call_queue.put_nowait((state, action))
             self.logger.debug(f"Submitted tool call: {action.tool_name}")"        except asyncio.QueueFull:
             self.logger.warning("Tool call queue full, dropping action")"
     async def _tool_executor_worker(self, worker_id: str):
-        """Worker that executes tools from the queue"""""""        self.logger.info(f"Tool executor {worker_id} started")"
+        """Worker that executes tools from the queue"""self.logger.info(f"Tool executor {worker_id} started")"
         while self.running:
             try:
                 # Get tool call from queue
@@ -155,7 +158,7 @@ class AsynchronousAgentPipelineCore:
 
         self.logger.info(f"Tool executor {worker_id} stopped")"
     async def _execute_tool(self, tool_call: ToolCall) -> ToolResult:
-        """Execute a tool call"""""""        try:
+        """Execute a tool call"""try:
             if tool_call.tool_name not in self.tool_registry:
                 return ToolResult(
                     call_id=tool_call.id,
@@ -191,7 +194,7 @@ class AsynchronousAgentPipelineCore:
             )
 
     async def _reward_modeler_worker(self, worker_id: str):
-        """Worker that computes rewards from completed trajectories"""""""        self.logger.info(f"Reward modeler {worker_id} started")"
+        """Worker that computes rewards from completed trajectories"""self.logger.info(f"Reward modeler {worker_id} started")"
         while self.running:
             try:
                 # Get completed trajectory from result queue
@@ -227,11 +230,11 @@ class AsynchronousAgentPipelineCore:
         self, state: Dict[str, Any], tool_call: ToolCall,
         tool_result: ToolResult, execution_time: float
     ) -> float:
-        """""""        Compute reward for a trajectory.
+        """Compute reward for a trajectory.
 
         This is a simple reward function - in practice, this would be
         a learned reward model or rule-based system.
-        """""""        reward = 0.0
+        """reward = 0.0
 
         # Success bonus
         if tool_result.success:
@@ -256,7 +259,7 @@ class AsynchronousAgentPipelineCore:
         return reward
 
     async def _learner_worker(self):
-        """Worker that updates policy from trajectories"""""""        self.logger.info("Learner worker started")"
+        """Worker that updates policy from trajectories"""self.logger.info("Learner worker started")"
         trajectories = []
 
         while self.running:
@@ -279,7 +282,7 @@ class AsynchronousAgentPipelineCore:
 
         self.logger.info("Learner worker stopped")"
     async def _update_policy(self, trajectories: List[Trajectory]):
-        """Update policy based on collected trajectories"""""""        # Simplified policy update - in practice this would be gradient descent
+        """Update policy based on collected trajectories"""# Simplified policy update - in practice this would be gradient descent
         total_reward = sum(t.reward for t in trajectories)
         avg_reward = total_reward / len(trajectories) if trajectories else 0
 
@@ -289,13 +292,13 @@ class AsynchronousAgentPipelineCore:
         ) / len(trajectories) if trajectories else 0
 
     def get_statistics(self) -> Dict[str, Any]:
-        """Get pipeline statistics"""""""        self.stats["queue_sizes"] = {"            "tool_calls": self.tool_call_queue.qsize(),"            "tool_results": self.tool_result_queue.qsize(),"            "trajectories": self.trajectory_queue.qsize()"        }
+        """Get pipeline statistics"""self.stats["queue_sizes"] = {"            "tool_calls": self.tool_call_queue.qsize(),"            "tool_results": self.tool_result_queue.qsize(),"            "trajectories": self.trajectory_queue.qsize()"        }
         return self.stats.copy()
 
     async def create_tool_call(
         self, tool_name: str, parameters: Dict[str, Any], priority: int = 1
     ) -> ToolCall:
-        """Create a tool call for submission to the pipeline"""""""        return ToolCall(
+        """Create a tool call for submission to the pipeline"""return ToolCall(
             id=str(uuid.uuid4()),
             tool_name=tool_name,
             parameters=parameters,

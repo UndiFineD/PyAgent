@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Branch Comparer - Comparing errors across git branches
+
+"""
+Branch Comparer - Comparing errors across git branches
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,7 @@ and maintain original error metadata rather than just IDs.
 - Add docstring examples, logging, and unit tests covering edge cases 
 (empty branches, identical branches, large sets), and consider streaming/async 
 interfaces for large datasets.
-"""""""
+
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -49,16 +53,16 @@ class BranchComparer:
 
     Attributes:
         branch_errors: Map of branch names to error sets.
-    """""""
+    
     def __init__(self) -> None:
-        """Initialize the branch comparer."""""""        self.branch_errors: dict[str, set[str]] = {}
+        """Initialize the branch comparer.        self.branch_errors: dict[str, set[str]] = {}
 
     def set_branch_errors(self, branch: str, error_ids: list[str]) -> None:
         """Set errors for a branch.""""
         Args:
             branch: Branch name.
             error_ids: List of error IDs in the branch.
-        """""""        self.branch_errors[branch] = set(error_ids)
+                self.branch_errors[branch] = set(error_ids)
 
     def compare(self, branch_a: str, branch_b: str) -> BranchComparison:
         """Compare errors between two branches.""""
@@ -68,7 +72,7 @@ class BranchComparer:
 
         Returns:
             BranchComparison with differences.
-        """""""        errors_a = self.branch_errors.get(branch_a, set())
+                errors_a = self.branch_errors.get(branch_a, set())
         errors_b = self.branch_errors.get(branch_b, set())
 
         return BranchComparison(
@@ -87,7 +91,7 @@ class BranchComparer:
 
         Returns:
             List of error IDs only in feature branch.
-        """""""        comparison = self.compare(base_branch, feature_branch)
+                comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_b
 
     def get_fixed_errors(self, base_branch: str, feature_branch: str) -> list[str]:
@@ -98,5 +102,5 @@ class BranchComparer:
 
         Returns:
             List of error IDs fixed in feature branch.
-        """""""        comparison = self.compare(base_branch, feature_branch)
+                comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_a

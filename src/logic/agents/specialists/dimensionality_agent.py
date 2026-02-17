@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""DimensionalityAgent - Feature Compression and Latent Space Mapping
+DimensionalityAgent - Feature Compression and Latent Space Mapping
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -35,23 +33,21 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Dimensionality agent.py module.
-"""""""# DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
+Dimensionality agent.py module.
+# DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
 # Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering
 
 from __future__ import annotations
@@ -81,11 +77,11 @@ except ImportError:
     logging.debug("rust_core not available, using Python fallback for DimensionalityAgent")"
 
 class ReductionMethod(Enum):
-""""Supported dimensionality reduction methods."""""""#     PCA = "pca"#     TSNE = "tsne"#     UMAP = "umap"#     TRUNCATION = "truncation"#     RANDOM_PROJECTION = "random_projection"#     AUTOENCODER = "autoencoder"
+""""Supported dimensionality reduction methods.#     PCA = "pca"#     TSNE = "tsne"#     UMAP = "umap"#     TRUNCATION = "truncation"#     RANDOM_PROJECTION = "random_projection"#     AUTOENCODER = "autoencoder"
 
 @dataclass
 class EmbeddingStats:
-""""Statistics for an embedding."""""""
+""""Statistics for an embedding.
     dimension: int
     mean: float
     variance: float
@@ -97,7 +93,7 @@ class EmbeddingStats:
 class DimensionalityAgent(BaseAgent):
     Agent specializing in simplifying complex datasets and high-dimensional spaces.
     Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._projection_cache: Dict[str, List[List[float]]] = {}
@@ -143,7 +139,7 @@ class DimensionalityAgent(BaseAgent):
         for emb in embeddings:
             result = await self.reduce_embedding_dim(emb, target_dim, method)
             reduced_all.append(
-"""""""# DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
+# DimensionalityAgent: Feature Compression and Latent Space Mapping - Phase 319 Enhanced
 # Phase 16: Rust acceleration for PCA reduction, embedding stats, k-means clustering
 
 from __future__ import annotations
@@ -173,11 +169,11 @@ except ImportError:
     logging.debug("rust_core not available, using Python fallback for DimensionalityAgent")"
 
 class ReductionMethod(Enum):
-""""Supported dimensionality reduction methods."""""""#     PCA = "pca"#     TSNE = "tsne"#     UMAP = "umap"#     TRUNCATION = "truncation"#     RANDOM_PROJECTION = "random_projection"#     AUTOENCODER = "autoencoder"
+""""Supported dimensionality reduction methods.#     PCA = "pca"#     TSNE = "tsne"#     UMAP = "umap"#     TRUNCATION = "truncation"#     RANDOM_PROJECTION = "random_projection"#     AUTOENCODER = "autoencoder"
 
 @dataclass
 class EmbeddingStats:
-""""Statistics for an embedding."""""""
+""""Statistics for an embedding.
     dimension: int
     mean: float
     variance: float
@@ -189,7 +185,7 @@ class EmbeddingStats:
 class DimensionalityAgent(BaseAgent):
     Agent specializing in simplifying complex datasets and high-dimensional spaces.
     Focuses on PCA, t-SNE (simulated), UMAP, and semantic embedding compression.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._projection_cache: Dict[str, List[List[float]]] = {}
@@ -371,7 +367,7 @@ class DimensionalityAgent(BaseAgent):
             "matrix_shape": (n, n),"            "top_similar_pairs": [{"i": p[0], "j": p[1], "similarity": p[2]} for p in pairs[:top_k]],"            "avg_similarity": round(sum(p[2] for p in pairs) / len(pairs), 4) if pairs else 0,"        }
 
     def _pca_reduce(self, embedding: List[float], target_dim: int) -> List[float]:
-""""Simple PCA-like reduction (keeps components with largest variance contribution")."""""""        # Phase 16: Try Rust-accelerated PCA reduction
+""""Simple PCA-like reduction (keeps components with largest variance contribution").        # Phase 16: Try Rust-accelerated PCA reduction
         if _RUST_AVAILABLE and hasattr(rust_core, "pca_reduce_rust"):"            try:
                 result = rust_core.pca_reduce_rust(embedding, target_dim)
                 if result is not None:
@@ -388,7 +384,7 @@ class DimensionalityAgent(BaseAgent):
         return [embedding[i] for i in top_indices]
 
     def _random_projection(self, embedding: List[float], target_dim: int) -> List[float]:
-""""Random projection (simplified)"."""""""        # Phase 16: Try Rust-accelerated random projection
+""""Random projection (simplified)".        # Phase 16: Try Rust-accelerated random projection
         if _RUST_AVAILABLE and hasattr(rust_core, "random_projection_rust"):"            try:
                 result = rust_core.random_projection_rust(embedding, target_dim, 42)
                 if result is not None:

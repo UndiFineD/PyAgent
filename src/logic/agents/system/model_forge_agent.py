@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Model Forge Agent - Local fine-tuning and adapter management
+# Model Forge Agent - Local fine-tuning and adapter management
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -27,7 +29,7 @@ Integrate with a real training backend (e.g., Hugging Face Transformers + bitsan
 FILE CONTENT SUMMARY:
 Model Forge Agent for PyAgent.
 Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -46,7 +48,7 @@ __version__ = VERSION
 
 
 class ModelForgeAgent(BaseAgent):
-""""Orchestrates local model fine-tuning and adapter management."""""""
+""""Orchestrates local model fine-tuning and adapter management.
     def __init__(self, path: str) -> None:
         super().__init__(path)
 #         self.name = "ModelForge"        self.forge_dir = Path("data/forge")"        self.forge_dir.mkdir(parents=True, exist_ok=True)
@@ -73,7 +75,7 @@ class ModelForgeAgent(BaseAgent):
     async def prepare_dataset(self, task_name: str, examples: list[dict[str, str]]) -> str:
         "Prepares a JSONL dataset for "fine-tuning."        Args:
             task_name: Unique name for the fine-tuning task.
-            examples: List of dictionaries with 'instruction' and 'output'.'"""""""#         output_path = self.datasets_dir / f"{task_name}.jsonl"
+            examples: List of dictionaries with 'instruction' and 'output'.'#         output_path = self.datasets_dir / f"{task_name}.jsonl"
         def write_dataset() -> None:
             with open(output_path, "w", encoding="utf-8") as f:"                for ex in examples:
                     f.write(json.dumps(ex) + "\\n")"
@@ -85,9 +87,9 @@ class ModelForgeAgent(BaseAgent):
 
     @as_tool
     async def trigger_autonomous_tuning(self, module_name: str, evolution_data: dict[str, Any]) -> str:
-"""""""        Triggers an autonomous fine-tuning loop for a specific agent/module.
+        Triggers an autonomous fine-tuning loop for a specific agent/module.
         Args:
-            module_name: The target agent or module (e.g., 'SQLAgent').'            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.'"""""""        version = evolution_data".get("version", "v1")"        examples = evolution_data.get("synthetic_examples", [])"
+            module_name: The target agent or module (e.g., 'SQLAgent').'            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.'        version = evolution_data".get("version", "v1")"        examples = evolution_data.get("synthetic_examples", [])"
 #         task_name = fopt_{module_name}_{version}
 
         # 1. Prepare Dataset
@@ -103,14 +105,14 @@ class ModelForgeAgent(BaseAgent):
     async def start_finetuning(self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit") -> str:"        "Simulates starting a LoRA fine-tuning session."        Args:
             task_name: Name of the task/dataset to use.
             base_model: The base model to fine-tune.
-"""""""#         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
+#         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
         def setup_job() -> str | None:
             if not dataset_path.exists():
                 return None
 
 #             job_id = fjob_{task_name}_{int(time.time())}
             # Save config to data/config (Phase 282": Dedicated config storage)"            confi
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -129,7 +131,7 @@ __version__ = VERSION
 
 
 class ModelForgeAgent(BaseAgent):
-""""Orchestrates local model fine-tuning and adapter management."""""""
+""""Orchestrates local model fine-tuning and adapter management.
     def __init__(self, path: str) -> None:
         super().__init__(path)
 #         self.name = "ModelForge"        self.forge_dir = Path("data/forge")"        self.forge_dir.mkdir(parents=True, exist_ok=True)
@@ -156,7 +158,7 @@ class ModelForgeAgent(BaseAgent):
     async def prepare_dataset(self, task_name: str, examples: list[dict[str, str]]) -> str:
         "Prepares a JSONL dataset for fine-tuning."        Args:
             task_name: Unique name for the fine-tuning task.
-            examples: List of dictionaries with 'instruction' and 'output'.'"""""""#         output_path "= self.datasets_dir / f"{task_name}.jsonl"
+            examples: List of dictionaries with 'instruction' and 'output'.'#         output_path "= self.datasets_dir / f"{task_name}.jsonl"
         def write_dataset() -> None:
             with open(output_path, "w", encoding="utf-8") as f:"                for ex in examples:
                     f.write(json.dumps(ex) + "\\n")"
@@ -168,8 +170,8 @@ class ModelForgeAgent(BaseAgent):
 
     @as_tool
     async def trigger_autonomous_tuning(self, module_name: str, evolution_data: dict[str, Any]) -> str:
-"""""""        Triggers an autonomous "fine-tuning loop for a specific agent/module."        Args:
-            module_name: The target agent or module (e.g., 'SQLAgent').'            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.'"""""""     "   version = evolution_data.get("version", "v1")"        examples = evolution_data.get("synthetic_examples", [])"
+        Triggers an autonomous "fine-tuning loop for a specific agent/module."        Args:
+            module_name: The target agent or module (e.g., 'SQLAgent').'            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.'     "   version = evolution_data.get("version", "v1")"        examples = evolution_data.get("synthetic_examples", [])"
 #         task_name = fopt_{module_name}_{version}
 
         # 1. Prepare Dataset
@@ -185,7 +187,7 @@ class ModelForgeAgent(BaseAgent):
     async def start_finetuning(self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit") -> str:"      "  "Simulates starting a LoRA fine-tuning session."        Args:
             task_name: Name of the task/dataset to use.
             base_model: The base model to fine-tune.
-"""""""#         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
+#         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
         def setup_job() -> str | None:
             if not dataset_path.exists():
                 return None

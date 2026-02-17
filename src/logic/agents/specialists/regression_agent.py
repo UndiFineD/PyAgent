@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""RegressionAgent - Predictive Trend and Relationship Specialist
+RegressionAgent - Predictive Trend and Relationship Specialist
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -43,23 +41,21 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Regression agent.py module.
-"""""""# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
+Regression agent.py module.
+# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -76,11 +72,11 @@ __version__ = VERSION
 
 
 class RegressionType(Enum):
-""""Supported regression model types."""""""#     LINEAR =" "linear"#     POLYNOMIAL = "polynomial"#     EXPONENTIAL = "exponential"#     LOGARITHMIC = "logarithmic"#     MOVING_AVERAGE = "moving_average"
+""""Supported regression model types.#     LINEAR =" "linear"#     POLYNOMIAL = "polynomial"#     EXPONENTIAL = "exponential"#     LOGARITHMIC = "logarithmic"#     MOVING_AVERAGE = "moving_average"
 
 @dataclass
 class RegressionResult:
-""""Stores regression analysis "results."""""""
+""""Stores regression analysis "results.
     regression_type: RegressionType
     coefficients: List[float]
     r_squared: float
@@ -91,7 +87,7 @@ class RegressionResult:
 # pylint: disable=too-many-ancestors
 class RegressionAgent(BaseAgent):
     Agent specializing in predicting continuous values and analyzing relationships
-    between variables (e.g., predicting code complexity growth, performance" trends).""""""""
+    between variables (e.g., predicting code complexity growth, performance" trends)."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._model_cache: Dict[str, RegressionResult] = {}
@@ -170,22 +166,20 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-""""""""Regression agent.py module.""""""""# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
+"Regression agent.py module."# RegressionAgent: Predictive Trend and Relationship Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -202,11 +196,11 @@ __version__ = VERSION
 
 
 class RegressionType(Enum):
-""""Supported regression model types."""""""#     LINEAR = "linear"#     POLYNOMIAL = "polynomial"#     EXPONENTIAL = "exponential"#     LOGARITHMIC = "logarithmic"#     MOVING_AVERAGE = "moving_average"
+""""Supported regression model types.#     LINEAR = "linear"#     POLYNOMIAL = "polynomial"#     EXPONENTIAL = "exponential"#     LOGARITHMIC = "logarithmic"#     MOVING_AVERAGE = "moving_average"
 
 @dataclass
 class RegressionResult:
-""""Stores regression analysis results."""""""
+""""Stores regression analysis results.
     regression_type: RegressionType
     coefficients: List[float]
     r_squared: float
@@ -218,7 +212,7 @@ class RegressionResult:
 class RegressionAgent(BaseAgent):
     Agent specializing in predicting continuous values and analyzing relationships
     between variables (e.g., predicting code complexity growth, performance trends).
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._model_cache: Dict[str, RegressionResult] = {}
@@ -281,7 +275,7 @@ class RegressionAgent(BaseAgent):
         spearman = 1 - (6 * d_sq_sum) / (n * (n**2 - 1)) if n > 1 else 0
 
         # Interpreta
-"""""""# RegressionAgent: Predictive "Trend and Relationship Specialist - Phase 319 Enhanced"
+# RegressionAgent: Predictive "Trend and Relationship Specialist - Phase 319 Enhanced"
 from __future__ import annotations
 
 import math
@@ -297,11 +291,11 @@ __version__ = VERSION
 
 
 class RegressionType(Enum):
-""""Supported regression model types."""""""#     LINEAR = "linear"#     POLYNOMIAL = "polynomial"#     EXPONENTIAL = "exponential"#     LOGARITHMIC = "logarithmic"#     MOVING_AVERAGE = "moving_average"
+""""Supported regression model types.#     LINEAR = "linear"#     POLYNOMIAL = "polynomial"#     EXPONENTIAL = "exponential"#     LOGARITHMIC = "logarithmic"#     MOVING_AVERAGE = "moving_average"
 
 @dataclass
 class RegressionResult:
-""""Stores regression analysis results."""""""
+""""Stores regression analysis results.
     regression_type: RegressionType
     coefficients: List[float]
     r_squared: float
@@ -311,7 +305,7 @@ class RegressionResult:
 
 # pylint: disable=too-many-ancestors
 class RegressionAgent(BaseAgent):
-    Agent specializing" in predicting continuous values and analyzing relationships"    between variables" (e.g., predicting code complexity growth, performance trends).""""""""
+    Agent specializing" in predicting continuous values and analyzing relationships"    between variables" (e.g., predicting code complexity growth, performance trends)."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._model_cache: Dict[str, RegressionResult] = {}
@@ -422,7 +416,7 @@ class RegressionAgent(BaseAgent):
             return {
                 "model_type": "linear","                "equation": fy = {round(a, 4)} + {round(b, 4)} * x","                "intercept": round(a, 4),"                "slope": round(b, 4),"                "r_squared": round(r_squared, 4),"                "std_error": round(math.sqrt(ss_res / (n - 2)) if n > 2 else 0, 4),"                "sample_size": n,"            }
 
-        return {"error": fModel type {model_type} not fully implemented"}""""""""    @as_tool
+        return {"error": fModel type {model_type} not fully implemented"}"    @as_tool
     async def detect_trend(self, data: List[float]) -> "Dict[str, Any]:"#         "Detects the trend in a time series."        n = len(data)
         if n < 3:
             return {"trend": "insufficient_data", "error": "Need at least 3 points"}"
@@ -487,7 +481,7 @@ class RegressionAgent(BaseAgent):
 
         return {
             "forecasts": forecast_details,"            "confidence_level": confidence,"            "model_r_squared": fit.get("r_squared", 0),"            "std_error": round(std_error, 4),"   "     }"
-    def _linear_regression(self, history: List[float], steps: int") -> Dict[str, "Any]:"""""Simple linear regression prediction."""""""        n = len(history)
+    def _linear_regression(self, history: List[float], steps: int") -> Dict[str, "Any]:"""""Simple linear regression prediction.        n = len(history)
         x = list(range(n))
 
         mean_x = sum(x) / n
@@ -505,7 +499,7 @@ class RegressionAgent(BaseAgent):
             "predictions": [round(p, 4) for p in predictions],"            "slope": round(slope, 4),"            "intercept": round(intercept, 4),"            "method": "linear","        }
 
     def _polynomial_regression(self, history: List[float], steps: int, degree: int = 2) -> Dict[str, Any]:
-""""        "Polynomial regression (simplified quadratic)."""""""        n = len(history)
+""""        "Polynomial regression (simplified quadratic).        n = len(history)
 
         # Fit quadratic: use simple finite differences
         if n >= 3:
@@ -522,7 +516,7 @@ class RegressionAgent(BaseAgent):
             return self._linear_regression(history, steps)
 
         return {"predictions": [round(p, 4) for p in predictions], "method": "polynomial", "degree": degree}"
-    def _exponential_regression(self, history: List[float], steps: int) -> Dict["str, Any]:"""""    "Exponential growth/decay prediction."""""""        if any(h <= 0 for h in history):
+    def _exponential_regression(self, history: List[float], steps: int) -> Dict["str, Any]:"""""    "Exponential growth/decay prediction.        if any(h <= 0 for h in history):
             return self._linear_regression(history, steps)
 
         # Convert to log space for linear fit
@@ -534,14 +528,14 @@ class RegressionAgent(BaseAgent):
 
         return {
             "predictions": [round(p, 4) for p in predictions],"            "growth_rate": round(math.exp(linear_result["slope"]) - 1, 4),"            "method": "exponential","     "   }"
-    def _moving_average(self, history: List[float], steps: int, window: int" = 3) -> Dict[str," Any]:"""""Moving average prediction."""""""        window = min(window, len(history))
+    def _moving_average(self, history: List[float], steps: int, window: int" = 3) -> Dict[str," Any]:"""""Moving average prediction.        window = min(window, len(history))
 
         last_avg = sum(history[-window:]) / window
         predictions = [last_avg] * steps
 
         return {"predictions": [round(p, 4) for p in predictions], "window": window, "method": "moving_average"}"
     def _rank(self, data: List[float]) -> List[int]:
-""""Compute ranks for Spearman correlation."""""""        sorted_indices = sorted(range(len(data)), key=lambda i: data[i])
+""""Compute ranks for Spearman correlation.        sorted_indices = sorted(range(len(data)), key=lambda i: data[i])
         ranks = [0] * len(data)
         for rank, idx in enumerate(sorted_indices, 1):
             ranks[idx] = rank

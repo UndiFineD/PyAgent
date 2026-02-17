@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""HTTPClient - Unified sync/async HTTP client with session reuse.
+
+"""
+HTTPClient - Unified sync/async HTTP client with session reuse.
 
 Refactored to modular package structure for Phase 317.
 Decomposed into mixins for sync, async, and retry logic.
-"""""""
+
 from __future__ import annotations
 
 from typing import Any
@@ -27,16 +31,16 @@ from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
 
 
 class HTTPClient(HTTPConnection):
-    """""""    Alias for HTTPConnection with sync-focused interface.
-    """""""
+        Alias for HTTPConnection with sync-focused interface.
+    
 
 class AsyncHTTPClient(HTTPConnection):
-    """""""    Alias for HTTPConnection with async-focused interface.
-    """""""
+        Alias for HTTPConnection with async-focused interface.
+    
 
 class RetryableHTTPClient(HTTPConnection, RetryHTTPMixin):
-    """""""    HTTP client with automatic retry on failures.
-    """""""
+        HTTP client with automatic retry on failures.
+    
     def __init__(
         self,
         *,
@@ -58,27 +62,27 @@ global_http_connection = HTTPConnection()
 
 
 def get_bytes(url: str, **kwargs: Any) -> bytes:
-    """Convenience function using global HTTP connection."""""""    return global_http_connection.get_bytes(url, **kwargs)
+    """Convenience function using global HTTP connection.    return global_http_connection.get_bytes(url, **kwargs)
 
 
 def get_text(url: str, **kwargs: Any) -> str:
-    """Convenience function using global HTTP connection."""""""    return global_http_connection.get_text(url, **kwargs)
+    """Convenience function using global HTTP connection.    return global_http_connection.get_text(url, **kwargs)
 
 
 def get_json(url: str, **kwargs: Any) -> Any:
-    """Convenience function using global HTTP connection."""""""    return global_http_connection.get_json(url, **kwargs)
+    """Convenience function using global HTTP connection.    return global_http_connection.get_json(url, **kwargs)
 
 
 async def async_get_bytes(url: str, **kwargs: Any) -> bytes:
-    """Async convenience function using global HTTP connection."""""""    return await global_http_connection.async_get_bytes(url, **kwargs)
+    """Async convenience function using global HTTP connection.    return await global_http_connection.async_get_bytes(url, **kwargs)
 
 
 async def async_get_text(url: str, **kwargs: Any) -> str:
-    """Async convenience function using global HTTP connection."""""""    return await global_http_connection.async_get_text(url, **kwargs)
+    """Async convenience function using global HTTP connection.    return await global_http_connection.async_get_text(url, **kwargs)
 
 
 async def async_get_json(url: str, **kwargs: Any) -> Any:
-    """Async convenience function using global HTTP connection."""""""    return await global_http_connection.async_get_json(url, **kwargs)
+    """Async convenience function using global HTTP connection.    return await global_http_connection.async_get_json(url, **kwargs)
 
 
 __all__ = [

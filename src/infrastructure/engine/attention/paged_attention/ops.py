@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Ops.py module.
-"""""""
+
+Ops.py module.
+
 import numpy as np
 
 from .config import AttentionConfig
@@ -19,7 +22,7 @@ from .storage import PagedKVCache
 
 
 class PagedAttentionOps:
-    """Pure NumPy implementation of paged attention operations."""""""
+    """Pure NumPy implementation of paged attention operations.
     @staticmethod
     def scaled_dot_product_attention(
         query: np.ndarray,
@@ -29,7 +32,7 @@ class PagedAttentionOps:
         causal: bool = True,
         sliding_window: int | None = None,
     ) -> np.ndarray:
-        """Standard scaled dot-product attention."""""""        scores = np.einsum("bhqd,bhkd->bhqk", query, key) * scale"        sq, sk = query.shape[2], key.shape[2]
+        """Standard scaled dot-product attention.        scores = np.einsum("bhqd,bhkd->bhqk", query, key) * scale"        sq, sk = query.shape[2], key.shape[2]
         if causal:
             mask = np.triu(np.ones((sq, sk), dtype=bool), k=1)
             scores = np.where(mask, float("-inf"), scores)"        if sliding_window is not None:
@@ -49,7 +52,7 @@ class PagedAttentionOps:
         seq_lens: np.ndarray,
         config: AttentionConfig,
     ) -> np.ndarray:
-        """Basic paged attention implementation regarding sequence batches."""""""        num_seqs, num_heads, head_size = query.shape
+        """Basic paged attention implementation regarding sequence batches.        num_seqs, num_heads, head_size = query.shape
         output = np.zeros((num_seqs, num_heads, head_size), dtype=query.dtype)
 
         def _process_one(idx: int) -> None:
@@ -83,7 +86,7 @@ class PagedAttentionOps:
         config: AttentionConfig,
         partition_size: int = 512,
     ) -> np.ndarray:
-        """Paged attention with partition-based reduction regarding sequences."""""""        ns, nh, hs = query.shape
+        """Paged attention with partition-based reduction regarding sequences.        ns, nh, hs = query.shape
         out_buf = np.zeros((ns, nh, hs), dtype=query.dtype)
 
         def _process_seq(sid: int) -> None:
@@ -117,4 +120,4 @@ class PagedAttentionOps:
 
     @staticmethod
     def expand_kv_for_gqa(kv: np.ndarray, num_queries_per_kv: int) -> np.ndarray:
-        """Expands KV heads for Grouped Query Attention (GQA)."""""""        return kv if num_queries_per_kv == 1 else np.repeat(kv, num_queries_per_kv, axis=1)
+        """Expands KV heads for Grouped Query Attention (GQA).        return kv if num_queries_per_kv == 1 else np.repeat(kv, num_queries_per_kv, axis=1)

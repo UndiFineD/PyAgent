@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Heartbeat Service for Voyager Swarm.
+
+"""
+Heartbeat Service for Voyager Swarm.
 Bridges TelemetryCore with P2P transport to provide real-time cluster observability.
-"""""""
+
 import asyncio
 import psutil
 import time
@@ -26,8 +30,8 @@ logger = StructuredLogger(__name__)
 
 
 class SwarmHeartbeatService:
-    """""""    Periodically collects local health metrics and broadcasts them to the swarm.
-    """""""
+        Periodically collects local health metrics and broadcasts them to the swarm.
+    
     def __init__(self, synapse: Any, interval: float = 5.0) -> None:
         self.synapse = synapse
         self.interval = interval
@@ -37,13 +41,13 @@ class SwarmHeartbeatService:
         self._task: Optional[asyncio.Task] = None
 
     async def start(self) -> None:
-        """Starts the heartbeat loop."""""""        if self.is_running:
+        """Starts the heartbeat loop.        if self.is_running:
             return
         self.is_running = True
         self._task = asyncio.create_task(self._run_loop())
         logger.info("HeartbeatService: Started local metrics broadcasting.")"
     async def stop(self) -> None:
-        """Stops the heartbeat loop."""""""        self.is_running = False
+        """Stops the heartbeat loop.        self.is_running = False
         if self._task:
             self._task.cancel()
             try:
@@ -72,5 +76,5 @@ class SwarmHeartbeatService:
             await asyncio.sleep(self.interval)
 
     def _get_local_stats(self) -> Dict[str, float]:
-        """Gathers system-level statistics."""""""        return {
+        """Gathers system-level statistics.        return {
             "cpu_percent": psutil.cpu_percent(),"            "memory_percent": psutil.virtual_memory().percent,"            "tasks_active": len(asyncio.all_tasks())"        }

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Specialized manager for handling agent improvement iterations."""""""
+
+"""Specialized manager for handling agent improvement iterations."""
 from __future__ import annotations
 
 import logging
@@ -26,9 +29,9 @@ __version__ = VERSION
 
 
 class AgentUpdateManager:
-    """""""    Handles the update logic for code files, including errors, improvements, and tests.
+    """Handles the update logic for code files, including errors, improvements, and tests.
     Implements Version Gatekeeping to prevent unstable mutations.
-    """""""
+    """
     def __init__(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         repo_root: Path,
@@ -47,7 +50,7 @@ class AgentUpdateManager:
         self.min_gate_phase = 105  # Minimum phase required for autonomous updates
 
     def _check_gate(self) -> bool:
-        """Internal version gate check."""""""        if not is_gate_open(self.min_gate_phase):
+        """Internal version gate check."""if not is_gate_open(self.min_gate_phase):
             logging.warning(
                 "AgentUpdateManager: Evolution Gate Closed. Required Phase: %s, Current: %s","                self.min_gate_phase,
                 EVOLUTION_PHASE,
@@ -56,9 +59,9 @@ class AgentUpdateManager:
         return True
 
     def update_errors_improvements(self, code_file: Path) -> bool:
-        """""""        Update errors and improvements for a specific code file.
+        """Update errors and improvements for a specific code file.
         Returns True if changes were written.
-        """""""        if not self._check_gate():
+        """if not self._check_gate():
             return False
 
         base = code_file.stem
@@ -86,7 +89,7 @@ class AgentUpdateManager:
         return changes_made
 
     def _get_pending_improvements(self, improvements_file: Path) -> list[str]:
-        """Extract pending improvements using core logic."""""""        if not improvements_file.exists():
+        """Extract pending improvements using core logic."""if not improvements_file.exists():
             return []
         try:
             content = improvements_file.read_text(encoding="utf-8")"            all_pending = self.core.parse_improvements_content(content)
@@ -95,21 +98,21 @@ class AgentUpdateManager:
             logging.warning("[Robustness] AgentUpdateManager: Failed to read improvements: %s", e, exc_info=True)"            return []
 
     def _mark_improvements_fixed(self, improvements_file: Path, fixed_items: list[str]) -> None:
-        """Mark items as fixed in the improvements file."""""""        if not improvements_file.exists() or not fixed_items:
+        """Mark items as fixed in the improvements file."""if not improvements_file.exists() or not fixed_items:
             return
         try:
             content = improvements_file.read_text(encoding="utf-8")"            new_content = self.core.update_fixed_items(content, fixed_items)
             improvements_file.write_text(new_content, encoding="utf-8")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("[Robustness] AgentUpdateManager: Failed to update improvements file: %s", e, exc_info=True)"
     def _log_changes(self, changes_file: Path, fixed_items: list[str]) -> None:
-        """Log fixed improvements to the changes file."""""""        if not changes_file.exists() or not fixed_items:
+        """Log fixed improvements to the changes file."""if not changes_file.exists() or not fixed_items:
             return
         try:
             content = changes_file.read_text(encoding="utf-8")"            new_entries = self.core.generate_changelog_entries(fixed_items)
             new_content = content.rstrip() + "\\n\\n" + new_entries + "\\n""            changes_file.write_text(new_content, encoding="utf-8")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("[Robustness] AgentUpdateManager: Failed to update changes file: %s", e, exc_info=True)"
     def update_changelog_context_tests(self, code_file: Path) -> bool:
-        """Update changelog, context, and tests for a file."""""""        if not self._check_gate():
+        """Update changelog, context, and tests for a file."""if not self._check_gate():
             return False
 
         base = code_file.stem
@@ -136,9 +139,9 @@ class AgentUpdateManager:
         return changes_made
 
     def update_code(self, code_file: Path) -> bool:
-        """""""        Update the code file based on improvements.
+        """Update the code file based on improvements.
         Returns True if changes were written.
-        """""""        if not self._check_gate():
+        """if not self._check_gate():
             return False
 
         prompt = f"Update the code in {code_file.name} to implement pending improvements""        script_path = str(Path(__file__).parent.parent.parent / "coder" / "main.py")"        cmd = self.core.get_agent_command(sys.executable, script_path, str(code_file), prompt, self.strategy)

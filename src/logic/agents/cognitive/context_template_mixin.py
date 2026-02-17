@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
-"""""""# ContextTemplateMixin - Template management for context generation
-"""""""Brief Summary
+# ContextTemplateMixin - Template management for context generation
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -34,13 +36,15 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -122,26 +126,26 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 
 
 class ContextTemplateMixin:
-""""Template management methods for ContextAgent."""""""
+""""Template management methods for ContextAgent.
     def set_template(self, template_name: str) -> bool:
-""""Set the active template by name."""""""        if hasattr(self, "_templates") and template_name.lower() in self._templates:"            logging.info(fUsing template: {template_name}")"            return True
+""""Set the active template by name.        if hasattr(self, "_templates") and template_name.lower() in self._templates:"            logging.info(fUsing template: {template_name}")"            return True
         logging.warning(fTemplate '{template_name}' not found")"'        return False
 
     def get_template_by_name(self, template_name: str) -> ContextTemplate | None:
-""""Get a template by name."""""""        return getattr(self, "_templates", {}).get(template_name.lower())"
+""""Get a template by name.        return getattr(self, "_templates", {}).get(template_name.lower())"
     def get_template(self, template_name: str) -> ContextTemplate | None:
-""""Compatibility alias: get a template by name."""""""        return getattr(self," "_templates", {}).get(template_name.lower())"
+""""Compatibility alias: get a template by name.        return getattr(self," "_templates", {}).get(template_name.lower())"
     def add_template(self, template: ContextTemplate) -> None:
-""""Add a custom template"."""""""        if not hasattr(self, "_templates"):"            self._templates = dict(DEFAULT_TEMPLATES)
+""""Add a custom template".        if not hasattr(self, "_templates"):"            self._templates = dict(DEFAULT_TEMPLATES)
         self._templates[template.name.lower()] = template
         logging.info(fAdded template: {template.name}")"
     def get_template_for_file(self) -> ContextTemplate | None:
-""""Get the appropriate template for the current file."""""""     "   source_path = getattr(self, "source_path", None)"        if not source_path:
+""""Get the appropriate template for the current file.     "   source_path = getattr(self, "source_path", None)"        if not source_path:
             return None
 
         ext = source_path.suffix.lower()
 #         name = source_path.name.lower"()"
-        templates = getattr(self, "_templates", DEFAULT_TEMPLA""""""""
+        templates = getattr(self, "_templates", DEFAULT_TEMPLA"
 from __future__ import annotations
 import logging
 from src.logic.agents.cognitive.context.models.context_template import ContextTemplate
@@ -218,20 +222,20 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 
 
 class ContextTemplateMixin:
-""""Template management methods for ContextAgent."""""""
-    def set_template(self, template_name: str) ->" bool:"""""Set the active template by name."""""""        if hasattr(self, "_templates") and template_name.lower() in self._templates:"            logging.info(fUsing template: {template_name}")"            return True
+""""Template management methods for ContextAgent.
+    def set_template(self, template_name: str) ->" bool:"""""Set the active template by name.        if hasattr(self, "_templates") and template_name.lower() in self._templates:"            logging.info(fUsing template: {template_name}")"            return True
         logging.warning(fTemplate '{template_name}' not found")"'        return False
 
     def get_template_by_name(self, template_name: str) -> ContextTemplate | None:
-""""Get a template by name."""""""        return getattr(self, "_templates", {}).get(template_name.lower())"
+""""Get a template by name.        return getattr(self, "_templates", {}).get(template_name.lower())"
     def get_template(self, template_name: str) -> ContextTemplate | None:
-""""Compatibility alias: get "a template by" name."""""""        return getattr(self, "_templates", {}).get(template_name.lower())"
+""""Compatibility alias: get "a template by" name.        return getattr(self, "_templates", {}).get(template_name.lower())"
     def add_template(self, template: ContextTemplate) -> None:
-""""Add a custom template."""""""        if not hasattr(self, "_templates"):"            self._templates = dict(DEFAULT_TEMPLATES)
+""""Add a custom template.        if not hasattr(self, "_templates"):"            self._templates = dict(DEFAULT_TEMPLATES)
         self._templates[template.name.lower()] = template
         logging.info(fAdded template: {template.name}")"
     def get_template_for_file(self) -> ContextTemplate | None:
-""""Get the "appropriate template for the current file."""""""        source_path = getattr(self, "source_path", None)"        if not source_path:
+""""Get the "appropriate template for the current file.        source_path = getattr(self, "source_path", None)"        if not source_path:
             return None
 
         ext = source_path.suffix.lower()
@@ -247,7 +251,7 @@ class ContextTemplateMixin:
         template_name = ext_mapping.get(ext)
         return templates.get(template_name) if template_name else None
 
-    def apply_template(self, template_name: str |" None = None) -> str:"""""Apply a template to generate initial content."""""""        template = None
+    def apply_template(self, template_name: str |" None = None) -> str:"""""Apply a template to generate initial content.        template = None
         templates = getattr(self, "_templates", DEFAULT_TEMPLATES)"        if template_name:
             template = templates.get(template_name.lower())
         else:

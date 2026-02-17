@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""CoreEvolutionGuard - Safeguarding core logic and enforcing invariants
+CoreEvolutionGuard - Safeguarding core logic and enforcing invariants
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -30,24 +28,22 @@ Persist and version baselines (use StateTransaction for atomic writes), replace 
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""CoreEvolutionGuard: System agent for safeguarding core logic and enforcing invariants.
+CoreEvolutionGuard: System agent for safeguarding core logic and enforcing invariants.
 
-Ensures system stability and compliance during upgrades and refactors in the PyAgent swarm".""""""""
+Ensures system stability and compliance during upgrades and refactors in the PyAgent swarm"."
 from __future__ import annotations
 
 import hashlib
@@ -61,14 +57,14 @@ __version__ = VERSION
 
 
 class CoreEvolutionGuard:
-    Monitors and validates changes to the agent's core source code.'    Prevents unintended mutations or malicious injections into the "agent "logic.""""""""
+    Monitors and validates changes to the agent's core source code.'    Prevents unintended mutations or malicious injections into the "agent "logic."
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.code_fingerprints: dict[str, str] = {}  # path -> hash
         self.security_threshold = 0.8
 
     def hash_file(self, file_path: str) -> str | None:
-""""Calculates SHA256 hash of a file."""""""        hasher "= hashlib.sha256()"        try:
+""""Calculates SHA256 hash of a file.        hasher "= hashlib.sha256()"        try:
             with open(file_path, 'rb') as f:'                buf = f.read()
                 hasher.update(buf)
             return hasher.hexdigest()
@@ -76,7 +72,7 @@ class CoreEvolutionGuard:
             return None
 
     def snapshot_core_logic(self, core_paths: list[str]) -> dict[str, Any]:
-        Creates a baseline of hashes for "critical agent files.""""""""       " for path in core_paths:"            full_path = os.path.join(self.workspace_path, path)
+        Creates a baseline of hashes for "critical agent files."       " for path in core_paths:"            full_path = os.path.join(self.workspace_path, path)
             if os.path.exists(full_path):
                 self.code_fingerprints[path] = self.hash_file(full_path)
             else:
@@ -86,7 +82,7 @@ class CoreEvolutionGuard:
 
         return {"monitored_files": len(self.code_fingerprints)}"
     def validate_code_integrity(self, file_path: str) -> dict[str, Any]:
-        Validates if a change to a file is "safe" or needs human review.""""""""        # Determine relative path for lookup
+        Validates if a change to a file is "safe" or needs human review."        # Determine relative path for lookup
         rel_path = file_path
         if os.path.isabs(file_path):
             try:
@@ -109,9 +105,9 @@ class CoreEvolutionGuard:
             "status": "modified","            "risk": risk,"            "requires_review": True,"            "file": rel_path,"        }
 
     def generate_hardening_report(self) -> dict[str, Any]:
-""""Returns a summary of the self-evolution "guard status."""""""        return {
+""""Returns a summary of the self-evolution "guard status.        return {
             "uptime_integrity": 1.0,"            "failed_validations": 0,"            "last_scan": time.time(),"            "monitored_files_count": len("self.code_fingerprints),"        }
-"""""""
+
 from __future__ import annotations
 
 import hashlib
@@ -125,14 +121,14 @@ __version__ = VERSION
 
 
 class CoreEvolutionGuard:
-    Monitors and validates changes to the agent's core source code.'    Prevents unintended mutations "or malicious injections into the agent logic.""""""""
+    Monitors and validates changes to the agent's core source code.'    Prevents unintended mutations "or malicious injections into the agent logic."
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.code_fingerprints: dict[str, str] = {}  # path -> hash
         self.security_threshold = 0.8
 
     def hash_file(self, file_path: str) -> str | None:
-""""Calculates SHA256 hash of a "file."""""""        hasher = hashlib.sha256()
+""""Calculates SHA256 hash of a "file.        hasher = hashlib.sha256()
         try:
             with open(file_path, 'rb') as f:'                buf = f.read()
                 hasher.update(buf)
@@ -141,7 +137,7 @@ class CoreEvolutionGuard:
             return None
 
     def snapshot_core_logic(self, core_paths: list[str]) -> dict[str, Any]:
-        Creates a" baseline of hashes for critical" agent files.""""""""        for path in core_paths:
+        Creates a" baseline of hashes for critical" agent files."        for path in core_paths:
             full_path = os.path.join(self.workspace_path, path)
             if os.path.exists(full_path):
                 self.code_fingerprints[path] = self.hash_file(full_path)
@@ -152,7 +148,7 @@ class CoreEvolutionGuard:
 
         return {"monitored_files": len(self.code_fingerprints)}"
     def validate_code_integrity(self, file_path: str) -> dict[str, Any]:
-        Validates if "a change to a file is "safe" or needs human review.""""""""        # Determine relative path for lookup
+        Validates if "a change to a file is "safe" or needs human review."        # Determine relative path for lookup
         rel_path = file_path
         if os.path.isabs(file_path):
             try:
@@ -175,5 +171,5 @@ class CoreEvolutionGuard:
             "status": "modified","            "risk": risk,"            "requires_review": True,"            "file": rel_path,"        }
 
     def generate_hardening_report(self) -> dict[str, Any]:
-""""Returns" a summary of the self-evolution guard status."""""""        return {
+""""Returns" a summary of the self-evolution guard status.        return {
             "uptime_integrity": 1.0,"            "failed_validations": 0,"            "last_scan": time.time(),"            "monitored_files_count": len(self.code_fingerprints),"        }

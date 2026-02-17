@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -22,17 +24,17 @@ from enum import Enum
 
 
 class KillChainPhase(Enum):
-    """Active Directory Kill Chain phases"""""""    RECONNAISSANCE = "reconnaissance""    WEAPONIZATION = "weaponization""    DELIVERY = "delivery""    EXPLOITATION = "exploitation""    INSTALLATION = "installation""    COMMAND_AND_CONTROL = "command_and_control""    PRIVILEGE_ESCALATION = "privilege_escalation""    PERSISTENCE = "persistence""    CREDENTIAL_DUMPING = "credential_dumping""    LATERAL_MOVEMENT = "lateral_movement""    ACTIONS_ON_OBJECTIVES = "actions_on_objectives""
+    """Active Directory Kill Chain phases"""RECONNAISSANCE = "reconnaissance""    WEAPONIZATION = "weaponization""    DELIVERY = "delivery""    EXPLOITATION = "exploitation""    INSTALLATION = "installation""    COMMAND_AND_CONTROL = "command_and_control""    PRIVILEGE_ESCALATION = "privilege_escalation""    PERSISTENCE = "persistence""    CREDENTIAL_DUMPING = "credential_dumping""    LATERAL_MOVEMENT = "lateral_movement""    ACTIONS_ON_OBJECTIVES = "actions_on_objectives""
 
 class AttackTechnique(Enum):
-    """Common AD attack techniques"""""""    KERBEROASTING = "kerberoasting""    ASREP_ROASTING = "asrep_roasting""    PASS_THE_HASH = "pass_the_hash""    PASS_THE_TICKET = "pass_the_ticket""    GOLDEN_TICKET = "golden_ticket""    SILVER_TICKET = "silver_ticket""    DCSYNC = "dcsync""    DC_SHADOW = "dc_shadow""    UNCONSTRAINED_DELEGATION = "unconstrained_delegation""    CONSTRAINED_DELEGATION = "constrained_delegation""    RESOURCE_BASED_CONSTRAINED_DELEGATION = "resource_based_constrained_delegation""    GPO_ABUSE = "gpo_abuse""    ACL_ABUSE = "acl_abuse""    TRUST_EXPLOITATION = "trust_exploitation""    LAPS_ABUSE = "laps_abuse""    SYSVOL_CREDENTIALS = "sysvol_credentials""    DNSADMIN_ESCALATION = "dnsadmin_escalation""
+    """Common AD attack techniques"""KERBEROASTING = "kerberoasting""    ASREP_ROASTING = "asrep_roasting""    PASS_THE_HASH = "pass_the_hash""    PASS_THE_TICKET = "pass_the_ticket""    GOLDEN_TICKET = "golden_ticket""    SILVER_TICKET = "silver_ticket""    DCSYNC = "dcsync""    DC_SHADOW = "dc_shadow""    UNCONSTRAINED_DELEGATION = "unconstrained_delegation""    CONSTRAINED_DELEGATION = "constrained_delegation""    RESOURCE_BASED_CONSTRAINED_DELEGATION = "resource_based_constrained_delegation""    GPO_ABUSE = "gpo_abuse""    ACL_ABUSE = "acl_abuse""    TRUST_EXPLOITATION = "trust_exploitation""    LAPS_ABUSE = "laps_abuse""    SYSVOL_CREDENTIALS = "sysvol_credentials""    DNSADMIN_ESCALATION = "dnsadmin_escalation""
 
 class DefenseControl(Enum):
-    """Defense and detection controls"""""""    MULTI_FACTOR_AUTH = "multi_factor_auth""    LEAST_PRIVILEGE = "least_privilege""    REGULAR_AUDITS = "regular_audits""    LOGGING_MONITORING = "logging_monitoring""    PATCH_MANAGEMENT = "patch_management""    NETWORK_SEGMENTATION = "network_segmentation""    ENDPOINT_PROTECTION = "endpoint_protection""    ANOMALY_DETECTION = "anomaly_detection""
+    """Defense and detection controls"""MULTI_FACTOR_AUTH = "multi_factor_auth""    LEAST_PRIVILEGE = "least_privilege""    REGULAR_AUDITS = "regular_audits""    LOGGING_MONITORING = "logging_monitoring""    PATCH_MANAGEMENT = "patch_management""    NETWORK_SEGMENTATION = "network_segmentation""    ENDPOINT_PROTECTION = "endpoint_protection""    ANOMALY_DETECTION = "anomaly_detection""
 
 @dataclass
 class AttackVector:
-    """Represents an attack vector in AD"""""""    technique: AttackTechnique
+    """Represents an attack vector in AD"""technique: AttackTechnique
     phase: KillChainPhase
     prerequisites: List[str] = field(default_factory=list)
     impact: str = """    detection_difficulty: str = "medium""    mitigation_complexity: str = "medium""    affected_components: List[str] = field(default_factory=list)
@@ -42,7 +44,7 @@ class AttackVector:
 
 @dataclass
 class DefenseAssessment:
-    """Assessment of defensive controls"""""""    control: DefenseControl
+    """Assessment of defensive controls"""control: DefenseControl
     implemented: bool = False
     effectiveness: str = "unknown"  # high, medium, low, unknown"    coverage: str = "partial"  # full, partial, minimal, none"    last_assessed: Optional[datetime] = None
     gaps: List[str] = field(default_factory=list)
@@ -51,7 +53,7 @@ class DefenseAssessment:
 
 @dataclass
 class KillChainAnalysis:
-    """Analysis of AD kill chain progression"""""""    analysis_id: str
+    """Analysis of AD kill chain progression"""analysis_id: str
     domain: str
     start_time: datetime
     phases_completed: List[KillChainPhase] = field(default_factory=list)
@@ -65,7 +67,7 @@ class KillChainAnalysis:
 
 @dataclass
 class SecurityPosture:
-    """Overall AD security posture assessment"""""""    assessment_id: str
+    """Overall AD security posture assessment"""assessment_id: str
     domain: str
     assessment_date: datetime
     overall_score: float  # 0-100, higher is better
@@ -77,11 +79,11 @@ class SecurityPosture:
 
 
 class ActiveDirectoryAttackDefenseCore:
-    """""""    Active Directory Attack & Defense Core for comprehensive AD security analysis.
+    """Active Directory Attack & Defense Core for comprehensive AD security analysis.
 
     Provides kill chain analysis, attack simulation, defense assessment,
     and security posture evaluation based on AD-Attack-Defense methodologies.
-    """""""
+    """
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.attack_vectors: Dict[AttackTechnique, AttackVector] = {}
@@ -90,7 +92,7 @@ class ActiveDirectoryAttackDefenseCore:
         self.security_postures: Dict[str, SecurityPosture] = {}
 
     async def initialize(self) -> bool:
-        """Initialize the AD attack & defense core"""""""        try:
+        """Initialize the AD attack & defense core"""try:
             await self.load_attack_vectors()
             await self.initialize_defense_assessments()
             self.logger.info("Active Directory Attack & Defense Core initialized successfully")"            return True
@@ -98,7 +100,7 @@ class ActiveDirectoryAttackDefenseCore:
             self.logger.exception("Failed to initialize Active Directory Attack & Defense Core")"            return False
 
     async def load_attack_vectors(self) -> None:
-        """Load comprehensive attack vectors database"""""""        self.attack_vectors = {
+        """Load comprehensive attack vectors database"""self.attack_vectors = {
             AttackTechnique.KERBEROASTING: AttackVector(
                 technique=AttackTechnique.KERBEROASTING,
                 phase=KillChainPhase.RECONNAISSANCE,
@@ -192,7 +194,7 @@ class ActiveDirectoryAttackDefenseCore:
 
         self.logger.info(f"Loaded {len(self.attack_vectors)} attack vectors")"
     async def initialize_defense_assessments(self) -> None:
-        """Initialize defense control assessments"""""""        for control in DefenseControl:
+        """Initialize defense control assessments"""for control in DefenseControl:
             self.defense_assessments[control] = DefenseAssessment(
                 control=control,
                 implemented=False,
@@ -204,7 +206,7 @@ class ActiveDirectoryAttackDefenseCore:
         domain: str,
         ad_configuration: Optional[Dict[str, Any]] = None
     ) -> SecurityPosture:
-        """""""        Perform comprehensive security posture assessment
+        """Perform comprehensive security posture assessment
 
         Args:
             domain: Domain to assess
@@ -212,7 +214,7 @@ class ActiveDirectoryAttackDefenseCore:
 
         Returns:
             Security posture assessment
-        """""""
+        """
         # Analyze attack vectors
         attack_vectors = await self.analyze_attack_vectors(ad_configuration or {})
 
@@ -247,7 +249,7 @@ class ActiveDirectoryAttackDefenseCore:
         self.logger.info(f"Completed security posture assessment for {domain}: score {overall_score:.1f}")"        return posture
 
     async def analyze_attack_vectors(self, ad_config: Dict[str, Any]) -> List[AttackVector]:
-        """Analyze applicable attack vectors based on AD configuration"""""""        applicable_vectors = []
+        """Analyze applicable attack vectors based on AD configuration"""applicable_vectors = []
 
         # Mock analysis based on configuration
         # In real implementation, this would analyze actual AD data
@@ -276,7 +278,7 @@ class ActiveDirectoryAttackDefenseCore:
         return applicable_vectors
 
     async def assess_defenses(self, ad_config: Dict[str, Any]) -> Dict[DefenseControl, DefenseAssessment]:
-        """Assess implemented defensive controls"""""""        assessments = {}
+        """Assess implemented defensive controls"""assessments = {}
 
         # Multi-factor authentication
         assessments[DefenseControl.MULTI_FACTOR_AUTH] = DefenseAssessment(
@@ -305,7 +307,7 @@ class ActiveDirectoryAttackDefenseCore:
         return assessments
 
     async def analyze_kill_chains(self, _attack_vectors: List[AttackVector]) -> List[KillChainAnalysis]:
-        """Analyze potential kill chain progressions"""""""        analyses = []
+        """Analyze potential kill chain progressions"""analyses = []
 
         # Mock kill chain analysis
         # In real implementation, this would simulate attack paths
@@ -337,7 +339,7 @@ class ActiveDirectoryAttackDefenseCore:
         attack_vectors: List[AttackVector],
         defense_assessments: Dict[DefenseControl, DefenseAssessment]
     ) -> float:
-        """Calculate overall security posture score"""""""        # Base score
+        """Calculate overall security posture score"""# Base score
         score = 100.0
 
         # Deduct points for applicable attack vectors
@@ -365,7 +367,7 @@ class ActiveDirectoryAttackDefenseCore:
         attack_vectors: List[AttackVector],
         defense_assessments: Dict[DefenseControl, DefenseAssessment]
     ) -> List[str]:
-        """Identify critical security gaps"""""""        gaps = []
+        """Identify critical security gaps"""gaps = []
 
         # Check for high-impact attack vectors without mitigations
         for vector in attack_vectors:
@@ -387,7 +389,7 @@ class ActiveDirectoryAttackDefenseCore:
         critical_gaps: List[str],
         defense_assessments: Dict[DefenseControl, DefenseAssessment]  # noqa: ARG002
     ) -> List[str]:
-        """Generate priority actions for security improvement"""""""        actions = []
+        """Generate priority actions for security improvement"""actions = []
 
         # Address critical gaps first
         for gap in critical_gaps:
@@ -404,7 +406,7 @@ class ActiveDirectoryAttackDefenseCore:
         _available_techniques: List[AttackTechnique],
         _defense_posture: Dict[DefenseControl, bool]
     ) -> KillChainAnalysis:
-        """""""        Simulate an attack chain from a starting technique
+        """Simulate an attack chain from a starting technique
 
         Args:
             start_technique: Technique to start the attack chain
@@ -413,7 +415,7 @@ class ActiveDirectoryAttackDefenseCore:
 
         Returns:
             Kill chain analysis of the simulated attack
-        """""""        # Mock attack chain simulation
+        """# Mock attack chain simulation
         # In real implementation, this would use graph algorithms
 
         chain = KillChainAnalysis(
@@ -433,7 +435,7 @@ class ActiveDirectoryAttackDefenseCore:
         self,
         posture: SecurityPosture,
         output_format: str = "json""    ) -> str:
-        """""""        Generate comprehensive attack & defense report
+        """Generate comprehensive attack & defense report
 
         Args:
             posture: Security posture assessment
@@ -441,7 +443,7 @@ class ActiveDirectoryAttackDefenseCore:
 
         Returns:
             Formatted report
-        """""""        if output_format == "json":"            report_data = {
+        """if output_format == "json":"            report_data = {
                 "assessment_id": posture.assessment_id,"                "domain": posture.domain,"                "assessment_date": posture.assessment_date.isoformat(),"                "overall_score": posture.overall_score,"                "attack_vectors": ["                    {
                         "technique": av.technique.value,"                        "phase": av.phase.value,"                        "impact": av.impact,"                        "detection_difficulty": av.detection_difficulty,"                        "mitigations": av.mitigations"                    }
                     for av in posture.attack_vectors
@@ -482,19 +484,19 @@ class ActiveDirectoryAttackDefenseCore:
         posture: SecurityPosture,
         filepath: str,
         output_format: str = "json""    ) -> None:
-        """""""        Export security posture report to file
+        """Export security posture report to file
 
         Args:
             posture: Security posture to export
             filepath: Output file path
             output_format: Export format
-        """""""        report_content = await self.generate_attack_report(posture, output_format)
+        """report_content = await self.generate_attack_report(posture, output_format)
 
         with open(filepath, 'w', encoding='utf-8') as f:'            f.write(report_content)
 
         self.logger.info(f"Exported security posture report to {filepath}")"
     async def get_attack_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive attack & defense statistics"""""""        stats: Dict[str, Any] = {
+        """Get comprehensive attack & defense statistics"""stats: Dict[str, Any] = {
             "total_assessments": len(self.security_postures),"            "attack_vectors_analyzed": len(self.attack_vectors),"            "defenses_assessed": len(self.defense_assessments),"            "kill_chain_analyses": len(self.kill_chain_analyses),"            "most_common_attacks": [],"            "defense_effectiveness": {},"            "risk_distribution": {}"        }
 
         # Most common attack vectors
@@ -526,7 +528,7 @@ class ActiveDirectoryAttackDefenseCore:
         return stats
 
     async def cleanup(self) -> None:
-        """Cleanup resources"""""""        self.attack_vectors.clear()
+        """Cleanup resources"""self.attack_vectors.clear()
         self.defense_assessments.clear()
         self.kill_chain_analyses.clear()
         self.security_postures.clear()

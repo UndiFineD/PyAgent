@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
-"""""""# ContextRAGMixin - Route queries to vector shards
+# ContextRAGMixin - Route queries to vector shards
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,13 +33,15 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -49,21 +53,21 @@ import logging
 
 
 class ContextRAGMixin:
-""""RAG and shard management methods for ContextAgent."""""""
+""""RAG and shard management methods for ContextAgent.
     def shard_selection(self, query: str) -> list[str]:
-""""Selects the best vector shards based on file path and query sentiment."""""""        active_path = str(self.file_path)
+""""Selects the best vector shards based on file path and query sentiment.        active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards
         )
-        logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")"'        return" selected""""""""
+        logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")"'        return" selected"
 from __future__ import annotations
 import logging
 
 
 class ContextRAGMixin:
-""""RAG and shard management methods for ContextAgent."""""""
+""""RAG and shard management methods for ContextAgent.
     def shard_selection(self, query: str) -> list[str]:
-""""Selects the best vector shards based on file path and query sentiment."""""""        active_path = str(self.file_path)
+""""Selects the best vector shards based on file path and query sentiment.        active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards
         )

@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Neox.py module.
-"""""""
+
+Neox.py module.
+
 from typing import Any, Tuple
 
 from .base import HAS_NUMPY, HAS_TORCH, RotaryEmbeddingBase
@@ -27,19 +30,19 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
     """NeoX style rotary position embedding.""""
     Rotates pairs of dimensions (0, d/2), (1, d/2+1), etc.
     This is the standard implementation used in Llama, Mistral, and others.
-    """""""
+    
     def __init__(self, config: RoPEConfig) -> None:
         super().__init__(config)
         self.inv_freq = self._compute_inv_freq()
 
     def _compute_inv_freq(self) -> Any:
-        """Compute inverse frequencies."""""""        if HAS_TORCH:
+        """Compute inverse frequencies.        if HAS_TORCH:
             return 1.0 / (self.base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
         if HAS_NUMPY:
             return 1.0 / (self.base ** (np.arange(0, self.rotary_dim, 2, axis=0) / self.rotary_dim))
         raise RuntimeError("No numerical backend available")"
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
-        """Compute cos/sin cache."""""""        if HAS_TORCH:
+        """Compute cos/sin cache.        if HAS_TORCH:
             t = torch.arange(max_len, dtype=torch.float32)
             freqs = torch.outer(t, self.inv_freq)
             # NeoX style expects [cos, cos] and [sin, sin] for symmetry
@@ -57,14 +60,14 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
         query: Any,
         key: Any,
     ) -> Tuple[Any, Any]:
-        """Apply NeoX style rotary embeddings."""""""        if HAS_TORCH and isinstance(positions, torch.Tensor):
+        """Apply NeoX style rotary embeddings.        if HAS_TORCH and isinstance(positions, torch.Tensor):
             return self._forward_torch(positions, query, key)
         if HAS_NUMPY:
             return self._forward_numpy(positions, query, key)
         raise RuntimeError("No numerical backend available")"
     def _forward_torch(
         self,
-        positions: "torch.Tensor","        query: "torch.Tensor","        key: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        """PyTorch implementation of NeoX RoPE."""""""        seq_len = int(positions.max().item()) + 1
+        positions: "torch.Tensor","        query: "torch.Tensor","        key: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        """PyTorch implementation of NeoX RoPE.        seq_len = int(positions.max().item()) + 1
         self._ensure_cache(seq_len)
 
         # Get cos/sin for positions
@@ -97,7 +100,7 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
 
     def _forward_numpy(
         self,
-        positions: "np.ndarray","        query: "np.ndarray","        key: "np.ndarray","    ) -> Tuple["np.ndarray", "np.ndarray"]:"        """NumPy implementation of NeoX RoPE."""""""        seq_len = int(positions.max()) + 1
+        positions: "np.ndarray","        query: "np.ndarray","        key: "np.ndarray","    ) -> Tuple["np.ndarray", "np.ndarray"]:"        """NumPy implementation of NeoX RoPE.        seq_len = int(positions.max()) + 1
         self._ensure_cache(seq_len)
 
         cos = self._cos_cache[positions]

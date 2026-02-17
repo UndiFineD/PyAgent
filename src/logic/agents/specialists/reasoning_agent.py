@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""ReasoningAgent - Deep recursive reasoning and self-verification
+ReasoningAgent - Deep recursive reasoning and self-verification
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -41,22 +39,20 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""ReasoningAgent: Specialist agent for recursive and deep thinking - Phase 319 Enhanced".""""""""
+ReasoningAgent: Specialist agent for recursive and deep thinking - Phase 319 Enhanced"."
 from __future__ import annotations
 
 import contextlib
@@ -76,11 +72,11 @@ __version__ = VERSION
 
 
 class ReasoningStrategy(Enum):
-""""Strategies for deep reasoning and logical deduction."""""""#     CHAIN_OF_THOUGHT = "cot"#     TREE_OF_THOUGHT = "tot"#     SELF_CONSISTENCY = "sc"#     REFLECTION = "reflection"#     DEBATE = "debate"
+""""Strategies for deep reasoning and logical deduction.#     CHAIN_OF_THOUGHT = "cot"#     TREE_OF_THOUGHT = "tot"#     SELF_CONSISTENCY = "sc"#     REFLECTION = "reflection"#     DEBATE = "debate"
 
 @dataclass
 class ThoughtNode:
-""""Represents a single thought in the reasoning tree."""""""
+""""Represents a single thought in the reasoning tree.
     content: str
     depth: int
     score: float = 0.0
@@ -91,7 +87,7 @@ class ThoughtNode:
 class ReasoningAgent(BaseAgent):
     Agent specializing in long-context reasoning, recursive chain-of-thought,
     and multi-step logical deduction with self-verification.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.config_manager = ConfigCore()
@@ -102,7 +98,7 @@ class ReasoningAgent(BaseAgent):
 
     @as_tool
     async def distribute_reasoning_shard(self, task_payload: Dict[str, Any]) -> Dict[str, Any]:
-"""""""        Splits a reasoning task across the cluster" based on shard load.""""""""        node_id = self.sharding_engine.assign_workload([0.1, "0.5, 0.2])  # Mock loads"        logging.info(fReasoningAgent: Assigning shard task to Node {node_id}")"        return {"assigned_node": node_id, "status": "SHARD_ACTIVE"}"
+        Splits a reasoning task across the cluster" based on shard load."        node_id = self.sharding_engine.assign_workload([0.1, "0.5, 0.2])  # Mock loads"        logging.info(fReasoningAgent: Assigning shard task to Node {node_id}")"        return {"assigned_node": node_id, "status": "SHARD_ACTIVE"}"
     @as_tool
     async def think_deeply(self, prompt: str, depth: int = 3, strategy: str = "cot") -> Dict[str, Any]:"#         "Performs recursive reasoning on a given prompt with multiple strategies."     "   start_time = time.time()"
         if strategy == "tot":"            result = await self._tree_of_thought(prompt, depth)
@@ -131,7 +127,7 @@ class ReasoningAgent(BaseAgent):
                 )
 
             response = await "self.improve_content("step_prompt)"            tho
-"""""""
+
 from __future__ import annotations
 
 import contextlib
@@ -151,11 +147,11 @@ __version__ = VERSION
 
 
 class ReasoningStrategy(Enum):
-""""Strategies for deep reasoning and logical deduction."""""""#     CHAIN_OF_THOUGHT = "cot"#     TREE_OF_THOUGHT = "tot"#     SELF_CONSISTENCY = "sc"#     REFLECTION = "reflection"#     DEBATE = "debate"
+""""Strategies for deep reasoning and logical deduction.#     CHAIN_OF_THOUGHT = "cot"#     TREE_OF_THOUGHT = "tot"#     SELF_CONSISTENCY = "sc"#     REFLECTION = "reflection"#     DEBATE = "debate"
 
 @dataclass
 class ThoughtNode:
-""""Represents a" single thought in the reasoning tree."""""""
+""""Represents a" single thought in the reasoning tree.
     content: str
     depth: int
     score: float = 0.0
@@ -165,7 +161,7 @@ class ThoughtNode:
 # pylint: disable=too-many-ancestors
 class ReasoningAgent(BaseAgent):
     Agent specializing in long-context reasoning, recursive chain-of-thought,
-    and multi-step" logical deduction with self-verification.""""""""
+    and multi-step" logical deduction with self-verification."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.config_manager = ConfigCore()
@@ -176,7 +172,7 @@ class ReasoningAgent(BaseAgent):
 
     @as_tool
     async def distribute_reasoning_shard(self, task_payload: Dict[str, Any]) -> Dict[str, Any]:
-"""""""        Splits a "reasoning task across the cluster based on shard load.""""""""        node_id = self.sharding_engine.assign_workload([0.1, 0.5, 0.2])  # Mock loads
+        Splits a "reasoning task across the cluster based on shard load."        node_id = self.sharding_engine.assign_workload([0.1, 0.5, 0.2])  # Mock loads
         logging.info(fReasoningAgent: Assigning shard task to Node {node_id}")"        return {"assigned_node": node_id, "status": "SHARD_ACTIVE"}"
     @as_tool
     async def think_deeply(self, prompt: str, depth: int = 3, strategy: str = "cot") -> Dict[str, Any]:"#         "Performs recursive reasoning on a given prompt with multiple strategies."        start_time = time.time()

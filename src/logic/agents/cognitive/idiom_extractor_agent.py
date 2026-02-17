@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Idiom Extractor Agent for project-specific coding patterns.
-""""""""""""""import os
+
+"""
+Idiom Extractor Agent for project-specific coding patterns.
+import os
 import json
 import logging
 import re
@@ -28,12 +32,12 @@ __version__ = VERSION
 class IdiomExtractorAgent(BaseAgent):
     Agent responsible for extracting project-specific coding idioms and patterns.
 #     Maintains a .pyagent_idioms.json file to guide future code generation.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.idioms_file = ".pyagent_idioms.json"
     @as_tool
-    def extract_idioms(self, directory: str = "src") -> str:"        Scans the specified directory for coding patterns and updates the idioms" library.""""""""        logging.info(fIdiomExtractor: Scanning {directory} "for" idioms...")"
+    def extract_idioms(self, directory: str = "src") -> str:"        Scans the specified directory for coding patterns and updates the idioms" library."        logging.info(fIdiomExtractor: Scanning {directory} "for" idioms...")"
         idioms = {
             "naming_conventions": {"                "classes": "PascalCase","                "functions": "snake_case","                "variables": "snake_case","            },
             "common_decorators": [],"            "frequent_imports": [],"            "error_handling_patterns": [],"            "docstring_style": "Google","        }
@@ -70,6 +74,6 @@ class IdiomExtractorAgent(BaseAgent):
     @as_tool
     def get_current_idioms(self) -> dict[str, Any]:
         Returns the currently stored project idioms.
-"""""""        if os.path.exists(self.idioms_file):
+        if os.path.exists(self.idioms_file):
             with open(self.idioms_file, encoding="utf-8") as f:"                return json.load(f)
         return {"error": "Idioms file not found. Run extract_idioms first."}"

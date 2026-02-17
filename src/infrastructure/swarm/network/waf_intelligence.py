@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -29,8 +31,8 @@ class WAFSignature:
     header_only: bool
     description: str
 
-    def matches(self, headers: Dict[str, str], content: str = "") -> bool:"        """""""        Check if the signature matches the given headers or content.
-        """""""        # Check headers
+    def matches(self, headers: Dict[str, str], content: str = "") -> bool:"                Check if the signature matches the given headers or content.
+                # Check headers
         for key, value in headers.items():
             if self.header_only:
                 if self.keyword in key or self.keyword in value:
@@ -46,8 +48,8 @@ class WAFSignature:
 
 
 class WAFIntelligence:
-    """""""    WAF Detection Logic ported from external sources.
-    """""""
+        WAF Detection Logic ported from external sources.
+    
     # Partial list ported from 0xSojalSec-dnsresolver
     SIGNATURES_DATA = [
         {
@@ -74,9 +76,9 @@ class WAFIntelligence:
             for s in self.SIGNATURES_DATA
         ]
 
-    def detect_waf(self, headers: Dict[str, str], content: str = "") -> List[str]:"        """""""        Detect WAFs based on headers and content.
+    def detect_waf(self, headers: Dict[str, str], content: str = "") -> List[str]:"                Detect WAFs based on headers and content.
         Returns list of detected WAF names.
-        """""""        detected = []
+                detected = []
         for sig in self.signatures:
             if sig.matches(headers, content):
                 if sig.waf_name not in detected:

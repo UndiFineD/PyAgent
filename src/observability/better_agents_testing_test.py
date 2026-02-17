@@ -1,25 +1,28 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Test suite for Better-Agents Testing Framework (Phase 323)
+
+Test suite for Better-Agents Testing Framework (Phase 323)
 Tests the testing pyramid, YAML-driven scenarios, and evaluation systems.
-"""""""
+
 import os
 from unittest.mock import Mock, patch
 import pytest
 import yaml
 
 class TestBetterAgentsTesting:
-    """Test cases for the better-agents testing framework."""""""    @pytest.fixture
+    """Test cases for the better-agents testing framework.    @pytest.fixture
     def testing_core(self):
         mock_core = Mock()
         mock_core.run_unit_test.return_value = {"passed": True}"        mock_core.run_integration_test.return_value = {"passed": True}"        mock_core.run_e2e_test.return_value = {"passed": True}"        mock_core.run_regression_tests.return_value = {"regressions_found": 0}"        mock_core.run_stress_tests.return_value = {"performance_metrics": {}}"        async def async_tests(test_list):

@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Module: database_access_core
+
+"""Module: database_access_core
 Core logic for ODBC database operations.
 Implements database connection and query patterns from ADSyncDump-BOF.
-"""""""
+"""
 from __future__ import annotations
 
 import ctypes
@@ -38,7 +41,7 @@ SQL_C_LONG = 4
 
 
 class DatabaseAccessCore:
-    """Core class for ODBC database operations."""""""
+    """Core class for ODBC database operations."""
     def __init__(self) -> None:
         try:
             self.odbc32 = ctypes.windll.odbc32
@@ -49,7 +52,7 @@ class DatabaseAccessCore:
             self.last_error = """        except Exception as e:
             raise RuntimeError(f"ODBC not available: {e}")"
     def connect(self, connection_string: str) -> bool:
-        """Connect to database using ODBC."""""""        try:
+        """Connect to database using ODBC."""try:
             # Allocate environment handle
             self.env_handle = ctypes.c_void_p()
             result = self.odbc32.SQLAllocHandle(
@@ -98,7 +101,7 @@ class DatabaseAccessCore:
             return False
 
     def execute_query(self, query: str) -> Optional[List[Dict[str, Any]]]:
-        """Execute SQL query."""""""        if not self.connected:
+        """Execute SQL query."""if not self.connected:
             self.last_error = "Not connected to database""            return None
 
         try:
@@ -123,7 +126,7 @@ class DatabaseAccessCore:
             return None
 
     def disconnect(self) -> None:
-        """Disconnect from database."""""""        try:
+        """Disconnect from database."""try:
             if self.stmt_handle:
                 self.odbc32.SQLFreeHandle(SQL_HANDLE_STMT, self.stmt_handle)
                 self.stmt_handle = None
@@ -140,8 +143,8 @@ class DatabaseAccessCore:
             pass
 
     def get_last_error(self) -> str:
-        """Get last error message."""""""        return self.last_error
+        """Get last error message."""return self.last_error
 
     def _get_error_message(self) -> str:
-        """Get detailed error message from ODBC."""""""        # Simplified - in real implementation, use SQLGetDiagRecW
+        """Get detailed error message from ODBC."""# Simplified - in real implementation, use SQLGetDiagRecW
         return "ODBC Error""

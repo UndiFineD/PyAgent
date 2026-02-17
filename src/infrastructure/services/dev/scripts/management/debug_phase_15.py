@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Validation script for Phase 15: Ethics & Safety Governance."""""""
+
+"""Validation script for Phase 15: Ethics & Safety Governance.
 from __future__ import annotations
 
 import logging
@@ -24,7 +27,7 @@ __version__ = VERSION
 
 
 def test_ethics_and_safety() -> None:
-    """Validate ethics guardrails and kill switch features."""""""    logging.basicConfig(level=logging.INFO)
+    """Validate ethics guardrails and kill switch features.    logging.basicConfig(level=logging.INFO)
     root = Path(str(Path(__file__).resolve().parents[5]) + "")"    fleet = FleetManager(str(root))
     fleet.register_agent("Knowledge", KnowledgeAgent)"
     print("--- Phase 15: Ethics Guardrail (Approved) ---")"    workflow = [{"agent": "Knowledge", "action": "scan_workspace", "args": ["/"]}]"

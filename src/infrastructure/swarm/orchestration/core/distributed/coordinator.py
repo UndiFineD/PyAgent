@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""Data-parallel coordination logic.
-"""""""
+Data-parallel coordination logic.
+
 from __future__ import annotations
 
 import logging
@@ -33,7 +35,7 @@ logger = logging.getLogger(__name__)
 class DPCoordinator:
     """Coordinator for data-parallel engine instances.""""
     Inspired by vLLM's DPCoordinator and dp_lb_pool patterns.'    Manages multiple engine instances and distributes requests.
-    """""""
+    
     def __init__(
         self,
         parallel_config: ParallelConfig,
@@ -54,7 +56,7 @@ class DPCoordinator:
         """Register a new engine instance.""""
         Args:
             identity: Engine identity.
-        """""""        with self._lock:
+                with self._lock:
             self._engines[identity.engine_id] = identity
             self._engine_states[identity.engine_id] = EngineState.READY
             self._engine_metrics[identity.engine_id] = MetricsMessage()
@@ -63,7 +65,7 @@ class DPCoordinator:
         """Deregister an engine instance.""""
         Args:
             engine_id: Engine ID to deregister.
-        """""""        with self._lock:
+                with self._lock:
             self._engines.pop(engine_id, None)
             self._engine_states.pop(engine_id, None)
             self._engine_metrics.pop(engine_id, None)
@@ -75,7 +77,7 @@ class DPCoordinator:
 
         Returns:
             Engine ID, or None if no engines available.
-        """""""        with self._lock:
+                with self._lock:
             ready_engines = [eid for eid, state in self._engine_states.items() if state == EngineState.READY]
 
             if not ready_engines:
@@ -112,7 +114,7 @@ class DPCoordinator:
         Args:
             engine_id: Engine ID.
             metrics: Updated metrics.
-        """""""        with self._lock:
+                with self._lock:
             self._engine_metrics[engine_id] = metrics
 
     def set_engine_state(self, engine_id: str, state: EngineState) -> None:
@@ -120,19 +122,19 @@ class DPCoordinator:
         Args:
             engine_id: Engine ID.
             state: New state.
-        """""""        with self._lock:
+                with self._lock:
             if engine_id in self._engine_states:
                 self._engine_states[engine_id] = state
 
     def get_engine_states(self) -> Dict[str, EngineState]:
-        """Get all engine states."""""""        with self._lock:
+        """Get all engine states.        with self._lock:
             return dict(self._engine_states)
 
     @property
     def num_engines(self) -> int:
-        """Number of registered engines."""""""        return len(self._engines)
+        """Number of registered engines.        return len(self._engines)
 
     @property
     def num_ready(self) -> int:
-        """Number of ready engines."""""""        with self._lock:
+        """Number of ready engines.        with self._lock:
             return list(self._engine_states.values()).count(EngineState.READY)

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ByzantineConsensusAgent - Fault-tolerant committee-based consensus
+
+"""
+ByzantineConsensusAgent - Fault-tolerant committee-based consensus
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -27,7 +31,7 @@ FILE CONTENT SUMMARY:
 ByzantineConsensusAgent for PyAgent.
 Ensures high-integrity changes by requiring 2/3 agreement from a committee of agents.
 Used for critical infrastructure or security logic changes.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -45,7 +49,7 @@ __version__ = VERSION
 
 
 class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Orchestrates 'Fault-Tolerant' decision making across multiple specialized agents."""""""'
+    """Orchestrates 'Fault-Tolerant' decision making across multiple specialized agents.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._core = ByzantineCore()
@@ -55,7 +59,7 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def select_committee(self, task: str, available_agents: list[str]) -> list[str]:
-        """Selects a subset of agents best suited for a task based on reliability. Enforces privacy."""""""        if not self._privacy_enforced:
+        """Selects a subset of agents best suited for a task based on reliability. Enforces privacy.        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for committee selection.")"        # Ensure registry is populated
         for agent in available_agents:
             if agent not in self._reliability_scores:
@@ -70,8 +74,8 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         change_type: str = "default","        timeout: float = 30.0,
         audit_results: dict[str, float] | None = None,
     ) -> dict[str, Any]:
-        """""""        Evaluates a set of proposals and determines the winner via BFT Consensus. Enforces privacy and rate limiting.
-        """""""        if not self._privacy_enforced:
+                Evaluates a set of proposals and determines the winner via BFT Consensus. Enforces privacy and rate limiting.
+                if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for committee voting.")"        # stub: rate limiting logic
         return await self._core.run_committee_vote(
             task,
@@ -186,12 +190,12 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Acts as a high-level evaluator for a single piece of content."""""""        _ = (prompt, target_file)
+        """Acts as a high-level evaluator for a single piece of content.        _ = (prompt, target_file)
         return "Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment.""
     async def _process_task(self, task_data: dict[str, Any]) -> Any:
-        """""""        Implementation of TaskQueueMixin abstract method.
+                Implementation of TaskQueueMixin abstract method.
         Routes incoming tasks to appropriate internal logic.
-        """""""        task_name = task_data.get("task", "")"        if "vote" in task_name.lower() or "consensus" in task_name.lower():"            proposals = task_data.get("proposals", {})"            return await self.run_committee_vote(task_name, proposals)
+                task_name = task_data.get("task", "")"        if "vote" in task_name.lower() or "consensus" in task_name.lower():"            proposals = task_data.get("proposals", {})"            return await self.run_committee_vote(task_name, proposals)
 
         return {"status": "ignored", "reason": "Unknown task type for ByzantineConsensusAgent"}"
 

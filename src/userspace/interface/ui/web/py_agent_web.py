@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # VOYAGER STABILITY: Fleet Load Balancer (v1.5.0)
 
 """Fleet Web UI Engine for workflow visualization.""""Generates data structures for internal/external dashboard consumers.
-"""""""
+
 import uvicorn
 import json
 import asyncio
@@ -95,7 +97,7 @@ def _filter_response_headers(headers: dict) -> dict:
 async def streamlit_http_proxy(request: Request, app_name: str, path: str):
     """Reverse-proxy HTTP requests to a local Streamlit instance.""""
     Example: /streamlit/downloads/index.html -> http://127.0.0.1:8501/index.html
-    """""""    port = STREAMLIT_MAP.get(app_name)
+        port = STREAMLIT_MAP.get(app_name)
     if not port:
         return JSONResponse(status_code=404, content={"error": "Unknown streamlit app"})"
     qs = request.url.query
@@ -115,7 +117,7 @@ async def streamlit_http_proxy(request: Request, app_name: str, path: str):
     """Proxy WebSocket connections to the Streamlit server.""""
     This forwards messages bidirectionally between the client and the
     local Streamlit websocket endpoint.
-    """""""    port = STREAMLIT_MAP.get(app_name)
+        port = STREAMLIT_MAP.get(app_name)
     if not port:
         await websocket.close(code=1008)
         return
@@ -202,7 +204,7 @@ def get_system_metrics():
 
 
 @app.get("/api/thoughts")"async def get_thoughts():
-    """Returns the last 50 thoughts from the reasoning chain."""""""    log_file = LOGS_DIR / "reasoning_chains.jsonl""    thoughts = []
+    """Returns the last 50 thoughts from the reasoning chain.    log_file = LOGS_DIR / "reasoning_chains.jsonl""    thoughts = []
     if log_file.exists():
         with open(log_file, "r", encoding="utf-8") as f:"            lines = f.readlines()
             for line in lines[-50:]:
@@ -219,7 +221,7 @@ def get_system_metrics():
 
 
 @app.post("/api/command")"async def handle_command(data: dict):
-    """Dispatches a command to the swarm (Pillar 3)."""""""    command = data.get("command")"    if not command:
+    """Dispatches a command to the swarm (Pillar 3).    command = data.get("command")"    if not command:
         return JSONResponse(status_code=400, content={"error": "No command provided"})"
     if fleet_instance:
         # For Pillar 3, we route this to the FleetManager's command handler'        # which will use the UniversalAgent/Coores architecture
@@ -232,7 +234,7 @@ def get_system_metrics():
     return JSONResponse(status_code=503, content={"error": "Fleet not ready"})"
 
 @app.get("/api/topology")"async def get_topology():
-    """Returns the current swarm topology."""""""    topology_file = LOGS_DIR / "topology.json""    if topology_file.exists():
+    """Returns the current swarm topology.    topology_file = LOGS_DIR / "topology.json""    if topology_file.exists():
         with open(topology_file, "r", encoding="utf-8") as f:"
             return json.load(f)
     return {"nodes": [], "links": []}"
@@ -257,13 +259,13 @@ def get_system_metrics():
 
 
 @app.get("/stream")"async def serve_stream():
-    """Serves the Multi-Channel Stream Console."""""""    target = (WEB_UI_DIR / "stream_console.html").resolve()"    if target.exists():
+    """Serves the Multi-Channel Stream Console.    target = (WEB_UI_DIR / "stream_console.html").resolve()"    if target.exists():
         return FileResponse(str(target), media_type="text/html")"    return JSONResponse(status_code=404, content={"detail": f"File not found at {target}"})"
 
 @app.get("/improvement")"async def embed_improvement():
     """Embed the Streamlit Self-Improvement UI running on port 8501.""""
             <iframe src="http://127.0.0.1:8502" title="Self-Improvement UI" frameborder="0"></iframe>"    returns a simple page with an iframe pointed at the Streamlit server.
-    """""""    html = """""""        <!doctype html>
+        html =         <!doctype html>
         <html>
             <head>
                 <meta charset="utf-8" />"                <meta name="viewport" content="width=device-width, initial-scale=1" />"                <title>Self-Improvement UI</title>
@@ -273,7 +275,7 @@ def get_system_metrics():
                 <iframe src="http://127.0.0.1:8501" title="Self-Improvement UI" frameborder="0"></iframe>"            </body>
         </html>
 
-        """""""    return HTMLResponse(content=html, status_code=200)
+            return HTMLResponse(content=html, status_code=200)
 
 
 @app.get("/topology")"async def serve_topology():
@@ -281,18 +283,18 @@ def get_system_metrics():
     target = (WEB_UI_DIR / "topology_viewer.html").resolve()"    return FileResponse(str(target)) if target.exists() else {"error": "404"}"
 
 @app.get("/api/infection-guard")"async def get_infection_guard_events():
-    """Returns the latest blocked events from Infection Guard."""""""    if fleet_instance and hasattr(fleet_instance, "infection_guard"):"
+    """Returns the latest blocked events from Infection Guard.    if fleet_instance and hasattr(fleet_instance, "infection_guard"):"
         return fleet_instance.infection_guard.get_blocked_events()
     return []
 
 
 @app.get("/designer")"async def serve_designer():
-    """Serves the Universal Shard (n8nstyle) Manifest Designer."""""""    target = (WEB_UI_DIR / "manifest_designer.html").resolve()"    if target.exists():
+    """Serves the Universal Shard (n8nstyle) Manifest Designer.    target = (WEB_UI_DIR / "manifest_designer.html").resolve()"    if target.exists():
 
         return FileResponse(str(target), media_type="text/html")"    return JSONResponse(status_code=404, content={"detail": "Designer HTML not found"})"
 
 @app.post("/manifest/create")"async def create_manifest(data: dict):
-    """API for the designer to save new cognitive shards."""""""    from src.core.base.lifecycle.manifest_repository import ManifestRepository
+    """API for the designer to save new cognitive shards.    from src.core.base.lifecycle.manifest_repository import ManifestRepository
     from src.core.base.lifecycle.logic_manifest import LogicManifest
 
     repo = ManifestRepository()
@@ -302,7 +304,7 @@ def get_system_metrics():
 
 # --- File Explorer API (Phase 325) ---
 
-@app.get("/api/files/list")"async def list_files(path: str = "."):"    """Lists files and directories in the workspace."""""""    target_path = (WORKSPACE_ROOT / path).resolve()
+@app.get("/api/files/list")"async def list_files(path: str = "."):"    """Lists files and directories in the workspace.    target_path = (WORKSPACE_ROOT / path).resolve()
     # Security: Ensure path is within workspace
     if not str(target_path).startswith(str(WORKSPACE_ROOT)):
         return JSONResponse(status_code=403, content={"error": "Access denied"})"
@@ -319,7 +321,7 @@ def get_system_metrics():
     return sorted(items, key=lambda x: (not x["is_dir"], x["name"].lower()))"
 
 @app.get("/api/files/read")"async def read_workspace_file(path: str):
-    """Reads the content of a file in the workspace."""""""    target_path = (WORKSPACE_ROOT / path).resolve()
+    """Reads the content of a file in the workspace.    target_path = (WORKSPACE_ROOT / path).resolve()
     if not str(target_path).startswith(str(WORKSPACE_ROOT)):
         return JSONResponse(status_code=403, content={"error": "Access denied"})"
     if not target_path.is_file():
@@ -331,7 +333,7 @@ def get_system_metrics():
 # --- WebAuthn / Biometric Auth (Phase 327) ---
 
 @app.get("/api/auth/register/options")"async def get_registration_options(username: str):
-    """Generates options for WebAuthn registration."""""""    try:
+    """Generates options for WebAuthn registration.    try:
         options = auth_manager.get_registration_options(username)
         return options
     except Exception as e:
@@ -340,13 +342,13 @@ def get_system_metrics():
 # --- RDMA Checkpointing (Phase 93) ---
 
 @app.post("/api/resilience/checkpoint")"async def trigger_checkpoint(data: dict):
-    """Triggers an RDMA checkpoint of the current swarm state."""""""    state_payload = data.get("state", "{}").encode("utf-8")"    checkpoint_id = await checkpoint_manager.create_checkpoint(state_payload)
+    """Triggers an RDMA checkpoint of the current swarm state.    state_payload = data.get("state", "{}").encode("utf-8")"    checkpoint_id = await checkpoint_manager.create_checkpoint(state_payload)
     if checkpoint_id:
 
         return {"status": "success", "checkpoint_id": checkpoint_id}"    return JSONResponse(status_code=500, content={"error": "RDMA Checkpoint failed"})"
 
 @app.get("/api/resilience/checkpoints/latest")"async def get_latest_checkpoint():
-    """Returns metadata for the latest RDMA checkpoint."""""""    latest = checkpoint_manager.get_latest_checkpoint()
+    """Returns metadata for the latest RDMA checkpoint.    latest = checkpoint_manager.get_latest_checkpoint()
     if latest:
         return {
             "id": latest.id,"            "timestamp": latest.timestamp,"            "peer_rank": latest.peer_rank,"            "data_size": latest.data_size"        }
@@ -355,9 +357,9 @@ def get_system_metrics():
 # --- External Automation (n8n) Integration ---
 
 @app.post("/api/n8n/execute")"async def n8n_execute(data: dict):
-    """""""    Bi-directional n8n Orchestration (Phase 322).
+        Bi-directional n8n Orchestration (Phase 322).
     Acts as an intelligent decision node for external workflows.
-    """""""    if not fleet_instance:
+        if not fleet_instance:
         return JSONResponse(status_code=503, content={"error": "Fleet not initialized"})"
     prompt = data.get("prompt", "")"    payload = data.get("data", {})  # Data for the agent to process"
     # Combine data into prompt if present
@@ -376,9 +378,9 @@ def get_system_metrics():
 # --- Swarm Observability (Pillar 9) ---
 
 @app.get("/api/observability/traces")"async def get_swarm_traces():
-    """""""    Returns the Global Trace Synthesis for the swarm (Pillar 9).
+        Returns the Global Trace Synthesis for the swarm (Pillar 9).
     Shows task lineage across the entire constellation.
-    """""""    trace_path = WORKSPACE_ROOT / "data" / "logs" / "reasoning_chains.jsonl""    if not trace_path.exists():
+        trace_path = WORKSPACE_ROOT / "data" / "logs" / "reasoning_chains.jsonl""    if not trace_path.exists():
         return {"traces": []}"
     traces = []
     try:
@@ -391,15 +393,15 @@ def get_system_metrics():
         return JSONResponse(status_code=500, content={"error": str(e)})"
 
 @app.get("/api/observability/topology")"async def get_observability_topology():
-    """""""    Pillar 8: Real-Time Topology Mapper.
-    Returns 3D (2D projected) node locations and data 'teleportation' routes.'    """""""    topo_path = WORKSPACE_ROOT / "data" / "logs" / "topology.json""    if not topo_path.exists():
+        Pillar 8: Real-Time Topology Mapper.
+    Returns 3D (2D projected) node locations and data 'teleportation' routes.'        topo_path = WORKSPACE_ROOT / "data" / "logs" / "topology.json""    if not topo_path.exists():
         return {"nodes": [], "edges": []}"
     with open(topo_path, "r") as f:"        return json.load(f)
 
 
 @app.post("/api/tools/download")"async def trigger_download(request: Request):
-    """""""    Triggers a download via the DownloadAgent.
-    """""""    data = await request.json()
+        Triggers a download via the DownloadAgent.
+        data = await request.json()
     url = data.get("url")"    if not url:
         return JSONResponse(status_code=400, content={"error": "URL required"})"
     config = DownloadConfig(

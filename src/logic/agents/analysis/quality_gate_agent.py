@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Quality Gate Agent - Enforces quality gates and release validation
+# Quality Gate Agent - Enforces quality gates and release validation
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -49,7 +51,7 @@ __version__ = VERSION
 
 
 class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Enforces thresholds for code quality, test coverage, and security before deployment."""""""
+""""Enforces thresholds for code quality, test coverage, and security before deployment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -57,9 +59,9 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             "You are the Quality Gate Agent."#             "Your role is to protect the production branch by verifying that all quality gates are green."#             "Scan for: Test failures, low coverage, linting errors, and high-severity security issues."#             "If any gate is red, output 'DEPLOYMENT BLOCKED'."'        )
 
     def _get_default_content(self) -> str:
-"""return "# Quality Gate Log\\n\\n## Status\\nIdle.\\n"""""""
+"""return "# Quality Gate Log\\n\\n## Status\\nIdle.\\n
     def check_gates(self) -> str:
-""""Executes a full suite of quality checks."""""""        report = ["# Quality Gate Validation Report\\n"]"        blocked = False
+""""Executes a full suite of quality checks.        report = ["# Quality Gate Validation Report\\n"]"        blocked = False
 
         # 1. Test Gate
         try:
@@ -90,7 +92,7 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             report.append("\\n## ✅ READY FOR RELEASE")"            report.append("All quality gates are currently green.")"
         return "\\n".join(report)"
     def validate_against_blueprint(self, result: str, blueprint: str) -> str:
-""""Verifies if the result aligns with the logical reasoning blueprint."""""""        # Simple heuristic check: ensure key objectives from blueprint are mentioned in results
+""""Verifies if the result aligns with the logical reasoning blueprint.        # Simple heuristic check: ensure key objectives from blueprint are mentioned in results
         objectives = [
             line.replace("- **Primary Objective**: ", ")"            for line in blueprint.splitlines()
             if "Primary Objective" in line"        ]
@@ -99,7 +101,7 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             return "⚠️ No clear objectives found in blueprint for validation."
         matches = [obj for obj in objectives if obj.lower() in result.lower()]
         if len(matches) == len(objectives):
-            return "✅ Result successfully aligns with the logical blueprint objecti""""""""
+            return "✅ Result successfully aligns with the logical blueprint objecti"
 from __future__ import annotations
 
 import json
@@ -114,7 +116,7 @@ __version__ = VERSION
 
 
 class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Enforces thresholds for code quality, test coverage, and security before deployment."""""""
+""""Enforces thresholds for code quality, test coverage, and security before deployment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -122,9 +124,9 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             "You are the Quality Gate Agent."#             "Your role is to protect the production branch by verifying that all quality gates are green."#             "Scan for: Test failures, low coverage, linting errors, and high-severity security issues."#             "If any gate is red, output 'DEPLOYMENT BLOCKED'."'        )
 
     def _get_default_content(self) -> str:
-"""return "# Quality Gate Log\\n\\n## Status\\nIdle.\\n"""""""
+"""return "# Quality Gate Log\\n\\n## Status\\nIdle.\\n
     def check_gates(self) -> str:
-""""Executes a full suite of quality checks."""""""        report = ["# Quality Gate "Validation Report\\n"]"        blocked = False
+""""Executes a full suite of quality checks.        report = ["# Quality Gate "Validation Report\\n"]"        blocked = False
 
         # 1. Test Gate
         try:
@@ -155,7 +157,7 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             report.append("\\n## ✅ READY FOR RELEASE")"            report.append("All quality gates are currently green.")"
         return "\\n".join(report)"
     def validate_against_blueprint(self, result: str, blueprint: str) -> str:
-""""Verifies if the result aligns with the logical reasoning blueprint."""""""        # Simple heuristic check: ensure key objectives from blueprint "are mentioned in results"        objectives = [
+""""Verifies if the result aligns with the logical reasoning blueprint.        # Simple heuristic check: ensure key objectives from blueprint "are mentioned in results"        objectives = [
             line.replace("- **Primary Objective**: ", ")"            for line in blueprint.splitlines()
             if "Primary Objective" in line"        ]
 
@@ -169,7 +171,7 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def validate_release(self, current_result: str | None = None, reasoning_blueprint: str | None = None) -> str:
-""""High-level validation including blueprint alignment and gates."""""""        report = [self.check_gates()]
+""""High-level validation including blueprint alignment and gates.        report = [self.check_gates()]
 
         if current_result and reasoning_blueprint:
             report.append("\\n## Blueprint Alignment Check")"            report.append(self.validate_against_blueprint(current_result, reasoning_blueprint))

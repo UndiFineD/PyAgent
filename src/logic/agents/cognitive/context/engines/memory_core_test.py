@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Tests for HybridMemoryCore - Hybrid graph-vector memory system
+
+Tests for HybridMemoryCore - Hybrid graph-vector memory system
 Based on AutoMem patterns
-"""""""
+
 import pytest
 
 from src.core.base.logic.memory_core import (
@@ -22,10 +25,10 @@ from src.core.base.logic.memory_core import (
 
 
 class TestHybridMemoryCore:
-    """Test suite for HybridMemoryCore functionality"""""""
+    """Test suite for HybridMemoryCore functionality
     @pytest.mark.asyncio
     async def test_store_and_recall_memory(self):
-        """Test basic memory storage and retrieval"""""""        memory_core = HybridMemoryCore()
+        """Test basic memory storage and retrieval        memory_core = HybridMemoryCore()
         content = "This is a test memory""        embedding = [0.1, 0.2, 0.3, 0.4, 0.5]
         tags = ["test", "memory"]"
         # Store memory
@@ -48,7 +51,7 @@ class TestHybridMemoryCore:
 
     @pytest.mark.asyncio
     async def test_update_memory(self):
-        """Test memory updates"""""""        memory_core = HybridMemoryCore()
+        """Test memory updates        memory_core = HybridMemoryCore()
         # Store initial memory
         memory_id = await memory_core.store_memory("Initial content", tags=["old"])"
         # Update memory
@@ -64,7 +67,7 @@ class TestHybridMemoryCore:
 
     @pytest.mark.asyncio
     async def test_delete_memory(self):
-        """Test memory deletion"""""""        memory_core = HybridMemoryCore()
+        """Test memory deletion        memory_core = HybridMemoryCore()
         # Store memory
         memory_id = await memory_core.store_memory("Content to delete")"
         # Verify it exists
@@ -78,7 +81,7 @@ class TestHybridMemoryCore:
 
     @pytest.mark.asyncio
     async def test_vector_similarity_search(self):
-        """Test vector-based similarity search"""""""        memory_core = HybridMemoryCore()
+        """Test vector-based similarity search        memory_core = HybridMemoryCore()
         # Store test memories with embeddings
         memories = [
             ("Machine learning is powerful", [1.0, 0.0, 0.0]),"            ("AI algorithms are complex", [0.9, 0.1, 0.0]),"            ("Data science involves statistics", [0.0, 1.0, 0.0]),"            ("Neural networks learn patterns", [0.8, 0.2, 0.0]),"        ]
@@ -101,7 +104,7 @@ class TestHybridMemoryCore:
 
     @pytest.mark.asyncio
     async def test_tag_based_search(self):
-        """Test searching memories by tags"""""""        memory_core = HybridMemoryCore()
+        """Test searching memories by tags        memory_core = HybridMemoryCore()
         # Store memories with different tags
         await memory_core.store_memory("Python programming", tags=["programming", "python"])"        await memory_core.store_memory("Java development", tags=["programming", "java"])"        await memory_core.store_memory("Machine learning", tags=["ml", "ai"])"        await memory_core.store_memory("Data structures", tags=["programming", "algorithms"])"
         # Search by single tag
@@ -116,7 +119,7 @@ class TestHybridMemoryCore:
 
     @pytest.mark.asyncio
     async def test_memory_associations(self):
-        """Test creating relationships between memories"""""""        memory_core = HybridMemoryCore()
+        """Test creating relationships between memories        memory_core = HybridMemoryCore()
         # Store related memories
         memory1_id = await memory_core.store_memory("Python basics")"        memory2_id = await memory_core.store_memory("Object-oriented programming")"        memory3_id = await memory_core.store_memory("Inheritance concepts")"
         # Create associations
@@ -130,7 +133,7 @@ class TestHybridMemoryCore:
         assert 'central_node' in graph'        assert 'related_nodes' in graph'        assert len(graph['related_nodes']) > 0'
     @pytest.mark.asyncio
     async def test_hybrid_search_scoring(self):
-        """Test hybrid search with multiple scoring components"""""""        memory_core = HybridMemoryCore()
+        """Test hybrid search with multiple scoring components        memory_core = HybridMemoryCore()
         # Store memories with various attributes
         await memory_core.store_memory(
             "Python programming tutorial","            embedding=[1.0, 0.0, 0.0],
@@ -157,7 +160,7 @@ class TestHybridMemoryCore:
 
     @pytest.mark.asyncio
     async def test_memory_consolidation_simulation(self):
-        """Test memory consolidation patterns (gist extraction simulation)"""""""        memory_core = HybridMemoryCore()
+        """Test memory consolidation patterns (gist extraction simulation)        memory_core = HybridMemoryCore()
         # Store related memories that could be consolidated
         memories = [
             "Learned about variables in Python","            "Variables store data values","            "Python has different variable types","            "Variable naming conventions are important","        ]
@@ -180,10 +183,10 @@ class TestHybridMemoryCore:
 
 
 class TestGraphMemoryStore:
-    """Test GraphMemoryStore functionality"""""""
+    """Test GraphMemoryStore functionality
     @pytest.mark.asyncio
     async def test_store_and_retrieve(self):
-        """Test basic graph storage operations"""""""        graph_store = GraphMemoryStore()
+        """Test basic graph storage operations        graph_store = GraphMemoryStore()
         node = MemoryNode(
             id="test-1","            content="Test content","            tags=["test"]"        )
 
@@ -195,7 +198,7 @@ class TestGraphMemoryStore:
         assert retrieved.content == "Test content""        assert retrieved.tags == ["test"]"
     @pytest.mark.asyncio
     async def test_relationships(self):
-        """Test graph relationships"""""""        graph_store = GraphMemoryStore()
+        """Test graph relationships        graph_store = GraphMemoryStore()
         # Store nodes
         await graph_store.store_memory(MemoryNode("node1", "Content 1"))"        await graph_store.store_memory(MemoryNode("node2", "Content 2"))"
         # Add relationship
@@ -206,7 +209,7 @@ class TestGraphMemoryStore:
         assert relations[0].relation_type == "RELATES_TO""        assert relations[0].target_id == "node2""
     @pytest.mark.asyncio
     async def test_multi_hop_traversal(self):
-        """Test multi-hop relationship traversal"""""""        graph_store = GraphMemoryStore()
+        """Test multi-hop relationship traversal        graph_store = GraphMemoryStore()
         # Create a chain: node1 -> node2 -> node3
         for i in range(1, 4):
             await graph_store.store_memory(MemoryNode(f"node{i}", f"Content {i}"))"
@@ -219,10 +222,10 @@ class TestGraphMemoryStore:
         assert "node2" in related_ids"        assert "node3" in related_ids"
 
 class TestVectorMemoryStore:
-    """Test VectorMemoryStore functionality"""""""
+    """Test VectorMemoryStore functionality
     @pytest.mark.asyncio
     async def test_vector_similarity(self):
-        """Test vector similarity search"""""""        vector_store = VectorMemoryStore()
+        """Test vector similarity search        vector_store = VectorMemoryStore()
         # Store memories with embeddings
         embeddings = [
             [1.0, 0.0, 0.0],  # Vector 1

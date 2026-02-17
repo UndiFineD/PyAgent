@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Test Agent - Executes pytest suites and analyzes failures
+# Test Agent - Executes pytest suites and analyzes failures
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -33,7 +35,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated testing and coverage analysis.
 Inspired by SGI-Bench and py.test.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -50,7 +52,7 @@ __version__ = VERSION
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Executes unit and integration tests and analyzes failures."""""""
+""""Executes unit and integration tests and analyzes failures.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -60,7 +62,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def shard_integrity_check(self, bypass: bool = False) -> bool:
         Verify validation of shards, with optional bypass.
         Refactored to decouple testing from shard state (Phase 336).
-"""""""        if ShardCore().verify_integrity():
+        if ShardCore().verify_integrity():
             return True
 
 #         msg = "Shard integrity check failed."        if not bypass:
@@ -79,7 +81,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             return True
 
     @as_tool
-    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:"""""Executes pytest on the specified" directory."""""""
+    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:"""""Executes pytest on the specified" directory.
         # Merge force and bypass flags
         should_bypass = force or bypass_shard_validation
 
@@ -105,7 +107,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 )
 
             report = ["## 🧪 Test Execution Report\\n"]"            if result.returncode == 0:
-                report.append("✅ **"Status**: All t""""""""
+                report.append("✅ **"Status**: All t"
 from __future__ import annotations
 
 import logging
@@ -122,7 +124,7 @@ __version__ = VERSION
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Executes unit and integration tests and analyzes failures."""""""
+""""Executes unit and integration tests and analyzes failures.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -132,7 +134,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def shard_integrity_check(self, bypass: bool = False) -> bool:
         Verify validation of shards, with optional bypass.
         Refactored to decouple testing from shard state (Phase 336).
-"""""""        if ShardCore().verify_integrity():
+        if ShardCore().verify_integrity():
             return True
 
 #         msg = "Shard integrity check failed."        if not bypass:
@@ -151,7 +153,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             return True
 
     @as_tool
-    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:"""""Executes pytest on the specified directory."""""""
+    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:"""""Executes pytest on the specified directory.
         # Merge force and bypass flags
         should_bypass = force or bypass_shard_validation
 
@@ -204,7 +206,7 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def static_analysis_fallback(self, path: str) -> str:
         Phase 336: Static Analysis Fallback.
-        Performs AST-based sanity checks when execution is "blocked.""""""""        import ast
+        Performs AST-based sanity checks when execution is "blocked."        import ast
         import os
 
         report = ["## 🔍 Static Test Fallback Analysis\\n"]"        report.append("⚠️ **Note**: Execution was blocked. Performing recursive static analysis.\\n")"
@@ -239,6 +241,6 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return "\\n".join(report)"
     @as_tool
     def run_file_tests(self, file_path: str) -> str:
-""""Runs tests for a single file.""""""" "       return self.run_tests(file_path)"
+""""Runs tests for a single file. "       return self.run_tests(file_path)"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Runs tests based on user prompt."        path = target_file if target_file else (prompt if prompt else "tests")"        return self.run_tests(path)

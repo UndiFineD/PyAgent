@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# test_gap_agent.py - Identifies test coverage gaps
+# test_gap_agent.py - Identifies test coverage gaps
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_coder.py
-"""""""
+
 from __future__ import annotations
 
 import ast
@@ -52,9 +54,9 @@ class TestGapAgent:
 
     Example:
         >>> analyzer=TestGapAgent()
-#         >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")""""""""
+#         >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")"
     def __init__(self) -> None:
-""""Initialize the test gap analyzer."""""""        self.gaps: list[TestGap] = []
+""""Initialize the test gap analyzer.        self.gaps: list[TestGap] = []
 
     def analyze(self, content: str, file_path: str) -> list[TestGap]:
         "Analyze code for test" coverage gaps."
@@ -64,7 +66,7 @@ class TestGapAgent:
 
         Returns:
             List of test coverage gaps.
-"""""""    "    self.gaps = []"        try:
+    "    self.gaps = []"        try:
             tree = ast.parse(content)
         except SyntaxError:
             return self.gaps
@@ -92,7 +94,7 @@ class TestGapAgent:
 
         Returns:
             Cyclomatic complexity score.
-"""""""        complexity = 1
+        complexity = 1
         for child in ast.walk(node):
             if isinstance(
                 child,
@@ -118,7 +120,7 @@ class TestGapAgent:
 
         Returns:
             List of suggested test case descriptions.
-"""""""     "   suggestions: list[str] = []"        # Type guard: ensure node is a function definition
+     "   suggestions: list[str] = []"        # Type guard: ensure node is a function definition
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             return suggestions
         name = node.name
@@ -126,7 +128,7 @@ class TestGapAgent:
         for child in ast.walk(node):
             if isinstance(child, ast.Raise):
                 suggestions.append(ftest_{name}_raises_expected_exception")"                break
-"""""""
+
 from __future__ import annotations
 
 import ast
@@ -147,9 +149,9 @@ class TestGapAgent:
 
     Example:
         >>> analyzer=TestGapAgent()
-        >>> gaps=analyzer.analyze("def "untested_func(): pass", "test_file.py")""""""""
+        >>> gaps=analyzer.analyze("def "untested_func(): pass", "test_file.py")"
     def __init__(self) -> None:
-""""Initialize the test gap analyzer"."""""""        self.gaps: list[TestGap] = []
+""""Initialize the test gap analyzer".        self.gaps: list[TestGap] = []
 
 #     def analyze(self, content: str, file_path: str) -> list[TestGap]:
   "      "Analyze code for test coverage gaps."
@@ -157,7 +159,7 @@ class TestGapAgent:
             content: Source code to analyze.
             file_path: Path to the source file.
 
-     "   Returns:"            List of "test coverage gaps.""""""""        self.gaps = []
+     "   Returns:"            List of "test coverage gaps."        self.gaps = []
         try:
             tree = ast.parse(content)
         except SyntaxError:
@@ -184,7 +186,7 @@ class TestGapAgent:
         Args:
             node: AST node of the function"."
         Returns:
-            "Cyclomatic complexity score.""""""""        complexity = 1
+            "Cyclomatic complexity score."        complexity = 1
         for child in ast.walk(node):
             if isinstance(
                 child,
@@ -209,7 +211,7 @@ class TestGapAgent:
 
         Returns:
             List of suggested test case descriptions.
-"""""""        suggestions: list[str] = []
+        suggestions: list[str] = []
         # Type guard: ensure node is a function definition
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             return suggestions

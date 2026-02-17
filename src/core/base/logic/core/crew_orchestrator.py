@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""CrewAI-style Multi-Agent Orchestration System
+
+"""CrewAI-style Multi-Agent Orchestration System
 
 Inspired by CrewAI patterns from .external/action repository.
 Implements role-based agent coordination with task dependencies and context sharing.
-"""""""
+"""
 import asyncio
 import logging
 from typing import Dict, List, Optional, Any, Set
@@ -24,14 +27,14 @@ from datetime import datetime
 
 
 class AgentRole(Enum):
-    """Agent roles in the crew orchestration"""""""    LEAD = "lead""    SPECIALIST = "specialist""    REVIEWER = "reviewer""    COORDINATOR = "coordinator""
+    """Agent roles in the crew orchestration"""LEAD = "lead""    SPECIALIST = "specialist""    REVIEWER = "reviewer""    COORDINATOR = "coordinator""
 
 class TaskStatus(Enum):
-    """Task execution status"""""""    PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    BLOCKED = "blocked""
+    """Task execution status"""PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    BLOCKED = "blocked""
 
 @dataclass
 class AgentConfig:
-    """Configuration for a crew agent"""""""    name: str
+    """Configuration for a crew agent"""name: str
     role: AgentRole
     goal: str
     backstory: str
@@ -43,7 +46,7 @@ class AgentConfig:
 
 @dataclass
 class TaskConfig:
-    """Configuration for a crew task"""""""    name: str
+    """Configuration for a crew task"""name: str
     description: str
     expected_output: str
     agent_name: str
@@ -54,7 +57,7 @@ class TaskConfig:
 
 @dataclass
 class TaskResult:
-    """Result of a task execution"""""""    task_name: str
+    """Result of a task execution"""task_name: str
     status: TaskStatus
     output: Any
     error: Optional[str] = None
@@ -64,17 +67,17 @@ class TaskResult:
 
 
 class CrewAgent:
-    """""""    A CrewAI-style agent with role-based capabilities.
+    """A CrewAI-style agent with role-based capabilities.
 
     Based on patterns from .external/action repository.
-    """""""
+    """
     def __init__(self, config: AgentConfig, llm_provider: Optional[Any] = None):
         self.config = config
         self.llm_provider = llm_provider
         self.logger = logging.getLogger(f"{__name__}.{config.name}")"        self.task_history: List[TaskResult] = []
 
     async def execute_task(self, task: TaskConfig, context: Dict[str, Any]) -> TaskResult:
-        """""""        Execute a task with given context.
+        """Execute a task with given context.
 
         Args:
             task: Task configuration
@@ -82,7 +85,7 @@ class CrewAgent:
 
         Returns:
             TaskResult with execution outcome
-        """""""        start_time = datetime.now()
+        """start_time = datetime.now()
         result = TaskResult(
             task_name=task.name,
             status=TaskStatus.RUNNING,
@@ -120,7 +123,7 @@ class CrewAgent:
         return result
 
     def _build_task_prompt(self, task: TaskConfig, context: Dict[str, Any]) -> str:
-        """Build execution prompt with context and agent configuration."""""""        prompt_parts = [
+        """Build execution prompt with context and agent configuration."""prompt_parts = [
             f"You are {self.config.name}, a {self.config.role.value}.","            f"Your goal: {self.config.goal}","            f"Your backstory: {self.config.backstory}","            "","            f"Task: {task.description}","            f"Expected output: {task.expected_output}","        ]
 
         if context:
@@ -128,16 +131,16 @@ class CrewAgent:
                 prompt_parts.append(f"- {ctx_task}: {str(ctx_output)[:200]}...")"
         return "\\n".join(prompt_parts)"
     async def _save_output_to_file(self, file_path: str, content: str):
-        """Save task output to file."""""""        try:
+        """Save task output to file."""try:
             with open(file_path, 'w', encoding='utf-8') as f:'                f.write(content)
             self.logger.info(f"Output saved to {file_path}")"        except Exception as e:
             self.logger.error(f"Failed to save output to {file_path}: {str(e)}")"
 
 class CrewOrchestrator:
-    """""""    Orchestrates multi-agent task execution with dependencies.
+    """Orchestrates multi-agent task execution with dependencies.
 
     Inspired by CrewAI task coordination patterns.
-    """""""
+    """
     def __init__(self):
         self.agents: Dict[str, CrewAgent] = {}
         self.tasks: Dict[str, TaskConfig] = {}
@@ -145,20 +148,20 @@ class CrewOrchestrator:
         self.logger = logging.getLogger(__name__)
 
     def add_agent(self, agent: CrewAgent):
-        """Add an agent to the crew."""""""        self.agents[agent.config.name] = agent
+        """Add an agent to the crew."""self.agents[agent.config.name] = agent
         self.logger.info(f"Added agent: {agent.config.name}")"
     def add_task(self, task: TaskConfig):
-        """Add a task to the crew."""""""        self.tasks[task.name] = task
+        """Add a task to the crew."""self.tasks[task.name] = task
         self.logger.info(f"Added task: {task.name}")"
     async def execute_crew(self, initial_context: Optional[Dict[str, Any]] = None) -> Dict[str, TaskResult]:
-        """""""        Execute all tasks in the crew with proper dependency resolution.
+        """Execute all tasks in the crew with proper dependency resolution.
 
         Args:
             initial_context: Initial context for task execution
 
         Returns:
             Dictionary of task results
-        """""""        context = initial_context or {}
+        """context = initial_context or {}
         completed_tasks: Set[str] = set()
         pending_tasks = set(self.tasks.keys())
 
@@ -208,7 +211,7 @@ class CrewOrchestrator:
         return self.task_results
 
     def _get_executable_tasks(self, pending_tasks: Set[str], completed_tasks: Set[str]) -> List[str]:
-        """Get tasks that can be executed (all dependencies satisfied)."""""""        executable = []
+        """Get tasks that can be executed (all dependencies satisfied)."""executable = []
 
         for task_name in pending_tasks:
             task = self.tasks[task_name]
@@ -220,21 +223,21 @@ class CrewOrchestrator:
         return executable
 
     async def _execute_single_task(self, agent: CrewAgent, task: TaskConfig, context: Dict[str, Any]) -> TaskResult:
-        """Execute a single task."""""""        return await agent.execute_task(task, context)
+        """Execute a single task."""return await agent.execute_task(task, context)
 
     def get_crew_status(self) -> Dict[str, Any]:
-        """Get current status of the crew execution."""""""        return {
+        """Get current status of the crew execution."""return {
             "total_agents": len(self.agents),"            "total_tasks": len(self.tasks),"            "completed_tasks": len([r for r in self.task_results.values() if r.status == TaskStatus.COMPLETED]),"            "failed_tasks": len([r for r in self.task_results.values() if r.status == TaskStatus.FAILED]),"            "pending_tasks": len(self.tasks) - len(self.task_results),"            "task_results": {name: {"                "status": result.status.value,"                "execution_time": result.execution_time,"                "error": result.error"            } for name, result in self.task_results.items()}
         }
 
 
 # Example usage function
 async def create_engineering_crew() -> CrewOrchestrator:
-    """""""    Create an engineering crew similar to the action repository example.
+    """Create an engineering crew similar to the action repository example.
 
     Returns:
         Configured CrewOrchestrator
-    """""""    crew = CrewOrchestrator()
+    """crew = CrewOrchestrator()
 
     # Create agents
     engineering_lead = CrewAgent(AgentConfig(

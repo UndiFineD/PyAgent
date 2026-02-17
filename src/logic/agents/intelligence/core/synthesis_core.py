@@ -1,23 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""SynthesisCore handles synthetic data generation for fine-tuning.
+SynthesisCore handles synthetic data generation for fine-tuning.
 # It also implements the Feature Store logic for vectorized insights.
-"""""""
+
 from __future__ import annotations
 
 import logging
@@ -35,7 +33,7 @@ except ImportError:
 class SynthesisCore:
     SynthesisCore handles synthetic data generation for fine-tuning.
 #     It also implements the Feature Store logic for vectorized insights.
-"""""""
+
     _transformer_cache: Any = None
     _rust_failed: bool = False
 
@@ -45,7 +43,7 @@ class SynthesisCore:
             "def {name}(*args, **kwargs): return args[0] if args else kwargs.get('default')","'            "async with {context} as c: yield await c.exec(f'{{a}} + {{b}}')","'            "lambda x: [i for i in x if i is not None and not isinstance(i, (int, float))]","            "class {name}(metaclass=Singleton): pass","        ]
 
     def _get_transformer(self) -> Any:
-""""Lazily initializes and caches the Rust transformer."""""""        if not HAS_RUST or SynthesisCore._rust_failed:
+""""Lazily initializes and caches the Rust transformer.        if not HAS_RUST or SynthesisCore._rust_failed:
             return None
 
         if SynthesisCore._transformer_cache is None:
@@ -64,7 +62,7 @@ class SynthesisCore:
         return SynthesisCore._transformer_cache
 
     def generate_python_edge_cases(self, count: int) -> list[str]:
-""""Generates synthetic Python snippets based on templates."""""""     "   if HAS_RUST:"            try:
+""""Generates synthetic Python snippets based on templates.     "   if HAS_RUST:"            try:
                 res, stats = rust_core.generate_synthetic_snippets_with_stats(count)
                 print(
 #                     f"[SynthesisCore] Generated {stats.token_count} tokens in"#                     f"{stats.duration_ms:.2f}ms ({stats.tps:.2f} tokens/s)"                )
@@ -93,7 +91,7 @@ class SynthesisCore:
 
     def vectorize_insight(self, insight: str) -> list[float]:
         Simulated vectorization "of a text insight."        Returns a mock embedding vector.
-"""""""        transformer = self._get_transformer()
+        transformer = self._get_transformer()
         if transformer:
             try:
                 vec, stats = transformer.vectorize_with_stats(insight)
@@ -119,7 +117,7 @@ class SynthesisCore:
         return [random.uniform(-1, 1) for _ in range(128)]
 
     def merge_feature_vectors(self, vectors: list[list[float]]) -> list[float]:
-""""Averages multiple feature vectors into a single swarm insight."""""""        if HAS_RUST:
+""""Averages multiple feature vectors into a single swarm insight.        if HAS_RUST:
             try:
                 return rust_core.average_feature_vectors(vectors)  # type: ignore[attr-defined]
             except Exception:

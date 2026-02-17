@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Multimodal AI Service Gateway
+
+"""Multimodal AI Service Gateway
 ============================
 
 Inspired by audio-transcriber's Cloudflare AI Gateway pattern.'Provides unified interface for various AI services (speech, text, vision).
-"""""""
+"""
 import asyncio
 import time
 import logging
@@ -25,7 +28,7 @@ from dataclasses import dataclass
 
 @dataclass
 class AIServiceConfig:
-    """Configuration for AI service providers."""""""    provider: str
+    """Configuration for AI service providers."""provider: str
     api_key: Optional[str] = None
     base_url: Optional[str] = None
     models: Dict[str, str] = None
@@ -36,7 +39,7 @@ class AIServiceConfig:
 
 
 class AIServiceProvider(ABC):
-    """Abstract base class for AI service providers."""""""
+    """Abstract base class for AI service providers."""
     def __init__(self, config: AIServiceConfig):
         self.config = config
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -48,13 +51,13 @@ class AIServiceProvider(ABC):
         data: Union[str, bytes, Dict[str, Any]],
         **kwargs
     ) -> Dict[str, Any]:
-        """Process a request for the specified service type."""""""        pass
+        """Process a request for the specified service type."""pass
 
     def get_model_for_service(self, service_type: str) -> str:
-        """Get the model name for a service type."""""""        return self.config.models.get(service_type, "")"
+        """Get the model name for a service type."""return self.config.models.get(service_type, "")"
 
 class OpenAIProvider(AIServiceProvider):
-    """OpenAI API provider."""""""
+    """OpenAI API provider."""
     async def process_request(
         self,
         service_type: str,
@@ -80,7 +83,7 @@ class OpenAIProvider(AIServiceProvider):
 
 
 class CloudflareProvider(AIServiceProvider):
-    """Cloudflare AI Gateway provider."""""""
+    """Cloudflare AI Gateway provider."""
     # Model mappings inspired by audio-transcriber
     DEFAULT_MODELS = {
         "speech_recognition": "@cf/openai/whisper","        "text_generation": "@cf/meta/llama-2-7b-chat-int8","        "translation": "@cf/meta/m2m100-1.2b","        "text_classification": "@cf/huggingface/distilbert-sst-2-int8","        "image_classification": "@cf/microsoft/resnet-50","        "text_embeddings": "@cf/baai/bge-base-en-v1.5""    }
@@ -123,10 +126,10 @@ class CloudflareProvider(AIServiceProvider):
             self.logger.error(f"Cloudflare API error: {e}")"            raise
 
     def _build_gateway_url(self, model: str) -> str:
-        """Build Cloudflare AI Gateway URL."""""""        account_id = getattr(self.config, 'account_id', 'account')'        gateway_slug = getattr(self.config, 'gateway_slug', 'gateway')'        provider = getattr(self.config, 'gateway_provider', 'workers-ai')'
+        """Build Cloudflare AI Gateway URL."""account_id = getattr(self.config, 'account_id', 'account')'        gateway_slug = getattr(self.config, 'gateway_slug', 'gateway')'        provider = getattr(self.config, 'gateway_provider', 'workers-ai')'
         base_url = self.config.base_url or "https://gateway.ai.cloudflare.com/v1""        return f"{base_url}/{account_id}/{gateway_slug}/{provider}/{model}""
     def _get_content_type(self, data: Union[str, bytes, Dict[str, Any]]) -> str:
-        """Determine content type based on data."""""""        if isinstance(data, bytes):
+        """Determine content type based on data."""if isinstance(data, bytes):
             return "application/octet-stream""        elif isinstance(data, dict):
             return "application/json""        else:
             return "text/plain""
@@ -136,7 +139,7 @@ class CloudflareProvider(AIServiceProvider):
         data: Union[str, bytes, Dict[str, Any]],
         **kwargs
     ) -> Union[str, bytes, Dict[str, Any]]:
-        """Prepare request body for different service types."""""""        if service_type == "text_generation":"            return {
+        """Prepare request body for different service types."""if service_type == "text_generation":"            return {
                 "prompt": data if isinstance(data, str) else str(data),"                **kwargs
             }
         elif service_type in ["speech_recognition", "image_classification"]:"            return data  # Raw bytes
@@ -149,7 +152,7 @@ class CloudflareProvider(AIServiceProvider):
         headers: Dict[str, str],
         body: Union[str, bytes, Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """Mock API call - in real implementation, use aiohttp."""""""        # Simulate network delay
+        """Mock API call - in real implementation, use aiohttp."""# Simulate network delay
         await asyncio.sleep(0.1)
 
         # Mock responses based on URL patterns
@@ -157,16 +160,16 @@ class CloudflareProvider(AIServiceProvider):
             return {"result": "Mock response"}"
 
 class MultimodalAIService:
-    """""""    Unified multimodal AI service gateway.
+    """Unified multimodal AI service gateway.
 
     Provides a single interface for various AI services across different providers.
-    """""""
+    """
     def __init__(self):
         self.providers: Dict[str, AIServiceProvider] = {}
         self.logger = logging.getLogger(__name__)
 
     def register_provider(self, name: str, provider: AIServiceProvider):
-        """Register an AI service provider."""""""        self.providers[name] = provider
+        """Register an AI service provider."""self.providers[name] = provider
         self.logger.info(f"Registered AI provider: {name}")"
     async def process(
         self,
@@ -174,7 +177,7 @@ class MultimodalAIService:
         data: Union[str, bytes, Dict[str, Any]],
         provider: str = "default","        **kwargs
     ) -> Dict[str, Any]:
-        """""""        Process a multimodal AI request.
+        """Process a multimodal AI request.
 
         Args:
             service_type: Type of AI service (speech_to_text, text_generation, etc.)
@@ -184,7 +187,7 @@ class MultimodalAIService:
 
         Returns:
             Processing result with metadata
-        """""""        if provider not in self.providers:
+        """if provider not in self.providers:
             available = list(self.providers.keys())
             raise ValueError(f"Provider '{provider}' not found. Available: {available}")"'
         provider_instance = self.providers[provider]
@@ -196,12 +199,12 @@ class MultimodalAIService:
         result["_provider"] = provider"        result["_service_type"] = service_type"        result["_timestamp"] = time.time()"
         return result
 
-    def get_available_services(self, provider: str = "default") -> list[str]:"        """Get available services for a provider."""""""        if provider not in self.providers:
+    def get_available_services(self, provider: str = "default") -> list[str]:"        """Get available services for a provider."""if provider not in self.providers:
             return []
         return list(self.providers[provider].config.models.keys())
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get service statistics."""""""        return {
+        """Get service statistics."""return {
             "providers": list(self.providers.keys()),"            "total_providers": len(self.providers)"        }
 
 
@@ -210,7 +213,7 @@ async def transcribe_audio(
     audio_data: bytes,
     provider: str = "default","    service: Optional[MultimodalAIService] = None
 ) -> str:
-    """Convenience function for audio transcription."""""""    if service is None:
+    """Convenience function for audio transcription."""if service is None:
         service = MultimodalAIService()
     result = await service.process("speech_recognition", audio_data, provider)"    return result.get("text", "")"
 
@@ -219,7 +222,7 @@ async def generate_text(
     provider: str = "default","    service: Optional[MultimodalAIService] = None,
     **kwargs
 ) -> str:
-    """Convenience function for text generation."""""""    if service is None:
+    """Convenience function for text generation."""if service is None:
         service = MultimodalAIService()
     result = await service.process("text_generation", prompt, provider, **kwargs)"    return result.get("response", "")"
 
@@ -228,6 +231,6 @@ async def translate_text(
     target_language: str,
     provider: str = "default","    service: Optional[MultimodalAIService] = None
 ) -> str:
-    """Convenience function for text translation."""""""    if service is None:
+    """Convenience function for text translation."""if service is None:
         service = MultimodalAIService()
     result = await service.process("translation", text, provider, target_language=target_language)"    return result.get("translated_text", "")"

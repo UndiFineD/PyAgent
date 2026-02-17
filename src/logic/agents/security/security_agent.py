@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Security Agent - Security Auditing and Vulnerability detection
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# Security Agent - Security Auditing and Vulnerability detection
+# [BATCHFIX] Commented metadata/non-Python
 # Brief Summary
 # DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -43,7 +45,7 @@ __version__ = VERSION
 
 
 class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Agent for security analysis of code and configuration."""""""
+""""Agent for security analysis of code and configuration.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
@@ -57,10 +59,10 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def _get_default_content(self) -> str:
     pass  # [BATCHFIX] inserted for empty block
-"""return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n"""""""
+"""return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
 
 if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#     "main()"  # [BATCHFIX] closed string""""""""
+""" [BATCHFIX] Commented unterminated string""""#     "main()"  # [BATCHFIX] closed string"
 from __future__ import annotations
 
 from src.core.base.common.base_utilities import create_main_function
@@ -71,7 +73,7 @@ __version__ = VERSION
 
 
 class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Agent for security analysis of code and configuration."""""""
+""""Agent for security analysis of code and configuration.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
@@ -85,7 +87,7 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def _get_default_content(self) -> str:
     pass  # [BATCHFIX] inserted for empty block
-"""return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n"""""""
+"""return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
 
 if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""#     main()

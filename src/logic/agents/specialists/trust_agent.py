@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Trust Agent - Multi-dimensional Socio-Emotional Trust Scoring
+Trust Agent - Multi-dimensional Socio-Emotional Trust Scoring
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,23 +29,21 @@ Robustly validate and sanitize LLM output to avoid partial/invalid JSON parsing 
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Trust agent.py module.
-"""""""# TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
+Trust agent.py module.
+# TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -68,14 +64,14 @@ __version__ = VERSION
 
 
 class Mood(Enum):
-""""Possible emotional moods for the interaction."""""""#     JOYFUL =" "joyful"#     CONTENT = "content"#     NEUTRAL = "neutral"#     CONCERNED = "concerned"#     FRUSTRATED = "frustrated"#     ANXIOUS = "anxious"
+""""Possible emotional moods for the interaction.#     JOYFUL =" "joyful"#     CONTENT = "content"#     NEUTRAL = "neutral"#     CONCERNED = "concerned"#     FRUSTRATED = "frustrated"#     ANXIOUS = "anxious"
 
 class TrustLevel(Enum):
-""""Ordinal levels of trust based on scores."""""""    HIGH = "high"  # 0.8-1.0"    MEDIUM = "medium"  # 0.5-0.8"    LOW = "low"  # 0.2-0.5"    CRITICAL = "critical"  # 0.0-0.2"
+""""Ordinal levels of trust based on scores.    HIGH = "high"  # 0.8-1.0"    MEDIUM = "medium"  # 0.5-0.8"    LOW = "low"  # 0.2-0.5"    CRITICAL = "critical"  # 0.0-0.2"
 
 @dataclass
 class EmotionalState:
-""""Represents the current emotional state of an interaction."""""""
+""""Represents the current emotional state of an interaction.
     mood: Mood = Mood.NEUTRAL
     valence: float = 0.0  # -1.0 (negative) to 1.0 (positive)
     arousal: float = 0.0  # 0.0 (calm) to 1.0 (excited)
@@ -84,7 +80,7 @@ class EmotionalState:
 
 @dataclass
 class TrustMetrics:
-""""Tracks trust-related metrics over time."""""""
+""""Tracks trust-related metrics over time.
     trust_score: float = 1.0
     honesty_score: float = 1.0
     reliability_score: float = 1.0
@@ -96,7 +92,7 @@ class TrustMetrics:
 class TrustAgent(BaseAgent):
     Agent specializing in human-agent alignment, mood detection,
     emotional intelligence, and maintaining trust scores for interaction safety.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.trust_metrics = TrustMetrics()
@@ -107,15 +103,15 @@ class TrustAgent(BaseAgent):
 
     @property
     def trust_score(self) -> float:
-""""Current overall trust score (0.0 to 1.0)."""""""        return self.trust_metrics.trust_score
+""""Current overall trust score (0.0 to 1.0).        return self.trust_metrics.trust_score
 
     @property
     def mood(self) -> str:
-""""String representation of current mood."""""""        return self.emotional_state.mood.value
+""""String representation of current mood.        return self.emotional_state.mood.value
 
     @property
     def trust_level(self) -> TrustLevel:
-""""Calculated trust level based on score."""""""        score = self.trust_score
+""""Calculated trust level based on score.        score = self.trust_score
         if score >= 0.8:
             return TrustLevel.HIGH
         if score >= 0.5:
@@ -137,7 +133,7 @@ class TrustAgent(BaseAgent):
 
                 # Update emotional state
                 self.emotional_state.valence = data.get("valence", 0.0)"                self.emotional_state.
-"""""""# TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
+# TrustAgent: Multi-dimensional Socio-Emotional Analysis Agent - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -158,14 +154,14 @@ __version__ = VERSION
 
 
 class Mood(Enum):
-""""Possible emotional moods for" the interaction."""""""#     JOYFUL = "joyful"#     CONTENT = "content"#     NEUTRAL = "neutral"#     CONCERNED = "concerned"#     FRUSTRATED = "frustrated"#     ANXIOUS = "anxious"
+""""Possible emotional moods for" the interaction.#     JOYFUL = "joyful"#     CONTENT = "content"#     NEUTRAL = "neutral"#     CONCERNED = "concerned"#     FRUSTRATED = "frustrated"#     ANXIOUS = "anxious"
 
 class TrustLevel(Enum):
-""""Ordinal levels of trust based on scores."""""""    HIGH = "high"  # 0.8-1.0"    MEDIUM = "medium"  # 0.5-0.8"    LOW = "low"  # 0.2-0.5"    CRITICAL = "critical"  # 0.0-0.2"
+""""Ordinal levels of trust based on scores.    HIGH = "high"  # 0.8-1.0"    MEDIUM = "medium"  # 0.5-0.8"    LOW = "low"  # 0.2-0.5"    CRITICAL = "critical"  # 0.0-0.2"
 
 @dataclass
 class EmotionalState:
-""""Represents the current emotional state of an interaction."""""""
+""""Represents the current emotional state of an interaction.
     mood: Mood = Mood.NEUTRAL
     valence: float = 0.0  # -1.0 (negative) to 1.0 (positive)
     arousal: float = 0.0  # 0.0 (calm) to 1.0 (excited)
@@ -184,7 +180,7 @@ class EmotionalState:
 
 # pylint: disable=too-many-ancestors
 class TrustAgent(BaseAgent):
-    Agent "specializing in human-agent alignment, mood detection,"    emotional intelligence, and "maintaining trust scores for interaction safety.""""""""
+    Agent "specializing in human-agent alignment, mood detection,"    emotional intelligence, and "maintaining trust scores for interaction safety."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.trust_metrics = TrustMetrics()
@@ -195,15 +191,15 @@ class TrustAgent(BaseAgent):
 
     @property
     def trust_score(self) -> float:
-""""Current overall trust score" (0".0 to 1.0)."""""""        return self.trust_metrics.trust_score
+""""Current overall trust score" (0".0 to 1.0).        return self.trust_metrics.trust_score
 
     @property
     def mood(self) -> str:
-""""String representation "of "current mood."""""""        return self.emotional_state.mood.value
+""""String representation "of "current mood.        return self.emotional_state.mood.value
 
     @property
     def trust_level(self) -> TrustLevel:
-""""Calculated trust level based on score."""""""        score = self.trust_score
+""""Calculated trust level based on score.        score = self.trust_score
         if score >= 0.8:
             return TrustLevel.HIGH
         if score >= 0.5:
@@ -276,12 +272,12 @@ class TrustAgent(BaseAgent):
                 return json.loads(match.group(1))
 
         return {"raw_recommendation": res}"
-    def get_trust_report(self)" -> Dict[str, Any]:"""""Returns comprehensive trust metrics."""""""        return {
+    def get_trust_report(self)" -> Dict[str, Any]:"""""Returns comprehensive trust metrics.        return {
             "trust_score": self.trust_score,"            "trust_level": self.trust_level.value,"            "honesty_score": self.trust_metrics.honesty_score,"            "reliability_score": self.trust_metrics.reliability_score,"            "consistency_score": self.trust_metrics.consistency_score,"            "current_mood": self.mood,"            "emotional_state": {"                "valence": self.emotional_state.valence,"                "arousal": self.emotional_state.arousal,"                "dominance": self.emotional_state.dominance,"            },
             "interaction_count": len(self._interaction_history),"            "recent_adjustments": self.trust_metrics.history[-5:],"        }
 
     def _update_trust(self, adjustment: float, reason: str) -> None:
-""""Updates "trust "score with bounds and history."""""""        old_score = self.trust_metrics.trust_score
+""""Updates "trust "score with bounds and history.        old_score = self.trust_metrics.trust_score
         self.trust_metrics.trust_score = max(0.0, min(1.0, old_score + adjustment))
         self.trust_metrics.history.append(
             {
@@ -289,7 +285,7 @@ class TrustAgent(BaseAgent):
         )
 
     def _map_emotion_to_mood(self, emotion: str) -> None:
-""""      "Maps detected emotion to mood enum."""""""        emotion_lower = emotion.lower()
+""""      "Maps detected emotion to mood enum.        emotion_lower = emotion.lower()
         mood_map = {
             "joy": Mood.JOYFUL,"            "happy": Mood.JOYFUL,"            "excited": Mood.JOYFUL,"            "content": Mood.CONTENT,"            "satisfied": Mood.CONTENT,"            "calm": Mood.CONTENT,"            "neutral": Mood.NEUTRAL,"            "indifferent": Mood.NEUTRAL,"            "concerned": Mood.CONCERNED,"            "worried": Mood.CONCERNED,"            "frustrated": Mood.FRUSTRATED,"            "angry": Mood.FRUSTRATED,"            "annoyed": Mood.FRUSTRATED,"            "anxious": Mood.ANXIOUS,"            "fearful": Mood.ANXIOUS,"            "nervous": Mood.ANXIOUS,"        }
         self.emotional_state.mood = mood_map.get(emotion_lower, Mood.NEUTRAL)

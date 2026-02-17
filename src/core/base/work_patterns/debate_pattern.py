@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Debate work pattern implementation for multi-agent adversarial reasoning."""""""
+
+"""Debate work pattern implementation for multi-agent adversarial reasoning."""
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 
@@ -20,7 +23,7 @@ from src.core.base.work_patterns.base_pattern import WorkPattern
 
 @dataclass
 class DebateAgent:
-    """Represents an agent in a debate with specific role and incentives."""""""
+    """Represents an agent in a debate with specific role and incentives."""
     agent_id: str
     role: str
     incentives: str
@@ -30,7 +33,7 @@ class DebateAgent:
 
 @dataclass
 class DebateConfig:
-    """Configuration for debate pattern execution."""""""
+    """Configuration for debate pattern execution."""
     max_rounds: int = 3
     quality_threshold: float = 0.8
     synthesis_method: str = "auto"  # "auto", "manual", "weighted_vote""
@@ -40,7 +43,7 @@ class DebateWorkPattern(WorkPattern):
     This pattern spawns opposing agents with different goals or perspectives
     to debate solutions, reducing bias and improving decision quality through
     adversarial reasoning.
-    """""""
+    """
     def __init__(self, name: str = "Debate", description: str = "Multi-agent debate pattern","                 advocate_agent: Any = None, auditor_agent: Any = None, **debate_agents):
         super().__init__(name, description)
         self.config = DebateConfig()
@@ -55,7 +58,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             True if agents are valid for debate
-        """""""        if len(agents) < 2:
+        """if len(agents) < 2:
             return False
 
         # Check that agents have different roles/perspectives
@@ -73,7 +76,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             The agent instance or None
-        """""""        agents = []
+        """agents = []
         if self.advocate_agent:
             agents.append(self.advocate_agent)
         if self.auditor_agent:
@@ -91,7 +94,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Dict containing debate results and final decision
-        """""""        # Get agents from pattern configuration
+        """# Get agents from pattern configuration
         debate_agents = []
         if self.advocate_agent:
             debate_agents.append(self.advocate_agent)
@@ -142,7 +145,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Results of the debate round
-        """""""        round_results = {
+        """round_results = {
             "round": round_num + 1,"            "arguments": [],"            "counter_arguments": []"        }
 
         # Each participant presents their position
@@ -178,7 +181,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Generated position
-        """""""        # Find the actual agent instance
+        """# Find the actual agent instance
         actual_agent = self._find_agent_by_id(agent.agent_id)
         if actual_agent and hasattr(actual_agent, 'execute_task'):'            # Create a context with debate-specific information
             debate_context = context.next_level(child_task_id=f"debate_position_{agent.agent_id}")"            debate_context.work_state = WorkState()
@@ -207,7 +210,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Counter-argument
-        """""""        # Find the actual agent instance
+        """# Find the actual agent instance
         actual_agent = self._find_agent_by_id(agent.agent_id)
         if actual_agent and hasattr(actual_agent, 'execute_task'):'            # Create a context with counter-argument information
             counter_context = context.next_level(child_task_id=f"counter_arg_{agent.agent_id}")"            counter_context.work_state = WorkState()
@@ -227,7 +230,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             True if consensus reached
-        """""""        # Simple consensus check - all agents agree on key points
+        """# Simple consensus check - all agents agree on key points
         # In practice, this would be more sophisticated
         arguments = round_results.get("arguments", [])"        if len(arguments) < 2:
             return False
@@ -247,7 +250,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Final synthesized decision
-        """""""        if self.config.synthesis_method == "auto":"            return await self._auto_synthesis(debate_history, participants)
+        """if self.config.synthesis_method == "auto":"            return await self._auto_synthesis(debate_history, participants)
         elif self.config.synthesis_method == "weighted_vote":"            return await self._weighted_vote_synthesis(debate_history, participants)
         else:
             # Manual synthesis - return all perspectives
@@ -266,7 +269,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Synthesized decision
-        """""""        # Simple synthesis - take the position with highest average confidence
+        """# Simple synthesis - take the position with highest average confidence
         final_round = debate_history[-1]
         best_position = max(
             final_round["arguments"],"            key=lambda x: x["position"]["confidence"]"        )
@@ -286,7 +289,7 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Synthesized decision
-        """""""        # Weight votes by agent incentives and historical performance
+        """# Weight votes by agent incentives and historical performance
         votes = {}
         for participant in participants:
             # Weight based on role importance (simplified)

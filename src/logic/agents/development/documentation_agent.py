@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Documentation Agent - Generates technical references and project OVERVIEW documents
-"""""""Brief Summary
+# Documentation Agent - Generates technical references and project OVERVIEW documents
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -46,7 +48,7 @@ __version__ = VERSION
 
 
 class DocumentationAgent(BaseAgent):
-""""Generates technical references and project OVERVIEW documents."""""""
+""""Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -54,9 +56,9 @@ class DocumentationAgent(BaseAgent):
 #             "You are the Documentation Agent."#             "Your role is to maintain clear, accurate technical documentation."#             "You summarize code structures, explain module relationships, and ensure READMEs are current."        )
 
     def _get_default_content(self) -> str:
-"""return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n"""""""
+"""return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
-""""Generates a technical reference for the src/classes/ directory."""""""        self.knowledge.build_index()
+""""Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
 #         classes_dir = self.workspace_root / "src/classes"
         # Get structural briefs
         py_files = [
@@ -76,7 +78,7 @@ class DocumentationAgent(BaseAgent):
 #         "Perform documentation maintenance."        _ = prompt," target_file"        return self.generate_reference()
 
 
-if __name__ == "__main__":"    main = create_main_function(DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')")"'"    main()""""""""
+if __name__ == "__main__":"    main = create_main_function(DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')")"'"    main()"
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -92,7 +94,7 @@ __version__ = VERSION
 
 
 class DocumentationAgent(BaseAgent):
-""""Generates technical references and project OVERVIEW documents."""""""
+""""Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -100,9 +102,9 @@ class DocumentationAgent(BaseAgent):
 #             "You are the Documentation Agent."#             "Your role is to maintain clear, accurate technical documentation."#             "You summarize code structures, explain module relationships, and ensure READMEs are current."        )
 
     def _get_default_content(self) -> str:
-"""return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n"""""""
+"""return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
-""""Generates a technical reference for the src/classes/ directory."""""""        self.knowledge.build_index()
+""""Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
 #         classes_dir = self.workspace_root / "src/classes"
         # Get structural briefs
         py_files = [

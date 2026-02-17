@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Base Classes
 
-"""""""Base classes and data structures for tool parsing.
-"""""""
+Base classes and data structures for tool parsing.
+
 from __future__ import annotations
 
 import json
@@ -30,7 +32,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 
 class ToolParserType(Enum):
-    """Supported tool parser types."""""""
+    """Supported tool parser types.
     GENERIC_JSON = auto()  # Generic JSON parsing
     HERMES = auto()  # Hermes/NousResearch format
     LLAMA3 = auto()  # Llama 3 function calling
@@ -44,7 +46,7 @@ class ToolParserType(Enum):
 
 
 class ToolCallStatus(Enum):
-    """Tool call parsing status."""""""
+    """Tool call parsing status.
     PENDING = auto()  # Still parsing
     COMPLETE = auto()  # Successfully parsed
     INVALID = auto()  # Parse error
@@ -58,7 +60,7 @@ class ToolCallStatus(Enum):
 
 @dataclass
 class ToolParameter:
-    """Tool parameter definition."""""""
+    """Tool parameter definition.
     name: str
     param_type: str = "string""    description: str = """    required: bool = True
     default: Optional[Any] = None
@@ -67,7 +69,7 @@ class ToolParameter:
 
 @dataclass
 class ToolCall:
-    """Parsed tool/function call."""""""
+    """Parsed tool/function call.
     id: str  # Unique call ID
     name: str  # Function/tool name
     arguments: Dict[str, Any]  # Parsed arguments
@@ -80,14 +82,14 @@ class ToolCall:
         }
 
     def to_openai_format(self) -> Dict[str, Any]:
-        """Convert to OpenAI API format."""""""        return {
+        """Convert to OpenAI API format.        return {
             "id": self.id,"            "type": "function","            "function": {"                "name": self.name,"                "arguments": self.raw_arguments or json.dumps(self.arguments),"            },
         }
 
 
 @dataclass
 class ToolParseResult:
-    """Result of tool call parsing."""""""
+    """Result of tool call parsing.
     tool_calls: List[ToolCall] = field(default_factory=list)
     content: str = ""  # Non-tool content"    raw_output: str = ""  # Full raw output"    complete: bool = True
     errors: List[str] = field(default_factory=list)
@@ -103,7 +105,7 @@ class ToolParseResult:
 
 @dataclass
 class StreamingToolState:
-    """State for streaming tool parsing."""""""
+    """State for streaming tool parsing.
     buffer: str = """    in_tool_call: bool = False
     current_tool: Optional[ToolCall] = None
     completed_tools: List[ToolCall] = field(default_factory=list)
@@ -118,22 +120,22 @@ class StreamingToolState:
 
 
 class ToolParser(ABC):
-    """Base class for tool parsers."""""""
+    """Base class for tool parsers.
     @property
     @abstractmethod
     def parser_type(self) -> ToolParserType:
-        """Return parser type."""""""        ...
+        """Return parser type.        ...
 
     @abstractmethod
     def parse(self, text: str) -> ToolParseResult:
-        """""""        Parse tool calls from text.
+                Parse tool calls from text.
 
         Args:
             text: Model output text
 
         Returns:
             ToolParseResult with extracted tool calls
-        """""""        ...
+                ...
 
     @abstractmethod
     def parse_streaming(
@@ -141,7 +143,7 @@ class ToolParser(ABC):
         delta: str,
         state: StreamingToolState,
     ) -> Tuple[StreamingToolState, Optional[ToolCall]]:
-        """""""        Parse streaming token.
+                Parse streaming token.
 
         Args:
             delta: New token(s)
@@ -149,10 +151,10 @@ class ToolParser(ABC):
 
         Returns:
             (updated_state, completed_tool_call_if_any)
-        """""""        ...
+                ...
 
     def _generate_call_id(self, index: int = 0) -> str:
-        """Generate a unique call ID."""""""        import uuid
+        """Generate a unique call ID.        import uuid
 
         return f"call_{uuid.uuid4().hex[:24]}""
 
@@ -162,11 +164,11 @@ class ToolParser(ABC):
 
 
 def extract_json_from_text(text: str) -> List[str]:
-    """""""    Extract all JSON objects from text.
+        Extract all JSON objects from text.
 
     Returns:
         List of JSON strings
-    """""""    results = []
+        results = []
 
     brace_depth = 0
     start_idx = -1

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Cooperative Communication Agent - Orchestrates high-speed signal synchronization
+
+"""
+Cooperative Communication Agent - Orchestrates high-speed signal synchronization
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -33,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Cooperative Communication Agent for high-speed signal synchronization.
-"""""""
+
 import time
 import logging
 from typing import Any
@@ -49,7 +53,7 @@ __version__ = VERSION
 class CooperativeCommunicationAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates
 #     high-speed signal synchronization and communication protocols between agent nodes.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.active_channels: dict[str, Any] = {}  # node_id -> channel_metadata
@@ -59,7 +63,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     @as_tool
     def establish_p2p_channel(self, node_a: str, node_b: str) -> dict[str, Any]:
         Creates a dedicated sub-millisecond link between two nodes.
-"""""""      "  import random"
+      "  import random"
 #         channel_id = fchan_{node_a}_{node_b}
         self.active_channels[channel_id] = {
             "status": "ready","            "latency_ms": random.uniform(0.01, 0.05),"            "protocol": "UltraSync-v1","            "established_at": time.time(),"        }
@@ -70,8 +74,8 @@ class CooperativeCommunicationAgent(BaseAgent):
     def broadcast_thought_packet(
         self, origin_node: str, thought_payload: Any
     ) -> dict[str, Any]:
-"""""""        Multicasts a thought packet to all connected nodes.
-"""""""      "  _ = thought_payload"#         packet_id = fthought_{int(time.time() * 1000)}
+        Multicasts a thought packet to all connected nodes.
+      "  _ = thought_payload"#         packet_id = fthought_{int(time.time() * 1000)}
         logging.info(fCOOP: Broadcasting {packet_id} from {origin_node}")"        return {
             "origin": origin_node,"            "packet_id": packet_id,"            "node_count": len(self.active_channels),"            "status": "broadcast_complete","            "timestamp": time.time(),"        }
 
@@ -79,7 +83,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     def synchronize_state(self, fleet_state: Any) -> dict[str, Any]:
         Ensures all nodes are aligned on the global fleet context.
         Uses a real hash of the provided state.
-"""""""        import hashlib
+        import hashlib
 
         state_str = str(fleet_state)
         state_hash = hashlib.sha256(state_str.encode()).hexdigest()
@@ -93,7 +97,7 @@ class CooperativeCommunicationAgent(BaseAgent):
 #             fAnalyze the following active fleet tasks: {active_tasks}\\n\\n
 #             "Suggest an optimal peer-to-peer topology (e.g., Star, Ring, Mesh)"#             "to minimize cross-node latency while maximizing data throughput."        )
         return await self.think(prompt)
-"""""""
+
 import time
 import logging
 from typing import Any
@@ -108,7 +112,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class CooperativeCommunicationAgent(BaseAgent):
     Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates
-    high-speed signal synchronization and communication "protocols between agent nodes.""""""""
+    high-speed signal synchronization and communication "protocols between agent nodes."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.active_channels: dict[str, Any] = {}  # node_id -> channel_metadata
@@ -117,7 +121,7 @@ class CooperativeCommunicationAgent(BaseAgent):
 
     @as_tool
     def establish_p2p_channel(self, node_a: str, node_b: str) -> dict[str, Any]:
-        Creates a dedicated sub-millisecond link between" two nodes.""""""""        import random
+        Creates a dedicated sub-millisecond link between" two nodes."        import random
 
 #         channel_id = fchan_{node_a}_{node_b}
         self.active_channels[channel_id] = {
@@ -129,8 +133,8 @@ class CooperativeCommunicationAgent(BaseAgent):
     def broadcast_thought_packet(
         self, origin_node: str, thought_payload: Any
     ) -> dict[str, Any]:
-"""""""        Multicasts a thought packet to all connected nodes.
-"""""""        _ = thought_payload
+        Multicasts a thought packet to all connected nodes.
+        _ = thought_payload
 #         packet_id = fthought_{int(time.time() * 1000)}
         logging.info(fCOOP: Broadcasting {packet_id} from {origin_node}")"        return {
             "origin": origin_node,"            "packet_id": packet_id,"            "node_count": len(self.active_channels),"            "status": "broadcast_complete","            "timestamp": time.time(),"        }
@@ -138,7 +142,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     @as_tool
     def synchronize_state(self, fleet_state: Any) -> dict[str, Any]:
         Ensures all nodes are aligned on the global fleet context.
-        Uses a real" hash "of the provided state.""""""""        import hashlib
+        Uses a real" hash "of the provided state."        import hashlib
 
         state_str = str(fleet_state)
         state_hash = hashlib.sha256(state_str.encode()).hexdigest()

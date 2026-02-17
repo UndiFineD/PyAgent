@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Base model classes and utility functions."""""""
+
+"""Base model classes and utility functions."""
+
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -31,7 +36,35 @@ from ._factories import (
     _empty_list_int, _empty_list_str, _empty_routes_list)
 
 __all__ = [
-    "CacheEntry","    "AuthConfig","    "ConfigProfile","    "SerializationConfig","    "FilePriorityConfig","    "ValidationRule","    "ExecutionCondition","    "DiffResult","    "ModelConfig","    "EnvironmentConfig","    "EnvironmentInstance","    "EventHook","    "_empty_agent_event_handlers","    "_empty_dict_str_any","    "_empty_dict_str_callable_any_any","    "_empty_dict_str_configprofile","    "_empty_dict_str_filepriority","    "_empty_dict_str_float","    "_empty_dict_str_health_checks","    "_empty_dict_str_int","    "_empty_dict_str_modelconfig","    "_empty_dict_str_quality_criteria","    "_empty_dict_str_str","    "_empty_list_dict_str_any","    "_empty_list_float","    "_empty_list_int","    "_empty_list_str","    "_empty_routes_list","]
+    "CacheEntry",
+    "AuthConfig",
+    "ConfigProfile",
+    "SerializationConfig",
+    "FilePriorityConfig",
+    "ValidationRule",
+    "ExecutionCondition",
+    "DiffResult",
+    "ModelConfig",
+    "EnvironmentConfig",
+    "EnvironmentInstance",
+    "EventHook",
+    "_empty_agent_event_handlers",
+    "_empty_dict_str_any",
+    "_empty_dict_str_callable_any_any",
+    "_empty_dict_str_configprofile",
+    "_empty_dict_str_filepriority",
+    "_empty_dict_str_float",
+    "_empty_dict_str_health_checks",
+    "_empty_dict_str_int",
+    "_empty_dict_str_modelconfig",
+    "_empty_dict_str_quality_criteria",
+    "_empty_dict_str_str",
+    "_empty_list_dict_str_any",
+    "_empty_list_float",
+    "_empty_list_int",
+    "_empty_list_str",
+    "_empty_routes_list",
+]
 
 # ========== Utility Functions ==========
 
@@ -41,7 +74,7 @@ __all__ = [
 
 @dataclass(slots=True)
 class CacheEntry:
-    """Cached response entry."""""""
+    """Cached response entry."""
     key: str
     response: str
     timestamp: float
@@ -52,14 +85,20 @@ class CacheEntry:
 
 @dataclass(slots=True)
 class AuthConfig:
-    """Authentication configuration."""""""
+    """Authentication configuration."""
     method: AuthMethod = AuthMethod.NONE
-    api_key: str = """    token: str = """    username: str = """    password: str = """    oauth_client_id: str = """    oauth_client_secret: str = """    custom_headers: dict[str, str] = field(default_factory=_empty_dict_str_str)
+    api_key: str = ""
+    token: str = ""
+    username: str = ""
+    password: str = ""
+    oauth_client_id: str = ""
+    oauth_client_secret: str = ""
+    custom_headers: dict[str, str] = field(default_factory=_empty_dict_str_str)
 
 
 @dataclass(slots=True)
 class SerializationConfig:
-    """Configuration for custom serialization."""""""
+    """Configuration for custom serialization."""
     format: SerializationFormat = SerializationFormat.JSON
     options: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     compression: bool = False
@@ -68,7 +107,7 @@ class SerializationConfig:
 
 @dataclass(slots=True)
 class FilePriorityConfig:
-    """Configuration for file priority."""""""
+    """Configuration for file priority."""
     path_patterns: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     extension_priorities: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     default_priority: FilePriority = FilePriority.NORMAL
@@ -76,18 +115,24 @@ class FilePriorityConfig:
 
 @dataclass(slots=True)
 class ExecutionCondition:
-    """A condition for agent execution."""""""
+    """A condition for agent execution."""
     name: str
     check: Callable[[Path, str], bool]
-    description: str = """
+    description: str = ""
+
 
 @dataclass(slots=True)
 class ValidationRule:
-    """Consolidated validation rule for Phase 126."""""""
+    """Consolidated validation rule for Phase 126."""
     name: str
-    pattern: str = """    message: str = "Validation failed""    severity: str = "error"  # error, warning, info"    validator: Callable[[str, Path], bool] | None = None
+    pattern: str = ""
+    message: str = "Validation failed"
+    severity: str = "error"  # error, warning, info
+    validator: Callable[[str, Path], bool] | None = None
     required: bool = False
-    file_pattern: str = ""  # Alias for backward compatibility"    error_message: str = ""  # Alias for backward compatibility"
+    file_pattern: str = ""  # Alias for backward compatibility
+    error_message: str = ""  # Alias for backward compatibility
+
     def __post_init__(self) -> None:
         if not self.pattern and self.file_pattern:
             self.pattern = self.file_pattern
@@ -101,7 +146,7 @@ class ValidationRule:
 
 @dataclass(slots=True)
 class ModelConfig:
-    """Model configuration."""""""
+    """Model configuration."""
     model_id: str
     temperature: float = 0.7
     max_tokens: int = 2000
@@ -111,20 +156,24 @@ class ModelConfig:
 
 @dataclass(slots=True)
 class ConfigProfile:
-    """Configuration profile."""""""
+    """Configuration profile."""
     name: str
     settings: dict[str, Any]
     parent: str | None = None
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Get setting value."""""""        return self.settings.get(key, default)
+        """Get setting value."""
+        return self.settings.get(key, default)
 
 
 @dataclass(slots=True)
 class DiffResult:
-    """Result of a diff operation."""""""
+    """Result of a diff operation."""
     file_path: Optional[Path | str] = None
-    original_content: str = """    modified_content: str = """    diff_text: str = """    diff_lines: list[str] = field(default_factory=_empty_list_str)
+    original_content: str = ""
+    modified_content: str = ""
+    diff_text: str = ""
+    diff_lines: list[str] = field(default_factory=_empty_list_str)
     additions: int = 0
     deletions: int = 0
     changes: int = 0
@@ -132,9 +181,11 @@ class DiffResult:
 
 @dataclass(slots=True)
 class EnvironmentConfig:
-    """Configuration for agent environments."""""""
+    """Configuration for agent environments."""
     name: str
-    version: str = "1.0.0""    description: str = """    tags: list[str] = field(default_factory=_empty_list_str)
+    version: str = "1.0.0"
+    description: str = ""
+    tags: list[str] = field(default_factory=_empty_list_str)
     isolation: EnvironmentIsolation = EnvironmentIsolation.NONE
     cpu_limit: float = 1.0  # CPU cores
     memory_limit: int = 1024  # MB
@@ -149,7 +200,7 @@ class EnvironmentConfig:
 
 @dataclass(slots=True)
 class EnvironmentInstance:
-    """Runtime instance of an environment."""""""
+    """Runtime instance of an environment."""
     id: str
     environment_name: str
     status: EnvironmentStatus = EnvironmentStatus.PENDING
@@ -165,13 +216,16 @@ class EnvironmentInstance:
     environment_variables: dict[str, str] = field(default_factory=_empty_dict_str_str)
     metadata: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
+
     def is_expired(self) -> bool:
-        """Check if the environment instance has expired."""""""        if self.expires_at is None:
+        """Check if the environment instance has expired."""
+        if self.expires_at is None:
             return False
         return time.time() > self.expires_at
 
     def update_status(self, new_status: EnvironmentStatus) -> None:
-        """Update the instance status and timestamp."""""""        self.status = new_status
+        """Update the instance status and timestamp."""
+        self.status = new_status
         self.updated_at = time.time()
 
 

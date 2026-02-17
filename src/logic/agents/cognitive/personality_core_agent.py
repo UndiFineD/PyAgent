@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Agent for managing emotional intelligence and communication style of the fleet.""""""""# from __future__ import annotations
+# "Agent for managing emotional intelligence and communication style of the fleet."# from __future__ import annotations
 
 import logging
 from typing import Any
@@ -26,7 +28,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class PersonalityCoreAgent(BaseAgent):
     Manages the 'emotional intelligence' and 'vibes' of the fleet.'    Adjusts communication style and task priorities based on user context.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -35,7 +37,7 @@ class PersonalityCoreAgent(BaseAgent):
     @as_tool
     def set_vibe_track(self, user_input: str) -> dict[str, Any]:
         Analyzes user input and sets the fleet-wide emotional/operational vibe.
-"""""""        logging.info(fPersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")"
+        logging.info(fPersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")"
         # In a real implementation, we'd use LLM to classify sentiment/urgency'#         # prompt = fAnalyze setiment/urgency of: {user_input}
         # analysis = self.think(prompt)
 
@@ -57,6 +59,6 @@ class PersonalityCoreAgent(BaseAgent):
     @as_tool
     def get_track_guidance(self) -> str:
         Returns instructions for other agents on how to behave under the current vibe.
-"""""""  "      guidance = {"            "professional": "Direct, technical, and concise.","            "friendly": "Encouraging, helpful, and personable.","            "rapid_response": "Extremely concise, focusing on immediate fixes and safety.","        }
+  "      guidance = {"            "professional": "Direct, technical, and concise.","            "friendly": "Encouraging, helpful, and personable.","            "rapid_response": "Extremely concise, focusing on immediate fixes and safety.","        }
         return guidance.get(
 #             self.current_vibe, "Maintain standard operational parameters."        )

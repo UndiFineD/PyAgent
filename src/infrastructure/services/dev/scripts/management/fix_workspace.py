@@ -1,15 +1,18 @@
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Script for reconciling workspace-wide module imports and missing __init__.py files."""""""
+
+"""Script for reconciling workspace-wide module imports and missing __init__.py files.
 from __future__ import annotations
 
 import os
@@ -21,7 +24,7 @@ __version__ = VERSION
 
 
 def fix_imports(content: str) -> str:
-    """Correct legacy module imports to use the src prefix."""""""
+    """Correct legacy module imports to use the src prefix.
     modules = [
         "agent_backend","        "agent_changes","        "agent_coder","        "agent_context","        "agent_errors","        "agent_improvements","        "agent_knowledge","        "agent_search","        "agent_stats","        "agent_strategies","        "agent_tests","        "agent_test_utils","    ]
 

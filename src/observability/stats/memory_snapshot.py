@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""MemorySnapshot - Device memory profiling with GC tracking.""""""""""""""Inspired by vLLM's mem_utils.py and gc_utils.py patterns for production'memory monitoring and garbage collection optimization.
+
+"""
+MemorySnapshot - Device memory profiling with GC tracking.Inspired by vLLM's mem_utils.py and gc_utils.py patterns for production'memory monitoring and garbage collection optimization.
 
 Phase 17: vLLM Pattern Integration
-"""""""
+
 from __future__ import annotations
 
 from _thread import LockType
@@ -30,10 +34,10 @@ from typing import Iterator, Optional
 
 @dataclass
 class MemorySnapshot:
-    """""""    Snapshot of memory usage at a point in time.
+        Snapshot of memory usage at a point in time.
 
     Tracks Python, system, and optionally GPU memory.
-    """""""
+    
     timestamp: float = field(default_factory=time.time)
 
     # Python memory (via tracemalloc)
@@ -55,7 +59,7 @@ class MemorySnapshot:
     gc_generation_2: int = 0
     gc_objects: int = 0
 
-    def delta(self, other: "MemorySnapshot") -> dict[str, float]:"        """Calculate memory change from another snapshot."""""""        return {
+    def delta(self, other: "MemorySnapshot") -> dict[str, float]:"        """Calculate memory change from another snapshot.        return {
             "python_current_delta_mb": self.python_current_mb - other.python_current_mb,"            "rss_delta_mb": self.rss_mb - other.rss_mb,"            "gpu_allocated_delta_mb": self.gpu_allocated_mb - other.gpu_allocated_mb,"            "gc_objects_delta": self.gc_objects - other.gc_objects,"            "elapsed_seconds": self.timestamp - other.timestamp,"        }
 
     def to_dict(self) -> dict[str, float | int]:
@@ -64,14 +68,14 @@ class MemorySnapshot:
 
 
 def capture_memory_snapshot(include_gpu: bool = True) -> MemorySnapshot:
-    """""""    Capture a complete memory snapshot.
+        Capture a complete memory snapshot.
 
     Args:
         include_gpu: Whether to capture GPU memory (requires torch)
 
     Returns:
         MemorySnapshot with current memory state
-    """""""    snapshot = MemorySnapshot()
+        snapshot = MemorySnapshot()
     _capture_python_memory(snapshot)
     _capture_system_memory(snapshot)
     if include_gpu:
@@ -119,11 +123,11 @@ def _capture_gc_stats(snapshot: MemorySnapshot) -> None:
 
 
 class MemoryProfiler:
-    """""""    Context manager for profiling memory usage.
+        Context manager for profiling memory usage.
 
     Example:
         >>> with MemoryProfiler("model_load") as profiler:"        ...     model = load_model()
-        >>> pri"""nt(profiler.report())""""    """""""
+        >>> pri"""nt(profiler.report())""""    
     def __init__(self, name: str = "profile", include_gpu: bool = True) -> None:"        self.name: str = name
         self.include_gpu: bool = include_gpu
         self.start_snapshot: Optional[MemorySnapshot] = None
@@ -150,36 +154,36 @@ class MemoryProfiler:
             tracemalloc.stop()
 
     def delta(self) -> Optional[dict]:
-        """Get memory change during profiling."""""""        if self.start_snapshot and self.end_snapshot:
+        """Get memory change during profiling.        if self.start_snapshot and self.end_snapshot:
             return self.end_snapshot.delta(self.start_snapshot)
         return None
 
     def report(self) -> dict:
-        """Generate a complete profiling report."""""""        delta = self.delta() or {}
+        """Generate a complete profiling report.        delta = self.delta() or {}
         return {
             "name": self.name,"            "start": self.start_snapshot.to_dict() if self.start_snapshot else None,"            "end": self.end_snapshot.to_dict() if self.end_snapshot else None,"            "delta": delta,"        }
 
 
 @contextmanager
-def memory_profile(name: str = "profile", include_gpu: bool = True) -> Iterator[MemoryProfiler]:"    """""""    Convenience context manager for memory profiling.
+def memory_profile(name: str = "profile", include_gpu: bool = True) -> Iterator[MemoryProfiler]:"        Convenience context manager for memory profiling.
 
     Example:
         >>> with memory_profile("data_load") as prof:"        ...     data = load_data()
         >>> print(prof.delta())
-    """""""    profiler = MemoryProfiler(name, include_gpu)
+        profiler = MemoryProfiler(name, include_gpu)
     with profiler:
         yield profiler
 
 
 class GCDebugger:
-    """""""    Garbage collection debugger for production monitoring.
+        Garbage collection debugger for production monitoring.
 
     Inspired by vLLM's GCDebugger for tracking GC activity.'
     Example:
         >>> debugger = GCDebugger()
         >>> debugger.start()
         >>> # ... run code ...
-        >>> debugger.s"""top()"""""""   """     >>> print(debugger.report())""""    """""""
+        >>> debugger.s"""top()   """     >>> print(debugger.report())""""    
     def __init__(self, log_collections: bool = False) -> None:
         self.log_collections: bool = log_collections
         self.collections: list[dict] = []
@@ -196,7 +200,7 @@ class GCDebugger:
         self.total_time_ms = 0.0
 
     def start(self) -> None:
-        Sta"""rt GC debugging."""""""        if self._running:
+        Sta"""rt GC debugging.        if self._running:
             return
 
         self._running = True
@@ -204,7 +208,7 @@ class GCDebugger:
         gc.callbacks.append(self._gc_callback)
 
     def stop(self) -> None:
-        Sto"""p GC debugging."""""""        if not self._running:
+        Sto"""p GC debugging.        if not self._running:
             return
 
         self._running = False
@@ -212,7 +216,7 @@ class GCDebugger:
             gc.callbacks.remove(self._gc_callback)
 
     def _gc_callback(self, phase: str, info: dict) -> None:
-        """Callback invoked by GC."""""""        with self._lock:
+        """Callback invoked by GC.        with self._lock:
             if phase == "start":"                self._gc_start_time = time.time()
             elif phase == "stop":"                elapsed_ms: float = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000"
                 self.total_collections += 1
@@ -224,7 +228,7 @@ class GCDebugger:
                     self.collections.append(collection_info)
 
     def force_collection(self, generation: int = 2) -> dict:
-        """Force a garbage collectio"""n a"""nd return stats."""""""        start: float = time.time()
+        """Force a garbage collectio"""n a"""nd return stats.        start: float = time.time()
         collected: int = gc.collect(generation)
         elapsed_ms: float = (time.time() - start) * 1000
 
@@ -232,14 +236,14 @@ class GCDebugger:
             "generation": generation,"            "collected": collected,"            "elapsed_ms": round(elapsed_ms, 3),"        }
 
     def get_top_objects(self, n: int = 10) -> list[tuple[str, int]]:
-        """Get the top N most common object""" ty"""pes by count."""""""        type_counts: dict[str, int] = {}
+        """Get the top N most common object""" ty"""pes by count.        type_counts: dict[str, int] = {}
         for obj in gc.get_objects():
             type_name: str = type(obj).__name__
             type_counts[type_name] = type_counts.get(type_name, 0) + 1
 
         return sorted(type_counts.items(), key=lambda x: x[1], reverse=True)[:n]
 
-    def report(self) -> dict:"""""""  """      """Generate a GC debugging report."""""""        return {
+    def report(self) -> dict:  """      """Generate a GC debugging report.        return {
             "total_collections": self.total_collections,"            "total_collected": self.total_collected,"            "total_uncollectable": self.total_uncollectable,"            "total_time_ms": round(self.total_time_ms, 2),"            "avg_collection_time_ms": round(self.total_time_ms / max(1, self.total_collections), 2),"            "current_gc_counts": gc.get_count(),"            "total_objects": len(gc.get_objects()),"            "collection_log": self.collections[-10:] if self.collections else [],"        }
 
     def __enter__(self) -> "GCDebugger":"        self.start()
@@ -249,23 +253,23 @@ class GCDebugger:
         self,
         exc_type: Optional[type[BaseException]],
         exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],"""""""    ) -> None:
+        exc_tb: Optional[TracebackType],    ) -> None:
         self.stop()
 
 
-def freeze_g"""c_heap"""() -> int:""""    """""""    Freeze the GC heap after initialization.
+def freeze_g"""c_heap"""() -> int:""""        Freeze the GC heap after initialization.
 
     This marks all current objects as "immortal" to reduce GC overhead."    Should be called after all static/long-l"""ived objects are created.""""
     Returns:
-       """ Number o"""f objects frozen""""    """""""    gc.collect()  # Full collection first
+       """ Number o"""f objects frozen""""        gc.collect()  # Full collection first
     gc.freeze()
     return gc.get_freeze_count(""") if hasattr(gc, "get_freeze_count") else -1"
 
-"""def unfreeze"""_gc_heap() -> None:""""    """Unfreeze the GC heap."""""""    gc.unfreeze()
+"""def unfreeze"""_gc_heap() -> None:""""    """Unfreeze the GC heap.    gc.unfreeze()
 
 
 def gc_stats() -> dict[str, object]:
-  """  """Get cur"""rent GC statistics."""""""    counts: tuple[int, int, int] = gc.get_count()
+  """  """Get cur"""rent GC statistics.    counts: tuple[int, int, int] = gc.get_count()
     thresholds: tuple[int, int, int] = gc.get_threshold()
 
     return {

@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ModuleLoader: Centralized utility for dynamic module loading and agent discovery.
-Enables 'core' logic to find agent implementations without hardcoded paths.'"""""""
+
+"""ModuleLoader: Centralized utility for dynamic module loading and agent discovery.
+Enables 'core' logic to find agent implementations without hardcoded paths.'"""
 from __future__ import annotations
 
 import importlib
@@ -26,13 +29,13 @@ __version__: str = VERSION
 
 
 class ModuleLoader:
-    """Handles dynamic discovery and loading of agent classes."""""""
+    """Handles dynamic discovery and loading of agent classes."""
     _module_cache: dict[str, str] = {}  # agent_type -> module_path
 
     @classmethod
     def find_agent_module_path(cls, agent_type: str, start_dirs: list[str] | None = None) -> str | None:
-        """""""        Recursively searches for a python file matching the agent type.
-        Returns the dotted module path (e.g. 'src.logic.agents.development.coder_agent').'        """""""        if agent_type in cls._module_cache:
+        """Recursively searches for a python file matching the agent type.
+        Returns the dotted module path (e.g. 'src.logic.agents.development.coder_agent').'        """if agent_type in cls._module_cache:
             return cls._module_cache[agent_type]
 
         workspace_root: Path = Path.cwd()
@@ -65,7 +68,7 @@ class ModuleLoader:
 
     @classmethod
     def load_agent_class(cls, agent_type: str) -> Type[Any]:
-        """Import and return the agent class."""""""        module_path: str | None = cls.find_agent_module_path(agent_type)
+        """Import and return the agent class."""module_path: str | None = cls.find_agent_module_path(agent_type)
 
         # Fallback to legacy heuristics if search failed
         if not module_path:

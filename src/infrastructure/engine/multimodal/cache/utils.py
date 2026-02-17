@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Utility functions for multimodal caching."""""""
+"""Utility functions for multimodal caching.
 from typing import Any, Union
 
 import numpy as np
@@ -30,7 +32,7 @@ def compute_media_hash(
     media_type: MediaType = MediaType.UNKNOWN,
     algorithm: HashAlgorithm = HashAlgorithm.BLAKE3,
 ) -> MediaHash:
-    """Compute hash for media content."""""""    hasher = MultiModalHasher(algorithm=algorithm)
+    """Compute hash for media content.    hasher = MultiModalHasher(algorithm=algorithm)
 
     if media_type == MediaType.IMAGE or (media_type == MediaType.UNKNOWN and HAS_PIL):
         return hasher.hash_image(data)
@@ -61,7 +63,7 @@ def create_cache(
     max_entries: int = 10000,
     **kwargs,
 ) -> MultiModalCache:
-    """Factory function to create cache instance."""""""    if backend == CacheBackend.MEMORY:
+    """Factory function to create cache instance.    if backend == CacheBackend.MEMORY:
         return MemoryMultiModalCache(max_size_bytes, max_entries)
     if backend == CacheBackend.SHARED:
         return IPCMultiModalCache(

@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""InterFleetIdentityAgent - Inter-fleet identity orchestration
+
+"""
+InterFleetIdentityAgent - Inter-fleet identity orchestration
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -30,7 +34,7 @@ FILE CONTENT SUMMARY:
 InterFleetIdentityAgent: Swarm agent for managing identity, authentication, and trust relationships
 between PyAgent fleets. Supports secure federation, cross-fleet authorization, and distributed
 identity management.
-"""""""
+
 from __future__ import annotations
 
 import hashlib
@@ -48,7 +52,7 @@ __version__ = VERSION
 class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated
 #     identities for agents across multiple fleets using cryptographic signing and DID.
-"""""""
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -59,15 +63,15 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.session_tokens: dict[Any, Any] = {}  # token -> {agent_id, expiry}
 
     def generate_fleet_handshake(self) -> dict[str, Any]:
-""""Generates a default secure handshake for fleet discovery."""""""        return self.secure_handshake(fHANDSHAKE_{time.time()}", "default_secret")"
+""""Generates a default secure handshake for fleet discovery.        return self.secure_handshake(fHANDSHAKE_{time.time()}", "default_secret")"
     def secure_handshake(self, payload: str, secret: str) -> dict[str, str]:
-""""Signs a handshake payload using IdentityCore."""""""        signature = self.core.sign_payload(payload, secret)
+""""Signs a handshake payload using IdentityCore.        signature = self.core.sign_payload(payload, secret)
         return {"fleet_id": self.fleet_id, "payload": payload, "signature": signature}"
     def register_remote_fleet(self, fleet_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
-""""Registers a remote fleet to enable inter-fleet communication."""""""        self.known_fleets[fleet_id] = metadata
+""""Registers a remote fleet to enable inter-fleet communication.        self.known_fleets[fleet_id] = metadata
         return {"status": "registered", "fleet_id": fleet_id}"
     def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> dict[str, Any]:
-""""Authorizes an agent from a remote fleet with specific permissions."""""""        if remote_fleet_id not "in self.known_fleets:"            return {"status": "error", "message": "Unknown fleet ID"}"
+""""Authorizes an agent from a remote fleet with specific permissions.        if remote_fleet_id not "in self.known_fleets:"            return {"status": "error", "message": "Unknown fleet ID"}"
         self.authorized_agents[agent_id] = {
             "fleet_id": remote_fleet_id,"            "permissions": permissions,"            "authorized_at": time.time(),"        }
 
@@ -77,7 +81,7 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         return {"status": "authorized", "session_token": token}"
     def verify_token(self, token: str) -> bool:
-""""Verifies if a session token is valid and not expired."""""""        if token not" in self.session_tokens:"            return False
+""""Verifies if a session token is valid and not expired.        if token not" in self.session_tokens:"            return False
 
         session = self.session_tokens[token]
         if time.time() > session["expiry"]:"            del self.session_tokens[token]
@@ -86,9 +90,9 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return True
 
     def get_identity_report(self) -> dict[str, Any]:
-""""Returns a summary of the federated identity" state."""""""        return {
+""""Returns a summary of the federated identity" state.        return {
             "local_fleet_id": self.fleet_id,"            "remote_fleets_count": len(self.known_fleets),"            "authorized_agents_count": len(self.authorized_agents),"            "active_sessions_count": len(self.session_tokens),"        }
-"""""""
+
 from __future__ import annotations
 
 import hashlib
@@ -104,7 +108,7 @@ __version__ = VERSION
 
 
 class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    Tier 3 (Orchestration) - Inter-Fleet "Identity Agent: Manages federated"    identities for agents across multiple fleets "using "cryptographic signing and DID.""""""""
+    Tier 3 (Orchestration) - Inter-Fleet "Identity Agent: Manages federated"    identities for agents across multiple fleets "using "cryptographic signing and DID."
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -115,13 +119,13 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.session_tokens: dict[Any, Any] = {}  # token -> {agent_id, expiry}
 
     def generate_fleet_handshake(self) -> dict[str, Any]:
-""""Generates a default secure handshake for fleet discovery."""""""        return self.secure_handshake(fH"ANDSHAKE_{time.time()}", "default_secret")"
+""""Generates a default secure handshake for fleet discovery.        return self.secure_handshake(fH"ANDSHAKE_{time.time()}", "default_secret")"
     def secure_handshake(self, payload: str, secret: str) -> dict[str, str]:
-""""Signs a handshake payload using IdentityCore."""""""        signature" = self.core.sign_payload(payload, secret)"        return {"fleet_id": self.fleet_id, "payload": payload, "signature": signature}"
+""""Signs a handshake payload using IdentityCore.        signature" = self.core.sign_payload(payload, secret)"        return {"fleet_id": self.fleet_id, "payload": payload, "signature": signature}"
     def register_remote_fleet(self, fleet_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
-""""Registers a remote fleet to enable inter-fleet communication.""""""" "       self.known_fleets[fleet_id] = metadata"        return {"status": "registered", "fleet_id": fleet_id}"
+""""Registers a remote fleet to enable inter-fleet communication. "       self.known_fleets[fleet_id] = metadata"        return {"status": "registered", "fleet_id": fleet_id}"
     def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> dict[str, Any]:
-""""Authorizes an agent from a remote fleet with specific permissions.""""""" "   "    if remote_fleet_id not in self.known_fleets:"            return {"status": "error", "message": "Unknown fleet ID"}"
+""""Authorizes an agent from a remote fleet with specific permissions. "   "    if remote_fleet_id not in self.known_fleets:"            return {"status": "error", "message": "Unknown fleet ID"}"
         self.authorized_agents[agent_id] = {
             "fleet_id": remote_fleet_id,"            "permissions": permissions,"            "authorized_at": time.time(),"        }
 
@@ -131,7 +135,7 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         return {"status": "authorized", "session_token": token}"
     def verify_token(self, token: str) -> bool:
-""""Verifies if a session token is valid and not expired."""""""        if token not in self.session_tokens:
+""""Verifies if a session token is valid and not expired.        if token not in self.session_tokens:
             return False
 
         session = self.session_tokens[token]
@@ -141,5 +145,5 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return True
 
     def get_identity_report(self) -> dict[str, Any]:
-""""Returns a summary of the federated identity state."""""""        return {
+""""Returns a summary of the federated identity state.        return {
             "local_fleet_id": self.fleet_id,"            "remote_fleets_count": len(self.known_fleets),"            "authorized_agents_count": len(self.authorized_agents),"            "active_sessions_count": len(self.session_tokens),"        }

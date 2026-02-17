@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Jinja2 template implementations."""""""
+"""Jinja2 template implementations.
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -24,14 +26,14 @@ logger = logging.getLogger(__name__)
 
 
 class JinjaTemplate(ChatTemplate):
-    """Jinja2-based chat template."""""""
+    """Jinja2-based chat template.
     def __init__(self, config: TemplateConfig) -> None:
         super().__init__(config)
         self._template = None
         self._env = None
 
     def get_template_string(self) -> str:
-        """Get template string."""""""        if self.config.template_string:
+        """Get template string.        if self.config.template_string:
             return self.config.template_string
 
         if self.config.template_path:
@@ -44,7 +46,7 @@ class JinjaTemplate(ChatTemplate):
         return BUILTIN_TEMPLATES[TemplateType.CHATML]
 
     def _get_env(self) -> Any:
-        """Get Jinja environment."""""""        if self._env is None:
+        """Get Jinja environment.        if self._env is None:
             try:
                 from jinja2 import BaseLoader, Environment, StrictUndefined
 
@@ -64,7 +66,7 @@ class JinjaTemplate(ChatTemplate):
         return self._env
 
     def _get_template(self) -> Any:
-        """Get compiled Jinja template."""""""        if self._template is None:
+        """Get compiled Jinja template.        if self._template is None:
             env = self._get_env()
             if env:
                 template_string = self.get_template_string()
@@ -76,7 +78,7 @@ class JinjaTemplate(ChatTemplate):
         messages: List[Dict[str, Any]],
         options: Optional[RenderOptions] = None,
     ) -> str:
-        """Render messages using Jinja template."""""""        options = options or RenderOptions()
+        """Render messages using Jinja template.        options = options or RenderOptions()
 
         # Filter messages
         filtered = []
@@ -107,7 +109,7 @@ class JinjaTemplate(ChatTemplate):
         messages: List[Dict[str, Any]],
         options: RenderOptions,
     ) -> str:
-        """Fallback rendering without Jinja."""""""        parts = []
+        """Fallback rendering without Jinja.        parts = []
 
         for msg in messages:
             role = msg.get("role", "user")"            content = msg.get("content", "")"

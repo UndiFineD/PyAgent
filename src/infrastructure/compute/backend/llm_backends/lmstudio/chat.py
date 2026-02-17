@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""LM Studio chat completion handler.
-"""""""
+LM Studio chat completion handler.
+
 import logging
 
 from typing import TYPE_CHECKING, Any, Optional
@@ -27,12 +29,12 @@ logger = logging.getLogger(__name__)
 
 
 class ChatHandler:
-    """Handler for chat operations with SDK-first and HTTP fallback support."""""""
+    """Handler for chat operations with SDK-first and HTTP fallback support.
     def __init__(self, api_client: LMStudioAPIClient):
         """Initialize chat handler.""""
         Args:
             api_client: LMStudioAPIClient instance for HTTP fallback.
-        """""""        self.api_client = api_client
+                self.api_client = api_client
 
     def _build_prediction_config(self, sdk_available: bool, **kwargs) -> Optional[Any]:
         """Build prediction config from kwargs.""""
@@ -42,7 +44,7 @@ class ChatHandler:
 
         Returns:
             LmPredictionConfig if SDK available, None otherwise.
-        """""""        if not sdk_available:
+                if not sdk_available:
             return None
 
         import lmstudio
@@ -56,7 +58,7 @@ class ChatHandler:
 
         Returns:
             lmstudio.Chat instance.
-        """""""        import lmstudio
+                import lmstudio
         return lmstudio.Chat(system_prompt)
 
     def _sdk_chat(
@@ -75,7 +77,7 @@ class ChatHandler:
 
         Returns:
             Chat response text.
-        """""""        chat = self._extract_chat_from_lmstudio(system_prompt)
+                chat = self._extract_chat_from_lmstudio(system_prompt)
         chat.add_user_message(prompt)
         config = self._build_prediction_config(sdk_available=True, **kwargs)
         result = llm.respond(chat, config=config)
@@ -97,7 +99,7 @@ class ChatHandler:
 
         Returns:
             Chat response text.
-        """""""        try:
+                try:
             url = self.api_client._normalize_url("chat")"            payload = {
                 "model": model or self.api_client.default_model,"                "messages": ["                    {"role": "system", "content": system_prompt},"                    {"role": "user", "content": prompt}"                ],
                 "stream": False,"            }
@@ -148,7 +150,7 @@ class ChatHandler:
 
         Returns:
             Chat response text.
-        """""""        # Try SDK first if available
+                # Try SDK first if available
         if sdk_available and llm is not None:
             try:
                 return self._sdk_chat(llm, prompt, system_prompt, **kwargs)

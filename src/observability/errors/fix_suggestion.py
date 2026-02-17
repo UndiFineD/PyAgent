@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FixSuggestion - Data model for automated fix suggestions
+
+"""
+FixSuggestion - Data model for automated fix suggestions
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -26,7 +30,7 @@ WHAT IT SHOULD DO BETTER:
 - Validate confidence is within 0.0–1.0 and enforce types (e.g., via __post_init__ or pydantic) to prevent invalid suggestions flowing through pipelines.
 - Add metadata (tags, priority, affected_files) and provenance (timestamp, agent_id) to improve traceability and filtering.
 - Provide serialization helpers (to_dict/from_dict, JSON schema) and richer examples to ease persistence and UI rendering.
-"""""""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -45,7 +49,7 @@ class FixSuggestion:
         confidence: Confidence score (0 - 1).
         code_snippet: Example code for the fix.
         source: Source of the suggestion.
-    """""""
+    
     error_id: str
     suggestion: str
     confidence: float = 0.0

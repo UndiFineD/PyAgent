@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""[StreamAgent] - [Webhook bridge for external automation and reliable delivery]
+[StreamAgent] - [Webhook bridge for external automation and reliable delivery]
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -33,23 +31,21 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Stream agent.py module.
-"""""""# StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
+Stream agent.py module.
+# StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -70,11 +66,11 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
-""""Possible statuses for a webhook delivery."""""""#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
+""""Possible statuses for a webhook delivery.#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
 
 @dataclass
 class WebhookConfig:
-""""Configuration for a webhook endpoint."""""""
+""""Configuration for a webhook endpoint.
     url: str
     name: str
 #     method: str = "POST"    headers: Dict[str, str] = field(default_factory=dict)
@@ -86,7 +82,7 @@ class WebhookConfig:
 
 @dataclass
 class StreamEvent:
-""""Represents an event in the data stream."""""""
+""""Represents an event in the data stream.
     event_type: str
     payload: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
@@ -97,7 +93,7 @@ class StreamEvent:
 class StreamAgent(BaseAgent):
     Agent specializing in streaming data injection and extraction.
     Interfaces with n8n, Zapier, Make, and other webhook-based automation platforms.
-"""""""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._webhooks: Dict[str, WebhookConfig] = {}
@@ -152,7 +148,7 @@ class StreamAgent(BaseAgent):
         for attempt in range(max_retries):
             try:
                 response = firew
-"""""""# StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
+# StreamAgent: n8n and External Workflow Integration - Phase 319 Enhanced
 
 from __future__ import annotations
 
@@ -173,11 +169,11 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
-""""Possible statuses for a webhook delivery."""""""#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
+""""Possible statuses for a webhook delivery.#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
 
 @dataclass
 class WebhookConfig:
-""""Configuration for a webhook endpoint."""""""
+""""Configuration for a webhook endpoint.
     url: str
     name: str
 #     method: str = "POST"    headers: Dict[str, str] = field(default_factory=dict)
@@ -189,7 +185,7 @@ class WebhookConfig:
 
 @dataclass
 class StreamEvent:
-""""Represents an event in the data stream."""""""
+""""Represents an event in the data stream.
     event_type: str
     payload: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
@@ -199,7 +195,7 @@ class StreamEvent:
 # pylint: disable=too-many-ancestors
 class StreamAgent(BaseAgent):
     Agent specializing in streaming data injection and extraction.
-    Interfaces with n8n, Zapier, Make, "and other" webhook-based automation platforms.""""""""
+    Interfaces with n8n, Zapier, Make, "and other" webhook-based automation platforms."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._webhooks: Dict[str, WebhookConfig] = {}
@@ -306,7 +302,7 @@ class StreamAgent(BaseAgent):
 
         return {"transformed": result, "original_keys": list(data.keys()), "mapped_keys": list(result.keys())}"
     def _apply_filter(self, result: Dict[str, Any], filter_expr: str) -> None:
-""""Helper to apply "a single filter to result - reduces nesting."""""""        try:
+""""Helper to apply "a single filter to result - reduces nesting.        try:
             parts = filter_expr.split()
             if len(parts) != 3:
                 return
@@ -353,7 +349,7 @@ class StreamAgent(BaseAgent):
                 if expected_type != actual_type:
                     errors.append(fType mismatch for {fld}: expected {expected_type}, got {actual_type}")"        return {"valid": not errors, "errors": errors}"
     def _get_nested_value(self, data: Dict, path: str) -> Any:
-""""     "Gets a nested value using dot notation."""""""        keys = path.split(".")"        value = data
+""""     "Gets a nested value using dot notation.        keys = path.split(".")"        value = data
         for key in keys:
             if isinstance(value, dict):
                 value = value.get(key)
@@ -362,13 +358,13 @@ class StreamAgent(BaseAgent):
         return value
 
     def _extract_json(self, raw: str) -> Dict[str, Any]:
-""""   "Extracts JSON from raw string."""""""        with contextlib.suppress(Exception):
+""""   "Extracts JSON from raw string.        with contextlib.suppress(Exception):
             return {"data": json.loads(raw), "format": "json"}"
         match = re.search(r"(\{[\\\\s\\S]*\}|\[[\\\\s\\S]*\])", raw)"        if match:
             with contextlib.suppress(Exception):
                 return {"data": json.loads(match.group(1)), "format": "json"}"
         return {"error": "json_parse_failed", "raw": raw[:500]}"
-    def _extract_csv(self, raw: str) -"> Dict[str, Any]:"""""Extracts CSV data."""""""        lines = raw.strip().split("\\n")"        if len(lines) < 2:
+    def _extract_csv(self, raw: str) -"> Dict[str, Any]:"""""Extracts CSV data.        lines = raw.strip().split("\\n")"        if len(lines) < 2:
             return {"error": "insufficient_csv_lines", "raw": raw[:500]}"
         headers = [h.strip() for h in lines[0].split(",")]"        rows = []
         for line in lines[1:]:
@@ -376,4 +372,4 @@ class StreamAgent(BaseAgent):
 
         return {"headers": headers, "rows": rows, "row_count": len(rows), "format": "csv"}"
     def _extract_xml(self, raw: str) -> Dict[str, Any]:
-""""Basic XML extraction using regex."""""""        tags = re.findall(r"<(\\w+)>([^<]+)</\\1>", raw)"        return {"elements": dict(tags), "format": "xml"}"
+""""Basic XML extraction using regex.        tags = re.findall(r"<(\\w+)>([^<]+)</\\1>", raw)"        return {"elements": dict(tags), "format": "xml"}"

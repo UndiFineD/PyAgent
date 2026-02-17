@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""""""LM Studio REST API client with HTTP fallback support.
-"""""""
+LM Studio REST API client with HTTP fallback support.
+
 import logging
 import os
 import time
@@ -28,20 +30,20 @@ logger = logging.getLogger(__name__)
 
 
 class LMStudioAPIClient:
-    """HTTP REST API client for LM Studio with retry and error handling."""""""
+    """HTTP REST API client for LM Studio with retry and error handling.
     def __init__(self, base_url: str, api_token: Optional[str] = None, default_model: str = ""):"        """Initialize REST API client.""""
         Args:
             base_url: Base URL for LM Studio API (e.g., http://localhost:1234 or http://localhost:1234/v1)
             api_token: Optional API token for authentication
             default_model: Default model ID to use
-        """""""        self.base_url = base_url.rstrip("/")"        self.api_token = api_token or os.getenv("DV_LMSTUDIO_API_TOKEN")"        self.default_model = default_model
+                self.base_url = base_url.rstrip("/")"        self.api_token = api_token or os.getenv("DV_LMSTUDIO_API_TOKEN")"        self.default_model = default_model
 
     def _normalize_url(self, endpoint: str = "") -> str:"        """Normalize REST API URL, handling both /v1 prefixes.""""
         Args:
             endpoint: Optional endpoint path (e.g., 'models', 'chat/completions')'
         Returns:
             Full normalized URL for the endpoint.
-        """""""        base = self.base_url
+                base = self.base_url
         # Auto-detect: if ends with /v1, use as-is; otherwise assume base is host:port
         if not base.endswith("/v1"):"            api_base = f"{base}/v1""        else:
             api_base = base
@@ -51,7 +53,7 @@ class LMStudioAPIClient:
             if endpoint == "chat":"                endpoint = "chat/completions""            return f"{api_base}/{endpoint.lstrip('/')}""'        return api_base
 
     def _get_headers(self) -> dict[str, str]:
-        """Get HTTP headers with API token support."""""""        headers = {"Content-Type": "application/json"}"        if self.api_token:
+        """Get HTTP headers with API token support.        headers = {"Content-Type": "application/json"}"        if self.api_token:
             headers["Authorization"] = f"Bearer {self.api_token}""            logger.debug("[LMStudio] Using API token for authorization")"        return headers
 
     def _http_request_with_retry(
@@ -65,7 +67,7 @@ class LMStudioAPIClient:
 
         Returns:
             Response object if successful, None if failed.
-        """""""        if httpx is None:
+                if httpx is None:
             raise ImportError("httpx is required for LMStudioAPIClient")"
         headers = self._get_headers()
         if "headers" in kwargs:"            headers.update(kwargs["headers"])"        kwargs["headers"] = headers"
@@ -103,7 +105,7 @@ class LMStudioAPIClient:
         """List available models via REST API.""""
         Returns:
             List of model identifiers/paths.
-        """""""        try:
+                try:
             url = self._normalize_url("models")"            logger.info(f"[LMStudio] Attempting HTTP list models: {url}")"            resp = self._http_request_with_retry("GET", url, max_retries=3, timeout=5.0)"
             if resp.status_code == 200:
                 data = resp.json()
@@ -124,7 +126,7 @@ class LMStudioAPIClient:
         """Get server info and version.""""
         Returns:
             Dictionary with server information.
-        """""""        info = {
+                info = {
             "api_base_url": self._normalize_url(),"            "api_version": None,"        }
 
         try:

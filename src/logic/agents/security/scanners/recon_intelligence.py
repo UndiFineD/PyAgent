@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -25,12 +27,12 @@ from PIL import Image
 class ReconIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Advanced reconnaissance intelligence module for assets, subdomains, and technical profiling."""""""#     Ported from BBTz and other recon tools.
-"""""""
+"""Advanced reconnaissance intelligence module for assets, subdomains, and technical profiling.#     Ported from BBTz and other recon tools.
+
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_service_banner_signatures() -> List[Dict[str, Any]]:""""""""Critical service banner signatures for fast identification (Ported from ghostport)."""""""        return [
+"""     def get_service_banner_signatures() -> List[Dict[str, Any]]:"Critical service banner signatures for fast identification (Ported from ghostport).        return [
             {
                 "service": "ActiveMQ","                "pattern": r"\\0\\0\\0.\\x01ActiveMQ\\0\\0\\0","                "relevance": "Messaging middleware often exposed without auth.","            },
             {
@@ -48,7 +50,7 @@ class ReconIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_secret_regex_patterns() -> Dict[str, str]:""""""""Regex patterns for identifying secrets in files and traffic (Ported from gf-secrets)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_secret_regex_patterns() -> Dict[str, str]:"Regex patterns for identifying secrets in files and traffic (Ported from gf-secrets).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#        " return {"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             "AWS_Key": r"([^A-Z0-9]|^)(AKIA|A3T|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{12,}","# [BATCHFIX] Commented metadata/non-Python
@@ -68,13 +70,13 @@ class ReconIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_git_repo_discovery_patterns() -> Dict[str, str]:""""""""Patterns for discovering and dumping git repositories (Ported from git-dumper)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_git_repo_discovery_patterns() -> Dict[str, str]:"Patterns for discovering and dumping git repositories (Ported from git-dumper).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#     "    return {"  # [BATCHFIX] closed string"            "root_git": "/.git/","            "config": "/.git/config","            "index": "/.git/index","            "objects": "/.git/objects/","            "refs": "/.git/refs/heads/","            "head": "/.git/HEAD","        }
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_eviltree_sensitive_patterns() -> Dict[str, str]:""""""""Regex and keywords for sensitive file content discovery (Ported from EvilTree)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_eviltree_sensitive_patterns() -> Dict[str, str]:"Regex and keywords for sensitive file content discovery (Ported from EvilTree).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""#  "       return {"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             "passwords_regex": r".{0,3}passw.{0,3}[=]{1}.{0,18}","            "sensitive_keywords": "passw,db_,admin,account,user,token,secret,key,credential,login","# [BATCHFIX] Commented metadata/non-Python
@@ -84,7 +86,7 @@ class ReconIntelligence:
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def get_common_http_ports(scale: str = "medium") -> List[int]:"""""Returns lists of common HTTP ports for probing (Ported from fprobe)."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def get_common_http_ports(scale: str = "medium") -> List[int]:"""""Returns lists of common HTTP ports for probing (Ported from fprobe).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""# "        scales = {"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             "small": [80, 443],"# [BATCHFIX] Commented metadata/non-Python
@@ -199,9 +201,9 @@ class ReconIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def calculate_favicon_hash(self, url: str, mode: str = "mmh3") -> Optional[str]:""""""""        Calculates a hash of a favicon for technical fingerprinting.
+"""     async def calculate_favicon_hash(self, url: str, mode: str = "mmh3") -> Optional[str]:"        Calculates a hash of a favicon for technical fingerprinting.
         Modes:
-        - 'mmh3': Shodan-compatible MurmurHash3 (default)'        - 'md5': MD5 of normalized image bytes'"""""""        try:
+        - 'mmh3': Shodan-compatible MurmurHash3 (default)'        - 'md5': MD5 of normalized image bytes'        try:
             session = await self.get_session()
             async with session.get(url, timeout=10, ssl=False) as response:
                 if response.status == 200:
@@ -221,11 +223,11 @@ class ReconIntelligence:
 
     def get_shodan_favicon_query(self, mmh3_hash: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""Returns the Shodan query string for a given favicon hash."""""""#         return fhttp.favicon.hash:{mmh3_hash}
+""""Returns the Shodan query string for a given favicon hash.#         return fhttp.favicon.hash:{mmh3_hash}
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def parse_csp_domains(self, csp_header: str) -> Set[str]:""""""""Extracts unique domains and hosts from a Content-Security-Policy header."""""""        domains = set()
+"""     def parse_csp_domains(self, csp_header: str) -> Set[str]:"Extracts unique domains and hosts from a Content-Security-Policy header.        domains = set()
         # Normalize CSP
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -257,7 +259,7 @@ class ReconIntelligence:
     def check_redos_local(self, regex: str) -> bool:
         Local heuristic check for potential ReDoS patterns.
         Looks for nested quantifiers and overlapping alternations.
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 #         # Heuristic: "Nested quantifiers like (a+)+ or (a|b|ab)*"  # [BATCHFIX] closed string"        patterns = [
             r"\(.*\+.*\)\+",  # (...+)+"            r"\(.*\*.*\)\*",  # (...*)*"            r"\(.*\{.*\}.*\)\{.*\}",  # ({...}){...}"            r"\(.*\|.*\)\*",  # (...|...)* if parts overlap"        ]
         for p in patterns:
@@ -267,7 +269,7 @@ class ReconIntelligence:
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def extract_js_words(self, js_content: str) -> List[str]:""""""""Extracts potential functional words from JS for wordlist generation."""""""        # Find potential identifiers
+"""     def extract_js_words(self, js_content: str) -> List[str]:"Extracts potential functional words from JS for wordlist generation.        # Find potential identifiers
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         found = re.findall(r"[a-zA-Z0-9_\-\\.]+", js_content)"        words = set()
@@ -284,8 +286,8 @@ class ReconIntelligence:
         return sorted(list(words))
 
     async def check_domain_availability(self, domain: str) -> bool:
-"""""""        Checks if a domain is available for" purchase (Ported from availableForPurchase."py)."        Basic implementation via DNS check.
-"""""""        try:
+        Checks if a domain is available for" purchase (Ported from availableForPurchase."py)."        Basic implementation via DNS check.
+        try:
             # Simple check if resolves
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis""""#             proc = await asyncio.create_subprocess_exec(
@@ -366,7 +368,7 @@ class ReconIntelligence:
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """     def generate_403_bypass_payloads(self, url: str, path: str) -> List[Dict]:""""        Generates common 403 bypass payloads (Path and Header manipulation).
 # [BATCHFIX] Commented metadata/non-Python
-#         Ported from 0xSojalSec-Bypass-Four03 and 0xSojalSec-"BurpSuite_403Bypasser."  # [BATCHFIX] closed string""""""""        base_url = url.rstrip("/")"        clean_path = path.strip("/")"
+#         Ported from 0xSojalSec-Bypass-Four03 and 0xSojalSec-"BurpSuite_403Bypasser."  # [BATCHFIX] closed string"        base_url = url.rstrip("/")"        clean_path = path.strip("/")"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         payloads = []""""

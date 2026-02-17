@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -35,7 +37,7 @@ __version__ = VERSION
 
 @dataclass
 class SwarmInsight:
-    """Data class representing a derived insight from the swarm."""""""
+    """Data class representing a derived insight from the swarm.
     agent: str
     insight: str
     confidence: float
@@ -43,10 +45,10 @@ class SwarmInsight:
     timestamp: float = field(default_factory=lambda: datetime.now().timestamp())
 
     def format_for_pool(self) -> str:
-        """Format the insight for the synthesis prompt."""""""        return f"- {self.agent} ({self.confidence:.2f}): {self.insight}""
+        """Format the insight for the synthesis prompt.        return f"- {self.agent} ({self.confidence:.2f}): {self.insight}""
 
 class IntelligenceCore:
-    """Logic-only core for swarm intelligence synthesis."""""""
+    """Logic-only core for swarm intelligence synthesis.
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root
         self._unclassified_tracker: Counter = Counter()
@@ -68,7 +70,7 @@ class IntelligenceCore:
 
         Returns:
             List of SwarmInsight objects.
-        """""""        if rc:
+                if rc:
             try:
                 # Optimized sort and truncate in Rust
                 pool = rc.filter_relevant_insights(pool, limit)  # type: ignore[attr-defined]
@@ -91,7 +93,7 @@ class IntelligenceCore:
 
         Returns:
             A prompt string for the AI.
-        """""""        lines = [i.format_for_pool() for i in insights]
+                lines = [i.format_for_pool() for i in insights]
         for lesson in sql_lessons:
             lines.append(f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})")"'
         pool_text = "\\n".join(lines)"        return (
@@ -104,7 +106,7 @@ class IntelligenceCore:
 
         Returns:
             List of filtered, actionable pattern dictionaries.
-        """""""        valid_patterns: list[dict[str, Any]] = []
+                valid_patterns: list[dict[str, Any]] = []
         unknown_failures = []
         keywords = [
             "error","            "failure","            "bottleneck","            "profiling","            "missing","            "security","            "leak","            "logic","            "refactor","            "quantum","            "recursive_loop","            "shard_parallelization","            "test_infrastructure","            "unknown","            "improvement","        ]

@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Task Management Mixin for BaseAgent.
-Provides structured task tracking and management, inspired by Adorable's todo tool.'"""""""
+
+"""Task Management Mixin for BaseAgent.
+Provides structured task tracking and management, inspired by Adorable's todo tool.'"""
 from __future__ import annotations
 
 import json
@@ -26,7 +29,7 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 @dataclass
 class TaskItem:
-    """Represents a single task item."""""""    description: str
+    """Represents a single task item."""description: str
     completed: bool = False
     created_at: float = field(default_factory=time.time)
     completed_at: Optional[float] = None
@@ -42,17 +45,17 @@ class TaskItem:
             description=data["description"],"            completed=data.get("completed", False),"            created_at=data.get("created_at", time.time()),"            completed_at=data.get("completed_at"),"            priority=data.get("priority", 1)"        )
 
     def complete(self) -> None:
-        """Mark the task as completed."""""""        self.completed = True
+        """Mark the task as completed."""self.completed = True
         self.completed_at = time.time()
 
     def reset(self) -> None:
-        """Reset the task to incomplete."""""""        self.completed = False
+        """Reset the task to incomplete."""self.completed = False
         self.completed_at = None
 
 
 class TaskManagerMixin:
-    """""""    Mixin providing structured task management capabilities.
-    Inspired by Adorable's todo tool for tracking agent tasks and workflows.'    """""""
+    """Mixin providing structured task management capabilities.
+    Inspired by Adorable's todo tool for tracking agent tasks and workflows.'    """
     class _ManagedTaskList(list):
         def __init__(self, parent, *args):
             super().__init__(*args)
@@ -95,8 +98,8 @@ class TaskManagerMixin:
         items: List[Dict[str, Any]],
         cascade_context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """""""        Update the task list with new items.
-        Inspired by Adorable's todo tool interface.'        """""""        try:
+        """Update the task list with new items.
+        Inspired by Adorable's todo tool interface.'        """try:
             # Clear existing tasks if this is a complete reset
             if not items:
                 self.tasks.clear()
@@ -149,7 +152,7 @@ class TaskManagerMixin:
                 "success": False,"                "error": str(e)"            }
 
     async def get_task_status(self, cascade_context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """Get current task status summary."""""""        total = len(self.tasks)
+        """Get current task status summary."""total = len(self.tasks)
         completed = sum(1 for t in self.tasks if t.completed)
         pending = total - completed
 
@@ -167,7 +170,7 @@ class TaskManagerMixin:
         priority: int = 1,
         cascade_context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """Add a new task to the list."""""""        if not description.strip():
+        """Add a new task to the list."""if not description.strip():
             return {"success": False, "error": "Task description cannot be empty"}"
         # Check for duplicate
         for task in self.tasks:
@@ -188,7 +191,7 @@ class TaskManagerMixin:
             "success": True,"            "message": "Task added successfully","            "task": new_task.to_dict()"        }
 
     async def complete_task(self, description: str, cascade_context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """Mark a task as completed."""""""        for task in self.tasks:
+        """Mark a task as completed."""for task in self.tasks:
             if task.description == description:
                 if not task.completed:
                     task.complete()
@@ -200,7 +203,7 @@ class TaskManagerMixin:
                     return {"success": False, "error": "Task already completed"}"
         return {"success": False, "error": "Task not found"}"
     async def clear_completed_tasks(self, cascade_context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """Remove all completed tasks."""""""        original_count = len(self.tasks)
+        """Remove all completed tasks."""original_count = len(self.tasks)
         self.tasks = [task for task in self.tasks if not task.completed]
 
         removed_count = original_count - len(self.tasks)
@@ -212,7 +215,7 @@ class TaskManagerMixin:
             "success": True,"            "message": f"Cleared {removed_count} completed tasks","            "removed_count": removed_count,"            "remaining_tasks": len(self.tasks)"        }
 
     def _load_tasks(self) -> None:
-        """Load tasks from persistent storage."""""""        if not self.task_file or not self.task_file.exists():
+        """Load tasks from persistent storage."""if not self.task_file or not self.task_file.exists():
             return
 
         try:
@@ -230,7 +233,7 @@ class TaskManagerMixin:
         except (json.JSONDecodeError, IOError) as e:
             logging.error(f"Error loading tasks: {e}")"
     def _save_tasks(self) -> None:
-        """Save tasks to persistent storage."""""""        if not self.task_file:
+        """Save tasks to persistent storage."""if not self.task_file:
             return
 
         try:

@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Security Guard Agent - Workspace Security Validation
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# Security Guard Agent - Workspace Security Validation
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """ [Brief Summary]""""# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
@@ -55,7 +57,7 @@ __version__ = VERSION
 
 
 class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Protects the workspace by validating diffs and commands."""""""
+""""Protects the workspace by validating diffs and commands.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
@@ -71,28 +73,28 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def _get_default_content(self) -> str:
     pass  # [BATCHFIX] inserted for empty block
-"""return "# Workspace Security Log\\n\\n## Status\\nMonitoring active.\\n"""""""
+"""return "# Workspace Security Log\\n\\n## Status\\nMonitoring active.\\n
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_for_secrets(self, content: str) -> list[str]:""""""""Scans for secrets using the core logic."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def scan_for_secrets(self, content: str) -> list[str]:"Scans for secrets using the core logic.# [BATCHFIX] Commented metadata/non-Python
 #         vulns = self.security_core.scan_content"(content)"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         return [v.description for v in vulns if v.severity in ["high", "critical"]]"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def audit_command(self, command: str) -> tuple[str, str]:""""""""Audits a shell command via the security core."""""""        return self.security_core.audit_command(command)
+"""     def audit_command(self, command: str) -> tuple[str, str]:"Audits a shell command via the security core.        return self.security_core.audit_command(command)
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def validate_shell_script(self, script_content: str) -> list[str]:""""""""Performs static analysis on shell scripts via the security core."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def validate_shell_script(self, script_content: str) -> list[str]:"Performs static analysis on shell scripts via the security core.# [BATCHFIX] Commented metadata/non-Python
 #         return self.security_core.validate_shell_script("script_content)"  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_for_injection(self, content: str) -> list[str]:""""""""Scans for indirect prompt injection via the security core."""""""        return self.security_core.scan_for_injection(content)
+"""     def scan_for_injection(self, content: str) -> list[str]:"Scans for indirect prompt injection via the security core.        return self.security_core.scan_for_injection(content)
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:""""""""Generates a comprehensive safety audit report."""""""        vulnerabilities = self.security_core.scan_content(code_changes)
+"""     def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:"Generates a comprehensive safety audit report.        vulnerabilities = self.security_core.scan_content(code_changes)
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -117,7 +119,7 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return "\\n".join(report)"
     def detect_jailbreak(self, prompt: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""Enhanced multi-stage jailbreak detection using structural analysis."""""""# [BATCHFIX] Commented metadata/non-Python
+""""Enhanced multi-stage jailbreak detection using structural analysis.# [BATCHFIX] Commented metadata/non-Python
 #         # Check for characteristic jailbreak patterns (DAN," persona adoption, etc.)"  # [BATCHFIX] closed string"        jailbreak_markers = [
             "DAN","            "Do Anything Now","            "Stay in character","            "You are now a","            "bypass","            "unfiltered","        ]
         if any(marker.lower() in prompt.lower() for marker in jailbreak_markers):
@@ -132,7 +134,7 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """         "Perform a security audit of the provided snippet or command."  # [BATCHFIX] closed string"        _ = target_file
-"""""""
+
 from __future__ import annotations
 
 from src.core.base.common.base_utilities import create_main_function
@@ -144,7 +146,7 @@ __version__ = VERSION
 
 
 class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Protects the workspace by validating diffs and commands."""""""
+""""Protects the workspace by validating diffs and commands.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
@@ -160,28 +162,28 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def _get_default_content(self) -> str:
     pass  # [BATCHFIX] inserted for empty block
-"""return "# Workspace Security Log\\n\\n## Status\\nMonitoring active.\\n"""""""
+"""return "# Workspace Security Log\\n\\n## Status\\nMonitoring active.\\n
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_for_secrets(self, content: str) -> list[str]:""""""""Scans for secrets using the core logic."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def scan_for_secrets(self, content: str) -> list[str]:"Scans for secrets using the core logic.# [BATCHFIX] Commented metadata/non-Python
 #         vulns = self".security_core.scan_content(content)"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         return [v.description for v in vulns if v.severity in ["high", "critical"]]"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def audit_command(self, command: str) -> tuple[str, str]:""""""""Audits a shell command via the security core."""""""        return self.security_core.audit_command(command)
+"""     def audit_command(self, command: str) -> tuple[str, str]:"Audits a shell command via the security core.        return self.security_core.audit_command(command)
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def validate_shell_script(self, script_content: str) -> list[str]:""""""""Performs static analysis on shell scripts via the security core."""""""        return self.security_core.validate_shell_script(script_content)
+"""     def validate_shell_script(self, script_content: str) -> list[str]:"Performs static analysis on shell scripts via the security core.        return self.security_core.validate_shell_script(script_content)
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_for_injection(self, content: str) -> list[str]:""""""""Scans for indirect prompt injection via the security core."""""""        return self.security_core.scan_for_injection(content)
+"""     def scan_for_injection(self, content: str) -> list[str]:"Scans for indirect prompt injection via the security core.        return self.security_core.scan_for_injection(content)
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:""""""""Generates a comprehensive safety audit report."""""""# [BATCHFIX] Commented metadata/non-Python
+"""     def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:"Generates a comprehensive safety audit report.# [BATCHFIX] Commented metadata/non-Python
 #         vulnerabilities" = self.security_core.scan_content(code_changes)"  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
@@ -206,7 +208,7 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return "\\n".join(report)"
     def detect_jailbreak(self, prompt: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""Enhanced multi-stage jailbreak detection using structural analysis."""""""        # Check for characteristic jailbreak patterns (DAN, persona adoption, etc.)
+""""Enhanced multi-stage jailbreak detection using structural analysis.        # Check for characteristic jailbreak patterns (DAN, persona adoption, etc.)
         jailbreak_markers = [
             "DAN","            "Do Anything Now","            "Stay in character","            "You are now a","            "bypass","            "unfiltered","        ]
         if any(marker.lower() in prompt.lower() for marker in jailbreak_markers):

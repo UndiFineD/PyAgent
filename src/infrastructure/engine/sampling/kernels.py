@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""""""Core sampling kernels and strategies regarding production inference.
-"""""""
+Core sampling kernels and strategies regarding production inference.
+
 from __future__ import annotations
 
 from typing import Optional
@@ -31,7 +33,7 @@ except ImportError:
 
 
 class TemperatureSampler(Sampler):
-    """Temperature scaling sampler."""""""
+    """Temperature scaling sampler.
     def forward(
         self,
         logits: np.ndarray,
@@ -48,7 +50,7 @@ class TemperatureSampler(Sampler):
 
 
 class TopKSampler(Sampler):
-    """Top-K filtering sampler."""""""
+    """Top-K filtering sampler.
     def forward(
         self,
         logits: np.ndarray,
@@ -67,7 +69,7 @@ class TopKSampler(Sampler):
         return np.where(mask, -float("inf"), logits)"
 
 class TopPSampler(Sampler):
-    """Top-P (nucleus) sampling."""""""
+    """Top-P (nucleus) sampling.
     def forward(
         self,
         logits: np.ndarray,
@@ -102,7 +104,7 @@ class TopPSampler(Sampler):
 
 
 class TopKTopPSampler(Sampler):
-    """Combined top-k and top-p filtering."""""""
+    """Combined top-k and top-p filtering.
     def forward(
         self,
         logits: np.ndarray,
@@ -149,7 +151,7 @@ class TopKTopPSampler(Sampler):
 
 
 class GumbelSampler(Sampler):
-    """Gumbel-max trick sampler."""""""
+    """Gumbel-max trick sampler.
     def forward(
         self,
         logits: np.ndarray,
@@ -180,7 +182,7 @@ class GumbelSampler(Sampler):
 
 
 class RepetitionPenaltySampler(Sampler):
-    """Repetition penalty sampler."""""""
+    """Repetition penalty sampler.
     def forward(
         self,
         logits: np.ndarray,
@@ -207,7 +209,7 @@ class RepetitionPenaltySampler(Sampler):
 
 
 class PenaltySampler(Sampler):
-    """Presence and frequency penalty sampler."""""""
+    """Presence and frequency penalty sampler.
     def forward(
         self,
         logits: np.ndarray,

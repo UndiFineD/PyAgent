@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""DependencyResolver - Resolve improvement dependencies
+
+"""
+DependencyResolver - Resolve improvement dependencies
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""
+
 from __future__ import annotations
 
 from src.core.base.lifecycle.version import VERSION
@@ -41,7 +45,7 @@ __version__ = VERSION
 
 
 class DependencyResolver:
-    """Resolves improvement dependencies."""""""
+    """Resolves improvement dependencies.
 # [AUTO-FIXED F821]     def __init__(self) -> None:
 # [AUTO-FIXED F821]         self.dependencies: dict[str, list[str]] = {}
 
@@ -52,7 +56,7 @@ class DependencyResolver:
 # [AUTO-FIXED F821]         return list(self.dependencies.get(improvement_id, []))
 
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]     def resolve_order(self, improvement_ids: list[str]) -> list[str]:
-        """Topologically sort the given ids so dependencies come first."""""""# [AUTO-FIXED F821] # [AUTO-FIXED F821]         visited: set[str] = set()
+        """Topologically sort the given ids so dependencies come first.# [AUTO-FIXED F821] # [AUTO-FIXED F821]         visited: set[str] = set()
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]         temp: set[str] = set()
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]         ordered: list[str] = []
 

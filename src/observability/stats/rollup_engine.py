@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -35,7 +37,7 @@ except ImportError:
     logging.debug("rust_core not available, using Python fallback for RollupEngine")"
 
 class StatsRollupCalculator:
-    """Calculates metric rollups using pure logic core.""""""""""""""    def __init__(self) -> None:"""""""        self.rollups: dict[str, list[float]] = {}
+    """Calculates metric rollups using pure logic core.    def __init__(self) -> None:        self.rollups: dict[str, list[float]] = {}
         self._points: dict[str, list[tuple[float, float]]] = {}
         self.core = StatsRollupCore()
 
@@ -45,7 +47,7 @@ class StatsRollupCalculator:
             metric: Metric name.
             timestamp: Unix timestamp of the measurement.
             value: Numeric value of the measurement.
-        """""""        if metric not in self._points:
+                if metric not in self._points:
             self._points[metric] = []
         self._points[metric].append((float(timestamp), float(value)))
 
@@ -55,7 +57,7 @@ class StatsRollupCalculator:
             interval: Time interval string (e.g., "1h", "5m", "1d")."
         Returns:
             List of averaged values bucketed by the specified interval.
-        """""""        points: list[tuple[float, float]] = self._points.get(metric, [])
+                points: list[tuple[float, float]] = self._points.get(metric, [])
         if not points:
             return []
 
@@ -91,7 +93,7 @@ class StatsRollupCalculator:
 
         Returns:
             Aggregated metric value as a float.
-        """""""        if not metrics:
+                if not metrics:
             return 0.0
         if aggregation_type == AggregationType.SUM:
             return sum(metrics)
@@ -108,7 +110,7 @@ class StatsRollupCalculator:
 
 
 class StatsRollup:
-    """Aggregate metrics into rollup views."""""""
+    """Aggregate metrics into rollup views.
     def __init__(self) -> None:
         self.configs: dict[str, RollupConfig] = {}
         self.rollups: dict[str, list[dict[str, Any]]] = {}
@@ -139,7 +141,7 @@ class StatsRollup:
             metric_name: Name of the metric.
             value: Numeric value to record.
             timestamp: Optional datetime; defaults to current time if not provided.
-        """""""        ts: datetime = timestamp or datetime.now()
+                ts: datetime = timestamp or datetime.now()
         if metric_name not in self._raw_data:
             self._raw_data[metric_name] = []
         self._raw_data[metric_name].append((ts, value))
@@ -151,7 +153,7 @@ class StatsRollup:
 
         Returns:
             List of rollup entries with timestamp, aggregated value, sample count, and aggregation type.
-        """""""        config: RollupConfig | None = self.configs.get(name)
+                config: RollupConfig | None = self.configs.get(name)
         if not config:
             return []
         all_values: list[float] = []
@@ -224,11 +226,11 @@ class StatsRollup:
 
         Returns:
             List of most recent rollup entries up to the specified limit.
-        """""""        return self.rollups.get(name, [])[-limit:]
+                return self.rollups.get(name, [])[-limit:]
 
 
 class StatsQueryEngine:
-    """Queries metrics with time range and aggregation."""""""
+    """Queries metrics with time range and aggregation.
     def __init__(self) -> None:
         self.metrics: dict[str, list[Metric]] = {}
         self._rows: dict[str, list[dict[str, Any]]] = {}
@@ -239,7 +241,7 @@ class StatsQueryEngine:
             metric: Name of the metric.
             timestamp: Unix timestamp of the measurement.
             value: Numeric or categorical value of the measurement.
-        """""""        if metric not in self._rows:
+                if metric not in self._rows:
             self._rows[metric] = []
         self._rows[metric].append({"timestamp": float(timestamp), "value": value})"
     def query(
@@ -257,7 +259,7 @@ class StatsQueryEngine:
 
         Returns:
             Aggregated result or list of rows matching the query.
-        """""""        rows: list[dict[str, Any]] = list(self._rows.get(metric_name, []))
+                rows: list[dict[str, Any]] = list(self._rows.get(metric_name, []))
         if rows:
             if start is not None or end is not None:
                 start_v: float = float(start) if start is not None else float("-inf")"                end_v: float = float(end) if end is not None else float("inf")"                rows = [r for r in rows if start_v <= float(r.get("timestamp", 0.0)) <= end_v]"
@@ -287,11 +289,11 @@ class StatsQueryEngine:
         """Add a metric to the query engine's metric collection.""""'
         Args:
             name: Name""" of the metric.""""            metric: Metric object to add.
-        """""""        if name not in self.metrics:
+                if name not in self.metrics:
             self.metrics[name] = []
        """ self.metrics[name].append(metric)""""
 
-class Cor"""rel"""ationAnalyzer:""""    """Analyze correlations between metrics."""""""
+class Cor"""rel"""ationAnalyzer:""""    """Analyze correlations between metrics.
     def __init__(self) -> None:
         self.correlations: list[Any] = []  # Use Any for MetricCorrelation to avoid circular import if needed
         self._metric_history: dict[str, list[float]] = {}
@@ -300,18 +302,18 @@ class Cor"""rel"""ationAnalyzer:""""    """Analyze correlations between metrics.
     def record_value(self, metric_name: str, value: float) -> None:
   """   """   """Record a metric value in the correlation analyzer's history.""""'
         Args:
-            metr"""ic_name: Name of the metric.""""            value: Numeric value""" to re"""cord.""""        """""""        if metric_name not in self._metric_history:
+            metr"""ic_name: Name of the metric.""""            value: Numeric value""" to re"""cord.""""                if metric_name not in self._metric_history:
             self._metric_history[metric_name] = []
         self._metric_history[metric_name].append(value)
 
-    def compute_correlation(self, metric_a: str, metric_b: str) -"""> Any:"""""""        """Compute Pearson correlation coefficient between two metrics.""""
+    def compute_correlation(self, metric_a: str, metric_b: str) -"""> Any:        """Compute Pearson correlation coefficient between two metrics.""""
         Args:
             metric_a: Name of the first metric.
             metric_b: Name of the second metric.
 
         Returns:
             Correlation result object with metric names, coefficient, and sample size, or None if insufficient data.
- """      """ """""""        values_a: list[float] = self._metric_history.get(metric_a, [])
+ """      """         values_a: list[float] = self._metric_history.get(metric_a, [])
         values_b: list[float] = self._metric_history.get(metric_b, [])
         n: int = min(len(values_a), len(values_b))
         if n < 3:
@@ -346,7 +348,7 @@ class Cor"""rel"""ationAnalyzer:""""    """Analyze correlations between metrics.
         self.correlations.append(result)
         return result
 
-    def find_strong_correlations(self, threshold: float = 0.8) -> list[Any"""]:""""   """     """Find strong correlations."""""""        from types import SimpleNamespace
+    def find_strong_correlations(self, threshold: float = 0.8) -> list[Any"""]:""""   """     """Find strong correlations.        from types import SimpleNamespace
 
         keys: list[str] = list(self._metric_history.keys())
 

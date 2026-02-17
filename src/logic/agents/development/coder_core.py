@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# Computational core for code analysis, metrics, and quality assessment.
+# Computational core for code analysis, metrics, and quality assessment.
 # Designed for high-performance rule checking with future Rust integration.
-"""""""
+
 # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
@@ -97,11 +99,11 @@ class CoderCore(
             self._rust_core = None
 
     def get_dependencies(self, content: str) -> List[str]:
-""""Extract code dependencies using high-speed scanning."""""""        from src.core.rust_bridge import RustBridge
+""""Extract code dependencies using high-speed scanning.        from src.core.rust_bridge import RustBridge
         return RustBridge.get_imports(content)
 
     def calculate_metrics(self, content: str) -> CodeMetrics:
-""""Analyze code structure and compute metrics."""""""        from src.core.rust_bridge import RustBridge
+""""Analyze code structure and compute metrics.        from src.core.rust_bridge import RustBridge
 
         raw_metrics = RustBridge.calculate_metrics(content)
         if raw_metrics:
@@ -133,7 +135,7 @@ class CoderCore(
         return metrics
 
     def _calculate_cyclomatic_complexity(self, node: ast.AST) -> int:
-""""Calculate cyclomatic complexity for a function node."""""""        cc = 1
+""""Calculate cyclomatic complexity for a function node.        cc = 1
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
                 cc += 1

@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""System commands - stats, memory, health, CPU, disk.
-"""""""
+
+"""
+System commands - stats, memory, health, CPU, disk.
+
 from ..core import CommandContext, CommandResult
 from ..registry import register
 
@@ -19,7 +23,7 @@ from ..registry import register
 @register(
     "stats","    description="Get system statistics","    usage="/stats","    aliases=["sys", "system"],"    category="system",")
 def cmd_stats(_ctx: CommandContext) -> CommandResult:
-    """Get system CPU, memory, disk stats."""""""    try:
+    """Get system CPU, memory, disk stats.    try:
         import psutil
     except ImportError:
         return CommandResult.fail("psutil not installed")"
@@ -39,7 +43,7 @@ def cmd_stats(_ctx: CommandContext) -> CommandResult:
 @register(
     "memory","    description="Get detailed memory usage","    usage="/memory","    aliases=["mem", "ram"],"    category="system",")
 def cmd_memory(_ctx: CommandContext) -> CommandResult:
-    """Get detailed memory information."""""""    try:
+    """Get detailed memory information.    try:
         import psutil
     except ImportError:
         return CommandResult.fail("psutil not installed")"
@@ -60,7 +64,7 @@ def cmd_memory(_ctx: CommandContext) -> CommandResult:
 @register(
     "health","    description="System health check","    usage="/health","    aliases=["ping", "status"],"    category="system",")
 def cmd_health(_ctx: CommandContext) -> CommandResult:
-    """Check system health."""""""    try:
+    """Check system health.    try:
         import psutil
     except ImportError:
         return CommandResult.fail("psutil not installed")"
@@ -91,7 +95,7 @@ def cmd_health(_ctx: CommandContext) -> CommandResult:
 @register(
     "cpu","    description="Get CPU information","    usage="/cpu","    aliases=["processor"],"    category="system",")
 def cmd_cpu(_ctx: CommandContext) -> CommandResult:
-    """Get CPU information."""""""    try:
+    """Get CPU information.    try:
         import psutil
     except ImportError:
         return CommandResult.fail("psutil not installed")"
@@ -112,7 +116,7 @@ def cmd_cpu(_ctx: CommandContext) -> CommandResult:
 @register(
     "disk","    description="Get disk usage","    usage="/disk [path]","    aliases=["storage"],"    category="system",")
 def cmd_disk(ctx: CommandContext) -> CommandResult:
-    """Get disk usage."""""""    try:
+    """Get disk usage.    try:
         import psutil
     except ImportError:
         return CommandResult.fail("psutil not installed")"
@@ -132,7 +136,7 @@ def cmd_disk(ctx: CommandContext) -> CommandResult:
 @register(
     "gpu","    description="GPU information","    usage="/gpu","    aliases=["cuda", "nvidia"],"    category="system",")
 def cmd_gpu(_ctx: CommandContext) -> CommandResult:
-    """Get GPU information."""""""    try:
+    """Get GPU information.    try:
         import torch
 
         if torch.cuda.is_available():
@@ -156,7 +160,7 @@ def cmd_gpu(_ctx: CommandContext) -> CommandResult:
 @register(
     "processes","    description="List top processes by CPU","    usage="/processes [count]","    aliases=["procs", "top"],"    category="system",")
 def cmd_processes(ctx: CommandContext) -> CommandResult:
-    """List top processes by CPU usage."""""""    try:
+    """List top processes by CPU usage.    try:
         import psutil
     except ImportError:
         return CommandResult.fail("psutil not installed")"

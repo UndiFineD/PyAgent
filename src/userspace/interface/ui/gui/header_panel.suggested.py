@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""Header Panel component for the PyAgent GUI."""""""
+"""Header Panel component for the PyAgent GUI.
 from __future__ import annotations
 
 import tkinter as tk
@@ -30,7 +28,7 @@ __version__ = VERSION
 
 
 class HeaderPanel:
-    """Handles project root selection and global context input."""""""
+    """Handles project root selection and global context input.
     def __init__(self, parent, project_root_var, callbacks) -> None:
         self.frame = ttk.Frame(parent, padding=5)
         self.project_root_var: Any = project_root_var

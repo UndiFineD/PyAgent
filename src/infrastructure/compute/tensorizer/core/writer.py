@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Writer for tensorizer file format."""""""
+"""Writer for tensorizer file format.
 import hashlib
 import struct
 from pathlib import Path
@@ -27,10 +29,10 @@ from .metadata import TensorMetadata
 
 
 class TensorizerWriter:
-    """""""    Writes tensors to a tensorizer file format.
+        Writes tensors to a tensorizer file format.
 
     Supports streaming writes, compression, and checksums.
-    """""""
+    
     def __init__(
         self,
         path: Union[str, Path],
@@ -51,16 +53,16 @@ class TensorizerWriter:
         self.close()
 
     def open(self) -> None:
-        """Open file for writing."""""""        self._file = open(self.path, 'wb')'        self._write_header()
+        """Open file for writing.        self._file = open(self.path, 'wb')'        self._write_header()
 
     def close(self) -> None:
-        """Close file and finalize."""""""        if self._file:
+        """Close file and finalize.        if self._file:
             self._finalize()
             self._file.close()
             self._file = None
 
     def _write_header(self) -> None:
-        """Write file header."""""""        if self._file is None:
+        """Write file header.        if self._file is None:
             return
 
         # Magic + version
@@ -74,7 +76,7 @@ class TensorizerWriter:
         self._header_written = True
 
     def _finalize(self) -> None:
-        """Finalize file with metadata index."""""""        if self._file is None:
+        """Finalize file with metadata index.        if self._file is None:
             return
 
         # Write metadata
@@ -94,7 +96,7 @@ class TensorizerWriter:
         name: str,
         tensor: np.ndarray,
     ) -> TensorMetadata:
-        """Write a tensor to the file."""""""        if self._file is None:
+        """Write a tensor to the file.        if self._file is None:
             raise RuntimeError("Writer not opened")"
         # Determine dtype
         dtype: TensorDtype = TensorDtype.FLOAT32
@@ -142,7 +144,7 @@ class TensorizerWriter:
         tensors: Dict[str, np.ndarray],
         progress_callback: Optional[Callable[[str, int, int], None]] = None,
     ) -> List[TensorMetadata]:
-        """Write multiple tensors (a model) to the file."""""""        results = []
+        """Write multiple tensors (a model) to the file.        results = []
         total: int = len(tensors)
 
         for i, (name, tensor) in enumerate(tensors.items()):

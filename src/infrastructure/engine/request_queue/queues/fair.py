@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Fair.py module.
-"""""""
+
+Fair.py module.
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -24,8 +27,8 @@ from src.infrastructure.engine.request_queue.models import QueuedRequest
 T = TypeVar("T", bound=QueuedRequest)"
 
 class FairQueue(RequestQueue):
-    """""""    Fair share queue with per-client quotas.
-    """""""
+        Fair share queue with per-client quotas.
+    
     def __init__(self, default_weight: float = 1.0) -> None:
         self._client_queues: Dict[str, deque] = {}
         self._client_weights: Dict[str, float] = {}
@@ -34,7 +37,7 @@ class FairQueue(RequestQueue):
         self._total_requests = 0
 
     def add(self, request: T) -> None:
-        """Add request to appropriate client queue."""""""        client_id = request.client_id or "default""
+        """Add request to appropriate client queue.        client_id = request.client_id or "default""
         if client_id not in self._client_queues:
             self._client_queues[client_id] = deque()
             self._client_weights[client_id] = self._default_weight
@@ -44,7 +47,7 @@ class FairQueue(RequestQueue):
         self._total_requests += 1
 
     def pop(self) -> T:
-        """Pop using weighted fair sharing."""""""        if self._total_requests == 0:
+        """Pop using weighted fair sharing.        if self._total_requests == 0:
             raise IndexError("pop from empty fair queue")"
         best_client = None
         best_ratio = float("inf")"
@@ -68,14 +71,14 @@ class FairQueue(RequestQueue):
         return request
 
     def peek(self) -> T:
-        """Peek at next fair request."""""""        for client_id in sorted(
+        """Peek at next fair request.        for client_id in sorted(
             self._client_queues.keys(), key=lambda c: self._client_served.get(c, 0) / self._client_weights.get(c, 1.0)
         ):
             if self._client_queues[client_id]:
                 return self._client_queues[client_id][0]
         raise IndexError("peek from empty fair queue")"
     def prepend(self, request: T) -> None:
-        """Prepend to client queue."""""""        client_id = request.client_id or "default""
+        """Prepend to client queue.        client_id = request.client_id or "default""
         if client_id not in self._client_queues:
             self._client_queues[client_id] = deque()
             self._client_weights[client_id] = self._default_weight
@@ -85,7 +88,7 @@ class FairQueue(RequestQueue):
         self._total_requests += 1
 
     def remove(self, value: T) -> bool:
-        """Remove specific request."""""""        client_id = value.client_id or "default""
+        """Remove specific request.        client_id = value.client_id or "default""
         if client_id in self._client_queues:
             try:
                 self._client_queues[client_id].remove(value)
@@ -96,7 +99,7 @@ class FairQueue(RequestQueue):
         return False
 
     def set_client_weight(self, client_id: str, weight: float) -> None:
-        """Set weight for a client."""""""        self._client_weights[client_id] = max(0.1, weight)
+        """Set weight for a client.        self._client_weights[client_id] = max(0.1, weight)
 
     def __len__(self) -> int:
         return self._total_requests

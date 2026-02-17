@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -24,7 +26,7 @@ from src.core.base.common.base_core import BaseCore
 
 @dataclass
 class PermutationResult:
-    """Result of subdomain permutation generation."""""""    domain: str
+    """Result of subdomain permutation generation."""domain: str
     permutations: Set[str] = field(default_factory=set)
     enriched_words: Set[str] = field(default_factory=set)
     enriched_numbers: Set[str] = field(default_factory=set)
@@ -34,7 +36,7 @@ class PermutationResult:
 
 @dataclass
 class PermutationConfig:
-    """Configuration for permutation generation."""""""    max_permutations: int = 10000
+    """Configuration for permutation generation."""max_permutations: int = 10000
     enrich_words: bool = True
     enrich_numbers: bool = True
     deduplicate: bool = True
@@ -43,14 +45,14 @@ class PermutationConfig:
 
 
 class SubdomainPermutationCore(BaseCore):
-    """""""    Subdomain Permutation Core implementing intelligent wordlist generation.
+    """Subdomain Permutation Core implementing intelligent wordlist generation.
 
     Inspired by AlterX, this core provides:
     - DSL-based pattern generation
     - Automatic word enrichment from input domains
     - Cluster bomb permutation algorithms
     - Configurable payloads and patterns
-    """""""
+    """
     def __init__(self, config: Optional[PermutationConfig] = None):
         super().__init__()
         self.config = config or PermutationConfig()
@@ -74,14 +76,14 @@ class SubdomainPermutationCore(BaseCore):
         # Regex patterns for enrichment
         self.extract_numbers = re.compile(r'[0-9]+')'        self.extract_words = re.compile(r'[a-zA-Z0-9]+')'        self.extract_words_only = re.compile(r'[a-zA-Z]{3,}')'
     def generate_permutations(self, domains: List[str]) -> PermutationResult:
-        """""""        Generate subdomain permutations for given domains.
+        """Generate subdomain permutations for given domains.
 
         Args:
             domains: List of base domains to generate permutations for
 
         Returns:
             PermutationResult with all generated permutations
-        """""""        result = PermutationResult(domain=domains[0] if domains else "")"
+        """result = PermutationResult(domain=domains[0] if domains else "")"
         # Process all input domains
         all_inputs = []
         for domain in domains:
@@ -114,7 +116,7 @@ class SubdomainPermutationCore(BaseCore):
         return result
 
     def _parse_domain(self, domain: str) -> List[Dict[str, Any]]:
-        """""""        Parse domain into components for variable extraction.
+        """Parse domain into components for variable extraction.
 
         Returns list of dicts with variables like AlterX:
         - {{sub}}: subdomain prefix
@@ -123,7 +125,7 @@ class SubdomainPermutationCore(BaseCore):
         - {{tld}}: top level domain
         - {{etld}}: effective TLD
         - {{sub1}}, {{sub2}}, etc.: multilevel subdomains
-        """""""        inputs = []
+        """inputs = []
 
         # Clean domain
         domain = domain.lower().strip()
@@ -154,7 +156,7 @@ class SubdomainPermutationCore(BaseCore):
         return inputs
 
     def _enrich_payloads(self, inputs: List[Dict[str, Any]]) -> Dict[str, Set[str]]:
-        """Extract words and numbers from input domains for enrichment."""""""        enriched_words = set()
+        """Extract words and numbers from input domains for enrichment."""enriched_words = set()
         enriched_numbers = set()
 
         for input_data in inputs:
@@ -175,7 +177,7 @@ class SubdomainPermutationCore(BaseCore):
             'words': enriched_words,'            'numbers': enriched_numbers'        }
 
     def _get_payloads(self) -> Dict[str, List[str]]:
-        """Get combined payloads (default + custom + enriched)."""""""        payloads = self.default_payloads.copy()
+        """Get combined payloads (default + custom + enriched)."""payloads = self.default_payloads.copy()
 
         # Add custom payloads
         if self.config.custom_payloads:
@@ -193,7 +195,7 @@ class SubdomainPermutationCore(BaseCore):
         patterns: List[str],
         payloads: Dict[str, List[str]]
     ) -> Set[str]:
-        """Generate permutations for a single domain input."""""""        permutations = set()
+        """Generate permutations for a single domain input."""permutations = set()
 
         for pattern in patterns:
             try:
@@ -223,7 +225,7 @@ class SubdomainPermutationCore(BaseCore):
         return permutations
 
     def _resolve_pattern(self, pattern: str, input_data: Dict[str, Any]) -> str:
-        """Resolve input variables in pattern (sub, suffix, root, etc.)."""""""        result = pattern
+        """Resolve input variables in pattern (sub, suffix, root, etc.)."""result = pattern
 
         # Replace input variables
         for var, value in input_data.items():
@@ -231,7 +233,7 @@ class SubdomainPermutationCore(BaseCore):
         return result
 
     def _extract_payload_vars(self, pattern: str) -> List[str]:
-        """Extract payload variable names from pattern (word, number, region, etc.)."""""""        # Find all {{variable}} patterns
+        """Extract payload variable names from pattern (word, number, region, etc.)."""# Find all {{variable}} patterns
         var_pattern = r'\{\{([^}]+)\}\}''        matches = re.findall(var_pattern, pattern)
 
         # Filter to payload variables only (not input variables like sub, suffix)
@@ -240,9 +242,9 @@ class SubdomainPermutationCore(BaseCore):
         return payload_vars
 
     def _cluster_bomb(self, payloads: Dict[str, List[str]], variables: List[str]) -> Iterator[Dict[str, str]]:
-        """""""        Cluster bomb algorithm to generate all combinations of payload variables.
+        """Cluster bomb algorithm to generate all combinations of payload variables.
 
-        This is a simplified version of AlterX's cluster bomb algorithm.'        """""""        if not variables:
+        This is a simplified version of AlterX's cluster bomb algorithm.'        """if not variables:
             yield {}
             return
 
@@ -259,7 +261,7 @@ class SubdomainPermutationCore(BaseCore):
             yield dict(zip(variables, combo))
 
     def _apply_payloads(self, pattern: str, payload_combo: Dict[str, str]) -> Optional[str]:
-        """Apply payload values to pattern."""""""        result = pattern
+        """Apply payload values to pattern."""result = pattern
 
         for var, value in payload_combo.items():
             result = result.replace(f"{{{{{var}}}}}", value)"
@@ -269,11 +271,11 @@ class SubdomainPermutationCore(BaseCore):
         return result.lower()
 
     def get_permutation_stats(self, result: PermutationResult) -> Dict[str, Any]:
-        """Get statistics about generated permutations."""""""        return {
+        """Get statistics about generated permutations."""return {
             'domain': result.domain,'            'total_permutations': result.total_generated,'            'patterns_used': result.patterns_used,'            'enriched_words': len(result.enriched_words),'            'enriched_numbers': len(result.enriched_numbers),'            'sample_permutations': list(result.permutations)[:10] if result.permutations else []'        }
 
     def export_wordlist(self, result: PermutationResult, filename: str) -> None:
-        """Export permutations to a wordlist file."""""""        try:
+        """Export permutations to a wordlist file."""try:
             with open(filename, 'w') as f:'                for perm in sorted(result.permutations):
                     f.write(f"{perm}\\n")"            self.logger.info(f"Exported {len(result.permutations)} permutations to {filename}")"        except Exception as e:
             self.logger.error(f"Failed to export wordlist: {e}")"

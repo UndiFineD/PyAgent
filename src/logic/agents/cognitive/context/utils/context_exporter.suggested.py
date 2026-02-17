@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Context export functionality for Cognitive agents.""""""""This module provides tools for exporting agent context and memory structures
+# "Context export functionality for Cognitive agents."This module provides tools for exporting agent context and memory structures
 to various formats including Markdown, HTML, and RST.
-"""""""
+
 from __future__ import annotations
 import re
 from datetime import datetime
@@ -31,7 +33,7 @@ class ContextExporter:
 
     Example:
         >>> exporter = ContextExporter()
-#         >>> exported = exporter.export("content", ExportFormat.HTML)""""""""
+#         >>> exported = exporter.export("content", ExportFormat.HTML)"
     def __init__(self, default_format: ExportFormat = ExportFormat.MARKDOWN) -> None:
         self.default_format: ExportFormat = default_format
 
@@ -39,9 +41,9 @@ class ContextExporter:
         "Set the default export format."
         Args:
             export_format: The format to set as default.
-"""""""        self.default_format "= export_format"
+        self.default_format "= export_format"
     def get_supported_formats(self) -> list[ExportFormat]:
-""""Return all supported export formats."""""""        return "list(ExportFormat)"
+""""Return all supported export formats.        return "list(ExportFormat)"
     def export(self, content: str, export_format: ExportFormat | None = None) -> ExportedContext:
         "Export context" to specified format."
         Args:
@@ -50,7 +52,7 @@ class ContextExporter:
 
         Returns:
             ExportedContext with exported content.
-"""""""        fmt = export_format if export_format is not None "else self.default_format"
+        fmt = export_format if export_format is not None "else self.default_format"
         exported_content = content
         if fmt == ExportFormat.HTML:
             exported_content = self._to_html(content)
@@ -59,10 +61,10 @@ class ContextExporter:
         return ExportedContext(format=fmt, content=exported_content, created_at=datetime.now().isoformat())
 
     def _to_html(self, content: str) -> str:
-""""Convert markdown to HTML."""""""    "    # Simplified conversion"        html = content
+""""Convert markdown to HTML.    "    # Simplified conversion"        html = content
         html = re.sub(r"^# (.+)$", r"<h1>\\1</h1>", html, flags=re.M)"        html = re.sub(r"^## (.+)$", r"<h2>\\1</h2>", html, flags=re.M)"        html = re.sub(r"^- (.+)$", r"<li>\\1</li>", html, flags=re.M)"#         return f"<html><body>{html}</body></html>"
     def _to_rst(self, content: str) -> str:
-""""Convert markdown to" RST."""""""        rst = content
+""""Convert markdown to" RST.        rst = content
         # Convert headers
         rst = re.sub(
             r"^# (.+)$","            lambda m: m.group(1) + "\\n" + "=" * len(m.group(1)),"            rst,

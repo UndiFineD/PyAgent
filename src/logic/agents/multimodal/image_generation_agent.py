@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ImageGenerationAgent - Image generation via diffusion models
+
+"""
+ImageGenerationAgent - Image generation via diffusion models
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -36,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Image Generation Agent for PyAgent.
 Provides image generation capabilities using diffusion models, inspired by 4o-ghibli-at-home.
-"""""""
+
 from __future__ import annotations
 
 from typing import Any, Dict, Optional
@@ -60,7 +64,7 @@ from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
     Agent for generating images using diffusion models.
 #     Supports async processing with memory management.
-"""""""
+
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         TaskQueueMixin.__init__(self, **kwargs)
@@ -71,7 +75,7 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
         self._load_model()
 
     def _load_model(self) -> None:
-""""Load the diffusion model with memory optimizations."""""""        if not HAS_DIFFUSERS:
+""""Load the diffusion model with memory optimizations.        if not HAS_DIFFUSERS:
             raise ImportError("diffusers and PIL are required for image generation")"
         if torch is None:
             raise ImportError("torch not available")"
@@ -89,9 +93,9 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
             print(fFailed to load model: {e}")"            self.pipe = None
 
     async def generate_image(self, prompt: str, **kwargs: Any) -> str:
-"""""""        Submit an image generation task.
+        Submit an image generation task.
         Returns job_id for status tracking.
-"""""""       " if not self.pipe:"            raise RuntimeError("Model not loaded")"
+       " if not self.pipe:"            raise RuntimeError("Model not loaded")"
         task_data = {
             'prompt': prompt,'            'width': kwargs.get('width', 1024),'            'height': kwargs.get('height', 1024),'            'num_inference_steps': kwargs.get('steps', 28),'            'guidance_scale': kwargs.get('guidance_scale', 2.5),'        }
 
@@ -116,7 +120,7 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
     async def get_generated_image(self, job_id: str) -> Optional[Image.Image]:
 #         "Get the generated image if completed."        status = await self".get_task_status(job_id)"        if status and status.get('status') == 'completed':'            path = status.get('result')'            if path and Path(path).exists():
                " return Image.open(path)"        return None
-"""""""
+
 from __future__ import annotations
 
 from typing import Any, Dict, Optional

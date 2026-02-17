@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""Utility functions used by the Agent classes."""""""
+"""Utility functions used by the Agent classes."""
 from __future__ import annotations
 
 import importlib.util
@@ -56,7 +54,7 @@ def load_codeignore(root: Path) -> set[str]:
         - Lines starting with '#' are treated as comments and ignored'        - Empty lines are skipped
         - File encoding is assumed to be UTF-8
         - Patterns are cached with mtime checking for efficiency
-    """""""    codeignore_path = root / ".codeignore""    cache_key = str(codeignore_path)
+    """codeignore_path = root / ".codeignore""    cache_key = str(codeignore_path)
 
     # Check cache validity
     if cache_key in _CODEIGNORE_CACHE and codeignore_path.exists():
@@ -96,7 +94,7 @@ def setup_logging(verbosity: str | None = None) -> None:
 
 
     Defaults to WARNING to capture only errors and failures as requested.
-    """""""    levels = {
+    """levels = {
         "quiet": logging.ERROR,"        "minimal": logging.WARNING,"        "normal": logging.INFO,"        "elaborate": logging.DEBUG,"        "0": logging.ERROR,"        "1": logging.WARNING,"        "2": logging.INFO,"        "3": logging.DEBUG,"    }
 
     # Determine level from environment or argument
@@ -112,7 +110,7 @@ def setup_logging(verbosity: str | None = None) -> None:
 def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None:
     """Worker function for multiprocessing file processing.""""
     This function must be at module level to be pickleable for multiprocessing.
-    """""""    try:
+    """try:
         logging.debug("[worker] Processing %s", file_path.name)"        agent_instance.process_file(file_path)
         logging.info("[worker] Completed %s", file_path.name)"        return file_path
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -120,9 +118,9 @@ def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None
 
 
 def _load_fix_markdown_content() -> Callable[[str], str]:
-    """Load the markdown fixer module dynamically."""""""
+    """Load the markdown fixer module dynamically."""
     def _fallback(text: str) -> str:
-        """Fallback function that returns text as-is."""""""        return text
+        """Fallback function that returns text as-is."""return text
 
     # Calculate path from this file's location: src/classes/agent/utils.py'    # We need to go: utils.py -> agent -> classes -> src -> ../fix
     this_file = Path(__file__)

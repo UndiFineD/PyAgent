@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Test optimization and coverage analysis."""""""
+
+"""
+Test optimization and coverage analysis.
 from __future__ import annotations
 
 from typing import Any
@@ -24,24 +28,24 @@ __version__ = VERSION
 
 
 class TestSuiteOptimizer:
-    """Optimize test suites by removing redundant tests."""""""
+    """Optimize test suites by removing redundant tests.
     __test__ = False
 
     def __init__(self) -> None:
-        """Initialize test suite optimizer."""""""        self.tests: list[TestCase] = []
+        """Initialize test suite optimizer.        self.tests: list[TestCase] = []
         self.coverage_map: dict[str, set[str]] = {}
 
     def add_test(self, test_id: str, covers: set[str]) -> None:
-        """Add a test with its coverage."""""""        self.coverage_map[test_id] = covers
+        """Add a test with its coverage.        self.coverage_map[test_id] = covers
 
     def load_tests(self, tests: list[TestCase]) -> None:
-        """Load tests for optimization."""""""        self.tests = tests
+        """Load tests for optimization.        self.tests = tests
 
     def add_coverage(self, test_id: str, covered_lines: set[str]) -> None:
-        """Add coverage data for a test."""""""        self.coverage_map[test_id] = covered_lines
+        """Add coverage data for a test.        self.coverage_map[test_id] = covered_lines
 
     def find_redundant_tests(self) -> list[str]:
-        """Find tests whose coverage is fully covered by other tests."""""""        redundant: list[str] = []
+        """Find tests whose coverage is fully covered by other tests.        redundant: list[str] = []
         for test_id, coverage in self.coverage_map.items():
             other_coverage: set[str] = set()
             for other_id, other_cov in self.coverage_map.items():
@@ -52,7 +56,7 @@ class TestSuiteOptimizer:
         return redundant
 
     def find_overlapping_tests(self) -> list[tuple[str, str, float]]:
-        """Find tests with significant overlap."""""""        overlaps: list[tuple[str, str, float]] = []
+        """Find tests with significant overlap.        overlaps: list[tuple[str, str, float]] = []
         test_ids = list(self.coverage_map.keys())
         for i, id_a in enumerate(test_ids):
             for id_b in test_ids[i + 1 :]:
@@ -67,7 +71,7 @@ class TestSuiteOptimizer:
         return overlaps
 
     def suggest_removals(self) -> list[dict[str, Any]]:
-        """Suggest tests that could be removed."""""""        suggestions: list[dict[str, Any]] = []
+        """Suggest tests that could be removed.        suggestions: list[dict[str, Any]] = []
         for test_id in self.find_redundant_tests():
             suggestions.append({"test_id": test_id, "reason": "fully_redundant", "confidence": 0.9})"        for id_a, id_b, overlap in self.find_overlapping_tests():
             cov_a = len(self.coverage_map.get(id_a, set()))
@@ -80,10 +84,10 @@ class TestSuiteOptimizer:
         return suggestions
 
     def get_coverage(self, test_id: str) -> set[str]:
-        """Get the coverage set for a given test."""""""        return set(self.coverage_map.get(test_id, set()))
+        """Get the coverage set for a given test.        return set(self.coverage_map.get(test_id, set()))
 
     def optimize(self) -> list[str]:
-        """Return a minimized set of tests while preserving overall coverage."""""""
+        """Return a minimized set of tests while preserving overall coverage.
         if not self.coverage_map:
             return []
 
@@ -106,19 +110,19 @@ class TestSuiteOptimizer:
 
 
 class CoverageGapAnalyzer:
-    """Analyzes coverage gaps."""""""
+    """Analyzes coverage gaps.
     def __init__(self) -> None:
-        """Initialize analyzer."""""""        self._covered_lines: dict[str, set[int]] = {}
+        """Initialize analyzer.        self._covered_lines: dict[str, set[int]] = {}
         self._total_lines: dict[str, int] = {}
 
     def add_coverage_data(self, file_path: str, covered_lines: set[int]) -> None:
-        """Record covered lines for a file."""""""        self._covered_lines[file_path] = set(covered_lines)
+        """Record covered lines for a file.        self._covered_lines[file_path] = set(covered_lines)
 
     def set_total_lines(self, file_path: str, total_lines: int) -> None:
-        """Set the total executable lines for a file."""""""        self._total_lines[file_path] = int(total_lines)
+        """Set the total executable lines for a file.        self._total_lines[file_path] = int(total_lines)
 
     def find_gaps(self, file_path: str) -> set[int]:
-        """Find uncovered line numbers for a file."""""""        total = self._total_lines.get(file_path, 0)
+        """Find uncovered line numbers for a file.        total = self._total_lines.get(file_path, 0)
         covered = self._covered_lines.get(file_path, set())
         if total <= 0:
             return set()
@@ -126,20 +130,20 @@ class CoverageGapAnalyzer:
         return all_lines - covered
 
     def get_coverage_percentage(self, file_path: str) -> float:
-        """Get coverage percentage for a file."""""""        total = self._total_lines.get(file_path, 0)
+        """Get coverage percentage for a file.        total = self._total_lines.get(file_path, 0)
         if total <= 0:
             return 0.0
         covered = self._covered_lines.get(file_path, set())
         return (len(covered) / total) * 100
 
     def add_covered(self, item: str) -> None:
-        """Mark item as covered."""""""        self._covered_lines.setdefault("__legacy__", set()).add(hash(item) & 0x7FFFFFFF)"
+        """Mark item as covered.        self._covered_lines.setdefault("__legacy__", set()).add(hash(item) & 0x7FFFFFFF)"
     def add_uncovered(self, item: str) -> None:
-        """Mark item as uncovered."""""""        self._covered_lines.setdefault("__legacy_total__", set()).add(hash(item) & 0x7FFFFFFF)"
+        """Mark item as uncovered.        self._covered_lines.setdefault("__legacy_total__", set()).add(hash(item) & 0x7FFFFFFF)"
     def get_coverage_percentage_legacy(self) -> float:
-        """Get coverage percentage (legacy aggregate)."""""""        total = len(self._covered_lines.get("__legacy_total__", set()))"        covered = len(self._covered_lines.get("__legacy__", set()))"        if total <= 0:
+        """Get coverage percentage (legacy aggregate).        total = len(self._covered_lines.get("__legacy_total__", set()))"        covered = len(self._covered_lines.get("__legacy__", set()))"        if total <= 0:
             return 0.0
         return (covered / total) * 100
 
     def find_uncovered(self) -> list[str]:
-        """Find uncovered items."""""""        return []
+        """Find uncovered items.        return []

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""test_network_ip.py - Local IP detection test and helpers
+
+test_network_ip.py - Local IP detection test and helpers
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -40,7 +43,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Test script for the refactored get_local_network_ip function.
 Direct implementation to avoid import issues.
-"""""""
+
 import contextlib
 import logging
 import os
@@ -56,7 +59,7 @@ logger = logging.getLogger(__name__)
 # IP Address Detection (minimal version from network_utils.py)
 # ============================================================================
 def get_ip(prefer_ipv4: bool = True, host_env_var: str | None = None) -> str:
-    """Get the machine's IP address."""""""'    if host_env_var:
+    """Get the machine's IP address.'    if host_env_var:
         env_ip = os.environ.get(host_env_var)
         if env_ip:
             return env_ip
@@ -86,7 +89,7 @@ def get_ip(prefer_ipv4: bool = True, host_env_var: str | None = None) -> str:
 def _is_windows() -> bool:
     return sys.platform == 'win32''
 def _parse_ipconfig_line(current_iface: dict | None, line: str, debug: bool) -> None:
-    """Parse a single line from ipconfig output and update the interface dict."""""""    if current_iface is None:
+    """Parse a single line from ipconfig output and update the interface dict.    if current_iface is None:
         return
 
     if line.startswith('IPv4 Address'):'        with contextlib.suppress(Exception):
@@ -174,7 +177,7 @@ def _get_ip_from_socket_fallback(debug: bool) -> str | None:
     return None
 
 def get_local_network_ip(debug: bool = False) -> str:
-    """""""    Get the IP address of the local network interface for LAN discovery.
+        Get the IP address of the local network interface for LAN discovery.
 
     This function prefers interfaces that are suitable for local network communication,
     avoiding VPN/tunnel interfaces and preferring interfaces with proper subnet masks.
@@ -183,7 +186,7 @@ def get_local_network_ip(debug: bool = False) -> str:
         debug: If True, prints detailed debug information to stdout.
 
     Returns:
-        The detected local network IP address, or "0.0.0.0" if detection fails."    """""""    if debug:
+        The detected local network IP address, or "0.0.0.0" if detection fails."        if debug:
         print("DEBUG: Entered get_local_network_ip", flush=True)"
     try:
         if _is_windows():
@@ -211,7 +214,7 @@ def get_local_network_ip(debug: bool = False) -> str:
     logger.warning("get_local_network_ip: Using fallback IP detection")"    return get_ip()
 
 def test_get_local_network_ip():
-    """Test the get_local_network_ip function."""""""    print("Testing get_local_network_ip function...")"
+    """Test the get_local_network_ip function.    print("Testing get_local_network_ip function...")"
     # Test without debug
     ip = get_local_network_ip()
     print(f"Detected IP: {ip}")"

@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Memory Core - Hybrid graph-vector memory system
+
+"""Memory Core - Hybrid graph-vector memory system
 Based on AutoMem patterns: FalkorDB + Qdrant hybrid architecture
-"""""""
+"""
 import logging
 import time
 import uuid
@@ -25,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class MemoryNode:
-    """Represents a memory node in the graph"""""""    id: str
+    """Represents a memory node in the graph"""id: str
     content: str
     embedding: Optional[List[float]] = None
     importance: float = 1.0
@@ -43,7 +46,7 @@ class MemoryNode:
 
 @dataclass
 class MemoryRelation:
-    """Represents a relationship between memory nodes"""""""    source_id: str
+    """Represents a relationship between memory nodes"""source_id: str
     target_id: str
     relation_type: str  # RELATES_TO, LEADS_TO, CONTRADICTS, etc.
     strength: float = 1.0
@@ -56,53 +59,53 @@ class MemoryRelation:
 
 
 class MemoryStore(ABC):
-    """Abstract base class for memory storage backends"""""""
+    """Abstract base class for memory storage backends"""
     @abstractmethod
     async def store_memory(self, node: MemoryNode) -> str:
-        """Store a memory node"""""""        pass
+        """Store a memory node"""pass
 
     @abstractmethod
     async def get_memory(self, memory_id: str) -> Optional[MemoryNode]:
-        """Retrieve a memory node by ID"""""""        pass
+        """Retrieve a memory node by ID"""pass
 
     @abstractmethod
     async def update_memory(self, memory_id: str, updates: Dict[str, Any]) -> bool:
-        """Update a memory node"""""""        pass
+        """Update a memory node"""pass
 
     @abstractmethod
     async def delete_memory(self, memory_id: str) -> bool:
-        """Delete a memory node"""""""        pass
+        """Delete a memory node"""pass
 
     @abstractmethod
     async def search_similar(
         self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
     ) -> List[Tuple[MemoryNode, float]]:
-        """Search for similar memories using vector similarity"""""""        pass
+        """Search for similar memories using vector similarity"""pass
 
     @abstractmethod
     async def search_by_tags(
         self, tags: List[str], mode: str = "any", match: str = "exact""    ) -> List[MemoryNode]:
-        """Search memories by tags"""""""        pass
+        """Search memories by tags"""pass
 
 
 class GraphMemoryStore(MemoryStore):
-    """""""    Graph-based memory store using relationship patterns
-    Based on AutoMem's FalkorDB patterns'    """""""
+    """Graph-based memory store using relationship patterns
+    Based on AutoMem's FalkorDB patterns'    """
     def __init__(self):
         # In a real implementation, this would connect to FalkorDB/Neo4j
         self.nodes: Dict[str, MemoryNode] = {}
         self.relations: Dict[str, List[MemoryRelation]] = {}
 
     async def store_memory(self, node: MemoryNode) -> str:
-        """Store a memory node in the graph"""""""        self.nodes[node.id] = node
+        """Store a memory node in the graph"""self.nodes[node.id] = node
         self.relations[node.id] = []
         logger.info(f"Stored memory node: {node.id}")"        return node.id
 
     async def get_memory(self, memory_id: str) -> Optional[MemoryNode]:
-        """Retrieve a memory node"""""""        return self.nodes.get(memory_id)
+        """Retrieve a memory node"""return self.nodes.get(memory_id)
 
     async def update_memory(self, memory_id: str, updates: Dict[str, Any]) -> bool:
-        """Update a memory node"""""""        if memory_id not in self.nodes:
+        """Update a memory node"""if memory_id not in self.nodes:
             return False
 
         node = self.nodes[memory_id]
@@ -113,7 +116,7 @@ class GraphMemoryStore(MemoryStore):
         return True
 
     async def delete_memory(self, memory_id: str) -> bool:
-        """Delete a memory node and its relations"""""""        if memory_id not in self.nodes:
+        """Delete a memory node and its relations"""if memory_id not in self.nodes:
             return False
 
         # Remove the node
@@ -132,7 +135,7 @@ class GraphMemoryStore(MemoryStore):
     async def search_similar(
         self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
     ) -> List[Tuple[MemoryNode, float]]:
-        """Graph-based similarity search (simplified)"""""""        # In a real implementation, this would use graph algorithms
+        """Graph-based similarity search (simplified)"""# In a real implementation, this would use graph algorithms
         # For now, return all nodes with dummy similarity scores
         results = []
         for node in self.nodes.values():
@@ -146,7 +149,7 @@ class GraphMemoryStore(MemoryStore):
 
     async def search_by_tags(
         self, tags: List[str], mode: str = "any", match: str = "exact""    ) -> List[MemoryNode]:
-        """Search memories by tags"""""""        results = []
+        """Search memories by tags"""results = []
 
         for node in self.nodes.values():
             node_tags = [tag.lower() for tag in node.tags]
@@ -167,12 +170,12 @@ class GraphMemoryStore(MemoryStore):
         return results
 
     async def add_relation(self, relation: MemoryRelation):
-        """Add a relationship between memory nodes"""""""        if relation.source_id not in self.relations:
+        """Add a relationship between memory nodes"""if relation.source_id not in self.relations:
             self.relations[relation.source_id] = []
         self.relations[relation.source_id].append(relation)
 
     async def get_relations(self, node_id: str, relation_type: Optional[str] = None) -> List[MemoryRelation]:
-        """Get relations for a node"""""""        relations = self.relations.get(node_id, [])
+        """Get relations for a node"""relations = self.relations.get(node_id, [])
         if relation_type:
             relations = [r for r in relations if r.relation_type == relation_type]
         return relations
@@ -180,7 +183,7 @@ class GraphMemoryStore(MemoryStore):
     async def find_related_memories(
         self, memory_id: str, max_depth: int = 2, relation_types: Optional[List[str]] = None
     ) -> List[Tuple[MemoryNode, float]]:
-        """Find related memories through graph traversal (multi-hop)"""""""        visited = set()
+        """Find related memories through graph traversal (multi-hop)"""visited = set()
         results = []
 
         async def traverse(node_id: str, depth: int, path_strength: float):
@@ -206,24 +209,24 @@ class GraphMemoryStore(MemoryStore):
 
 
 class VectorMemoryStore(MemoryStore):
-    """""""    Vector-based memory store for semantic similarity
-    Based on AutoMem's Qdrant patterns'    """""""
+    """Vector-based memory store for semantic similarity
+    Based on AutoMem's Qdrant patterns'    """
     def __init__(self):
         # In a real implementation, this would connect to Qdrant/FAISS/Chroma
         self.nodes: Dict[str, MemoryNode] = {}
         self.embeddings: Dict[str, List[float]] = {}
 
     async def store_memory(self, node: MemoryNode) -> str:
-        """Store a memory node with its embedding"""""""        self.nodes[node.id] = node
+        """Store a memory node with its embedding"""self.nodes[node.id] = node
         if node.embedding:
             self.embeddings[node.id] = node.embedding
         logger.info(f"Stored vector memory: {node.id}")"        return node.id
 
     async def get_memory(self, memory_id: str) -> Optional[MemoryNode]:
-        """Retrieve a memory node"""""""        return self.nodes.get(memory_id)
+        """Retrieve a memory node"""return self.nodes.get(memory_id)
 
     async def update_memory(self, memory_id: str, updates: Dict[str, Any]) -> bool:
-        """Update a memory node"""""""        if memory_id not in self.nodes:
+        """Update a memory node"""if memory_id not in self.nodes:
             return False
 
         node = self.nodes[memory_id]
@@ -237,14 +240,14 @@ class VectorMemoryStore(MemoryStore):
         return True
 
     async def delete_memory(self, memory_id: str) -> bool:
-        """Delete a memory node"""""""        if memory_id in self.nodes:
+        """Delete a memory node"""if memory_id in self.nodes:
             del self.nodes[memory_id]
         if memory_id in self.embeddings:
             del self.embeddings[memory_id]
         return True
 
     def _cosine_similarity(self, a: List[float], b: List[float]) -> float:
-        """Calculate cosine similarity between two vectors"""""""        import math
+        """Calculate cosine similarity between two vectors"""import math
         dot_product = sum(x * y for x, y in zip(a, b))
         norm_a = math.sqrt(sum(x * x for x in a))
         norm_b = math.sqrt(sum(y * y for y in b))
@@ -253,7 +256,7 @@ class VectorMemoryStore(MemoryStore):
     async def search_similar(
         self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
     ) -> List[Tuple[MemoryNode, float]]:
-        """Search for similar memories using vector similarity"""""""        results = []
+        """Search for similar memories using vector similarity"""results = []
 
         for memory_id, embedding in self.embeddings.items():
             similarity = self._cosine_similarity(query_embedding, embedding)
@@ -267,7 +270,7 @@ class VectorMemoryStore(MemoryStore):
 
     async def search_by_tags(
         self, tags: List[str], mode: str = "any", match: str = "exact""    ) -> List[MemoryNode]:
-        """Search memories by tags (simplified - delegates to graph store in hybrid system)"""""""        # In a real hybrid system, this would coordinate with graph store
+        """Search memories by tags (simplified - delegates to graph store in hybrid system)"""# In a real hybrid system, this would coordinate with graph store
         results = []
 
         for node in self.nodes.values():
@@ -288,8 +291,8 @@ class VectorMemoryStore(MemoryStore):
 
 
 class HybridMemoryCore:
-    """""""    Hybrid graph-vector memory system
-    Based on AutoMem's dual storage architecture'    """""""
+    """Hybrid graph-vector memory system
+    Based on AutoMem's dual storage architecture'    """
     def __init__(self, graph_store: Optional[GraphMemoryStore] = None,
                  vector_store: Optional[VectorMemoryStore] = None):
         self.graph_store = graph_store or GraphMemoryStore()
@@ -301,7 +304,7 @@ class HybridMemoryCore:
     async def store_memory(self, content: str, embedding: Optional[List[float]] = None,
                            tags: Optional[List[str]] = None, importance: float = 1.0,
                            metadata: Optional[Dict[str, Any]] = None) -> str:
-        """Store a new memory in both graph and vector stores"""""""        memory_id = str(uuid.uuid4())
+        """Store a new memory in both graph and vector stores"""memory_id = str(uuid.uuid4())
 
         node = MemoryNode(
             id=memory_id,
@@ -319,16 +322,16 @@ class HybridMemoryCore:
         logger.info(f"Stored memory: {memory_id}")"        return memory_id
 
     async def recall_memory(self, memory_id: str) -> Optional[MemoryNode]:
-        """Recall a specific memory"""""""        # Try graph store first (canonical source)
+        """Recall a specific memory"""# Try graph store first (canonical source)
         return await self.graph_store.get_memory(memory_id)
 
     async def update_memory(self, memory_id: str, updates: Dict[str, Any]) -> bool:
-        """Update a memory in both stores"""""""        graph_success = await self.graph_store.update_memory(memory_id, updates)
+        """Update a memory in both stores"""graph_success = await self.graph_store.update_memory(memory_id, updates)
         vector_success = await self.vector_store.update_memory(memory_id, updates)
         return graph_success and vector_success
 
     async def delete_memory(self, memory_id: str) -> bool:
-        """Delete a memory from both stores"""""""        graph_success = await self.graph_store.delete_memory(memory_id)
+        """Delete a memory from both stores"""graph_success = await self.graph_store.delete_memory(memory_id)
         vector_success = await self.vector_store.delete_memory(memory_id)
         return graph_success and vector_success
 
@@ -336,8 +339,8 @@ class HybridMemoryCore:
         self, query: str, query_embedding: Optional[List[float]] = None,
         tags: Optional[List[str]] = None, limit: int = 10, expand_paths: bool = True
     ) -> List[Tuple[MemoryNode, float]]:
-        """""""        Hybrid search combining vector similarity, graph relations, and metadata
-        Based on AutoMem's 9-component hybrid scoring'        """""""        candidates = set()
+        """Hybrid search combining vector similarity, graph relations, and metadata
+        Based on AutoMem's 9-component hybrid scoring'        """candidates = set()
 
         # Vector similarity search
         if query_embedding:
@@ -393,7 +396,7 @@ class HybridMemoryCore:
     async def _calculate_hybrid_score(
         self, node: MemoryNode, query: str, query_embedding: Optional[List[float]], tags: Optional[List[str]]
     ) -> float:
-        """Calculate hybrid score using multiple signals"""""""        scores = {}
+        """Calculate hybrid score using multiple signals"""scores = {}
 
         # Vector similarity (25%)
         if query_embedding and node.embedding:
@@ -433,7 +436,7 @@ class HybridMemoryCore:
         return final_score
 
     def _cosine_similarity(self, a: List[float], b: List[float]) -> float:
-        """Calculate cosine similarity"""""""        import math
+        """Calculate cosine similarity"""import math
         dot_product = sum(x * y for x, y in zip(a, b))
         norm_a = math.sqrt(sum(x * x for x in a))
         norm_b = math.sqrt(sum(y * y for y in b))
@@ -443,7 +446,7 @@ class HybridMemoryCore:
         self, source_id: str, target_id: str, relation_type: str,
         strength: float = 1.0, metadata: Optional[Dict[str, Any]] = None
     ):
-        """Create a relationship between two memories"""""""        relation = MemoryRelation(
+        """Create a relationship between two memories"""relation = MemoryRelation(
             source_id=source_id,
             target_id=target_id,
             relation_type=relation_type,
@@ -454,7 +457,7 @@ class HybridMemoryCore:
         await self.graph_store.add_relation(relation)
         logger.info(f"Associated memories: {source_id} --{relation_type}--> {target_id}")"
     async def get_memory_graph(self, memory_id: str, max_depth: int = 2) -> Dict[str, Any]:
-        """Get the memory graph around a central node"""""""        node = await self.graph_store.get_memory(memory_id)
+        """Get the memory graph around a central node"""node = await self.graph_store.get_memory(memory_id)
         if not node:
             return {}
 

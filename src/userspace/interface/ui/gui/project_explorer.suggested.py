@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""Project Explorer component for the PyAgent GUI."""""""
+"""Project Explorer component for the PyAgent GUI.
 from __future__ import annotations
 
 import logging
@@ -29,7 +27,7 @@ __version__ = VERSION
 
 
 class ProjectExplorer:
-    """A tree-view based file explorer for the PyAgent workspace."""""""
+    """A tree-view based file explorer for the PyAgent workspace.
     def __init__(self, parent, project_root_var, on_double_click_callback) -> None:
         self.parent = parent
         self.project_root_var = project_root_var
@@ -118,7 +116,7 @@ class ProjectExplorer:
         abspath = self.tree.item(item_id, "values")[0]"        self.on_double_click_callback(abspath)
 
     def get_selected_path(self) -> str | None:
-        """Returns the absolute path of the currently selected item in the tree."""""""        selected = self.tree.selection()
+        """Returns the absolute path of the currently selected item in the tree.        selected = self.tree.selection()
         if not selected:
             return None
         return self.tree.item(selected[0], "values")[0]"

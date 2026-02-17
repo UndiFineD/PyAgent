@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
@@ -23,7 +25,7 @@ from src.core.base.common.base_core import BaseCore
 
 @dataclass
 class JobPosting:
-    """Represents a job posting with all relevant data"""""""    company_name: str
+    """Represents a job posting with all relevant data"""company_name: str
     company_url: Optional[str]
     job_title: str
     job_locations: str
@@ -41,11 +43,11 @@ class JobPosting:
 
     @property
     def age_days(self) -> int:
-        """Calculate how many days ago the job was posted"""""""        return (datetime.now() - self.posting_date).days
+        """Calculate how many days ago the job was posted"""return (datetime.now() - self.posting_date).days
 
     @property
     def salary_display(self) -> str:
-        """Format salary for display"""""""        if not self.salary:
+        """Format salary for display"""if not self.salary:
             return """
         if self.salary >= 1000:
             salary_str = f"${(self.salary / 1000):.0f}k""        else:
@@ -54,7 +56,7 @@ class JobPosting:
 
 @dataclass
 class JobMarketStats:
-    """Statistics about the job market"""""""    total_jobs: int
+    """Statistics about the job market"""total_jobs: int
     avg_salary: Optional[float]
     top_companies: List[Tuple[str, int]]
     top_locations: List[Tuple[str, int]]
@@ -64,11 +66,11 @@ class JobMarketStats:
 
 
 class JobMarketIntelligenceCore(BaseCore):
-    """""""    Job Market Intelligence Core for automated job data collection and analysis.
+    """Job Market Intelligence Core for automated job data collection and analysis.
 
     Provides capabilities to collect, analyze, and present job market intelligence
     including salary trends, company hiring patterns, and market insights.
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.job_database: List[JobPosting] = []
@@ -76,7 +78,7 @@ class JobMarketIntelligenceCore(BaseCore):
         self.last_update: Optional[datetime] = None
 
     async def initialize(self) -> bool:
-        """Initialize the job market intelligence core"""""""        try:
+        """Initialize the job market intelligence core"""try:
             # Initialize with default data sources
             await self.add_default_sources()
             self.logger.info("Job Market Intelligence Core initialized successfully")"            return True
@@ -84,18 +86,18 @@ class JobMarketIntelligenceCore(BaseCore):
             self.logger.error(f"Failed to initialize Job Market Intelligence Core: {e}")"            return False
 
     async def add_default_sources(self) -> None:
-        """Add default job data sources"""""""        default_sources = [
+        """Add default job data sources"""default_sources = [
             "https://github.com/speedyapply/2026-SWE-College-Jobs","            "https://github.com/speedyapply/2026-AI-College-Jobs","            "https://www.levels.fyi","            "https://www.glassdoor.com","            "https://www.indeed.com""        ]
 
         for source in default_sources:
             await self.add_data_source(source)
 
     async def add_data_source(self, source_url: str) -> None:
-        """Add a job data source"""""""        if source_url not in self.data_sources:
+        """Add a job data source"""if source_url not in self.data_sources:
             self.data_sources.append(source_url)
             self.logger.info(f"Added data source: {source_url}")"
     async def remove_data_source(self, source_url: str) -> bool:
-        """Remove a job data source"""""""        if source_url in self.data_sources:
+        """Remove a job data source"""if source_url in self.data_sources:
             self.data_sources.remove(source_url)
             self.logger.info(f"Removed data source: {source_url}")"            return True
         return False
@@ -106,7 +108,7 @@ class JobMarketIntelligenceCore(BaseCore):
         company_type: Optional[str] = None,
         max_age_days: int = 120
     ) -> List[JobPosting]:
-        """""""        Collect job data from configured sources
+        """Collect job data from configured sources
 
         Args:
             job_type: Type of jobs to collect (intern, new_grad, etc.)
@@ -116,7 +118,7 @@ class JobMarketIntelligenceCore(BaseCore):
 
         Returns:
             List of collected job postings
-        """""""        collected_jobs = []
+        """collected_jobs = []
 
         # Simulate data collection from various sources
         # In a real implementation, this would scrape or API-call actual job sites
@@ -140,7 +142,7 @@ class JobMarketIntelligenceCore(BaseCore):
         company_type: Optional[str],
         max_age_days: int
     ) -> List[JobPosting]:
-        """Generate sample job data for demonstration"""""""        companies = {
+        """Generate sample job data for demonstration"""companies = {
             "faang": ["Google", "Meta", "Amazon", "Apple", "Netflix", "Microsoft"],"            "quant": ["Jane Street", "Two Sigma", "Citadel", "Jump Trading", "DRW"],"            "other": ["Stripe", "Databricks", "Snowflake", "Coinbase", "Roblox"]"        }
 
         jobs = []
@@ -173,7 +175,7 @@ class JobMarketIntelligenceCore(BaseCore):
         company_type: Optional[str] = None,
         is_usa: Optional[bool] = None
     ) -> JobMarketStats:
-        """""""        Analyze collected job market data
+        """Analyze collected job market data
 
         Args:
             job_type: Filter by job type
@@ -182,7 +184,7 @@ class JobMarketIntelligenceCore(BaseCore):
 
         Returns:
             Market statistics
-        """""""        # Filter jobs
+        """# Filter jobs
         filtered_jobs = self.job_database
 
         if job_type:
@@ -248,7 +250,7 @@ class JobMarketIntelligenceCore(BaseCore):
         company_type: Optional[str] = None,
         is_usa: Optional[bool] = None,
         output_format: str = "markdown""    ) -> str:
-        """""""        Generate a market intelligence report
+        """Generate a market intelligence report
 
         Args:
             job_type: Filter by job type
@@ -258,7 +260,7 @@ class JobMarketIntelligenceCore(BaseCore):
 
         Returns:
             Formatted report
-        """""""        stats = await self.analyze_market_data(job_type, company_type, is_usa)
+        """stats = await self.analyze_market_data(job_type, company_type, is_usa)
 
         if output_format == "json":"            return json.dumps(asdict(stats), indent=2, default=str)
 
@@ -273,7 +275,7 @@ class JobMarketIntelligenceCore(BaseCore):
         company_type: Optional[str],
         is_usa: Optional[bool]
     ) -> str:
-        """Generate markdown format report"""""""        title = "Job Market Intelligence Report""        if job_type:
+        """Generate markdown format report"""title = "Job Market Intelligence Report""        if job_type:
             title += f" - {job_type.title()}""        if company_type:
             title += f" ({company_type.title()})""        if is_usa is not None:
             title += f" {'USA' if is_usa else 'International'}""'
@@ -308,14 +310,14 @@ class JobMarketIntelligenceCore(BaseCore):
         job_type: Optional[str] = None,
         company_type: Optional[str] = None,
         output_format: str = "json""    ) -> None:
-        """""""        Export job data to file
+        """Export job data to file
 
         Args:
             filepath: Output file path
             job_type: Filter by job type
             company_type: Filter by company type
             output_format: Export format (json, csv)
-        """""""        # Filter jobs
+        """# Filter jobs
         filtered_jobs = self.job_database
 
         if job_type:
@@ -338,14 +340,14 @@ class JobMarketIntelligenceCore(BaseCore):
     async def get_market_insights(
         self,
         focus_area: str = "salary""    ) -> Dict[str, Any]:
-        """""""        Generate market insights and recommendations
+        """Generate market insights and recommendations
 
         Args:
             focus_area: Area to focus insights on (salary, companies, locations)
 
         Returns:
             Dictionary of insights and recommendations
-        """""""        stats = await self.analyze_market_data()
+        """stats = await self.analyze_market_data()
 
         insights = {
             "market_health": "healthy" if stats.total_jobs > 100 else "limited","            "recommendations": [],"            "trends": [],"            "opportunities": []"        }
@@ -368,6 +370,6 @@ class JobMarketIntelligenceCore(BaseCore):
         return insights
 
     async def cleanup(self) -> None:
-        """Cleanup resources"""""""        self.job_database.clear()
+        """Cleanup resources"""self.job_database.clear()
         self.data_sources.clear()
         self.logger.info("Job Market Intelligence Core cleaned up")"

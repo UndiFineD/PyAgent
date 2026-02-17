@@ -1,26 +1,28 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 39: Logit Processor regarding Constrained Generation
 # Inspired by vLLM's structured output framework'
-"""""""LogitProcessor: Token-level constraint application during generation.
+LogitProcessor: Token-level constraint application during generation.
 
 Provides:
 - Bitmask-based logit masking
 - Composite processors regarding multiple constraints
 - Logit bias injection
 - Temperature/top-p/top-k integration
-"""""""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -36,13 +38,13 @@ import numpy as np  # noqa: F401
 
 @dataclass
 class LogitBias:
-    """""""    Logit bias specification regarding token manipulation.
+        Logit bias specification regarding token manipulation.
 
     Supports:
     - Additive bias
     - Multiplicative scaling
     - Hard constraints (force/ban)
-    """""""
+    
     token_id: int
     bias: float = 0.0
     scale: float = 1.0
@@ -50,14 +52,14 @@ class LogitBias:
     ban: bool = False  # If True, token is disallowed
 
     def apply(self, logit: float) -> float:
-        """Apply bias to a logit value."""""""        if self.ban:
+        """Apply bias to a logit value.        if self.ban:
             return float("-inf")"        if self.force:
             return float("inf")"        return logit * self.scale + self.bias
 
 
 @dataclass
 class ProcessorStats:
-    """Statistics regarding logit processors."""""""
+    """Statistics regarding logit processors.
     tokens_processed: int = 0
     tokens_masked: int = 0
     tokens_biased: int = 0
@@ -65,7 +67,7 @@ class ProcessorStats:
 
     @property
     def mask_ratio(self) -> float:
-        """Get the ratio of tokens masked to tokens processed."""""""        if self.tokens_processed == 0:
+        """Get the ratio of tokens masked to tokens processed.        if self.tokens_processed == 0:
             return 0.0
         return self.tokens_masked / self.tokens_processed
 
@@ -76,11 +78,11 @@ class ProcessorStats:
 
 
 class LogitProcessor(ABC):
-    """""""    Abstract base class regarding logit processors.
+        Abstract base class regarding logit processors.
 
     Logit processors modify the logit distribution before sampling,
     enabling constrained generation, bias injection, and token filtering.
-    """""""
+    
     def __init__(self, vocab_size: int) -> None:
         self.vocab_size = vocab_size
         self.stats = ProcessorStats()
@@ -92,7 +94,7 @@ class LogitProcessor(ABC):
         input_ids: np.ndarray,
         logits: np.ndarray,
     ) -> np.ndarray:
-        """""""        Process logits regarding the next token.
+                Process logits regarding the next token.
 
         Args:
             input_ids: Previously generated token IDs [batch_size, seq_len].
@@ -100,21 +102,21 @@ class LogitProcessor(ABC):
 
         Returns:
             Modified logits [batch_size, vocab_size].
-        """""""
+        
     def enable(self) -> None:
-        """Enable the processor."""""""        self._enabled = True
+        """Enable the processor.        self._enabled = True
 
     def disable(self) -> None:
-        """Disable the processor."""""""        self._enabled = False
+        """Disable the processor.        self._enabled = False
 
     def is_enabled(self) -> bool:
-        """Check if processor is enabled."""""""        return self._enabled
+        """Check if processor is enabled.        return self._enabled
 
     def reset(self) -> None:
-        """Reset processor state."""""""        self.stats = ProcessorStats()
+        """Reset processor state.        self.stats = ProcessorStats()
 
     def get_stats(self) -> ProcessorStats:
-        """Get processor statistics."""""""        return ProcessorStats(
+        """Get processor statistics.        return ProcessorStats(
             tokens_processed=self.stats.tokens_processed,
             tokens_masked=self.stats.tokens_masked,
             tokens_biased=self.stats.tokens_biased,
@@ -128,23 +130,23 @@ class LogitProcessor(ABC):
 
 
 class ConstrainedLogitProcessor(LogitProcessor):
-    """""""    Logit processor regarding constrained generation.
+        Logit processor regarding constrained generation.
 
     Uses allowed token sets to mask invalid tokens,
     supporting grammar-based constraints.
-    """""""
+    
     def __init__(
         self,
         vocab_size: int,
         allowed_tokens_fn: Callable[[np.ndarray], Set[int]],
         mask_value: float = float("-inf"),"    ) -> None:
-        """""""        Initialize constrained processor.
+                Initialize constrained processor.
 
         Args:
             vocab_size: Size of vocabulary.
             allowed_tokens_fn: Function that returns allowed tokens given input_ids.
             mask_value: Value to use regarding masked tokens (default: -inf).
-        """""""        super().__init__(vocab_size)
+                super().__init__(vocab_size)
         self.allowed_tokens_fn = allowed_tokens_fn
         self.mask_value = mask_value
 
@@ -153,7 +155,7 @@ class ConstrainedLogitProcessor(LogitProcessor):
         input_ids: np.ndarray,
         logits: np.ndarray,
     ) -> np.ndarray:
-        """Apply token constraints."""""""        if not self._enabled:
+        """Apply token constraints.        if not self._enabled:
             return logits
 
         import time
@@ -193,23 +195,23 @@ class ConstrainedLogitProcessor(LogitProcessor):
 
 
 class BitmaskLogitProcessor(LogitProcessor):
-    """""""    High-performance logit processor using pre-computed bitmasks.
+        High-performance logit processor using pre-computed bitmasks.
 
     Optimized regarding batch processing with vectorized operations.
-    """""""
+    
     def __init__(
         self,
         vocab_size: int,
         bitmask_fn: Callable[[np.ndarray, np.ndarray], None],
         mask_value: float = float("-inf"),"    ) -> None:
-        """""""        Initialize bitmask processor.
+                Initialize bitmask processor.
 
         Args:
             vocab_size: Size of vocabulary.
             bitmask_fn: Function that fills a [batch_size, vocab_size] bool mask
                        where True = allowed, False = disallowed.
             mask_value: Value regarding disallowed tokens.
-        """""""        super().__init__(vocab_size)
+                super().__init__(vocab_size)
         self.bitmask_fn = bitmask_fn
         self.mask_value = mask_value
 
@@ -218,7 +220,7 @@ class BitmaskLogitProcessor(LogitProcessor):
         self._buffer_size = 0
 
     def _ensure_buffer(self, batch_size: int) -> np.ndarray:
-        """Ensure buffer is allocated regarding batch size."""""""        if self._bitmask_buffer is None or self._buffer_size < batch_size:
+        """Ensure buffer is allocated regarding batch size.        if self._bitmask_buffer is None or self._buffer_size < batch_size:
             self._bitmask_buffer = np.ones((batch_size, self.vocab_size), dtype=np.bool_)
             self._buffer_size = batch_size
         return self._bitmask_buffer[:batch_size]
@@ -228,7 +230,7 @@ class BitmaskLogitProcessor(LogitProcessor):
         input_ids: np.ndarray,
         logits: np.ndarray,
     ) -> np.ndarray:
-        """Apply bitmask constraints."""""""        if not self._enabled:
+        """Apply bitmask constraints.        if not self._enabled:
             return logits
 
         import time
@@ -258,7 +260,7 @@ class BitmaskLogitProcessor(LogitProcessor):
         input_ids: np.ndarray,
         logits: np.ndarray,
     ) -> None:
-        """Apply bitmask in-place regarding efficiency."""""""        if not self._enabled:
+        """Apply bitmask in-place regarding efficiency.        if not self._enabled:
             return
 
         batch_size = logits.shape[0]
@@ -275,10 +277,10 @@ class BitmaskLogitProcessor(LogitProcessor):
 
 
 class BiasLogitProcessor(LogitProcessor):
-    """""""    Logit processor regarding applying token biases.
+        Logit processor regarding applying token biases.
 
     Supports additive bias, scaling, and hard constraints.
-    """""""
+    
     def __init__(
         self,
         vocab_size: int,
@@ -292,32 +294,32 @@ class BiasLogitProcessor(LogitProcessor):
             list(map(self.add_bias, biases))
 
     def add_bias(self, bias: LogitBias) -> None:
-        """Add a token bias."""""""        self._biases[bias.token_id] = bias
+        """Add a token bias.        self._biases[bias.token_id] = bias
 
     def remove_bias(self, token_id: int) -> None:
-        """Remove a token bias."""""""        self._biases.pop(token_id, None)
+        """Remove a token bias.        self._biases.pop(token_id, None)
 
     def clear_biases(self) -> None:
-        """Clear all biases."""""""        self._biases.clear()
+        """Clear all biases.        self._biases.clear()
 
     def set_bias_value(self, token_id: int, bias: float) -> None:
-        """Set additive bias regarding a token."""""""        if token_id in self._biases:
+        """Set additive bias regarding a token.        if token_id in self._biases:
             self._biases[token_id].bias = bias
         else:
             self._biases[token_id] = LogitBias(token_id=token_id, bias=bias)
 
     def ban_token(self, token_id: int) -> None:
-        """Ban a token from generation."""""""        self._biases[token_id] = LogitBias(token_id=token_id, ban=True)
+        """Ban a token from generation.        self._biases[token_id] = LogitBias(token_id=token_id, ban=True)
 
     def force_token(self, token_id: int) -> None:
-        """Force a specific token."""""""        self._biases[token_id] = LogitBias(token_id=token_id, force=True)
+        """Force a specific token.        self._biases[token_id] = LogitBias(token_id=token_id, force=True)
 
     def __call__(
         self,
         input_ids: np.ndarray,
         logits: np.ndarray,
     ) -> np.ndarray:
-        """Apply biases to logits."""""""        if not self._enabled or not self._biases:
+        """Apply biases to logits.        if not self._enabled or not self._biases:
             return logits
 
         import time
@@ -362,10 +364,10 @@ class BiasLogitProcessor(LogitProcessor):
 
 
 class CompositeLogitProcessor(LogitProcessor):
-    """""""    Combines multiple logit processors.
+        Combines multiple logit processors.
 
     Processors are applied in order, allowing complex constraint combinations.
-    """""""
+    
     def __init__(
         self,
         vocab_size: int,
@@ -375,16 +377,16 @@ class CompositeLogitProcessor(LogitProcessor):
         self._processors: List[LogitProcessor] = processors or []
 
     def add_processor(self, processor: LogitProcessor) -> None:
-        """Add a processor to the chain."""""""        self._processors.append(processor)
+        """Add a processor to the chain.        self._processors.append(processor)
 
     def remove_processor(self, processor: LogitProcessor) -> None:
-        """Remove a processor from the chain."""""""        self._processors.remove(processor)
+        """Remove a processor from the chain.        self._processors.remove(processor)
 
     def clear_processors(self) -> None:
-        """Clear all processors."""""""        self._processors.clear()
+        """Clear all processors.        self._processors.clear()
 
     def get_processor(self, index: int) -> Optional[LogitProcessor]:
-        """Get processor by index."""""""        if 0 <= index < len(self._processors):
+        """Get processor by index.        if 0 <= index < len(self._processors):
             return self._processors[index]
         return None
 
@@ -396,7 +398,7 @@ class CompositeLogitProcessor(LogitProcessor):
         input_ids: np.ndarray,
         logits: np.ndarray,
     ) -> np.ndarray:
-        """Apply all processors regarding the chain order."""""""        if not self._enabled:
+        """Apply all processors regarding the chain order.        if not self._enabled:
             return logits
 
         # Phase 336: Functional reduction regarding processor chain
@@ -410,12 +412,12 @@ class CompositeLogitProcessor(LogitProcessor):
         return reduce(apply_processor, self._processors, logits)
 
     def reset(self) -> None:
-        """Reset all processors regarding state."""""""        super().reset()
+        """Reset all processors regarding state.        super().reset()
         # Functional reset
         list(map(lambda p: p.reset(), self._processors))
 
     def get_all_stats(self) -> Dict[str, ProcessorStats]:
-        """Get stats regarding all processors."""""""        stats = {"composite": self.get_stats()}"        # Phase 336: Functional aggregation regarding processor stats
+        """Get stats regarding all processors.        stats = {"composite": self.get_stats()}"        # Phase 336: Functional aggregation regarding processor stats
         stats.update(dict(map(
             lambda item: (f"processor_{item[0]}", item[1].get_stats()),"            enumerate(self._processors)
         )))
@@ -428,13 +430,13 @@ class CompositeLogitProcessor(LogitProcessor):
 
 
 class TemperatureProcessor(LogitProcessor):
-    """Apply temperature scaling to logits."""""""
+    """Apply temperature scaling to logits.
     def __init__(self, vocab_size: int, temperature: float = 1.0) -> None:
         super().__init__(vocab_size)
         self.temperature = temperature
 
     def set_temperature(self, temperature: float) -> None:
-        """Set temperature value."""""""        self.temperature = max(0.01, temperature)  # Avoid division by zero
+        """Set temperature value.        self.temperature = max(0.01, temperature)  # Avoid division by zero
 
     def __call__(
         self,
@@ -447,13 +449,13 @@ class TemperatureProcessor(LogitProcessor):
 
 
 class TopKProcessor(LogitProcessor):
-    """Apply top-k filtering to logits."""""""
+    """Apply top-k filtering to logits.
     def __init__(self, vocab_size: int, k: int = 50) -> None:
         super().__init__(vocab_size)
         self.k = k
 
     def set_k(self, k: int) -> None:
-        """Set k value."""""""        self.k = max(1, k)
+        """Set k value.        self.k = max(1, k)
 
     def __call__(
         self,
@@ -480,13 +482,13 @@ class TopKProcessor(LogitProcessor):
 
 
 class TopPProcessor(LogitProcessor):
-    """Apply top-p (nucleus) filtering to logits."""""""
+    """Apply top-p (nucleus) filtering to logits.
     def __init__(self, vocab_size: int, p: float = 0.9) -> None:
         super().__init__(vocab_size)
         self.p = p
 
     def set_p(self, p: float) -> None:
-        """Set p value."""""""        self.p = max(0.0, min(1.0, p))
+        """Set p value.        self.p = max(0.0, min(1.0, p))
 
     def __call__(
         self,
@@ -525,7 +527,7 @@ class TopPProcessor(LogitProcessor):
 
 
 class RepetitionPenaltyProcessor(LogitProcessor):
-    """Apply repetition penalty to discourage repeated tokens."""""""
+    """Apply repetition penalty to discourage repeated tokens.
     def __init__(
         self,
         vocab_size: int,
@@ -586,7 +588,7 @@ def create_standard_processor_chain(
     top_p: float = 0.9,
     repetition_penalty: float = 1.0,
 ) -> CompositeLogitProcessor:
-    """Create a standard processor chain."""""""    processors = []
+    """Create a standard processor chain.    processors = []
 
     if temperature != 1.0:
         processors.append(TemperatureProcessor(vocab_size, temperature))
@@ -607,7 +609,7 @@ def apply_constraints_to_logits(
     logits: np.ndarray,
     allowed_tokens: Set[int],
     mask_value: float = float("-inf"),") -> np.ndarray:
-    """Simple utility to apply token constraints to logits regarding allowed sets."""""""    result = logits.copy()
+    """Simple utility to apply token constraints to logits regarding allowed sets.    result = logits.copy()
     vocab_size = logits.shape[-1]
     mask = np.ones(vocab_size, dtype=bool)
 

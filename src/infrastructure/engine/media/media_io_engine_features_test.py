@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 40: Media IO Engine Tests
 
-"""""""Tests for MediaIOEngine - unified media loading.
-"""""""
+Tests for MediaIOEngine - unified media loading.
+
 import pytest
 import inspect
 import numpy as np
@@ -43,40 +45,40 @@ from src.infrastructure.services.mediaio import (
 
 
 class TestEnums:
-    """Test enum values."""""""
+    """Test enum values.
     def test_media_type_values(self):
-        """Test MediaType enum."""""""        assert MediaType.IMAGE is not None
+        """Test MediaType enum.        assert MediaType.IMAGE is not None
         assert MediaType.VIDEO is not None
         assert MediaType.AUDIO is not None
         assert MediaType.DOCUMENT is not None
 
     def test_image_format_values(self):
-        """Test ImageFormat enum."""""""        assert ImageFormat.JPEG is not None
+        """Test ImageFormat enum.        assert ImageFormat.JPEG is not None
         assert ImageFormat.PNG is not None
         assert ImageFormat.WEBP is not None
         assert ImageFormat.GIF is not None
 
     def test_video_format_values(self):
-        """Test VideoFormat enum."""""""        assert VideoFormat.MP4 is not None
+        """Test VideoFormat enum.        assert VideoFormat.MP4 is not None
         assert VideoFormat.WEBM is not None
         assert VideoFormat.AVI is not None
 
     def test_audio_format_values(self):
-        """Test AudioFormat enum."""""""        assert AudioFormat.WAV is not None
+        """Test AudioFormat enum.        assert AudioFormat.WAV is not None
         assert AudioFormat.MP3 is not None
         assert AudioFormat.FLAC is not None
 
     def test_resize_mode_values(self):
-        """Test ResizeMode enum."""""""        assert ResizeMode.CROP is not None
+        """Test ResizeMode enum.        assert ResizeMode.CROP is not None
         assert ResizeMode.PAD is not None
         assert ResizeMode.STRETCH is not None
         assert ResizeMode.SHORTEST is not None
 
 
 class TestMediaMetadata:
-    """Test MediaMetadata dataclass."""""""
+    """Test MediaMetadata dataclass.
     def test_create_image_metadata(self):
-        """Test creating image metadata."""""""        meta = MediaMetadata(
+        """Test creating image metadata.        meta = MediaMetadata(
             media_type=MediaType.IMAGE,
             format=ImageFormat.JPEG,
             width=640,
@@ -89,7 +91,7 @@ class TestMediaMetadata:
         assert meta.height == 480
 
     def test_create_video_metadata(self):
-        """Test creating video metadata."""""""        meta = MediaMetadata(
+        """Test creating video metadata.        meta = MediaMetadata(
             media_type=MediaType.VIDEO,
             format=VideoFormat.MP4,
             width=1920,
@@ -102,7 +104,7 @@ class TestMediaMetadata:
         assert meta.frame_count == 900
 
     def test_create_audio_metadata(self):
-        """Test creating audio metadata."""""""        meta = MediaMetadata(
+        """Test creating audio metadata.        meta = MediaMetadata(
             media_type=MediaType.AUDIO,
             format=AudioFormat.WAV,
             duration=5.0,
@@ -113,9 +115,9 @@ class TestMediaMetadata:
 
 
 class TestImageData:
-    """Test ImageData dataclass."""""""
+    """Test ImageData dataclass.
     def test_create_image_data(self):
-        """Test creating ImageData."""""""        data = np.random.randn(480, 640, 3).astype(np.float32)
+        """Test creating ImageData.        data = np.random.randn(480, 640, 3).astype(np.float32)
         meta = MediaMetadata(
             media_type=MediaType.IMAGE,
             format=ImageFormat.PNG,
@@ -129,7 +131,7 @@ class TestImageData:
         assert img.shape == (480, 640, 3)
 
     def test_batch_image_data(self):
-        """Test batch ImageData."""""""        data = np.random.randn(4, 224, 224, 3).astype(np.float32)
+        """Test batch ImageData.        data = np.random.randn(4, 224, 224, 3).astype(np.float32)
         meta = MediaMetadata(
             media_type=MediaType.IMAGE,
             format=ImageFormat.JPEG,
@@ -140,9 +142,9 @@ class TestImageData:
 
 
 class TestVideoData:
-    """Test VideoData dataclass."""""""
+    """Test VideoData dataclass.
     def test_create_video_data(self):
-        """Test creating VideoData."""""""        frames = np.random.randn(32, 224, 224, 3).astype(np.float32)
+        """Test creating VideoData.        frames = np.random.randn(32, 224, 224, 3).astype(np.float32)
         meta = MediaMetadata(
             media_type=MediaType.VIDEO,
             format=VideoFormat.MP4,
@@ -153,7 +155,7 @@ class TestVideoData:
         assert video.frame_count == 32
 
     def test_video_with_timestamps(self):
-        """Test VideoData with timestamps."""""""        frames = np.random.randn(10, 224, 224, 3).astype(np.float32)
+        """Test VideoData with timestamps.        frames = np.random.randn(10, 224, 224, 3).astype(np.float32)
         timestamps = np.linspace(0, 1, 10)
         meta = MediaMetadata(
             media_type=MediaType.VIDEO,
@@ -170,9 +172,9 @@ class TestVideoData:
 
 
 class TestAudioData:
-    """Test AudioData dataclass."""""""
+    """Test AudioData dataclass.
     def test_create_audio_data(self):
-        """Test creating AudioData."""""""        waveform = np.random.randn(16000).astype(np.float32)
+        """Test creating AudioData.        waveform = np.random.randn(16000).astype(np.float32)
         meta = MediaMetadata(
             media_type=MediaType.AUDIO,
             format=AudioFormat.WAV,
@@ -183,7 +185,7 @@ class TestAudioData:
         assert audio.duration == 1.0  # 16000 samples / 16000 Hz
 
     def test_stereo_audio(self):
-        """Test stereo AudioData."""""""        waveform = np.random.randn(2, 16000).astype(np.float32)
+        """Test stereo AudioData.        waveform = np.random.randn(2, 16000).astype(np.float32)
         meta = MediaMetadata(
             media_type=MediaType.AUDIO,
             format=AudioFormat.WAV,
@@ -196,16 +198,16 @@ class TestAudioData:
 
 
 class TestMediaLoadConfig:
-    """Test MediaLoadConfig dataclass."""""""
+    """Test MediaLoadConfig dataclass.
     def test_default_config(self):
-        """Test default config."""""""        config = MediaLoadConfig()
+        """Test default config.        config = MediaLoadConfig()
 
         assert config.normalize is True
         assert config.max_frames == 32
         assert config.target_sample_rate == 16000
 
     def test_custom_config(self):
-        """Test custom config."""""""        config = MediaLoadConfig(
+        """Test custom config.        config = MediaLoadConfig(
             target_size=(224, 224),
             resize_mode=ResizeMode.CROP,
             normalize=True,
@@ -217,7 +219,7 @@ class TestMediaLoadConfig:
         assert config.max_frames == 64
 
     def test_clip_normalization(self):
-        """Test CLIP normalization values."""""""        config = MediaLoadConfig()
+        """Test CLIP normalization values.        config = MediaLoadConfig()
 
         # Default should be CLIP values
         assert len(config.mean) == 3
@@ -225,20 +227,20 @@ class TestMediaLoadConfig:
 
 
 class TestImageLoader:
-    """Test ImageLoader class."""""""
+    """Test ImageLoader class.
     def test_create_loader(self):
-        """Test creating loader."""""""        loader = ImageLoader()
+        """Test creating loader.        loader = ImageLoader()
         assert loader is not None
 
     def test_supports_image(self):
-        """Test supports image type."""""""        loader = ImageLoader()
+        """Test supports image type.        loader = ImageLoader()
 
         assert loader.supports(MediaType.IMAGE) is True
         assert loader.supports(MediaType.VIDEO) is False
 
     @pytest.mark.asyncio
     async def test_load_bytes(self):
-        """Test loading from bytes."""""""        loader = ImageLoader()
+        """Test loading from bytes.        loader = ImageLoader()
         MediaLoadConfig()
 
         # Create minimal PNG bytes (1x1 red pixel)
@@ -253,39 +255,39 @@ class TestImageLoader:
         assert hasattr(loader, 'load')'
 
 class TestVideoLoader:
-    """Test VideoLoader class."""""""
+    """Test VideoLoader class.
     def test_create_loader(self):
-        """Test creating loader."""""""        loader = VideoLoader()
+        """Test creating loader.        loader = VideoLoader()
         assert loader is not None
 
     def test_supports_video(self):
-        """Test supports video type."""""""        loader = VideoLoader()
+        """Test supports video type.        loader = VideoLoader()
 
         assert loader.supports(MediaType.VIDEO) is True
         assert loader.supports(MediaType.IMAGE) is False
 
 
 class TestAudioLoader:
-    """Test AudioLoader class."""""""
+    """Test AudioLoader class.
     def test_create_loader(self):
-        """Test creating loader."""""""        loader = AudioLoader()
+        """Test creating loader.        loader = AudioLoader()
         assert loader is not None
 
     def test_supports_audio(self):
-        """Test supports audio type."""""""        loader = AudioLoader()
+        """Test supports audio type.        loader = AudioLoader()
 
         assert loader.supports(MediaType.AUDIO) is True
         assert loader.supports(MediaType.IMAGE) is False
 
 
 class TestMediaIOEngine:
-    """Test MediaIOEngine class."""""""
+    """Test MediaIOEngine class.
     def test_create_engine(self):
-        """Test creating engine."""""""        engine = MediaIOEngine()
+        """Test creating engine.        engine = MediaIOEngine()
         assert engine is not None
 
     def test_create_with_config(self):
-        """Test creating engine with config."""""""        config = MediaLoadConfig(
+        """Test creating engine with config.        config = MediaLoadConfig(
             target_size=(224, 224),
             normalize=True,
         )
@@ -294,7 +296,7 @@ class TestMediaIOEngine:
         assert engine.config.target_size == (224, 224)
 
     def test_register_loader(self):
-        """Test registering custom loader."""""""        engine = MediaIOEngine()
+        """Test registering custom loader.        engine = MediaIOEngine()
 
         class CustomLoader(MediaLoader):
             def supports(self, media_type):
@@ -309,18 +311,18 @@ class TestMediaIOEngine:
         assert True
 
     def test_detect_media_type(self):
-        """Test media type detection."""""""        engine = MediaIOEngine()
+        """Test media type detection.        engine = MediaIOEngine()
 
         assert engine._detect_media_type("test.jpg") == MediaType.IMAGE"        assert engine._detect_media_type("test.png") == MediaType.IMAGE"        assert engine._detect_media_type("test.mp4") == MediaType.VIDEO"        assert engine._detect_media_type("test.wav") == MediaType.AUDIO"
     def test_compute_cache_key(self):
-        """Test cache key computation."""""""        engine = MediaIOEngine()
+        """Test cache key computation.        engine = MediaIOEngine()
 
         key1 = engine._compute_cache_key("image.jpg", MediaType.IMAGE)"        key2 = engine._compute_cache_key("image.jpg", MediaType.IMAGE)"        key3 = engine._compute_cache_key("other.jpg", MediaType.IMAGE)"
         assert key1 == key2
         assert key1 != key3
 
     def test_clear_cache(self):
-        """Test clearing cache."""""""        engine = MediaIOEngine()
+        """Test clearing cache.        engine = MediaIOEngine()
 
         engine.clear_cache()
 
@@ -329,16 +331,16 @@ class TestMediaIOEngine:
 
     @pytest.mark.asyncio
     async def test_load_batch(self):
-        """Test batch loading."""""""        engine = MediaIOEngine()
+        """Test batch loading.        engine = MediaIOEngine()
 
         # Just verify the method exists and is async
         assert inspect.iscoroutinefunction(engine.load_batch)
 
 
 class TestFactoryFunctions:
-    """Test factory functions."""""""
+    """Test factory functions.
     def test_create_media_engine(self):
-        """Test create_media_engine."""""""        engine = create_media_engine(
+        """Test create_media_engine.        engine = create_media_engine(
             target_size=(224, 224),
             normalize=True,
             use_gpu=False,
@@ -348,28 +350,28 @@ class TestFactoryFunctions:
         assert engine.config.target_size == (224, 224)
 
     def test_create_default_engine(self):
-        """Test creating default engine."""""""        engine = create_media_engine()
+        """Test creating default engine.        engine = create_media_engine()
 
         assert engine is not None
 
     @pytest.mark.asyncio
     async def test_load_image_function(self):
-        """Test load_image convenience function."""""""        # Just verify the function is async
+        """Test load_image convenience function.        # Just verify the function is async
         assert inspect.iscoroutinefunction(load_image)
 
     @pytest.mark.asyncio
     async def test_load_video_function(self):
-        """Test load_video convenience function."""""""        assert inspect.iscoroutinefunction(load_video)
+        """Test load_video convenience function.        assert inspect.iscoroutinefunction(load_video)
 
     @pytest.mark.asyncio
     async def test_load_audio_function(self):
-        """Test load_audio convenience function."""""""        assert inspect.iscoroutinefunction(load_audio)
+        """Test load_audio convenience function.        assert inspect.iscoroutinefunction(load_audio)
 
 
 class TestResizeModes:
-    """Test different resize modes."""""""
+    """Test different resize modes.
     def test_resize_mode_crop(self):
-        """Test crop resize mode."""""""        config = MediaLoadConfig(
+        """Test crop resize mode.        config = MediaLoadConfig(
             target_size=(224, 224),
             resize_mode=ResizeMode.CROP,
         )
@@ -377,7 +379,7 @@ class TestResizeModes:
         assert config.resize_mode == ResizeMode.CROP
 
     def test_resize_mode_pad(self):
-        """Test pad resize mode."""""""        config = MediaLoadConfig(
+        """Test pad resize mode.        config = MediaLoadConfig(
             target_size=(224, 224),
             resize_mode=ResizeMode.PAD,
         )
@@ -385,7 +387,7 @@ class TestResizeModes:
         assert config.resize_mode == ResizeMode.PAD
 
     def test_resize_mode_stretch(self):
-        """Test stretch resize mode."""""""        config = MediaLoadConfig(
+        """Test stretch resize mode.        config = MediaLoadConfig(
             target_size=(224, 224),
             resize_mode=ResizeMode.STRETCH,
         )

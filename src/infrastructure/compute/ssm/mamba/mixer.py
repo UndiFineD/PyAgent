@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
-"""""""Mamba Mixer - Implementation of Mamba-1 and Mamba-2 mixer layers.
-"""""""
+Mamba Mixer - Implementation of Mamba-1 and Mamba-2 mixer layers.
+
 # pylint: disable=invalid-name
 
 from __future__ import annotations
@@ -40,8 +42,8 @@ from src.infrastructure.compute.ssm.mamba.ops import (CausalConv1d,
 
 
 class MambaMixer:
-    """""""    Mamba-1 Mixer layer.
-    """""""
+        Mamba-1 Mixer layer.
+    
     def __init__(self, config: MambaConfig) -> None:
         self.config = config
 
@@ -85,10 +87,10 @@ class MambaMixer:
         self.c_layernorm_weight = np.ones(config.ssm_state_size, dtype=np.float32)
 
     def _silu(self, x: np.ndarray) -> np.ndarray:
-        """SiLU activation."""""""        return x * (1 / (1 + np.exp(-x)))
+        """SiLU activation.        return x * (1 / (1 + np.exp(-x)))
 
     def _rms_norm(self, x: np.ndarray, weight: np.ndarray) -> np.ndarray:
-        """RMS normalization."""""""        variance = np.mean(x**2, axis=-1, keepdims=True)
+        """RMS normalization.        variance = np.mean(x**2, axis=-1, keepdims=True)
         x_normed = x / np.sqrt(variance + self.config.rms_norm_eps)
         return x_normed * weight
 
@@ -97,7 +99,7 @@ class MambaMixer:
         hidden_states: np.ndarray,
         state: MambaState | None = None,
     ) -> MambaOutput:
-        """Forward pass through Mamba mixer."""""""        batch_size, _, _ = hidden_states.shape
+        """Forward pass through Mamba mixer.        batch_size, _, _ = hidden_states.shape
         if state is None:
             state = MambaState.zeros(batch_size, self.config, hidden_states.dtype)
 
@@ -145,7 +147,7 @@ class MambaMixer:
         hidden_states: np.ndarray,
         state: MambaState,
     ) -> MambaOutput:
-        """Single-step update for decoding."""""""        projected = hidden_states @ self.in_proj_weight.T
+        """Single-step update for decoding.        projected = hidden_states @ self.in_proj_weight.T
         if self.in_proj_bias is not None:
             projected = projected + self.in_proj_bias
 
@@ -182,8 +184,8 @@ class MambaMixer:
 
 
 class Mamba2Mixer(MambaMixer):
-    """""""    Mamba-2 Mixer with multi-head SSM.
-    """""""
+        Mamba-2 Mixer with multi-head SSM.
+    
     def __init__(
         self,
         config: MambaConfig,

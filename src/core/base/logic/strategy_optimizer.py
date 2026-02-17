@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Strategy Optimizer - AutoML framework for pipeline optimization
+
+"""Strategy Optimizer - AutoML framework for pipeline optimization
 Based on AutoRAG patterns: threshold filtering, performance measurement, best selection
-"""""""
+"""
 import asyncio
 import logging
 import time
@@ -26,11 +29,11 @@ logger = logging.getLogger(__name__)
 
 
 # class OptimizationMetric(Enum):  # Removed duplicate definition
-#     """Metrics for evaluating strategy performance"""""""#     ACCURACY = "accuracy""#     PRECISION = "precision""#     RECALL = "recall""#     F1_SCORE = "f1_score""#     LATENCY = "latency""#     THROUGHPUT = "throughput""#     COST = "cost""#     ROBUSTNESS = "robustness""
+#     """Metrics for evaluating strategy performance"""#     ACCURACY = "accuracy""#     PRECISION = "precision""#     RECALL = "recall""#     F1_SCORE = "f1_score""#     LATENCY = "latency""#     THROUGHPUT = "throughput""#     COST = "cost""#     ROBUSTNESS = "robustness""
 
 @dataclass
 class StrategyConfig:
-    """Configuration for a strategy"""""""    name: str
+    """Configuration for a strategy"""name: str
     parameters: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
     created_at: float = None
@@ -42,7 +45,7 @@ class StrategyConfig:
 
 @dataclass
 class PerformanceResult:
-    """Result of evaluating a strategy"""""""    strategy_name: str
+    """Result of evaluating a strategy"""strategy_name: str
     metrics: Dict[str, float] = field(default_factory=dict)
     execution_time: float = 0.0
     error: Optional[str] = None
@@ -57,7 +60,7 @@ class PerformanceResult:
 
 @dataclass
 class OptimizationTrial:
-    """A single optimization trial"""""""    trial_id: str
+    """A single optimization trial"""trial_id: str
     strategy_configs: List[StrategyConfig]
     performance_results: List[PerformanceResult] = field(default_factory=list)
     best_strategy: Optional[StrategyConfig] = None
@@ -67,24 +70,24 @@ class OptimizationTrial:
 
 
 class Strategy(ABC):
-    """Abstract base class for strategies"""""""
+    """Abstract base class for strategies"""
     @abstractmethod
     async def execute(self, input_data: Any, **kwargs) -> Any:
-        """Execute the strategy with given input"""""""        pass
+        """Execute the strategy with given input"""pass
 
     @abstractmethod
     def get_config(self) -> StrategyConfig:
-        """Get the strategy configuration"""""""        pass
+        """Get the strategy configuration"""pass
 
     @property
     @abstractmethod
     def name(self) -> str:
-        """Get strategy name"""""""        pass
+        """Get strategy name"""pass
 
 
 class ThresholdFilter:
-    """""""    Threshold-based filtering for strategy selection
-    Based on AutoRAG's threshold filtering patterns'    """""""
+    """Threshold-based filtering for strategy selection
+    Based on AutoRAG's threshold filtering patterns'    """
     def __init__(self, thresholds: Dict[str, float]):
         self.thresholds = thresholds
         # Define which metrics have "higher is better" vs "lower is better""        self.higher_is_better = {
@@ -93,7 +96,7 @@ class ThresholdFilter:
             "latency", "cost""        }
 
     def filter_strategies(self, performance_results: List[PerformanceResult]) -> List[PerformanceResult]:
-        """Filter strategies based on threshold criteria"""""""        filtered = []
+        """Filter strategies based on threshold criteria"""filtered = []
 
         for result in performance_results:
             if result.error:
@@ -125,24 +128,24 @@ class ThresholdFilter:
         return filtered
 
     def update_thresholds(self, new_thresholds: Dict[str, float]):
-        """Update filtering thresholds"""""""        self.thresholds.update(new_thresholds)
+        """Update filtering thresholds"""self.thresholds.update(new_thresholds)
 
 
 class PerformanceMeasurer:
-    """""""    Measures and aggregates strategy performance
-    Based on AutoRAG's performance measurement patterns'    """""""
+    """Measures and aggregates strategy performance
+    Based on AutoRAG's performance measurement patterns'    """
     def __init__(self, metrics: List[OptimizationMetric]):
         self.metrics = metrics
         self.measurement_functions: Dict[str, Callable] = {}
 
     def register_metric_function(self, metric: str, func: Callable):
-        """Register a custom metric measurement function"""""""        self.measurement_functions[metric] = func
+        """Register a custom metric measurement function"""self.measurement_functions[metric] = func
 
     async def measure_performance(
         self, strategy: Strategy, input_data: Any,
         ground_truth: Optional[Any] = None, **kwargs
     ) -> PerformanceResult:
-        """Measure performance of a strategy"""""""        start_time = time.time()
+        """Measure performance of a strategy"""start_time = time.time()
 
         try:
             # Execute strategy
@@ -191,7 +194,7 @@ class PerformanceMeasurer:
     def _default_metric_calculation(
         self, metric: OptimizationMetric, result: Any, ground_truth: Any, execution_time: float
     ) -> float:
-        """Default metric calculations"""""""        if metric == OptimizationMetric.LATENCY:
+        """Default metric calculations"""if metric == OptimizationMetric.LATENCY:
             return execution_time
         elif metric == OptimizationMetric.THROUGHPUT:
             # Assume result size indicates throughput
@@ -214,16 +217,16 @@ class PerformanceMeasurer:
 
 
 class BestSelectionAlgorithm(ABC):
-    """Abstract base class for best strategy selection algorithms"""""""
+    """Abstract base class for best strategy selection algorithms"""
     @abstractmethod
     def select_best(
         self, performance_results: List[PerformanceResult], weights: Optional[Dict[str, float]] = None
     ) -> PerformanceResult:
-        """Select the best performing strategy"""""""        pass
+        """Select the best performing strategy"""pass
 
 
 class WeightedAverageSelector(BestSelectionAlgorithm):
-    """Select best strategy using weighted average of metrics"""""""
+    """Select best strategy using weighted average of metrics"""
     def __init__(self):
         # Define which metrics have "higher is better" vs "lower is better""        self.higher_is_better = {
             "accuracy", "precision", "recall", "f1_score", "throughput", "robustness""        }
@@ -233,7 +236,7 @@ class WeightedAverageSelector(BestSelectionAlgorithm):
     def select_best(
         self, performance_results: List[PerformanceResult], weights: Optional[Dict[str, float]] = None
     ) -> PerformanceResult:
-        """Select strategy with highest weighted average score"""""""        if not performance_results:
+        """Select strategy with highest weighted average score"""if not performance_results:
             raise ValueError("No performance results provided")"
         if weights is None:
             # Default equal weights for all metrics
@@ -278,11 +281,11 @@ class WeightedAverageSelector(BestSelectionAlgorithm):
 
 
 class ParetoFrontierSelector(BestSelectionAlgorithm):
-    """Select best strategy using Pareto frontier (multi-objective optimization)"""""""
+    """Select best strategy using Pareto frontier (multi-objective optimization)"""
     def select_best(
         self, performance_results: List[PerformanceResult], weights: Optional[Dict[str, float]] = None
     ) -> PerformanceResult:
-        """Select strategy on Pareto frontier with best compromise"""""""        if not performance_results:
+        """Select strategy on Pareto frontier with best compromise"""if not performance_results:
             raise ValueError("No performance results provided")"
         # Filter out error results
         valid_results = [r for r in performance_results if not r.error]
@@ -308,7 +311,7 @@ class ParetoFrontierSelector(BestSelectionAlgorithm):
         return self._select_from_frontier(pareto_frontier, weights)
 
     def _calculate_pareto_frontier(self, results: List[PerformanceResult]) -> List[PerformanceResult]:
-        """Calculate Pareto frontier for multi-objective optimization"""""""        if not results:
+        """Calculate Pareto frontier for multi-objective optimization"""if not results:
             return []
 
         frontier = []
@@ -330,7 +333,7 @@ class ParetoFrontierSelector(BestSelectionAlgorithm):
         return frontier
 
     def _dominates(self, result1: PerformanceResult, result2: PerformanceResult) -> bool:
-        """Check if result1 dominates result2"""""""        at_least_one_better = False
+        """Check if result1 dominates result2"""at_least_one_better = False
 
         # Define which metrics have "lower is better""        lower_is_better = {"latency", "cost"}"
         for metric in set(result1.metrics.keys()) | set(result2.metrics.keys()):
@@ -352,7 +355,7 @@ class ParetoFrontierSelector(BestSelectionAlgorithm):
     def _select_from_frontier(
         self, frontier: List[PerformanceResult], weights: Dict[str, float]
     ) -> PerformanceResult:
-        """Select best result from Pareto frontier using weighted scoring"""""""        best_result = None
+        """Select best result from Pareto frontier using weighted scoring"""best_result = None
         best_score = float('-inf')'
         for result in frontier:
             score = sum(result.metrics.get(metric, 0) * weight
@@ -366,8 +369,8 @@ class ParetoFrontierSelector(BestSelectionAlgorithm):
 
 
 class StrategyOptimizer:
-    """""""    AutoML framework for strategy optimization
-    Based on AutoRAG's strategy optimization patterns'    """""""
+    """AutoML framework for strategy optimization
+    Based on AutoRAG's strategy optimization patterns'    """
     def __init__(self,
                  threshold_filter: Optional[ThresholdFilter] = None,
                  performance_measurer: Optional[PerformanceMeasurer] = None,
@@ -384,10 +387,10 @@ class StrategyOptimizer:
         self.strategy_registry: Dict[str, Strategy] = {}
 
     def register_strategy(self, strategy: Strategy):
-        """Register a strategy for optimization"""""""        self.strategy_registry[strategy.name] = strategy
+        """Register a strategy for optimization"""self.strategy_registry[strategy.name] = strategy
         logger.info(f"Registered strategy: {strategy.name}")"
     def unregister_strategy(self, strategy_name: str):
-        """Unregister a strategy"""""""        if strategy_name in self.strategy_registry:
+        """Unregister a strategy"""if strategy_name in self.strategy_registry:
             del self.strategy_registry[strategy_name]
             logger.info(f"Unregistered strategy: {strategy_name}")"
     async def optimize(
@@ -395,8 +398,8 @@ class StrategyOptimizer:
         ground_truth: Optional[Any] = None, metric_weights: Optional[Dict[str, float]] = None,
         **kwargs
     ) -> OptimizationTrial:
-        """""""        Run optimization trial across multiple strategies
-        Based on AutoRAG's optimization workflow'        """""""        trial_id = f"trial_{int(time.time())}_{len(self.optimization_history)}""
+        """Run optimization trial across multiple strategies
+        Based on AutoRAG's optimization workflow'        """trial_id = f"trial_{int(time.time())}_{len(self.optimization_history)}""
         # Create trial
         trial = OptimizationTrial(
             trial_id=trial_id,
@@ -437,7 +440,7 @@ class StrategyOptimizer:
     def _calculate_optimization_score(
         self, result: PerformanceResult, weights: Optional[Dict[str, float]]
     ) -> float:
-        """Calculate overall optimization score"""""""        if weights is None:
+        """Calculate overall optimization score"""if weights is None:
             # Equal weights for all metrics
             weights = {metric: 1.0 / len(result.metrics) for metric in result.metrics}
 
@@ -454,8 +457,8 @@ class StrategyOptimizer:
     async def optimize_pipeline(
         self, pipeline_configs: List[Dict[str, Any]], evaluation_data: List[Tuple[Any, Any]], **kwargs
     ) -> OptimizationTrial:
-        """""""        Optimize a complete pipeline configuration
-        Based on AutoRAG's pipeline optimization'        """""""        # Convert pipeline configs to strategies
+        """Optimize a complete pipeline configuration
+        Based on AutoRAG's pipeline optimization'        """# Convert pipeline configs to strategies
         strategies = []
         for config in pipeline_configs:
             strategy = PipelineStrategy(config)
@@ -478,13 +481,13 @@ class StrategyOptimizer:
         return trial
 
     def get_optimization_history(self, limit: Optional[int] = None) -> List[OptimizationTrial]:
-        """Get optimization history"""""""        history = self.optimization_history
+        """Get optimization history"""history = self.optimization_history
         if limit:
             history = history[-limit:]
         return history
 
     def get_strategy_performance_stats(self, strategy_name: str) -> Dict[str, Any]:
-        """Get performance statistics for a strategy"""""""        relevant_trials = [
+        """Get performance statistics for a strategy"""relevant_trials = [
             trial for trial in self.optimization_history
             if any(result.strategy_name == strategy_name for result in trial.performance_results)
         ]
@@ -519,12 +522,12 @@ class StrategyOptimizer:
 
 
 class PipelineStrategy(Strategy):
-    """Strategy wrapper for pipeline configurations"""""""
+    """Strategy wrapper for pipeline configurations"""
     def __init__(self, config: Dict[str, Any]):
         self._config = config
         self._name = config.get("name", f"pipeline_{id(self)}")"
     async def execute(self, input_data: Any, **kwargs) -> Any:
-        """Execute pipeline with configuration"""""""        # Placeholder implementation - in real usage, this would
+        """Execute pipeline with configuration"""# Placeholder implementation - in real usage, this would
         # execute the actual pipeline with the given config
         pipeline_type = self._config.get("type", "generic")"
         if pipeline_type == "rag":"            # Simulate RAG pipeline execution
@@ -535,7 +538,7 @@ class PipelineStrategy(Strategy):
             # Generic pipeline simulation
             return f"Executed {pipeline_type} pipeline on input: {str(input_data)[:100]}""
     async def _execute_rag_pipeline(self, input_data: Any, **kwargs) -> str:
-        """Simulate RAG pipeline execution"""""""        # Simulate retrieval and generation
+        """Simulate RAG pipeline execution"""# Simulate retrieval and generation
         retrieval_config = self._config.get("retrieval", {})"        generation_config = self._config.get("generation", {})"
         # Simulate processing time based on config complexity
         processing_time = len(str(retrieval_config)) * 0.001 + len(str(generation_config)) * 0.001
@@ -543,17 +546,17 @@ class PipelineStrategy(Strategy):
 
         return f"RAG result: {str(input_data)[:50]}... (retrieved {retrieval_config.get('top_k', 5)} docs)""'
     async def _execute_classification_pipeline(self, input_data: Any, **kwargs) -> str:
-        """Simulate classification pipeline execution"""""""        model_config = self._config.get("model", {})"
+        """Simulate classification pipeline execution"""model_config = self._config.get("model", {})"
         # Simulate processing
         await asyncio.sleep(0.05)
 
         return f"Classification: {model_config.get('type', 'unknown')} predicted class for: {str(input_data)[:50]}""'
     def get_config(self) -> StrategyConfig:
-        """Get strategy configuration"""""""        return StrategyConfig(
+        """Get strategy configuration"""return StrategyConfig(
             name=self._name,
             parameters=self._config,
             metadata={"type": "pipeline"}"        )
 
     @property
     def name(self) -> str:
-        """Get strategy name"""""""        return self._name
+        """Get strategy name"""return self._name

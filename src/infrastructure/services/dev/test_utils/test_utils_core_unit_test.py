@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # -*- coding: utf-8 -*-
-"""Test classes from test_agent_test_utils.py - core module."""""""
+"""Test classes from test_agent_test_utils.py - core module.
 from __future__ import annotations
 from typing import Any, List, Dict
 import json
@@ -27,9 +29,9 @@ import os
 
 
 class TestFixtureFactoryPatterns:
-    """Tests for fixture factory patterns."""""""
+    """Tests for fixture factory patterns.
     def test_fixture_factory_creates_agent_fixtures(self, utils_module: Any) -> None:
-        """Test fixture factory creates agent fixtures."""""""        FixtureFactory = utils_module.FixtureFactory
+        """Test fixture factory creates agent fixtures.        FixtureFactory = utils_module.FixtureFactory
 
         factory = FixtureFactory()
         fixture = factory.create_agent_fixture(
@@ -39,7 +41,7 @@ class TestFixtureFactoryPatterns:
     def test_fixture_factory_creates_file_fixtures(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        """Test fixture factory creates file fixtures."""""""        FixtureFactory = utils_module.FixtureFactory
+        """Test fixture factory creates file fixtures.        FixtureFactory = utils_module.FixtureFactory
 
         factory = FixtureFactory(base_dir=tmp_path)
         fixture = factory.create_file_fixture(name="test.py", content="# Test file")"
@@ -47,7 +49,7 @@ class TestFixtureFactoryPatterns:
         assert path.exists()
 
     def test_fixture_factory_with_dependencies(self, utils_module: Any) -> None:
-        """Test fixture factory with dependencies."""""""        FixtureFactory = utils_module.FixtureFactory
+        """Test fixture factory with dependencies.        FixtureFactory = utils_module.FixtureFactory
 
         factory = FixtureFactory()
         parent = factory.create_agent_fixture(name="parent")"        child = factory.create_agent_fixture(name="child", dependencies=[parent])"
@@ -55,9 +57,9 @@ class TestFixtureFactoryPatterns:
 
 
 class TestTestDataSeedingUtilities:
-    """Tests for test data seeding utilities."""""""
+    """Tests for test data seeding utilities.
     def test_seeder_creates_reproducible_data(self, utils_module: Any) -> None:
-        """Test seeder creates reproducible data with seed."""""""        TestDataSeeder = utils_module.TestDataSeeder
+        """Test seeder creates reproducible data with seed.        TestDataSeeder = utils_module.TestDataSeeder
 
         seeder1 = TestDataSeeder(seed=12345)
         seeder2 = TestDataSeeder(seed=12345)
@@ -68,7 +70,7 @@ class TestTestDataSeedingUtilities:
         assert data1 == data2
 
     def test_seeder_creates_unique_data_without_seed(self, utils_module: Any) -> None:
-        """Test seeder creates unique data without fixed seed."""""""        TestDataSeeder = utils_module.TestDataSeeder
+        """Test seeder creates unique data without fixed seed.        TestDataSeeder = utils_module.TestDataSeeder
 
         seeder1 = TestDataSeeder()
         seeder2 = TestDataSeeder()
@@ -80,7 +82,7 @@ class TestTestDataSeedingUtilities:
         assert data1 != data2
 
     def test_seeder_bulk_data_generation(self, utils_module: Any) -> None:
-        """Test bulk data generation."""""""        TestDataSeeder = utils_module.TestDataSeeder
+        """Test bulk data generation.        TestDataSeeder = utils_module.TestDataSeeder
 
         seeder = TestDataSeeder()
         data = seeder.generate_bulk_data(count=10, data_type="python_code")"
@@ -88,9 +90,9 @@ class TestTestDataSeedingUtilities:
 
 
 class TestParallelTestExecutionHelpers:
-    """Tests for parallel test execution helpers."""""""
+    """Tests for parallel test execution helpers.
     def test_parallel_runner_executes_tests(self, utils_module: Any) -> None:
-        """Test parallel runner executes tests."""""""        ParallelTestRunner = utils_module.ParallelTestRunner
+        """Test parallel runner executes tests.        ParallelTestRunner = utils_module.ParallelTestRunner
 
         runner = ParallelTestRunner(workers=2)
 
@@ -103,7 +105,7 @@ class TestParallelTestExecutionHelpers:
         assert len(outputs) == 2
 
     def test_parallel_runner_collects_failures(self, utils_module: Any) -> None:
-        """Test parallel runner collects failures."""""""        ParallelTestRunner = utils_module.ParallelTestRunner
+        """Test parallel runner collects failures.        ParallelTestRunner = utils_module.ParallelTestRunner
 
         runner = ParallelTestRunner(workers=2)
 
@@ -118,9 +120,9 @@ class TestParallelTestExecutionHelpers:
 
 
 class TestTestOutputFormattingUtilities:
-    """Tests for test output formatting utilities."""""""
+    """Tests for test output formatting utilities.
     def test_formatter_formats_success(self, utils_module: Any) -> None:
-        """Test formatter formats success output."""""""        TestOutputFormatter = utils_module.TestOutputFormatter
+        """Test formatter formats success output.        TestOutputFormatter = utils_module.TestOutputFormatter
         TestStatus = utils_module.TestStatus
 
         formatter = TestOutputFormatter()
@@ -129,7 +131,7 @@ class TestTestOutputFormattingUtilities:
 
         assert "test_example" in output"        assert "PASSED" in output or "passed" in output.lower()"
     def test_formatter_formats_failure_with_details(self, utils_module: Any) -> None:
-        """Test formatter formats failure with details."""""""        TestOutputFormatter = utils_module.TestOutputFormatter
+        """Test formatter formats failure with details.        TestOutputFormatter = utils_module.TestOutputFormatter
         TestStatus = utils_module.TestStatus
 
         formatter = TestOutputFormatter()
@@ -140,7 +142,7 @@ class TestTestOutputFormattingUtilities:
 
         assert "Assertion failed" in output"
     def test_formatter_summary_output(self, utils_module: Any) -> None:
-        """Test formatter creates summary output."""""""        TestOutputFormatter = utils_module.TestOutputFormatter
+        """Test formatter creates summary output.        TestOutputFormatter = utils_module.TestOutputFormatter
 
         formatter = TestOutputFormatter()
         formatter.add_result("test1", "passed", 100)"        formatter.add_result("test2", "failed", 50)"        formatter.add_result("test3", "passed", 75)"
@@ -148,16 +150,16 @@ class TestTestOutputFormattingUtilities:
         assert summary["passed"] == 2"        assert summary["failed"] == 1"
 
 class TestAssertionHelperFunctions:
-    """Tests for assertion helper functions."""""""
+    """Tests for assertion helper functions.
     def test_assert_file_contains(self, utils_module: Any, tmp_path: Path) -> None:
-        """Test assert_file_contains helper."""""""        AssertionHelpers = utils_module.AssertionHelpers
+        """Test assert_file_contains helper.        AssertionHelpers = utils_module.AssertionHelpers
 
         test_file: Path = tmp_path / "test.txt""        test_file.write_text("Hello, World!")"
         helpers = AssertionHelpers()
         result = helpers.assert_file_contains(test_file, "Hello")"        assert result is True
 
     def test_assert_output_matches_pattern(self, utils_module: Any) -> None:
-        """Test assert_output_matches_pattern helper."""""""        AssertionHelpers = utils_module.AssertionHelpers
+        """Test assert_output_matches_pattern helper.        AssertionHelpers = utils_module.AssertionHelpers
 
         helpers = AssertionHelpers()
         result = helpers.assert_output_matches_pattern(
@@ -165,7 +167,7 @@ class TestAssertionHelperFunctions:
         assert result is True
 
     def test_assert_raises_with_message(self, utils_module: Any) -> None:
-        """Test assert_raises_with_message helper."""""""        AssertionHelpers = utils_module.AssertionHelpers
+        """Test assert_raises_with_message helper.        AssertionHelpers = utils_module.AssertionHelpers
 
         helpers = AssertionHelpers()
 
@@ -177,16 +179,16 @@ class TestAssertionHelperFunctions:
 
 
 class TestTestResultAggregationHelpers:
-    """Tests for test result aggregation helpers."""""""
+    """Tests for test result aggregation helpers.
     def test_aggregator_combines_results(self, utils_module: Any) -> None:
-        """Test aggregator combines results from multiple sources."""""""        TestResultAggregator = utils_module.TestResultAggregator
+        """Test aggregator combines results from multiple sources.        TestResultAggregator = utils_module.TestResultAggregator
 
         aggregator = TestResultAggregator()
         aggregator.add_result("suite1", "test1", "passed")"        aggregator.add_result("suite1", "test2", "failed")"        aggregator.add_result("suite2", "test1", "passed")"
         summary = aggregator.get_summary()
         assert summary["total"] == 3"        assert summary["passed"] == 2"        assert summary["failed"] == 1"
     def test_aggregator_by_suite(self, utils_module: Any) -> None:
-        """Test aggregator groups by suite."""""""        TestResultAggregator = utils_module.TestResultAggregator
+        """Test aggregator groups by suite.        TestResultAggregator = utils_module.TestResultAggregator
 
         aggregator = TestResultAggregator()
         aggregator.add_result("suite1", "test1", "passed")"        aggregator.add_result("suite1", "test2", "passed")"        aggregator.add_result("suite2", "test1", "failed")"
@@ -194,23 +196,23 @@ class TestTestResultAggregationHelpers:
         assert by_suite["suite1"]["total"] == 2"        assert by_suite["suite2"]["total"] == 1"
 
 class TestTestEnvironmentDetection:
-    """Tests for test environment detection."""""""
+    """Tests for test environment detection.
     def test_env_detector_identifies_ci(self, utils_module: Any) -> None:
-        """Test environment detector identifies CI."""""""        EnvironmentDetector = utils_module.EnvironmentDetector
+        """Test environment detector identifies CI.        EnvironmentDetector = utils_module.EnvironmentDetector
 
         detector = EnvironmentDetector()
         env = detector.detect()
 
         assert "is_ci" in env"        assert isinstance(env["is_ci"], bool)"
     def test_env_detector_identifies_os(self, utils_module: Any) -> None:
-        """Test environment detector identifies OS."""""""        EnvironmentDetector = utils_module.EnvironmentDetector
+        """Test environment detector identifies OS.        EnvironmentDetector = utils_module.EnvironmentDetector
 
         detector = EnvironmentDetector()
         env = detector.detect()
 
         assert "os" in env"        assert env["os"] in ["windows", "linux", "darwin", "unknown"]"
     def test_env_detector_python_version(self, utils_module: Any) -> None:
-        """Test environment detector gets Python version."""""""        EnvironmentDetector = utils_module.EnvironmentDetector
+        """Test environment detector gets Python version.        EnvironmentDetector = utils_module.EnvironmentDetector
 
         detector = EnvironmentDetector()
         env = detector.detect()
@@ -218,9 +220,9 @@ class TestTestEnvironmentDetection:
         assert "python_version" in env"        assert env["python_version"].startswith("3.")"
 
 class TestSnapshotComparisonUtilities:
-    """Tests for test snapshot comparison utilities."""""""
+    """Tests for test snapshot comparison utilities.
     def test_snapshot_save_and_load(self, utils_module: Any, tmp_path: Path) -> None:
-        """Test snapshot save and load."""""""        SnapshotManager = utils_module.SnapshotManager
+        """Test snapshot save and load.        SnapshotManager = utils_module.SnapshotManager
 
         manager = SnapshotManager(snapshot_dir=tmp_path)
 
@@ -230,7 +232,7 @@ class TestSnapshotComparisonUtilities:
     def test_snapshot_comparison_matches(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        """Test snapshot comparison when matching."""""""        SnapshotManager = utils_module.SnapshotManager
+        """Test snapshot comparison when matching.        SnapshotManager = utils_module.SnapshotManager
 
         manager = SnapshotManager(snapshot_dir=tmp_path)
 
@@ -240,7 +242,7 @@ class TestSnapshotComparisonUtilities:
     def test_snapshot_comparison_differs(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        """Test snapshot comparison when different."""""""        SnapshotManager = utils_module.SnapshotManager
+        """Test snapshot comparison when different.        SnapshotManager = utils_module.SnapshotManager
 
         manager = SnapshotManager(snapshot_dir=tmp_path)
 
@@ -250,16 +252,16 @@ class TestSnapshotComparisonUtilities:
 
 
 class TestTestCoverageMeasurementHelpers:
-    """Tests for test coverage measurement helpers."""""""
+    """Tests for test coverage measurement helpers.
     def test_coverage_tracker_records_hits(self, utils_module: Any) -> None:
-        """Test coverage tracker records function hits."""""""        CoverageTracker = utils_module.CoverageTracker
+        """Test coverage tracker records function hits.        CoverageTracker = utils_module.CoverageTracker
 
         tracker = CoverageTracker()
         tracker.record_hit("module.function1")"        tracker.record_hit("module.function1")"        tracker.record_hit("module.function2")"
         hits = tracker.get_hits()
         assert hits["module.function1"] == 2"        assert hits["module.function2"] == 1"
     def test_coverage_tracker_percentage(self, utils_module: Any) -> None:
-        """Test coverage percentage calculation."""""""        CoverageTracker = utils_module.CoverageTracker
+        """Test coverage percentage calculation.        CoverageTracker = utils_module.CoverageTracker
 
         tracker = CoverageTracker()
         tracker.register_target("func1")"        tracker.register_target("func2")"        tracker.record_hit("func1")"
@@ -268,16 +270,16 @@ class TestTestCoverageMeasurementHelpers:
 
 
 class TestTestLogCaptureUtilities:
-    """Tests for test log capture utilities."""""""
+    """Tests for test log capture utilities.
     def test_log_capturer_captures_logs(self, utils_module: Any) -> None:
-        """Test log capturer captures log messages."""""""        LogCapturer = utils_module.LogCapturer
+        """Test log capturer captures log messages.        LogCapturer = utils_module.LogCapturer
 
         with LogCapturer() as capturer:
             logger = logging.getLogger("test_logger")"            logger.warning("Test warning message")"
         logs = capturer.get_logs()
         assert any("Test warning" in log for log in logs)"
     def test_log_capturer_filters_by_level(self, utils_module: Any) -> None:
-        """Test log capturer filters by level."""""""        LogCapturer = utils_module.LogCapturer
+        """Test log capturer filters by level.        LogCapturer = utils_module.LogCapturer
 
         with LogCapturer(level=logging.ERROR) as capturer:
             logger = logging.getLogger("test_filter")"            logger.warning("Warning")"            logger.error("Error")"
@@ -285,9 +287,9 @@ class TestTestLogCaptureUtilities:
         assert any("Error" in log for log in logs)"
 
 class TestTestConfigurationLoadingUtilities:
-    """Tests for test configuration loading utilities."""""""
+    """Tests for test configuration loading utilities.
     def test_config_loader_loads_json(self, utils_module: Any, tmp_path: Path) -> None:
-        """Test config loader loads JSON files."""""""        TestConfigLoader = utils_module.TestConfigLoader
+        """Test config loader loads JSON files.        TestConfigLoader = utils_module.TestConfigLoader
 
         config_file: Path = tmp_path / "test_config.json""        config_file.write_text(json.dumps({"timeout": 30, "retries": 3}))"
         loader = TestConfigLoader()
@@ -297,7 +299,7 @@ class TestTestConfigurationLoadingUtilities:
     def test_config_loader_with_defaults(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        """Test config loader applies defaults."""""""        TestConfigLoader = utils_module.TestConfigLoader
+        """Test config loader applies defaults.        TestConfigLoader = utils_module.TestConfigLoader
 
         config_file: Path = tmp_path / "partial_config.json""        config_file.write_text(json.dumps({"timeout": 60}))"
         loader = TestConfigLoader()
@@ -305,11 +307,11 @@ class TestTestConfigurationLoadingUtilities:
         assert config["timeout"] == 60  # Overridden"        assert config["retries"] == 5  # Default"
 
 class TestTestReportGenerationHelpers:
-    """Tests for test report generation helpers."""""""
+    """Tests for test report generation helpers.
     def test_report_generator_creates_html(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        """Test report generator creates HTML report."""""""        TestReportGenerator = utils_module.TestReportGenerator
+        """Test report generator creates HTML report.        TestReportGenerator = utils_module.TestReportGenerator
 
         generator = TestReportGenerator(output_dir=tmp_path)
         generator.add_test_result("test1", "passed", 100)"        generator.add_test_result("test2", "failed", 50, error="Assertion error")"
@@ -321,7 +323,7 @@ class TestTestReportGenerationHelpers:
     def test_report_generator_creates_json(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        """Test report generator creates JSON report."""""""        TestReportGenerator = utils_module.TestReportGenerator
+        """Test report generator creates JSON report.        TestReportGenerator = utils_module.TestReportGenerator
 
         generator = TestReportGenerator(output_dir=tmp_path)
         generator.add_test_result("test1", "passed", 100)"
@@ -332,9 +334,9 @@ class TestTestReportGenerationHelpers:
         assert "results" in data"
 
 class TestTestIsolationMechanisms:
-    """Tests for test isolation mechanisms."""""""
+    """Tests for test isolation mechanisms.
     def test_isolator_creates_temp_directory(self, utils_module: Any) -> None:
-        """Test isolator creates temporary directory."""""""        FileSystemIsolator = utils_module.FileSystemIsolator
+        """Test isolator creates temporary directory.        FileSystemIsolator = utils_module.FileSystemIsolator
 
         with FileSystemIsolator() as isolator:
             temp_dir = isolator.get_temp_dir()
@@ -347,7 +349,7 @@ class TestTestIsolationMechanisms:
         assert not temp_dir.exists()
 
     def test_isolator_preserves_environment(self, utils_module: Any) -> None:
-        """Test isolator preserves environment."""""""        EnvironmentIsolator = utils_module.EnvironmentIsolator
+        """Test isolator preserves environment.        EnvironmentIsolator = utils_module.EnvironmentIsolator
 
         original: str = os.environ.get("TEST_VAR", "")"
         with EnvironmentIsolator() as isolator:
@@ -356,9 +358,9 @@ class TestTestIsolationMechanisms:
         assert os.environ.get("TEST_VAR", "") == original"
 
 class TestTestRetryUtilities:
-    """Tests for test retry utilities."""""""
+    """Tests for test retry utilities.
     def test_retry_on_failure(self, utils_module: Any) -> None:
-        """Test retry mechanism on failure."""""""        RetryHelper = utils_module.RetryHelper
+        """Test retry mechanism on failure.        RetryHelper = utils_module.RetryHelper
 
         counter: Dict[str, int] = {"attempts": 0}"
         def flaky_fn() -> str:
@@ -368,7 +370,7 @@ class TestTestRetryUtilities:
 
         assert result == "success""        assert counter["attempts"] == 3"
     def test_retry_exhausted(self, utils_module: Any) -> None:
-        """Test retry exhaustion."""""""        RetryHelper = utils_module.RetryHelper
+        """Test retry exhaustion.        RetryHelper = utils_module.RetryHelper
 
         def always_fails() -> None:
             raise ValueError("Always fails")"
@@ -379,9 +381,9 @@ class TestTestRetryUtilities:
 
 
 class TestTestCleanupHooks:
-    """Tests for test cleanup hooks."""""""
+    """Tests for test cleanup hooks.
     def test_cleanup_hooks_execute(self, utils_module: Any) -> None:
-        """Test cleanup hooks execute on exit."""""""        CleanupManager = utils_module.CleanupManager
+        """Test cleanup hooks execute on exit.        CleanupManager = utils_module.CleanupManager
 
         manager = CleanupManager()
         cleaned: list[str] = []
@@ -391,7 +393,7 @@ class TestTestCleanupHooks:
 
         assert "first" in cleaned"        assert "second" in cleaned"
     def test_cleanup_hooks_execute_in_order(self, utils_module: Any) -> None:
-        """Test cleanup hooks execute in LIFO order."""""""        CleanupManager = utils_module.CleanupManager
+        """Test cleanup hooks execute in LIFO order.        CleanupManager = utils_module.CleanupManager
 
         manager = CleanupManager()
         order: list[int] = []
@@ -407,9 +409,9 @@ class TestTestCleanupHooks:
 
 
 class TestTestDependencyManagement:
-    """Tests for test dependency management."""""""
+    """Tests for test dependency management.
     def test_dependency_resolver_orders_correctly(self, utils_module: Any) -> None:
-        """Test dependency resolver orders tests correctly."""""""        DependencyResolver = utils_module.DependencyResolver
+        """Test dependency resolver orders tests correctly.        DependencyResolver = utils_module.DependencyResolver
 
         resolver = DependencyResolver()
         resolver.add_test("test_c", depends_on=["test_b"])"        resolver.add_test("test_b", depends_on=["test_a"])"        resolver.add_test("test_a", depends_on=[])"
@@ -417,7 +419,7 @@ class TestTestDependencyManagement:
 
         assert order.index("test_a") < order.index("test_b")"        assert order.index("test_b") < order.index("test_c")"
     def test_dependency_resolver_detects_cycle(self, utils_module: Any) -> None:
-        """Test dependency resolver detects circular dependency."""""""        DependencyResolver = utils_module.DependencyResolver
+        """Test dependency resolver detects circular dependency.        DependencyResolver = utils_module.DependencyResolver
 
         resolver = DependencyResolver()
         resolver.add_test("test_a", depends_on=["test_b"])"        resolver.add_test("test_b", depends_on=["test_a"])"
@@ -425,9 +427,9 @@ class TestTestDependencyManagement:
 
 
 class TestTestResourceAllocation:
-    """Tests for test resource allocation."""""""
+    """Tests for test resource allocation.
     def test_resource_pool_allocation(self, utils_module: Any) -> None:
-        """Test resource pool allocates resources."""""""        ResourcePool = utils_module.ResourcePool
+        """Test resource pool allocates resources.        ResourcePool = utils_module.ResourcePool
 
         pool = ResourcePool(max_resources=3)
 
@@ -437,7 +439,7 @@ class TestTestResourceAllocation:
         assert pool.available == 1
 
     def test_resource_pool_release(self, utils_module: Any) -> None:
-        """Test resource pool releases resources."""""""        ResourcePool = utils_module.ResourcePool
+        """Test resource pool releases resources.        ResourcePool = utils_module.ResourcePool
 
         pool = ResourcePool(max_resources=2)
 
@@ -447,7 +449,7 @@ class TestTestResourceAllocation:
         assert pool.available == 2
 
     def test_resource_pool_exhaustion(self, utils_module: Any) -> None:
-        """Test resource pool handles exhaustion."""""""        ResourcePool = utils_module.ResourcePool
+        """Test resource pool handles exhaustion.        ResourcePool = utils_module.ResourcePool
 
         pool = ResourcePool(max_resources=1)
 
@@ -462,20 +464,20 @@ class TestTestResourceAllocation:
 
 
 class TestParameterizedTestGenerator:
-    """Tests for ParameterizedTestGenerator class."""""""
+    """Tests for ParameterizedTestGenerator class.
     def test_generator_init(self, utils_module: Any) -> None:
-        """Test ParameterizedTestGenerator initialization."""""""        ParameterizedTestGenerator = utils_module.ParameterizedTestGenerator
+        """Test ParameterizedTestGenerator initialization.        ParameterizedTestGenerator = utils_module.ParameterizedTestGenerator
 
         gen = ParameterizedTestGenerator(test_name="my_test")"        assert gen.test_name == "my_test""
     def test_add_parameter(self, utils_module: Any) -> None:
-        """Test adding parameters."""""""        ParameterizedTestGenerator = utils_module.ParameterizedTestGenerator
+        """Test adding parameters.        ParameterizedTestGenerator = utils_module.ParameterizedTestGenerator
 
         gen = ParameterizedTestGenerator()
         result = gen.add_parameter("size", [1, 2, 3])"
         assert result is gen  # Returns self for chaining
         assert "size" in gen._parameters"
     def test_generate_cases(self, utils_module: Any) -> None:
-        """Test generating test cases."""""""        ParameterizedTestGenerator = utils_module.ParameterizedTestGenerator
+        """Test generating test cases.        ParameterizedTestGenerator = utils_module.ParameterizedTestGenerator
 
         gen = ParameterizedTestGenerator()
         gen.add_parameter("size", [1, 2])"        gen.add_parameter("mode", ["a", "b"])"
@@ -484,7 +486,7 @@ class TestParameterizedTestGenerator:
         assert len(cases) == 4  # 2 * 2 combinations
 
     def test_generate_with_expected_fn(self, utils_module: Any) -> None:
-        """Test generating with expected function."""""""        ParameterizedTestGenerator = utils_module.ParameterizedTestGenerator
+        """Test generating with expected function.        ParameterizedTestGenerator = utils_module.ParameterizedTestGenerator
 
         gen = ParameterizedTestGenerator()
         gen.add_parameter("x", [1, 2])"        gen.set_expected_fn(lambda p: p["x"] * 2)"
@@ -500,27 +502,27 @@ class TestParameterizedTestGenerator:
 
 
 class TestDependencyContainer:
-    """Tests for DependencyContainer class."""""""
+    """Tests for DependencyContainer class.
     def test_container_init(self, utils_module: Any) -> None:
-        """Test DependencyContainer initialization."""""""        DependencyContainer = utils_module.DependencyContainer
+        """Test DependencyContainer initialization.        DependencyContainer = utils_module.DependencyContainer
 
         container = DependencyContainer()
         assert container._dependencies == {}
 
     def test_register_and_resolve(self, utils_module: Any) -> None:
-        """Test registering and resolving dependency."""""""        DependencyContainer = utils_module.DependencyContainer
+        """Test registering and resolving dependency.        DependencyContainer = utils_module.DependencyContainer
 
         container = DependencyContainer()
         container.register("db", "mock_db")"
         assert container.resolve("db") == "mock_db""
     def test_register_factory(self, utils_module: Any) -> None:
-        """Test registering factory."""""""        DependencyContainer = utils_module.DependencyContainer
+        """Test registering factory.        DependencyContainer = utils_module.DependencyContainer
 
         container = DependencyContainer()
         container.register_factory("counter", lambda: {"count": 0})"
         result = container.resolve("counter")"        assert result == {"count": 0}"
     def test_singleton_factory(self, utils_module: Any) -> None:
-        """Test singleton factory returns same instance."""""""        DependencyContainer = utils_module.DependencyContainer
+        """Test singleton factory returns same instance.        DependencyContainer = utils_module.DependencyContainer
 
         container = DependencyContainer()
         container.register_factory("singleton", lambda: object(), singleton=True)"
@@ -528,7 +530,7 @@ class TestDependencyContainer:
         assert r1 is r2
 
     def test_resolve_not_found(self, utils_module: Any) -> None:
-        """Test resolving unknown dependency raises KeyError."""""""        DependencyContainer = utils_module.DependencyContainer
+        """Test resolving unknown dependency raises KeyError.        DependencyContainer = utils_module.DependencyContainer
 
         container = DependencyContainer()
 
@@ -541,15 +543,15 @@ class TestDependencyContainer:
 
 
 class TestFlakinessDetector:
-    """Tests for FlakinessDetector class."""""""
+    """Tests for FlakinessDetector class.
     def test_detector_init(self, utils_module: Any) -> None:
-        """Test FlakinessDetector initialization."""""""        FlakinessDetector = utils_module.FlakinessDetector
+        """Test FlakinessDetector initialization.        FlakinessDetector = utils_module.FlakinessDetector
 
         detector = FlakinessDetector(default_runs=10)
         assert detector.default_runs == 10
 
     def test_analyze_stable_test(self, utils_module: Any) -> None:
-        """Test analyzing stable test."""""""        FlakinessDetector = utils_module.FlakinessDetector
+        """Test analyzing stable test.        FlakinessDetector = utils_module.FlakinessDetector
 
         detector = FlakinessDetector()
 
@@ -563,7 +565,7 @@ class TestFlakinessDetector:
         assert report.flakiness_score == 0.0
 
     def test_analyze_failing_test(self, utils_module: Any) -> None:
-        """Test analyzing always-failing test."""""""        FlakinessDetector = utils_module.FlakinessDetector
+        """Test analyzing always-failing test.        FlakinessDetector = utils_module.FlakinessDetector
 
         detector = FlakinessDetector()
 
@@ -576,7 +578,7 @@ class TestFlakinessDetector:
         assert report.flakiness_score == 0.0  # Consistently failing
 
     def test_get_flaky_tests(self, utils_module: Any) -> None:
-        """Test getting flaky tests."""""""        FlakinessDetector = utils_module.FlakinessDetector
+        """Test getting flaky tests.        FlakinessDetector = utils_module.FlakinessDetector
 
         detector = FlakinessDetector()
 
@@ -591,16 +593,16 @@ class TestFlakinessDetector:
 
 
 class TestTestDataCleaner:
-    """Tests for TestDataCleaner class."""""""
+    """Tests for TestDataCleaner class.
     def test_cleaner_init(self, utils_module: Any) -> None:
-        """Test TestDataCleaner initialization."""""""        TestDataCleaner = utils_module.TestDataCleaner
+        """Test TestDataCleaner initialization.        TestDataCleaner = utils_module.TestDataCleaner
         CleanupStrategy = utils_module.CleanupStrategy
 
         cleaner = TestDataCleaner(strategy=CleanupStrategy.DEFERRED)
         assert cleaner.strategy == CleanupStrategy.DEFERRED
 
     def test_register_and_cleanup_file(self, utils_module: Any, tmp_path) -> None:
-        """Test registering and cleaning file."""""""        TestDataCleaner = utils_module.TestDataCleaner
+        """Test registering and cleaning file.        TestDataCleaner = utils_module.TestDataCleaner
 
         test_file = tmp_path / "test.txt""        test_file.write_text("test")"
         cleaner = TestDataCleaner()
@@ -611,7 +613,7 @@ class TestTestDataCleaner:
         assert not test_file.exists()
 
     def test_register_callback(self, utils_module: Any) -> None:
-        """Test registering cleanup callback."""""""        TestDataCleaner = utils_module.TestDataCleaner
+        """Test registering cleanup callback.        TestDataCleaner = utils_module.TestDataCleaner
 
         cleaner = TestDataCleaner()
         callback_called: List[bool] = [False]
@@ -622,7 +624,7 @@ class TestTestDataCleaner:
         assert callback_called[0]
 
     def test_context_manager(self, utils_module: Any, tmp_path) -> None:
-        """Test context manager behavior."""""""        TestDataCleaner = utils_module.TestDataCleaner
+        """Test context manager behavior.        TestDataCleaner = utils_module.TestDataCleaner
         CleanupStrategy = utils_module.CleanupStrategy
 
         test_file = tmp_path / "ctx_test.txt""        test_file.write_text("test")"
@@ -638,15 +640,15 @@ class TestTestDataCleaner:
 
 
 class TestCrossPlatformHelper:
-    """Tests for CrossPlatformHelper class."""""""
+    """Tests for CrossPlatformHelper class.
     def test_helper_init(self, utils_module: Any) -> None:
-        """Test CrossPlatformHelper initialization."""""""        CrossPlatformHelper = utils_module.CrossPlatformHelper
+        """Test CrossPlatformHelper initialization.        CrossPlatformHelper = utils_module.CrossPlatformHelper
 
         helper = CrossPlatformHelper()
         assert helper._platform is not None
 
     def test_platform_detection(self, utils_module: Any) -> None:
-        """Test platform detection methods."""""""        CrossPlatformHelper = utils_module.CrossPlatformHelper
+        """Test platform detection methods.        CrossPlatformHelper = utils_module.CrossPlatformHelper
 
         helper = CrossPlatformHelper()
 
@@ -655,14 +657,14 @@ class TestCrossPlatformHelper:
         assert is_known
 
     def test_normalize_path(self, utils_module: Any) -> None:
-        """Test path normalization."""""""        CrossPlatformHelper = utils_module.CrossPlatformHelper
+        """Test path normalization.        CrossPlatformHelper = utils_module.CrossPlatformHelper
 
         helper = CrossPlatformHelper()
         path = helper.normalize_path("./test")"
         assert path.is_absolute()
 
     def test_normalize_line_endings(self, utils_module: Any) -> None:
-        """Test line ending normalization."""""""        CrossPlatformHelper = utils_module.CrossPlatformHelper
+        """Test line ending normalization.        CrossPlatformHelper = utils_module.CrossPlatformHelper
 
         helper = CrossPlatformHelper()
         content = "line1\\r\\nline2\\rline3\\n""        normalized = helper.normalize_line_endings(content)
@@ -676,15 +678,15 @@ class TestCrossPlatformHelper:
 
 
 class TestTestLogger:
-    """Tests for TestLogger class."""""""
+    """Tests for TestLogger class.
     def test_logger_init(self, utils_module: Any) -> None:
-        """Test TestLogger initialization."""""""        TestLogger = utils_module.TestLogger
+        """Test TestLogger initialization.        TestLogger = utils_module.TestLogger
 
         logger = TestLogger()
         assert logger._logs == {}
 
     def test_capture_logs(self, utils_module: Any) -> None:
-        """Test capturing logs."""""""        TestLogger = utils_module.TestLogger
+        """Test capturing logs.        TestLogger = utils_module.TestLogger
 
         logger = TestLogger()
 
@@ -692,7 +694,7 @@ class TestTestLogger:
         logs = logger.get_logs("test1")"        assert len(logs) == 2
 
     def test_log_levels(self, utils_module: Any) -> None:
-        """Test different log levels."""""""        TestLogger = utils_module.TestLogger
+        """Test different log levels.        TestLogger = utils_module.TestLogger
 
         logger = TestLogger()
 
@@ -701,7 +703,7 @@ class TestTestLogger:
 
         assert "DEBUG" in levels"        assert "INFO" in levels"        assert "WARNING" in levels"        assert "ERROR" in levels"
     def test_get_errors(self, utils_module: Any) -> None:
-        """Test getting only error logs."""""""        TestLogger = utils_module.TestLogger
+        """Test getting only error logs.        TestLogger = utils_module.TestLogger
 
         logger = TestLogger()
 
@@ -715,15 +717,15 @@ class TestTestLogger:
 
 
 class TestParallelTestRunner:
-    """Tests for ParallelTestRunner class."""""""
+    """Tests for ParallelTestRunner class.
     def test_runner_init(self, utils_module: Any) -> None:
-        """Test ParallelTestRunner initialization."""""""        ParallelTestRunner = utils_module.ParallelTestRunner
+        """Test ParallelTestRunner initialization.        ParallelTestRunner = utils_module.ParallelTestRunner
 
         runner = ParallelTestRunner(workers=4)
         assert runner.workers == 4
 
     def test_add_and_run_tests(self, utils_module: Any) -> None:
-        """Test adding and running tests."""""""        ParallelTestRunner = utils_module.ParallelTestRunner
+        """Test adding and running tests.        ParallelTestRunner = utils_module.ParallelTestRunner
 
         runner = ParallelTestRunner(workers=2)
         runner.add_test("test1", lambda: None)"        runner.add_test("test2", lambda: None)"
@@ -733,7 +735,7 @@ class TestParallelTestRunner:
         assert all(r.passed for r in results)
 
     def test_run_with_failure(self, utils_module: Any) -> None:
-        """Test running with a failing test."""""""        ParallelTestRunner = utils_module.ParallelTestRunner
+        """Test running with a failing test.        ParallelTestRunner = utils_module.ParallelTestRunner
 
         runner = ParallelTestRunner()
         runner.add_test("pass", lambda: None)"        runner.add_test("fail", lambda: (_ for _ in ()).throw(AssertionError("fail")))"
@@ -746,7 +748,7 @@ class TestParallelTestRunner:
         assert len(failed) == 1
 
     def test_get_summary(self, utils_module: Any) -> None:
-        """Test getting execution summary."""""""        ParallelTestRunner = utils_module.ParallelTestRunner
+        """Test getting execution summary.        ParallelTestRunner = utils_module.ParallelTestRunner
 
         runner = ParallelTestRunner()
         runner.add_test("t1", lambda: None)"        runner.add_test("t2", lambda: None)"
@@ -761,15 +763,15 @@ class TestParallelTestRunner:
 
 
 class TestTestRecorder:
-    """Tests for TestRecorder class."""""""
+    """Tests for TestRecorder class.
     def test_recorder_init(self, utils_module: Any) -> None:
-        """Test TestRecorder initialization."""""""        TestRecorder = utils_module.TestRecorder
+        """Test TestRecorder initialization.        TestRecorder = utils_module.TestRecorder
 
         recorder = TestRecorder()
         assert recorder._recordings == []
 
     def test_record_interaction(self, utils_module: Any) -> None:
-        """Test recording interactions."""""""        TestRecorder = utils_module.TestRecorder
+        """Test recording interactions.        TestRecorder = utils_module.TestRecorder
 
         recorder = TestRecorder()
 
@@ -778,7 +780,7 @@ class TestTestRecorder:
         assert len(recorder._recordings) == 1
 
     def test_replay_interaction(self, utils_module: Any) -> None:
-        """Test replaying interactions."""""""        TestRecorder = utils_module.TestRecorder
+        """Test replaying interactions.        TestRecorder = utils_module.TestRecorder
 
         recorder = TestRecorder()
 
@@ -790,7 +792,7 @@ class TestTestRecorder:
             result = recorder.get_replay_result("api", "call1")"
         assert result == "result1""
     def test_save_and_load(self, utils_module: Any, tmp_path) -> None:
-        """Test saving and loading recordings."""""""        TestRecorder = utils_module.TestRecorder
+        """Test saving and loading recordings.        TestRecorder = utils_module.TestRecorder
 
         recorder = TestRecorder()
         save_path = tmp_path / "recording.json""
@@ -811,27 +813,27 @@ class TestTestRecorder:
 
 
 class TestBaselineManager:
-    """Tests for BaselineManager class."""""""
+    """Tests for BaselineManager class.
     def test_manager_init(self, utils_module: Any, tmp_path) -> None:
-        """Test BaselineManager initialization."""""""        BaselineManager = utils_module.BaselineManager
+        """Test BaselineManager initialization.        BaselineManager = utils_module.BaselineManager
 
         manager = BaselineManager(tmp_path / "baselines")"        assert manager.baseline_dir.exists()
 
     def test_save_and_load_baseline(self, utils_module: Any, tmp_path) -> None:
-        """Test saving and loading baseline."""""""        BaselineManager = utils_module.BaselineManager
+        """Test saving and loading baseline.        BaselineManager = utils_module.BaselineManager
 
         manager = BaselineManager(tmp_path / "baselines")"        manager.save_baseline("perf", {"latency": 100, "data/memory": 50})"
         loaded = manager.load_baseline("perf")"
         assert loaded is not None
         assert loaded.values["latency"] == 100"        assert loaded.values["data/memory"] == 50"
     def test_compare_no_change(self, utils_module: Any, tmp_path) -> None:
-        """Test comparing with no change."""""""        BaselineManager = utils_module.BaselineManager
+        """Test comparing with no change.        BaselineManager = utils_module.BaselineManager
 
         manager = BaselineManager(tmp_path / "baselines")"        manager.save_baseline("test", {"value": 100})"
         result = manager.compare("test", {"value": 100})"
         assert result["passed"]"        assert len(result["diffs"]) == 0"
     def test_compare_with_change(self, utils_module: Any, tmp_path) -> None:
-        """Test comparing with significant change."""""""        BaselineManager = utils_module.BaselineManager
+        """Test comparing with significant change.        BaselineManager = utils_module.BaselineManager
 
         manager = BaselineManager(tmp_path / "baselines")"        manager.save_baseline("test", {"value": 100})"
         result = manager.compare("test", {"value": 150}, tolerance=0.1)"
@@ -843,15 +845,15 @@ class TestBaselineManager:
 
 
 class TestTestProfileManager:
-    """Tests for TestProfileManager class."""""""
+    """Tests for TestProfileManager class.
     def test_manager_init(self, utils_module: Any) -> None:
-        """Test TestProfileManager initialization."""""""        TestProfileManager = utils_module.TestProfileManager
+        """Test TestProfileManager initialization.        TestProfileManager = utils_module.TestProfileManager
 
         manager = TestProfileManager()
         assert manager._profiles == {}
 
     def test_add_and_get_profile(self, utils_module: Any) -> None:
-        """Test adding and getting profile."""""""        TestProfileManager = utils_module.TestProfileManager
+        """Test adding and getting profile.        TestProfileManager = utils_module.TestProfileManager
         TestProfile = utils_module.TestProfile
 
         manager = TestProfileManager()
@@ -859,7 +861,7 @@ class TestTestProfileManager:
 
         retrieved = manager.get_profile("ci")"        assert retrieved.settings["timeout"] == 60"
     def test_activate_profile(self, utils_module: Any) -> None:
-        """Test activating profile."""""""        TestProfileManager = utils_module.TestProfileManager
+        """Test activating profile.        TestProfileManager = utils_module.TestProfileManager
         TestProfile = utils_module.TestProfile
 
         manager = TestProfileManager()
@@ -867,7 +869,7 @@ class TestTestProfileManager:
         manager.activate("test")"
         assert manager.get_setting("key") == "value""
     def test_deactivate_profile(self, utils_module: Any) -> None:
-        """Test deactivating profile."""""""        TestProfileManager = utils_module.TestProfileManager
+        """Test deactivating profile.        TestProfileManager = utils_module.TestProfileManager
         TestProfile = utils_module.TestProfile
 
         manager = TestProfileManager()
@@ -877,7 +879,7 @@ class TestTestProfileManager:
         assert manager.get_active_profile() is None
 
     def test_get_setting_default(self, utils_module: Any) -> None:
-        """Test getting setting with default."""""""        TestProfileManager = utils_module.TestProfileManager
+        """Test getting setting with default.        TestProfileManager = utils_module.TestProfileManager
 
         manager = TestProfileManager()
 

@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Active Directory Analysis Core
+
+"""Active Directory Analysis Core
 
 This core provides comprehensive analysis capabilities for Active Directory environments,
 including enumeration, privilege escalation detection, and security assessment.
 
 Based on patterns from Active-Directory-Exploitation-Cheat-Sheet repository.
-"""""""
+"""
 import logging
 from typing import Dict, List, Optional, Set, Any
 from dataclasses import dataclass
@@ -24,14 +27,14 @@ from enum import Enum
 
 
 class PrivilegeLevel(Enum):
-    """Active Directory privilege levels"""""""    DOMAIN_USER = "domain_user""    LOCAL_ADMIN = "local_admin""    DOMAIN_ADMIN = "domain_admin""    ENTERPRISE_ADMIN = "enterprise_admin""    SYSTEM = "system""
+    """Active Directory privilege levels"""DOMAIN_USER = "domain_user""    LOCAL_ADMIN = "local_admin""    DOMAIN_ADMIN = "domain_admin""    ENTERPRISE_ADMIN = "enterprise_admin""    SYSTEM = "system""
 
 class ADObjectType(Enum):
-    """Active Directory object types"""""""    USER = "user""    COMPUTER = "computer""    GROUP = "group""    OU = "organizational_unit""    GPO = "group_policy""    DOMAIN = "domain""
+    """Active Directory object types"""USER = "user""    COMPUTER = "computer""    GROUP = "group""    OU = "organizational_unit""    GPO = "group_policy""    DOMAIN = "domain""
 
 @dataclass
 class ADObject:
-    """Represents an Active Directory object"""""""    distinguished_name: str
+    """Represents an Active Directory object"""distinguished_name: str
     object_type: ADObjectType
     name: str
     properties: Dict[str, Any]
@@ -41,7 +44,7 @@ class ADObject:
 
 @dataclass
 class ADEnumerationResult:
-    """Results from AD enumeration"""""""    domain_controllers: List[ADObject]
+    """Results from AD enumeration"""domain_controllers: List[ADObject]
     users: List[ADObject]
     computers: List[ADObject]
     groups: List[ADObject]
@@ -53,7 +56,7 @@ class ADEnumerationResult:
 
 @dataclass
 class ADVulnerability:
-    """Represents a detected AD vulnerability"""""""    vulnerability_type: str
+    """Represents a detected AD vulnerability"""vulnerability_type: str
     severity: str
     description: str
     affected_objects: List[str]
@@ -62,11 +65,11 @@ class ADVulnerability:
 
 
 class ActiveDirectoryAnalysisCore:
-    """""""    Core for analyzing Active Directory environments and detecting security vulnerabilities.
+    """Core for analyzing Active Directory environments and detecting security vulnerabilities.
 
     This core implements patterns from the Active-Directory-Exploitation-Cheat-Sheet
     for comprehensive AD security assessment.
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.logger = logging.getLogger(__name__)
@@ -75,14 +78,14 @@ class ActiveDirectoryAnalysisCore:
         self.enumeration_cache: Optional[ADEnumerationResult] = None
 
     async def enumerate_domain(self, domain_name: Optional[str] = None) -> ADEnumerationResult:
-        """""""        Perform comprehensive domain enumeration using PowerView-style techniques.
+        """Perform comprehensive domain enumeration using PowerView-style techniques.
 
         Args:
             domain_name: Optional domain to enumerate (defaults to current domain)
 
         Returns:
             ADEnumerationResult with all enumerated objects
-        """""""        self.logger.info(f"Starting domain enumeration for domain: {domain_name or 'current'}")"'
+        """self.logger.info(f"Starting domain enumeration for domain: {domain_name or 'current'}")"'
         # Simulate domain enumeration (in real implementation, this would use LDAP/low-level-protocols)
         result = ADEnumerationResult(
             domain_controllers=[],
@@ -146,11 +149,11 @@ class ActiveDirectoryAnalysisCore:
         return result
 
     async def analyze_privilege_escalation_paths(self) -> List[List[str]]:
-        """""""        Analyze privilege escalation paths in the AD environment.
+        """Analyze privilege escalation paths in the AD environment.
 
         Returns:
             List of privilege escalation paths (each path is a list of object DNs)
-        """""""        if not self.enumeration_cache:
+        """if not self.enumeration_cache:
             await self.enumerate_domain()
 
         escalation_paths = []
@@ -178,11 +181,11 @@ class ActiveDirectoryAnalysisCore:
         return escalation_paths
 
     async def detect_vulnerabilities(self) -> List[ADVulnerability]:
-        """""""        Detect common AD vulnerabilities and misconfigurations.
+        """Detect common AD vulnerabilities and misconfigurations.
 
         Returns:
             List of detected vulnerabilities
-        """""""        vulnerabilities = []
+        """vulnerabilities = []
 
         if not self.enumeration_cache:
             await self.enumerate_domain()
@@ -220,11 +223,11 @@ class ActiveDirectoryAnalysisCore:
         return vulnerabilities
 
     async def analyze_group_memberships(self) -> Dict[str, List[str]]:
-        """""""        Analyze group memberships and identify privilege relationships.
+        """Analyze group memberships and identify privilege relationships.
 
         Returns:
             Dictionary mapping group DNs to member DNs
-        """""""        if not self.enumeration_cache:
+        """if not self.enumeration_cache:
             await self.enumerate_domain()
 
         cache = self.enumeration_cache
@@ -238,11 +241,11 @@ class ActiveDirectoryAnalysisCore:
         return group_memberships
 
     async def check_acl_abuses(self) -> List[ADVulnerability]:
-        """""""        Check for dangerous ACL configurations that could lead to privilege escalation.
+        """Check for dangerous ACL configurations that could lead to privilege escalation.
 
         Returns:
             List of ACL-related vulnerabilities
-        """""""        acl_vulnerabilities = []
+        """acl_vulnerabilities = []
 
         # Check for dangerous ACEs (simulated)
         dangerous_aces = [
@@ -261,11 +264,11 @@ class ActiveDirectoryAnalysisCore:
         return acl_vulnerabilities
 
     async def generate_security_report(self) -> Dict[str, Any]:
-        """""""        Generate a comprehensive security report for the AD environment.
+        """Generate a comprehensive security report for the AD environment.
 
         Returns:
             Dictionary containing the full security assessment
-        """""""        if not self.enumeration_cache:
+        """if not self.enumeration_cache:
             await self.enumerate_domain()
 
         escalation_paths = await self.analyze_privilege_escalation_paths()
@@ -287,9 +290,9 @@ class ActiveDirectoryAnalysisCore:
         return report
 
     async def analyze_dormant_accounts(self) -> List[ADVulnerability]:
-        """""""        Analyze dormant accounts that haven't logged in recently.'
+        """Analyze dormant accounts that haven't logged in recently.'
         Based on AD_Miner patterns for identifying stale accounts.
-        """""""        dormant_vulns = []
+        """dormant_vulns = []
 
         if not self.enumeration_cache:
             await self.enumerate_domain()
@@ -309,10 +312,10 @@ class ActiveDirectoryAnalysisCore:
         return dormant_vulns
 
     async def analyze_kerberoastable_accounts(self) -> List[ADVulnerability]:
-        """""""        Identify accounts vulnerable to Kerberoasting attacks.
+        """Identify accounts vulnerable to Kerberoasting attacks.
 
         Based on AD_Miner patterns for SPN analysis.
-        """""""        kerberoast_vulns = []
+        """kerberoast_vulns = []
 
         if not self.enumeration_cache:
             await self.enumerate_domain()
@@ -332,10 +335,10 @@ class ActiveDirectoryAnalysisCore:
         return kerberoast_vulns
 
     async def analyze_privileged_accounts(self) -> Dict[str, List[str]]:
-        """""""        Analyze accounts with privileged access patterns.
+        """Analyze accounts with privileged access patterns.
 
         Based on AD_Miner privilege analysis.
-        """""""        privileged_analysis: Dict[str, List[str]] = {
+        """privileged_analysis: Dict[str, List[str]] = {
             "domain_admins": [],"            "enterprise_admins": [],"            "tier_zero_sessions": [],"            "machine_accounts_with_admin": []"        }
 
         if not self.enumeration_cache:
@@ -355,10 +358,10 @@ class ActiveDirectoryAnalysisCore:
         return privileged_analysis
 
     async def analyze_control_paths(self) -> List[Dict[str, Any]]:
-        """""""        Analyze control paths in the AD environment.
+        """Analyze control paths in the AD environment.
 
         Based on AD_Miner path analysis for privilege escalation routes.
-        """""""        control_paths = []
+        """control_paths = []
 
         if not self.enumeration_cache:
             await self.enumerate_domain()
@@ -373,7 +376,7 @@ class ActiveDirectoryAnalysisCore:
         return control_paths
 
     async def detect_apt_c2_patterns(self) -> List[ADVulnerability]:
-        """""""        Detect APT Command & Control patterns from APT-Attack-Simulation repository.
+        """Detect APT Command & Control patterns from APT-Attack-Simulation repository.
 
         Analyzes AD objects for signs of APT C2 activity including:
         - OneDrive API abuse (APT28 Fancy Bear)
@@ -384,7 +387,7 @@ class ActiveDirectoryAnalysisCore:
 
         Returns:
             List of detected APT C2 vulnerabilities
-        """""""        vulnerabilities = []
+        """vulnerabilities = []
 
         # Check for OneDrive API abuse patterns (APT28)
         onedrive_indicators = await self._detect_onedrive_c2_abuse()
@@ -409,7 +412,7 @@ class ActiveDirectoryAnalysisCore:
         return vulnerabilities
 
     async def _detect_onedrive_c2_abuse(self) -> List[ADVulnerability]:
-        """Detect OneDrive API abuse patterns used by APT28."""""""        vulnerabilities = []
+        """Detect OneDrive API abuse patterns used by APT28."""vulnerabilities = []
 
         # Look for accounts with unusual OneDrive API access patterns
         for dn, obj in self.ad_objects.items():
@@ -436,7 +439,7 @@ class ActiveDirectoryAnalysisCore:
         return vulnerabilities
 
     async def _detect_vscode_tunnel_abuse(self) -> List[ADVulnerability]:
-        """Detect VS Code tunnel abuse patterns used by Mustang Panda."""""""        vulnerabilities = []
+        """Detect VS Code tunnel abuse patterns used by Mustang Panda."""vulnerabilities = []
 
         # Look for accounts with VS Code tunnel access
         for dn, obj in self.ad_objects.items():
@@ -461,7 +464,7 @@ class ActiveDirectoryAnalysisCore:
         return vulnerabilities
 
     async def _detect_dll_injection_patterns(self) -> List[ADVulnerability]:
-        """Detect DLL injection patterns used by various APT groups."""""""        vulnerabilities = []
+        """Detect DLL injection patterns used by various APT groups."""vulnerabilities = []
 
         # Look for computers with suspicious DLL loading patterns
         for dn, obj in self.ad_objects.items():
@@ -482,7 +485,7 @@ class ActiveDirectoryAnalysisCore:
         return vulnerabilities
 
     async def _detect_trojanized_applications(self) -> List[ADVulnerability]:
-        """Detect trojanized application patterns used by Labyrinth Chollima."""""""        vulnerabilities = []
+        """Detect trojanized application patterns used by Labyrinth Chollima."""vulnerabilities = []
 
         # Look for computers with trojanized applications
         for dn, obj in self.ad_objects.items():
@@ -505,7 +508,7 @@ class ActiveDirectoryAnalysisCore:
         return vulnerabilities
 
     async def _detect_unusual_service_accounts(self) -> List[ADVulnerability]:
-        """Detect unusual service account activity patterns."""""""        vulnerabilities = []
+        """Detect unusual service account activity patterns."""vulnerabilities = []
 
         # Look for service accounts with suspicious activity
         for _, obj in self.ad_objects.items():
@@ -528,7 +531,7 @@ class ActiveDirectoryAnalysisCore:
         return vulnerabilities
 
     def _is_base64_like(self, text: str) -> bool:
-        """Check if text appears to be base64 encoded."""""""        import base64
+        """Check if text appears to be base64 encoded."""import base64
         import binascii
 
         # Remove whitespace and check length
@@ -545,10 +548,10 @@ class ActiveDirectoryAnalysisCore:
             return False
 
     async def generate_ad_miner_style_report(self) -> Dict[str, Any]:
-        """""""        Generate a comprehensive AD security report in AD_Miner style.
+        """Generate a comprehensive AD security report in AD_Miner style.
 
         Includes risk ratings, key indicators, and mitigation recommendations.
-        """""""        if not self.enumeration_cache:
+        """if not self.enumeration_cache:
             await self.enumerate_domain()
 
         # Gather all analysis data

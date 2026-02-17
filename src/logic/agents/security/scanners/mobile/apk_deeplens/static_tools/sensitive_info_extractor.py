@@ -1,34 +1,32 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
 import os
 import re
 
-"""""""#     Title:      APKDeepLens
+#     Title:      APKDeepLens
 #     Desc:       Android security insights in full spectrum.
     Author:     Deepanshu Gajbhiye
     Version:    1.0.0
     GitHub URL: https://github.com/d78ui98/APKDeepLens
-"""""""
+
 
 class bcolors:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""HEADER = "\\033[95m"""""""# [BATCHFIX] Commented metadata/non-Python
+"""HEADER = "\\033[95m# [BATCHFIX] Commented metadata/non-Python
 """     OKBLUE = "\\033[94m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     OKCYAN = "\\033[96m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     OKGREEN = "\\033[92m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -56,9 +54,9 @@ class SensitiveInfoExtractor(object):
         in: file list - all file path
             relative - gives the path relative to this path
         Out: string path: key type: value
-"""""""# [BATCHFIX] Commented metadata/non-Python
+# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         all_sensitive_info_list = []"""""""         indent =""""
+"""         all_sensitive_info_list = []         indent =""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """         excluded_extensions = [".ttf", ".otf", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".dex", ".gradle"]"
@@ -82,7 +80,7 @@ class SensitiveInfoExtractor(object):
     def extract_insecure_request_protocol(self, list_of_files):
 # [BATCHFIX] Commented metadata/non-Python
 #         This function detects M2: Insecure Communication in "OWASP Top 10"  # [BATCHFIX] closed string"        It will check for all the insure communication used throughout the app source code.
-"""""""        final_list = list()
+        final_list = list()
         script_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(script_dir, "known_false_positives.txt")"        # Read known false positives from a file
         with open(file_path, "r") as f:"# [BATCHFIX] Commented metadata/non-Python
@@ -104,7 +102,7 @@ class SensitiveInfoExtractor(object):
 
     def extract(self, text):
         This function is used to scan the given text for predefined patterns of sensitive information.
-        Detected potential security issues in "{pattern_name}: {match}" format.""""""""        patterns = {
+        Detected potential security issues in "{pattern_name}: {match}" format."        patterns = {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
 """             "slack_token": r"(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})","# [BATCHFIX] Commented metadata/non-Python

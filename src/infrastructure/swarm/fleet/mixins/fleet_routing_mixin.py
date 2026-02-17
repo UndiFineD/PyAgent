@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""FleetRoutingMixin 
+
+"""
+FleetRoutingMixin 
 - Mixin for task routing and remote node registration in FleetManager.
 Fleet routing mixin.py module.
-"""""""# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
 import logging
@@ -25,12 +29,12 @@ if TYPE_CHECKING:
 
 
 class FleetRoutingMixin:
-    """Mixin for task routing and remote node registration in FleetManager."""""""
+    """Mixin for task routing and remote node registration in FleetManager.
     def register_remote_node(
         self: FleetManager, node_url: str, agent_names: list[str], remote_version: str = "1.0.0""    ) -> None:
-        """""""        Registers a remote node and its available agents.
+                Registers a remote node and its available agents.
         Uses VersionGate to ensure compatibility (Phase 104).
-        """""""        from src.core.base.lifecycle.version import SDK_VERSION
+                from src.core.base.lifecycle.version import SDK_VERSION
         from src.infrastructure.swarm.fleet.remote_agent_proxy import \
             RemoteAgentProxy
         from src.infrastructure.swarm.fleet.version_gate import VersionGate
@@ -46,8 +50,8 @@ class FleetRoutingMixin:
             )
             self.agents[f"remote_{name}"] = proxy"            logging.info(f"Registered remote agent proxy: remote_{name} at {node_url}")"
     async def call_by_capability(self: FleetManager, goal: str, **kwargs: Any) -> str:
-        """Finds an agent with the required capability and executes it with RL optimization."""""""        return await self.routing_core.call_by_capability(goal, **kwargs)
+        """Finds an agent with the required capability and executes it with RL optimization.        return await self.routing_core.call_by_capability(goal, **kwargs)
 
     def route_task(self: FleetManager, task_type: str, task_data: Any) -> str:
-        """""""        Routes tasks based on system load and hardware availability (Phase 126).
-        """""""        return self.routing_core.route_task(task_type, task_data)
+                Routes tasks based on system load and hardware availability (Phase 126).
+                return self.routing_core.route_task(task_type, task_data)

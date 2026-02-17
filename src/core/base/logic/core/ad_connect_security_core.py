@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Azure AD Connect Security Core
+
+"""Azure AD Connect Security Core
 
 This core implements Azure AD Connect security analysis patterns inspired by ADSyncDump-BOF.
 It provides comprehensive security assessment for Azure AD Connect deployments including
@@ -25,7 +28,7 @@ Key Features:
 - Synchronization health monitoring
 - Security vulnerability detection
 - Compliance reporting for AD Connect deployments
-"""""""
+"""
 import asyncio
 import json
 import logging
@@ -43,7 +46,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ADConnectServiceAccount:
-    """Represents an Azure AD Connect service account."""""""    username: str
+    """Represents an Azure AD Connect service account."""username: str
     domain: str
     account_type: str  # 'ManagedServiceAccount', 'DomainUser', 'LocalSystem''    privileges: List[str]
     last_password_change: Optional[datetime]
@@ -53,7 +56,7 @@ class ADConnectServiceAccount:
 
 @dataclass
 class ADConnectDatabase:
-    """Represents Azure AD Connect database information."""""""    instance_name: str
+    """Represents Azure AD Connect database information."""instance_name: str
     database_name: str
     server_version: str
     encryption_status: str
@@ -64,7 +67,7 @@ class ADConnectDatabase:
 
 @dataclass
 class ADConnectConfiguration:
-    """Represents Azure AD Connect configuration settings."""""""    sync_interval: int
+    """Represents Azure AD Connect configuration settings."""sync_interval: int
     password_sync_enabled: bool
     device_sync_enabled: bool
     group_sync_enabled: bool
@@ -75,7 +78,7 @@ class ADConnectConfiguration:
 
 @dataclass
 class ADConnectSecurityAssessment:
-    """Security assessment results for Azure AD Connect."""""""    service_account: ADConnectServiceAccount
+    """Security assessment results for Azure AD Connect."""service_account: ADConnectServiceAccount
     database: ADConnectDatabase
     configuration: ADConnectConfiguration
     vulnerabilities: List[Dict[str, Any]]
@@ -85,12 +88,12 @@ class ADConnectSecurityAssessment:
 
 
 class ADConnectSecurityCore(BaseCore):
-    """""""    Core for Azure AD Connect security analysis and assessment.
+    """Core for Azure AD Connect security analysis and assessment.
 
     This core provides comprehensive security analysis for Azure AD Connect deployments,
     including service account analysis, database security, configuration auditing,
     and vulnerability detection.
-    """""""
+    """
     def __init__(self):
         super().__init__()
         self.name = "ADConnectSecurityCore""        self.version = "1.0.0""        self.description = "Azure AD Connect Security Analysis and Assessment""
@@ -105,14 +108,14 @@ class ADConnectSecurityCore(BaseCore):
         }
 
     async def analyze_service_account(self, _context: CascadeContext) -> ADConnectServiceAccount:
-        """""""        Analyze the Azure AD Connect service account.
+        """Analyze the Azure AD Connect service account.
 
         Args:
             _context: Cascade context for the analysis
 
         Returns:
             ADConnectServiceAccount: Service account analysis results
-        """""""        try:
+        """try:
             # Check if running on Windows
             if platform.system() != 'Windows':'                raise ValueError("Azure AD Connect analysis requires Windows environment")"
             # Find ADSync service
@@ -142,14 +145,14 @@ class ADConnectSecurityCore(BaseCore):
             )
 
     async def analyze_database_security(self, _context: CascadeContext) -> ADConnectDatabase:
-        """""""        Analyze Azure AD Connect database security.
+        """Analyze Azure AD Connect database security.
 
         Args:
             _context: Cascade context for the analysis
 
         Returns:
             ADConnectDatabase: Database security analysis results
-        """""""        try:
+        """try:
             # Check LocalDB instance
             db_info = await self._get_localdb_instance_info()
 
@@ -169,14 +172,14 @@ class ADConnectSecurityCore(BaseCore):
                 connection_string="""            )
 
     async def analyze_configuration(self, _context: CascadeContext) -> ADConnectConfiguration:
-        """""""        Analyze Azure AD Connect configuration.
+        """Analyze Azure AD Connect configuration.
 
         Args:
             _context: Cascade context for the analysis
 
         Returns:
             ADConnectConfiguration: Configuration analysis results
-        """""""        try:
+        """try:
             # Read configuration from registry and files
             config_data = await self._read_adsync_configuration()
 
@@ -202,14 +205,14 @@ class ADConnectSecurityCore(BaseCore):
             )
 
     async def perform_security_assessment(self, context: CascadeContext) -> ADConnectSecurityAssessment:
-        """""""        Perform comprehensive security assessment of Azure AD Connect deployment.
+        """Perform comprehensive security assessment of Azure AD Connect deployment.
 
         Args:
             context: Cascade context for the analysis
 
         Returns:
             ADConnectSecurityAssessment: Complete security assessment
-        """""""        try:
+        """try:
             # Analyze all components
             service_account = await self.analyze_service_account(context)
             database = await self.analyze_database_security(context)
@@ -246,7 +249,7 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to perform security assessment: {e}")"            raise
 
     async def _get_adsync_service_info(self) -> Dict[str, Any]:
-        """Get Azure AD Connect service information."""""""        try:
+        """Get Azure AD Connect service information."""try:
             # Use PowerShell to get service information
             cmd = [
                 'powershell.exe','                '-Command','                'Get-Service -Name ADSync | Select-Object -Property Name, Status, StartType | ConvertTo-Json''            ]
@@ -258,7 +261,7 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to get ADSync service info: {e}")"            return {}
 
     async def _analyze_service_account_details(self, _service_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze service account details."""""""        try:
+        """Analyze service account details."""try:
             # Get service account from registry
             cmd = [
                 'powershell.exe','                '-Command','                (
@@ -284,7 +287,7 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to analyze service account: {e}")"            return {}
 
     async def _check_service_account_privileges(self, account_info: Dict[str, Any]) -> List[str]:
-        """Check service account privileges."""""""        privileges = []
+        """Check service account privileges."""privileges = []
 
         try:
             account_name = f"{account_info.get('domain', '')}\\{account_info.get('username', '')}""'
@@ -301,13 +304,13 @@ class ADConnectSecurityCore(BaseCore):
         return privileges
 
     async def _check_password_policy_compliance(self, _account_info: Dict[str, Any]) -> bool:
-        """Check if service account complies with password policy."""""""        try:
+        """Check if service account complies with password policy."""try:
             # This is a simplified check - in practice, you'd need domain policy analysis'            return True  # Placeholder
         except Exception:  # noqa: BLE001
             return False
 
     async def _get_localdb_instance_info(self) -> Dict[str, Any]:
-        """Get LocalDB instance information."""""""        try:
+        """Get LocalDB instance information."""try:
             # Check for LocalDB instances
             cmd = [
                 'powershell.exe','                '-Command','                (
@@ -329,15 +332,15 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to get LocalDB info: {e}")"            return {}
 
     async def _check_database_encryption(self, _db_info: Dict[str, Any]) -> str:
-        """Check database encryption status."""""""        # Simplified check - in practice, would query database encryption status
+        """Check database encryption status."""# Simplified check - in practice, would query database encryption status
         return "TDE_Enabled"  # Placeholder"
     async def _analyze_backup_status(self, _db_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze database backup status."""""""        # Simplified check - in practice, would check backup history
+        """Analyze database backup status."""# Simplified check - in practice, would check backup history
         return {
             'status': 'Current','            'last_backup': datetime.now() - timedelta(days=1)'        }
 
     async def _read_adsync_configuration(self) -> Dict[str, Any]:
-        """Read Azure AD Connect configuration."""""""        config = {
+        """Read Azure AD Connect configuration."""config = {
             'sync_interval': 30,'            'password_sync': True,'            'device_sync': True,'            'group_sync': True'        }
 
         try:
@@ -357,11 +360,11 @@ class ADConnectSecurityCore(BaseCore):
         return config
 
     async def _parse_sync_rules(self, _config_data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Parse synchronization rules."""""""        # Simplified - in practice, would parse actual sync rules
+        """Parse synchronization rules."""# Simplified - in practice, would parse actual sync rules
         return []
 
     async def _get_sync_domains(self, config_data: Dict[str, Any]) -> Dict[str, List[str]]:
-        """Get synchronization domains."""""""        return {
+        """Get synchronization domains."""return {
             'source': ['contoso.local'],'            'target': ['contoso.onmicrosoft.com']'        }
 
     async def _identify_vulnerabilities(
@@ -369,7 +372,7 @@ class ADConnectSecurityCore(BaseCore):
         database: ADConnectDatabase,
         configuration: ADConnectConfiguration
     ) -> List[Dict[str, Any]]:
-        """Identify security vulnerabilities."""""""        vulnerabilities = []
+        """Identify security vulnerabilities."""vulnerabilities = []
 
         # Check for known vulnerabilities based on version
         if database.server_version != 'Unknown':'            for cve, info in self.known_vulnerabilities.items():
@@ -391,7 +394,7 @@ class ADConnectSecurityCore(BaseCore):
         configuration: ADConnectConfiguration,
         vulnerabilities: List[Dict[str, Any]]
     ) -> float:
-        """Calculate compliance score (0-10 scale)."""""""        score = 10.0
+        """Calculate compliance score (0-10 scale)."""score = 10.0
 
         # Deduct points for vulnerabilities
         severity_weights = {
@@ -408,7 +411,7 @@ class ADConnectSecurityCore(BaseCore):
         return max(0.0, min(10.0, score))
 
     def _calculate_risk_level(self, score: float) -> str:
-        """Calculate risk level based on compliance score."""""""        if score >= self.risk_thresholds['critical']:'            return 'Critical''        elif score >= self.risk_thresholds['high']:'            return 'High''        elif score >= self.risk_thresholds['medium']:'            return 'Medium''        else:
+        """Calculate risk level based on compliance score."""if score >= self.risk_thresholds['critical']:'            return 'Critical''        elif score >= self.risk_thresholds['high']:'            return 'High''        elif score >= self.risk_thresholds['medium']:'            return 'Medium''        else:
             return 'Low''
     async def _generate_security_recommendations(
         self,
@@ -417,7 +420,7 @@ class ADConnectSecurityCore(BaseCore):
         configuration: ADConnectConfiguration,
         vulnerabilities: List[Dict[str, Any]]
     ) -> List[str]:
-        """Generate security recommendations."""""""        recommendations = []
+        """Generate security recommendations."""recommendations = []
 
         # Service account recommendations
         if not service_account.password_policy_compliance:
@@ -434,7 +437,7 @@ class ADConnectSecurityCore(BaseCore):
         return recommendations
 
     async def _run_powershell_command(self, cmd: List[str]) -> Optional[str]:
-        """Run a PowerShell command and return output."""""""        try:
+        """Run a PowerShell command and return output."""try:
             result = await asyncio.create_subprocess_exec(
                 *cmd,
                 stdout=asyncio.subprocess.PIPE,
@@ -450,7 +453,7 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to run PowerShell command: {e}")"            return None
 
     async def _get_account_sid(self, account_name: str) -> Optional[str]:
-        """Get SID for account name."""""""        try:
+        """Get SID for account name."""try:
             cmd = [
                 'powershell.exe','                '-Command','                (
                     f'$objUser = New-Object System.Security.Principal.NTAccount("{account_name}"); '"'                    f'$strSID = $objUser.Translate([System.Security.Principal.SecurityIdentifier]); ''                    f'$strSID.Value''                )
@@ -463,18 +466,18 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to get account SID: {e}")"            return None
 
     async def _check_account_privilege(self, account_name: str, privilege: str) -> bool:
-        """Check if account has specific privilege."""""""        # Simplified check - in practice, would use Windows API
+        """Check if account has specific privilege."""# Simplified check - in practice, would use Windows API
         return False
 
     async def execute_task(self, context: CascadeContext) -> Dict[str, Any]:
-        """""""        Execute AD Connect security analysis task.
+        """Execute AD Connect security analysis task.
 
         Args:
             context: Cascade context containing task parameters
 
         Returns:
             Dict containing analysis results
-        """""""        try:
+        """try:
             # Type safe access to task from context
             task_data = getattr(context, 'task', {}) if hasattr(context, 'task') else {}'            task_type = task_data.get('type', 'assessment')'
             if task_type == 'service_account_analysis':'                sa_result = await self.analyze_service_account(context)
@@ -496,14 +499,14 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Task execution failed: {e}")"            raise
 
     async def validate_task(self, context: CascadeContext) -> bool:
-        """""""        Validate AD Connect security analysis task.
+        """Validate AD Connect security analysis task.
 
         Args:
             context: Cascade context containing task parameters
 
         Returns:
             bool: True if task is valid
-        """""""        required_fields = ['type']'        task_data = getattr(context, 'task', {}) if hasattr(context, 'task') else {}'
+        """required_fields = ['type']'        task_data = getattr(context, 'task', {}) if hasattr(context, 'task') else {}'
         for field in required_fields:
             if field not in task_data:
                 return False
@@ -513,9 +516,9 @@ class ADConnectSecurityCore(BaseCore):
 
         return task_data['type'] in valid_types'
     def get_capabilities(self) -> List[str]:
-        """Get core capabilities."""""""        return [
+        """Get core capabilities."""return [
             'azure_ad_connect_security_analysis','            'service_account_analysis','            'database_security_assessment','            'configuration_auditing','            'vulnerability_detection','            'compliance_reporting''        ]
 
     def get_supported_task_types(self) -> List[str]:
-        """Get supported task types."""""""        return [
+        """Get supported task types."""return [
             'service_account_analysis','            'database_analysis','            'configuration_analysis','            'full_assessment''        ]

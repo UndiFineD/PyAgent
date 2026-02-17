@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Multi-Agent Orchestrator Core - Unified Agent Management System
+
+"""Multi-Agent Orchestrator Core - Unified Agent Management System
 =================================================================
 
 Inspired by big-3-super-agent's orchestration patterns, this core provides:'- Unified interface for managing multiple agent types (voice, coding, browser)
@@ -24,7 +27,7 @@ Key Patterns Extracted from big-3-super-agent:
 - Tool-based orchestration via function calls
 - Background processing with operator logs
 - Multi-agent coordination and lifecycle management
-"""""""
+"""
 import json
 import threading
 import time
@@ -40,7 +43,7 @@ from src.core.base.state.agent_state_manager import StateTransaction
 
 @dataclass
 class AgentMetadata:
-    """Metadata for registered agents."""""""    name: str
+    """Metadata for registered agents."""name: str
     agent_type: str
     session_id: str
     created_at: str
@@ -52,7 +55,7 @@ class AgentMetadata:
 
 @dataclass
 class TaskResult:
-    """Result of an agent task execution."""""""    task_id: str
+    """Result of an agent task execution."""task_id: str
     agent_name: str
     status: str  # "pending", "running", "completed", "failed""    result: Optional[Any] = None
     error: Optional[str] = None
@@ -62,16 +65,16 @@ class TaskResult:
 
 
 class MultiAgentOrchestratorCore:
-    """""""    Unified orchestrator for managing multiple agent types.
+    """Unified orchestrator for managing multiple agent types.
 
     Provides a centralized system for:
     - Agent registration and lifecycle management
     - Task dispatch and execution tracking
     - Working directory management
     - Tool-based orchestration interface
-    """""""
+    """
     def __init__(self, base_working_dir: Optional[Path] = None):
-        """Initialize the multi-agent orchestrator."""""""        self.base_working_dir = base_working_dir or Path.cwd() / "agent_workspace""        self.base_working_dir.mkdir(parents=True, exist_ok=True)
+        """Initialize the multi-agent orchestrator."""self.base_working_dir = base_working_dir or Path.cwd() / "agent_workspace""        self.base_working_dir.mkdir(parents=True, exist_ok=True)
 
         # Agent registry storage
         self.registry_path = self.base_working_dir / "agent_registry.json""        self.agent_registry: Dict[str, AgentMetadata] = {}
@@ -92,7 +95,7 @@ class MultiAgentOrchestratorCore:
         self._load_registry()
 
     def _load_registry(self):
-        """Load agent registry from disk."""""""        if not self.registry_path.exists():
+        """Load agent registry from disk."""if not self.registry_path.exists():
             return
 
         try:
@@ -101,7 +104,7 @@ class MultiAgentOrchestratorCore:
         except Exception as e:
             print(f"Warning: Failed to load agent registry: {e}")"
     def _save_registry(self):
-        """Save agent registry to disk."""""""        data = {
+        """Save agent registry to disk."""data = {
             "agents": {"                name: {
                     "name": agent.name,"                    "agent_type": agent.agent_type,"                    "session_id": agent.session_id,"                    "created_at": agent.created_at,"                    "working_dir": agent.working_dir,"                    "status": agent.status,"                    "last_active": agent.last_active,"                    "task_history": agent.task_history,"                    "capabilities": agent.capabilities,"                }
                 for name, agent in self.agent_registry.items()
@@ -112,11 +115,11 @@ class MultiAgentOrchestratorCore:
             self.registry_path.write_text(json.dumps(data, indent=2))
 
     def register_agent_type(self, agent_type: str, handler: Callable):
-        """""""        Register a handler for a specific agent type.
+        """Register a handler for a specific agent type.
 
         Args:
             agent_type: Type of agent (e.g., "voice", "coding", "browser")"            handler: Function that creates and manages agents of this type
-        """""""        self.agent_handlers[agent_type] = handler
+        """self.agent_handlers[agent_type] = handler
 
     def create_agent(
         self,
@@ -125,7 +128,7 @@ class MultiAgentOrchestratorCore:
         capabilities: Optional[List[str]] = None,
         context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """""""        Create and register a new agent.
+        """Create and register a new agent.
 
         Args:
             agent_type: Type of agent to create
@@ -135,7 +138,7 @@ class MultiAgentOrchestratorCore:
 
         Returns:
             Dictionary with agent creation result
-        """""""        if agent_type not in self.agent_handlers:
+        """if agent_type not in self.agent_handlers:
             return {
                 "ok": False,"                "error": f"Unsupported agent type: {agent_type}. Available: {list(self.agent_handlers.keys())}""            }
 
@@ -194,7 +197,7 @@ class MultiAgentOrchestratorCore:
         parameters: Optional[Dict[str, Any]] = None,
         context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
-        """""""        Dispatch a task to an agent for execution.
+        """Dispatch a task to an agent for execution.
 
         Args:
             agent_name: Name of the agent to dispatch to
@@ -204,7 +207,7 @@ class MultiAgentOrchestratorCore:
 
         Returns:
             Dictionary with task dispatch result
-        """""""        agent = self.agent_registry.get(agent_name)
+        """agent = self.agent_registry.get(agent_name)
         if not agent:
             return {
                 "ok": False,"                "error": f"Agent '{agent_name}' not found""'            }
@@ -241,11 +244,11 @@ class MultiAgentOrchestratorCore:
             "ok": True,"            "task_id": task_id,"            "agent_name": agent_name,"            "status": "dispatched""        }
 
     def get_task_status(self, task_id: str) -> Optional[TaskResult]:
-        """Get the status of a task."""""""        with self.task_lock:
+        """Get the status of a task."""with self.task_lock:
             return self.tasks.get(task_id)
 
     def list_agents(self, agent_type: Optional[str] = None) -> List[Dict[str, Any]]:
-        """List all registered agents, optionally filtered by type."""""""        agents = []
+        """List all registered agents, optionally filtered by type."""agents = []
         for name, metadata in self.agent_registry.items():
             if agent_type and metadata.agent_type != agent_type:
                 continue
@@ -255,7 +258,7 @@ class MultiAgentOrchestratorCore:
 
         return sorted(agents, key=lambda x: x["created_at"], reverse=True)"
     def delete_agent(self, agent_name: str) -> Dict[str, Any]:
-        """Delete an agent and clean up its resources."""""""        agent = self.agent_registry.get(agent_name)
+        """Delete an agent and clean up its resources."""agent = self.agent_registry.get(agent_name)
         if not agent:
             return {
                 "ok": False,"                "error": f"Agent '{agent_name}' not found""'            }
@@ -282,14 +285,14 @@ class MultiAgentOrchestratorCore:
                 "ok": False,"                "error": f"Failed to delete agent: {e}""            }
 
     def get_agent_tools(self, agent_name: str) -> List[Dict[str, Any]]:
-        """Get available tools for an agent."""""""        agent = self.agent_registry.get(agent_name)
+        """Get available tools for an agent."""agent = self.agent_registry.get(agent_name)
         if not agent or agent.agent_type not in self.agent_handlers:
             return []
 
         handler = self.agent_handlers[agent.agent_type]
         return handler("tools", agent_name, agent)"
     def shutdown(self):
-        """Shutdown the orchestrator and cleanup resources."""""""        self.running = False
+        """Shutdown the orchestrator and cleanup resources."""self.running = False
 
         # Wait for background threads
         for thread in self.background_threads:
@@ -306,7 +309,7 @@ class MultiAgentOrchestratorCore:
         task_description: str,
         parameters: Dict[str, Any]
     ):
-        """Execute a task in the background."""""""        try:
+        """Execute a task in the background."""try:
             # Update task status
             with self.task_lock:
                 self.tasks[task_id].status = "running""
@@ -332,7 +335,7 @@ class MultiAgentOrchestratorCore:
                 task.completed_at = datetime.now(timezone.utc).isoformat()
 
     def _generate_agent_name(self, agent_type: str) -> str:
-        """Generate a unique agent name."""""""        base_name = f"{agent_type}_{int(time.time())}""        counter = 1
+        """Generate a unique agent name."""base_name = f"{agent_type}_{int(time.time())}""        counter = 1
         name = base_name
 
         while name in self.agent_registry:

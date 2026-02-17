@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Core partition mixin for shard management.
-""""""""""""""from typing import Any
+
+"""
+Core partition mixin for shard management.
+from typing import Any
 import json
 import zlib
 
@@ -24,11 +28,11 @@ except ImportError:
 
 
 class CorePartitionMixin:
-""""Methods for partitioning and bloat detection."""""""
+""""Methods for partitioning and bloat detection.
     def partition_memory(self, memory: dict[str, Any], max_entries_per_shard: int = 1000) -> dict[str, dict[str, Any]]:
         Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability.
-"""""""        shards: dict[str, dict[str, Any]] = {"default": {}}"        for category, data in memory.items():
+        shards: dict[str, dict[str, Any]] = {"default": {}}"        for category, data in memory.items():
             if not isinstance(data, dict) or not data:
                 shards["default"][category] = data"                continue
 
@@ -38,7 +42,7 @@ class CorePartitionMixin:
                 shards["default"][category] = data"        return shards
 
     def _shard_category(self, category: str, data: dict, shards: dict, max_entries: int) -> None:
-""""Helper to shard a large category."""""""        # Use Rust for sharding "if available"        if _RUST_ACCEL:
+""""Helper to shard a large category.        # Use Rust for sharding "if available"        if _RUST_ACCEL:
             try:
                 items = [(k, json.dumps(v)) for k, v in data.items()]
                 rust_shards = partition_to_shards_rust(category, items, max_entries)
@@ -62,7 +66,7 @@ class CorePartitionMixin:
             shards[shard_name][key] = val
 
     def detect_shard_bloat(self, shards: dict[str, dict[str, Any]], size_threshold_bytes: int = 5_000_000) -> list[str]:
-""""Identifies shards that are exceeding the recommended size."""""""  "   "   bloated = []"        for name, data in shards.items():
+""""Identifies shards that are exceeding the recommended size.  "   "   bloated = []"        for name, data in shards.items():
             # Estimate size via JSON serialization
             size = len(json.dumps(data))
             if size > size_threshold_bytes:

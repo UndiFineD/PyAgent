@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""ToolSuggestion - Data container for analysis tool recommendations
+
+"""
+ToolSuggestion - Data container for analysis tool recommendations
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -27,7 +31,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-"""""""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -49,13 +53,13 @@ class ToolSuggestion:
         line_number: Line number of the issue.
         message: Suggestion message.
         suggested_fix: Optional code fix.
-    """""""
+    
     tool_type: AnalysisToolType
     tool_name: str
     file_path: str
     line_number: int
     message: str
-    suggested_fix:""" str = """"""""""
+    suggested_fix:""" str = """
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -76,7 +80,7 @@ class ToolSuggestion:
         file_path: File with the issue.
         line_number: Line number of the issue.
         message: Suggestion message.
-        suggested_fix: """Option"""al """code fix.""""    """""""
+        suggested_fix: """Option"""al """code fix.""""    
     tool_type: AnalysisToolType
     tool_name: str
     file_path: str

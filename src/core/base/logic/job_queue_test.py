@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Integration test for new core services: JobQueue, MultimodalAIService, and TTSService.
-"""""""
+"""Integration test for new core services: JobQueue, MultimodalAIService, and TTSService.
+"""
 import time
 from src.core.base.logic.job_queue import JobQueue
 from src.core.base.logic.multimodal_ai_service import MultimodalAIService, CloudflareProvider, AIServiceConfig
@@ -24,9 +22,9 @@ from src.core.base.logic.tts_service import TTSService
 
 
 class TestNewServicesIntegration:
-    """Test integration of the three new core services."""""""
+    """Test integration of the three new core services."""
     def test_job_queue_basic_functionality(self):
-        """Test basic job queue operations."""""""        queue = JobQueue(max_queue_size=10)
+        """Test basic job queue operations."""queue = JobQueue(max_queue_size=10)
         results = []
 
         def processor(job_id, data):
@@ -45,7 +43,7 @@ class TestNewServicesIntegration:
         queue.stop()
 
     def test_tts_service_basic_functionality(self):
-        """Test TTS service generates audio."""""""        tts = TTSService()
+        """Test TTS service generates audio."""tts = TTSService()
 
         # Generate audio
         audio_data = tts.synthesize("Hello, this is a test.")"
@@ -54,7 +52,7 @@ class TestNewServicesIntegration:
         assert len(audio_data) > 0
 
     def test_multimodal_ai_service_initialization(self):
-        """Test multimodal AI service can be initialized and configured."""""""        service = MultimodalAIService()
+        """Test multimodal AI service can be initialized and configured."""service = MultimodalAIService()
 
         # Create a mock provider
         config = AIServiceConfig(provider='cloudflare', api_key='test_key')'        provider = CloudflareProvider(config)
@@ -65,7 +63,7 @@ class TestNewServicesIntegration:
         assert True
 
     def test_services_work_together(self):
-        """Test that all services can be used together in a workflow."""""""        # Initialize all services
+        """Test that all services can be used together in a workflow."""# Initialize all services
         queue = JobQueue(max_queue_size=10)
         tts = TTSService()
         multimodal = MultimodalAIService()

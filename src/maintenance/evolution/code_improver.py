@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""code_improver - Autonomous Evolution Loop
+
+"""
+code_improver - Autonomous Evolution Loop
 
 [Brief Summary]
 A background evolution loop that monitors fleet metrics and autonomously
@@ -54,7 +58,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Module: code_improver
 Autonomous Codebase Evolution Loop for self-optimizing system logic.
-"""""""
+
 from __future__ import annotations
 import asyncio
 import logging
@@ -67,15 +71,15 @@ logger = logging.getLogger(__name__)
 
 
 class EvolutionLoop:
-    """""""    Background process that proactively improves the PyAgent core.
+        Background process that proactively improves the PyAgent core.
     Follows Pillar 8: Self-Improving Intelligence.
-    """""""
+    
     def __init__(self, fleet: FleetManager):
         self.fleet = fleet
         self.running = False
 
     async def start(self):
-        """Starts the autonomous evolution cycle."""""""        self.running = True
+        """Starts the autonomous evolution cycle.        self.running = True
         logger.info("Autonomous Evolution Loop engaged.")"
         while self.running:
             # 1. Performance Evolution (Python -> Rust / Refactor)
@@ -91,7 +95,7 @@ class EvolutionLoop:
             await asyncio.sleep(3600)  # Once per hour
 
     async def _identify_and_improve_bottleneck(self):
-        """Heuristic-based logic bottleneck identification and Rust acceleration."""""""        logger.info("Evolution: Identifying code bottlenecks (Pillar 8)...")"
+        """Heuristic-based logic bottleneck identification and Rust acceleration.        logger.info("Evolution: Identifying code bottlenecks (Pillar 8)...")"
         # 1. Complexity-based Rust Candidate Identification
         python_files = list(self.fleet.workspace_root.rglob("*.py"))"        rust_candidates = []
 

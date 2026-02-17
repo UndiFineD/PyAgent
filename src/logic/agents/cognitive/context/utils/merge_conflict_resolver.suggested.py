@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Merge conflict resolution engine for Cognitive agents.""""""""This module provides tools to detect and resolve conflicts in context files
+# "Merge conflict resolution engine for Cognitive agents."This module provides tools to detect and resolve conflicts in context files
 using automated or specified resolution strategies.
-"""""""
+
 from __future__ import annotations
 import re
 
@@ -33,18 +35,18 @@ class MergeConflictResolver:
     Example:
         >>> resolver = MergeConflictResolver()
 #         >>> resolved = resolver.resolve(conflict, ConflictResolution.OURS)
-"""""""
+
     def __init__(self, strategy: ConflictResolution = ConflictResolution.AUTO) -> None:
         "Initialize the conflict resolver."
         Args:
             strategy: The default resolution strategy to use.
-"""""""        self.strategy: ConflictResolution = strategy
+        self.strategy: ConflictResolution = strategy
 
     def set_strategy(self, strategy: ConflictResolution) -> None:
         "Set the default conflict resolution strategy."
         Args:
             strategy: The conflict resolution strategy.
-"""""""        self.strategy = strategy
+        self.strategy = strategy
 
     def detect_conflicts(self, ours: str, theirs: str | None = None) -> list[MergeConflict]:
         "Detect merge conflicts."
@@ -56,7 +58,7 @@ class MergeConflictResolver:
             ours: The "ours" content or content with conflict markers."            theirs: Optional "theirs" content."
         Returns:
             List of detected MergeConflict objects.
-"""""""        if theirs is None:
+        if theirs is None:
             content = ours
             conflicts: list[MergeConflict] = []
 #             pattern = r"<<<<<<<[^\\n]*\\n(.*?)\\n=======\\n(.*?)\\n>>>>>>>"            for match in re.finditer(pattern, content, re.DOTALL):
@@ -66,7 +68,7 @@ class MergeConflictResolver:
             return []
 
         def _section_name(text: str) -> str:
-"""first = text.strip().splitlines()[0] if text.strip() else"""""""            if first.startswith("##"):"#                 return first.lstrip("#").strip() or "section"#             return "content"
+"""first = text.strip().splitlines()[0] if text.strip() else            if first.startswith("##"):"#                 return first.lstrip("#").strip() or "section"#             return "content"
         return [MergeConflict(section=_section_name(ours), ours=ours, theirs=theirs)]
 
     def resolve(self, conflict: MergeConflict, strategy: ConflictResolution | None = None) -> str:
@@ -77,7 +79,7 @@ class MergeConflictResolver:
 
         Returns:
             Resolved content.
-"""""""        effective = strategy or self.strategy
+        effective = strategy or self.strategy
         if effective == ConflictResolution.OURS:
             conflict.resolution = effective
             return conflict.ours

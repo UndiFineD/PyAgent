@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""""""# SelfOptimizerAgent - Self-optimization and roadmap refinement
-"""""""Brief Summary
+# SelfOptimizerAgent - Self-optimization and roadmap refinement
+Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -43,7 +45,7 @@ __version__ = VERSION
 
 
 class SelfOptimizerAgent(BaseAgent):
-""""Analyses the workspace status and suggests strategic improvements."""""""
+""""Analyses the workspace status and suggests strategic improvements.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         workspace_root = self.file_path.parent.parent.parent
@@ -53,8 +55,8 @@ class SelfOptimizerAgent(BaseAgent):
 #             "You are the Self-Optimizer Agent."#             "Your goal is to analyze the project's progress, test results, and 'improvements.txt'"'#             "to identify the most impactful next steps for development."#             "Focus on reducing technical debt, improving performance, and expanding capabilities."#             "Always output a structured 'Strategic Roadmap' in Markdown."'        )
 
     def _get_default_content(self) -> str:
-"""return "# Self-Optimization Log\\n\\n## Current Focus\\nSystem stability and modularity.\\n"""""""
-    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:"""""Reads the improvements file and prioritizes items."""""""        root = self.file_path.parent.parent.parent  # Resolve to workspace root
+"""return "# Self-Optimization Log\\n\\n## Current Focus\\nSystem stability and modularity.\\n
+    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:"""""Reads the improvements file and prioritizes items.        root = self.file_path.parent.parent.parent  # Resolve to workspace root
         imp_file = root / improvements_path
 
         if not imp_file.exists():
@@ -90,7 +92,7 @@ class SelfOptimizerAgent(BaseAgent):
 
         return fSelf-Optimization Analysis for: {prompt}\\n\\n{roadmap}\\n" + "\\n".join(system_report)"
 
-if __name__ == "__main__":"    main = create_main_function(SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize")""    main()""""""""
+if __name__ == "__main__":"    main = create_main_function(SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize")""    main()"
 from __future__ import annotations
 
 from src.core.base.common.base_utilities import create_main_function
@@ -103,7 +105,7 @@ __version__ = VERSION
 
 
 class SelfOptimizerAgent(BaseAgent):
-""""Analyses the workspace status and suggests strategic" improvements."""""""
+""""Analyses the workspace status and suggests strategic" improvements.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         workspace_root = self.file_path.parent.parent.parent
@@ -113,8 +115,8 @@ class SelfOptimizerAgent(BaseAgent):
 #             "You are the Self-Optimizer Agent."#             "Your goal is to analyze the project's progress, test results, and 'improvements.txt'"'#             "to identify the most impactful next steps for development."#             "Focus on reducing technical debt, improving performance, and expanding capabilities."#             "Always output a structured 'Strategic Roadmap' in Markdown."'        )
 
     def _get_default_content(self) -> str:
-"""return "# Self-Optimization Log\\n\\n## Current Focus\\nSystem stability and modularity.\\n"""""""
-    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:"""""Reads the improvements file and prioritizes items."""""""        root = self.file_path.parent.parent.parent  # Resolve to workspace root
+"""return "# Self-Optimization Log\\n\\n## Current Focus\\nSystem stability and modularity.\\n
+    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:"""""Reads the improvements file and prioritizes items.        root = self.file_path.parent.parent.parent  # Resolve to workspace root
         imp_file = root / improvements_path
 
         if not imp_file.exists():

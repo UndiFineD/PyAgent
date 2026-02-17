@@ -1,20 +1,24 @@
 
 
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""OrchestratorRegistryCore
+
+"""
+OrchestratorRegistryCore
 - Core logic for orchestrator registry management.
 Orchestrator registry core.py module.
-"""""""
+
 
 from __future__ import annotations
 
@@ -35,16 +39,16 @@ __version__ = VERSION
 
 
 class OrchestratorRegistryCore:
-    """""""    Pure logic core for Orchestrator Registry.
+        Pure logic core for Orchestrator Registry.
     Handles dynamic discovery of orchestrator classes.
-    """""""
+    
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
     def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, bool, str | None]]:
-        """""""        Processes a list of file paths and extracts orchestrator configurations.
+                Processes a list of file paths and extracts orchestrator configurations.
         Expects relative paths from workspace root.
-        """""""        discovered: dict[str, tuple[str, str, bool, str | None]] = {}
+                discovered: dict[str, tuple[str, str, bool, str | None]] = {}
 
         for rel_path in file_paths:
             file = os.path.basename(rel_path)
@@ -96,9 +100,9 @@ class OrchestratorRegistryCore:
 
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\\1_\\2", name)"        return re.sub("([a-z0-9])([A-Z])", r"\\1_\\2", s1).lower()"
     def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, bool, str | None]]:
-        """""""        Parses the raw manifest dictionary and filters incompatible plugins.
+                Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {Name: (module, class, needs_fleet, arg_path)}.
-        """""""        valid_configs: dict[str, tuple[str, str, bool, str | None]] = {}
+                valid_configs: dict[str, tuple[str, str, bool, str | None]] = {}
         for key, cfg in raw_manifest.items():
             # Expecting: "Name": ["module.path", "ClassName", needs_fleet, "arg_path", "min_sdk_version"]"            if isinstance(cfg, list) and len(cfg) >= 2:
                 # Version gate
@@ -111,8 +115,8 @@ class OrchestratorRegistryCore:
         return valid_configs
 
     def is_compatible(self, required_version: str) -> bool:
-        """""""        Checks if the current SDK version meets the required version.
-        """""""        try:
+                Checks if the current SDK version meets the required version.
+                try:
             p_parts = [int(x) for x in self.sdk_version.split(".")]"            r_parts = [int(x) for x in required_version.split(".")]"
             # Pad to length 3
             p_parts += [0] * (3 - len(p_parts))

@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""""""Core logic for multi-agent orchestration and workflow management.
-"""""""
+"""Core logic for multi-agent orchestration and workflow management.
+"""
 from __future__ import annotations
 
 import random
@@ -31,8 +29,8 @@ if TYPE_CHECKING:
 
 
 class OrchestrationCore(BaseCore):
-    """""""    Authoritative engine for multi-agent workflows.
-    """""""
+    """Authoritative engine for multi-agent workflows.
+    """
     def __init__(self) -> None:
         super().__init__()
         self.agents: List[ComposedAgent] = []
@@ -40,13 +38,13 @@ class OrchestrationCore(BaseCore):
         self.execution_order: List[str] = []
 
     def add_agent(self, agent: ComposedAgent) -> None:
-        """""""        Adds an agent to the orchestration registry.
-        """""""        self.agents.append(agent)
+        """Adds an agent to the orchestration registry.
+        """self.agents.append(agent)
         self._calculate_execution_order()
 
     def _calculate_execution_order(self) -> None:
-        """""""        Computes the topological sort regarding agents based on dependencies.
-        """""""        sorted_agents: List[str] = []
+        """Computes the topological sort regarding agents based on dependencies.
+        """sorted_agents: List[str] = []
         visited: set[str] = set()
         temp: set[str] = set()
 
@@ -74,8 +72,8 @@ class OrchestrationCore(BaseCore):
         prompt: str,
         agent_factory: Callable[[str, str], Any],
     ) -> Dict[str, str]:
-        """""""        Executes the registered agents in the calculated order.
-        """""""        self.results.clear()
+        """Executes the registered agents in the calculated order.
+        """self.results.clear()
 
         def run_agent(carry: str, agent_type: str) -> str:
             agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
@@ -102,17 +100,17 @@ class OrchestrationCore(BaseCore):
 
 @dataclass
 class QualityScorer:
-    """""""    Evaluates text quality based on weighted criteria.
-    """""""
+    """Evaluates text quality based on weighted criteria.
+    """
     criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
 
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
-        """""""        Adds a single scoring criterion.
-        """""""        self.criteria[name] = (func, weight)
+        """Adds a single scoring criterion.
+        """self.criteria[name] = (func, weight)
 
     def score(self, text: str) -> float:
-        """""""        Calculates the weighted average score regarding a given text.
-        """""""        if not self.criteria:
+        """Calculates the weighted average score regarding a given text.
+        """if not self.criteria:
             return min(1.0, len(text) / 200.0)
 
         # Calculate totals regarding scores and weights functionally
@@ -129,8 +127,8 @@ class QualityScorer:
 
 @dataclass
 class ABTest:
-    """""""    Simple A/B testing harness regarding variants.
-    """""""
+    """Simple A/B testing harness regarding variants.
+    """
     name: str
     variants: List[str]
     weights: List[float] = field(default_factory=list)
@@ -144,5 +142,5 @@ class ABTest:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
 
     def select_variant(self) -> str:
-        """""""        Selects a variant based on defined weights.
-        """""""        return random.choices(self.variants, weights=self.weights, k=1)[0]
+        """Selects a variant based on defined weights.
+        """return random.choices(self.variants, weights=self.weights, k=1)[0]

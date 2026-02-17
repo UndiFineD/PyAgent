@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # -*- coding: utf-8 -*-
-"""Test classes from test_agent_test_utils.py - performance module."""""""
+"""Test classes from test_agent_test_utils.py - performance module.
 from __future__ import annotations
 from typing import Any, Dict
 import time
@@ -22,9 +24,9 @@ import time
 
 
 class TestPerformanceMetricDataclass:
-    """Tests for PerformanceMetric dataclass."""""""
+    """Tests for PerformanceMetric dataclass.
     def test_creation(self, utils_module: Any) -> None:
-        """Test creating PerformanceMetric."""""""        PerformanceMetric = utils_module.PerformanceMetric
+        """Test creating PerformanceMetric.        PerformanceMetric = utils_module.PerformanceMetric
         PerformanceMetricType = utils_module.PerformanceMetricType
 
         metric = PerformanceMetric(
@@ -35,14 +37,14 @@ class TestPerformanceMetricDataclass:
         assert metric.unit == "ms""
 
 class TestPerformanceTracker:
-    """Tests for PerformanceTracker class."""""""
+    """Tests for PerformanceTracker class.
     def test_initialization(self, utils_module: Any) -> None:
-        """Test tracker initialization."""""""        PerformanceTracker = utils_module.PerformanceTracker
+        """Test tracker initialization.        PerformanceTracker = utils_module.PerformanceTracker
         tracker = PerformanceTracker()
         assert tracker.get_metrics() == []
 
     def test_track_execution(self, utils_module: Any) -> None:
-        """Test tracking execution time."""""""        PerformanceTracker = utils_module.PerformanceTracker
+        """Test tracking execution time.        PerformanceTracker = utils_module.PerformanceTracker
         tracker = PerformanceTracker()
 
         with tracker.track("test_func"):"            time.sleep(0.01)  # 10ms
@@ -52,7 +54,7 @@ class TestPerformanceTracker:
         assert metrics[0].test_name == "test_func""        assert metrics[0].value >= 10  # At least 10ms
 
     def test_get_summary(self, utils_module: Any) -> None:
-        """Test getting performance summary."""""""        PerformanceTracker = utils_module.PerformanceTracker
+        """Test getting performance summary.        PerformanceTracker = utils_module.PerformanceTracker
         tracker = PerformanceTracker()
 
         with tracker.track("test1"):"            pass
@@ -67,9 +69,9 @@ class TestPerformanceTracker:
 
 
 class TestTestTimingAndBenchmarkingUtilities:
-    """Tests for test timing and benchmarking utilities."""""""
+    """Tests for test timing and benchmarking utilities.
     def test_timer_measures_duration(self, utils_module: Any) -> None:
-        """Test timer measures execution duration."""""""        TestTimer = utils_module.TestTimer
+        """Test timer measures execution duration.        TestTimer = utils_module.TestTimer
 
         timer = TestTimer()
         timer.start()
@@ -80,7 +82,7 @@ class TestTestTimingAndBenchmarkingUtilities:
         assert duration >= 10
 
     def test_benchmarker_multiple_runs(self, utils_module: Any) -> None:
-        """Test benchmarker runs multiple iterations."""""""        Benchmarker = utils_module.Benchmarker
+        """Test benchmarker runs multiple iterations.        Benchmarker = utils_module.Benchmarker
 
         benchmarker = Benchmarker()
 
@@ -91,7 +93,7 @@ class TestTestTimingAndBenchmarkingUtilities:
 
         assert counter["count"] == 5"        assert "average_ms" in results"        assert "min_ms" in results"        assert "max_ms" in results"
     def test_benchmarker_statistics(self, utils_module: Any) -> None:
-        """Test benchmarker calculates statistics."""""""        Benchmarker = utils_module.Benchmarker
+        """Test benchmarker calculates statistics.        Benchmarker = utils_module.Benchmarker
 
         benchmarker = Benchmarker()
         results = benchmarker.run(lambda: 1 + 1, iterations=10)

@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Run autonomous fleet healing.py module.
-"""""""
+
+Run autonomous fleet healing.py module.
+
 
 from __future__ import annotations
 
@@ -30,12 +33,12 @@ __version__ = VERSION
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")"
 
 def run_autonomous_maintenance() -> None:
-    """""""    Master entry point for autonomous fleet maintenance.
+        Master entry point for autonomous fleet maintenance.
     - Improves speed, security, robustness, self-healing.
     - Prepares code for Rust migration via strong typing.
     - Optimizes databases for trillion-parameter scale.
     - Enforces local-first AI and recording.
-    """""""    workspace_root = Path(os.getcwd())
+        workspace_root = Path(os.getcwd())
     logging.info("=== SWARM AUTONOMOUS MAINTENANCE INITIATED ===")"
     # 1. Initialize Fleet Manager (Core Hub)
     fleet = FleetManager(str(workspace_root))

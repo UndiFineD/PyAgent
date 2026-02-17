@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Rust Bridge Profiler - Profiling Rust-accelerated functions
+
+"""
+Rust Bridge Profiler - Profiling Rust-accelerated functions
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Rust bridge profiler.py module.
-"""""""# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
+# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
 
 from __future__ import annotations
 
@@ -51,14 +55,14 @@ except ImportError:
 
 
 class RustBridgeProfiler:
-    """""""    Orchestrates the profiling of the rust_core.pyd binary.
+        Orchestrates the profiling of the rust_core.pyd binary.
     Collects execution counts and timing metrics for all exported Rust functions.
-    """""""
+    
     def __init__(self) -> None:
         self.stats: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"calls": 0, "total_ns": 0})"        self._is_active = False
 
     def enable(self) -> None:
-        """Monkey-patches rust_core functions with profiling wrappers."""""""        if not _RUST_AVAILABLE or self._is_active:
+        """Monkey-patches rust_core functions with profiling wrappers.        if not _RUST_AVAILABLE or self._is_active:
             return
 
         for name in dir(rust_core):
@@ -69,7 +73,7 @@ class RustBridgeProfiler:
         self._is_active = True
         logging.info("RustBridgeProfiler: Enabled (High-precision profiling active).")"
     def _wrap_function(self, fn: Callable[..., Any], fname: str) -> Callable[..., Any]:
-        """Wraps a function with nanosecond-precision timing."""""""
+        """Wraps a function with nanosecond-precision timing.
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             start = time.perf_counter_ns()
             try:
@@ -84,7 +88,7 @@ class RustBridgeProfiler:
         return wrapper
 
     def get_report(self) -> str:
-        """Generates a markdown report of the profiling results."""""""        if not self.stats:
+        """Generates a markdown report of the profiling results.        if not self.stats:
             return "No profiling data collected.""
         sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        total_calls = sum(s["calls"] for _, s in sorted_stats)"        total_time_ms = sum(s["total_ns"] for _, s in sorted_stats) / 1e6"
         report = [
@@ -94,11 +98,11 @@ class RustBridgeProfiler:
             avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            report.append(f"| `{name}` | {s['calls']} | {s['total_ns'] / 1e6:.3f} | {avg_us:.2f} |")"'
         return "\\n".join(report)"
     def log_summary(self) -> None:
-        """Logs a summary of the top 5 most expensive functions."""""""        if not self.stats:
+        """Logs a summary of the top 5 most expensive functions.        if not self.stats:
             return
 
         sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        logging.info("RustBridgeProfiler: Pulse check complete.")"        for name, s in sorted_stats[:5]:
-            avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            logging.info(f" - {name}: {s['calls']} calls, {avg_us:.1f}μs avg")"'"""""""# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
+            avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            logging.info(f" - {name}: {s['calls']} calls, {avg_us:.1f}μs avg")"'# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
 
 from __future__ import annotations
 
@@ -117,13 +121,13 @@ except ImportError:
 
 
 class RustBridgeProfiler:
-    """""""    Orchestrates the profiling of the rust_core.pyd binary.
-    Collects execution counts and timing metrics for a"""ll exported Rust functions.""""    """""""
+        Orchestrates the profiling of the rust_core.pyd binary.
+    Collects execution counts and timing metrics for a"""ll exported Rust functions.""""    
     def __init__(self) -> None:
         self.stats: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"calls": 0, "total_ns": 0})"        self._is_active = False
 
     def enable(self) -> None:
-        """Monkey-patches rust_core functions with profiling wrappers."""""""        if not _RUST_AVAILABLE or self._is_active:
+        """Monkey-patches rust_core functions with profiling wrappers.        if not _RUST_AVAILABLE or self._is_active:
             return
 
         for name in dir(rust_core):
@@ -134,7 +138,7 @@ class RustBridgeProfiler:
         self._is_active = True
         logging.info("RustBridgeProfiler: Enabled (High-precision profiling active).")"
     def _wrap_function(self, fn: Callable[..., Any], fname: str) -> Callable[..., Any]:
-        """Wraps a function with nanosecond-precision timing."""""""
+        """Wraps a function with nanosecond-precision timing.
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             start = time.perf_counter_ns()
             try:
@@ -149,7 +153,7 @@ class RustBridgeProfiler:
         return wrapper
 
     def get_report(self) -> str:
-        """Generates a markdown report of the profiling results."""""""        if not self.stats:
+        """Generates a markdown report of the profiling results.        if not self.stats:
             return "No profiling data collected.""
         sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        total_calls = sum(s["calls"] for _, s in sorted_stats)"        total_time_ms = sum(s["total_ns"] for _, s in sorted_stats) / 1e6"
         report = [
@@ -159,7 +163,7 @@ class RustBridgeProfiler:
             avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            report.append(f"| `{name}` | {s['calls']} | {s['total_ns'] / 1e6:.3f} | {avg_us:.2f} |")"'
         return "\\n".join(report)"
     def log_summary(self) -> None:
-        """Logs a summary of the top 5 most expensive functions."""""""        if not self.stats:
+        """Logs a summary of the top 5 most expensive functions.        if not self.stats:
             return
 
         sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        logging.info("RustBridgeProfiler: Pulse check complete.")"        for name, s in sorted_stats[:5]:

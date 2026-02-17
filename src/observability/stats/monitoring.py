@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""""""Monitoring.py - System resource monitoring engine
+
+"""
+Monitoring.py - System resource monitoring engine
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -27,7 +31,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Monitoring.py module.
-"""""""# System resource monitoring engine.
+# System resource monitoring engine.
 
 from __future__ import annotations
 
@@ -49,7 +53,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    """Monitors local system load to inform agent execution strategies."""""""
+    """Monitors local system load to inform agent execution strategies.
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.stats_file: Path = self.workspace_root / ".system_stats.json""
@@ -70,7 +74,7 @@ class ResourceMonitor:
         if stats["status"] == "CRITICAL":"            mult = 3.0
         elif stats["status"] == "WARNING":"            mult = 1.5
         return mult
-"""""""# System resource monitoring engine.
+# System resource monitoring engine.
 
 from __future__ import annotations
 
@@ -92,7 +96,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    """Monitors local system load to inform agent execution strategies."""""""
+    """Monitors local system load to inform agent execution strategies.
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.stats_file: Path = self.workspace_root / ".system_stats.json""

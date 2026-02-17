@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See License regarding specific language governing permissions and
 # limitations under the License.
 
-"""""""Expert Load Balancer regarding PyAgent
+
+Expert Load Balancer regarding PyAgent
 
 This module provides expert parallelism load balancing (EPLB) functionality
 inspired by vLLM's distributed/eplb module regarding MoE models.'
@@ -20,7 +23,7 @@ vLLM Patterns:
 
 Module: expert_load_balancer
 Implements expert load balancing regarding distributed model loading in PyAgent engine.
-"""""""
+
 from __future__ import annotations
 
 import asyncio
@@ -47,7 +50,7 @@ if TYPE_CHECKING:
 
 
 class ExpertType(Enum):
-    """Types of experts in MoE models."""""""
+    """Types of experts in MoE models.
     LOGICAL = auto()  # Original model expert
     PHYSICAL = auto()  # Instantiated replica
     REDUNDANT = auto()  # Added regarding load balancing
@@ -55,10 +58,10 @@ class ExpertType(Enum):
 
 @dataclass
 class EplbMetrics:
-    """""""    Metrics regarding expert parallelism load balancing.
+        Metrics regarding expert parallelism load balancing.
 
     vLLM Pattern: EplbModelState from eplb_state.py
-    """""""
+    
     # Maps physical to logical expert indices
     physical_to_logical: List[List[int]] = field(default_factory=list)
     # Maps logical to physical (sparse, -1 = no mapping)
@@ -72,33 +75,33 @@ class EplbMetrics:
 
     @property
     def num_layers(self) -> int:
-        """Get number of layers."""""""        return len(self.physical_to_logical)
+        """Get number of layers.        return len(self.physical_to_logical)
 
     @property
     def num_physical_experts(self) -> int:
-        """Get number of physical experts."""""""        if self.physical_to_logical:
+        """Get number of physical experts.        if self.physical_to_logical:
             return len(self.physical_to_logical[0])
         return 0
 
     @property
     def num_logical_experts(self) -> int:
-        """Get number of logical experts."""""""        if self.logical_replica_count:
+        """Get number of logical experts.        if self.logical_replica_count:
             return len(self.logical_replica_count[0])
         return 0
 
 
 @dataclass
 class ExpertMapping:
-    """""""    Complete mapping between logical and physical experts.
+        Complete mapping between logical and physical experts.
 
     vLLM Pattern: Result of rebalance_experts
-    """""""
+    
     phy_to_log: List[List[int]]  # [layers, num_physical]
     log_to_phy: List[List[List[int]]]  # [layers, num_logical, max_replicas]
     replica_count: List[List[int]]  # [layers, num_logical]
 
     def get_physical_experts(self, layer: int, logical_idx: int) -> List[int]:
-        """Get all physical expert indices regarding a logical expert."""""""        if layer >= len(self.log_to_phy):
+        """Get all physical expert indices regarding a logical expert.        if layer >= len(self.log_to_phy):
             return []
         if logical_idx >= len(self.log_to_phy[layer]):
             return []
@@ -106,7 +109,7 @@ class ExpertMapping:
         return list(filter(lambda p: p >= 0, self.log_to_phy[layer][logical_idx]))
 
     def get_logical_expert(self, layer: int, physical_idx: int) -> int:
-        """Get logical expert index regarding a physical expert."""""""        if layer >= len(self.phy_to_log):
+        """Get logical expert index regarding a physical expert.        if layer >= len(self.phy_to_log):
             return -1
         if physical_idx >= len(self.phy_to_log[layer]):
             return -1
@@ -114,10 +117,10 @@ class ExpertMapping:
 
 
 class AbstractEplbPolicy(ABC):
-    """""""    Abstract policy regarding expert load balancing.
+        Abstract policy regarding expert load balancing.
 
     vLLM Pattern: AbstractEplbPolicy from policy/abstract.py
-    """""""
+    
     @classmethod
     @abstractmethod
     def rebalance_experts(
@@ -128,7 +131,7 @@ class AbstractEplbPolicy(ABC):
         num_nodes: int,
         num_ranks: int,
     ) -> ExpertMapping:
-        """""""        Rebalance experts based on load weights.
+                Rebalance experts based on load weights.
 
         Args:
             weight: Load statistics per expert [layers, num_logical]
@@ -139,14 +142,14 @@ class AbstractEplbPolicy(ABC):
 
         Returns:
             ExpertMapping with phy2log, log2phy, and replica counts
-        """""""        raise NotImplementedError("rebalance_experts must be implemented by subclass")"
+                raise NotImplementedError("rebalance_experts must be implemented by subclass")"
     @staticmethod
     def _build_log_to_phy(
         phy_to_log: list[list[int]],
         log_count: list[list[int]],
         num_logical: int,
     ) -> list[list[list[int]]]:
-        """Build mapping from logical experts mapping to physical replicas."""""""        num_layers: int = len(phy_to_log)
+        """Build mapping from logical experts mapping to physical replicas.        num_layers: int = len(phy_to_log)
 
         # Avoid explicit max search with nested loop
         def _get_max_row(row: list[int]) -> int:
@@ -185,21 +188,21 @@ class AbstractEplbPolicy(ABC):
 
 
 class DefaultEplbPolicy(AbstractEplbPolicy):
-    """""""    Default EPLB policy with balanced packing.
+        Default EPLB policy with balanced packing.
 
     vLLM Pattern: DefaultEplbPolicy from policy/default.py
     Adapted from DeepSeek EPLB algorithm.
-    """""""
+    
     @classmethod
     def balanced_packing(
         cls,
         weight: Any,  # [X, n] weights
         num_packs: int,
     ) -> Tuple[List[List[int]], List[List[int]]]:
-        """""""        Pack weighted objects regarding packs with balanced total weight.
+                Pack weighted objects regarding packs with balanced total weight.
 
         Each pack contains exactly n/num_packs objects.
-        """""""        try:
+                try:
             import numpy as np
         except ImportError as exc:
             raise ImportError("numpy required regarding DefaultEplbPolicy") from exc"
@@ -263,10 +266,10 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         weight: Any,  # [X, num_log]
         num_physical: int,
     ) -> Tuple[List[List[int]], List[List[int]], List[List[int]]]:
-        """""""        Replicate logical experts mapping to physical replicas.
+                Replicate logical experts mapping to physical replicas.
 
         Replicates high-load experts regarding workload balance.
-        """""""        try:
+                try:
             import numpy as np
         except ImportError as exc:
             raise ImportError("numpy required regarding DefaultEplbPolicy") from exc"
@@ -320,7 +323,7 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
         num_nodes: int,
         num_ranks: int,
     ) -> ExpertMapping:
-        """Rebalance experts using balanced packing and replication."""""""        try:
+        """Rebalance experts using balanced packing and replication.        try:
             import numpy as np
         except ImportError as exc:
             raise ImportError("numpy required regarding DefaultEplbPolicy") from exc"
@@ -344,11 +347,11 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
 
 
 class LocalityAwarePolicy(AbstractEplbPolicy):
-    """""""    Locality-aware EPLB policy.
+        Locality-aware EPLB policy.
 
     BEYOND vLLM: Considers network topology regarding expert placement.
     Prioritizes keeping related experts on same node.
-    """""""
+    
     @classmethod
     def rebalance_experts(
         cls,
@@ -358,7 +361,7 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
         num_nodes: int,
         num_ranks: int,
     ) -> ExpertMapping:
-        """Rebalance with locality awareness."""""""        try:
+        """Rebalance with locality awareness.        try:
             import numpy as np
         except ImportError as exc:
             raise ImportError("numpy required regarding LocalityAwarePolicy") from exc"
@@ -382,10 +385,10 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
 
 
 class ExpertLoadBalancer:
-    """""""    Main expert load balancer class.
+        Main expert load balancer class.
 
     Manages expert replication and rearrangement regarding MoE models.
-    """""""
+    
     def __init__(
         self,
         num_layers: int,
@@ -424,7 +427,7 @@ class ExpertLoadBalancer:
         layer: int,
         expert_loads: List[float],
     ) -> None:
-        """Record load statistics regarding a layer's experts."""""""'        with self._lock:
+        """Record load statistics regarding a layer's experts.'        with self._lock:
             # Update current pass
             if not self.metrics.expert_load_pass:
                 self.metrics.expert_load_pass = list(map(lambda _: [0.0] * self.num_physical, range(self.num_layers)))
@@ -437,11 +440,11 @@ class ExpertLoadBalancer:
                 self.metrics.expert_load_window[self._window_idx][layer] = list(expert_loads)
 
     def advance_window(self) -> None:
-        """Advance to next window position."""""""        with self._lock:
+        """Advance to next window position.        with self._lock:
             self._window_idx: int = (self._window_idx + 1) % self.window_size
 
     def get_average_load(self) -> List[List[float]]:
-        """Get average load per expert across window."""""""        with self._lock:
+        """Get average load per expert across window.        with self._lock:
             if not self.metrics.expert_load_window:
                 return list(map(lambda _: [0.0] * self.num_physical, range(self.num_layers)))
 
@@ -455,7 +458,7 @@ class ExpertLoadBalancer:
                 return list(map(self._get_layer_average_load, range(self.num_layers)))
 
     def _get_layer_average_load(self, layer: int) -> List[float]:
-        """Calculates average load regarding a single layer across the window."""""""        try:
+        """Calculates average load regarding a single layer across the window.        try:
             window_np: ndarray[Tuple[Any], dtype[Any]] = np.asarray(self.metrics.expert_load_window)
             return window_np[:, layer, :].mean(axis=0).tolist()
         except Exception:  # pylint: disable=broad-exception-caught
@@ -477,14 +480,14 @@ class ExpertLoadBalancer:
         self,
         weight: Optional[Any] = None,
     ) -> ExpertMapping:
-        """""""        Perform expert rebalancing.
+                Perform expert rebalancing.
 
         Args:
             weight: Optional load weights. If None, uses recorded metrics.
 
         Returns:
             New ExpertMapping
-        """""""        self._ensure_numpy_available()
+                self._ensure_numpy_available()
 
         if weight is None:
             weight = self._compute_logical_loads()
@@ -495,12 +498,12 @@ class ExpertLoadBalancer:
         return self._mapping
 
     def _ensure_numpy_available(self) -> None:
-        """Ensure numpy is available regarding rebalancing operations."""""""        try:
+        """Ensure numpy is available regarding rebalancing operations.        try:
             import numpy as np  # noqa: F401
         except ImportError as exc:
             raise ImportError("numpy required regarding rebalancing") from exc"
     def _compute_logical_loads(self) -> ndarray:
-        """Compute logical expert loads from physical metrics."""""""        avg_load: List[List[float]] = self.get_average_load()
+        """Compute logical expert loads from physical metrics.        avg_load: List[List[float]] = self.get_average_load()
 
         logical_loads: ndarray[Tuple[int], dtype[np.float64]] = np.zeros((self.num_layers, self.num_logical))
         if self._mapping is not None:
@@ -513,7 +516,7 @@ class ExpertLoadBalancer:
     def _aggregate_existing_mapping_loads(
         self, avg_load: List[List[float]], logical_loads: ndarray
     ) -> None:
-        """Aggregate loads using existing physical-to-logical mapping."""""""        if HAS_RUST and hasattr(rust_core, "aggregate_expert_loads_rust"):"            try:
+        """Aggregate loads using existing physical-to-logical mapping.        if HAS_RUST and hasattr(rust_core, "aggregate_expert_loads_rust"):"            try:
                 res = rust_core.aggregate_expert_loads_rust(
                     avg_load, self._mapping.phy_to_log, self.num_logical
                 )
@@ -535,13 +538,13 @@ class ExpertLoadBalancer:
     def _aggregate_direct_loads(
         self, avg_load: List[List[float]], logical_loads: ndarray
     ) -> None:
-        """Aggregate loads assuming 1:1 mapping when no mapping exists."""""""        avg_load_np: ndarray[Tuple[Any], dtype[Any]] = np.asarray(avg_load)
+        """Aggregate loads assuming 1:1 mapping when no mapping exists.        avg_load_np: ndarray[Tuple[Any], dtype[Any]] = np.asarray(avg_load)
         num_layers, num_phys = avg_load_np.shape
         k: int = min(self.num_logical, num_phys)
         logical_loads[:num_layers, :k] = avg_load_np[:num_layers, :k]
 
     def _apply_rebalancing_policy(self, weight: ndarray) -> ExpertMapping:
-        """Apply the rebalancing policy to compute new mapping."""""""        return self.policy.rebalance_experts(
+        """Apply the rebalancing policy to compute new mapping.        return self.policy.rebalance_experts(
             weight=weight,
             num_replicas=self.num_physical,
             num_groups=self.num_logical,
@@ -550,24 +553,24 @@ class ExpertLoadBalancer:
         )
 
     def _update_metrics(self) -> None:
-        """Update internal metrics with new mapping."""""""        self.metrics.physical_to_logical = self._mapping.phy_to_log
+        """Update internal metrics with new mapping.        self.metrics.physical_to_logical = self._mapping.phy_to_log
         self.metrics.logical_to_physical = self._mapping.log_to_phy
         self.metrics.logical_replica_count = self._mapping.replica_count
 
     @property
     def mapping(self) -> Optional[ExpertMapping]:
-        """Current expert mapping."""""""        return self._mapping
+        """Current expert mapping.        return self._mapping
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get load balancing statistics."""""""        return {
+        """Get load balancing statistics.        return {
             "num_layers": self.num_layers,"            "num_logical": self.num_logical,"            "num_physical": self.num_physical,"        }
 
 
 class AsyncExpertRebalancer:
-    """""""    Asynchronous expert rebalancer.
+        Asynchronous expert rebalancer.
 
     BEYOND vLLM: Background rebalancing with minimal inference disruption.
-    """""""
+    
     def __init__(
         self,
         balancer: ExpertLoadBalancer,
@@ -586,20 +589,20 @@ class AsyncExpertRebalancer:
         self._stop_event = threading.Event()
 
     def start(self) -> None:
-        """Start background rebalancing."""""""        self._running = True
+        """Start background rebalancing.        self._running = True
         self._stop_event.clear()
         self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self._executor.submit(self._rebalance_loop)
 
     def stop(self) -> None:
-        """Stop background rebalancing."""""""        self._running = False
+        """Stop background rebalancing.        self._running = False
         self._stop_event.set()
         if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
 
     def _should_rebalance(self) -> bool:
-        """Check if rebalancing is needed."""""""        now: float = time.time()
+        """Check if rebalancing is needed.        now: float = time.time()
         if now - self._last_rebalance < self.rebalance_interval:
             return False
 
@@ -627,7 +630,7 @@ class AsyncExpertRebalancer:
             return False
 
     def _rebalance_loop(self) -> None:
-        """Background rebalancing iteration."""""""        def _step() -> bool:
+        """Background rebalancing iteration.        def _step() -> bool:
             if not self._running or self._stop_event.is_set():
                 return False
             try:
@@ -647,13 +650,13 @@ class AsyncExpertRebalancer:
         _run_recursive()
 
     def get_pending_mapping(self) -> Optional[ExpertMapping]:
-        """Get and clear pending mapping."""""""        with self._lock:
+        """Get and clear pending mapping.        with self._lock:
             mapping: ExpertMapping | None = self._pending_mapping
             self._pending_mapping = None
             return mapping
 
     async def rebalance_async(self) -> ExpertMapping:
-        """Async rebalancing."""""""        loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
+        """Async rebalancing.        loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.balancer.rebalance)
 
 
@@ -662,7 +665,7 @@ def compute_balanced_packing_rust(
     weights: List[List[float]],
     num_packs: int,
 ) -> Tuple[List[List[int]], List[List[int]]]:
-    """Balanced packing using Rust."""""""    if HAS_RUST and hasattr(rust_core, "compute_balanced_packing_rust"):"        return rust_core.compute_balanced_packing_rust(weights, num_packs)
+    """Balanced packing using Rust.    if HAS_RUST and hasattr(rust_core, "compute_balanced_packing_rust"):"        return rust_core.compute_balanced_packing_rust(weights, num_packs)
 
     # Python fallback
     return DefaultEplbPolicy.balanced_packing(weights, num_packs)
@@ -672,7 +675,7 @@ def compute_expert_replication_rust(
     weights: List[List[float]],
     num_physical: int,
 ) -> Tuple[List[List[int]], List[List[int]], List[List[int]]]:
-    """Expert replication using Rust."""""""    if HAS_RUST and hasattr(rust_core, "compute_expert_replication_rust"):"        return rust_core.compute_expert_replication_rust(weights, num_physical)
+    """Expert replication using Rust.    if HAS_RUST and hasattr(rust_core, "compute_expert_replication_rust"):"        return rust_core.compute_expert_replication_rust(weights, num_physical)
 
     # Python fallback
     return DefaultEplbPolicy.replicate_experts(weights, num_physical)
@@ -681,7 +684,7 @@ def compute_expert_replication_rust(
 def compute_load_imbalance_rust(
     loads: List[List[float]],
 ) -> float:
-    """Compute load imbalance ratio using Rust wrapper."""""""    if HAS_RUST and hasattr(rust_core, "compute_load_imbalance_rust"):"        return rust_core.compute_load_imbalance_rust(loads)
+    """Compute load imbalance ratio using Rust wrapper.    if HAS_RUST and hasattr(rust_core, "compute_load_imbalance_rust"):"        return rust_core.compute_load_imbalance_rust(loads)
 
     # Python fallback using numpy avoiding explicit nested iteration
     loads_np = np.asarray(loads)
