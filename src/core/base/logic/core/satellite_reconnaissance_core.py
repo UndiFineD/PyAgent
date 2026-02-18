@@ -66,7 +66,6 @@ class SatelliteReconConfig:
 
 
 
-
 class SatelliteReconnaissanceCore(BaseCore):
     """Satellite Reconnaissance Core implementing specialized space/aerospace asset discovery.
 
@@ -140,7 +139,8 @@ class SatelliteReconnaissanceCore(BaseCore):
         return result
 
     async def _analyze_satellite_catalogs(self, target: str, result: SatelliteReconResult) -> None:
-        """Analyze satellite catalogs for assets related to target."""# This is a simplified implementation - in reality would query actual APIs
+        """Analyze satellite catalogs for assets related to target."""
+# This is a simplified implementation - in reality would query actual APIs
         # For demo purposes, we'll create mock satellite data'
         mock_satellites = [
             SatelliteAsset(
@@ -165,7 +165,8 @@ class SatelliteReconnaissanceCore(BaseCore):
                 'satellite': sat.name,'                'norad_id': sat.norad_id,'                'parameters': sat.orbital_parameters,'                'tle_data': self._generate_mock_tle(sat)'            })
 
     async def _analyze_telemetry_sources(self, target: str, result: SatelliteReconResult) -> None:
-        """Analyze telemetry sources for satellite data."""# Mock telemetry data
+        """Analyze telemetry sources for satellite data."""
+# Mock telemetry data
         result.telemetry_data = {
             'beacon_signals': ['                {'frequency': 437.5, 'modulation': 'AFSK', 'data': 'Mock telemetry data'},'                {'frequency': 145.8, 'modulation': 'FSK', 'data': 'Position data'}'            ],
             'downlink_status': 'active','            'last_contact': datetime.now().isoformat(),'            'signal_strength': -120,  # dBm'            'data_rate': 9600  # bps'        }
@@ -176,7 +177,8 @@ class SatelliteReconnaissanceCore(BaseCore):
                 f"https://telemetry.{target.lower()}.com/sat/{sat.norad_id}","                f"https://tracking.{target.lower()}.org/{sat.name}""            ])
 
     async def _discover_ground_stations(self, target: str, result: SatelliteReconResult) -> None:
-        """Discover ground stations associated with target."""# Mock ground station data
+        """Discover ground stations associated with target."""
+# Mock ground station data
         result.ground_station_info = [
             {
                 'name': f"{target.upper()} Ground Station Alpha","'                'location': {'lat': 40.7128, 'lon': -74.0060, 'country': 'USA'},'                'frequency_bands': ['Ku-band', 'Ka-band'],'                'antennas': [{'diameter': 9.0, 'type': 'parabolic'}],'                'status': 'operational''            },
@@ -205,7 +207,8 @@ class SatelliteReconnaissanceCore(BaseCore):
             }
 
     def _generate_mock_tle(self, satellite: SatelliteAsset) -> str:
-        """Generate mock Two-Line Element set for satellite."""# This is a simplified TLE format
+        """Generate mock Two-Line Element set for satellite."""
+# This is a simplified TLE format
         line1 = f"1 {satellite.norad_id or '12345'}U 23001A   23015.00000000  .00000000  00000-0  00000-0 0  0001""'        line2 = f"2 {satellite.norad_id or '12345'} 098.5000 000.0000 0000000 000.0000 014.00000000 00000""'
         return f"{line1}\\n{line2}""
     def _calculate_confidence(self, result: SatelliteReconResult) -> float:
@@ -241,7 +244,8 @@ class SatelliteReconnaissanceCore(BaseCore):
 
         Returns:
             Telemetry data dictionary
-        """# Mock telemetry monitoring
+        """
+# Mock telemetry monitoring
         return {
             'satellite_id': satellite_id,'            'timestamp': datetime.now().isoformat(),'            'telemetry': {'                'battery_voltage': 12.5,'                'temperature': -10.5,'                'signal_strength': -85,'                'data_packets_received': 150,'                'orbital_position': {'                    'latitude': 45.5,'                    'longitude': -122.5,'                    'altitude': 35786'                }
             },

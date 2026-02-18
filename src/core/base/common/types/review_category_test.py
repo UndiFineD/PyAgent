@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.review_category import ReviewCategory
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.review_category import ReviewCategory
+except ImportError:
+    from core.base.common.types.review_category import ReviewCategory
+
 
 
 def test_reviewcategory_basic():

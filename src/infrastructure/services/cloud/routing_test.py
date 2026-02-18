@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.cloud.routing import RoutingStrategy, ProviderMetrics, RoutingConstraints, IntelligentRouter
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.cloud.routing import RoutingStrategy, ProviderMetrics, RoutingConstraints, IntelligentRouter
+except ImportError:
+    from infrastructure.services.cloud.routing import RoutingStrategy, ProviderMetrics, RoutingConstraints, IntelligentRouter
+
 
 
 def test_routingstrategy_basic():

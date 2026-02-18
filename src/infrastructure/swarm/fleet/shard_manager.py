@@ -19,14 +19,29 @@ ShardManager
 Sharding and partitioning logic.
 (Facade for src.core.base.common.shard_core)
 
-import logging
-from pathlib import Path
-from typing import Any
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.common.shard_core import ShardCore as StandardShardCore
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.shard_core import ShardCore as StandardShardCore
+except ImportError:
+    from src.core.base.common.shard_core import ShardCore as StandardShardCore
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

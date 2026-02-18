@@ -18,12 +18,36 @@ Core package.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from .config import CompressionType, TensorDtype, TensorizerConfig  # noqa: F401
-from .metadata import TensorMetadata  # noqa: F401
-from .reader import TensorizerReader  # noqa: F401
-from .streaming import StreamingTensorizerReader  # noqa: F401
-from .utils import get_model_info, load_model, save_model  # noqa: F401
-from .writer import TensorizerWriter  # noqa: F401
+try:
+    from .config import CompressionType, TensorDtype, TensorizerConfig  # noqa: F401
+except ImportError:
+    from .config import CompressionType, TensorDtype, TensorizerConfig # noqa: F401
+
+try:
+    from .metadata import TensorMetadata  # noqa: F401
+except ImportError:
+    from .metadata import TensorMetadata # noqa: F401
+
+try:
+    from .reader import TensorizerReader  # noqa: F401
+except ImportError:
+    from .reader import TensorizerReader # noqa: F401
+
+try:
+    from .streaming import StreamingTensorizerReader  # noqa: F401
+except ImportError:
+    from .streaming import StreamingTensorizerReader # noqa: F401
+
+try:
+    from .utils import get_model_info, load_model, save_model  # noqa: F401
+except ImportError:
+    from .utils import get_model_info, load_model, save_model # noqa: F401
+
+try:
+    from .writer import TensorizerWriter  # noqa: F401
+except ImportError:
+    from .writer import TensorizerWriter # noqa: F401
+
 
 __all__ = [
     "TensorizerConfig","    "CompressionType","    "TensorDtype","    "TensorMetadata","    "TensorizerWriter","    "TensorizerReader","    "StreamingTensorizerReader","    "save_model","    "load_model","    "get_model_info","]

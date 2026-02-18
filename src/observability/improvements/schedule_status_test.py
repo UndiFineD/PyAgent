@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.schedule_status import ScheduleStatus
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.schedule_status import ScheduleStatus
+except ImportError:
+    from observability.improvements.schedule_status import ScheduleStatus
+
 
 
 def test_schedulestatus_basic():

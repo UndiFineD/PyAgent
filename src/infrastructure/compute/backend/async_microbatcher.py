@@ -65,7 +65,6 @@ class BatchStats:
 
 
 
-
 class AsyncMicrobatcher(Generic[T, R]):
         Async micro-batcher that collects items and processes them in batches.
 
@@ -240,7 +239,6 @@ class AsyncMicrobatcher(Generic[T, R]):
         for item in batch:
             if not item.future.done():
                 item.future.set_exception(exc)
-
 
 
 

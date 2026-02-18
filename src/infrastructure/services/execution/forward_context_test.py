@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.execution.forward_context import BatchDescriptor, DPMetadata, ForwardContext, ForwardTimingTracker, get_forward_context, is_forward_context_available, create_forward_context, set_forward_context, get_timing_tracker
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.execution.forward_context import BatchDescriptor, DPMetadata, ForwardContext, ForwardTimingTracker, get_forward_context, is_forward_context_available, create_forward_context, set_forward_context, get_timing_tracker
+except ImportError:
+    from infrastructure.services.execution.forward_context import BatchDescriptor, DPMetadata, ForwardContext, ForwardTimingTracker, get_forward_context, is_forward_context_available, create_forward_context, set_forward_context, get_timing_tracker
+
 
 
 def test_batchdescriptor_basic():

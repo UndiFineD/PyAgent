@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.core.distributed.messages import CoordinatorMessage, RequestMessage, ResponseMessage, ControlMessage, MetricsMessage
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.core.distributed.messages import CoordinatorMessage, RequestMessage, ResponseMessage, ControlMessage, MetricsMessage
+except ImportError:
+    from infrastructure.swarm.orchestration.core.distributed.messages import CoordinatorMessage, RequestMessage, ResponseMessage, ControlMessage, MetricsMessage
+
 
 
 def test_coordinatormessage_basic():

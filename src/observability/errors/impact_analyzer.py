@@ -56,11 +56,28 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
 
-from .error_entry import ErrorEntry
-from .error_impact import ErrorImpact
-from .error_severity import ErrorSeverity
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .error_entry import ErrorEntry
+except ImportError:
+    from .error_entry import ErrorEntry
+
+try:
+    from .error_impact import ErrorImpact
+except ImportError:
+    from .error_impact import ErrorImpact
+
+try:
+    from .error_severity import ErrorSeverity
+except ImportError:
+    from .error_severity import ErrorSeverity
+
 
 __version__ = VERSION
 

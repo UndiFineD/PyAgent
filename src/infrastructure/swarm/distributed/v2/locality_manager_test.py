@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.distributed.v2.locality_manager import LocalityGroup, LocalityManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.distributed.v2.locality_manager import LocalityGroup, LocalityManager
+except ImportError:
+    from infrastructure.swarm.distributed.v2.locality_manager import LocalityGroup, LocalityManager
+
 
 
 def test_localitygroup_basic():

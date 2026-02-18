@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.decoding.grammar.registry import GrammarCompiler, StructuredOutputManager, compile_grammar, validate_structured_output_params
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.decoding.grammar.registry import GrammarCompiler, StructuredOutputManager, compile_grammar, validate_structured_output_params
+except ImportError:
+    from infrastructure.engine.decoding.grammar.registry import GrammarCompiler, StructuredOutputManager, compile_grammar, validate_structured_output_params
+
 
 
 def test_grammarcompiler_basic():

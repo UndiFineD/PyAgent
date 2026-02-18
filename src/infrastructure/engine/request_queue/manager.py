@@ -18,13 +18,36 @@ Manager.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-import threading
-import time
-from typing import Any, Dict, Optional
+try:
+    import threading
+except ImportError:
+    import threading
 
-from .enums import RequestStatus, SchedulingPolicy
-from .factory import create_request_queue
-from .models import QueuedRequest
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .enums import RequestStatus, SchedulingPolicy
+except ImportError:
+    from .enums import RequestStatus, SchedulingPolicy
+
+try:
+    from .factory import create_request_queue
+except ImportError:
+    from .factory import create_request_queue
+
+try:
+    from .models import QueuedRequest
+except ImportError:
+    from .models import QueuedRequest
 
 
 

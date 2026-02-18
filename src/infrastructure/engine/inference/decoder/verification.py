@@ -19,9 +19,17 @@ Verification.py module.
 
 from __future__ import annotations
 
-import numpy as np
 
-from .config import DraftProposal, VerificationResult
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import DraftProposal, VerificationResult
+except ImportError:
+    from .config import DraftProposal, VerificationResult
 
 
 

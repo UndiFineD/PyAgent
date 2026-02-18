@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.search_core import SearchCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.search_core import SearchCore
+except ImportError:
+    from core.base.common.search_core import SearchCore
+
 
 
 def test_searchcore_basic():

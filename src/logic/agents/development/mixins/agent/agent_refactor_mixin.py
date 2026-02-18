@@ -13,12 +13,26 @@
 # limitations under the License.
 
 # "Refactoring pattern and duplication logic for CoderAgent."""" pylint: disable=too-many-ancestors""""
+
+
 from __future__ import annotations
 
-import re
-from typing import Any
 
-from src.core.base.common.types.refactoring_pattern import RefactoringPattern
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.types.refactoring_pattern import RefactoringPattern
+except ImportError:
+    from src.core.base.common.types.refactoring_pattern import RefactoringPattern
 
 
 

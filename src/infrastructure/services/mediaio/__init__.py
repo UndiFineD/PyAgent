@@ -17,15 +17,39 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Media IO package for unified media loading and processing.
 
-from .audio import AudioLoader  # noqa: F401
-from .base import MediaLoader  # noqa: F401
-from .engine import (MediaIOEngine, create_media_engine, load_audio,  # noqa: F401
+try:
+    from .audio import AudioLoader  # noqa: F401
+except ImportError:
+    from .audio import AudioLoader # noqa: F401
+
+try:
+    from .base import MediaLoader  # noqa: F401
+except ImportError:
+    from .base import MediaLoader # noqa: F401
+
+try:
+    from .engine import (MediaIOEngine, create_media_engine, load_audio,  # noqa: F401
+except ImportError:
+    from .engine import (MediaIOEngine, create_media_engine, load_audio, # noqa: F401
+
                      load_image, load_video)
-from .image import ImageLoader  # noqa: F401
-from .models import (AudioData, AudioFormat, ImageData, ImageFormat,  # noqa: F401
+try:
+    from .image import ImageLoader  # noqa: F401
+except ImportError:
+    from .image import ImageLoader # noqa: F401
+
+try:
+    from .models import (AudioData, AudioFormat, ImageData, ImageFormat,  # noqa: F401
+except ImportError:
+    from .models import (AudioData, AudioFormat, ImageData, ImageFormat, # noqa: F401
+
                      MediaLoadConfig, MediaMetadata, MediaType, ResizeMode,
                      VideoData, VideoFormat)
-from .video import VideoLoader  # noqa: F401
+try:
+    from .video import VideoLoader  # noqa: F401
+except ImportError:
+    from .video import VideoLoader # noqa: F401
+
 
 __all__ = [
     "MediaType","    "ImageFormat","    "VideoFormat","    "AudioFormat","    "ResizeMode","    "MediaMetadata","    "ImageData","    "VideoData","    "AudioData","    "MediaLoadConfig","    "MediaLoader","    "ImageLoader","    "VideoLoader","    "AudioLoader","    "MediaIOEngine","    "create_media_engine","    "load_image","    "load_video","    "load_audio","]

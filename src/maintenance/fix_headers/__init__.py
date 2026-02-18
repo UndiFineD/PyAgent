@@ -18,6 +18,10 @@ PyAgent Fix Headers Tool
 
 A maintenance tool for ensuring all Python files have proper Apache 2.0 license headers.
 
-from .fix_headers_agent import FixHeadersAgent
+try:
+    from .fix_headers_agent import FixHeadersAgent
+except ImportError:
+    from .fix_headers_agent import FixHeadersAgent
+
 
 __version__ = "1.0.0""__all__ = ["FixHeadersAgent"]"

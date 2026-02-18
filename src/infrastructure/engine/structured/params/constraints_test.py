@@ -12,10 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-import json
-from .constraints import OutputConstraint, JsonSchemaConstraint
-from .enums import ConstraintType, SchemaFormat
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from .constraints import OutputConstraint, JsonSchemaConstraint
+except ImportError:
+    from .constraints import OutputConstraint, JsonSchemaConstraint
+
+try:
+    from .enums import ConstraintType, SchemaFormat
+except ImportError:
+    from .enums import ConstraintType, SchemaFormat
+
 
 
 def test_output_constraint_validate():

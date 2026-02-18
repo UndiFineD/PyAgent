@@ -18,12 +18,20 @@ Scheduling infrastructure.
 Phase 19: Beyond vLLM - Priority and deadline scheduling.
 Phase 34: Disaggregated prefill-decode scheduling.
 
-from src.infrastructure.engine.scheduling.disaggregated_scheduler import (
+try:
+    from .infrastructure.engine.scheduling.disaggregated_scheduler import (
+except ImportError:
+    from src.infrastructure.engine.scheduling.disaggregated_scheduler import (
+
     DCPConfig, DisaggregatedScheduler, HashSelector, InstanceInfo,
     InstanceRole, InstanceSelector, KVTransferParams, LeastLoadedSelector,
     ProxyOrchestrator, RandomSelector, RoundRobinSelector, ScheduledRequest,
     SchedulingPolicy, create_dcp_scheduler)
-from src.infrastructure.engine.scheduling.priority_scheduler import (
+try:
+    from .infrastructure.engine.scheduling.priority_scheduler import (
+except ImportError:
+    from src.infrastructure.engine.scheduling.priority_scheduler import (
+
     AsyncPriorityScheduler, DeadlineScheduler, PriorityScheduler,
     RateLimitedScheduler, ScheduledTask, TaskPriority, TaskState, TaskStats)
 

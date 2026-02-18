@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .suppression_rule import SuppressionRule
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .suppression_rule import SuppressionRule
+except ImportError:
+    from .suppression_rule import SuppressionRule
+
 
 
 def test_suppressionrule_basic():

@@ -16,10 +16,22 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Utility functions regarding reasoning extraction and streaming parsing.
 """
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .models import ReasoningResult, StreamingReasoningState
-from .registry import ReasoningParserManager
+
+try:
+    from .models import ReasoningResult, StreamingReasoningState
+except ImportError:
+    from .models import ReasoningResult, StreamingReasoningState
+
+try:
+    from .registry import ReasoningParserManager
+except ImportError:
+    from .registry import ReasoningParserManager
+
 
 
 def extract_reasoning(

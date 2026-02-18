@@ -22,7 +22,6 @@ from src.core.base.common.types.security_vulnerability import SecurityVulnerabil
 
 
 
-
 class SecurityReporterMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -31,7 +30,8 @@ class SecurityReporterMixin:
     pass  # [BATCHFIX] inserted for empty block
 """"Records security findings for fleet intelligence (Phase 108).        if hasattr(self, "recorder") and self.recorder:"            try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                 self.recorder.record_lesson(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                 self.recorder.record_lesson(
                     "security_vulnerability","                    {
                         "type": issue_type,"                        "severity": severity,"                        "description": desc,"                        "timestamp": time.time(),"                    },
                 )
@@ -39,17 +39,23 @@ class SecurityReporterMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #                 logging.debug(fSecurityCore: Failed to record finding: {e}")"  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:"Determines the overall risk level for a report.# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         severities = [v.severity for v in vulnerabilities]""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         severities = [v.severity for v in vulnerabilities]""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         if "critical" in severities or "CRITICAL" in [s.upper() for s in severities]:"# [BATCHFIX] Commented metadata/non-Python
 """             return "CRITICAL"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         if "high" in severities or "HIGH" in [s.upper() for s in severities]:"# [BATCHFIX] Commented metadata/non-Python
 """             return "HIGH"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         if "medium" in severities or "MEDIUM" in [s.upper() for s in severities]:"# [BATCHFIX] Commented metadata/non-Python
 """             return "MEDIUM"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """         return "LOW"  # [BATCHFIX] closed string"

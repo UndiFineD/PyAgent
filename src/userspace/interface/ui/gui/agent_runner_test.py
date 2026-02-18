@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .agent_runner import AgentRunner
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .agent_runner import AgentRunner
+except ImportError:
+    from .agent_runner import AgentRunner
+
 
 
 def test_agentrunner_basic():

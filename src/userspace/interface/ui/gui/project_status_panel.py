@@ -32,7 +32,6 @@ __version__ = VERSION
 
 
 
-
 class ProjectStatusPanel:
     """A panel that displays the current orchestration status from status.json.
     def __init__(self, parent) -> None:

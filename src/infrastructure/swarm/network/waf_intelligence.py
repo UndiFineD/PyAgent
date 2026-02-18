@@ -13,9 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
-from typing import Dict, List
-from dataclasses import dataclass
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Dict, List
+except ImportError:
+    from typing import Dict, List
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 # Refactoring Note: Ported from .external/0xSojalSec-dnsresolver/src/waf/mod.rs
 # Logic ported:
@@ -45,7 +57,6 @@ class WAFSignature:
                 return True
 
         return False
-
 
 
 

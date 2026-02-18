@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.crew_orchestrator import AgentRole, TaskStatus, AgentConfig, TaskConfig, TaskResult, CrewAgent, CrewOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.crew_orchestrator import AgentRole, TaskStatus, AgentConfig, TaskConfig, TaskResult, CrewAgent, CrewOrchestrator
+except ImportError:
+    from core.base.logic.core.crew_orchestrator import AgentRole, TaskStatus, AgentConfig, TaskConfig, TaskResult, CrewAgent, CrewOrchestrator
+
 
 
 def test_agentrole_basic():

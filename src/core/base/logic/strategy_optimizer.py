@@ -29,7 +29,8 @@ logger = logging.getLogger(__name__)
 
 
 # class OptimizationMetric(Enum):  # Removed duplicate definition
-#     """Metrics for evaluating strategy performance"""#     ACCURACY = "accuracy""#     PRECISION = "precision""#     RECALL = "recall""#     F1_SCORE = "f1_score""#     LATENCY = "latency""#     THROUGHPUT = "throughput""#     COST = "cost""#     ROBUSTNESS = "robustness""
+#     """Metrics for evaluating strategy performance"""
+#     ACCURACY = "accuracy""#     PRECISION = "precision""#     RECALL = "recall""#     F1_SCORE = "f1_score""#     LATENCY = "latency""#     THROUGHPUT = "throughput""#     COST = "cost""#     ROBUSTNESS = "robustness""
 
 @dataclass
 class StrategyConfig:
@@ -70,7 +71,6 @@ class OptimizationTrial:
 
 
 
-
 class Strategy(ABC):
     """Abstract base class for strategies"""
     @abstractmethod
@@ -85,7 +85,6 @@ class Strategy(ABC):
     @abstractmethod
     def name(self) -> str:
         """Get strategy name"""pass
-
 
 
 
@@ -133,7 +132,6 @@ class ThresholdFilter:
 
     def update_thresholds(self, new_thresholds: Dict[str, float]):
         """Update filtering thresholds"""self.thresholds.update(new_thresholds)
-
 
 
 
@@ -223,7 +221,6 @@ class PerformanceMeasurer:
 
 
 
-
 class BestSelectionAlgorithm(ABC):
     """Abstract base class for best strategy selection algorithms"""
     @abstractmethod
@@ -231,7 +228,6 @@ class BestSelectionAlgorithm(ABC):
         self, performance_results: List[PerformanceResult], weights: Optional[Dict[str, float]] = None
     ) -> PerformanceResult:
         """Select the best performing strategy"""pass
-
 
 
 
@@ -288,7 +284,6 @@ class WeightedAverageSelector(BestSelectionAlgorithm):
             return performance_results[0]  # Return any result as fallback
 
         return best_result
-
 
 
 
@@ -378,7 +373,6 @@ class ParetoFrontierSelector(BestSelectionAlgorithm):
                 best_result = result
 
         return best_result or frontier[0]
-
 
 
 
@@ -472,7 +466,8 @@ class StrategyOptimizer:
         self, pipeline_configs: List[Dict[str, Any]], evaluation_data: List[Tuple[Any, Any]], **kwargs
     ) -> OptimizationTrial:
         """Optimize a complete pipeline configuration
-        Based on AutoRAG's pipeline optimization'        """# Convert pipeline configs to strategies
+        Based on AutoRAG's pipeline optimization'        """
+# Convert pipeline configs to strategies
         strategies = []
         for config in pipeline_configs:
             strategy = PipelineStrategy(config)
@@ -536,14 +531,14 @@ class StrategyOptimizer:
 
 
 
-
 class PipelineStrategy(Strategy):
     """Strategy wrapper for pipeline configurations"""
     def __init__(self, config: Dict[str, Any]):
         self._config = config
         self._name = config.get("name", f"pipeline_{id(self)}")"
     async def execute(self, input_data: Any, **kwargs) -> Any:
-        """Execute pipeline with configuration"""# TODO Placeholder implementation - in real usage, this would
+        """Execute pipeline with configuration"""
+# TODO Placeholder implementation - in real usage, this would
         # execute the actual pipeline with the given config
         pipeline_type = self._config.get("type", "generic")"
         if pipeline_type == "rag":"            # Simulate RAG pipeline execution
@@ -554,7 +549,8 @@ class PipelineStrategy(Strategy):
             # Generic pipeline simulation
             return f"Executed {pipeline_type} pipeline on input: {str(input_data)[:100]}""
     async def _execute_rag_pipeline(self, input_data: Any, **kwargs) -> str:
-        """Simulate RAG pipeline execution"""# Simulate retrieval and generation
+        """Simulate RAG pipeline execution"""
+# Simulate retrieval and generation
         retrieval_config = self._config.get("retrieval", {})"        generation_config = self._config.get("generation", {})"
         # Simulate processing time based on config complexity
         processing_time = len(str(retrieval_config)) * 0.001 + len(str(generation_config)) * 0.001

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.analysis.ecosystem_diagnostics_agent import EcosystemDiagnosticsAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.analysis.ecosystem_diagnostics_agent import EcosystemDiagnosticsAgent
+except ImportError:
+    from infrastructure.services.dev.scripts.analysis.ecosystem_diagnostics_agent import EcosystemDiagnosticsAgent
+
 
 
 def test_ecosystemdiagnosticsagent_basic():

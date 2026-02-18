@@ -15,7 +15,11 @@
 
 LoRA Management Facade.
 
-from .manager import (AdapterSlot, AdapterStatus, LoRAAdapter, LoRAConfig,
+try:
+    from .manager import (AdapterSlot, AdapterStatus, LoRAAdapter, LoRAConfig,
+except ImportError:
+    from .manager import (AdapterSlot, AdapterStatus, LoRAAdapter, LoRAConfig,
+
                       LoRAInfo, LoRAManager, LoRAMethod, LoRARegistry,
                       LoRARequest, LoRASlotManager, LoRAWeights, TargetModule,
                       get_lora_info, load_lora_adapter, merge_adapters)

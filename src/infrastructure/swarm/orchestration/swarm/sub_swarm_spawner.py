@@ -34,7 +34,6 @@ if TYPE_CHECKING:
 
 
 
-
 class SubSwarm:
     """A lightweight sub-swarm with a subset of capabilities.
     def __init__(self, swarm_id: str, agents: list[str], parent_fleet: FleetManager) -> None:
@@ -66,7 +65,6 @@ class SubSwarm:
             return str(result)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"SubSwarm execution failed: {e}""
-
 
 
 class SubSwarmSpawner:

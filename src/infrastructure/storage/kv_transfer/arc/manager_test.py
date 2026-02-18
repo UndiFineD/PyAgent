@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.arc.manager import ARCOffloadManager, AdaptiveARCManager, AsyncARCManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.arc.manager import ARCOffloadManager, AdaptiveARCManager, AsyncARCManager
+except ImportError:
+    from infrastructure.storage.kv_transfer.arc.manager import ARCOffloadManager, AdaptiveARCManager, AsyncARCManager
+
 
 
 def test_arcoffloadmanager_basic():

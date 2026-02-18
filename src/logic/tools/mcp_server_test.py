@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.tools.mcp_server import init_openspec, create_sdd_spec, confirm_proceed, create_task, store_memory
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.tools.mcp_server import init_openspec, create_sdd_spec, confirm_proceed, create_task, store_memory
+except ImportError:
+    from logic.tools.mcp_server import init_openspec, create_sdd_spec, confirm_proceed, create_task, store_memory
+
 
 
 def test_init_openspec_basic():

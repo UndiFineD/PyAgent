@@ -15,12 +15,10 @@
 from typing import List, Optional
 
 
-
 class TableTrieNode:
     def __init__(self):
         self.children = {}
         self.kv_cache_pointer = None # Reference to paged attention block indices
-
 
 
 class TableTrie:
@@ -46,7 +44,6 @@ class TableTrie:
                 return None
             node = node.children[tid]
         return node.kv_cache_pointer
-
 
 
 class TableCacheManager:

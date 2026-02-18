@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.agent_tests.cross_browser import CrossBrowserRunner
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.agent_tests.cross_browser import CrossBrowserRunner
+except ImportError:
+    from infrastructure.services.dev.agent_tests.cross_browser import CrossBrowserRunner
+
 
 
 def test_crossbrowserrunner_basic():

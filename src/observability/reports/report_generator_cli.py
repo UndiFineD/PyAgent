@@ -14,14 +14,43 @@
 
 
 from __future__ import annotations
-from argparse import Namespace
-import sys
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.observability.reports.export_format import ExportFormat
-from src.observability.reports.report_exporter import ReportExporter
-from src.observability.reports.report_generator import ReportGenerator
+try:
+    from argparse import Namespace
+except ImportError:
+    from argparse import Namespace
+
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .observability.reports.export_format import ExportFormat
+except ImportError:
+    from src.observability.reports.export_format import ExportFormat
+
+try:
+    from .observability.reports.report_exporter import ReportExporter
+except ImportError:
+    from src.observability.reports.report_exporter import ReportExporter
+
+try:
+    from .observability.reports.report_generator import ReportGenerator
+except ImportError:
+    from src.observability.reports.report_generator import ReportGenerator
+
 
 root: Path = Path(__file__).resolve().parents[2]
 if str(root) not in sys.path:

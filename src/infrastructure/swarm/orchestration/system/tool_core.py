@@ -41,7 +41,6 @@ __version__ = VERSION
 
 
 
-
 class ToolMetadata(BaseModel):
     """Metadata for a registered tool.
     name: str
@@ -51,7 +50,6 @@ class ToolMetadata(BaseModel):
     owner: str  # Name of the agent providing this tool
     category: str = "general""    priority: int = 0
     reliability_score: float = 1.0  # Phase 119: Performance-based scoring
-
 
 
 

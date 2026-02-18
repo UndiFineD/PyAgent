@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.pooling.strategies import BasePooler, MeanPooler, CLSPooler, LastTokenPooler, MaxPooler, AttentionPooler, WeightedMeanPooler, MatryoshkaPooler, MultiVectorPooler, StepPooler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.pooling.strategies import BasePooler, MeanPooler, CLSPooler, LastTokenPooler, MaxPooler, AttentionPooler, WeightedMeanPooler, MatryoshkaPooler, MultiVectorPooler, StepPooler
+except ImportError:
+    from infrastructure.engine.pooling.strategies import BasePooler, MeanPooler, CLSPooler, LastTokenPooler, MaxPooler, AttentionPooler, WeightedMeanPooler, MatryoshkaPooler, MultiVectorPooler, StepPooler
+
 
 
 def test_basepooler_basic():

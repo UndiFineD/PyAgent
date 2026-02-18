@@ -20,12 +20,24 @@ Simple math agent.py module.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.orchestration.system.tool_registry import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.orchestration.system.tool_registry import as_tool
+except ImportError:
+    from src.infrastructure.swarm.orchestration.system.tool_registry import as_tool
+
 
 __version__ = VERSION
-
 
 
 

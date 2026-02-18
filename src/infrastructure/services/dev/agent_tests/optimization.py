@@ -18,14 +18,26 @@
 Test optimization and coverage analysis.
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .models import TestCase
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .models import TestCase
+except ImportError:
+    from .models import TestCase
+
 
 __version__ = VERSION
-
 
 
 
@@ -109,7 +121,6 @@ class TestSuiteOptimizer:
             return list(self.coverage_map.keys())
 
         return kept
-
 
 
 

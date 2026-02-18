@@ -31,7 +31,6 @@ if TYPE_CHECKING:
 
 
 
-
 class FleetConsensusManager:
     """Manages multi-agent consensus workflows.
     def __init__(self, fleet: FleetManager) -> None:

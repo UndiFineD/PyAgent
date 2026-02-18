@@ -14,6 +14,8 @@
 
 
 """Utility functions used by the Agent classes."""
+
+
 from __future__ import annotations
 
 import importlib.util
@@ -110,7 +112,8 @@ def setup_logging(verbosity: str | None = None) -> None:
 def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None:
     """Worker function for multiprocessing file processing.""""
     This function must be at module level to be pickleable for multiprocessing.
-    """try:
+    """
+try:
         logging.debug("[worker] Processing %s", file_path.name)"        agent_instance.process_file(file_path)
         logging.info("[worker] Completed %s", file_path.name)"        return file_path
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable

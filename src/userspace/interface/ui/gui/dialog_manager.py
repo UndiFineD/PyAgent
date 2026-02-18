@@ -16,15 +16,35 @@
 """Dialog and interaction management for the PyAgent GUI.
 from __future__ import annotations
 
-import tkinter as tk
-from collections.abc import Callable
-from tkinter import filedialog, messagebox, ttk
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import tkinter
+except ImportError:
+    import tkinter
+ as tk
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections.abc import Callable
+
+try:
+    from tkinter import filedialog, messagebox, ttk
+except ImportError:
+    from tkinter import filedialog, messagebox, ttk
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

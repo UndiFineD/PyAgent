@@ -16,6 +16,8 @@
 
 """
 Auto-extracted class from agent_changes.py""""
+
+
 from __future__ import annotations
 
 import logging
@@ -33,7 +35,6 @@ from .import_source import ImportSource
 from .imported_entry import ImportedEntry
 
 __version__ = VERSION
-
 
 
 

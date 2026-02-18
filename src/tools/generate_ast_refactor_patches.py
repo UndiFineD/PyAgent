@@ -57,7 +57,6 @@ def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
 
 
 
-
 class SubprocessTransformer(ast.NodeTransformer):
     """AST transformer that replaces subprocess calls with a safe wrapper.    DANGEROUS_ATTRS = {'Popen', 'call', 'run', 'check_output'}'
     def visit_Call(self, node):

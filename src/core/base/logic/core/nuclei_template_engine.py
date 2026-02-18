@@ -81,7 +81,6 @@ class ScanResult:
 
 
 
-
 class NucleiTemplateEngine:
     """Nuclei-style vulnerability detection engine.
 
@@ -99,7 +98,8 @@ class NucleiTemplateEngine:
 
         Returns:
             Parsed NucleiTemplate or None if parsing fails
-        """try:
+        """
+try:
             data = yaml.safe_load(yaml_content)
 
             # Parse info section
@@ -143,7 +143,8 @@ class NucleiTemplateEngine:
 
         Returns:
             Parsed NucleiTemplate or None if loading fails
-        """try:
+        """
+try:
             with open(file_path, 'r', encoding='utf-8') as f:'                content = f.read()
             return self.load_template_from_yaml(content)
         except Exception as e:
@@ -232,7 +233,8 @@ class NucleiTemplateEngine:
         body: Optional[str] = None,
         timeout: int = 10
     ) -> Optional[requests.Response]:
-        """Make HTTP request with timeout."""try:
+        """Make HTTP request with timeout."""
+try:
             loop = asyncio.get_event_loop()
             # Wrap synchronous requests.request in run_in_executor
             response = await loop.run_in_executor(
@@ -274,7 +276,8 @@ class NucleiTemplateEngine:
         else:  # "or""            return any(results)
 
     def _check_single_matcher(self, matcher: MatcherCondition, response: requests.Response) -> bool:
-        """Check a single matcher condition."""try:
+        """Check a single matcher condition."""
+try:
             if matcher.type == "dsl":"                return self._check_dsl_matcher(matcher.dsl or [], response)
             elif matcher.type == "status":"                return response.status_code == matcher.status_code
             elif matcher.type == "word":"                return self._check_word_matcher(matcher.words or [], response.text)
@@ -285,7 +288,8 @@ class NucleiTemplateEngine:
             self.logger.error(f"Matcher check failed: {e}")"            return False
 
     def _check_dsl_matcher(self, dsl_expressions: List[str], response: requests.Response) -> bool:
-        """Check DSL (Domain Specific Language) expressions."""# Simplified DSL evaluation - in real Nuclei, this is more complex
+        """Check DSL (Domain Specific Language) expressions."""
+# Simplified DSL evaluation - in real Nuclei, this is more complex
         for expr in dsl_expressions:
             if "status_code" in expr and "==" in expr:"                # Simple status code check
                 parts = expr.split("==")"                if len(parts) == 2:

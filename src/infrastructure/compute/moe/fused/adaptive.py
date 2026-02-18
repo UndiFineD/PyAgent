@@ -26,7 +26,6 @@ from .layer import FusedMoELayer
 
 
 
-
 class AdaptiveMoELayer(FusedMoELayer):
     """Adaptive MoE layer with dynamic top-k selection and capacity management.
     def __init__(
@@ -61,7 +60,6 @@ class AdaptiveMoELayer(FusedMoELayer):
             return super().forward(x, router_logits)
         finally:
             self.config.top_k = original_top_k
-
 
 
 

@@ -15,12 +15,24 @@
 
 from __future__ import annotations
 
-from src.core.base.common.types.changelog_entry import ChangelogEntry
-from src.core.base.common.types.release_note import ReleaseNote
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.types.changelog_entry import ChangelogEntry
+except ImportError:
+    from src.core.base.common.types.changelog_entry import ChangelogEntry
+
+try:
+    from .core.base.common.types.release_note import ReleaseNote
+except ImportError:
+    from src.core.base.common.types.release_note import ReleaseNote
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

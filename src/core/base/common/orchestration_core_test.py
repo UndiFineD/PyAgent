@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.orchestration_core import OrchestrationCore, QualityScorer, ABTest
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.orchestration_core import OrchestrationCore, QualityScorer, ABTest
+except ImportError:
+    from core.base.common.orchestration_core import OrchestrationCore, QualityScorer, ABTest
+
 
 
 def test_orchestrationcore_basic():

@@ -20,7 +20,11 @@ Self Archiving Agent - Identify and archive low-utility files and memories
 # AUTHOR: Keimpe de Jong
 USAGE:
 Import the agent and invoke its tools from an orchestration context. Example:
-from src.core.base.lifecycle.self_archiving_agent import SelfArchivingAgent
+try:
+    from .core.base.lifecycle.self_archiving_agent import SelfArchivingAgent
+except ImportError:
+    from src.core.base.lifecycle.self_archiving_agent import SelfArchivingAgent
+
 agent = SelfArchivingAgent(__file__)
 targets = agent.identify_archivable_targets(threshold_days=90)
 report = agent.archive_targets(targets)
@@ -42,17 +46,45 @@ Self archiving agent.py module.
 
 from __future__ import annotations
 
-import logging
-import os
-from datetime import datetime
-from pathlib import Path
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -86,17 +118,45 @@ class SelfArchivingAgent(BaseAgent):
 
 from __future__ import annotations
 
-import logging
-import os
-from datetime import datetime
-from pathlib import Path
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

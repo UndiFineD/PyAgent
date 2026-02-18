@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.structured.structured_output_orchestrator import StructuredOutputBackendType, ConstraintType, GrammarProtocol, BackendProtocol, ConstraintSpec, OrchestratorConfig, BackendWrapper, CompiledGrammarHandle, StructuredOutputOrchestrator, AsyncStructuredOutputOrchestrator, BatchProcessor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.structured.structured_output_orchestrator import StructuredOutputBackendType, ConstraintType, GrammarProtocol, BackendProtocol, ConstraintSpec, OrchestratorConfig, BackendWrapper, CompiledGrammarHandle, StructuredOutputOrchestrator, AsyncStructuredOutputOrchestrator, BatchProcessor
+except ImportError:
+    from infrastructure.engine.structured.structured_output_orchestrator import StructuredOutputBackendType, ConstraintType, GrammarProtocol, BackendProtocol, ConstraintSpec, OrchestratorConfig, BackendWrapper, CompiledGrammarHandle, StructuredOutputOrchestrator, AsyncStructuredOutputOrchestrator, BatchProcessor
+
 
 
 def test_structuredoutputbackendtype_basic():

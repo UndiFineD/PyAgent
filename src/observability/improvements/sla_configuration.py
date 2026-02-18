@@ -36,9 +36,22 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from src.core.base.lifecycle.version import VERSION
-from .sla_level import SLALevel
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .sla_level import SLALevel
+except ImportError:
+    from .sla_level import SLALevel
+
 
 __version__ = VERSION
 

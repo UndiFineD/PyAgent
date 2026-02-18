@@ -54,7 +54,6 @@ __version__ = VERSION
 
 
 
-
 class ToolEvolutionAgent(BaseAgent):
 """"Detects automation opportunities and writes its own toolsets.
     def __init__(self, file_path: str) -> None:
@@ -126,7 +125,6 @@ from src.logic.agents.development.core.tool_drafting_core import (
     ToolDefinition, ToolDraftingCore)
 
 __version__ = VERSION
-
 
 
 

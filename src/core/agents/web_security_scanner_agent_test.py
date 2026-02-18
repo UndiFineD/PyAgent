@@ -16,11 +16,26 @@
 """
 Test module for web_security_scanner_agent
 """
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.agents.web_security_scanner_agent import WebSecurityScannerAgent
-from src.core.base.logic.security.web_security_scanner_core import WebSecurityScannerCore
+try:
+    from unittest.mock import AsyncMock, MagicMock, patch
+except ImportError:
+    from unittest.mock import AsyncMock, MagicMock, patch
+
+
+try:
+    from .core.agents.web_security_scanner_agent import WebSecurityScannerAgent
+except ImportError:
+    from src.core.agents.web_security_scanner_agent import WebSecurityScannerAgent
+
+try:
+    from .core.base.logic.security.web_security_scanner_core import WebSecurityScannerCore
+except ImportError:
+    from src.core.base.logic.security.web_security_scanner_core import WebSecurityScannerCore
 
 
 
@@ -49,7 +64,8 @@ class TestWebSecurityScannerCore:
     @pytest.mark.asyncio
     @patch('aiohttp.ClientSession')
     async def test_scan_single_host_match(self, mock_session_class, scanner_core):
-        """Test scanning single host with pattern match."""# Mock response
+        """Test scanning single host with pattern match."""
+# Mock response
         mock_response = AsyncMock()
         mock_response.status = 200
         mock_response.text = AsyncMock(return_value='<a href="/content/dam/test">link</a>')
@@ -74,7 +90,6 @@ class TestWebSecurityScannerCore:
         mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
 
         patterns = {'aem': r'href="/content/dam'}"'        matches = await scanner_core._scan_single_host("http://example.com", patterns)"        assert matches == []
-
 
 
 

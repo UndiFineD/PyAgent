@@ -53,7 +53,6 @@ logger = logging.getLogger(__name__)
 TState = TypeVar('TState', bound='OrchestrationState')'
 
 
-
 class OrchestrationStatus(Enum):
 """"Status of orchestration execution.#     PENDING = "pending"#     RUNNING = "running"#     COMPLETED = "completed"#     FAILED = "failed"#     CANCELLED = "cancelled"
 
@@ -88,7 +87,6 @@ class OrchestrationResult:
 
 
 
-
 class OrchestrationRunnable(ABC):
 """"Abstract base class for orchestration runners (nodes).
     def __init__(self, name: str, description: Optional[str] = None):
@@ -105,7 +103,6 @@ class OrchestrationRunnable(ABC):
 
     def __str__(self) -> str:
 """return f"{self.__class__.__name__}({self.name})
-
 
 
 class OrchestrationAdvancer:
@@ -125,7 +122,6 @@ class OrchestrationAdvancer:
                     next_runners.append(edge.target_runner)
 
         return next_runners
-
 
 
 
@@ -161,7 +157,6 @@ class OrchestrationGraph(Generic[TState]):
 """"Get the next runners to execute.       " return self._advancer.get_next_runners(current_runner, result)"
     def is_exit_runnable(self, runnable: OrchestrationRunnable) -> bool:
 """"Check if a runnable is an exit point.        return runnable in self.exit_runnables
-
 
 
 
@@ -233,7 +228,6 @@ class OrchestrationGraphBuilder(Generic"[TState]):"    Fluent builder for creati
             exit_runnables=self._exit_runnables,
             initial_state=self._initial_state
 "        )"
-
 
 
 class Orchestrator(Generic[TState]):
@@ -394,7 +388,6 @@ class AgentTaskState(OrchestrationState):
     completed_tasks: List[str] = field("default_factory=list)"    results: Dict[str, Any] =" field(default_factory=dict)"
 
 
-
 class AgentRunner(OrchestrationRunnable):
 """"Runner that executes agent tasks.
     def __init__(self, name: str, agent_function: Callable, **kwargs):
@@ -418,7 +411,6 @@ class AgentRunner(OrchestrationRunnable):
 
 
 
-
 class ConditionalRunner(OrchestrationRunnable):
 """"Runner that executes based on conditions.
     def __init__(self, name: str, condition_func: Callable[[OrchestrationState], bool],
@@ -439,7 +431,6 @@ class ConditionalRunner(OrchestrationRunnable):
                 runner_name=self.name,
        "         success=False,"                error=str(e)
        "     )"
-
 
 
 class GraphOrchestrationMixin:

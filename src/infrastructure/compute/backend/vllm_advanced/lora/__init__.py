@@ -16,10 +16,26 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 LoRA adapter management for vLLM.
 
-from .manager import LoraManager  # noqa: F401
-from .models import HAS_LORA, AdapterState, LoraAdapter, LoraConfig  # noqa: F401
-from .registry import LoraRegistry  # noqa: F401
-from .utils import create_lora_request, discover_adapters  # noqa: F401
+try:
+    from .manager import LoraManager  # noqa: F401
+except ImportError:
+    from .manager import LoraManager # noqa: F401
+
+try:
+    from .models import HAS_LORA, AdapterState, LoraAdapter, LoraConfig  # noqa: F401
+except ImportError:
+    from .models import HAS_LORA, AdapterState, LoraAdapter, LoraConfig # noqa: F401
+
+try:
+    from .registry import LoraRegistry  # noqa: F401
+except ImportError:
+    from .registry import LoraRegistry # noqa: F401
+
+try:
+    from .utils import create_lora_request, discover_adapters  # noqa: F401
+except ImportError:
+    from .utils import create_lora_request, discover_adapters # noqa: F401
+
 
 __all__ = [
     "AdapterState","    "LoraConfig","    "LoraAdapter","    "HAS_LORA","    "LoraRegistry","    "LoraManager","    "create_lora_request","    "discover_adapters","]

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.tools.parser.hermes_parser import HermesToolParser
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.tools.parser.hermes_parser import HermesToolParser
+except ImportError:
+    from infrastructure.services.tools.parser.hermes_parser import HermesToolParser
+
 
 
 def test_hermestoolparser_basic():

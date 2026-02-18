@@ -29,7 +29,6 @@ from typing import Any, Dict, List
 
 
 
-
 class DocstringStandards:
     """PyAgent docstring formatting standards and validation.
     # Standard format patterns
@@ -116,7 +115,6 @@ class DocstringStandards:
 
 
 
-
 class DocstringAnalyzer:
     """Analyzes Python files for docstring issues.
     def __init__(self, standards: DocstringStandards):
@@ -197,7 +195,6 @@ class DocstringAnalyzer:
         has_control_flow = any(isinstance(n, (ast.If, ast.For, ast.While, ast.Try)) for n in ast.walk(node))
 
         return has_params or is_long or has_control_flow
-
 
 
 

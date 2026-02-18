@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import types
-from src.core.base.common.utils.agent_git_handler import AgentGitHandler
+try:
+    import types
+except ImportError:
+    import types
+
+try:
+    from .core.base.common.utils.agent_git_handler import AgentGitHandler
+except ImportError:
+    from src.core.base.common.utils.agent_git_handler import AgentGitHandler
 
 
 

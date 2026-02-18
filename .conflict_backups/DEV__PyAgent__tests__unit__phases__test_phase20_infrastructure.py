@@ -41,7 +41,6 @@ import pytest
 
 
 
-
 class TestExtensionManager:
     """Tests for ExtensionManager class."""
 
@@ -100,7 +99,6 @@ class TestExtensionManager:
 
 
 
-
 class TestTypedExtensionManager:
     """Tests for TypedExtensionManager class."""
 
@@ -139,7 +137,6 @@ class TestTypedExtensionManager:
 
 
 
-
 class TestMultiExtensionManager:
     """Tests for MultiExtensionManager class."""
 
@@ -167,7 +164,6 @@ class TestMultiExtensionManager:
 
 
 
-
 class TestLazyExtensionManager:
     """Tests for LazyExtensionManager class."""
 
@@ -191,7 +187,6 @@ class TestLazyExtensionManager:
 # ============================================================================
 # CollectionUtils Tests
 # ============================================================================
-
 
 
 
@@ -241,7 +236,6 @@ class TestLazyDict:
 
 
 
-
 class TestListUtilities:
     """Tests for list utility functions."""
 
@@ -276,7 +270,6 @@ class TestListUtilities:
 
 
 
-
 class TestGroupingUtilities:
     """Tests for grouping functions."""
 
@@ -295,7 +288,6 @@ class TestGroupingUtilities:
         evens, odds = partition([1, 2, 3, 4, 5], lambda x: x % 2 == 0)
         assert evens == [2, 4]
         assert odds == [1, 3, 5]
-
 
 
 
@@ -326,7 +318,6 @@ class TestDictUtilities:
 
 
 
-
 class TestRunOnce:
     """Tests for run_once decorator."""
 
@@ -348,7 +339,6 @@ class TestRunOnce:
 
 
 
-
 class TestDeprecation:
     """Tests for deprecation decorators."""
 
@@ -365,7 +355,6 @@ class TestDeprecation:
             foo(old_param=1)
             assert len(w) == 1
             assert "deprecated" in str(w[0].message).lower()
-
 
 
 
@@ -394,7 +383,6 @@ class TestSupportsKw:
 
 
 
-
 class TestMemoize:
     """Tests for memoization."""
 
@@ -416,7 +404,6 @@ class TestMemoize:
 
         assert expensive(10) == 20
         assert call_count[0] == 2
-
 
 
 
@@ -444,7 +431,6 @@ class TestThrottle:
 # ============================================================================
 # NetworkUtils Tests
 # ============================================================================
-
 
 
 
@@ -477,7 +463,6 @@ class TestIPDetection:
 
 
 
-
 class TestHostPortParsing:
     """Tests for host:port parsing."""
 
@@ -506,7 +491,6 @@ class TestHostPortParsing:
 
 
 
-
 class TestPortDiscovery:
     """Tests for port discovery functions."""
 
@@ -529,7 +513,6 @@ class TestPortDiscovery:
 # ============================================================================
 # EnvConfig Tests
 # ============================================================================
-
 
 
 
@@ -557,7 +540,6 @@ class TestEnvVar:
             assert port == 9000
         finally:
             del os.environ["TEST_PORT_PHASE20"]
-
 
 
 
@@ -596,7 +578,6 @@ class TestEnvFunctions:
 
 
 
-
 class TestTempEnv:
     """Tests for temp_env context manager."""
 
@@ -610,7 +591,6 @@ class TestTempEnv:
             assert os.environ.get("TEST_TEMP_PHASE20") == "temporary"
 
         assert os.environ.get("TEST_TEMP_PHASE20") == original
-
 
 
 
@@ -638,7 +618,6 @@ class TestNamespacedConfig:
 
 
 
-
 class TestOtelAvailability:
     """Tests for OpenTelemetry availability."""
 
@@ -649,7 +628,6 @@ class TestOtelAvailability:
         # Just check it returns a boolean
         result = is_otel_available()
         assert isinstance(result, bool)
-
 
 
 
@@ -666,7 +644,6 @@ class TestSpanAttributes:
 
 
 
-
 class TestNullTracer:
     """Tests for NullTracer (testing helper)."""
 
@@ -680,7 +657,6 @@ class TestNullTracer:
             span.set_attribute("key", "value")
             span.add_event("event")
             assert not span.is_recording()
-
 
 
 
@@ -706,7 +682,6 @@ class TestSpanTiming:
         assert "total" in attrs
         assert "step1" in attrs
         assert "step2" in attrs
-
 
 
 
@@ -739,7 +714,6 @@ class TestTraceContextPropagation:
 # ============================================================================
 # Integration Tests
 # ============================================================================
-
 
 
 

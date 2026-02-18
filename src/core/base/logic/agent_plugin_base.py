@@ -20,18 +20,36 @@ Auto-extracted class from agent.py
 
 from __future__ import annotations
 
-import logging
-from abc import ABC, abstractmethod
-from pathlib import Path
-from typing import Any
 
-from src.core.base.common.models import (AgentHealthCheck, AgentPriority,
-                                         HealthStatus)
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+from src.core.base.common.models import AgentHealthCheck, AgentPriority, HealthStatus
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__: str = VERSION
-
-
 
 
 class AgentPluginBase(ABC):
@@ -44,6 +62,7 @@ class AgentPluginBase(ABC):
         priority: Execution priority.
         config: Plugin configuration.
     """
+
     def __init__(
         self,
         name: str,
@@ -61,6 +80,8 @@ class AgentPluginBase(ABC):
         self.priority: AgentPriority = priority
         self.config: dict[str, Any] = config or {}
         self.logger: logging.Logger = logging.getLogger(f"plugin.{name}")
+
+
     @abstractmethod
     def run(self, file_path: Path, context: dict[str, Any]) -> bool:
         """
@@ -74,10 +95,13 @@ class AgentPluginBase(ABC):
         """
         raise NotImplementedError()
 
+
     def setup(self) -> None:
         """
         Called once when plugin is loaded. Override for initialization.
         """
+
+
     @abstractmethod
     def shutdown(self) -> None:
         """
@@ -91,6 +115,7 @@ class AgentPluginBase(ABC):
         Called once when plugin is unloaded. Override for cleanup.
         """
 
+
     def health_check(self) -> AgentHealthCheck:
         """
         Check plugin health status.
@@ -98,4 +123,3 @@ class AgentPluginBase(ABC):
             AgentHealthCheck: Health check result.
         """
         return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)
-

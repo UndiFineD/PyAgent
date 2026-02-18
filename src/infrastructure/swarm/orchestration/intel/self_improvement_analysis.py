@@ -12,13 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-from typing import Any
+try:
+    import os
+except ImportError:
+    import os
 
-from .mixins.complexity_analysis_mixin import ComplexityAnalysisMixin
-from .mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
-from .mixins.research_analysis_mixin import ResearchAnalysisMixin
-from .mixins.structural_analysis_mixin import StructuralAnalysisMixin
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .mixins.complexity_analysis_mixin import ComplexityAnalysisMixin
+except ImportError:
+    from .mixins.complexity_analysis_mixin import ComplexityAnalysisMixin
+
+try:
+    from .mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
+except ImportError:
+    from .mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
+
+try:
+    from .mixins.research_analysis_mixin import ResearchAnalysisMixin
+except ImportError:
+    from .mixins.research_analysis_mixin import ResearchAnalysisMixin
+
+try:
+    from .mixins.structural_analysis_mixin import StructuralAnalysisMixin
+except ImportError:
+    from .mixins.structural_analysis_mixin import StructuralAnalysisMixin
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.cuda_stream_pool import StreamPriority, StreamState, StreamStats, PooledStream, PooledEvent, EventPool, CudaStreamPool, get_global_stream_pool, reset_global_pool, compute_stream, comm_stream, high_priority_stream
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.cuda_stream_pool import StreamPriority, StreamState, StreamStats, PooledStream, PooledEvent, EventPool, CudaStreamPool, get_global_stream_pool, reset_global_pool, compute_stream, comm_stream, high_priority_stream
+except ImportError:
+    from core.base.logic.core.cuda_stream_pool import StreamPriority, StreamState, StreamStats, PooledStream, PooledEvent, EventPool, CudaStreamPool, get_global_stream_pool, reset_global_pool, compute_stream, comm_stream, high_priority_stream
+
 
 
 def test_streampriority_basic():

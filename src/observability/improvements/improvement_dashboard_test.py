@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.improvement_dashboard import ImprovementDashboard
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.improvement_dashboard import ImprovementDashboard
+except ImportError:
+    from observability.improvements.improvement_dashboard import ImprovementDashboard
+
 
 
 def test_improvementdashboard_basic():

@@ -39,7 +39,6 @@ from .models import (AudioData, AudioFormat, MediaLoadConfig, MediaMetadata,
 
 
 
-
 class AudioLoader(MediaLoader):
     """Load and process audio.
     def __init__(self):

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.test_logger import TestLogger
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.test_logger import TestLogger
+except ImportError:
+    from infrastructure.services.dev.test_utils.test_logger import TestLogger
+
 
 
 def test_testlogger_basic():

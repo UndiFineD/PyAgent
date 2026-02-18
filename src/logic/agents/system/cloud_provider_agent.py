@@ -51,11 +51,19 @@ Supports multi-cloud, hybrid, and distributed cloud operations within the PyAgen
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -91,11 +99,19 @@ resource "{provider}_instance" "pyagent_node" {{"  count         = {node_count}
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

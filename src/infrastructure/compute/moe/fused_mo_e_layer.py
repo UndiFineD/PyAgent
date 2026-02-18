@@ -15,7 +15,11 @@
 
 Fused mo e layer.py module.
 
-from .fused import (AdaptiveMoELayer, DenseDispatcher, ExpertPlacementStrategy,
+try:
+    from .fused import (AdaptiveMoELayer, DenseDispatcher, ExpertPlacementStrategy,
+except ImportError:
+    from .fused import (AdaptiveMoELayer, DenseDispatcher, ExpertPlacementStrategy,
+
                     FusedMoEConfig, FusedMoELayer, FusedMoEMethodBase,
                     FusedMoEParallelConfig, FusedMoEQuantConfig,
                     HierarchicalMoELayer, SparseDispatcher,

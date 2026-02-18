@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.loading.sharded_state_loader import ShardPattern, ShardedTensor, SubtensorFilter, ShardedStateLoader, IncrementalShardLoader, AsyncShardLoader, compute_shard_assignment_rust, validate_shard_shapes_rust
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.loading.sharded_state_loader import ShardPattern, ShardedTensor, SubtensorFilter, ShardedStateLoader, IncrementalShardLoader, AsyncShardLoader, compute_shard_assignment_rust, validate_shard_shapes_rust
+except ImportError:
+    from infrastructure.engine.loading.sharded_state_loader import ShardPattern, ShardedTensor, SubtensorFilter, ShardedStateLoader, IncrementalShardLoader, AsyncShardLoader, compute_shard_assignment_rust, validate_shard_shapes_rust
+
 
 
 def test_shardpattern_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.lock_free_queue import QueueStats, MPMCQueue, SPSCQueue, PriorityItem, PriorityQueue, WorkStealingDeque, BatchingQueue
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.lock_free_queue import QueueStats, MPMCQueue, SPSCQueue, PriorityItem, PriorityQueue, WorkStealingDeque, BatchingQueue
+except ImportError:
+    from core.base.logic.structures.lock_free_queue import QueueStats, MPMCQueue, SPSCQueue, PriorityItem, PriorityQueue, WorkStealingDeque, BatchingQueue
+
 
 
 def test_queuestats_basic():

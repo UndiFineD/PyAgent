@@ -15,15 +15,43 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Utility functions for tensorizer.
-import os
-from pathlib import Path
-from typing import Any, Dict, Union
+try:
+    import os
+except ImportError:
+    import os
 
-import numpy as np
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from .config import CompressionType, TensorizerConfig
-from .reader import TensorizerReader
-from .writer import TensorizerWriter
+try:
+    from typing import Any, Dict, Union
+except ImportError:
+    from typing import Any, Dict, Union
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import CompressionType, TensorizerConfig
+except ImportError:
+    from .config import CompressionType, TensorizerConfig
+
+try:
+    from .reader import TensorizerReader
+except ImportError:
+    from .reader import TensorizerReader
+
+try:
+    from .writer import TensorizerWriter
+except ImportError:
+    from .writer import TensorizerWriter
+
 
 
 def save_model(

@@ -37,7 +37,6 @@ __version__ = VERSION
 
 
 
-
 class ScalingCore(StandardScalingCore):
         Pure logic for handling scaling decisions.
     Supports multi-resource metrics (latency, cpu, mem) and anti-flapping.

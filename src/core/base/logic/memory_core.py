@@ -16,12 +16,36 @@
 """Memory Core - Hybrid graph-vector memory system
 Based on AutoMem patterns: FalkorDB + Qdrant hybrid architecture
 """
-import logging
-import time
-import uuid
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Tuple
-from abc import ABC, abstractmethod
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Dict, List, Optional, Any, Tuple
+except ImportError:
+    from typing import Dict, List, Optional, Any, Tuple
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +83,6 @@ class MemoryRelation:
 
 
 
-
 class MemoryStore(ABC):
     """Abstract base class for memory storage backends"""
     @abstractmethod
@@ -88,7 +111,6 @@ class MemoryStore(ABC):
     async def search_by_tags(
         self, tags: List[str], mode: str = "any", match: str = "exact""    ) -> List[MemoryNode]:
         """Search memories by tags"""pass
-
 
 
 
@@ -139,7 +161,8 @@ class GraphMemoryStore(MemoryStore):
     async def search_similar(
         self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
     ) -> List[Tuple[MemoryNode, float]]:
-        """Graph-based similarity search (simplified)"""# In a real implementation, this would use graph algorithms
+        """Graph-based similarity search (simplified)"""
+# In a real implementation, this would use graph algorithms
         # For now, return all nodes with dummy similarity scores
         results = []
         for node in self.nodes.values():
@@ -213,7 +236,6 @@ class GraphMemoryStore(MemoryStore):
 
 
 
-
 class VectorMemoryStore(MemoryStore):
     """Vector-based memory store for semantic similarity
     Based on AutoMem's Qdrant patterns'    """
@@ -276,7 +298,8 @@ class VectorMemoryStore(MemoryStore):
 
     async def search_by_tags(
         self, tags: List[str], mode: str = "any", match: str = "exact""    ) -> List[MemoryNode]:
-        """Search memories by tags (simplified - delegates to graph store in hybrid system)"""# In a real hybrid system, this would coordinate with graph store
+        """Search memories by tags (simplified - delegates to graph store in hybrid system)"""
+# In a real hybrid system, this would coordinate with graph store
         results = []
 
         for node in self.nodes.values():
@@ -294,7 +317,6 @@ class VectorMemoryStore(MemoryStore):
                         results.append(node)
 
         return results
-
 
 
 
@@ -330,7 +352,8 @@ class HybridMemoryCore:
         logger.info(f"Stored memory: {memory_id}")"        return memory_id
 
     async def recall_memory(self, memory_id: str) -> Optional[MemoryNode]:
-        """Recall a specific memory"""# Try graph store first (canonical source)
+        """Recall a specific memory"""
+# Try graph store first (canonical source)
         return await self.graph_store.get_memory(memory_id)
 
     async def update_memory(self, memory_id: str, updates: Dict[str, Any]) -> bool:

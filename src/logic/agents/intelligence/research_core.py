@@ -53,7 +53,6 @@ __version__ = VERSION
 
 
 
-
 class ResearchCore:
     Pure logic for SGI-Bench DCAP cycle and research ingestion.
 #     Side-effect free and strongly typed.
@@ -117,7 +116,6 @@ except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
 
 
 

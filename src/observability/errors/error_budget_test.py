@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .error_budget import ErrorBudget
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .error_budget import ErrorBudget
+except ImportError:
+    from .error_budget import ErrorBudget
+
 
 
 def test_errorbudget_basic():

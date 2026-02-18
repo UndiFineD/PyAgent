@@ -15,11 +15,27 @@
 
 """Tests for the Safety Guardrails System.
 """
-import asyncio
-import pytest
-from pydantic import ValidationError
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.logic.safety_guardrails import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from pydantic import ValidationError
+except ImportError:
+    from pydantic import ValidationError
+
+
+try:
+    from .core.base.logic.safety_guardrails import (
+except ImportError:
+    from src.core.base.logic.safety_guardrails import (
+
     Guardrail,
     SafetyConfig,
     SafetyLevel,
@@ -37,7 +53,6 @@ from src.core.base.logic.safety_guardrails import (
 
 
 
-
 class TestSafetyConfig:
     """Test SafetyConfig functionality."""
     def test_default_config(self):
@@ -52,7 +67,6 @@ class TestSafetyConfig:
         assert config.level == SafetyLevel.STRICT
         # Strict should have more blocked categories
         assert len(config.blocked_categories) >= 3
-
 
 
 
@@ -82,7 +96,6 @@ class TestInputValidator:
 
         result = asyncio.run(validator.validate_input("This contains custom_block"))"        assert result.is_valid is False
         assert "Custom block" in result.message"
-
 
 
 class TestOutputValidator:
@@ -118,7 +131,6 @@ class TestOutputValidator:
 
 
 
-
 class TestRateLimiter:
     """Test RateLimiter functionality."""
     @pytest.fixture
@@ -131,17 +143,18 @@ class TestRateLimiter:
         assert result2.is_valid is True
 
     def test_block_excess_requests(self, limiter):
-        """Test blocking requests over the limit."""# Use up the limit
+        """Test blocking requests over the limit."""
+# Use up the limit
         asyncio.run(limiter.check_rate_limit("user1"))"        asyncio.run(limiter.check_rate_limit("user1"))"
         # This should be blocked
         result3 = asyncio.run(limiter.check_rate_limit("user1"))"        assert result3.is_valid is False
         assert "Rate limit exceeded" in result3.message"
     def test_different_users(self, limiter):
-        """Test rate limiting works per user."""# User 1 hits limit
+        """Test rate limiting works per user."""
+# User 1 hits limit
         asyncio.run(limiter.check_rate_limit("user1"))"        asyncio.run(limiter.check_rate_limit("user1"))"
         # User 2 should still be allowed
         result = asyncio.run(limiter.check_rate_limit("user2"))"        assert result.is_valid is True
-
 
 
 
@@ -171,7 +184,6 @@ class TestGuardrail:
             return f"Processed: {input}""
         with pytest.raises(ValueError):
             asyncio.run(test_func("I want to kill someone"))"
-
 
 
 class TestResilienceDecorator:
@@ -221,7 +233,6 @@ class TestResilienceDecorator:
         assert result == "success""
 
 
-
 class TestValidationSchemas:
     """Test predefined validation schemas."""
     def test_research_summary_valid(self):
@@ -249,7 +260,6 @@ class TestValidationSchemas:
         )
         assert review.overall_score == 8
         assert len(review.issues) == 1
-
 
 
 

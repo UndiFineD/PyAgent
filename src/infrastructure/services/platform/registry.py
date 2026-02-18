@@ -38,7 +38,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class PlatformRegistry:
     """Registry for platform implementations.
     _platforms: Dict[PlatformType, Type[Platform]] = {}

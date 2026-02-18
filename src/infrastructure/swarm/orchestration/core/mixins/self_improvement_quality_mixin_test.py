@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.core.mixins.self_improvement_quality_mixin import SelfImprovementQualityMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.core.mixins.self_improvement_quality_mixin import SelfImprovementQualityMixin
+except ImportError:
+    from infrastructure.swarm.orchestration.core.mixins.self_improvement_quality_mixin import SelfImprovementQualityMixin
+
 
 
 def test_selfimprovementqualitymixin_basic():

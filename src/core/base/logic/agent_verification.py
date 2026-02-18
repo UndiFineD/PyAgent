@@ -15,15 +15,34 @@
 
 """Verification logic regarding agent outputs.
 Implements Stanford Reseach 'Anchoring Strength' and Keio University 'Self-Verification' paths.'"""
+
+
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 # Phase 317: Modularized Verification Classes
-from .verification.agent_verifier import AgentVerifier
-from .verification.code_health_auditor import CodeHealthAuditor
-from .verification.code_integrity_verifier import CodeIntegrityVerifier
+try:
+    from .verification.agent_verifier import AgentVerifier
+except ImportError:
+    from .verification.agent_verifier import AgentVerifier
+
+try:
+    from .verification.code_health_auditor import CodeHealthAuditor
+except ImportError:
+    from .verification.code_health_auditor import CodeHealthAuditor
+
+try:
+    from .verification.code_integrity_verifier import CodeIntegrityVerifier
+except ImportError:
+    from .verification.code_integrity_verifier import CodeIntegrityVerifier
+
 
 __version__ = VERSION
 
-__all__ = ["AgentVerifier", "CodeHealthAuditor", "CodeIntegrityVerifier"]"
+__all__ = ["AgentVerifier", "CodeHealthAuditor", "CodeIntegrityVerifier"]

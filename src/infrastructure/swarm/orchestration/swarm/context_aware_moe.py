@@ -18,16 +18,31 @@
 Context-Aware MoE Orchestrator (Phase 63 Expansion).
 Optimizes expert routing for long-context tasks by considering KV-cache locality.
 
-import logging
-from typing import Any, Dict
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.infrastructure.engine.kv_cache.context_sharder import \
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+
+try:
+    from .infrastructure.engine.kv_cache.context_sharder import \
+except ImportError:
+    from src.infrastructure.engine.kv_cache.context_sharder import \
+
     ContextShardManager
-from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import \
+try:
+    from .infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import \
+except ImportError:
+    from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import \
+
     CrossModelMoEOrchestrator
 
 logger = logging.getLogger(__name__)
-
 
 
 

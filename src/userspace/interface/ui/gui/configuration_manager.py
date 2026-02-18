@@ -16,13 +16,25 @@
 """Configuration management for PyAgent GUI settings.
 from __future__ import annotations
 
-import os
 
-from src.core.base.common.storage_core import StorageCore
-from src.core.base.lifecycle.version import VERSION
+try:
+    import os
+except ImportError:
+    import os
+
+
+try:
+    from .core.base.common.storage_core import StorageCore
+except ImportError:
+    from src.core.base.common.storage_core import StorageCore
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

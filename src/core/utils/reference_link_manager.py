@@ -17,11 +17,19 @@
 Auto-extracted class from agent_changes.py
 from __future__ import annotations
 
-from src.core.base.common.types.linked_reference import LinkedReference
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.types.linked_reference import LinkedReference
+except ImportError:
+    from src.core.base.common.types.linked_reference import LinkedReference
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

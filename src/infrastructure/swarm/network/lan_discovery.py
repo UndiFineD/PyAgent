@@ -51,7 +51,6 @@ class PeerInfo:
 
 
 
-
 class LANDiscovery:
         Decentralized LAN Discovery for PyAgents.
     Follows an Announce -> Respond -> Register -> Sync cycle.

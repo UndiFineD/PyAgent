@@ -37,7 +37,6 @@ except ImportError:
 
 
 
-
 class MetacognitiveCore:
     "Pure logic core for metacognitive evaluation and intention prediction."
     Phase 14 Rust Optimizations:

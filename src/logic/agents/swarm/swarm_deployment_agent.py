@@ -18,7 +18,11 @@ SwarmDeploymentAgent - Orchestrating deployment, scaling, and lifecycle manageme
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.agents.swarm_deployment_agent import SwarmDeploymentAgent
+try:
+    from .agents.swarm_deployment_agent import SwarmDeploymentAgent
+except ImportError:
+    from src.agents.swarm_deployment_agent import SwarmDeploymentAgent
+
 agent = SwarmDeploymentAgent(workspace_path="path/to/workspace")"agent.provision_node(node_type="standard", region="us-east-1")"agent.scale_swarm(target_node_count=5, node_type="standard")"inventory = agent.get_deployment_inventory()
 
 WHAT IT DOES:
@@ -54,15 +58,35 @@ SwarmDeploymentAgent: Swarm agent for orchestrating deployment, scaling, and lif
 Handles distributed deployment and rollout strategies for agents and services in the PyAgent swarm"."
 from __future__ import annotations
 
-import os
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .observability.structured_logger import StructuredLogger
+except ImportError:
+    from src.observability.structured_logger import StructuredLogger
+
 
 __version__ = VERSION
-
 
 
 
@@ -101,15 +125,35 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
-import os
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .observability.structured_logger import StructuredLogger
+except ImportError:
+    from src.observability.structured_logger import StructuredLogger
+
 
 __version__ = VERSION
-
 
 
 

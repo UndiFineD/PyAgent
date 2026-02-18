@@ -17,6 +17,8 @@
 Core logic for ODBC database operations.
 Implements database connection and query patterns from ADSyncDump-BOF.
 """
+
+
 from __future__ import annotations
 
 import ctypes
@@ -41,7 +43,6 @@ SQL_C_LONG = 4
 
 
 
-
 class DatabaseAccessCore:
     """Core class for ODBC database operations."""
     def __init__(self) -> None:
@@ -54,7 +55,8 @@ class DatabaseAccessCore:
             self.last_error = """        except Exception as e:
             raise RuntimeError(f"ODBC not available: {e}")"
     def connect(self, connection_string: str) -> bool:
-        """Connect to database using ODBC."""try:
+        """Connect to database using ODBC."""
+try:
             # Allocate environment handle
             self.env_handle = ctypes.c_void_p()
             result = self.odbc32.SQLAllocHandle(
@@ -128,7 +130,8 @@ class DatabaseAccessCore:
             return None
 
     def disconnect(self) -> None:
-        """Disconnect from database."""try:
+        """Disconnect from database."""
+try:
             if self.stmt_handle:
                 self.odbc32.SQLFreeHandle(SQL_HANDLE_STMT, self.stmt_handle)
                 self.stmt_handle = None
@@ -148,5 +151,6 @@ class DatabaseAccessCore:
         """Get last error message."""return self.last_error
 
     def _get_error_message(self) -> str:
-        """Get detailed error message from ODBC."""# Simplified - in real implementation, use SQLGetDiagRecW
+        """Get detailed error message from ODBC."""
+# Simplified - in real implementation, use SQLGetDiagRecW
         return "ODBC Error""

@@ -15,15 +15,42 @@
 
 """Test Utils: Common utilities for agent and backend unit tests.
 """
+
+
 from __future__ import annotations
 
-import sys
-from collections.abc import Iterator
-from contextlib import contextmanager
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.services.dev.test_utils import (FileSystemIsolator,
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from collections.abc import Iterator
+except ImportError:
+    from collections.abc import Iterator
+
+try:
+    from contextlib import contextmanager
+except ImportError:
+    from contextlib import contextmanager
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.services.dev.test_utils import (FileSystemIsolator,
+except ImportError:
+    from src.infrastructure.services.dev.test_utils import (FileSystemIsolator,
+
                                                         LogCapturer,
                                                         MockAIBackend,
                                                         ModuleLoader,

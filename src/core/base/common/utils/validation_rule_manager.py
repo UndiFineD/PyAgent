@@ -16,11 +16,29 @@
 """Manager for validation rules.
 (Facade for src.core.base.common.validation_core)
 """
+
+
 from __future__ import annotations
-from typing import Any
-from pathlib import Path
-from src.core.base.common.validation_core import ValidationCore
-from src.core.base.common.models import ValidationRule
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from .core.base.common.validation_core import ValidationCore
+except ImportError:
+    from src.core.base.common.validation_core import ValidationCore
+
+try:
+    from .core.base.common.models import ValidationRule
+except ImportError:
+    from src.core.base.common.models import ValidationRule
 
 
 

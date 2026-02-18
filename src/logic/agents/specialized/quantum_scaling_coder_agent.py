@@ -34,8 +34,15 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Quantum Scaling Coder Agent.
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
 
 
 
@@ -46,8 +53,15 @@ class QuantumScalingCoderAgent(BaseAgent):
         super().__init__(**kwargs)
         self.path = path
         self.version = "VERSION"
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
 
 
 

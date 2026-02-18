@@ -21,7 +21,12 @@ Facade for the modularized implementation in src/infrastructure/conversation/con
 
 from __future__ import annotations
 
-from .context import (AgenticContext, ContextConfig, ContextManager,
+
+try:
+    from .context import (AgenticContext, ContextConfig, ContextManager,
+except ImportError:
+    from .context import (AgenticContext, ContextConfig, ContextManager,
+
                       ContextOrchestrator, ContextSnapshot, ContextState,
                       ConversationContext, ConversationTurn, TokenMetrics,
                       TokenTracker, ToolExecution, ToolExecutionPolicy,

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
+except ImportError:
+    from infrastructure.security.firewall.zero_trust import ZeroTrustFirewall
+
 
 
 def test_zerotrustfirewall_basic():

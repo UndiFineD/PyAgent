@@ -15,17 +15,48 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Writer for tensorizer file format.
-import hashlib
-import struct
-from pathlib import Path
-from typing import BinaryIO, Callable, Dict, List, Optional, Union
+try:
+    import hashlib
+except ImportError:
+    import hashlib
 
-import numpy as np
+try:
+    import struct
+except ImportError:
+    import struct
 
-from .compression import compress_data
-from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import BinaryIO, Callable, Dict, List, Optional, Union
+except ImportError:
+    from typing import BinaryIO, Callable, Dict, List, Optional, Union
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .compression import compress_data
+except ImportError:
+    from .compression import compress_data
+
+try:
+    from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
+except ImportError:
+    from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
+
                      TensorDtype, TensorizerConfig)
-from .metadata import TensorMetadata
+try:
+    from .metadata import TensorMetadata
+except ImportError:
+    from .metadata import TensorMetadata
 
 
 

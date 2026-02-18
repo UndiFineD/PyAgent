@@ -31,7 +31,6 @@ except ImportError:
 __version__ = VERSION
 
 
-
 class
 class ContextCompressorCore:
     """

@@ -31,7 +31,6 @@ import numpy as np
 
 
 
-
 class TTSEngine(ABC):
     """Abstract base class for TTS engines."""
 
@@ -59,7 +58,6 @@ class TTSEngine(ABC):
     def get_languages(self) -> list[str]:
         """Get available languages."""
         return []
-
 
 
 
@@ -191,7 +189,6 @@ class CoquiTTSEngine(TTSEngine):
             return self._tts.languages or []
 
         return ["en"]
-
 
 
 

@@ -18,11 +18,26 @@ Selectors.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-import random
-from abc import ABC, abstractmethod
-from typing import List, Optional
+try:
+    import random
+except ImportError:
+    import random
 
-from .config import InstanceInfo, ScheduledRequest
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import List, Optional
+except ImportError:
+    from typing import List, Optional
+
+
+try:
+    from .config import InstanceInfo, ScheduledRequest
+except ImportError:
+    from .config import InstanceInfo, ScheduledRequest
 
 
 
@@ -36,7 +51,6 @@ class InstanceSelector(ABC):
         request: ScheduledRequest,
     ) -> Optional[InstanceInfo]:
         """Select an instance for the request.        raise NotImplementedError
-
 
 
 
@@ -63,7 +77,6 @@ class RoundRobinSelector(InstanceSelector):
 
 
 
-
 class LeastLoadedSelector(InstanceSelector):
     """Select least loaded instance.
     def select(
@@ -79,7 +92,6 @@ class LeastLoadedSelector(InstanceSelector):
 
 
 
-
 class RandomSelector(InstanceSelector):
     """Random instance selection.
     def select(
@@ -92,7 +104,6 @@ class RandomSelector(InstanceSelector):
             return None
 
         return random.choice(healthy)
-
 
 
 

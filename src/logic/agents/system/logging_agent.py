@@ -50,7 +50,6 @@ __version__ = VERSION
 
 
 
-
 class LoggingAgent(BaseAgent):
 """"Manages distributed fleet logs and integrates with external aggregators.
     def __init__(self, file_path: str) -> None:
@@ -146,7 +145,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

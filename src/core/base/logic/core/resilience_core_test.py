@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from src.core.base.common.resilience_core import ResilienceCore
+try:
+    from .core.base.common.resilience_core import ResilienceCore
+except ImportError:
+    from src.core.base.common.resilience_core import ResilienceCore
+
 
 
 def test_retry_uses_injected_sleep(monkeypatch):

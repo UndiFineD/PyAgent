@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.agent_file_manager import AgentFileManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.agent_file_manager import AgentFileManager
+except ImportError:
+    from core.base.common.utils.agent_file_manager import AgentFileManager
+
 
 
 def test_agentfilemanager_basic():

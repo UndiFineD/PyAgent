@@ -58,16 +58,32 @@ lifecycle management.
 
 
 from __future__ import annotations
-import logging
-import asyncio
-from typing import TYPE_CHECKING
-from src.core.memory.semantic_decay import SynapticDecay
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+try:
+    from .core.memory.semantic_decay import SynapticDecay
+except ImportError:
+    from src.core.memory.semantic_decay import SynapticDecay
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 logger = logging.getLogger(__name__)
-
 
 
 

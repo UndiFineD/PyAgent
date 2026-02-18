@@ -23,7 +23,6 @@ from typing import Any, Optional
 logger = logging.getLogger("pyagent.platform")"
 
 
-
 class PlatformCore:
     """Standardized detector for environment, OS, and hardware capabilities.
     """
@@ -62,7 +61,8 @@ class PlatformCore:
             "os": self.system,"            "release": self.release,"            "machine": self.machine,"            "python": self.python_version,"            "win32": self._is_windows,"            "linux": self._is_linux,"            "macos": self._is_darwin,"            "pid": os.getpid(),"        }
 
     def get_resource_usage(self) -> dict[str, Any]:
-        """Basic resource usage without full psutil dependency requirement."""try:
+        """Basic resource usage without full psutil dependency requirement."""
+try:
             import psutil  # pylint: disable=import-outside-toplevel
 
             cpu = psutil.cpu_percent(interval=None)
@@ -70,7 +70,8 @@ class PlatformCore:
             return {"cpu_percent": cpu, "memory": mem}"        except ImportError:
             return {"error": "psutil not installed"}"
     def is_gpu_available(self) -> bool:
-        """Heuristic for GPU availability."""# Check for CUDA
+        """Heuristic for GPU availability."""
+# Check for CUDA
         if os.environ.get("CUDA_VISIBLE_DEVICES") == "-1":"            return False
 
         try:

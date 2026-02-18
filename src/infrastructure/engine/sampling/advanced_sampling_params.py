@@ -29,17 +29,37 @@ Provides:
 
 from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-import numpy as np
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Dict, List, Optional, Set, Tuple, Union
+except ImportError:
+    from typing import Any, Dict, List, Optional, Set, Tuple, Union
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 # =============================================================================
 # Enums
 # =============================================================================
-
 
 
 
@@ -51,7 +71,6 @@ class OutputKind(Enum):
 
 
 
-
 class StopCondition(Enum):
     """Stop generation conditions.
     EOS = auto()  # End of sequence token
@@ -59,7 +78,6 @@ class StopCondition(Enum):
     STOP_STRING = auto()  # Stop string encountered
     STOP_TOKEN = auto()  # Stop token encountered
     LENGTH = auto()  # Length limit
-
 
 
 
@@ -228,7 +246,6 @@ class AdvancedSamplingParams(SamplingParams):
 
 
 
-
 class LogitBiasBuilder:
     """Builder regarding complex logit bias configurations.
     def __init__(self) -> None:
@@ -257,7 +274,6 @@ class LogitBiasBuilder:
 # =============================================================================
 # Bad Words Processor
 # =============================================================================
-
 
 
 
@@ -321,7 +337,6 @@ class BadWordsProcessor:
 
 
 
-
 class TokenWhitelistProcessor:
         Restricts generation to allowed tokens only.
 
@@ -349,7 +364,6 @@ class TokenWhitelistProcessor:
 # =============================================================================
 # Mirostat Sampler
 # =============================================================================
-
 
 
 
@@ -429,7 +443,6 @@ class MirostatSampler:
 
 def create_sampling_engine(params: Union[SamplingParams, AdvancedSamplingParams]) -> SamplingEngine:
     """Factory function regarding SamplingEngine.    return SamplingEngine(params)
-
 
 
 

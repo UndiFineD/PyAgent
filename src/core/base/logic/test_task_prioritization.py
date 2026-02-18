@@ -15,12 +15,32 @@
 
 """Tests for the Task Prioritization System.
 """
-import asyncio
-import pytest
-import pytest_asyncio
-from datetime import datetime, timedelta
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.logic.task_prioritization import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import pytest_asyncio
+except ImportError:
+    import pytest_asyncio
+
+try:
+    from datetime import datetime, timedelta
+except ImportError:
+    from datetime import datetime, timedelta
+
+
+try:
+    from .core.base.logic.task_prioritization import (
+except ImportError:
+    from src.core.base.logic.task_prioritization import (
+
     TaskManager,
     TaskScheduler,
     Task,
@@ -31,7 +51,6 @@ from src.core.base.logic.task_prioritization import (
     create_task,
     create_agent_capability
 )
-
 
 
 class TestTask:
@@ -75,7 +94,6 @@ class TestTask:
             title="Dependent Task","            description="Depends on others","            type=TaskType.CODE_GENERATION,
             dependencies=["task-1", "task-2"]"        )
         assert "task-1" in task.dependencies"        assert len(task.dependencies) == 2
-
 
 
 class TestAgentCapability:
@@ -125,7 +143,6 @@ class TestAgentCapability:
         )
         score = agent.suitability_score(research_task)
         assert score == 0.0
-
 
 
 class TestTaskManager:
@@ -235,7 +252,6 @@ class TestTaskScheduler:
         ]
         assert len(assigned_tasks) >= 1
         await scheduler.stop()
-
 
 
 class TestConvenienceFunctions:

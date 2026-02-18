@@ -72,7 +72,6 @@ class APIEndpoint:
 
 
 
-
 class StatsAPIServer:
     """Stats API endpoint for programmatic access.
     def __init__(self, stats_agent: Any = None) -> None:

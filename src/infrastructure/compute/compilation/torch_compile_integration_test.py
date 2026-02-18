@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.compilation.torch_compile_integration import CompileMode, CompileBackend, CompileConfig, CompileStats, CompilerInterface, TorchCompiler, CompilationCounter, IncrementalCompiler, ProfileGuidedCompiler, compile_fn, set_compile_enabled, get_compile_config, with_compiler_context
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.compilation.torch_compile_integration import CompileMode, CompileBackend, CompileConfig, CompileStats, CompilerInterface, TorchCompiler, CompilationCounter, IncrementalCompiler, ProfileGuidedCompiler, compile_fn, set_compile_enabled, get_compile_config, with_compiler_context
+except ImportError:
+    from infrastructure.compute.compilation.torch_compile_integration import CompileMode, CompileBackend, CompileConfig, CompileStats, CompilerInterface, TorchCompiler, CompilationCounter, IncrementalCompiler, ProfileGuidedCompiler, compile_fn, set_compile_enabled, get_compile_config, with_compiler_context
+
 
 
 def test_compilemode_basic():

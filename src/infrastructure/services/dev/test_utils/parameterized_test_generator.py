@@ -15,17 +15,35 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections.abc import Callable
 
-from .parameterized_test_case import ParameterizedTestCase
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .parameterized_test_case import ParameterizedTestCase
+except ImportError:
+    from .parameterized_test_case import ParameterizedTestCase
+
 
 __version__ = VERSION
-
 
 
 

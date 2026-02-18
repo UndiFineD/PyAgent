@@ -15,10 +15,25 @@
 
 """Integration test for new core services: JobQueue, MultimodalAIService, and TTSService.
 """
-import time
-from src.core.base.logic.job_queue import JobQueue
-from src.core.base.logic.multimodal_ai_service import MultimodalAIService, CloudflareProvider, AIServiceConfig
-from src.core.base.logic.tts_service import TTSService
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from .core.base.logic.job_queue import JobQueue
+except ImportError:
+    from src.core.base.logic.job_queue import JobQueue
+
+try:
+    from .core.base.logic.multimodal_ai_service import MultimodalAIService, CloudflareProvider, AIServiceConfig
+except ImportError:
+    from src.core.base.logic.multimodal_ai_service import MultimodalAIService, CloudflareProvider, AIServiceConfig
+
+try:
+    from .core.base.logic.tts_service import TTSService
+except ImportError:
+    from src.core.base.logic.tts_service import TTSService
 
 
 

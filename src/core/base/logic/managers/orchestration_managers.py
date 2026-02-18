@@ -16,11 +16,21 @@
 """Orchestration Managers regarding multi-agent workflows.
 (Facade regarding src.core.base.common.orchestration_core)
 """
+
+
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.orchestration_core import ABTest, QualityScorer
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.orchestration_core import ABTest, QualityScorer
+except ImportError:
+    from src.core.base.common.orchestration_core import ABTest, QualityScorer
 
 
 
@@ -33,8 +43,8 @@ class AgentComposer:
         self._core = OrchestrationCore()
 
     def add_agent(self, agent: Any) -> None:
-        """Add an agent to the composition."""self._core.add_agent(agent)
-
+        """Add an agent to the composition."""
+        self._core.add_agent(agent)
 
 
 
@@ -46,8 +56,9 @@ class ModelSelector:
         self._core = ModelSelectorCore()
 
     def select(self, agent_type: str) -> str:
-        """Select a model regarding the given agent type."""_ = agent_type
+        """Select a model regarding the given agent type."""
+        _ = agent_type
         # Note: ModelSelectorCore might need select method or similar
-        return "default""
+        return "default"
 
-__all__ = ["ABTest", "AgentComposer", "ModelSelector", "QualityScorer"]"
+__all__ = ["ABTest", "AgentComposer", "ModelSelector", "QualityScorer"]

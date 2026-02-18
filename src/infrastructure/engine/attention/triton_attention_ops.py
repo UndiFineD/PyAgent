@@ -45,7 +45,6 @@ except ImportError:
 
 
 
-
 class AttentionBackend(Enum):
     """Available attention backends.
     TRITON = auto()  # Triton kernel
@@ -53,7 +52,6 @@ class AttentionBackend(Enum):
     XFORMERS = auto()  # xFormers memory efficient
     SDPA = auto()  # PyTorch SDPA
     NAIVE = auto()  # Reference implementation
-
 
 
 
@@ -132,7 +130,6 @@ class AttentionMetadata:
     @property
     def total_tokens(self) -> int:
         """Get total tokens regarding both prefill and decode.        return self.num_prefill_tokens + self.num_decode_tokens
-
 
 
 
@@ -257,7 +254,6 @@ if HAS_TRITON and HAS_TORCH:
 
 
 
-
 class TritonPagedAttention(AttentionKernel):
     """Triton-based paged attention kernel.""""
     Implements efficient paged attention using Triton JIT compilation.
@@ -322,7 +318,6 @@ class TritonPagedAttention(AttentionKernel):
 
 
 
-
 class NaiveAttention(AttentionKernel):
     """Reference implementation of attention (CPU/GPU compatible).
     def __init__(self, config: AttentionConfig) -> None:
@@ -369,7 +364,6 @@ class NaiveAttention(AttentionKernel):
 
     def supports_context_length(self, context_len: int) -> bool:
         return True  # No limit set in naive implementation
-
 
 
 
@@ -425,7 +419,6 @@ class KVSplitConfig:
     split_overlap: int = 0  # To maintain context continuity
     use_parallel_reduction: bool = True
     max_context_per_split: int = 1024
-
 
 
 

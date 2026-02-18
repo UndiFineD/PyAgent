@@ -14,17 +14,44 @@
 
 
 # "Engine for persistent episodic memory of agent actions and outcomes."# from __future__ import annotations
-from pathlib import Path
-from typing import Any
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.engines.memory_core import MemoryCore
-from .memory_mixins.memory_storage_mixin import MemoryStorageMixin
-from .memory_mixins.memory_episode_mixin import MemoryEpisodeMixin
-from .memory_mixins.memory_search_mixin import MemorySearchMixin
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.engines.memory_core import MemoryCore
+except ImportError:
+    from src.logic.agents.cognitive.context.engines.memory_core import MemoryCore
+
+try:
+    from .memory_mixins.memory_storage_mixin import MemoryStorageMixin
+except ImportError:
+    from .memory_mixins.memory_storage_mixin import MemoryStorageMixin
+
+try:
+    from .memory_mixins.memory_episode_mixin import MemoryEpisodeMixin
+except ImportError:
+    from .memory_mixins.memory_episode_mixin import MemoryEpisodeMixin
+
+try:
+    from .memory_mixins.memory_search_mixin import MemorySearchMixin
+except ImportError:
+    from .memory_mixins.memory_search_mixin import MemorySearchMixin
+
 
 __version__ = VERSION
-
 
 
 

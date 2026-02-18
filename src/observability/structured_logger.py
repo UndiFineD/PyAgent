@@ -71,7 +71,6 @@ __version__: str = VERSION
 
 
 
-
 class StructuredLogger:
     """JSON logger for PyAgent swarm observability.""""    Phase 277: Added log hygiene with automated GZIP compression.
     

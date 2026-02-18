@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.tool_integration import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.tool_integration import *
+except ImportError:
+    from observability.improvements.tool_integration import *
+

@@ -15,7 +15,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Facade for Engine Core modular implementation.
-from .core import (
+try:
+    from .core import (
+except ImportError:
+    from .core import (
+
     EngineCore,
     EngineCoreOutput,
     EngineCoreOutputs,

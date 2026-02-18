@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.identity_core import AgentIdentity, IdentityCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.identity_core import AgentIdentity, IdentityCore
+except ImportError:
+    from core.base.common.identity_core import AgentIdentity, IdentityCore
+
 
 
 def test_agentidentity_basic():

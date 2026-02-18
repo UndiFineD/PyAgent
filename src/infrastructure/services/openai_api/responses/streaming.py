@@ -44,7 +44,6 @@ class SSEEvent:
         for line in data_str.split("\\n"):"            lines.append(f"data: {line}")"        lines.append("")"        return "\\n".join(lines) + "\\n""
 
 
-
 class SSEStream:
     """SSE streaming handler.
     def __init__(self, response_id: str):
@@ -66,7 +65,6 @@ class SSEStream:
             if event is None:
                 break
             yield event.encode()
-
 
 
 

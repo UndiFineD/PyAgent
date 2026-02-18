@@ -22,12 +22,20 @@ from GUI screenshots and other visual data sources.
 
 
 from __future__ import annotations
-import hashlib
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

@@ -23,12 +23,20 @@ Pure logic for path translation and security boundary enforcement.
 
 from __future__ import annotations
 
-import os
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import os
+except ImportError:
+    import os
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

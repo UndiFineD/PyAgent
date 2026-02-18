@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-import numpy as np
-from .models import FSMState, FSMTransitionTable, TokenMask
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+try:
+    from .models import FSMState, FSMTransitionTable, TokenMask
+except ImportError:
+    from .models import FSMState, FSMTransitionTable, TokenMask
+
 
 
 def test_fsm_state_transitions():

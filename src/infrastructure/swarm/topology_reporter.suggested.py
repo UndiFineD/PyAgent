@@ -32,7 +32,6 @@ __version__ = VERSION
 
 
 
-
 class SwarmTopologyReporter:
         Generates D3.js compatible topology data for 3D Swarm Viewer.
     Captures node relationships, trust scores, and communication latency.

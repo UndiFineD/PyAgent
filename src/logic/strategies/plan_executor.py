@@ -51,11 +51,28 @@ Strategies Module: Unified interface for agent decision-making strategies.
 
 from __future__ import annotations
 
-import sys
-from collections.abc import Awaitable, Callable
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from collections.abc import Awaitable, Callable
+except ImportError:
+    from collections.abc import Awaitable, Callable
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent

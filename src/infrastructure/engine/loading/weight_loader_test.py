@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.loading.weight_loader import WeightFormat, WeightSpec, LoadStats, AtomicWriter, WeightLoader, SafetensorsLoader, MultiThreadWeightLoader, FastSafetensorsLoader, StreamingWeightLoader, GGUFLoader, atomic_writer, detect_weight_format, get_file_lock_path, compute_weight_hash_rust, validate_weight_shapes_rust, filter_shared_tensors
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.loading.weight_loader import WeightFormat, WeightSpec, LoadStats, AtomicWriter, WeightLoader, SafetensorsLoader, MultiThreadWeightLoader, FastSafetensorsLoader, StreamingWeightLoader, GGUFLoader, atomic_writer, detect_weight_format, get_file_lock_path, compute_weight_hash_rust, validate_weight_shapes_rust, filter_shared_tensors
+except ImportError:
+    from infrastructure.engine.loading.weight_loader import WeightFormat, WeightSpec, LoadStats, AtomicWriter, WeightLoader, SafetensorsLoader, MultiThreadWeightLoader, FastSafetensorsLoader, StreamingWeightLoader, GGUFLoader, atomic_writer, detect_weight_format, get_file_lock_path, compute_weight_hash_rust, validate_weight_shapes_rust, filter_shared_tensors
+
 
 
 def test_weightformat_basic():

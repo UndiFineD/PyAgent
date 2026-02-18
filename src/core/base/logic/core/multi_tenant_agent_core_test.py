@@ -17,16 +17,27 @@
 
 Tests multi-tenant agent orchestration functionality based on AgentCloud patterns.
 """
-import pytest
-from datetime import datetime
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.logic.core.multi_tenant_agent_core import (
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+
+try:
+    from .core.base.logic.core.multi_tenant_agent_core import (
+except ImportError:
+    from src.core.base.logic.core.multi_tenant_agent_core import (
+
     MultiTenantAgentCore,
     ProcessType,
     AgentStatus,
     TaskStatus
 )
-
 
 
 

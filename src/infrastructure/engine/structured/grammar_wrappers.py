@@ -29,7 +29,6 @@ from .grammar_matcher import GrammarMatcher
 
 
 
-
 class XGrammarGrammar:
         XGrammar grammar wrapper.
 
@@ -63,7 +62,6 @@ class XGrammarGrammar:
 
     def jump_forward_string(self) -> Optional[str]:
         """Get jump-forward string if available.        return self._jump_forward_string
-
 
 
 

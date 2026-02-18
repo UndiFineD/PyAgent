@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .analytics_engine import AnalyticsEngine
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .analytics_engine import AnalyticsEngine
+except ImportError:
+    from .analytics_engine import AnalyticsEngine
+
 
 
 def test_analyticsengine_basic():

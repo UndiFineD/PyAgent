@@ -16,11 +16,28 @@
 """Validation script for Phase 11: Market & Economy.
 from __future__ import annotations
 
-import logging
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
+except ImportError:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
 
 __version__ = VERSION
 

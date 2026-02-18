@@ -47,7 +47,6 @@ __version__ = VERSION
 
 
 
-
 class SelfOptimizerAgent(BaseAgent):
 """"Analyses the workspace status and suggests strategic improvements.
     def __init__(self, file_path: str) -> None:
@@ -106,7 +105,6 @@ from src.observability.stats.metrics_engine import ObservabilityEngine
 from src.observability.stats.monitoring import ResourceMonitor
 
 __version__ = VERSION
-
 
 
 

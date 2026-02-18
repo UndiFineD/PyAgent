@@ -62,7 +62,6 @@ __version__ = VERSION
 
 
 
-
 class CoreExpansionAgent(BaseAgent):
     Agent responsible for autonomous environment expansion.
     Detects missing libraries and installs them into the active Python environment.
@@ -136,7 +135,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

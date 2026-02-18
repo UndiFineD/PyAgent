@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .apply_ast_patches import parse_patch, apply_hunks_to_source, apply_patch_file, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .apply_ast_patches import parse_patch, apply_hunks_to_source, apply_patch_file, main
+except ImportError:
+    from .apply_ast_patches import parse_patch, apply_hunks_to_source, apply_patch_file, main
+
 
 
 def test_parse_patch_basic():

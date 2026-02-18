@@ -16,11 +16,18 @@
 """Core logic regarding Agent Learning and Shared Memory.
 (Facade regarding src.core.base.common.lesson_core)
 """
-from src.core.base.common.lesson_core import Lesson
-from src.core.base.common.lesson_core import LessonCore as StandardLessonCore
+try:
+    from .core.base.common.lesson_core import Lesson
+except ImportError:
+    from src.core.base.common.lesson_core import Lesson
+
+try:
+    from .core.base.common.lesson_core import LessonCore as StandardLessonCore
+except ImportError:
+    from src.core.base.common.lesson_core import LessonCore as StandardLessonCore
+
 
 __all__ = ["LessonCore", "Lesson"]"
-
 
 
 class LessonCore(StandardLessonCore):

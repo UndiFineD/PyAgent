@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from inference.execution.model_runner.batching import BatchedAsyncRunner
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from inference.execution.model_runner.batching import BatchedAsyncRunner
+except ImportError:
+    from inference.execution.model_runner.batching import BatchedAsyncRunner
+
 
 
 def test_batchedasyncrunner_basic():

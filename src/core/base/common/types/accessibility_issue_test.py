@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.accessibility_issue import AccessibilityIssue
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.accessibility_issue import AccessibilityIssue
+except ImportError:
+    from core.base.common.types.accessibility_issue import AccessibilityIssue
+
 
 
 def test_accessibilityissue_basic():

@@ -18,12 +18,32 @@
 latent reasoning consistency across language boundaries.
 Ref: ArXiv 2601.02996 (Latent Reasoning in LLMs)
 
-import logging
-from typing import Any
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import create_main_function, as_tool
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.common.base_utilities import create_main_function, as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function, as_tool
+
 
 __version__ = VERSION
 

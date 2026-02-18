@@ -23,7 +23,6 @@ from .enums import EvictionPolicy
 
 
 
-
 class FreeBlockQueue:
         Doubly-linked list queue for free blocks with O(1) operations.
     Maintains LRU order for eviction decisions.
@@ -85,7 +84,6 @@ class FreeBlockQueue:
 
 
 
-
 class BlockHashCache:
     """Cache mapping block hashes to blocks for prefix caching.
     def __init__(self) -> None:
@@ -124,7 +122,6 @@ class BlockHashCache:
 
     def __len__(self) -> int:
         return len(self._cache)
-
 
 
 

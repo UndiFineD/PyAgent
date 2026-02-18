@@ -39,12 +39,20 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
 
-from .bulk_operation_result import BulkOperationResult
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .bulk_operation_result import BulkOperationResult
+except ImportError:
+    from .bulk_operation_result import BulkOperationResult
+
 
 __version__ = VERSION
-
 
 
 

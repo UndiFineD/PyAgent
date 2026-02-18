@@ -17,13 +17,29 @@ N-gram Proposer regarding Speculative Decoding.
 
 Refactored to modular package structure regarding Phase 317.
 
-from src.infrastructure.engine.sampling.ngram.factory import \
+try:
+    from .infrastructure.engine.sampling.ngram.factory import \
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.factory import \
+
     create_ngram_proposer
-from src.infrastructure.engine.sampling.ngram.index import (SuffixIndex,
+try:
+    from .infrastructure.engine.sampling.ngram.index import (SuffixIndex,
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.index import (SuffixIndex,
+
                                                             SuffixTreeProposer)
-from src.infrastructure.engine.sampling.ngram.proposer import (
+try:
+    from .infrastructure.engine.sampling.ngram.proposer import (
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.proposer import (
+
     AdaptiveNgramProposer, NgramProposer)
-from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+try:
+    from .infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+
                                                             NgramConfig,
                                                             ProposalStats)
 

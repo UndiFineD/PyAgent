@@ -22,7 +22,6 @@ from typing import Any
 
 
 
-
 class EcosystemDiagnosticsAgent:
     """Agent for running high-level ecosystem diagnostics and health checks.
     def __init__(self, root_path: str = ".") -> None:"        self.root_path = Path(root_path)

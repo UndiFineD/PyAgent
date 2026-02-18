@@ -24,7 +24,6 @@ from src.infrastructure.swarm.fleet.agent_registry import LazyAgentMap
 
 
 
-
 class OrchestrationMixin:
     """Handles registry, tools, strategies, and distributed logging."""
     def __init__(self, **_kwargs: Any) -> None:
@@ -150,7 +149,8 @@ class OrchestrationMixin:
 
     @staticmethod
     def get_backend_status() -> dict[str, Any]:
-        """Get the status of the execution backend."""try:
+        """Get the status of the execution backend."""
+try:
             # pylint: disable=import-outside-toplevel
             from src.infrastructure import backend as ab
         except ImportError:
@@ -159,7 +159,8 @@ class OrchestrationMixin:
 
     @staticmethod
     def describe_backends() -> str:
-        """Return a description of available backends."""try:
+        """Return a description of available backends."""
+try:
             # pylint: disable=import-outside-toplevel
             from src.infrastructure import backend as ab
         except ImportError:
@@ -221,7 +222,8 @@ class OrchestrationMixin:
 
     async def _try_registry_delegation(self, agent_type: str, prompt: str,
                                        target_file: str | None, context: Any | None) -> str | None:
-        """Attempt delegation via AgentRegistry fallback."""try:
+        """Attempt delegation via AgentRegistry fallback."""
+try:
             # pylint: disable=import-outside-toplevel
             from src.core.base.lifecycle.agent_core import BaseCore
             from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry

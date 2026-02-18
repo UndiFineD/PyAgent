@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.job_manager_core import JobManagerCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.job_manager_core import JobManagerCore
+except ImportError:
+    from core.base.job_manager_core import JobManagerCore
+
 
 
 def test_jobmanagercore_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.request_context import RequestContext
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.request_context import RequestContext
+except ImportError:
+    from infrastructure.compute.backend.request_context import RequestContext
+
 
 
 def test_requestcontext_basic():

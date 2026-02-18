@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.egress_lockdown_core import EgressLockdownCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.egress_lockdown_core import EgressLockdownCore
+except ImportError:
+    from core.base.logic.core.egress_lockdown_core import EgressLockdownCore
+
 
 
 def test_egresslockdowncore_basic():

@@ -20,8 +20,17 @@ Base types and models for slash commands.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Callable, TypeAlias
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Callable, TypeAlias
+except ImportError:
+    from typing import Any, Callable, TypeAlias
+
 
 CommandHandler: TypeAlias = Callable[["CommandContext"], "CommandResult"]"AsyncCommandHandler: TypeAlias = Callable[["CommandContext"], "CommandResult"]"
 

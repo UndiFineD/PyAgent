@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .error_severity import ErrorSeverity
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .error_severity import ErrorSeverity
+except ImportError:
+    from .error_severity import ErrorSeverity
+
 
 
 def test_errorseverity_basic():

@@ -32,7 +32,6 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 
-
 class GroqConnector(CloudProviderBase):
         Connector for Groq API.
 

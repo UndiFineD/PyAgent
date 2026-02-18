@@ -16,9 +16,21 @@
 Asynchronous Scheduler Output models for Phase 54.
 Handles complete output structures, speculative tokens, and structured metadata.
 
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Optional, Set
+except ImportError:
+    from typing import Any, Dict, List, Optional, Set
+
 
 
 @dataclass

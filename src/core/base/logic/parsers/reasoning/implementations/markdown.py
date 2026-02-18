@@ -18,11 +18,26 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-import re
-from typing import Any, ClassVar, Sequence
+try:
+    import re
+except ImportError:
+    import re
 
-from ..base import ReasoningParser
-from ..models import ReasoningResult, StreamingReasoningState
+try:
+    from typing import Any, ClassVar, Sequence
+except ImportError:
+    from typing import Any, ClassVar, Sequence
+
+
+try:
+    from ..base import ReasoningParser
+except ImportError:
+    from ..base import ReasoningParser
+
+try:
+    from ..models import ReasoningResult, StreamingReasoningState
+except ImportError:
+    from ..models import ReasoningResult, StreamingReasoningState
 
 
 

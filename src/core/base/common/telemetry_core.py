@@ -37,7 +37,6 @@ logger = logging.getLogger("pyagent.telemetry")
 
 
 
-
 class MetricType(Enum):
     """Enumeration of supported metric types."""
     COUNTER = "counter"

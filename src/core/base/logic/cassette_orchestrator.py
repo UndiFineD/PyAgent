@@ -16,9 +16,20 @@
 """Synaptic Modularization: The Cassette Orchestrator regarding pluggable logic blocks.
 Inspired by the Unified Algorithmic Cassette Model (Grokkit).
 """
-import abc
-from typing import Any, Dict, Optional
-from src.core.base.common.models.communication_models import CascadeContext
+try:
+    import abc
+except ImportError:
+    import abc
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 
@@ -36,7 +47,6 @@ class BaseLogicCassette(abc.ABC):
 
     async def initialize(self) -> None:
         """Optional initialization logic regarding hardware or state."""self.is_initialized = True
-
 
 
 

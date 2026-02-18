@@ -67,7 +67,6 @@ __version__ = VERSION
 
 
 
-
 class AgentChain:
     """Chain multiple agents for sequential execution.""""
     Allows output of one agent to be used as input to the next.

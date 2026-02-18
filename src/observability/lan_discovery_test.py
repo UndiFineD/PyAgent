@@ -15,7 +15,11 @@
 
 Test script for LANDiscovery network functionality.
 
-from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
+try:
+    from .infrastructure.swarm.network.lan_discovery import LANDiscovery
+except ImportError:
+    from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
+
 
 def test_network_detection():
     discovery = LANDiscovery(

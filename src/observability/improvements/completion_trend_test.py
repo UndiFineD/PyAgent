@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .completion_trend import CompletionTrend, CompletionTrend
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .completion_trend import CompletionTrend, CompletionTrend
+except ImportError:
+    from .completion_trend import CompletionTrend, CompletionTrend
+
 
 
 def test_completiontrend_basic():

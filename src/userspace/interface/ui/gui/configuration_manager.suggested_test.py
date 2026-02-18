@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .configuration_manager.suggested import ConfigurationManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .configuration_manager.suggested import ConfigurationManager
+except ImportError:
+    from .configuration_manager.suggested import ConfigurationManager
+
 
 
 def test_configurationmanager_basic():

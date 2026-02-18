@@ -13,10 +13,25 @@
 # limitations under the License.
 
 
-import base64
-import uuid
-from typing import Dict, Any, List, Optional
-from urllib.parse import quote
+try:
+    import base64
+except ImportError:
+    import base64
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Dict, Any, List, Optional
+except ImportError:
+    from typing import Dict, Any, List, Optional
+
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urllib.parse import quote
 
 
 

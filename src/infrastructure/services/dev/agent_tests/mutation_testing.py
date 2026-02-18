@@ -18,15 +18,31 @@
 Mutation testing functionality.
 from __future__ import annotations
 
-import hashlib
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import hashlib
+except ImportError:
+    import hashlib
 
-from .enums import MutationOperator
-from .models import Mutation
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .enums import MutationOperator
+except ImportError:
+    from .enums import MutationOperator
+
+try:
+    from .models import Mutation
+except ImportError:
+    from .models import Mutation
+
 
 __version__ = VERSION
-
 
 
 
@@ -98,7 +114,6 @@ class MutationTester:
                     f"- Line {mut.line_number}: {mut.operator.value} ""                    f"(`{mut.original_code.strip()}` -> `{mut.mutated_code.strip()}`)""                )
 
         return "\\n".join(report)"
-
 
 
 class MutationRunner:

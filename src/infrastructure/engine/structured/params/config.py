@@ -17,13 +17,29 @@
 Config.py module.
 """
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .constraints import (ChoiceConstraint, GrammarConstraint,
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .constraints import (ChoiceConstraint, GrammarConstraint,
+except ImportError:
+    from .constraints import (ChoiceConstraint, GrammarConstraint,
+
                           JsonSchemaConstraint, OutputConstraint,
                           RegexConstraint)
-from .enums import (GuidedDecodingBackend, StructuredOutputType,
+try:
+    from .enums import (GuidedDecodingBackend, StructuredOutputType,
+except ImportError:
+    from .enums import (GuidedDecodingBackend, StructuredOutputType,
+
                     WhitespacePattern)
 
 

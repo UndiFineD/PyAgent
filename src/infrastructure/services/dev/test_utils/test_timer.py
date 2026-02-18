@@ -15,14 +15,24 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
-import time
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

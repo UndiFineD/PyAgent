@@ -15,7 +15,10 @@
 
 Tests for AnomalyDetectionAgent.
 
-from src.logic.agents.security.anomaly_detection_agent import AnomalyDetectionAgent
+try:
+    from .logic.agents.security.anomaly_detection_agent import AnomalyDetectionAgent
+except ImportError:
+    from src.logic.agents.security.anomaly_detection_agent import AnomalyDetectionAgent
 
 
 

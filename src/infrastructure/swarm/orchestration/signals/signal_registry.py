@@ -36,7 +36,6 @@ __version__ = VERSION
 
 
 
-
 class SignalRegistry:
         SignalRegistry recovered after Copilot CLI deprecation event.
     Standardized TODO Placeholder for future re-implementation.

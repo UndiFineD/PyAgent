@@ -15,15 +15,31 @@
 # -*- coding: utf-8 -*-
 """Test classes from test_agent_test_utils.py - core module.
 from __future__ import annotations
-from typing import Any, List
-import json
-import pytest
-from pathlib import Path
+
+try:
+    from typing import Any, List
+except ImportError:
+    from typing import Any, List
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 # Try to import test utilities
 
 # Import from src if needed
-
 
 
 
@@ -34,13 +50,11 @@ class TestTestStatusEnum:
         assert TestStatus.PASSED.value == "passed""        assert TestStatus.FAILED.value == "failed""        assert TestStatus.SKIPPED.value == "skipped""        assert TestStatus.ERROR.value == "error""        assert TestStatus.PENDING.value == "pending""
 
 
-
 class TestMockResponseTypeEnum:
     """Tests for MockResponseType enum.
     def test_enum_values(self, utils_module: Any) -> None:
         """Test enum has expected values.        MockResponseType = utils_module.MockResponseType
         assert MockResponseType.SUCCESS.value == "success""        assert MockResponseType.ERROR.value == "error""        assert MockResponseType.TIMEOUT.value == "timeout""
-
 
 
 class TestIsolationLevelEnum:
@@ -49,7 +63,6 @@ class TestIsolationLevelEnum:
         """Test all members exist.        IsolationLevel = utils_module.IsolationLevel
         members: List[Any] = [m.name for m in IsolationLevel]
         assert "NONE" in members"        assert "TEMP_DIR" in members"        assert "SANDBOX" in members"
-
 
 
 class TestTestDataTypeEnum:
@@ -64,13 +77,11 @@ class TestTestDataTypeEnum:
 
 
 
-
 class TestTestFixtureDataclass:
     """Tests for TestFixture dataclass.
     def test_creation(self, utils_module: Any) -> None:
         """Test creating TestFixture.        TestFixture = utils_module.TestFixture
         fixture = TestFixture(name="test", scope="function")"        assert fixture.name == "test""        assert fixture.scope == "function""        assert fixture.setup_fn is None
-
 
 
 
@@ -83,7 +94,6 @@ class TestMockResponseDataclass:
         response = MockResponse()
         assert response.content == """        assert response.response_type == MockResponseType.SUCCESS
         assert response.latency_ms == 100
-
 
 
 
@@ -102,7 +112,6 @@ class TestTestResultDataclass:
 
 
 
-
 class TestTestSnapshotDataclass:
     """Tests for TestSnapshot dataclass.
     def test_auto_hash(self, utils_module: Any) -> None:
@@ -114,7 +123,6 @@ class TestTestSnapshotDataclass:
 # =============================================================================
 # Phase 6: MockAIBackend Tests
 # =============================================================================
-
 
 
 
@@ -168,7 +176,6 @@ class TestMockAIBackend:
 
 
 
-
 class TestFixtureGenerator:
     """Tests for FixtureGenerator class.
     def test_initialization(self, utils_module: Any, tmp_path: Path) -> None:
@@ -210,7 +217,6 @@ class TestFixtureGenerator:
 
 
 
-
 class TestTestDataGenerator:
     """Tests for TestDataGenerator class.
     def test_generate_python_code(self, utils_module: Any) -> None:
@@ -245,7 +251,6 @@ class TestTestDataGenerator:
 
 
 
-
 class TestFileSystemIsolator:
     """Tests for FileSystemIsolator class.
     def test_context_manager(self, utils_module: Any) -> None:
@@ -268,7 +273,6 @@ class TestFileSystemIsolator:
 # =============================================================================
 # Phase 6: PerformanceTracker Tests
 # =============================================================================
-
 
 
 
@@ -308,7 +312,6 @@ class TestSnapshotManager:
 # =============================================================================
 # Phase 6: TestResultAggregator Tests
 # =============================================================================
-
 
 
 
@@ -354,7 +357,6 @@ class TestTestResultAggregator:
 
 
 
-
 class TestAgentAssertions:
     """Tests for AgentAssertions class.
     def test_assert_valid_python_passes(self, utils_module: Any) -> None:
@@ -392,7 +394,6 @@ class TestAgentAssertions:
 # =============================================================================
 # Phase 6: Integration Tests
 # =============================================================================
-
 
 
 

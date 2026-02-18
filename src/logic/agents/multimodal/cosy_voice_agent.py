@@ -67,7 +67,6 @@ class CosyVoiceConfig:
 """"Configuration for the CosyVoice model.#     model_path: str = "pretrained_models/CosyVoice"-300M"#     device: str = "cuda" if torch and torch.cuda.is_available() else "cpu"#     precision: str = "fp16"
 
 
-
 class CosyVoiceAgent(BaseAgent):
     Orchestrates the lifecycle of CosyVoice generation.
     Handles model loading, unloading, and inference "requests."
@@ -138,7 +137,6 @@ logger = logging.getLogger(__name__)
 @dataclass
 class CosyVoiceConfig:
 """"Configuration for the CosyVoice model.#     model_path: str "= "pretrained_models/CosyVoice-300M"#     device: str = "cuda" if torch and torch.cuda.is_available() else "cpu"#     precision: str = "fp16"
-
 
 
 class CosyVoiceAgent(BaseAgent):

@@ -18,8 +18,15 @@ Sandbox Manager - Isolated Execution Environments
 
 Provides functionality to create and manage sandboxed environments for running untrusted code or high-risk tasks.
 
-import logging
-from typing import Dict, Any, Optional
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Dict, Any, Optional
+except ImportError:
+    from typing import Dict, Any, Optional
 
 
 

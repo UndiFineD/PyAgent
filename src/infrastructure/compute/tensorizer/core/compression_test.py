@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.tensorizer.core.compression import compress_data, decompress_data
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.tensorizer.core.compression import compress_data, decompress_data
+except ImportError:
+    from infrastructure.compute.tensorizer.core.compression import compress_data, decompress_data
+
 
 
 def test_compress_data_basic():

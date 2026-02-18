@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .trend_analyzer import TrendAnalyzer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .trend_analyzer import TrendAnalyzer
+except ImportError:
+    from .trend_analyzer import TrendAnalyzer
+
 
 
 def test_trendanalyzer_basic():

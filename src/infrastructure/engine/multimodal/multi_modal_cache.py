@@ -21,7 +21,12 @@ Delegates to modularized sub-packages in src/infrastructure/multimodal/cache/.
 
 from __future__ import annotations
 
-from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
+
+try:
+    from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
+except ImportError:
+    from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
+
                     IPCMultiModalCache, MediaHash, MediaType,
                     MemoryMultiModalCache, MultiModalCache, MultiModalHasher,
                     PerceptualCache, TODO PlaceholderRange, PrefetchMultiModalCache,

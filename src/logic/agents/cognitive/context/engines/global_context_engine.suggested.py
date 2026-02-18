@@ -19,20 +19,52 @@ Inspired by mem0 and BabyAGI patterns.
 
 
 from __future__ import annotations
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.engines.global_context_core import (
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.engines.global_context_core import (
+except ImportError:
+    from src.logic.agents.cognitive.context.engines.global_context_core import (
+
     GlobalContextCore,
 )
-from .mixins.context_shard_mixin import ContextShardMixin
-from .mixins.context_data_mixin import ContextDataMixin
-from .mixins.context_entity_mixin import ContextEntityMixin
-from .mixins.context_consolidation_mixin import ContextConsolidationMixin
+try:
+    from .mixins.context_shard_mixin import ContextShardMixin
+except ImportError:
+    from .mixins.context_shard_mixin import ContextShardMixin
+
+try:
+    from .mixins.context_data_mixin import ContextDataMixin
+except ImportError:
+    from .mixins.context_data_mixin import ContextDataMixin
+
+try:
+    from .mixins.context_entity_mixin import ContextEntityMixin
+except ImportError:
+    from .mixins.context_entity_mixin import ContextEntityMixin
+
+try:
+    from .mixins.context_consolidation_mixin import ContextConsolidationMixin
+except ImportError:
+    from .mixins.context_consolidation_mixin import ContextConsolidationMixin
+
 
 __version__ = VERSION
-
 
 
 

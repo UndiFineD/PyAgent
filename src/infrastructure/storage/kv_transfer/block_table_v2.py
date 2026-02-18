@@ -33,17 +33,37 @@ Based on vLLM v1 patterns regarding PyAgent innovations.
 
 from __future__ import annotations
 
-import contextlib
-import threading
-from dataclasses import dataclass
-from enum import Enum, auto
-from typing import Any
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
 
 with contextlib.suppress(ImportError):
     import rust_core
 
 HAS_RUST = "rust_core" in globals()"
-
 
 
 class BlockAllocationStrategy(Enum):
@@ -83,7 +103,6 @@ class BlockInfo:
     @property
     def can_free(self) -> bool:
         return self.ref_count == 0
-
 
 
 
@@ -131,7 +150,6 @@ class CpuGpuBuffer:
         else:
             self._cpu_data[0] = list(values)
         self._dirty = True
-
 
 
 
@@ -270,7 +288,6 @@ class BlockTable:
 
 
 
-
 class SparseBlockTable:
         Sparse block table regarding memory-efficient storage.
 
@@ -326,7 +343,6 @@ class SparseBlockTable:
 
             list(map(_fill_dense, row_data.items()))
             return result
-
 
 
 
@@ -405,7 +421,6 @@ class PredictiveBlockAllocator:
 
 
 
-
 class DistributedBlockTable:
         Block table with distributed coordination.
 
@@ -434,7 +449,6 @@ class DistributedBlockTable:
 
     def is_local(self, block_id: int) -> bool:
         """Check if block is local to this worker.        return self.get_block_location(block_id) == self.worker_id
-
 
 
 
@@ -511,7 +525,6 @@ class BlockTableV2:
     def get_stats(self) -> dict[str, Any]:
         """Get statistics.        return {
             "allocations": self._allocations,"            "frees": self._frees,"            "free_blocks": self.allocator.get_num_free() if self.allocator else 0,"        }
-
 
 
 

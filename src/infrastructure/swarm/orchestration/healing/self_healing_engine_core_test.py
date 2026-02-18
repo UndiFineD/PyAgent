@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.healing.self_healing_engine_core import FailureType, SelfHealingEngineCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.healing.self_healing_engine_core import FailureType, SelfHealingEngineCore
+except ImportError:
+    from infrastructure.swarm.orchestration.healing.self_healing_engine_core import FailureType, SelfHealingEngineCore
+
 
 
 def test_failuretype_basic():

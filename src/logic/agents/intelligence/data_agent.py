@@ -35,7 +35,10 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Data agent.py module.
 
-from .data_intelligence_agent import DataIntelligenceAgent
+try:
+    from .data_intelligence_agent import DataIntelligenceAgent
+except ImportError:
+    from .data_intelligence_agent import DataIntelligenceAgent
 
 
 
@@ -45,7 +48,10 @@ class DataAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the DataAgent (via DataIntelligence core)."
-from .data_intelligence_agent import DataIntelligenceAgent
+try:
+    from .data_intelligence_agent import DataIntelligenceAgent
+except ImportError:
+    from .data_intelligence_agent import DataIntelligenceAgent
 
 
 

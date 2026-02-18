@@ -43,7 +43,6 @@ __version__ = VERSION
 
 
 
-
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Identifies missing type annotations and 'Any' usage to improve codebase robustness.'
     def __init__(self, file_path: str) -> None:
@@ -119,7 +118,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

@@ -29,7 +29,6 @@ from src.infrastructure.services.executor.multiproc.future import FutureWrapper
 
 
 
-
 class UniprocExecutor(Executor):
         Single-process executor for debugging and simple use cases.
     

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.cloud_swarm_manager.suggested import CloudSwarmManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.cloud_swarm_manager.suggested import CloudSwarmManager
+except ImportError:
+    from infrastructure.swarm.fleet.cloud_swarm_manager.suggested import CloudSwarmManager
+
 
 
 def test_cloudswarmmanager_basic():

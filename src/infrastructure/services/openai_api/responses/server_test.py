@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.openai_api.responses.server import ResponsesAPIServer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.openai_api.responses.server import ResponsesAPIServer
+except ImportError:
+    from infrastructure.services.openai_api.responses.server import ResponsesAPIServer
+
 
 
 def test_responsesapiserver_basic():

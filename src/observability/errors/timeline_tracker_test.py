@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .timeline_tracker import TimelineTracker
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .timeline_tracker import TimelineTracker
+except ImportError:
+    from .timeline_tracker import TimelineTracker
+
 
 
 def test_timelinetracker_basic():

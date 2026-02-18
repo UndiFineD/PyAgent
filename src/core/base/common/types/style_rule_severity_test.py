@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.style_rule_severity import StyleRuleSeverity
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.style_rule_severity import StyleRuleSeverity
+except ImportError:
+    from core.base.common.types.style_rule_severity import StyleRuleSeverity
+
 
 
 def test_styleruleseverity_basic():

@@ -104,7 +104,6 @@ class CommandDefinition:
 
 
 
-
 class CommandRegistry:
     """Registry for slash commands.
     def __init__(self) -> None:
@@ -313,7 +312,6 @@ class ProcessedPrompt:
     @property
     def command_data(self) -> dict[str, dict[str, Any]]:
         """Map of command names to structured data.        return {cmd.command: result.data for cmd, result in self.results}
-
 
 
 

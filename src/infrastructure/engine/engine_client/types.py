@@ -20,10 +20,26 @@ Shared types and configurations for engine clients.
 
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Optional
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
 
 
 
@@ -34,7 +50,6 @@ class ClientMode(Enum):
     SYNC_MP = auto()  # Synchronous multi-process
     ASYNC_MP = auto()  # Async multi-process
     DP_ASYNC = auto()  # Data parallel with load balancing
-
 
 
 

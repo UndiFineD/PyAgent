@@ -15,13 +15,31 @@
 
 """Core logic for prompt template management and versioning.
 """
+
+
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any, Dict, Optional
 
-from .base_core import BaseCore
-from .models import PromptTemplate
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .models import PromptTemplate
+except ImportError:
+    from .models import PromptTemplate
 
 
 
@@ -47,7 +65,6 @@ class PromptCore(BaseCore):
         """Renders a registered template with the provided arguments.
         """if name not in self.templates:
             raise KeyError(f"Template '{name}' not found")"'        return self.templates[name].render(**kwargs)
-
 
 
 

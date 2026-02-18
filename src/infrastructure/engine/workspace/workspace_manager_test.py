@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.workspace.workspace_manager import WorkspaceManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.workspace.workspace_manager import WorkspaceManager
+except ImportError:
+    from infrastructure.engine.workspace.workspace_manager import WorkspaceManager
+
 
 
 def test_workspacemanager_basic():

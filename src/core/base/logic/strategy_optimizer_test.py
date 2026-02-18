@@ -15,16 +15,31 @@
 
 """Tests for StrategyOptimizer - AutoML framework for pipeline optimization
 """
-import asyncio
-import pytest
-from typing import Any, Dict
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.logic.strategy_optimizer import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+
+try:
+    from .core.base.logic.strategy_optimizer import (
+except ImportError:
+    from src.core.base.logic.strategy_optimizer import (
+
     StrategyOptimizer, Strategy, StrategyConfig, PerformanceResult,
     ThresholdFilter, PerformanceMeasurer, WeightedAverageSelector,
     ParetoFrontierSelector, OptimizationMetric
 )
-
 
 
 
@@ -43,7 +58,6 @@ class MockStrategy(Strategy):
     @property
     def name(self) -> str:
         return self._name
-
 
 
 
@@ -171,7 +185,6 @@ class TestStrategyOptimizer:
 
 
 
-
 class TestPerformanceMeasurer:
     """Test PerformanceMeasurer functionality"""
     @pytest.fixture
@@ -199,7 +212,6 @@ class TestPerformanceMeasurer:
         strategy = FailingStrategy()
         result = await measurer.measure_performance(strategy, "input")"
         assert result.error == "Test error""        assert result.execution_time >= 0
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.effort_estimate import EffortEstimate
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.effort_estimate import EffortEstimate
+except ImportError:
+    from observability.improvements.effort_estimate import EffortEstimate
+
 
 
 def test_effortestimate_basic():

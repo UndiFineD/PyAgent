@@ -20,15 +20,31 @@ Fallback incremental detokenization for non-fast tokenizers.
 
 from __future__ import annotations
 
-from typing import List, Optional, Tuple
 
-from src.infrastructure.engine.tokenization.detokenizer.base import \
+try:
+    from typing import List, Optional, Tuple
+except ImportError:
+    from typing import List, Optional, Tuple
+
+
+try:
+    from .infrastructure.engine.tokenization.detokenizer.base import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.base import \
+
     IncrementalDetokenizer
-from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
-    StopChecker
-from src.infrastructure.engine.tokenization.detokenizer.types import \
-    TokenizerLike
+try:
+    from .infrastructure.engine.tokenization.detokenizer.stop_checker import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
 
+    StopChecker
+try:
+    from .infrastructure.engine.tokenization.detokenizer.types import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.types import \
+
+    TokenizerLike
 
 
 

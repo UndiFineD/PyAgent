@@ -32,11 +32,31 @@ Beyond vLLM:
 
 from __future__ import annotations
 
-import time
-from copy import copy
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Callable
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from copy import copy
+except ImportError:
+    from copy import copy
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
 
 
 
@@ -47,7 +67,6 @@ class SamplingStrategy(Enum):
     BEAM_SEARCH = auto()  # Beam search with pruning
     DIVERSE = auto()  # Diverse beam search
     BEST_OF_N = auto()  # Generate n, return best
-
 
 
 
@@ -350,7 +369,6 @@ class BeamState:
 
 
 
-
 class BeamSearchManager:
         Beam search implementation.
 
@@ -443,7 +461,6 @@ class BeamSearchManager:
 
 
 
-
 class DiverseSamplingManager:
         Diverse sampling to maximize output variety.
 
@@ -497,7 +514,6 @@ class DiverseSamplingManager:
     ) -> None:
         """Record a generated token.        if request_id in self.sequences:
             self.sequences[request_id][sample_idx].append(token_id)
-
 
 
 

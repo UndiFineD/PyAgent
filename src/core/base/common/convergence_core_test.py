@@ -13,9 +13,20 @@
 # limitations under the License.
 """Test Convergence Core module.
 """
-import pytest
-from hypothesis import given, strategies as st, settings, HealthCheck
-from src.core.base.common.convergence_core import ConvergenceCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    from .core.base.common.convergence_core import ConvergenceCore
+except ImportError:
+    from src.core.base.common.convergence_core import ConvergenceCore
 
 
 

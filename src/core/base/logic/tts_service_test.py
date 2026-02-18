@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.tts_service import TTSEngine, CoquiTTSEngine, TTSService, text_to_speech
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.tts_service import TTSEngine, CoquiTTSEngine, TTSService, text_to_speech
+except ImportError:
+    from core.base.logic.tts_service import TTSEngine, CoquiTTSEngine, TTSService, text_to_speech
+
 
 
 def test_ttsengine_basic():

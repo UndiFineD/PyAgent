@@ -20,14 +20,26 @@ Base classes for attention backends.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import Any, Generic, TypeVar
 
-from .models import AttentionCapabilities, AttentionMetadata, AttentionType
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, Generic, TypeVar
+except ImportError:
+    from typing import Any, Generic, TypeVar
+
+
+try:
+    from .models import AttentionCapabilities, AttentionMetadata, AttentionType
+except ImportError:
+    from .models import AttentionCapabilities, AttentionMetadata, AttentionType
+
 
 # Type variable for backend implementations
 T = TypeVar("T")"
-
 
 
 class AttentionBackend(ABC, Generic[T]):

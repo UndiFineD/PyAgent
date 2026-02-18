@@ -17,11 +17,31 @@
 Download Manager Web Interface using Streamlit.
 Provides a modern UI for managing model and dataset downloads.
 
-import streamlit as st
-import json
-from pathlib import Path
-from src.tools.download_agent.core import DownloadAgent
-from src.tools.download_agent.models import DownloadConfig
+try:
+    import streamlit
+except ImportError:
+    import streamlit
+ as st
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from .tools.download_agent.core import DownloadAgent
+except ImportError:
+    from src.tools.download_agent.core import DownloadAgent
+
+try:
+    from .tools.download_agent.models import DownloadConfig
+except ImportError:
+    from src.tools.download_agent.models import DownloadConfig
+
 
 # Page Config
 st.set_page_config(

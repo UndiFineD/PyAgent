@@ -46,7 +46,6 @@ class FileMetadata:
 
 
 
-
 class EfficientChangeDetector:
     """USN-inspired change detection for file systems
     Uses metadata-based tracking instead of full content scanning
@@ -75,7 +74,8 @@ class EfficientChangeDetector:
             return None
 
     def _get_file_metadata(self, path: Path) -> Optional[FileMetadata]:
-        """Get metadata for a file"""try:
+        """Get metadata for a file"""
+try:
             stat = path.stat()
             return FileMetadata(
                 path=str(path),

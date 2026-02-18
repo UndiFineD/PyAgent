@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.request_tracer import RequestTracer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.request_tracer import RequestTracer
+except ImportError:
+    from infrastructure.compute.backend.request_tracer import RequestTracer
+
 
 
 def test_requesttracer_basic():

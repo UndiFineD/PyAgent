@@ -31,11 +31,28 @@ Optimized for:
 Inspired by vLLM's specialized worker architectures.'
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from src.core.lazy_loader import LazyLoader
-from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING, Any, Dict, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Dict, Optional
+
+
+try:
+    from .core.lazy_loader import LazyLoader
+except ImportError:
+    from src.core.lazy_loader import LazyLoader
+
+try:
+    from .infrastructure.storage.kv_transfer.kv_transfer_connector import (
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
+
     KVConnectorRole, KVTransferConfig)
 
 if TYPE_CHECKING:
@@ -45,7 +62,6 @@ if TYPE_CHECKING:
         KVConnectorBase
 
 logger: logging.Logger = logging.getLogger(__name__)
-
 
 
 

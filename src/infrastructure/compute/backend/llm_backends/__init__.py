@@ -18,7 +18,12 @@ Llm backends package.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION as VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION as VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION as VERSION
+
 
 __version__ = VERSION
 

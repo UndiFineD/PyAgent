@@ -16,7 +16,10 @@
 """Test module for data_parsing_mixin
 """
 
-from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
+try:
+    from .core.base.mixins.data_parsing_mixin import DataParsingMixin
+except ImportError:
+    from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
 
 
 

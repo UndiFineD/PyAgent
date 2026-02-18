@@ -28,7 +28,6 @@ except ImportError:
 logger = logging.getLogger("pyagent.formula")
 
 
-
 class FormulaCore:
     """Safely evaluates mathematical expressions using AST.
     Standardized math primitives with Rust acceleration.

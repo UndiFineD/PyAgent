@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.network.domain_intelligence import BugBountyProgram, DomainIntelligence
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.network.domain_intelligence import BugBountyProgram, DomainIntelligence
+except ImportError:
+    from infrastructure.swarm.network.domain_intelligence import BugBountyProgram, DomainIntelligence
+
 
 
 def test_bugbountyprogram_basic():

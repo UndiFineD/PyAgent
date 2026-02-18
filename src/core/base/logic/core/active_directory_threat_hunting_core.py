@@ -27,10 +27,8 @@ from src.core.base.common.base_core import BaseCore
 
 
 
-
 class ThreatLevel(Enum):
     """Threat severity levels"""LOW = "low""    MEDIUM = "medium""    HIGH = "high""    CRITICAL = "critical""
-
 
 
 class ADObjectType(Enum):
@@ -74,7 +72,6 @@ class HuntingResult:
 
 
 
-
 class ActiveDirectoryThreatHuntingCore(BaseCore):
     """Active Directory Threat Hunting Core for comprehensive AD security analysis.
 
@@ -91,7 +88,8 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
         self.baseline_data: Dict[str, Any] = {}
 
     async def initialize(self) -> bool:
-        """Initialize the Active Directory threat hunting core"""try:
+        """Initialize the Active Directory threat hunting core"""
+try:
             # Initialize threat detection rules and baselines
             await self.load_threat_detection_rules()
             await self.initialize_baselines()
@@ -129,7 +127,8 @@ class ActiveDirectoryThreatHuntingCore(BaseCore):
 
         Returns:
             List of enumerated AD objects
-        """# Mock AD enumeration - in real implementation, this would use LDAP queries
+        """
+# Mock AD enumeration - in real implementation, this would use LDAP queries
         enumerated_objects = []
 
         # Generate mock AD objects for demonstration

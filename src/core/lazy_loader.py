@@ -59,7 +59,6 @@ T = TypeVar("T")
 
 
 
-
 class LazyLoader:
     """A descriptor class for deferred imports.
 
@@ -175,7 +174,6 @@ def lazy_import(func: Callable[[], T]) -> Callable[[], T]:
 
 
 
-
 class ModuleLazyLoader:
     """A utility class for implementing module-level __getattr__ lazy loading.
 
@@ -212,7 +210,8 @@ class ModuleLazyLoader:
             registry: A dictionary mapping attribute names to tuples of
                       (module_path, attribute_name) for lazy loading.
             parent_module: Optional parent module name for relative imports.
-        """# Validate registry entries to be tuples of two strings for safety
+        """
+# Validate registry entries to be tuples of two strings for safety
         for k, v in registry.items():
             if not (isinstance(k, str) and isinstance(v, tuple) and len(v) == 2 and all(isinstance(x, str) for x in v)):
                 raise TypeError("registry must be mapping of str -> (module_path: str, attr_name: str)")

@@ -12,17 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-import asyncio
-import pytest_asyncio
-from src.core.base.logic.async_pipeline_core import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import pytest_asyncio
+except ImportError:
+    import pytest_asyncio
+
+try:
+    from .core.base.logic.async_pipeline_core import (
+except ImportError:
+    from src.core.base.logic.async_pipeline_core import (
+
     AsyncPipelineCore,
     PipelineConfig,
     PipelineTask,
     TaskStatus,
     TaskPriority
 )
-
 
 
 
@@ -68,7 +83,8 @@ class TestAsyncPipelineCore:
 
     @pytest.mark.asyncio
     async def test_task_execution_success(self, pipeline):
-        """Test successful task execution"""# Register handler
+        """Test successful task execution"""
+# Register handler
         async def success_handler(task):
             await asyncio.sleep(0.1)  # Simulate work
             return "success_result""
@@ -87,7 +103,8 @@ class TestAsyncPipelineCore:
 
     @pytest.mark.asyncio
     async def test_task_execution_failure(self, pipeline):
-        """Test task execution failure"""# Register failing handler
+        """Test task execution failure"""
+# Register failing handler
         async def failing_handler(task):
             await asyncio.sleep(0.1)
             raise ValueError("Task failed")"
@@ -245,7 +262,8 @@ class TestAsyncPipelineCore:
         assert test_result.status == TaskStatus.COMPLETED
         assert code_result.result == "executed_print('hello')""'        assert test_result.result == "tested_pytest tests/""
     def test_task_status_queries(self, pipeline):
-        """Test task status query methods"""# Initially empty
+        """Test task status query methods"""
+# Initially empty
         assert len(pipeline.get_pending_tasks()) == 0
         assert len(pipeline.get_running_tasks()) == 0
         assert len(pipeline.get_completed_tasks()) == 0

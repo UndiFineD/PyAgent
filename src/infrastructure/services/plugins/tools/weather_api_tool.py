@@ -31,7 +31,6 @@ __version__ = VERSION
 
 
 
-
 class Weather_APITool:
     """Auto-generated tool class
     def __init__(self, base_url: str = "http://localhost:8080") -> None:"        self.name = "Weather_API""        self.base_url = base_url.rstrip("/")"

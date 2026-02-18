@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.swarm_pruning_orchestrator import SwarmPruningOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.swarm_pruning_orchestrator import SwarmPruningOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.swarm_pruning_orchestrator import SwarmPruningOrchestrator
+
 
 
 def test_swarmpruningorchestrator_basic():

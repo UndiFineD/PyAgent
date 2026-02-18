@@ -47,7 +47,6 @@ __version__ = VERSION
 
 
 
-
 class IdentityAgent(BaseAgent):
     Manages Decentralized Identifiers (DIDs) and Verifiable Credentials" (VCs)"#     for agents within the Swarm and across fleet boundaries.
 
@@ -114,7 +113,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

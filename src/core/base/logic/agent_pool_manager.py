@@ -31,7 +31,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class AgentStatus(Enum):
     """Agent lifecycle status"""ACTIVE = "active""    ELITE = "elite""    DEPRECATED = "deprecated""    INTEGRATED = "integrated""
 
@@ -63,7 +62,6 @@ class TaskRequirements:
     complexity_score: float  # 0.0 to 1.0
     estimated_duration: float  # seconds
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 
 
@@ -116,7 +114,8 @@ class AgentPoolManager:
             self._check_elite_promotion(manifest)
 
     def analyze_task_requirements(self, task_description: str, context: CascadeContext) -> TaskRequirements:
-        """Analyze task requirements and extract needed capabilities"""# This is a simplified implementation - in practice, this would use LLM analysis
+        """Analyze task requirements and extract needed capabilities"""
+# This is a simplified implementation - in practice, this would use LLM analysis
         capabilities = set()
 
         # Extract keywords that indicate capabilities
@@ -183,7 +182,8 @@ class AgentPoolManager:
             return "integrate_agents""        else:
             return "create_new""
     def create_integrated_agent(self, requirements: TaskRequirements, candidate_agents: List[str]) -> str:
-        """Create an integrated agent from multiple candidates"""# Find best combination of agents
+        """Create an integrated agent from multiple candidates"""
+# Find best combination of agents
         best_combination = self._find_best_integration(requirements, candidate_agents)
 
         if not best_combination:
@@ -242,7 +242,8 @@ class AgentPoolManager:
         return min(1.0, coverage)
 
     def _find_best_integration(self, requirements: TaskRequirements, candidates: List[str]) -> Optional[List[str]]:
-        """Find the best combination of agents for integration"""# Simplified: just return top 2 candidates if they together provide good coverage
+        """Find the best combination of agents for integration"""
+# Simplified: just return top 2 candidates if they together provide good coverage
         if len(candidates) < 2:
             return None
 

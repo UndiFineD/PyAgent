@@ -13,19 +13,14 @@
 # limitations under the License.
 
 
-Image.py module.
 
 from typing import Any, Dict, Optional, Tuple
-
 import numpy as np
-
 from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
 
-
-
 class ImageProcessor(BaseMultiModalProcessor[Any]):
-    """Processor for image inputs.
+    """Processor for image inputs."""
     modality = ModalityType.IMAGE
 
     def __init__(
@@ -36,6 +31,7 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
         std: Tuple[float, ...] = (0.229, 0.224, 0.225),
         patch_size: int = 14,
     ) -> None:
+        """Initialize the image processor with configuration and processing parameters."""
         super().__init__(config)
         self.target_size = target_size
         self.mean = np.array(mean).reshape((1, 1, 3))
@@ -47,22 +43,28 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
         data: Any,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        """Process image data. Expects a PIL Image or a numpy array. Returns a normalized numpy array and metadata."""
         # Convert PIL to numpy if needed
-        if hasattr(data, "convert"):"            data = data.convert("RGB")"            image_np = np.array(data, dtype=np.float32) / 255.0
+        if hasattr(data, "convert"):
+            data = data.convert("RGB")
+            image_np = np.array(data, dtype=np.float32) / 255.0
         elif isinstance(data, np.ndarray):
             if data.dtype == np.uint8:
                 image_np = data.astype(np.float32) / 255.0
             else:
                 image_np = data.astype(np.float32)
         else:
-            raise TypeError(f"Unsupported image type: {type(data)}")"
+            raise TypeError(f"Unsupported image type: {type(data)}")
         original_size = image_np.shape[:2]
 
         # Resize
-        target = kwargs.get("target_size", self.target_size)"        image_resized = self._resize(image_np, target)
+        target = kwargs.get("target_size", self.target_size)
+        image_resized = self._resize(image_np, target)
 
         # Normalize
-        mean = kwargs.get("mean", self.mean)"        std = kwargs.get("std", self.std)"        image_normalized = (image_resized - mean) / std
+        mean = kwargs.get("mean", self.mean)
+        std = kwargs.get("std", self.std)
+        image_normalized = (image_resized - mean) / std
 
         # Calculate grid size
         h, w = image_normalized.shape[:2]
@@ -70,12 +72,17 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
         num_patches_w = w // self.patch_size
 
         metadata = {
-            "original_size": original_size,"            "processed_size": (h, w),"            "grid_hw": (num_patches_h, num_patches_w),"            "num_patches": num_patches_h * num_patches_w,"        }
+            "original_size": original_size,
+            "processed_size": (h, w),
+            "grid_hw": (num_patches_h, num_patches_w),
+            "num_patches": num_patches_h * num_patches_w,
+        }
 
         return image_normalized, metadata
 
-    def get_TODO Placeholder_count(self, data: Any, **kwargs: Any) -> int:
-        target = kwargs.get("target_size", self.target_size)"        h, w = target
+    def get_patches_count(self, data: Any, **kwargs: Any) -> int:
+        target = kwargs.get("target_size", self.target_size)
+        h, w = target
         num_patches_h = h // self.patch_size
         num_patches_w = w // self.patch_size
         return num_patches_h * num_patches_w
@@ -85,6 +92,7 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
         image: np.ndarray,
         target_size: Tuple[int, int],
     ) -> np.ndarray:
+        """Resize the image to the target size using bilinear interpolation."""
         src_h, src_w = image.shape[:2]
         tgt_h, tgt_w = target_size
 

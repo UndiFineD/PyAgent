@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.fix_path_backslashes import fix_path_backslashes
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.fix_path_backslashes import fix_path_backslashes
+except ImportError:
+    from infrastructure.services.dev.scripts.management.fix_path_backslashes import fix_path_backslashes
+
 
 
 def test_fix_path_backslashes_basic():

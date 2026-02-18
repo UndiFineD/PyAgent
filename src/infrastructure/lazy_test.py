@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .lazy import get_eagle_proposer, get_arc_offload_manager, get_tool_parser_registry, get_reasoning_engine, get_paged_attention_engine, get_mooncake_connector, get_nixl_connector, get_prefill_worker, get_decode_worker, get_pp_transfer, get_tp_transfer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .lazy import get_eagle_proposer, get_arc_offload_manager, get_tool_parser_registry, get_reasoning_engine, get_paged_attention_engine, get_mooncake_connector, get_nixl_connector, get_prefill_worker, get_decode_worker, get_pp_transfer, get_tp_transfer
+except ImportError:
+    from .lazy import get_eagle_proposer, get_arc_offload_manager, get_tool_parser_registry, get_reasoning_engine, get_paged_attention_engine, get_mooncake_connector, get_nixl_connector, get_prefill_worker, get_decode_worker, get_pp_transfer, get_tp_transfer
+
 
 
 def test_get_eagle_proposer_basic():

@@ -16,7 +16,6 @@ import torch
 import torch.nn as nn
 
 
-
 class ARCQuantLayer(nn.Module):
     """
     Augmented Residual Channel (ARC) Quantization Layer (arXiv:2601.07475).

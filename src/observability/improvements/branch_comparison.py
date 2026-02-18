@@ -39,13 +39,34 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import time
+except ImportError:
+    import time
 
-from .branch_comparison_status import BranchComparisonStatus
-from .improvement_diff import ImprovementDiff
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .branch_comparison_status import BranchComparisonStatus
+except ImportError:
+    from .branch_comparison_status import BranchComparisonStatus
+
+try:
+    from .improvement_diff import ImprovementDiff
+except ImportError:
+    from .improvement_diff import ImprovementDiff
+
 
 __version__ = VERSION
 
@@ -73,15 +94,38 @@ class BranchComparison:
     removed_count: int = 0
     modified_count: int = 0
     compared_at: float = field(default_factory=t"""ime.time)""""
+
+
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import time
+except ImportError:
+    import time
 
-from .branch_comparison_status import BranchComparisonStatus
-from .improvement_diff import ImprovementDiff
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .branch_comparison_status import BranchComparisonStatus
+except ImportError:
+    from .branch_comparison_status import BranchComparisonStatus
+
+try:
+    from .improvement_diff import ImprovementDiff
+except ImportError:
+    from .improvement_diff import ImprovementDiff
+
 
 __version__ = VERSION
 

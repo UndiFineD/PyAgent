@@ -18,13 +18,40 @@
 Implements advanced Synaptic Decay, Neural Context Pruning, and Semantic Cache Invalidation.
 Phase 91-92: Sliding-window invalidation and attention-entropy maps for KV-cache landmarks.
 """
+
+
 from __future__ import annotations
-import time
-import logging
-import math
-from typing import Any, Dict, List, Optional, Tuple, Set
-from dataclasses import dataclass, field
-from collections import defaultdict
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple, Set
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple, Set
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from collections import defaultdict
+except ImportError:
+    from collections import defaultdict
+
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +76,6 @@ class PruningDecision:
     reason: str
     confidence: float
     alternative_blocks: List[str] = field(default_factory=list)
-
 
 
 
@@ -151,7 +177,6 @@ class NeuralContextPruner:
 
 
 
-
 class SemanticCacheInvalidator:
     """Implements Phase 91: Sliding-window invalidation of LSH buckets.
     
@@ -204,7 +229,8 @@ class SemanticCacheInvalidator:
         return invalidated
     
     def _get_fingerprint_for_key(self, key: str) -> Optional[str]:
-        """Get semantic fingerprint for a key (TODO Placeholder implementation)."""# This would integrate with the actual memory storage system
+        """Get semantic fingerprint for a key (TODO Placeholder implementation)."""
+# This would integrate with the actual memory storage system
         return None  # Explicitly document that this returns None in current implementation
         
     def _get_key_age(self, key: str) -> float:
@@ -212,7 +238,6 @@ class SemanticCacheInvalidator:
             if k == key:
                 return time.time() - timestamp
         return float('inf')'
-
 
 
 class SynapticDecay:
@@ -321,7 +346,8 @@ class SynapticDecay:
             "total_memory_blocks": total_blocks,"            "average_attention_entropy": avg_entropy,"            "average_relevance_score": avg_relevance,"            "semantic_clusters": len(self.semantic_invalidator.semantic_clusters),"            "access_window_size": len(self.semantic_invalidator.access_window)"        }
 
     def prune_low_utility(self, cache_manager: Any):
-        """Actively prunes low-utility items from a provided cache manager."""# Concept: get all keys from cache_manager.kv_cache
+        """Actively prunes low-utility items from a provided cache manager."""
+# Concept: get all keys from cache_manager.kv_cache
         # keys = cache_manager.get_all_keys()
         # dead_keys = self.process_decay(keys)
         # for k in dead_keys: cache_manager.delete(k)

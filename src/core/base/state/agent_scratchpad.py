@@ -15,10 +15,20 @@
 """Logic for Agent Scratchpad (Confucius-style persistent notes).
 Extracted from BaseAgent for decomposition.
 """
+
+
 from __future__ import annotations
 
-import logging
-from datetime import datetime
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
 
 
 

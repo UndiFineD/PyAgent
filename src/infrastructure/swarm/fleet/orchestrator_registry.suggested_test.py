@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.orchestrator_registry.suggested import LazyOrchestratorMap, OrchestratorRegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.orchestrator_registry.suggested import LazyOrchestratorMap, OrchestratorRegistry
+except ImportError:
+    from infrastructure.swarm.fleet.orchestrator_registry.suggested import LazyOrchestratorMap, OrchestratorRegistry
+
 
 
 def test_lazyorchestratormap_basic():

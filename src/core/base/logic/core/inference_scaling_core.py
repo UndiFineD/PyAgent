@@ -18,12 +18,10 @@ from pydantic import BaseModel
 
 
 
-
 class ScalingStrategy(BaseModel):
     max_candidates: int = 5
     self_critique_rounds: int = 1
     difficulty_threshold: float = 0.7
-
 
 
 
@@ -79,6 +77,7 @@ class InferenceScalingCore:
 
     def estimate_difficulty(self, task_description: str) -> float:
         """Estimates task difficulty to decide whether to trigger scaling.
-        """# TODO Placeholder for heuristic or model-based difficulty estimation
+        """
+# TODO Placeholder for heuristic or model-based difficulty estimation
         if len(task_description.split()) > 100 or "complex" in task_description.lower():"            return 0.9
         return 0.3

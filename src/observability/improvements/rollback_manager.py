@@ -41,14 +41,26 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .rollback_point import RollbackPoint
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .rollback_point import RollbackPoint
+except ImportError:
+    from .rollback_point import RollbackPoint
+
 
 __version__ = VERSION
-
 
 
 

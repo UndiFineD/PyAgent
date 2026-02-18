@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.ad_connect_security_core import ADConnectServiceAccount, ADConnectDatabase, ADConnectConfiguration, ADConnectSecurityAssessment, ADConnectSecurityCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.ad_connect_security_core import ADConnectServiceAccount, ADConnectDatabase, ADConnectConfiguration, ADConnectSecurityAssessment, ADConnectSecurityCore
+except ImportError:
+    from core.base.logic.core.ad_connect_security_core import ADConnectServiceAccount, ADConnectDatabase, ADConnectConfiguration, ADConnectSecurityAssessment, ADConnectSecurityCore
+
 
 
 def test_adconnectserviceaccount_basic():

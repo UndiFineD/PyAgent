@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.worker.disaggregated_prefill_worker import DisaggregatedPrefillWorker
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.worker.disaggregated_prefill_worker import DisaggregatedPrefillWorker
+except ImportError:
+    from infrastructure.swarm.worker.disaggregated_prefill_worker import DisaggregatedPrefillWorker
+
 
 
 def test_disaggregatedprefillworker_basic():

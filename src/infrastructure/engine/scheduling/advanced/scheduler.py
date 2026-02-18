@@ -15,15 +15,42 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Advanced request scheduler coordinator.
-import threading
-import time
-import uuid
-from typing import Any
+try:
+    import threading
+except ImportError:
+    import threading
 
-from .config import (PreemptionReason, RequestPriority, RequestState,
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .config import (PreemptionReason, RequestPriority, RequestState,
+except ImportError:
+    from .config import (PreemptionReason, RequestPriority, RequestState,
+
                      SchedulerConfig)
-from .queue import PriorityRequestQueue
-from .request import ScheduledRequest
+try:
+    from .queue import PriorityRequestQueue
+except ImportError:
+    from .queue import PriorityRequestQueue
+
+try:
+    from .request import ScheduledRequest
+except ImportError:
+    from .request import ScheduledRequest
 
 
 

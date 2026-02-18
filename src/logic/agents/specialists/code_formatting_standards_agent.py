@@ -39,7 +39,6 @@ from src.core.base.common.models.core_enums import MessageRole
 
 
 
-
 class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
     Agent responsible for strict code formatting standards and quality enforcement.
 

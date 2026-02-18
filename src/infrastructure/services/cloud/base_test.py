@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.cloud.base import InferenceRequest, InferenceResponse, CloudProviderBase, CloudProviderError, RateLimitError, AuthenticationError
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.cloud.base import InferenceRequest, InferenceResponse, CloudProviderBase, CloudProviderError, RateLimitError, AuthenticationError
+except ImportError:
+    from infrastructure.services.cloud.base import InferenceRequest, InferenceResponse, CloudProviderBase, CloudProviderError, RateLimitError, AuthenticationError
+
 
 
 def test_inferencerequest_basic():

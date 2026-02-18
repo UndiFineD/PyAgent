@@ -12,31 +12,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from google import genai
-from google.genai import types
+try:
+    from google import genai
+except ImportError:
+    from google import genai
+
+try:
+    from google.genai import types
+except ImportError:
+    from google.genai import types
+
 
 
 def scan_code(API, MODEL, instruction, code):
     pass  # [BATCHFIX] inserted for empty block
 """result =    count = 1
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     client = genai.Client(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     client = genai.Client(
         api_key=API,
     )
 
     model = MODEL
     contents = [
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         types.Content(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         types.Content(
             role="user","            parts=[
                 types.Part.from_text(text=code),
             ],
         ),
     ]
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     tools = [types.Tool(google_search=types.GoogleSearch())]""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     generate_content_config = types.GenerateContentConfig(
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""     tools = [types.Tool(google_search=types.GoogleSearch())]""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     generate_content_config = types.GenerateContentConfig(
         tools=tools,
         response_mime_type="text/plain","        system_instruction=[
             types.Part.from_text(text=instruction),
@@ -44,7 +57,8 @@ def scan_code(API, MODEL, instruction, code):
     )
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     for chunk in client.models.generate_content_stream(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     for chunk in client.models.generate_content_stream(
         model=model,
         contents=contents,
         config=generate_content_config,

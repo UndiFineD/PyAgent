@@ -35,16 +35,36 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-import json
-from datetime import datetime
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import json
+except ImportError:
+    import json
 
-from .improvement import Improvement
-from .rollback_record import RollbackRecord
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .rollback_record import RollbackRecord
+except ImportError:
+    from .rollback_record import RollbackRecord
+
 
 __version__ = VERSION
-
 
 
 

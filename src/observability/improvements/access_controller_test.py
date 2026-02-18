@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .access_controller import AccessController, AccessController
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .access_controller import AccessController, AccessController
+except ImportError:
+    from .access_controller import AccessController, AccessController
+
 
 
 def test_accesscontroller_basic():

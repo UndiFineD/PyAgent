@@ -15,7 +15,10 @@
 
 Tests for EventCorrelationAgent.
 
-from src.logic.agents.security.event_correlation_agent import EventCorrelationAgent
+try:
+    from .logic.agents.security.event_correlation_agent import EventCorrelationAgent
+except ImportError:
+    from src.logic.agents.security.event_correlation_agent import EventCorrelationAgent
 
 
 

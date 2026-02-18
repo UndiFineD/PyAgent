@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.evolution_core import AgentMetadata, EvolutionCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.evolution_core import AgentMetadata, EvolutionCore
+except ImportError:
+    from core.base.logic.core.evolution_core import AgentMetadata, EvolutionCore
+
 
 
 def test_agentmetadata_basic():

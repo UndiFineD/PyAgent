@@ -49,7 +49,8 @@ def extract_public_symbols(filepath):
 def generate_test_skeleton(module_path, classes, functions):
     """Generate a pytest skeleton test file for the given module and its public classes/functions."""
     test_path = module_path.parent / (module_path.stem + "_test.py")
-    header = """#!/usr/bin/env python3
+    header = """
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

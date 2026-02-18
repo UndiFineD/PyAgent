@@ -17,13 +17,34 @@
 """Verifies speculative tokens regarding target model outputs.
 from __future__ import annotations
 
-import functools
-from dataclasses import dataclass
-from typing import List, Optional
 
-import numpy as np
+try:
+    import functools
+except ImportError:
+    import functools
 
-from .config import AcceptanceMethod
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import List, Optional
+except ImportError:
+    from typing import List, Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import AcceptanceMethod
+except ImportError:
+    from .config import AcceptanceMethod
+
 
 
 @dataclass
@@ -39,7 +60,6 @@ class VerificationResult:
     @property
     def success(self) -> bool:
         """True if at least one token was accepted.        return self.accepted_count > 0
-
 
 
 

@@ -50,7 +50,6 @@ from src.core.base.state.agent_state_manager import StateTransaction
 
 
 
-
 class AgentTier(Enum):
     """Agent evolution tiers."""
     SPECIALIZED = "specialized"
@@ -88,7 +87,6 @@ class TaskAnalysis:
     domain: str
     complexity: str  # "simple", "moderate", "complex"
     estimated_effort: int  # 1-10 scale
-
 
 
 

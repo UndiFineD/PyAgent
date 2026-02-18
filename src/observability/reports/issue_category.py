@@ -18,7 +18,11 @@ IssueCategory - Enum for classifying code issues
 A small, focused enum that centralizes canonical issue categories used across reporting and analysis subsystems. Keeps category strings consistent and versioned via the project's VERSION constant.'# DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from issue_category import IssueCategory
+try:
+    from issue_category import IssueCategory
+except ImportError:
+    from issue_category import IssueCategory
+
 # compare or iterate
 if IssueCategory.SYNTAX == IssueCategory("syntax"):"    ...
 
@@ -36,12 +40,20 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

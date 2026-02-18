@@ -16,7 +16,11 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Facade for GuidedDecoder.
 
-from .guided import (ChoiceConstraint, GuidedConfig, GuidedDecoder, GuidedMode,
+try:
+    from .guided import (ChoiceConstraint, GuidedConfig, GuidedDecoder, GuidedMode,
+except ImportError:
+    from .guided import (ChoiceConstraint, GuidedConfig, GuidedDecoder, GuidedMode,
+
                      JsonSchema, RegexPattern, generate_choice, generate_json)
 
 __all__ = [

@@ -47,7 +47,6 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="FleetLookupMixin")"
 
 
-
 class FleetLookupMixin:
     """Mixin for lazy loading lookups and property accessors in FleetManager.
     def __getattr__(self, name: str) -> Any:

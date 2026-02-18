@@ -20,8 +20,16 @@ Configuration regarding EAGLE speculative decoding.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum, auto
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -32,7 +40,6 @@ class EagleMethod(Enum):
     EAGLE_2 = auto()  # EAGLE-2 with tree attention
     EAGLE_3 = auto()  # EAGLE-3 with aux hidden states
     EAGLE_3_LFM = auto()  # EAGLE-3 LFM variant
-
 
 
 

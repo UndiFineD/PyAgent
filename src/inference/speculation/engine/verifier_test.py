@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from inference.speculation.engine.verifier import TokenVerifier
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from inference.speculation.engine.verifier import TokenVerifier
+except ImportError:
+    from inference.speculation.engine.verifier import TokenVerifier
+
 
 
 def test_tokenverifier_basic():

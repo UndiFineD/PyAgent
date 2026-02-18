@@ -37,7 +37,10 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Self search agent.py module.
 
-from .web_intelligence_agent import WebIntelligenceAgent
+try:
+    from .web_intelligence_agent import WebIntelligenceAgent
+except ImportError:
+    from .web_intelligence_agent import WebIntelligenceAgent
 
 
 
@@ -47,7 +50,10 @@ class SelfSearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancesto
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the SelfSearchAgent (via WebIntelligence core)."
-from .web_intelligence_agent import WebIntelligenceAgent
+try:
+    from .web_intelligence_agent import WebIntelligenceAgent
+except ImportError:
+    from .web_intelligence_agent import WebIntelligenceAgent
 
 
 

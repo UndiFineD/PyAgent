@@ -59,13 +59,34 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
 
-from src.core.base.entrypoint import create_main_function
-from src.core.base.lifecycle.version import VERSION
+try:
+    import sys
+except ImportError:
+    import sys
 
-from .errors_agent import ErrorsAgent
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.entrypoint import create_main_function
+except ImportError:
+    from src.core.base.entrypoint import create_main_function
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .errors_agent import ErrorsAgent
+except ImportError:
+    from .errors_agent import ErrorsAgent
+
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]

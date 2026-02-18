@@ -35,7 +35,6 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 
-
 class EventType(Enum):
     """Types of request events.
     QUEUED = auto()
@@ -139,7 +138,6 @@ class OutputProcessorOutput:
 
 
 
-
 class RequestOutputCollector:
     """Queue for collecting request outputs.
     def __init__(self) -> None:
@@ -155,7 +153,6 @@ class RequestOutputCollector:
 
     def empty(self) -> bool:
         """Check if queue is empty.        return self._queue.empty()
-
 
 
 
@@ -281,7 +278,6 @@ class RequestState:
 
 
 
-
 class LoRARequestStates:
     """Track LoRA request states.
     def __init__(self, log_stats: bool = False) -> None:
@@ -301,7 +297,6 @@ class LoRARequestStates:
 
     def get_active_lora_ids(self) -> Set[int]:
         """Get currently active LoRA IDs.        return set(self.active_loras.keys())
-
 
 
 
@@ -474,7 +469,6 @@ class OutputProcessor:
 
     def get_request_state(self, request_id: str) -> Optional[RequestState]:
         """Get state for a request.        return self.request_states.get(request_id)
-
 
 
 

@@ -17,12 +17,26 @@
 Cryptography mixin for BaseAgent, implementing DPAPI and AES operations.
 Inspired by ADSyncDump-BOF decryption patterns.
 """
+
+
 from __future__ import annotations
 
-import platform
-from typing import Any, Optional
 
-from src.core.base.logic.processing.crypto_core import CryptoCore
+try:
+    import platform
+except ImportError:
+    import platform
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
+
+try:
+    from .core.base.logic.processing.crypto_core import CryptoCore
+except ImportError:
+    from src.core.base.logic.processing.crypto_core import CryptoCore
 
 
 

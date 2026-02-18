@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.muxer import ChannelType, ModalityChannel, Muxer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.muxer import ChannelType, ModalityChannel, Muxer
+except ImportError:
+    from infrastructure.engine.multimodal.muxer import ChannelType, ModalityChannel, Muxer
+
 
 
 def test_channeltype_basic():

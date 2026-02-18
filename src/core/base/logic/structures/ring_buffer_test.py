@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.ring_buffer import RingBuffer, ThreadSafeRingBuffer, TimestampedValue, TimeSeriesBuffer, SlidingWindowAggregator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.ring_buffer import RingBuffer, ThreadSafeRingBuffer, TimestampedValue, TimeSeriesBuffer, SlidingWindowAggregator
+except ImportError:
+    from core.base.logic.structures.ring_buffer import RingBuffer, ThreadSafeRingBuffer, TimestampedValue, TimeSeriesBuffer, SlidingWindowAggregator
+
 
 
 def test_ringbuffer_basic():

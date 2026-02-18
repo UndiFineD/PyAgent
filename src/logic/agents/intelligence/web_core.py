@@ -54,7 +54,6 @@ __version__ = VERSION
 
 
 
-
 class WebCore:
 """"Pure logic core for Web navigation and extraction.
     def __init__(self) -> None:
@@ -112,7 +111,6 @@ from bs4 import BeautifulSoup
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

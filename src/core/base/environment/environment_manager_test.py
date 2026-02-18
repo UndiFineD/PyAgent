@@ -15,15 +15,42 @@
 
 """Test environment management functionality.
 """
-import asyncio
-import tempfile
-from pathlib import Path
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-import pytest
+try:
+    import tempfile
+except ImportError:
+    import tempfile
 
-from src.core.base.common.models.base_models import EnvironmentConfig
-from src.core.base.common.models.core_enums import EnvironmentIsolation, EnvironmentStatus
-from src.core.base.environment.environment_manager import EnvironmentManager
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .core.base.common.models.base_models import EnvironmentConfig
+except ImportError:
+    from src.core.base.common.models.base_models import EnvironmentConfig
+
+try:
+    from .core.base.common.models.core_enums import EnvironmentIsolation, EnvironmentStatus
+except ImportError:
+    from src.core.base.common.models.core_enums import EnvironmentIsolation, EnvironmentStatus
+
+try:
+    from .core.base.environment.environment_manager import EnvironmentManager
+except ImportError:
+    from src.core.base.environment.environment_manager import EnvironmentManager
 
 
 
@@ -155,7 +182,8 @@ class TestEnvironmentManager:
 
     @pytest.mark.asyncio
     async def test_persistence(self, temp_dir):
-        """Test environment and instance persistence."""# Create first manager and add data
+        """Test environment and instance persistence."""
+# Create first manager and add data
         manager1 = EnvironmentManager(base_dir=temp_dir)
         await manager1.initialize()
 

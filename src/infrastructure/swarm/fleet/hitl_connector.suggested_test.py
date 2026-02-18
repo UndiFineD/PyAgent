@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.hitl_connector.suggested import HITLConnector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.hitl_connector.suggested import HITLConnector
+except ImportError:
+    from infrastructure.swarm.fleet.hitl_connector.suggested import HITLConnector
+
 
 
 def test_hitlconnector_basic():

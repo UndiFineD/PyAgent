@@ -17,15 +17,30 @@
 """
 Heterogeneous speculator.py module.
 
-import logging
-from typing import Any, List, Tuple
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.common.models.communication_models import ExpertProfile, MoERoutingDecision
-from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+try:
+    from typing import Any, List, Tuple
+except ImportError:
+    from typing import Any, List, Tuple
+
+
+try:
+    from .core.base.common.models.communication_models import ExpertProfile, MoERoutingDecision
+except ImportError:
+    from src.core.base.common.models.communication_models import ExpertProfile, MoERoutingDecision
+
+try:
+    from .infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+except ImportError:
+    from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+
     MoEGatekeeper
 
 logger: logging.Logger = logging.getLogger(__name__)
-
 
 
 

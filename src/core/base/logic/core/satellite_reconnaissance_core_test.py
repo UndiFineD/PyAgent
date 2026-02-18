@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.satellite_reconnaissance_core import SatelliteAsset, SatelliteReconResult, SatelliteReconConfig, SatelliteReconnaissanceCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.satellite_reconnaissance_core import SatelliteAsset, SatelliteReconResult, SatelliteReconConfig, SatelliteReconnaissanceCore
+except ImportError:
+    from core.base.logic.core.satellite_reconnaissance_core import SatelliteAsset, SatelliteReconResult, SatelliteReconConfig, SatelliteReconnaissanceCore
+
 
 
 def test_satelliteasset_basic():

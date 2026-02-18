@@ -14,16 +14,38 @@
 
 
 """Models for agent configuration, state, and plugins."""
+
+
 from __future__ import annotations
 
-import time
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from typing import Any
 
-from .base_models import (_empty_dict_str_any,
-                          _empty_dict_str_callable_any_any, _empty_list_str)
-from .core_enums import AgentPriority, HealthStatus
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections.abc import Callable
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+from .base_models import _empty_dict_str_any, _empty_dict_str_callable_any_any, _empty_list_str
+try:
+    from .core_enums import AgentPriority, HealthStatus
+except ImportError:
+    from .core_enums import AgentPriority, HealthStatus
+
 
 
 @dataclass(slots=True)

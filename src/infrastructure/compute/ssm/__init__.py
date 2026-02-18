@@ -21,7 +21,11 @@ Modules:
     MambaMixer: Mamba-1 selective state space model
     MambaUtils: Utilities for Mamba computation
 
-from src.infrastructure.compute.ssm.mamba_mixer import (CausalConv1d,
+try:
+    from .infrastructure.compute.ssm.mamba_mixer import (CausalConv1d,
+except ImportError:
+    from src.infrastructure.compute.ssm.mamba_mixer import (CausalConv1d,
+
                                                         HybridMambaMixer,
                                                         Mamba2Mixer,
                                                         MambaConfig,
@@ -29,7 +33,11 @@ from src.infrastructure.compute.ssm.mamba_mixer import (CausalConv1d,
                                                         MambaOutput,
                                                         MambaState,
                                                         SelectiveScan)
-from src.infrastructure.compute.ssm.mamba_utils import (
+try:
+    from .infrastructure.compute.ssm.mamba_utils import (
+except ImportError:
+    from src.infrastructure.compute.ssm.mamba_utils import (
+
     apply_ssm_recurrence, compute_conv_state_shape, compute_ssm_state_shape,
     discretize_ssm, silu_activation, swish_activation)
 

@@ -22,10 +22,23 @@ Registry and factory for KV transfer connectors.
 
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
-from src.infrastructure.storage.kv_transfer.connector.decode_bench import \
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING, Any, Dict, List, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Dict, List, Optional
+
+
+try:
+    from .infrastructure.storage.kv_transfer.connector.decode_bench import \
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.connector.decode_bench import \
+
     DecodeBenchConnector
 
 if TYPE_CHECKING:

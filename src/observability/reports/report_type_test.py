@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.reports.report_type import ReportType
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.reports.report_type import ReportType
+except ImportError:
+    from observability.reports.report_type import ReportType
+
 
 
 def test_reporttype_basic():

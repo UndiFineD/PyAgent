@@ -16,25 +16,47 @@
 
 Modularized via the 'core_logic' subpackage to maintain <500 line limit.
 """
+
+
 from __future__ import annotations
 
-import logging
-import os
-from typing import Any, Callable, Dict, List, Tuple
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from typing import Any, Callable, Dict, List, Tuple
+except ImportError:
+    from typing import Any, Callable, Dict, List, Tuple
+
+
 
 from src.core.base.common.models import AgentConfig, ConversationMessage
+
 # Phase 317: Modularized Logic Mixins
-from src.core.base.mixins.event_mixin import EventCore
-from src.core.base.mixins.formatting_mixin import FormattingCore
-from src.core.base.mixins.metrics_mixin import MetricsCore
-from src.core.base.mixins.utils_mixin import UtilsCore
-from src.core.base.mixins.validation_mixin import ValidationCore
+
+
+from src.core.base.logic.core.events import EventCore
+    
+
+from src.core.base.logic.core.formatting import FormattingCore
+
+
+
+
 
 logger = logging.getLogger(__name__)
 
 
 # pylint: disable=too-many-ancestors
-class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, EventCore):
+class BaseAgentCore(FormattingCore):
     """Pure logic core for agent operations (Rust-convertible).
     Inherits from logic mixins to satisfy the 500-line modularization rule.
     """
@@ -145,7 +167,7 @@ class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, Even
             return False, "Invalid temperature value"
         if max_tokens <= 0:
             return False, "Invalid max_tokens value"
-        return True, "" 
+        return True, ""
 
 
     def is_response_valid(

@@ -24,7 +24,12 @@ budget management, and health-aware failover.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+
+try:
+    from typing import TYPE_CHECKING, Any
+except ImportError:
+    from typing import TYPE_CHECKING, Any
+
 
 # Lazy imports for performance
 __all__: list[str] = [

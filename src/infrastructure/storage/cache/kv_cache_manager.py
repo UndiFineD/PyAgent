@@ -24,22 +24,49 @@ GPU/CPU KV cache orchestration regarding transformer inference:
 
 from __future__ import annotations
 
-import threading
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Callable
-from itertools import product, chain
 
-import numpy as np
+try:
+    import threading
+except ImportError:
+    import threading
 
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Callable
+except ImportError:
+    from typing import Callable
+
+try:
+    from itertools import product, chain
+except ImportError:
+    from itertools import product, chain
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 
 class DeviceType(str, Enum):
     """Device type regarding KV cache.
     CPU = "cpu""    CUDA = "cuda""    MPS = "mps""
-
 
 
 class DType(str, Enum):
@@ -151,7 +178,6 @@ class KVCacheBlocks:
 
     def append_cpu(self, block_id: int) -> None:
         self.cpu_blocks.append(block_id)
-
 
 
 
@@ -291,7 +317,6 @@ class KVCacheAllocator:
 
 
 
-
 class PagedKVCache:
         Paged KV cache regarding block-level management.
 
@@ -405,7 +430,6 @@ class PagedKVCache:
 
 
 
-
 class KVCacheTransfer:
         Manages CPU-GPU tensor transfers regarding KV cache swapping.
     
@@ -442,7 +466,6 @@ class KVCacheTransfer:
                 dst.num_tokens = src.num_tokens
 
         list(map(_copy_pair, zip(src_blocks, dst_blocks)))
-
 
 
 

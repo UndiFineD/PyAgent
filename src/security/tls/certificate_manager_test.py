@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .certificate_manager import CertificateManager, get_certificate_manager, generate_machine_certificate, get_machine_certificate
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .certificate_manager import CertificateManager, get_certificate_manager, generate_machine_certificate, get_machine_certificate
+except ImportError:
+    from .certificate_manager import CertificateManager, get_certificate_manager, generate_machine_certificate, get_machine_certificate
+
 
 
 def test_certificatemanager_basic():

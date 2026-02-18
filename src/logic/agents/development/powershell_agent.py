@@ -36,12 +36,24 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_agent import CoderAgent
+
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.development.coder_agent import CoderAgent
+except ImportError:
+    from src.logic.agents.development.coder_agent import CoderAgent
+
 
 __version__ = VERSION
-
 
 
 
@@ -61,12 +73,24 @@ if __name__ == "__main__":"    main = create_main_function(PowershellAgent, "Pow
 
 from __future__ import annotations
 
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_agent import CoderAgent
+
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.development.coder_agent import CoderAgent
+except ImportError:
+    from src.logic.agents.development.coder_agent import CoderAgent
+
 
 __version__ = VERSION
-
 
 
 

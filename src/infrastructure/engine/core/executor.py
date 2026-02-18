@@ -12,33 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Standard executor implementations.
+
+"""Standard executor implementations."""
+
+
+
 from .base import Executor
 from .config import ModelRunnerOutput, SchedulerOutput
 
 
-
-
 class MockExecutor(Executor):
-    """Mock executor for testing.
+    """Mock executor for testing."""
+
     def __init__(self, tokens_per_step: int = 1) -> None:
         self.tokens_per_step = tokens_per_step
+
 
     def execute_model(
         self,
         scheduler_output: SchedulerOutput,
     ) -> ModelRunnerOutput:
-        """Generate mock tokens.        output = ModelRunnerOutput()
-
+        """Generate mock tokens."""
+        output = ModelRunnerOutput()
         for request in scheduler_output.scheduled_requests:
             output.req_ids.append(request.request_id)
             output.req_id_to_index[request.request_id] = len(output.req_ids) - 1
             # Generate mock tokens
             output.sampled_token_ids.append([1000] * self.tokens_per_step)
-
         return output
 
+
     def shutdown(self) -> None:
-        """No-op shutdown.
+        """No-op shutdown."""
+        pass

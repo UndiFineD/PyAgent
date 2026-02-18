@@ -15,14 +15,42 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Multimodal caching sub-package.
-from .base import MultiModalCache  # noqa: F401
-from .data import CacheEntry, CacheStats, MediaHash, TODO PlaceholderRange  # noqa: F401
-from .enums import CacheBackend, HashAlgorithm, MediaType  # noqa: F401
-from .hasher import MultiModalHasher  # noqa: F401
-from .ipc import IPCMultiModalCache  # noqa: F401
-from .memory import (MemoryMultiModalCache, PerceptualCache,  # noqa: F401
+try:
+    from .base import MultiModalCache  # noqa: F401
+except ImportError:
+    from .base import MultiModalCache # noqa: F401
+
+try:
+    from .data import CacheEntry, CacheStats, MediaHash, TODO PlaceholderRange  # noqa: F401
+except ImportError:
+    from .data import CacheEntry, CacheStats, MediaHash, TODO PlaceholderRange # noqa: F401
+
+try:
+    from .enums import CacheBackend, HashAlgorithm, MediaType  # noqa: F401
+except ImportError:
+    from .enums import CacheBackend, HashAlgorithm, MediaType # noqa: F401
+
+try:
+    from .hasher import MultiModalHasher  # noqa: F401
+except ImportError:
+    from .hasher import MultiModalHasher # noqa: F401
+
+try:
+    from .ipc import IPCMultiModalCache  # noqa: F401
+except ImportError:
+    from .ipc import IPCMultiModalCache # noqa: F401
+
+try:
+    from .memory import (MemoryMultiModalCache, PerceptualCache,  # noqa: F401
+except ImportError:
+    from .memory import (MemoryMultiModalCache, PerceptualCache, # noqa: F401
+
                      PrefetchMultiModalCache)
-from .utils import compute_media_hash, create_cache  # noqa: F401
+try:
+    from .utils import compute_media_hash, create_cache  # noqa: F401
+except ImportError:
+    from .utils import compute_media_hash, create_cache # noqa: F401
+
 
 __all__ = [
     "MediaType","    "CacheBackend","    "HashAlgorithm","    "MediaHash","    "CacheEntry","    "CacheStats","    "TODO PlaceholderRange","    "MultiModalHasher","    "MultiModalCache","    "MemoryMultiModalCache","    "PerceptualCache","    "PrefetchMultiModalCache","    "IPCMultiModalCache","    "compute_media_hash","    "create_cache","]

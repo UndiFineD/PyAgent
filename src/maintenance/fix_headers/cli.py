@@ -44,9 +44,17 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CLI interface for the Fix Headers Tool.
 
-import argparse
+try:
+    import argparse
+except ImportError:
+    import argparse
 
-from .fix_headers_agent import FixHeadersAgent
+
+try:
+    from .fix_headers_agent import FixHeadersAgent
+except ImportError:
+    from .fix_headers_agent import FixHeadersAgent
+
 
 
 def main():

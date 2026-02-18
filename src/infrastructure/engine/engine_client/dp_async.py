@@ -20,14 +20,43 @@ Data parallel implementation with P2C load balancing.
 
 from __future__ import annotations
 
-import logging
-import time
-from typing import TYPE_CHECKING, Optional
 
-from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
-from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
-from src.infrastructure.engine.engine_client.lb import P2CLoadBalancer
-from src.infrastructure.engine.engine_client.types import (ClientMode,
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import TYPE_CHECKING, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Optional
+
+
+try:
+    from .infrastructure.engine.engine_client.async_mp import AsyncMPClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
+
+try:
+    from .infrastructure.engine.engine_client.base import EngineCoreClientBase
+except ImportError:
+    from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
+
+try:
+    from .infrastructure.engine.engine_client.lb import P2CLoadBalancer
+except ImportError:
+    from src.infrastructure.engine.engine_client.lb import P2CLoadBalancer
+
+try:
+    from .infrastructure.engine.engine_client.types import (ClientMode,
+except ImportError:
+    from src.infrastructure.engine.engine_client.types import (ClientMode,
+
                                                            EngineClientConfig,
                                                            EngineOutput,
                                                            WorkerInfo)
@@ -36,7 +65,6 @@ if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import SchedulerOutput
 
 logger = logging.getLogger(__name__)
-
 
 
 

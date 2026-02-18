@@ -16,10 +16,25 @@
 Test suite for AutoMem Memory System (Phase 320)
 Tests the 9-component hybrid search algorithm and memory operations.
 
-import time
-from pathlib import Path
-from unittest.mock import Mock, patch
-import pytest
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from unittest.mock import Mock, patch
+except ImportError:
+    from unittest.mock import Mock, patch
+
+try:
+    import pytest
+except ImportError:
+    import pytest
 
 
 

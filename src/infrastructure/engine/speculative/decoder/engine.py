@@ -17,13 +17,33 @@
 """Speculative decoding orchestrator regarding Phase 336.
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, List, Optional, Tuple
 
-import numpy as np
+try:
+    from typing import Any, Callable, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from .config import AcceptanceMethod
-from .proposers import MedusaProposer, NgramProposer, SpeculativeProposer
-from .verification import SpeculativeVerifier, VerificationResult
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import AcceptanceMethod
+except ImportError:
+    from .config import AcceptanceMethod
+
+try:
+    from .proposers import MedusaProposer, NgramProposer, SpeculativeProposer
+except ImportError:
+    from .proposers import MedusaProposer, NgramProposer, SpeculativeProposer
+
+try:
+    from .verification import SpeculativeVerifier, VerificationResult
+except ImportError:
+    from .verification import SpeculativeVerifier, VerificationResult
 
 
 

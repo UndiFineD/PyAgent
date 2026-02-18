@@ -16,8 +16,16 @@
 # flake8: noqa: F401
 
 """Lazy-loading entry point for observability.reports.from __future__ import annotationsfrom typing import Any, TYPE_CHECKING
-from src.core.base.lifecycle.version import VERSION
-from src.core.lazy_loader import ModuleLazyLoader
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.lazy_loader import ModuleLazyLoader
+except ImportError:
+    from src.core.lazy_loader import ModuleLazyLoader
+
 
 if TYPE_CHECKING:
     from .access_controller import AccessController

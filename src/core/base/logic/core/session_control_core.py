@@ -18,10 +18,8 @@ from pathlib import Path
 
 
 
-
 class SessionSignal(enum.Enum):
     """Signals for agent session lifecycle control."""RUNNING = "running""    PAUSE = "pause""    STOP = "stop""    RESUME = "resume""
-
 
 
 class SessionControlCore:

@@ -67,7 +67,6 @@ except ImportError:
 
 
 
-
 class LoggingCore:
         Pure logic for log formatting and sensitive data masking.
     Targeted for Rust conversion to ensure performance in high-throughput streams.

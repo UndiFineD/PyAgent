@@ -66,10 +66,8 @@ class MCPServerInfo:
 
 
 
-
 class MCPServerType(Enum):
     """Types of MCP servers.    LOCAL = "local""    REMOTE = "remote""    DOCKER = "docker""    NATIVE = "native""
-
 
 
 class MCPCategory(Enum):
@@ -100,7 +98,6 @@ class MCPTool:
     server_name: str
     category: str
     tags: List[str] = field(default_factory=list)
-
 
 
 
@@ -191,7 +188,6 @@ class MCPServerRegistry:
         self.logger.warning("ecosystem_populator module not found; discovery stubbed.")"
         self._save_registry()
         self.logger.info(f"Ecosystem expanded to {len(self.servers)} MCP servers")"        return discovered
-
 
 
 
@@ -340,7 +336,6 @@ class MCPServerInstance:
 
 
 
-
 class MCPBridge:
         MCP Protocol Bridge.
 
@@ -420,7 +415,6 @@ class MCPBridge:
     def get_servers_by_capability(self, capability: str) -> List[str]:
         """Get server names by capability.        return [name for name, config in self.registry.servers.items()
                 if capability in config.capabilities and config.enabled]
-
 
 
 

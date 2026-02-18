@@ -13,17 +13,44 @@
 # limitations under the License.
 
 
-import contextlib
-import hashlib
-import logging
-from datetime import datetime
-from typing import Any, Callable
+try:
+    import contextlib
+except ImportError:
+    import contextlib
 
-from .metrics import MetricAnnotation
-from .observability_core import MetricSubscription, StatsSubscription
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
+
+
+try:
+    from .metrics import MetricAnnotation
+except ImportError:
+    from .metrics import MetricAnnotation
+
+try:
+    from .observability_core import MetricSubscription, StatsSubscription
+except ImportError:
+    from .observability_core import MetricSubscription, StatsSubscription
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -68,7 +95,6 @@ class AnnotationManager:
 
 
 
-
 class StatsAnnotationManager:
     """Manages annotations on metrics (backward compat).
     def __init__(self) -> None:
@@ -87,7 +113,6 @@ class StatsAnnotationManager:
 
     def get_annotations(self, metric: str) -> list[MetricAnnotation]:
         return self.annotations.get(metric, [])
-
 
 
 
@@ -134,7 +159,6 @@ class SubscriptionManager:
                     self.last_notification[sub_id] = now
                     notified.append(sub_id)
         return notified
-
 
 
 

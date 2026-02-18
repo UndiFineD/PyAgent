@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.loading.kv_offload.base import OffloadingBackend, OffloadingManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.loading.kv_offload.base import OffloadingBackend, OffloadingManager
+except ImportError:
+    from infrastructure.engine.loading.kv_offload.base import OffloadingBackend, OffloadingManager
+
 
 
 def test_offloadingbackend_basic():

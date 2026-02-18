@@ -13,8 +13,15 @@
 # limitations under the License.
 
 # "Entity and lesson management logic for GlobalContextEngine."# from __future__ import annotations
-from datetime import datetime
-from typing import Any
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 

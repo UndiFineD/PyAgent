@@ -48,6 +48,8 @@ FILE CONTENT SUMMARY:
 
 Logic for managing code improvements.
 Extracted from ImprovementsAgent for decompositi"""on.""""
+
+
 from __future__ import annotations
 
 import hashlib
@@ -83,7 +85,6 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
         default_effort=EffortEstimate.MEDIUM,
     ),
 ]
-
 
 
 
@@ -143,6 +144,8 @@ class ImprovementManager:
             section_match = section_re.match(line)
             if section_match:
                 priority_name = s"""ec"""tio"""n_match.group""""
+
+
 from __future__ import annotations
 
 import hashlib
@@ -178,7 +181,6 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
         default_effort=EffortEstimate.MEDIUM,
     ),
 ]
-
 
 
 

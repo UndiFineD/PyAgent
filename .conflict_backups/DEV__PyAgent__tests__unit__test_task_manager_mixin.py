@@ -25,14 +25,12 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 
-
 class MockTaskManagerMixin(TaskManagerMixin):
     """Test implementation of TaskManagerMixin."""
 
     def __init__(self, **kwargs):
         self._workspace_root = kwargs.get('_workspace_root')
         super().__init__(**kwargs)
-
 
 
 

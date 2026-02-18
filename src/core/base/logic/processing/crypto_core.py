@@ -17,6 +17,8 @@
 Core logic for cryptographic operations.
 Implements DPAPI and AES decryption patterns from ADSyncDump-BOF.
 """
+
+
 from __future__ import annotations
 
 import base64
@@ -39,18 +41,15 @@ CALG_AES_256 = 0x00006610
 
 
 
-
 class DATA_BLOB(ctypes.Structure):
     _fields_ = [
         ("cbData", wintypes.DWORD),"        ("pbData", ctypes.POINTER(ctypes.c_byte))"    ]
 
 
 
-
 class CREDENTIALW(ctypes.Structure):
     _fields_ = [
         ("Flags", wintypes.DWORD),"        ("Type", wintypes.DWORD),"        ("TargetName", wintypes.LPWSTR),"        ("Comment", wintypes.LPWSTR),"        ("LastWritten", wintypes.FILETIME),"        ("CredentialBlobSize", wintypes.DWORD),"        ("CredentialBlob", ctypes.POINTER(ctypes.c_byte)),"        ("Persist", wintypes.DWORD),"        ("AttributeCount", wintypes.DWORD),"        ("Attributes", ctypes.c_void_p),"        ("TargetAlias", wintypes.LPWSTR),"        ("UserName", wintypes.LPWSTR)"    ]
-
 
 
 
@@ -63,7 +62,8 @@ class CryptoCore:
         except Exception as e:
             raise RuntimeError(f"Crypto libraries not available: {e}")"
     def decrypt_dpapi_blob(self, encrypted_data: bytes, entropy: Optional[bytes] = None) -> Optional[bytes]:
-        """Decrypt data using Windows DPAPI."""try:
+        """Decrypt data using Windows DPAPI."""
+try:
             # Prepare input blob
             in_blob = DATA_BLOB()
             in_blob.cbData = len(encrypted_data)
@@ -101,7 +101,8 @@ class CryptoCore:
             return None
 
     def decrypt_aes_cbc(self, key: bytes, iv: bytes, encrypted_data: bytes) -> Optional[bytes]:
-        """Decrypt data using AES-CBC."""try:
+        """Decrypt data using AES-CBC."""
+try:
             # Acquire crypto context
             hProv = wintypes.HANDLE()
             if not self.advapi32.CryptAcquireContextW(
@@ -154,13 +155,15 @@ class CryptoCore:
             return None
 
     def base64_decode(self, encoded_data: str) -> Optional[bytes]:
-        """Decode base64 string to bytes."""try:
+        """Decode base64 string to bytes."""
+try:
             return base64.b64decode(encoded_data)
         except Exception:
             return None
 
     def read_windows_credential(self, target_name: str) -> Optional[bytes]:
-        """Read encrypted credential blob from Windows Credential Manager."""try:
+        """Read encrypted credential blob from Windows Credential Manager."""
+try:
             cred = CREDENTIALW()
             cred_ptr = ctypes.POINTER(CREDENTIALW)()
 

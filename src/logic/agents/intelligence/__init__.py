@@ -16,8 +16,16 @@
 
 # "Auto-generated module exports."# from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
-from .search_agent import SearchAgent
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .search_agent import SearchAgent
+except ImportError:
+    from .search_agent import SearchAgent
+
 
 __version__ = VERSION
 __all__ = ["SearchAgent"]"

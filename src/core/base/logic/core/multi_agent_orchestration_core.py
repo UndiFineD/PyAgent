@@ -17,6 +17,8 @@
 Implements structured multi-agent coordination patterns inspired by CrewAI and OpenAI Agents SDK.
 Provides deterministic agent interactions with Pydantic-based structured outputs.
 """
+
+
 from __future__ import annotations
 
 import asyncio
@@ -34,21 +36,17 @@ logger = logging.getLogger(__name__)
 T = TypeVar('T', bound=BaseModel)'
 
 
-
 class AgentTask(BaseModel):
     """Represents a task to be executed by an agent."""description: str = Field(..., description="Human-readable task description")"    priority: int = Field(default=1, ge=1, le=10, description="Task priority (1-10)")"    context: Dict[str, Any] = Field(default_factory=dict, description="Additional context data")"    dependencies: List[str] = Field(default_factory=list, description="Task IDs this task depends on")"
-
 
 
 class AgentResult(BaseModel):
     """Standardized result format from agent execution."""task_id: str = Field(..., description="ID of the completed task")"    success: bool = Field(..., description="Whether the task completed successfully")"    output: Any = Field(..., description="The agent's output/result")"'    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")"    error_message: Optional[str] = Field(default=None, description="Error message if task failed")"
 
 
-
 class OrchestrationPlan(BaseModel):
     """Plan for multi-agent task execution."""tasks: List[AgentTask] = Field(..., description="List of tasks to execute")"    execution_order: List[str] = Field(..., description="Order of task execution by task ID")"    parallel_groups: List[List[str]] = Field(default_factory=list,
                                              description="Groups of tasks that can run in parallel")"
-
 
 
 class AgentCoordinator(ABC):
@@ -60,7 +58,6 @@ class AgentCoordinator(ABC):
     @abstractmethod
     async def plan_orchestration(self, objective: str, context: CascadeContext) -> OrchestrationPlan:
         """Create an orchestration plan for achieving an objective."""pass
-
 
 
 

@@ -57,7 +57,6 @@ class ReconConfig:
             self.sources = ['dns', 'crtsh', 'threatcrowd']'
 
 
-
 class IntelligenceSource(ABC):
     """Abstract base class for intelligence sources"""
     @abstractmethod
@@ -68,7 +67,6 @@ class IntelligenceSource(ABC):
     @abstractmethod
     def name(self) -> str:
         """Name of the intelligence source"""pass
-
 
 
 
@@ -137,7 +135,6 @@ class DNSSource(IntelligenceSource):
 
 
 
-
 class CertificateTransparencySource(IntelligenceSource):
     """Certificate Transparency log enumeration"""
     @property
@@ -172,7 +169,6 @@ class CertificateTransparencySource(IntelligenceSource):
 
 
 
-
 class ThreatCrowdSource(IntelligenceSource):
     """ThreatCrowd API enumeration"""
     @property
@@ -198,7 +194,6 @@ class ThreatCrowdSource(IntelligenceSource):
         except Exception as e:
             logger.warning(f"Error querying ThreatCrowd: {e}")"
         return results
-
 
 
 
@@ -291,7 +286,8 @@ class ReconnaissanceCore:
         return list(wordlist)
 
     def _expand_pattern(self, pattern: str, payloads: Dict[str, List[str]]) -> List[str]:
-        """Expand a single pattern with payloads"""# Simple implementation - replace {{variable}} with payload values
+        """Expand a single pattern with payloads"""
+# Simple implementation - replace {{variable}} with payload values
         results = [pattern]
 
         for var_name, values in payloads.items():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.utils.benchmarking import agent_dir_on_path, agent_sys_path
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.utils.benchmarking import agent_dir_on_path, agent_sys_path
+except ImportError:
+    from core.utils.benchmarking import agent_dir_on_path, agent_sys_path
+
 
 
 def test_agent_dir_on_path_basic():

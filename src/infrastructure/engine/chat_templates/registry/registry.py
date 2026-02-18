@@ -28,7 +28,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class ChatTemplateRegistry:
     """Registry for chat templates with dynamic resolution.
     _instance: Optional["ChatTemplateRegistry"] = None"    _lock = threading.Lock()

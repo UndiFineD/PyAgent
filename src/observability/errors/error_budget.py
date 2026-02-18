@@ -20,7 +20,11 @@ Error Budget - ErrorBudget dataclass
 # AUTHOR: Keimpe de Jong
 USAGE:
 Import the ErrorBudget dataclass and instantiate to track an SLO error budget:
-from src.modules.error_budget import ErrorBudget
+try:
+    from .modules.error_budget import ErrorBudget
+except ImportError:
+    from src.modules.error_budget import ErrorBudget
+
 eb = ErrorBudget(budget_name="api_availability", total_budget=100.0)"# read or update attributes directly:
 eb.consumed += 2.5
 remaining = eb.total_budget - eb.consumed
@@ -38,9 +42,18 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

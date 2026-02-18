@@ -19,7 +19,11 @@ TimelineEvent - Simple dataclass for error timeline entries
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.lifecycle.timeline_event import TimelineEvent
+try:
+    from .core.base.lifecycle.timeline_event import TimelineEvent
+except ImportError:
+    from src.core.base.lifecycle.timeline_event import TimelineEvent
+
 event = TimelineEvent(timestamp="2026-02-12T21:00:00Z", event_type="created", error_id="err-1234", details="Initial occurrence")"
 WHAT IT DOES:
 Defines a minimal dataclass representing a point in an error timeline with fields timestamp, event_type, error_id, and optional details and exposes module __version__ from the package VERSION
@@ -31,9 +35,18 @@ Use timezone-aware datetime objects instead of plain strings, validate and norma
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

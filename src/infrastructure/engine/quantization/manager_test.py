@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.quantization.manager import QuantizationMode, QuantizationManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.quantization.manager import QuantizationMode, QuantizationManager
+except ImportError:
+    from infrastructure.engine.quantization.manager import QuantizationMode, QuantizationManager
+
 
 
 def test_quantizationmode_basic():

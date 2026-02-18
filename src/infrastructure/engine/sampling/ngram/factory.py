@@ -21,11 +21,24 @@ N-gram Proposer Factory - Helper functions to instantiate proposers.
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.infrastructure.engine.sampling.ngram.proposer import (
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .infrastructure.engine.sampling.ngram.proposer import (
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.proposer import (
+
     AdaptiveNgramProposer, NgramProposer)
-from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+try:
+    from .infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+
                                                             NgramConfig)
 
 

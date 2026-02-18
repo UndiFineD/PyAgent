@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.kv_cache.pack_kv import PackKVManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.kv_cache.pack_kv import PackKVManager
+except ImportError:
+    from infrastructure.engine.kv_cache.pack_kv import PackKVManager
+
 
 
 def test_packkvmanager_basic():

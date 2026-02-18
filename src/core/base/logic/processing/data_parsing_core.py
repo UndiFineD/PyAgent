@@ -17,11 +17,12 @@
 Core logic for data parsing operations.
 Implements XML/HTML parsing patterns from ADSyncDump-BOF.
 """
+
+
 from __future__ import annotations
 
 import html
 from typing import Optional
-
 
 
 
@@ -31,7 +32,8 @@ class DataParsingCore:
         """Unescape HTML entities in text."""return html.unescape(text)
 
     def extract_xml_value(self, xml: str, tag_pattern: str) -> Optional[str]:
-        """Extract value from XML using tag pattern."""try:
+        """Extract value from XML using tag pattern."""
+try:
             # Simple pattern-based extraction
             start_pattern = f"<{tag_pattern}>""            end_pattern = f"</{tag_pattern}>""
             start_pos = xml.find(start_pattern)
@@ -50,7 +52,8 @@ class DataParsingCore:
             return None
 
     def find_pattern(self, haystack: str, needle: str) -> Optional[str]:
-        """Find pattern in text using simple string scanning."""try:
+        """Find pattern in text using simple string scanning."""
+try:
             pos = haystack.find(needle)
             if pos == -1:
                 return None

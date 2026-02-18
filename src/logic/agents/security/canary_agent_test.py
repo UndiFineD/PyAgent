@@ -15,7 +15,10 @@
 
 Tests for CanaryAgent.
 
-from src.logic.agents.security.canary_agent import CanaryAgent
+try:
+    from .logic.agents.security.canary_agent import CanaryAgent
+except ImportError:
+    from src.logic.agents.security.canary_agent import CanaryAgent
 
 
 

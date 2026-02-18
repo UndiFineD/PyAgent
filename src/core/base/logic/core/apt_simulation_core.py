@@ -59,7 +59,6 @@ class C2Profile:
 
 
 
-
 class APTSimulationCore(BaseCore):
     """Advanced APT Simulation and Analysis Core
 

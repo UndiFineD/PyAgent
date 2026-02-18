@@ -15,7 +15,10 @@
 
 """
 Assistant for indexing the workspace for vector search.
-from typing import List, Dict, Any, Tuple
+try:
+    from typing import List, Dict, Any, Tuple
+except ImportError:
+    from typing import List, Dict, Any, Tuple
 
 
 

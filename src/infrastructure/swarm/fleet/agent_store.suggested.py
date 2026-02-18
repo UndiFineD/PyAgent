@@ -19,11 +19,27 @@ AgentStore for sharing specialized agent configurations and templates.
 Allows agents to 'buy' or download new capabilities.'
 from __future__ import annotations
 
-import logging
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
 
 
 

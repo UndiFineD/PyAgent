@@ -16,13 +16,23 @@
 """Module: skill_core
 Base classes for the Universal Shard (Skill Core) architecture.
 """
+
+
 from __future__ import annotations
-import abc
-from typing import TYPE_CHECKING
+
+try:
+    import abc
+except ImportError:
+    import abc
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
 
 if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent
-
 
 
 
@@ -40,7 +50,6 @@ class SkillCore(abc.ABC):
     @abc.abstractmethod
     async def shutdown(self) -> None:
         """Cleanup resources used by the skill."""pass
-
 
 
 

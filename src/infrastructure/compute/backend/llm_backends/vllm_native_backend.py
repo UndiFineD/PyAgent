@@ -29,7 +29,6 @@ __version__ = VERSION
 
 
 
-
 class VllmNativeBackend(LLMBackend):
     """vLLM Native Engine LLM Backend.
     def chat(

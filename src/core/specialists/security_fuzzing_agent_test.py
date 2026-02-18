@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.specialists.security_fuzzing_agent import SecurityFuzzingMixin, SecurityFuzzingAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.specialists.security_fuzzing_agent import SecurityFuzzingMixin, SecurityFuzzingAgent
+except ImportError:
+    from core.specialists.security_fuzzing_agent import SecurityFuzzingMixin, SecurityFuzzingAgent
+
 
 
 def test_securityfuzzingmixin_basic():

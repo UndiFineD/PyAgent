@@ -14,9 +14,20 @@
 
 
 """Unit tests for communication models (CascadeContext)."""
-import pytest
-from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.common.models import FailureClassification
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
+
+try:
+    from .core.base.common.models import FailureClassification
+except ImportError:
+    from src.core.base.common.models import FailureClassification
 
 
 

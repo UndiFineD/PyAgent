@@ -57,13 +57,37 @@ FILE CONTENT SUMMARY:
 FilterAgent: Specialist agent for real-time multimodal stream filtering (Audio/Video/Text)"."
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict, List
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
-from src.infrastructure.engine.multimodal.processor.video import VideoProcessor
-from src.infrastructure.engine.multimodal.processor.audio import AudioProcessor
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .infrastructure.engine.multimodal.processor.video import VideoProcessor
+except ImportError:
+    from src.infrastructure.engine.multimodal.processor.video import VideoProcessor
+
+try:
+    from .infrastructure.engine.multimodal.processor.audio import AudioProcessor
+except ImportError:
+    from src.infrastructure.engine.multimodal.processor.audio import AudioProcessor
 
 
 
@@ -103,13 +127,37 @@ class FilterAgent(BaseAgent):
 
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict, List
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
-from src.infrastructure.engine.multimodal.processor.video import VideoProcessor
-from src.infrastructure.engine.multimodal.processor.audio import AudioProcessor
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .infrastructure.engine.multimodal.processor.video import VideoProcessor
+except ImportError:
+    from src.infrastructure.engine.multimodal.processor.video import VideoProcessor
+
+try:
+    from .infrastructure.engine.multimodal.processor.audio import AudioProcessor
+except ImportError:
+    from src.infrastructure.engine.multimodal.processor.audio import AudioProcessor
 
 
 

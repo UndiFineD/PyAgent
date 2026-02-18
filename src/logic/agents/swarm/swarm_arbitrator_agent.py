@@ -51,15 +51,35 @@ SwarmArbitratorAgent: Swarm agent for mediating conflicts, resolving resource co
 Coordinates arbitration logic for distributed agent collaboration within the PyAgent swarm"."
 from __future__ import annotations
 
-import time
-import uuid
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.swarm.core.auction_core import AuctionCore
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.swarm.core.auction_core import AuctionCore
+except ImportError:
+    from src.logic.agents.swarm.core.auction_core import AuctionCore
+
 
 __version__ = VERSION
-
 
 
 
@@ -125,15 +145,35 @@ class SwarmArbitratorAgent:
       "  "    # "Only preempt allocated tasks"
 from __future__ import annotations
 
-import time
-import uuid
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.swarm.core.auction_core import AuctionCore
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.swarm.core.auction_core import AuctionCore
+except ImportError:
+    from src.logic.agents.swarm.core.auction_core import AuctionCore
+
 
 __version__ = VERSION
-
 
 
 

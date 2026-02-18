@@ -14,7 +14,11 @@
 
 # Licensed under the Apache License, Version 2.0
 
-from src.core.base.common.pruning_core import PruningCore
+try:
+    from .core.base.common.pruning_core import PruningCore
+except ImportError:
+    from src.core.base.common.pruning_core import PruningCore
+
 
 
 def test_calculate_decay_python_fallback(monkeypatch):

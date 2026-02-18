@@ -21,14 +21,30 @@ Provides high-speed text redaction and log scanning for PII.
 
 from __future__ import annotations
 
-import logging
-import re
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

@@ -46,7 +46,6 @@ if TYPE_CHECKING:
 
 
 
-
 class FederationMixin:
 """"Mixin for multi-project federation in TopologicalNavigator.
     @as_tool
@@ -74,7 +73,6 @@ from src.core.base.common.base_utilities import as_tool
 if TYPE_CHECKING:
     from src.logic.agents.system.topological_navigator import \
         TopologicalNavigator
-
 
 
 

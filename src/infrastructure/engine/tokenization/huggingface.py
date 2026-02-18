@@ -27,7 +27,6 @@ from .models import TokenizerBackend, TokenizerConfig, TokenizerInfo
 
 
 
-
 class HuggingFaceTokenizer(BaseTokenizer):
     """HuggingFace transformers tokenizer wrapper.
     def __init__(self, config: TokenizerConfig) -> None:

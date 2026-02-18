@@ -12,10 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import threading
-import pytest
+try:
+    import threading
+except ImportError:
+    import threading
 
-from src.core.base.common.resilience_core import ResilienceCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .core.base.common.resilience_core import ResilienceCore
+except ImportError:
+    from src.core.base.common.resilience_core import ResilienceCore
+
 
 
 def test_retry_uses_threading_event_wait(monkeypatch):

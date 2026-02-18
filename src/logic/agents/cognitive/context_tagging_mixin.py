@@ -48,7 +48,11 @@ FILE CONTENT SUMMARY:
 
 # "Mixin for context tagging capabilities."
 from __future__ import annotations
-from src.logic.agents.cognitive.context.models.context_tag import ContextTag
+
+try:
+    from .logic.agents.cognitive.context.models.context_tag import ContextTag
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_tag import ContextTag
 
 
 
@@ -71,7 +75,11 @@ class ContextTaggingMixin:
     def get_tags_by_parent(self, parent_name: str) -> list[ContextTag]:
 """"Get all tags with a specific parent.        return [t for t in getattr(self, "_tags", {}).values() if t.parent == parent_name]"
 from __future__ import annotations
-from src.logic.agents.cognitive.context.models.context_tag import ContextTag
+
+try:
+    from .logic.agents.cognitive.context.models.context_tag import ContextTag
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_tag import ContextTag
 
 
 

@@ -50,7 +50,6 @@ __version__ = VERSION
 
 
 
-
 class ModelForgeAgent(BaseAgent):
 """"Orchestrates local model fine-tuning and adapter management.
     def __init__(self, path: str) -> None:
@@ -132,7 +131,6 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.system.core.model_registry_core import ModelRegistryCore
 
 __version__ = VERSION
-
 
 
 

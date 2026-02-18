@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .code_analyzer import CodeAnalyzer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .code_analyzer import CodeAnalyzer
+except ImportError:
+    from .code_analyzer import CodeAnalyzer
+
 
 
 def test_codeanalyzer_basic():

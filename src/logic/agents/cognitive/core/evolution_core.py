@@ -17,8 +17,15 @@
 Core logic for Evolutionary Hyper-Parameter Tuning (Phase 182).
 # Handles prompt crossover and lineage persistence.
 
-import hashlib
-import random
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import random
+except ImportError:
+    import random
 
 
 

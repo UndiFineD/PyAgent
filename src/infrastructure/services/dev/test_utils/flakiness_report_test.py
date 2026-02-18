@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.flakiness_report import FlakinessReport
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.flakiness_report import FlakinessReport
+except ImportError:
+    from infrastructure.services.dev.test_utils.flakiness_report import FlakinessReport
+
 
 
 def test_flakinessreport_basic():

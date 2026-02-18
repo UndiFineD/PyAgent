@@ -15,13 +15,33 @@
 
 Processor package.
 
-from .analyzer import LogprobsAnalyzer  # noqa: F401
-from .config import (LogprobEntry, LogprobFormat, LogprobsResult,  # noqa: F401
+try:
+    from .analyzer import LogprobsAnalyzer  # noqa: F401
+except ImportError:
+    from .analyzer import LogprobsAnalyzer # noqa: F401
+
+try:
+    from .config import (LogprobEntry, LogprobFormat, LogprobsResult,  # noqa: F401
+except ImportError:
+    from .config import (LogprobEntry, LogprobFormat, LogprobsResult, # noqa: F401
+
                      PromptLogprobs, SampleLogprobs, TopLogprob,
                      compute_perplexity)
-from .engine import LogprobsProcessor, StreamingLogprobs  # noqa: F401
-from .storage import FlatLogprobs  # noqa: F401
-from .utils import compute_entropy, normalize_logprobs  # noqa: F401
+try:
+    from .engine import LogprobsProcessor, StreamingLogprobs  # noqa: F401
+except ImportError:
+    from .engine import LogprobsProcessor, StreamingLogprobs # noqa: F401
+
+try:
+    from .storage import FlatLogprobs  # noqa: F401
+except ImportError:
+    from .storage import FlatLogprobs # noqa: F401
+
+try:
+    from .utils import compute_entropy, normalize_logprobs  # noqa: F401
+except ImportError:
+    from .utils import compute_entropy, normalize_logprobs # noqa: F401
+
 
 __all__ = [
     "LogprobFormat","    "TopLogprob","    "LogprobEntry","    "PromptLogprobs","    "SampleLogprobs","    "LogprobsResult","    "compute_perplexity","    "compute_entropy","    "normalize_logprobs","    "FlatLogprobs","    "LogprobsProcessor","    "StreamingLogprobs","    "LogprobsAnalyzer","]

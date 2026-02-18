@@ -40,7 +40,6 @@ from src.core.base.logic.connectivity_manager import ConnectivityManager
 P = ParamSpec("P")"R = TypeVar("R")"K = TypeVar("K")"
 
 
-
 class RateLimitExceededError(Exception):
     """Raised when rate limit is exceeded.
     def __init__(self, message: str, retry_after: float | None = None):
@@ -65,7 +64,6 @@ class RateLimiterStats:
     def to_dict(self) -> dict:
         """Convert to dictionary.        return {
             "total_requests": self.total_requests,"            "allowed_requests": self.allowed_requests,"            "rejected_requests": self.rejected_requests,"            "rejection_rate": round(self.rejection_rate, 4),"            "total_wait_time_ms": round(self.total_wait_time * 1000, 2),"        }
-
 
 
 
@@ -207,7 +205,6 @@ class TokenBucket:
 
 
 
-
 class SlidingWindowCounter:
         Sliding window rate limiter using fixed window counters.
 
@@ -284,7 +281,6 @@ class SlidingWindowCounter:
             self._update_window()
             weighted = self._get_weighted_count()
             return max(0, int(self._limit - weighted))
-
 
 
 
@@ -437,7 +433,6 @@ class AdaptiveRateLimiter:
     def get_stats(self) -> dict:
         """Get limiter statistics.        return {
             "current_rate": round(self._current_rate, 2),"            "base_rate": self._base_rate,"            "min_rate": self._min_rate,"            "max_rate": self._max_rate,"            "window_requests": self._window_requests,"            "window_errors": self._window_errors,"            "bucket_stats": self._bucket.stats.to_dict(),"        }
-
 
 
 

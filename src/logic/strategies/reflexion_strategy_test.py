@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.strategies.reflexion_strategy import ReflexionStrategy
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.strategies.reflexion_strategy import ReflexionStrategy
+except ImportError:
+    from logic.strategies.reflexion_strategy import ReflexionStrategy
+
 
 
 def test_reflexionstrategy_basic():

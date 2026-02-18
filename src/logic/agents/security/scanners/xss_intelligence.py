@@ -20,7 +20,6 @@ from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 
 
-
 class XssIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -28,13 +27,17 @@ class XssIntelligence:
 
     DEFAULT_PAYLOADS = [
         "<script>alert(1)</script>","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         '"><script>alert(1)</script>',"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         "';alert(1)//","  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         '";alert(1)//',"  # [BATCHFIX] closed string"'        "<img src=x onerror=alert(1)>","        "javascript:alert(1)","    ]
+""" [BATCHFIX] Commented unterminated string""""
+#         '"><script>alert(1)</script>',"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#         "';alert(1)//","  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#         '";alert(1)//',"  # [BATCHFIX] closed string"'        "<img src=x onerror=alert(1)>","        "javascript:alert(1)","    ]
 
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     async def verify_reflection(cls, url: str, payloads: Optional[List[str]] = None) -> List[str]:""""        Injects payloads into URL parameters and checks if they are reflected in the response.
         Inspired by AutoRecon-XSS and qsreplace workflows.
 # [BATCHFIX] Commented metadata/non-Python
@@ -45,10 +48,12 @@ class XssIntelligence:
 
         if not params:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             return []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         found = []""""        timeout = aiohttp.ClientTimeout(total=10)
         async with aiohttp.ClientSession(timeout=timeout) as session:
             for param_name in params:
@@ -56,7 +61,8 @@ class XssIntelligence:
                     # Replace only the current parameter value
                     new_params = params.copy()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                     new_params[param_name] = [payload]""""
                     test_query = urlencode(new_params, doseq=True)
                     test_url = urlunparse(parsed._replace(query=test_query))
@@ -75,13 +81,16 @@ class XssIntelligence:
 
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def scan_dom_xss(cls, url: str) -> List[str]:""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""     async def scan_dom_xss(cls, url: str) -> List[str]:""""
+# [BATCHFIX] Commented metadata/non-Python
 #         Heuristic scan for DOM-based XSS by looking for dangerous "sinks in JS."  # [BATCHFIX] closed string"        Logic adapted from various DOM XSS scripts.
         # Patterns for dangerous sinks and sources
         SINKS = re.compile(r"(eval|setTimeout|setInterval|innerHTML|outerHTML|document\\.write|docment\\.writeln)\\\\s*\(")"        SOURCES = re.compile(r"(location\\.(search|hash|href|pathname)|document\\.(URL|referrer|cookie)|window\\.name)")"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         findings = []""""        timeout = aiohttp.ClientTimeout(total=10)
         async with aiohttp.ClientSession(timeout=timeout) as session:
             try:
@@ -96,7 +105,8 @@ class XssIntelligence:
 #                             findings.append(fPotential inline DOM XSS sink/source found in {url}")"  # [BATCHFIX] closed string"
                         # 2. Extract and fetch external JS files
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                         js_files = re.findall(r'src=["\'](.*?\\.js)["\']', content)"'#                         base_url = f"{parsed.scheme}://{parsed.netloc}" if (parsed := urlparse(url)) else"
                         for js_path in js_files:
                             if not js_path.startswith("http"):"# [BATCHFIX] Commented metadata/non-Python

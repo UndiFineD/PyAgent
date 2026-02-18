@@ -13,29 +13,49 @@
 # limitations under the License.
 
 
-from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor, DismExtractorFailue
+try:
+    from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor, DismExtractorFailue
+except ImportError:
+    from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor, DismExtractorFailue
 
-from typing import Dict, List
-import subprocess
-import json
-import os
+
+try:
+    from typing import Dict, List
+except ImportError:
+    from typing import Dict, List
+
+try:
+    import subprocess
+except ImportError:
+    import subprocess
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import os
+except ImportError:
+    import os
+
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ SCRIPT_PATH = os.path.join(os.path.split(__file__)[0], "dism_scripts", "ida_python.py")"# [BATCHFIX] Commented metadata/non-Python
 """ TEMP_OUTPUT_FILE = "ida_pro_rpc_reg_info.tmp"  # [BATCHFIX] closed string"
-
 
 
 class IdaDBOpenException(Exception):
     def __init__(self, pe_path: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         super().__init__(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         super().__init__(
 #             fRunning IDA dism failed, return code 4. Please close the
 #             fIDA instance open for the file and retry. PE path: {pe_path}
         )
-
 
 
 
@@ -44,9 +64,12 @@ class IdaProRpcRegistrationExtractor(BaseRpcRegistrationExtractor):
 #     pass  # [BATCHFIX] inserted for empty class
 """_default_dism_path = "C:\\Program Files\\IDA Pro 7.6\\idat64.exe
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""     def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         p = subprocess.run([self._dism_path, f"-S{SCRIPT_PATH}", "-A", pe_path, "-t"], stdout=subprocess.PIPE)"        if p.returncode != 0:
             if p.returncode == 4:
                 raise IdaDBOpenException(pe_path)

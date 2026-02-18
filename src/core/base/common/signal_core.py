@@ -28,7 +28,6 @@ logger = logging.getLogger("pyagent.signal")
 
 
 
-
 class SignalCore(BaseCore):
     """Authoritative engine for agent signals and inter-process events.
     Standardizes subscription and broadcast logic across the swarm.

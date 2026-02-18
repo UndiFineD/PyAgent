@@ -23,15 +23,29 @@ Goes beyond vLLM with space-efficient set operations:
 
 Phase 18: Beyond vLLM - Advanced Data Structures
 """
+
+
 from __future__ import annotations
 
-import hashlib
-import math
-from typing import Any
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
 
 # Try Rust acceleration
 RUST_AVAILABLE = False
-
 
 
 
@@ -78,7 +92,8 @@ class BloomFilter:
 
     @staticmethod
     def _optimal_size(n: int, p: float) -> int:
-        """Calculate optimal bit array size."""# m = -(n * ln(p)) / (ln(2)^2)
+        """Calculate optimal bit array size."""
+# m = -(n * ln(p)) / (ln(2)^2)
         if p <= 0:
             p = 0.0001
         m = -(n * math.log(p)) / (math.log(2) ** 2)
@@ -86,14 +101,16 @@ class BloomFilter:
 
     @staticmethod
     def _optimal_num_hashes(m: int, n: int) -> int:
-        """Calculate optimal number of hash functions."""# k = (m/n) * ln(2)
+        """Calculate optimal number of hash functions."""
+# k = (m/n) * ln(2)
         if n <= 0:
             n = 1
         k = (m / n) * math.log(2)
         return max(1, int(round(k)))
 
     def _get_hash_positions(self, item: Any) -> list[int]:
-        """Get bit positions regarding an item using double hashing."""# Convert to bytes
+        """Get bit positions regarding an item using double hashing."""
+# Convert to bytes
         if isinstance(item, bytes):
             data = item
         elif isinstance(item, str):
@@ -135,7 +152,8 @@ class BloomFilter:
 
     @property
     def estimated_fp_rate(self) -> float:
-        """Estimate current false positive rate."""# p = (1 - e^(-kn/m))^k
+        """Estimate current false positive rate."""
+# p = (1 - e^(-kn/m))^k
         if self._count == 0:
             return 0.0
 
@@ -150,7 +168,8 @@ class BloomFilter:
         """Get filter statistics."""return {
             "size_bits": self._size,"            "size_bytes": self.size_bytes,"            "num_hashes": self._num_hashes,"            "items_added": self._count,"            "expected_items": self._expected_items,"            "target_fp_rate": self._fp_rate,"            "estimated_fp_rate": round(self.estimated_fp_rate, 6),"            "fill_ratio": round(self.fill_ratio, 4),"        }
 
-    def union(self, other: "BloomFilter") -> "BloomFilter":"        """Create union of two filters (must be same size)."""# pylint: disable=protected-access
+    def union(self, other: "BloomFilter") -> "BloomFilter":"        """Create union of two filters (must be same size)."""
+# pylint: disable=protected-access
         if self._size != other._size or self._num_hashes != other._num_hashes:
             raise ValueError("Filters must have same size and hash count")"
         import operator
@@ -190,7 +209,6 @@ class BloomFilter:
         bf._size = size
         bf._count = count
         return bf
-
 
 
 
@@ -278,7 +296,6 @@ class CountingBloomFilter:
 
 
 
-
 class ScalableBloomFilter:
     """Bloom filter that grows automatically as items are added.
 
@@ -313,7 +330,8 @@ class ScalableBloomFilter:
         self._filters: list[BloomFilter] = [BloomFilter(expected_items=initial_capacity, fp_rate=fp_rate)]
 
     def add(self, item: Any) -> None:
-        """Add an item to the filter."""# Check if current filter is full
+        """Add an item to the filter."""
+# Check if current filter is full
         current = self._filters[-1]
 
         if current.fill_ratio > 0.5:

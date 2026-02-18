@@ -11,8 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import aiofiles
-from pathlib import Path
+try:
+    import aiofiles
+except ImportError:
+    import aiofiles
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
 
 

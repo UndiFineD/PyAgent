@@ -17,13 +17,25 @@
 Auto-extracted class from agent_changes.py
 from __future__ import annotations
 
-from src.core.base.common.types.changelog_entry import ChangelogEntry
-from src.core.base.lifecycle.version import VERSION
 
-from .GroupingStrategy import GroupingStrategy
+try:
+    from .core.base.common.types.changelog_entry import ChangelogEntry
+except ImportError:
+    from src.core.base.common.types.changelog_entry import ChangelogEntry
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .GroupingStrategy import GroupingStrategy
+except ImportError:
+    from .GroupingStrategy import GroupingStrategy
+
 
 __version__ = VERSION
-
 
 
 

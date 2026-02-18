@@ -19,10 +19,22 @@ Coder metrics mixin.py module.
 
 from __future__ import annotations
 
-import ast
-import math
 
-from src.core.base.common.types.code_metrics import CodeMetrics
+try:
+    import ast
+except ImportError:
+    import ast
+
+try:
+    import math
+except ImportError:
+    import math
+
+
+try:
+    from .core.base.common.types.code_metrics import CodeMetrics
+except ImportError:
+    from src.core.base.common.types.code_metrics import CodeMetrics
 
 
 

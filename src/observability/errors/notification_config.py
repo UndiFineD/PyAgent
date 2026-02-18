@@ -61,12 +61,29 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from .error_severity import ErrorSeverity
-from .notification_channel import NotificationChannel
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .error_severity import ErrorSeverity
+except ImportError:
+    from .error_severity import ErrorSeverity
+
+try:
+    from .notification_channel import NotificationChannel
+except ImportError:
+    from .notification_channel import NotificationChannel
+
 
 __version__ = VERSION
 

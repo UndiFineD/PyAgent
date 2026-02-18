@@ -15,11 +15,27 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Advanced request scheduling sub-package.
-from .config import (PreemptionReason, RequestPriority, RequestState,  # noqa: F401
+try:
+    from .config import (PreemptionReason, RequestPriority, RequestState,  # noqa: F401
+except ImportError:
+    from .config import (PreemptionReason, RequestPriority, RequestState, # noqa: F401
+
                      SchedulerConfig)
-from .queue import PriorityRequestQueue  # noqa: F401
-from .request import RequestMetrics, ScheduledRequest  # noqa: F401
-from .scheduler import (AdvancedRequestScheduler, create_scheduler,  # noqa: F401
+try:
+    from .queue import PriorityRequestQueue  # noqa: F401
+except ImportError:
+    from .queue import PriorityRequestQueue # noqa: F401
+
+try:
+    from .request import RequestMetrics, ScheduledRequest  # noqa: F401
+except ImportError:
+    from .request import RequestMetrics, ScheduledRequest # noqa: F401
+
+try:
+    from .scheduler import (AdvancedRequestScheduler, create_scheduler,  # noqa: F401
+except ImportError:
+    from .scheduler import (AdvancedRequestScheduler, create_scheduler, # noqa: F401
+
                         priority_from_string)
 
 __all__ = [

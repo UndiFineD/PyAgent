@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.position.rotary.gptj import GptJRotaryEmbedding
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.position.rotary.gptj import GptJRotaryEmbedding
+except ImportError:
+    from infrastructure.engine.position.rotary.gptj import GptJRotaryEmbedding
+
 
 
 def test_gptjrotaryembedding_basic():

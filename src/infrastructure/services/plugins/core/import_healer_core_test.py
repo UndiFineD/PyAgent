@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.plugins.core.import_healer_core import ImportHealerCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.plugins.core.import_healer_core import ImportHealerCore
+except ImportError:
+    from infrastructure.services.plugins.core.import_healer_core import ImportHealerCore
+
 
 
 def test_importhealercore_basic():

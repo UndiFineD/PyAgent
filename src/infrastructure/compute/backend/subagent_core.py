@@ -32,7 +32,6 @@ if TYPE_CHECKING:
 
 
 
-
 class SubagentCore:
     """Delegated execution core for SubagentRunner.
     def __init__(self, runner: SubagentRunner) -> None:

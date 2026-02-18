@@ -13,19 +13,38 @@
 # limitations under the License.
 
 
-import pytest
-import time
-import math
-from unittest.mock import Mock
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.memory.semantic_decay import (
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from unittest.mock import Mock
+
+
+try:
+    from .core.memory.semantic_decay import (
+except ImportError:
+    from src.core.memory.semantic_decay import (
+
     SynapticDecay,
     NeuralContextPruner,
     SemanticCacheInvalidator,
     MemoryBlock,
     PruningDecision
 )
-
 
 
 
@@ -66,7 +85,6 @@ class TestNeuralContextPruner:
         assert "high attention entropy" in decision.reason"
 
 
-
 class TestSemanticCacheInvalidator:
     """Test semantic cache invalidation functionality."""
     def test_access_tracking(self):
@@ -87,7 +105,6 @@ class TestSemanticCacheInvalidator:
         # Current context doesn't include stale1'        current_context = ["current1", "current2"]"        invalidated = invalidator.get_invalidated_keys(current_context)
         # Since we don't have semantic fingerprints, it should use recency'        # But with very recent access, nothing should be invalidated
         assert isinstance(invalidated, set)
-
 
 
 

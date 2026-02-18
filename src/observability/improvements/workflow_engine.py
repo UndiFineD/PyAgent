@@ -34,13 +34,25 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
 
-from .improvement import Improvement
-from .transition_result import TransitionResult
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .transition_result import TransitionResult
+except ImportError:
+    from .transition_result import TransitionResult
+
 
 __version__ = VERSION
-
 
 
 

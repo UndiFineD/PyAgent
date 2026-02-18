@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.execution.cuda_graph_manager import CUDAGraphMode, BatchDescriptor, CUDAGraphEntry, CUDAGraphRegistry, CUDAGraphManager, compute_graph_key, generate_warmup_sizes
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.execution.cuda_graph_manager import CUDAGraphMode, BatchDescriptor, CUDAGraphEntry, CUDAGraphRegistry, CUDAGraphManager, compute_graph_key, generate_warmup_sizes
+except ImportError:
+    from infrastructure.services.execution.cuda_graph_manager import CUDAGraphMode, BatchDescriptor, CUDAGraphEntry, CUDAGraphRegistry, CUDAGraphManager, compute_graph_key, generate_warmup_sizes
+
 
 
 def test_cudagraphmode_basic():

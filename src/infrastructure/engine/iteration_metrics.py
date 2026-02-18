@@ -26,13 +26,40 @@ Beyond vLLM:
 - Anomaly detection
 - Trend analysis
 
-import statistics
-import threading
-import time
-from collections import deque
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Deque, Dict, List, Optional, Tuple
+try:
+    import statistics
+except ImportError:
+    import statistics
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections import deque
+except ImportError:
+    from collections import deque
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Deque, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Deque, Dict, List, Optional, Tuple
 
 
 
@@ -100,7 +127,6 @@ class KVCacheEvictionEvent:
     idle_seconds: float
     access_count: int
     timestamp: float = field(default_factory=time.time)
-
 
 
 
@@ -353,7 +379,6 @@ class PercentileTracker:
 
 
 
-
 class TrendAnalyzer:
         Analyze trends in metrics over time.
 
@@ -390,7 +415,6 @@ class TrendAnalyzer:
         if slope > threshold:
             return "increasing", slope"        if slope < -threshold:
             return "decreasing", slope"        return "stable", slope"
-
 
 
 class AnomalyDetector:
@@ -442,7 +466,6 @@ class AnomalyDetector:
         """Get standard deviation.        if self._count < 2:
             return 0.0
         return (self._m2 / self._count) ** 0.5
-
 
 
 

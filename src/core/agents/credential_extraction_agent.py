@@ -34,7 +34,6 @@ from src.core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationM
 
 
 
-
 class CredentialExtractionAgent(
     BaseAgent,
     PrivilegeEscalationMixin,

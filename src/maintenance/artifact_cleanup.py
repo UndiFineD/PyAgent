@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class ArtifactCleanupCore:
         Core for managing artifact cleanup in PyAgent.
 

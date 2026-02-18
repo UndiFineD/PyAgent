@@ -39,15 +39,35 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-import re
-from typing import Any
 
-from src.core.base.common.types.migration_rule import MigrationRule
-from src.core.base.common.types.migration_status import MigrationStatus
-from src.core.base.lifecycle.version import VERSION
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.types.migration_rule import MigrationRule
+except ImportError:
+    from src.core.base.common.types.migration_rule import MigrationRule
+
+try:
+    from .core.base.common.types.migration_status import MigrationStatus
+except ImportError:
+    from src.core.base.common.types.migration_status import MigrationStatus
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -107,15 +127,35 @@ class MigrationManager:
 
 from __future__ import annotations
 
-import re
-from typing import Any
 
-from src.core.base.common.types.migration_rule import MigrationRule
-from src.core.base.common.types.migration_status import MigrationStatus
-from src.core.base.lifecycle.version import VERSION
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.types.migration_rule import MigrationRule
+except ImportError:
+    from src.core.base.common.types.migration_rule import MigrationRule
+
+try:
+    from .core.base.common.types.migration_status import MigrationStatus
+except ImportError:
+    from src.core.base.common.types.migration_status import MigrationStatus
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

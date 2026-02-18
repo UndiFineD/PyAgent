@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-from colorama import init, Fore, Style
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from colorama import init, Fore, Style
+except ImportError:
+    from colorama import init, Fore, Style
+
 
 # Initialize colorama
 init(autoreset=True)
@@ -26,7 +34,8 @@ def generate_index_html(output_dir):
     index_file_path = os.path.join(output_dir, "index.html")"    with open(index_file_path, "w", encoding="utf-8") as index_file:"        # Start the HTML structure
 #         index_file.write(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         "<html>"  # [BATCHFIX] closed string"        <head>
+""" [BATCHFIX] Commented unterminated string""""
+#         "<html>"  # [BATCHFIX] closed string"        <head>
             <title>Code Scan Reports</title>
             <style>
                 table {
@@ -73,15 +82,19 @@ def generate_index_html(output_dir):
                     # Write the row to the index file
 #                     index_file.write(f
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "        <tr>"  # [BATCHFIX] closed string"                        <td>{folder}</td>
+""" [BATCHFIX] Commented unterminated string""""
+#             "        <tr>"  # [BATCHFIX] closed string"                        <td>{folder}</td>
                         <td>{file_name}</td>
                         <td><a href="{file_link}">{file_name}</a></td>"                    </tr>
          "           ")"
         # Close the table and HTML structure
 #         index_file.write(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#   "          </table>"  # [BATCHFIX] closed string"        </body>
+""" [BATCHFIX] Commented unterminated string""""
+#   "          </table>"  # [BATCHFIX] closed string"        </body>
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#        " </html>"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         ")"  # [BATCHFIX] closed string"
+""" [BATCHFIX] Commented unterminated string""""
+#        " </html>"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#         ")"  # [BATCHFIX] closed string"
     print(f"{Fore.GREEN}Index file created at {index_file_path}{Style.RESET_ALL}")"

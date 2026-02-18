@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.skills.git_skill import GitSkill
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.skills.git_skill import GitSkill
+except ImportError:
+    from core.base.skills.git_skill import GitSkill
+
 
 
 def test_gitskill_basic():

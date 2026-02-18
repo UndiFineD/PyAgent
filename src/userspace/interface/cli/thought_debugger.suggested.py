@@ -29,7 +29,6 @@ from src.infrastructure.swarm.orchestration.signals.signal_registry import Signa
 
 
 
-
 class ThoughtDebugger:
         Interactive CLI tool for real-time inspection of agent reasoning (thoughts).
     Subscribes to the 'thought_stream' signal and provides formatting and control.'    

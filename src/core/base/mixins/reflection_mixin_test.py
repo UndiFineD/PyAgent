@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.reflection_mixin import ReflectionMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.reflection_mixin import ReflectionMixin
+except ImportError:
+    from core.base.mixins.reflection_mixin import ReflectionMixin
+
 
 
 def test_reflectionmixin_basic():

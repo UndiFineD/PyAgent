@@ -58,7 +58,6 @@ def get_mcp_agent_class() -> type | None:
 
 
 
-
 class LazyAgentMap(dict):
     """A dictionary that instantiates agents only when they are first accessed.
     def __init__(
@@ -365,7 +364,6 @@ class LazyAgentMap(dict):
             self._instances.update(other)
         if kwargs:
             self._instances.update(kwargs)
-
 
 
 

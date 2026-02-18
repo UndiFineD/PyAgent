@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .batch_extract import chunk_files, make_chunk_report, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .batch_extract import chunk_files, make_chunk_report, main
+except ImportError:
+    from .batch_extract import chunk_files, make_chunk_report, main
+
 
 
 def test_chunk_files_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.remote_agent_proxy.suggested import RemoteAgentProxy
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.remote_agent_proxy.suggested import RemoteAgentProxy
+except ImportError:
+    from infrastructure.swarm.fleet.remote_agent_proxy.suggested import RemoteAgentProxy
+
 
 
 def test_remoteagentproxy_basic():

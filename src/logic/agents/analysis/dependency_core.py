@@ -55,7 +55,6 @@ __version__ = VERSION
 
 
 
-
 class DependencyCore:
         Pure logic core for dependency analysis.
     Provides static methods to parse Python source code for import and class inheritance dependencies.
@@ -130,7 +129,6 @@ from src.core.base.common.types.dependency_type import DependencyType
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

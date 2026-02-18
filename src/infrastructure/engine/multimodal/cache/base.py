@@ -24,7 +24,6 @@ from .hasher import MultiModalHasher
 
 
 
-
 class MultiModalCache(ABC):
         Abstract base for multimodal content caching.
 

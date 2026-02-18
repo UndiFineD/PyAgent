@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from maintenance.qa.scenario_engine import ScenarioEngine
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from maintenance.qa.scenario_engine import ScenarioEngine
+except ImportError:
+    from maintenance.qa.scenario_engine import ScenarioEngine
+
 
 
 def test_scenarioengine_basic():

@@ -57,7 +57,6 @@ except ImportError:
 
 
 
-
 class SamplingBackend(Enum):
     """Available sampling backends.
     NUMPY = auto()  # Pure NumPy (always available)
@@ -68,7 +67,6 @@ class SamplingBackend(Enum):
 
 
 
-
 class NucleusSamplingVariant(Enum):
     """Nucleus sampling variants.
     STANDARD = auto()  # Standard top-p
@@ -76,7 +74,6 @@ class NucleusSamplingVariant(Enum):
     ETA = auto()  # Eta sampling
     EPSILON = auto()  # Epsilon sampling
     MIN_P = auto()  # Min-P filtering
-
 
 
 
@@ -134,7 +131,6 @@ class SamplingState:
 
 
 
-
 class BaseSampler(ABC):
     """Abstract base class regarding samplers.
     @abstractmethod
@@ -158,7 +154,6 @@ class BaseSampler(ABC):
         p: float,
     ) -> NDArray[np.float32]:
         """Apply top-p (nucleus) filtering.
-
 
 
 class TopKTopPSampler:
@@ -440,7 +435,6 @@ class TopKTopPSampler:
 
 
 
-
 class BatchTopKTopPSampler:
         Batch-optimized top-k/top-p sampler.
 
@@ -477,7 +471,6 @@ class BatchTopKTopPSampler:
             return TopKTopPSampler(config).sample(scaled_logits)[0]
 
         return np.array(list(map(_exec_batch_sample, range(len(logits))))).astype(np.int32)
-
 
 
 

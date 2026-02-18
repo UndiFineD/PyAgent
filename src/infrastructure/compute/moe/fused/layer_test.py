@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.moe.fused.layer import FusedMoELayer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.moe.fused.layer import FusedMoELayer
+except ImportError:
+    from infrastructure.compute.moe.fused.layer import FusedMoELayer
+
 
 
 def test_fusedmoelayer_basic():

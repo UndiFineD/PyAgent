@@ -20,7 +20,6 @@ from typing import Any
 
 
 
-
 class MemorySearchMixin:
 """"Methods for searching memories.
     def get_lessons_learned(

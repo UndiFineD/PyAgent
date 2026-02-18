@@ -20,9 +20,17 @@ Truncation management for prompt rendering.
 
 from __future__ import annotations
 
-from typing import List, Tuple
 
-from .models import TruncationResult, TruncationStrategy
+try:
+    from typing import List, Tuple
+except ImportError:
+    from typing import List, Tuple
+
+
+try:
+    from .models import TruncationResult, TruncationStrategy
+except ImportError:
+    from .models import TruncationResult, TruncationStrategy
 
 
 

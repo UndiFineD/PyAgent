@@ -19,20 +19,44 @@ visualizations for agent contexts and their inter-relationships.
 
 
 from __future__ import annotations
-import json
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.visualization_data import (
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.models.visualization_data import (
+except ImportError:
+    from src.logic.agents.cognitive.context.models.visualization_data import (
+
     VisualizationData,
 )
-from src.logic.agents.cognitive.context.models.visualization_type import (
+try:
+    from .logic.agents.cognitive.context.models.visualization_type import (
+except ImportError:
+    from src.logic.agents.cognitive.context.models.visualization_type import (
+
     VisualizationType,
 )
 
 __version__ = VERSION
-
 
 
 

@@ -27,7 +27,6 @@ __version__ = VERSION
 
 
 
-
 class DiffViewer:
     """A window for viewing differences between original and changed files.
     def __init__(self, parent: Any) -> None:

@@ -34,7 +34,6 @@ __version__ = VERSION
 
 
 
-
 class SafetyAuditTrail:
     """Logs security violations for later forensic analysis and training.
     def __init__(self, log_path: str) -> None:

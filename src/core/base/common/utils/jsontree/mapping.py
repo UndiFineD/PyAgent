@@ -15,11 +15,22 @@
 
 """Mapping.py module.
 """
+
+
 from __future__ import annotations
 
-from typing import Any, Callable, overload
 
-from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
+try:
+    from typing import Any, Callable, overload
+except ImportError:
+    from typing import Any, Callable, overload
+
+
+try:
+    from .core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
+except ImportError:
+    from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
+
                                                        _JSONTree)
 
 

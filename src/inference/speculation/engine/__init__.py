@@ -15,17 +15,45 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative decoding engine components."""
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
-from .base import DrafterBase  # noqa: F401
-from .config import SpecMethod, SpeculativeConfig  # noqa: F401
-from .engine import SpeculativeEngine, create_speculative_decoder  # noqa: F401
-from .proposals import DraftProposal, SpecDecodingMetrics, VerificationResult  # noqa: F401
-from .proposers import (EagleProposer, HybridDrafter, NgramProposer,  # noqa: F401
+try:
+    from .base import DrafterBase  # noqa: F401
+except ImportError:
+    from .base import DrafterBase # noqa: F401
+
+try:
+    from .config import SpecMethod, SpeculativeConfig  # noqa: F401
+except ImportError:
+    from .config import SpecMethod, SpeculativeConfig # noqa: F401
+
+try:
+    from .engine import SpeculativeEngine, create_speculative_decoder  # noqa: F401
+except ImportError:
+    from .engine import SpeculativeEngine, create_speculative_decoder # noqa: F401
+
+try:
+    from .proposals import DraftProposal, SpecDecodingMetrics, VerificationResult  # noqa: F401
+except ImportError:
+    from .proposals import DraftProposal, SpecDecodingMetrics, VerificationResult # noqa: F401
+
+try:
+    from .proposers import (EagleProposer, HybridDrafter, NgramProposer,  # noqa: F401
+except ImportError:
+    from .proposers import (EagleProposer, HybridDrafter, NgramProposer, # noqa: F401
+
                         SuffixProposer)
-from .verifier import TokenVerifier  # noqa: F401
+try:
+    from .verifier import TokenVerifier  # noqa: F401
+except ImportError:
+    from .verifier import TokenVerifier # noqa: F401
+
 
 __all__ = [
     "SpecMethod","    "SpeculativeConfig","    "DraftProposal","    "VerificationResult","    "SpecDecodingMetrics","    "DrafterBase","    "NgramProposer","    "SuffixProposer","    "EagleProposer","    "HybridDrafter","    "TokenVerifier","    "SpeculativeEngine","    "create_speculative_decoder","]

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.resilience.verify_resilience_debt import test_imports, test_instantiation
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.resilience.verify_resilience_debt import test_imports, test_instantiation
+except ImportError:
+    from infrastructure.services.resilience.verify_resilience_debt import test_imports, test_instantiation
+
 
 
 def test_test_imports_basic():

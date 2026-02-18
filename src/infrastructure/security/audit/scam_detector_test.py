@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.security.audit.scam_detector import ScamDetector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.security.audit.scam_detector import ScamDetector
+except ImportError:
+    from infrastructure.security.audit.scam_detector import ScamDetector
+
 
 
 def test_scamdetector_basic():

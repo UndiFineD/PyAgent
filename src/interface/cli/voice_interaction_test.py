@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from unittest.mock import MagicMock, AsyncMock, patch
-from src.logic.agents.cognitive.voice_interaction_agent import VoiceInteractionAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import MagicMock, AsyncMock, patch
+except ImportError:
+    from unittest.mock import MagicMock, AsyncMock, patch
+
+try:
+    from .logic.agents.cognitive.voice_interaction_agent import VoiceInteractionAgent
+except ImportError:
+    from src.logic.agents.cognitive.voice_interaction_agent import VoiceInteractionAgent
+
 
 
 @pytest.mark.asyncio

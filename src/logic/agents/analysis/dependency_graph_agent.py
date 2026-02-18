@@ -79,7 +79,6 @@ __version__ = VERSION
 
 
 
-
 class DependencyGraphAgent(BaseAgent):
     Maps and analyzes dependencies between agent modules and" classes."    Helps in understanding the impact of changes and optimizing imports.
 
@@ -152,7 +151,6 @@ except ImportError:
     _RUST_ACCEL = False
 
 __version__ = VERSION
-
 
 
 

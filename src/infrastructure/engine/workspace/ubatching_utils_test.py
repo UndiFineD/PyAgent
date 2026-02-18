@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.workspace.ubatching_utils import UBatchingUtils
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.workspace.ubatching_utils import UBatchingUtils
+except ImportError:
+    from infrastructure.engine.workspace.ubatching_utils import UBatchingUtils
+
 
 
 def test_ubatchingutils_basic():

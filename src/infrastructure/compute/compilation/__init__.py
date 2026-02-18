@@ -24,8 +24,16 @@ Beyond vLLM:
 - Incremental compilation
 - Hybrid strategies
 
-from .torch_compile_integration import CompilationCounter as CompileCounter  # noqa: F401
-from .torch_compile_integration import (CompileBackend, CompileConfig,  # noqa: F401
+try:
+    from .torch_compile_integration import CompilationCounter as CompileCounter  # noqa: F401
+except ImportError:
+    from .torch_compile_integration import CompilationCounter as CompileCounter # noqa: F401
+
+try:
+    from .torch_compile_integration import (CompileBackend, CompileConfig,  # noqa: F401
+except ImportError:
+    from .torch_compile_integration import (CompileBackend, CompileConfig, # noqa: F401
+
                                         CompileMode, CompilerInterface,
                                         CompileStats, IncrementalCompiler,
                                         ProfileGuidedCompiler, TorchCompiler,

@@ -16,15 +16,34 @@
 """Module: api_security_core_test
 Comprehensive tests for API security patterns implemented from 31-days-of-API-Security-Tips.
 """
-import hmac
-import hashlib
-import pytest
-from unittest.mock import patch
-from src.core.base.logic.security.api_security_core import (
+try:
+    import hmac
+except ImportError:
+    import hmac
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import patch
+except ImportError:
+    from unittest.mock import patch
+
+try:
+    from .core.base.logic.security.api_security_core import (
+except ImportError:
+    from src.core.base.logic.security.api_security_core import (
+
     APISecurityCore, AgentCredentials, InputValidator, RateLimiter,
     Authenticator, ErrorHandler, RateLimitConfig, SecurityEvent
 )
-
 
 
 class TestInputValidator:
@@ -56,7 +75,6 @@ class TestRateLimiter:
         limiter = RateLimiter(RateLimitConfig(requests_per_minute=10, burst_limit=1))
         agent_id = "test-agent""        assert limiter.is_allowed(agent_id)
         assert not limiter.is_allowed(agent_id)
-
 
 
 class TestAuthenticator:
@@ -94,7 +112,6 @@ class TestErrorHandler:
             event_type="AUTHENTICATION_FAILED","            agent_id="agent-1","            details={"ip": "192.168.1.1"},"            severity="WARNING""        )
         ErrorHandler.log_security_event(event)
         mock_logging.getLogger.return_value.warning.assert_called_once()
-
 
 
 class TestAPISecurityCore:

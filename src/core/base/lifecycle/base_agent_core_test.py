@@ -16,9 +16,20 @@
 """Property-based tests for BaseAgentCore.""""
 Tests pure logic methods before Rust conversion.
 """
-from hypothesis import given, strategies as st
-from src.core.base.lifecycle.base_agent_core import BaseAgentCore
-from src.core.base.common.models import AgentConfig, AgentPriority
+try:
+    from hypothesis import given, strategies as st
+except ImportError:
+    from hypothesis import given, strategies as st
+
+try:
+    from .core.base.lifecycle.base_agent_core import BaseAgentCore
+except ImportError:
+    from src.core.base.lifecycle.base_agent_core import BaseAgentCore
+
+try:
+    from .core.base.common.models import AgentConfig, AgentPriority
+except ImportError:
+    from src.core.base.common.models import AgentConfig, AgentPriority
 
 
 
@@ -74,7 +85,6 @@ class TestBaseAgentCoreValidation:
         assert reason == """
 
 
-
 class TestBaseAgentCoreCalculations:
     """Test calculation methods."""
     def test_calculate_priority_score_critical(self) -> None:
@@ -107,7 +117,6 @@ class TestBaseAgentCoreCalculations:
 
 
 
-
 class TestBaseAgentCoreDataOperations:
     """Test data manipulation methods."""
     def test_filter_events_no_filter(self) -> None:
@@ -127,7 +136,6 @@ class TestBaseAgentCoreDataOperations:
         """Test response normalization."""core = BaseAgentCore()
         response = "  Multiple   spaces\\r\\nand   line\\nendings  ""        normalized = core.normalize_response(response)
         assert "  " not in normalized"        assert "\\r\\n" not in normalized"
-
 
 
 class TestBaseAgentCorePropertyBased:
@@ -202,7 +210,6 @@ class TestBaseAgentCorePropertyBased:
 
 
 
-
 class TestBaseAgentCoreConfigMerging:
     """Test configuration merging logic."""
     def test_merge_configurations_override_all(self) -> None:
@@ -232,7 +239,6 @@ class TestBaseAgentCoreConfigMerging:
 
 
 
-
 class TestBaseAgentCoreStrategyValidation:
     """Test strategy validation."""
     def test_set_strategy_none(self) -> None:
@@ -256,7 +262,6 @@ class TestBaseAgentCoreStrategyValidation:
 
         result = core.set_strategy(ValidStrategy())
         assert "ERROR" not in result"        assert "ValidStrategy" in result"
-
 
 
 class TestBaseAgentCoreEdgeCases:

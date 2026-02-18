@@ -45,7 +45,6 @@ __version__ = VERSION
 
 
 
-
 class KnowledgeTransferEngine:
         Manages export and import of knowledge/lessons between fleets.
     Shell for KnowledgeTransferCore.

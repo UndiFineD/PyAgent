@@ -14,6 +14,8 @@
 
 
 # "Code metrics and quality logic for CoderAgent."""" pylint: disable=too-many-ancestors""""
+
+
 from __future__ import annotations
 
 import logging
@@ -25,7 +27,6 @@ import sys
 from src.core.base.common.types.code_metrics import CodeMetrics
 from src.core.base.common.types.code_smell import CodeSmell
 from src.core.base.common.types.quality_score import QualityScore
-
 
 
 

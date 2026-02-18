@@ -40,7 +40,6 @@ except ImportError:
 
 
 
-
 class TensorParallelGroup:
         Tensor parallel operations for distributed model execution.
 

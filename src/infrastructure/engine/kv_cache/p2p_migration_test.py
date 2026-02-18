@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.kv_cache.p2p_migration import P2PMigrationEngine
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.kv_cache.p2p_migration import P2PMigrationEngine
+except ImportError:
+    from infrastructure.engine.kv_cache.p2p_migration import P2PMigrationEngine
+
 
 
 def test_p2pmigrationengine_basic():

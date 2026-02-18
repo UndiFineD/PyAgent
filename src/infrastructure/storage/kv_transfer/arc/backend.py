@@ -22,15 +22,27 @@ Backends for block storage in the ARC offloading system.
 
 from __future__ import annotations
 
-import threading
-from abc import ABC, abstractmethod
 
-from src.infrastructure.storage.kv_transfer.arc.types import (BlockHash,
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+
+try:
+    from .infrastructure.storage.kv_transfer.arc.types import (BlockHash,
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.arc.types import (BlockHash,
+
                                                               BlockState,
                                                               BlockStatus,
                                                               LoadStoreSpec,
                                                               OffloadMedium)
-
 
 
 
@@ -61,7 +73,6 @@ class Backend(ABC):
     @abstractmethod
     def medium(self) -> OffloadMedium:
         """Get storage medium.        pass
-
 
 
 

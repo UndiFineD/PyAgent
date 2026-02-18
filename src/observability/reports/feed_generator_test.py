@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.reports.feed_generator import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.reports.feed_generator import *
+except ImportError:
+    from observability.reports.feed_generator import *
+

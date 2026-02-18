@@ -28,20 +28,16 @@ import secrets
 
 
 
-
 class CommunicationProtocol(Enum):
     """C2 communication protocols"""HTTP = "http""    HTTPS = "https""    SMB = "smb""    TCP = "tcp""    MTLS = "mtls""    DNS = "dns""    ICMP = "icmp""
-
 
 
 class AgentStatus(Enum):
     """Agent status states"""ACTIVE = "active""    SLEEPING = "sleeping""    DEAD = "dead""    CHECKING_IN = "checking_in""    EXECUTING = "executing""
 
 
-
 class TaskStatus(Enum):
     """Task execution status"""PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""
-
 
 
 class ListenerType(Enum):
@@ -159,7 +155,6 @@ class C2Framework:
 
 
 
-
 class C2FrameworkCore:
     """C2 Framework Core for command and control operations.
 
@@ -172,7 +167,8 @@ class C2FrameworkCore:
         self.running = False
 
     async def initialize(self, profile_config: Dict[str, Any]) -> bool:
-        """Initialize the C2 framework with a profile"""try:
+        """Initialize the C2 framework with a profile"""
+try:
             # Create profile from config
             profile = C2Profile(
                 name=profile_config.get("name", "default"),"                port=profile_config["port"],"                endpoint=profile_config["endpoint"],"                password_hash=self._hash_password(profile_config["password"]),"                ssl_cert=profile_config.get("ssl_cert"),"                ssl_key=profile_config.get("ssl_key"),"                extenders=profile_config.get("extenders", []),"                server_response=profile_config.get("server_response", {})"            )
@@ -482,7 +478,8 @@ class C2FrameworkCore:
             await self._start_listener(listener)
 
     async def _start_listener(self, listener: C2Listener) -> bool:
-        """Start a specific listener (mock implementation)"""try:
+        """Start a specific listener (mock implementation)"""
+try:
             # Mock listener startup
             listener.status = "running""            self.logger.info(f"Started listener: {listener.name} ({listener.listener_id})")"            return True
         except Exception as e:
@@ -584,7 +581,8 @@ class C2FrameworkCore:
         hash_obj = hashlib.sha256((password + salt).encode())
         return f"{salt}:{hash_obj.hexdigest()}""
     def _verify_password(self, password: str, hash_string: str) -> bool:
-        """Verify password against hash"""try:
+        """Verify password against hash"""
+try:
             salt, hash_value = hash_string.split(":")"            hash_obj = hashlib.sha256((password + salt).encode())
             return hash_obj.hexdigest() == hash_value
         except Exception:

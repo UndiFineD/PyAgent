@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.jsontree.reduction import json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.jsontree.reduction import json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves
+except ImportError:
+    from core.base.common.utils.jsontree.reduction import json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves
+
 
 
 def test_json_reduce_leaves_basic():

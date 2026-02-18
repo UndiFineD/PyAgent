@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.cache.prefix_cache import EvictionPolicy, PrefixCacheConfig, CacheBlock, PrefixCacheStats, PrefixCacheManager, BlockHasher, compute_block_hash, create_prefix_cache, get_request_block_hasher
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.cache.prefix_cache import EvictionPolicy, PrefixCacheConfig, CacheBlock, PrefixCacheStats, PrefixCacheManager, BlockHasher, compute_block_hash, create_prefix_cache, get_request_block_hasher
+except ImportError:
+    from infrastructure.storage.cache.prefix_cache import EvictionPolicy, PrefixCacheConfig, CacheBlock, PrefixCacheStats, PrefixCacheManager, BlockHasher, compute_block_hash, create_prefix_cache, get_request_block_hasher
+
 
 
 def test_evictionpolicy_basic():

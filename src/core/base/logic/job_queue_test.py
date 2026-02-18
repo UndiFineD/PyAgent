@@ -22,7 +22,6 @@ from src.core.base.logic.tts_service import TTSService
 
 
 
-
 class TestNewServicesIntegration:
     """Test integration of the three new core services."""
     def test_job_queue_basic_functionality(self):
@@ -65,7 +64,8 @@ class TestNewServicesIntegration:
         assert True
 
     def test_services_work_together(self):
-        """Test that all services can be used together in a workflow."""# Initialize all services
+        """Test that all services can be used together in a workflow."""
+# Initialize all services
         queue = JobQueue(max_queue_size=10)
         tts = TTSService()
         multimodal = MultimodalAIService()

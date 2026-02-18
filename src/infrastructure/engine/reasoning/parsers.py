@@ -15,11 +15,26 @@
 
 Parsers.py module.
 
-from abc import ABC, abstractmethod
-from typing import Generator, Iterator, List, Optional, Tuple
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
 
-from .data_classes import ParseResult, ThinkingBlock, ToolCall
-from .enums import ParseState, ReasoningFormat, ToolCallFormat
+try:
+    from typing import Generator, Iterator, List, Optional, Tuple
+except ImportError:
+    from typing import Generator, Iterator, List, Optional, Tuple
+
+
+try:
+    from .data_classes import ParseResult, ThinkingBlock, ToolCall
+except ImportError:
+    from .data_classes import ParseResult, ThinkingBlock, ToolCall
+
+try:
+    from .enums import ParseState, ReasoningFormat, ToolCallFormat
+except ImportError:
+    from .enums import ParseState, ReasoningFormat, ToolCallFormat
 
 
 
@@ -49,7 +64,6 @@ class ReasoningParser(ABC):
         """Reset parser state.        self.state = ParseState.IDLE
         self.buffer = """        self.thinking_blocks = []
         self._current_block_start = 0
-
 
 
 

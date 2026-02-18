@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.review.moderator_agent import ModeratorAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.review.moderator_agent import ModeratorAgent
+except ImportError:
+    from logic.review.moderator_agent import ModeratorAgent
+
 
 
 def test_moderatoragent_basic():

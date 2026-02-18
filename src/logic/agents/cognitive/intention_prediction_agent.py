@@ -15,16 +15,39 @@
 
 """
 Intention Prediction Agent for predicting peer actions and goals.
-import time
-import random
-import logging
-from typing import Any
+try:
+    import time
+except ImportError:
+    import time
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore
+except ImportError:
+    from src.logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore
+
 
 __version__ = VERSION
-
 
 
 

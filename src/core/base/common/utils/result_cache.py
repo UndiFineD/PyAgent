@@ -16,12 +16,26 @@
 """Manager for result caching.
 (Facade for src.core.base.common.cache_core)
 """
+
+
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any
 
-from src.core.base.common.cache_core import CacheCore
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.cache_core import CacheCore
+except ImportError:
+    from src.core.base.common.cache_core import CacheCore
 
 
 

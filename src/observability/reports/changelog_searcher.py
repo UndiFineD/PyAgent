@@ -30,7 +30,6 @@ __version__ = VERSION
 
 
 
-
 class ChangelogSearcher:
     """Searches changelog content across project history.    Provides search functionality for finding specific entries
     in changelog history.

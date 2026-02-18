@@ -16,6 +16,8 @@
 """Core logic for Sharded Knowledge Management.
 Handles trillion-parameter scale entity distribution.
 """
+
+
 from __future__ import annotations
 
 import hashlib
@@ -28,7 +30,6 @@ try:
     import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
-
 
 
 

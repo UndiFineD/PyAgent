@@ -39,7 +39,6 @@ except ImportError:
 
 
 
-
 class TorchSDPABackend(AttentionBackend[None]):
         PyTorch Scaled Dot-Product Attention backend.
 

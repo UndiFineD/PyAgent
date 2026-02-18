@@ -13,14 +13,50 @@
 # limitations under the License.
 
 
-"""Core package.
-"""from .events import EventCore  # noqa: F401
-from .formatting import FormattingCore  # noqa: F401
-from .metrics import MetricsCore  # noqa: F401
-from .utils import UtilsCore  # noqa: F401
-from .validation import ValidationCore  # noqa: F401
-from .code_analyzer import CodeAnalyzerCore  # noqa: F401
-from .memory_consolidation_core import MemoryConsolidationCore  # noqa: F401
+"""Core package."""
+
+try:
+    from .events import EventCore  # noqa: F401
+except ImportError:
+    from .events import EventCore # noqa: F401
+
+try:
+    from .formatting import FormattingCore  # noqa: F401
+except ImportError:
+    from .formatting import FormattingCore # noqa: F401
+
+try:
+    from .metrics import MetricsCore  # noqa: F401
+except ImportError:
+    from .metrics import MetricsCore # noqa: F401
+
+try:
+    from .utils import UtilsCore  # noqa: F401
+except ImportError:
+    from .utils import UtilsCore # noqa: F401
+
+try:
+    from .validation import ValidationCore  # noqa: F401
+except ImportError:
+    from .validation import ValidationCore # noqa: F401
+
+try:
+    from .code_analyzer import CodeAnalyzerCore  # noqa: F401
+except ImportError:
+    from .code_analyzer import CodeAnalyzerCore # noqa: F401
+
+try:
+    from .memory_consolidation_core import MemoryConsolidationCore  # noqa: F401
+except ImportError:
+    from .memory_consolidation_core import MemoryConsolidationCore # noqa: F401
+
 
 __all__ = [
-    "ValidationCore","    "MetricsCore","    "FormattingCore","    "UtilsCore","    "EventCore","    "CodeAnalyzerCore","    "MemoryConsolidationCore","]
+    "ValidationCore",
+    "MetricsCore",
+    "FormattingCore",
+    "UtilsCore",
+    "EventCore",
+    "CodeAnalyzerCore",
+    "MemoryConsolidationCore",
+]

@@ -17,8 +17,15 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Models and configuration for NCCL communication.
 
-from dataclasses import dataclass
-from enum import Enum, auto
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 

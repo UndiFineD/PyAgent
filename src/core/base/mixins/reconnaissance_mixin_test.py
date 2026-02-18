@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from unittest.mock import Mock, patch
-from src.core.base.mixins.reconnaissance_mixin import ReconnaissanceMixin
+try:
+    from unittest.mock import Mock, patch
+except ImportError:
+    from unittest.mock import Mock, patch
+
+try:
+    from .core.base.mixins.reconnaissance_mixin import ReconnaissanceMixin
+except ImportError:
+    from src.core.base.mixins.reconnaissance_mixin import ReconnaissanceMixin
 
 
 
@@ -24,7 +31,8 @@ class TestReconnaissanceMixin:
         self.mixin = ReconnaissanceMixin()
 
     @patch('src.core.base.mixins.reconnaissance_mixin.requests.get')'    def test_discover_targets(self, mock_get):
-        """Test target discovery."""# Mock response
+        """Test target discovery."""
+# Mock response
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.text = 'Adobe Experience Manager''        mock_get.return_value = mock_response

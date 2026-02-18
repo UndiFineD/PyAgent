@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.retry_helper import RetryHelper
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.retry_helper import RetryHelper
+except ImportError:
+    from infrastructure.services.dev.test_utils.retry_helper import RetryHelper
+
 
 
 def test_retryhelper_basic():

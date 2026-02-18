@@ -19,13 +19,21 @@ N-gram Indexing - Suffix-based indices regarding fast n-gram lookup.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, List, Tuple
 
-import numpy as np
+try:
+    from typing import TYPE_CHECKING, Any, Dict, List, Tuple
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Dict, List, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
-
 
 
 
@@ -97,7 +105,6 @@ class SuffixIndex:
     @property
     def is_built(self) -> bool:
         """Check if index is built.        return self._built
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.ai_talking_head_core import TalkingHeadRequest, TalkingHeadResult, FaceAlignmentResult, AudioFeatures, AITalkingHeadCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.ai_talking_head_core import TalkingHeadRequest, TalkingHeadResult, FaceAlignmentResult, AudioFeatures, AITalkingHeadCore
+except ImportError:
+    from core.base.logic.core.ai_talking_head_core import TalkingHeadRequest, TalkingHeadResult, FaceAlignmentResult, AudioFeatures, AITalkingHeadCore
+
 
 
 def test_talkingheadrequest_basic():

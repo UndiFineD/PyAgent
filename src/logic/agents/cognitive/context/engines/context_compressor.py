@@ -28,7 +28,6 @@ except ImportError:
 __version__ = VERSION
 
 
-
 class
 class ContextCompressor:
     """

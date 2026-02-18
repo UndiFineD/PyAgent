@@ -22,7 +22,11 @@ This package provides:
 - ToolParser: Parse function/tool calls from generation
 - ReasoningEngine: Unified reasoning extraction
 
-from .reasoning_engine import (  # Enums; Data classes; Core classes; Parser implementations; Factory  # noqa: F401
+try:
+    from .reasoning_engine import (  # Enums; Data classes; Core classes; Parser implementations; Factory  # noqa: F401
+except ImportError:
+    from .reasoning_engine import ( # Enums; Data classes; Core classes; Parser implementations; Factory # noqa: F401
+
     DeepSeekReasoningParser, GenericReasoningParser, HermesToolParser,
     OpenAIToolParser, ParseResult, ParseState, QwenReasoningParser,
     ReasoningEngine, ReasoningFormat, ReasoningParser, ReasoningToken,

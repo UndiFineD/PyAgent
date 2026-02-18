@@ -25,14 +25,12 @@ __version__ = VERSION
 
 
 
-
 class SynthesisResult(BaseModel):
     """Result of a tool/plugin synthesis operation.
     code: str
     entry_point: str
     imports: list[str]
     is_safe: bool = False
-
 
 
 

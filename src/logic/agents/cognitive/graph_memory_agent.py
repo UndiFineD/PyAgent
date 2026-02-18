@@ -35,15 +35,47 @@ FILE CONTENT SUMMARY:
 Agent specializing in Graph-based memory and entity relationship tracking.
 Supports FalkorDB-style triple storage (Subject-Predicate-Object).
 
-from pathlib import Path
-from typing import Any, Dict
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from .mixins.graph_storage_mixin import GraphStorageMixin
-from .mixins.graph_mirix_mixin import GraphMIRIXMixin
-from .mixins.graph_beads_mixin import GraphBeadsMixin
-from .mixins.graph_entity_mixin import GraphEntityMixin
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .mixins.graph_storage_mixin import GraphStorageMixin
+except ImportError:
+    from .mixins.graph_storage_mixin import GraphStorageMixin
+
+try:
+    from .mixins.graph_mirix_mixin import GraphMIRIXMixin
+except ImportError:
+    from .mixins.graph_mirix_mixin import GraphMIRIXMixin
+
+try:
+    from .mixins.graph_beads_mixin import GraphBeadsMixin
+except ImportError:
+    from .mixins.graph_beads_mixin import GraphBeadsMixin
+
+try:
+    from .mixins.graph_entity_mixin import GraphEntityMixin
+except ImportError:
+    from .mixins.graph_entity_mixin import GraphEntityMixin
+
 
 __version__ = VERSION
 
@@ -77,15 +109,47 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
     main = create_main_function(
 #         GraphMemoryAgent, "Graph Memory Agent", "Memory storage path"    )
  "  " main()"
-from pathlib import Path
-from typing import Any, Dict
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from .mixins.graph_storage_mixin import GraphStorageMixin
-from .mixins.graph_mirix_mixin import GraphMIRIXMixin
-from .mixins.graph_beads_mixin import GraphBeadsMixin
-from .mixins.graph_entity_mixin import GraphEntityMixin
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .mixins.graph_storage_mixin import GraphStorageMixin
+except ImportError:
+    from .mixins.graph_storage_mixin import GraphStorageMixin
+
+try:
+    from .mixins.graph_mirix_mixin import GraphMIRIXMixin
+except ImportError:
+    from .mixins.graph_mirix_mixin import GraphMIRIXMixin
+
+try:
+    from .mixins.graph_beads_mixin import GraphBeadsMixin
+except ImportError:
+    from .mixins.graph_beads_mixin import GraphBeadsMixin
+
+try:
+    from .mixins.graph_entity_mixin import GraphEntityMixin
+except ImportError:
+    from .mixins.graph_entity_mixin import GraphEntityMixin
+
 
 __version__ = VERSION
 

@@ -31,7 +31,6 @@ from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
 
 
 
-
 class JsonToolParser(ToolParser):
         Generic JSON tool call parser.
 

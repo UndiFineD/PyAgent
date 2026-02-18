@@ -21,23 +21,63 @@ Clients for distributed communication.
 
 from __future__ import annotations
 
-import asyncio
-import logging
-import threading
-import time
-import uuid
-from typing import Callable, Dict, Generic, List, Optional, TypeVar
 
-from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Callable, Dict, Generic, List, Optional, TypeVar
+except ImportError:
+    from typing import Callable, Dict, Generic, List, Optional, TypeVar
+
+
+try:
+    from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
+except ImportError:
+    from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
+
                      WorkerIdentity)
-from .coordinator import DPCoordinator
-from .messages import RequestMessage, ResponseMessage
-from .worker import BaseWorker, WorkerProcess
+try:
+    from .coordinator import DPCoordinator
+except ImportError:
+    from .coordinator import DPCoordinator
+
+try:
+    from .messages import RequestMessage, ResponseMessage
+except ImportError:
+    from .messages import RequestMessage, ResponseMessage
+
+try:
+    from .worker import BaseWorker, WorkerProcess
+except ImportError:
+    from .worker import BaseWorker, WorkerProcess
+
 
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T")"
-
 
 
 class MPClient(Generic[T]):
@@ -110,7 +150,6 @@ class MPClient(Generic[T]):
 
 
 
-
 class AsyncMPClient(Generic[T]):
     """Async client for communicating with worker processes.""""
     Inspired by vLLM's AsyncMPClient.'    Async interface for non-blocking operations.
@@ -140,7 +179,6 @@ class AsyncMPClient(Generic[T]):
         """Get a response asynchronously.        if self._loop:
             return await self._loop.run_in_executor(None, self._sync_client.get_response, timeout)
         return None
-
 
 
 

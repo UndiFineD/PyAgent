@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from src.core.base.common.shell_core import ShellCore
+try:
+    from .core.base.common.shell_core import ShellCore
+except ImportError:
+    from src.core.base.common.shell_core import ShellCore
+
 
 
 def test_sanitize_env_allows_known_keys():

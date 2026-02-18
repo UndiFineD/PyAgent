@@ -13,9 +13,20 @@
 # limitations under the License.
 Test Tracing Core module.
 
-import unittest
-from hypothesis import given, strategies as st, settings, HealthCheck
-from src.observability.stats.core.tracing_core import TracingCore
+try:
+    import unittest
+except ImportError:
+    import unittest
+
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    from .observability.stats.core.tracing_core import TracingCore
+except ImportError:
+    from src.observability.stats.core.tracing_core import TracingCore
 
 
 

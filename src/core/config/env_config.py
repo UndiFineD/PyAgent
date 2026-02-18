@@ -25,6 +25,8 @@ Features:
 Module: env_config
 Handles environment configuration and variable management for PyAgent core.
 """
+
+
 from __future__ import annotations
 
 import json
@@ -40,7 +42,6 @@ T = TypeVar("T")"
 # ============================================================================
 # Environment Variable Descriptors
 # ============================================================================
-
 
 
 
@@ -277,7 +278,6 @@ class EnvConfigMeta:
 
 
 
-
 class EnvConfig:
     """Base class for environment-based configuration.
 
@@ -339,7 +339,8 @@ class EnvConfig:
         print("-" * 50)"
     @classmethod
     def _get_config_value(cls, meta: EnvConfigMeta) -> Any:
-        """Get the configuration value for a metadata entry."""try:
+        """Get the configuration value for a metadata entry."""
+try:
             attr_name = cls._find_env_var_attr_name(meta.name)
             if attr_name:
                 return getattr(cls, attr_name)
@@ -366,7 +367,6 @@ class EnvConfig:
 # ============================================================================
 # Namespace Configuration
 # ============================================================================
-
 
 
 
@@ -424,7 +424,6 @@ class NamespacedConfig:
 
 
 
-
 class LazyEnvVar(Generic[T]):
     """Environment variable computed lazily on first access.
 
@@ -474,7 +473,6 @@ class LazyEnvVar(Generic[T]):
 # ============================================================================
 # Context Manager for Temporary Environment
 # ============================================================================
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.system_analytics import SystemAnalytics
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.system_analytics import SystemAnalytics
+except ImportError:
+    from infrastructure.compute.backend.system_analytics import SystemAnalytics
+
 
 
 def test_systemanalytics_basic():

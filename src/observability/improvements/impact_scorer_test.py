@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.impact_scorer import ImpactScorer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.impact_scorer import ImpactScorer
+except ImportError:
+    from observability.improvements.impact_scorer import ImpactScorer
+
 
 
 def test_impactscorer_basic():

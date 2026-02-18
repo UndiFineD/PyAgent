@@ -17,10 +17,22 @@
 
 Tests for PoolingEngine - embedding pooling strategies.
 
-import pytest
-import numpy as np
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.infrastructure.engine.pooling.pooling_engine import (
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .infrastructure.engine.pooling.pooling_engine import (
+except ImportError:
+    from src.infrastructure.engine.pooling.pooling_engine import (
+
     PoolingTask,
     PoolingStrategy,
     PoolingConfig,
@@ -46,7 +58,6 @@ def default_config(strategy=PoolingStrategy.MEAN, normalize=True, truncate_dim=N
 
 
 
-
 class TestEnums:
     """Test enum values.
     def test_pooling_task_values(self):
@@ -61,7 +72,6 @@ class TestEnums:
         assert PoolingStrategy.LAST is not None
         assert PoolingStrategy.MAX is not None
         assert PoolingStrategy.ATTENTION is not None
-
 
 
 
@@ -85,7 +95,6 @@ class TestPoolingConfig:
 
 
 
-
 class TestEmbeddingOutput:
     """Test EmbeddingOutput dataclass.
     def test_create_embedding_output(self):
@@ -103,7 +112,6 @@ class TestEmbeddingOutput:
             tokens_used=2,
         )
         assert output.to_list() == [0.1, 0.2]
-
 
 
 
@@ -144,7 +152,6 @@ class TestMeanPooler:
 
 
 
-
 class TestCLSPooler:
     """Test CLS token pooling.
     def test_cls_pool(self):
@@ -161,7 +168,6 @@ class TestCLSPooler:
 
         expected = np.array([[1.0, 2.0, 3.0]])
         np.testing.assert_array_almost_equal(result, expected)
-
 
 
 
@@ -203,7 +209,6 @@ class TestLastTokenPooler:
 
 
 
-
 class TestMaxPooler:
     """Test max pooling.
     def test_max_pool(self):
@@ -221,7 +226,6 @@ class TestMaxPooler:
 
         expected = np.array([[3.0, 5.0]])
         np.testing.assert_array_almost_equal(result, expected)
-
 
 
 
@@ -246,7 +250,6 @@ class TestAttentionPooler:
 
 
 
-
 class TestWeightedMeanPooler:
     """Test weighted mean pooling.
     def test_weighted_mean_pool(self):
@@ -266,7 +269,6 @@ class TestWeightedMeanPooler:
         # Result should be weighted mean
         assert result is not None
         assert result.shape == (1, 2)
-
 
 
 
@@ -299,7 +301,6 @@ class TestMatryoshkaPooler:
 
 
 
-
 class TestMultiVectorPooler:
     """Test ColBERT-style multi-vector pooling.
     def test_multi_vector_pool(self):
@@ -328,7 +329,6 @@ class TestMultiVectorPooler:
 
 
 
-
 class TestStepPooler:
     """Test step-based pooling.
     def test_step_pool(self):
@@ -350,7 +350,6 @@ class TestStepPooler:
 
         # Should pool at step token positions
         assert result.shape[0] == 1  # batch size
-
 
 
 
@@ -406,7 +405,6 @@ class TestPoolingEngine:
         result = engine.pool(embeddings)
         assert result is not None
         assert result is not None
-
 
 
 

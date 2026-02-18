@@ -67,10 +67,8 @@ __version__ = VERSION
 
 
 
-
 class EssayStyle(Enum):
 """"Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
-
 
 
 class EssayLength(Enum):
@@ -164,10 +162,8 @@ __version__ = VERSION
 
 
 
-
 class EssayStyle(Enum):
 """"Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
-
 
 
 class EssayLength(Enum):

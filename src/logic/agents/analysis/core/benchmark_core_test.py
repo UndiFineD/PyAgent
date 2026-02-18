@@ -16,12 +16,19 @@
 """Property-based tests for BenchmarkCore.""""
 Tests performance calculation logic before Rust conversion.
 
-from hypothesis import given, strategies as st, settings
-from src.logic.agents.analysis.core.benchmark_core import (
+try:
+    from hypothesis import given, strategies as st, settings
+except ImportError:
+    from hypothesis import given, strategies as st, settings
+
+try:
+    from .logic.agents.analysis.core.benchmark_core import (
+except ImportError:
+    from src.logic.agents.analysis.core.benchmark_core import (
+
     BenchmarkCore,
     BenchmarkResult,
 )
-
 
 
 
@@ -72,7 +79,6 @@ class TestBenchmarkCoreBasics:
 
 
 
-
 class TestBenchmarkCorePropertyBased:
     """Property-based tests using Hypothesis.
     @settings(deadline=None)
@@ -120,7 +126,6 @@ class TestBenchmarkCorePropertyBased:
 
 
 
-
 class TestBenchmarkCoreEdgeCases:
     """Test edge cases and boundary conditions.
     def test_calculate_baseline_very_large_latencies(self) -> None:
@@ -159,7 +164,6 @@ class TestBenchmarkCoreEdgeCases:
         # Just above threshold
         result = core.check_regression(110.1, 100.0, threshold=0.10)
         assert result["regression"]"
-
 
 
 class TestBenchmarkCoreConsistency:

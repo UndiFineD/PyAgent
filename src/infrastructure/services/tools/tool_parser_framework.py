@@ -37,14 +37,27 @@ The actual implementations have been split into:
 
 from __future__ import annotations
 
+
 # Re-export from parser module
-from .parser import (  # Enums; Data Classes; Base Class; Parsers; Utilities
+try:
+    from .parser import (  # Enums; Data Classes; Base Class; Parsers; Utilities
+except ImportError:
+    from .parser import ( # Enums; Data Classes; Base Class; Parsers; Utilities
+
     HermesToolParser, JsonToolParser, Llama3ToolParser,
     ToolCall, ToolParseResult, extract_json_from_text)
 # Re-export from registry module
-from .registry import StreamingToolParser, ToolParserRegistry, parse_tool_call
+try:
+    from .registry import StreamingToolParser, ToolParserRegistry, parse_tool_call
+except ImportError:
+    from .registry import StreamingToolParser, ToolParserRegistry, parse_tool_call
+
 # Re-export from validator module
-from .validator import (validate_argument_type, validate_tool_call,
+try:
+    from .validator import (validate_argument_type, validate_tool_call,
+except ImportError:
+    from .validator import (validate_argument_type, validate_tool_call,
+
                         validate_tool_schema)
 
 __all__ = [

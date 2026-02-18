@@ -45,7 +45,6 @@ __version__ = VERSION
 
 
 
-
 class LintingAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Ensures code adheres to quality standards by running linters.
     def __init__(self, file_path: str) -> None:
@@ -99,7 +98,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

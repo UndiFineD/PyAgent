@@ -20,10 +20,22 @@ Cache salt generation for prompt rendering.
 
 from __future__ import annotations
 
-import hashlib
-from typing import Any, Dict, Optional
 
-from .models import PromptConfig, TruncationStrategy
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .models import PromptConfig, TruncationStrategy
+except ImportError:
+    from .models import PromptConfig, TruncationStrategy
 
 
 

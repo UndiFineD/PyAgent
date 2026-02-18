@@ -15,15 +15,44 @@
 
 from __future__ import annotations
 
-import logging
-import threading
-import time
-import uuid
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .request_context import RequestContext
-from .request_priority import RequestPriority
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .request_context import RequestContext
+except ImportError:
+    from .request_context import RequestContext
+
+try:
+    from .request_priority import RequestPriority
+except ImportError:
+    from .request_priority import RequestPriority
+
 
 __version__ = VERSION
 

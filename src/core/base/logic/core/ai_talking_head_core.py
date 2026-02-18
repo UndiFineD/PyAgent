@@ -62,7 +62,6 @@ class AudioFeatures:
 
 
 
-
 class AITalkingHeadCore(BaseCore):
     """AI Talking Head Core for audio-visual controlled video generation.
 
@@ -77,7 +76,8 @@ class AITalkingHeadCore(BaseCore):
         self.audio_cache: Dict[str, AudioFeatures] = {}
 
     async def initialize(self) -> bool:
-        """Initialize the AI talking head core"""try:
+        """Initialize the AI talking head core"""
+try:
             # Initialize AI models for different components
             await self.initialize_models()
             self.logger.info("AI Talking Head Core initialized successfully")"            return True
@@ -85,7 +85,8 @@ class AITalkingHeadCore(BaseCore):
             self.logger.error(f"Failed to initialize AI Talking Head Core: {e}")"            return False
 
     async def initialize_models(self) -> None:
-        """Initialize the various AI models needed for talking head generation"""# Mock model initialization - in real implementation, these would be actual ML models
+        """Initialize the various AI models needed for talking head generation"""
+# Mock model initialization - in real implementation, these would be actual ML models
         model_configs = {
             "face_detector": {"                "type": "face_detection","                "model_name": "retinaface","                "confidence_threshold": 0.8"            },
             "face_aligner": {"                "type": "face_alignment","                "landmarks": 68,"                "output_size": (512, 512)"            },
@@ -216,12 +217,14 @@ class AITalkingHeadCore(BaseCore):
         emotion: str,
         speaking_style: str
     ) -> bytes:
-        """Synthesize audio from text with emotion and style"""# Mock audio synthesis
+        """Synthesize audio from text with emotion and style"""
+# Mock audio synthesis
         audio_length = len(text) * 0.1  # Rough estimate
         msg = f"[SYNTHESIZED_AUDIO:{text}|emotion:{emotion}|style:{speaking_style}|length:{audio_length}s]""        return msg.encode()
 
     async def _extract_audio_features(self, audio_data: bytes) -> AudioFeatures:
-        """Extract features from audio data"""# Mock feature extraction
+        """Extract features from audio data"""
+# Mock feature extraction
         return AudioFeatures(
             phonemes=["t", "e", "s", "t"],"            timestamps=[0.0, 0.1, 0.2, 0.3],
             pitch_contour=[120.0, 125.0, 130.0, 128.0],
@@ -233,7 +236,8 @@ class AITalkingHeadCore(BaseCore):
         audio_features: AudioFeatures,
         reference_face: Optional[bytes]
     ) -> List[bytes]:
-        """Generate lip sync animation frames"""# Mock lip sync generation
+        """Generate lip sync animation frames"""
+# Mock lip sync generation
         num_frames = int(len(audio_features.phonemes) * 5)  # 5 frames per phoneme
         frames = []
 
@@ -251,7 +255,8 @@ class AITalkingHeadCore(BaseCore):
         reference_face: Optional[bytes],
         request: TalkingHeadRequest
     ) -> bytes:
-        """Generate full video with head movements and expressions"""# Mock video generation using diffusion model
+        """Generate full video with head movements and expressions"""
+# Mock video generation using diffusion model
         total_frames = int(request.video_length_seconds * 25)  # 25 fps
         video_frames = []
 
@@ -267,11 +272,13 @@ class AITalkingHeadCore(BaseCore):
         video_data = b"[VIDEO_START]" + b"".join(video_frames) + b"[VIDEO_END]""        return video_data
 
     async def _enhance_video_quality(self, video_data: bytes) -> bytes:
-        """Apply post-processing enhancements to the video"""# Mock video enhancement
+        """Apply post-processing enhancements to the video"""
+# Mock video enhancement
         enhanced = video_data + b"[QUALITY_ENHANCED|UPSCALED|STABILIZED]""        return enhanced
 
     async def _calculate_video_quality(self, video_data: bytes, audio_data: bytes) -> float:
-        """Calculate video quality score"""# Mock quality calculation
+        """Calculate video quality score"""
+# Mock quality calculation
         base_quality = 0.85
 
         # Adjust based on data size (proxy for complexity)
@@ -310,7 +317,8 @@ class AITalkingHeadCore(BaseCore):
 
         Returns:
             Face analysis result
-        """# Check cache first
+        """
+# Check cache first
         image_hash = hash(image_data)
         if str(image_hash) in self.face_alignment_cache:
             return self.face_alignment_cache[str(image_hash)]
@@ -334,7 +342,8 @@ class AITalkingHeadCore(BaseCore):
 
         Returns:
             Emotion probability distribution
-        """# Mock emotion recognition
+        """
+# Mock emotion recognition
         return {
             "neutral": 0.4,"            "happy": 0.3,"            "excited": 0.2,"            "calm": 0.1"        }
 

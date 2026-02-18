@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.hash_registry import HashAlgorithm, ContentHasher, is_fips_mode, hash_sha256, hash_sha1, hash_md5, hash_xxhash64, hash_xxhash128, hash_fnv1a, safe_hash, get_hash_fn, get_hash_fn_by_name, hash_with
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.hash_registry import HashAlgorithm, ContentHasher, is_fips_mode, hash_sha256, hash_sha1, hash_md5, hash_xxhash64, hash_xxhash128, hash_fnv1a, safe_hash, get_hash_fn, get_hash_fn_by_name, hash_with
+except ImportError:
+    from core.base.common.utils.hash_registry import HashAlgorithm, ContentHasher, is_fips_mode, hash_sha256, hash_sha1, hash_md5, hash_xxhash64, hash_xxhash128, hash_fnv1a, safe_hash, get_hash_fn, get_hash_fn_by_name, hash_with
+
 
 
 def test_hashalgorithm_basic():

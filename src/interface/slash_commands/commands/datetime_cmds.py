@@ -16,11 +16,27 @@
 """
 DateTime commands - date, time, datetime, uptime.
 
-import time
-from datetime import datetime, timezone
+try:
+    import time
+except ImportError:
+    import time
 
-from ..core import CommandContext, CommandResult
-from ..registry import register
+try:
+    from datetime import datetime, timezone
+except ImportError:
+    from datetime import datetime, timezone
+
+
+try:
+    from ..core import CommandContext, CommandResult
+except ImportError:
+    from ..core import CommandContext, CommandResult
+
+try:
+    from ..registry import register
+except ImportError:
+    from ..registry import register
+
 
 # Track start time for uptime
 _start_time = time.time()

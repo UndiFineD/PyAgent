@@ -14,11 +14,18 @@
 
 
 # "Auto-extracted class from agent_context.py"from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.utils.cross_repo_context import CrossRepoContext
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.utils.cross_repo_context import CrossRepoContext
+except ImportError:
+    from src.logic.agents.cognitive.context.utils.cross_repo_context import CrossRepoContext
+
 
 __version__ = VERSION
-
 
 
 

@@ -21,16 +21,36 @@ FederatedKnowledgeOrchestrator for PyAgent.""""Synchronizes learned insights ('L
 
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.orchestration.connectivity.inter_fleet_bridge_orchestrator import \
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.orchestration.connectivity.inter_fleet_bridge_orchestrator import \
+except ImportError:
+    from src.infrastructure.swarm.orchestration.connectivity.inter_fleet_bridge_orchestrator import \
+
     InterFleetBridgeOrchestrator
-from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+try:
+    from .logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+except ImportError:
+    from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+
 
 __version__ = VERSION
-
 
 
 

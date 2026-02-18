@@ -21,21 +21,53 @@ Engine core processor for data parallel coordination.
 
 from __future__ import annotations
 
-from _thread import RLock
-import logging
-import threading
-import time
-from collections import deque
-from typing import Any, Optional
 
-from src.infrastructure.swarm.parallel.dp.balancer import P2CLoadBalancer
-from src.infrastructure.swarm.parallel.dp.types import (DPConfig, StepState,
+try:
+    from _thread import RLock
+except ImportError:
+    from _thread import RLock
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections import deque
+except ImportError:
+    from collections import deque
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
+
+try:
+    from .infrastructure.swarm.parallel.dp.balancer import P2CLoadBalancer
+except ImportError:
+    from src.infrastructure.swarm.parallel.dp.balancer import P2CLoadBalancer
+
+try:
+    from .infrastructure.swarm.parallel.dp.types import (DPConfig, StepState,
+except ImportError:
+    from src.infrastructure.swarm.parallel.dp.types import (DPConfig, StepState,
+
                                                         WaveState,
                                                         WorkerHealth,
                                                         WorkerState)
 
 logger: logging.Logger = logging.getLogger(__name__)
-
 
 
 

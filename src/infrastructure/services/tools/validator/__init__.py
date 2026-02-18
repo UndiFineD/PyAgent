@@ -18,7 +18,11 @@
 
 Schema validation for tool calls.
 
-from .schema import (validate_argument_type, validate_tool_call,  # noqa: F401
+try:
+    from .schema import (validate_argument_type, validate_tool_call,  # noqa: F401
+except ImportError:
+    from .schema import (validate_argument_type, validate_tool_call, # noqa: F401
+
                      validate_tool_schema)
 
 __all__ = [

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.memory.gpu_memory_allocator import MemoryState, AllocationStrategy, MemoryRegion, MemorySnapshot, MemoryPoolConfig, MemoryPressureEvent, CuMemAllocator, MultiGPUMemoryBalancer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.memory.gpu_memory_allocator import MemoryState, AllocationStrategy, MemoryRegion, MemorySnapshot, MemoryPoolConfig, MemoryPressureEvent, CuMemAllocator, MultiGPUMemoryBalancer
+except ImportError:
+    from infrastructure.storage.memory.gpu_memory_allocator import MemoryState, AllocationStrategy, MemoryRegion, MemorySnapshot, MemoryPoolConfig, MemoryPressureEvent, CuMemAllocator, MultiGPUMemoryBalancer
+
 
 
 def test_memorystate_basic():

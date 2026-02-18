@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.debug_market import test_market_features
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.debug_market import test_market_features
+except ImportError:
+    from infrastructure.services.dev.scripts.management.debug_market import test_market_features
+
 
 
 def test_test_market_features_basic():

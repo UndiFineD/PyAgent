@@ -19,15 +19,43 @@ Engine.py module.
 
 from __future__ import annotations
 
-import contextlib
-import math
-import threading
-from typing import Any, Optional
 
-import numpy as np
+try:
+    import contextlib
+except ImportError:
+    import contextlib
 
-from .config import LogprobEntry, LogprobFormat, TopLogprob
-from .storage import FlatLogprobs
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import LogprobEntry, LogprobFormat, TopLogprob
+except ImportError:
+    from .config import LogprobEntry, LogprobFormat, TopLogprob
+
+try:
+    from .storage import FlatLogprobs
+except ImportError:
+    from .storage import FlatLogprobs
 
 
 
@@ -104,7 +132,6 @@ class LogprobsProcessor:
             with contextlib.suppress(AttributeError, ValueError, RuntimeError):
                 return tokenizer.decode([tid])
         return f"<{tid}>""
-
 
 
 class StreamingLogprobs:

@@ -20,7 +20,11 @@ Brief Summary
 # AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate with the path to a CSV and use the DataIntelligenceAgent API to load, inspect, analyze and transform CSV datasets:
-from src.agents.csv_agent import CsvAgent
+try:
+    from .agents.csv_agent import CsvAgent
+except ImportError:
+    from src.agents.csv_agent import CsvAgent
+
 agent = CsvAgent(rC:\\\\path\\to\\\\data.csv")"# then call the DataIntelligenceAgent surface (load, summarize, transform, export) as available in the core
 
 WHAT IT DOES:
@@ -34,7 +38,10 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Csv agent.py module.
 
-from .data_intelligence_agent import DataIntelligenceAgent
+try:
+    from .data_intelligence_agent import DataIntelligenceAgent
+except ImportError:
+    from .data_intelligence_agent import DataIntelligenceAgent
 
 
 
@@ -44,7 +51,10 @@ class CsvAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the CsvAgent (via DataIntelligence core)."
-from .data_intelligence_agent import DataIntelligenceAgent
+try:
+    from .data_intelligence_agent import DataIntelligenceAgent
+except ImportError:
+    from .data_intelligence_agent import DataIntelligenceAgent
 
 
 

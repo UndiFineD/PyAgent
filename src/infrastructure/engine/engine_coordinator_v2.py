@@ -30,7 +30,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class EngineState(Enum):
         Possible states for the EngineCoordinator.
         STARTING = 0
@@ -38,7 +37,6 @@ class EngineState(Enum):
     COOLDOWN = 2
     ERROR = 3
     STOPPED = 4
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.spec_decode.metadata import SpecDecodeMetadataV2, TreeVerificationMetadata, SpecDecodeMetadataFactory
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.spec_decode.metadata import SpecDecodeMetadataV2, TreeVerificationMetadata, SpecDecodeMetadataFactory
+except ImportError:
+    from infrastructure.engine.speculative.spec_decode.metadata import SpecDecodeMetadataV2, TreeVerificationMetadata, SpecDecodeMetadataFactory
+
 
 
 def test_specdecodemetadatav2_basic():

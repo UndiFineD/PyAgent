@@ -31,7 +31,6 @@ Key Features:
 - Modular design for easy extension and integration with agent mixins
 
 
-
 classes:
 - MultimodalCore: Main class for multimodal alignment, streaming, and fusion
 
@@ -63,7 +62,6 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.multimodal")
-
 
 
 

@@ -39,12 +39,24 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -54,7 +66,8 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         super().__init__(file_path)
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         self._system_prompt = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
 """             "You are a Senior Security Auditor."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """             "Scan the provided content for vulnerabilities, hardcoded secrets,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -66,15 +79,28 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
 
 if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#     "main()"  # [BATCHFIX] closed string"
+""" [BATCHFIX] Commented unterminated string""""
+#     "main()"  # [BATCHFIX] closed string"
 from __future__ import annotations
 
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -84,7 +110,8 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         super().__init__(file_path)
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         self._system_prompt = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
 """             "You are a Senior Security Auditor."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """             "Scan the provided content for vulnerabilities, hardcoded secrets,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -96,4 +123,5 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
 
 if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""#     main()
+""" [BATCHFIX] Commented metadata/non-Python""""
+#     main()

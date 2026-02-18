@@ -19,12 +19,28 @@ Analyzer.py module.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Tuple, Union
 
-import numpy as np
+try:
+    from typing import Any, Dict, List, Tuple, Union
+except ImportError:
+    from typing import Any, Dict, List, Tuple, Union
 
-from .config import LogprobEntry
-from .storage import FlatLogprobs
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import LogprobEntry
+except ImportError:
+    from .config import LogprobEntry
+
+try:
+    from .storage import FlatLogprobs
+except ImportError:
+    from .storage import FlatLogprobs
 
 
 

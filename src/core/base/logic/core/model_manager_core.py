@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, Any
+try:
+    from typing import Dict, Any
+except ImportError:
+    from typing import Dict, Any
 
 
 
@@ -25,7 +28,8 @@ class ModelManagerCore:
         self.model_stats: Dict[str, Any] = {}
 
     async def check_health(self, model_name: str) -> bool:
-        """Verifies if a model is loaded and responsive."""# TODO Placeholder for provider-specific health check
+        """Verifies if a model is loaded and responsive."""
+# TODO Placeholder for provider-specific health check
         return True
 
     async def optimize_context(self, model_name: str, task_complexity: float) -> int:

@@ -17,10 +17,22 @@
 """
 Logging config.py module.
 
-import logging
-import os
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.infrastructure.services.logging.core.log_rotation_core import \
+try:
+    import os
+except ImportError:
+    import os
+
+
+try:
+    from .infrastructure.services.logging.core.log_rotation_core import \
+except ImportError:
+    from src.infrastructure.services.logging.core.log_rotation_core import \
+
     LogRotationCore
 
 

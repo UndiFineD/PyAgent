@@ -27,18 +27,34 @@ Example command module (commands/greet.py):
 Phase 24: Advanced Observability & Parsing
 
 # Convenience functions
-from src.interface.slash_commands.api import (execute_command,
+try:
+    from .interface.slash_commands.api import (execute_command,
+except ImportError:
+    from src.interface.slash_commands.api import (execute_command,
+
                                               get_slash_commands,
                                               process_prompt)
-from src.interface.slash_commands.core import (CommandContext,
+try:
+    from .interface.slash_commands.core import (CommandContext,
+except ImportError:
+    from src.interface.slash_commands.core import (CommandContext,
+
                                                CommandDefinition,
                                                CommandRegistry, CommandResult,
                                                ParsedCommand, ProcessedPrompt,
                                                SlashCommands, parse_commands)
-from src.interface.slash_commands.loader import (discover_command_modules,
+try:
+    from .interface.slash_commands.loader import (discover_command_modules,
+except ImportError:
+    from src.interface.slash_commands.loader import (discover_command_modules,
+
                                                  load_commands,
                                                  reload_commands)
-from src.interface.slash_commands.registry import (command,
+try:
+    from .interface.slash_commands.registry import (command,
+except ImportError:
+    from src.interface.slash_commands.registry import (command,
+
                                                    get_global_registry,
                                                    register, register_command)
 

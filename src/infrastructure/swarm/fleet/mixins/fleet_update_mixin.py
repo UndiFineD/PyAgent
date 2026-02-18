@@ -31,7 +31,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class FleetUpdateMixin:
         Mixin for FleetManager to support autonomous periodic updates.
     Checks for repository updates every 15 minutes.

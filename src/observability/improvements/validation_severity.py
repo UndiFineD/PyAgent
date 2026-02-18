@@ -16,7 +16,11 @@
 """
 validation_severity.py - ValidationSeverity enum# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.validation_severity import ValidationSeverity
+try:
+    from .core.base.validation_severity import ValidationSeverity
+except ImportError:
+    from src.core.base.validation_severity import ValidationSeverity
+
 # compare severity
 if ValidationSeverity.ERROR == ValidationSeverity.WARNING:
     ...
@@ -33,12 +37,20 @@ Add richer documentation, canonical serialization/deserialization helpers, mappi
 
 from __future__ import annotations
 
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

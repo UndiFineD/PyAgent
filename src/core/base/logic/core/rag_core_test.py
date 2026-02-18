@@ -17,9 +17,17 @@
 
 Tests advanced RAG functionality based on AgentCloud patterns.
 """
-import pytest
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.logic.core.rag_core import (
+
+try:
+    from .core.base.logic.core.rag_core import (
+except ImportError:
+    from src.core.base.logic.core.rag_core import (
+
     RAGCore,
     VectorStoreType,
     RetrievalStrategy,
@@ -30,7 +38,6 @@ from src.core.base.logic.core.rag_core import (
     RAGQuery,
     MockVectorStore
 )
-
 
 
 

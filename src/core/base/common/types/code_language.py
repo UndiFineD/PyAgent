@@ -34,7 +34,6 @@ __version__ = VERSION
 
 
 
-
 class CodeLanguage(Enum):
     """Supported code languages."""
     PYTHON = "python"

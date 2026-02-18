@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.dag_workflow_core import WorkflowNode, DAGWorkflowCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.dag_workflow_core import WorkflowNode, DAGWorkflowCore
+except ImportError:
+    from core.base.logic.core.dag_workflow_core import WorkflowNode, DAGWorkflowCore
+
 
 
 def test_workflownode_basic():

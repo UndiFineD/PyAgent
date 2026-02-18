@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.cache.kv_cache_metrics import MetricType, AlertLevel, MetricsConfig, BlockMetricsState, KVCacheEvictionEvent, CacheAlert, CacheMetricsSummary, KVCacheMetricsCollector, BatchMetricsCollector, create_metrics_collector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.cache.kv_cache_metrics import MetricType, AlertLevel, MetricsConfig, BlockMetricsState, KVCacheEvictionEvent, CacheAlert, CacheMetricsSummary, KVCacheMetricsCollector, BatchMetricsCollector, create_metrics_collector
+except ImportError:
+    from infrastructure.storage.cache.kv_cache_metrics import MetricType, AlertLevel, MetricsConfig, BlockMetricsState, KVCacheEvictionEvent, CacheAlert, CacheMetricsSummary, KVCacheMetricsCollector, BatchMetricsCollector, create_metrics_collector
+
 
 
 def test_metrictype_basic():

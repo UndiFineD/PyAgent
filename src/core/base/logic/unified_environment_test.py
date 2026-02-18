@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.unified_environment import EnvironmentStatus, EnvironmentResult, EnvironmentCapabilities, EnvironmentProtocol, BaseEnvironment, ToolEnvironment, AgentEnvironment, CompositeEnvironment, EnvironmentRegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.unified_environment import EnvironmentStatus, EnvironmentResult, EnvironmentCapabilities, EnvironmentProtocol, BaseEnvironment, ToolEnvironment, AgentEnvironment, CompositeEnvironment, EnvironmentRegistry
+except ImportError:
+    from core.base.logic.unified_environment import EnvironmentStatus, EnvironmentResult, EnvironmentCapabilities, EnvironmentProtocol, BaseEnvironment, ToolEnvironment, AgentEnvironment, CompositeEnvironment, EnvironmentRegistry
+
 
 
 def test_environmentstatus_basic():

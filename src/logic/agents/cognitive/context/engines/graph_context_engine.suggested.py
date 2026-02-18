@@ -26,7 +26,6 @@ __version__ = VERSION
 
 
 
-
 class GraphContextEngine:
 """"Manages an adjacency list of file and class dependencies.
     def __init__(self, workspace_root: str) -> None:

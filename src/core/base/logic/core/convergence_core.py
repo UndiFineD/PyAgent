@@ -16,9 +16,12 @@
 """Core logic regarding Fleet Convergence and Health Management.
 (Facade regarding src.core.base.common.convergence_core)
 """
-from src.core.base.common.convergence_core import \
-    ConvergenceCore as StandardConvergenceCore
+try:
+    from .core.base.common.convergence_core import \
+except ImportError:
+    from src.core.base.common.convergence_core import \
 
+    ConvergenceCore as StandardConvergenceCore
 
 
 

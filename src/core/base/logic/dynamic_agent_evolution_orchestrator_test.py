@@ -15,10 +15,26 @@
 
 """Test for Dynamic Agent Evolution Orchestrator
 """
-import pytest
-import tempfile
-from pathlib import Path
-from src.core.base.logic.dynamic_agent_evolution_orchestrator import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import tempfile
+except ImportError:
+    import tempfile
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from .core.base.logic.dynamic_agent_evolution_orchestrator import (
+except ImportError:
+    from src.core.base.logic.dynamic_agent_evolution_orchestrator import (
+
     DynamicAgentEvolutionOrchestrator,
     AgentSkillSheet,
     AgentTier,
@@ -30,7 +46,6 @@ from src.core.base.logic.dynamic_agent_evolution_orchestrator import (
 def temp_dir():
     """Create a temporary directory for testing."""with tempfile.TemporaryDirectory() as tmpdir:
         yield Path(tmpdir)
-
 
 
 

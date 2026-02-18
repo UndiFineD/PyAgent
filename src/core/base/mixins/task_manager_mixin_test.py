@@ -15,10 +15,21 @@
 
 """Tests for Task Manager Mixin.
 Tests structured task tracking and management inspired by Adorable's todo tool.'"""
-import pytest
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.mixins.task_manager_mixin import TaskManagerMixin, TaskItem
-from src.core.base.common.models.communication_models import CascadeContext
+
+try:
+    from .core.base.mixins.task_manager_mixin import TaskManagerMixin, TaskItem
+except ImportError:
+    from src.core.base.mixins.task_manager_mixin import TaskManagerMixin, TaskItem
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 
@@ -27,7 +38,6 @@ class MockTaskManagerMixin(TaskManagerMixin):
     """Test implementation of TaskManagerMixin."""
     def __init__(self, **kwargs):
         self._workspace_root = kwargs.get('_workspace_root')'        super().__init__(**kwargs)
-
 
 
 
@@ -98,7 +108,8 @@ class TestTaskManager:
 
     @pytest.mark.asyncio
     async def test_update_task_list_update_existing(self, task_manager, cascade_context):
-        """Test updating existing tasks."""# Add initial task
+        """Test updating existing tasks."""
+# Add initial task
         await task_manager.add_task("Existing task", priority=1)"
         # Update the task
         task_data = [
@@ -114,7 +125,8 @@ class TestTaskManager:
 
     @pytest.mark.asyncio
     async def test_get_task_status(self, task_manager, cascade_context):
-        """Test getting task status."""# Add some tasks
+        """Test getting task status."""
+# Add some tasks
         await task_manager.add_task("Task 1", priority=1)"        await task_manager.add_task("Task 2", priority=2)"        await task_manager.complete_task("Task 2")"
         status = await task_manager.get_task_status(cascade_context)
 

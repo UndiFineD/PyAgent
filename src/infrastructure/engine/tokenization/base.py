@@ -20,10 +20,22 @@ Base class for tokenizers.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import List, Optional, Sequence
 
-from .models import TokenizerConfig, TokenizeResult, TokenizerInfo
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import List, Optional, Sequence
+except ImportError:
+    from typing import List, Optional, Sequence
+
+
+try:
+    from .models import TokenizerConfig, TokenizeResult, TokenizerInfo
+except ImportError:
+    from .models import TokenizerConfig, TokenizeResult, TokenizerInfo
 
 
 

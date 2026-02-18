@@ -18,9 +18,21 @@
 This module provides Signal Protocol-based E2EE for PyAgent,
 enabling zero-knowledge user data storage and secure user-to-user communication.
 """
-from .e2e_encryption_core import E2EEncryptionCore, UserKeyPair, RatchetState
-from .secure_auth_manager import SecureAuthManager, UserSession
-from .encrypted_memory_store import EncryptedMemoryStore
+try:
+    from .e2e_encryption_core import E2EEncryptionCore, UserKeyPair, RatchetState
+except ImportError:
+    from .e2e_encryption_core import E2EEncryptionCore, UserKeyPair, RatchetState
+
+try:
+    from .secure_auth_manager import SecureAuthManager, UserSession
+except ImportError:
+    from .secure_auth_manager import SecureAuthManager, UserSession
+
+try:
+    from .encrypted_memory_store import EncryptedMemoryStore
+except ImportError:
+    from .encrypted_memory_store import EncryptedMemoryStore
+
 
 __all__ = [
     "E2EEncryptionCore","    "UserKeyPair","    "RatchetState","    "SecureAuthManager","    "UserSession","    "EncryptedMemoryStore","]

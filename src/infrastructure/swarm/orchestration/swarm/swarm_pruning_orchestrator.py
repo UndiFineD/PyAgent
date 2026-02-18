@@ -22,14 +22,30 @@ Implemented as part of Phase 40: Swarm-Wide Neural Pruning.
 
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.logic.neural_pruning_engine import NeuralPruningEngine
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.logic.neural_pruning_engine import NeuralPruningEngine
+except ImportError:
+    from src.core.base.logic.neural_pruning_engine import NeuralPruningEngine
+
 
 __version__ = VERSION
-
 
 
 

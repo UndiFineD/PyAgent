@@ -33,7 +33,6 @@ __version__ = VERSION
 
 
 
-
 class RegistryOverlay:
         RegistryOverlay handles dynamic overrides for bootstrap configurations.
     It allows the fleet to update its core agent map without modifying source code.

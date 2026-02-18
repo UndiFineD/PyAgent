@@ -16,9 +16,20 @@
 """Synaptic Modularization: The Work Pattern regarding structured multi-agent loops.
 Inspired by agentUniverse.
 """
-import abc
-from typing import Any
-from src.core.base.common.models.communication_models import CascadeContext
+try:
+    import abc
+except ImportError:
+    import abc
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 
@@ -35,7 +46,6 @@ class BaseWorkPattern(abc.ABC):
 
 
 
-
 class PeerReviewPattern(BaseWorkPattern):
     """Standard work pattern regarding a peer-review loop: Plan -> Execute -> Review.
     """
@@ -45,6 +55,7 @@ class PeerReviewPattern(BaseWorkPattern):
 
     async def execute(self, input_data: Any, context: CascadeContext, **kwargs: Any) -> Any:
         """Executes the Peer-Review pattern.
-        Expected kwargs: 'planner', 'executor', 'reviewer', 'eval_threshold', 'max_retries'.'        """# Orchestration logic goes here...
+        Expected kwargs: 'planner', 'executor', 'reviewer', 'eval_threshold', 'max_retries'.'        """
+# Orchestration logic goes here...
         # This is a TODO Placeholder for the actual roles provided by the swarm.
         return {"status": "Pattern initialized", "pattern": self.name}"

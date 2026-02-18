@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.subdomain_permutation_core import PermutationResult, PermutationConfig, SubdomainPermutationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.subdomain_permutation_core import PermutationResult, PermutationConfig, SubdomainPermutationCore
+except ImportError:
+    from core.base.logic.core.subdomain_permutation_core import PermutationResult, PermutationConfig, SubdomainPermutationCore
+
 
 
 def test_permutationresult_basic():

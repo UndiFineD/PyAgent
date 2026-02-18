@@ -52,14 +52,30 @@ audits, configuration hygiene checks, and environment stabilization.
 
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.maintenance.workspace_maintenance import WorkspaceMaintenance
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .maintenance.workspace_maintenance import WorkspaceMaintenance
+except ImportError:
+    from src.maintenance.workspace_maintenance import WorkspaceMaintenance
+
 
 __version__ = VERSION
-
 
 
 

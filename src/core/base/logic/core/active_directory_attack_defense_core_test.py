@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.active_directory_attack_defense_core import KillChainPhase, AttackTechnique, DefenseControl, AttackVector, DefenseAssessment, KillChainAnalysis, SecurityPosture, ActiveDirectoryAttackDefenseCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.active_directory_attack_defense_core import KillChainPhase, AttackTechnique, DefenseControl, AttackVector, DefenseAssessment, KillChainAnalysis, SecurityPosture, ActiveDirectoryAttackDefenseCore
+except ImportError:
+    from core.base.logic.core.active_directory_attack_defense_core import KillChainPhase, AttackTechnique, DefenseControl, AttackVector, DefenseAssessment, KillChainAnalysis, SecurityPosture, ActiveDirectoryAttackDefenseCore
+
 
 
 def test_killchainphase_basic():

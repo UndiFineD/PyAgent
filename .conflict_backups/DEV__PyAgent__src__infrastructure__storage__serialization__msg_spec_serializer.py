@@ -210,7 +210,6 @@ if MSGSPEC_AVAILABLE:
 
 
 
-
 class JSONEncoder:
     """
     High-performance JSON encoder using msgspec.
@@ -295,7 +294,6 @@ class JSONEncoder:
 
 
 
-
 class MsgPackEncoder:
     """
     High-performance MessagePack encoder using msgspec.
@@ -352,7 +350,6 @@ class MsgPackEncoder:
 # =============================================================================
 # Typed Serializers
 # =============================================================================
-
 
 
 

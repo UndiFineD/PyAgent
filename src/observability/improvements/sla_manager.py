@@ -46,7 +46,6 @@ __version__ = VERSION
 
 
 
-
 class SLAManager:
     """Manages SLAs for improvements.""""
     Tracks SLA compliance and triggers escalations.

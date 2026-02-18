@@ -22,16 +22,36 @@ Base classes and data structures for tool parsing.
 
 from __future__ import annotations
 
-import json
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Tuple
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple
+
 
 # =============================================================================
 # Enums
 # =============================================================================
-
 
 
 
@@ -47,7 +67,6 @@ class ToolParserType(Enum):
     DEEPSEEKV3 = auto()  # DeepSeek V3 format
     INTERNLM = auto()  # InternLM format
     PYTHONIC = auto()  # Python-style function calls
-
 
 
 
@@ -123,7 +142,6 @@ class StreamingToolState:
 # =============================================================================
 # Base Tool Parser
 # =============================================================================
-
 
 
 

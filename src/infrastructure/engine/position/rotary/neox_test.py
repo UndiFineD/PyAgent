@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.position.rotary.neox import NeoxRotaryEmbedding
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.position.rotary.neox import NeoxRotaryEmbedding
+except ImportError:
+    from infrastructure.engine.position.rotary.neox import NeoxRotaryEmbedding
+
 
 
 def test_neoxrotaryembedding_basic():

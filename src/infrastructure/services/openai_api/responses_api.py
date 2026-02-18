@@ -17,7 +17,11 @@
 """
 Bridge file for OpenAI API responses.
 
-from .responses import (
+try:
+    from .responses import (
+except ImportError:
+    from .responses import (
+
     AudioContent,
     ContentPart,
     ContentPartType,

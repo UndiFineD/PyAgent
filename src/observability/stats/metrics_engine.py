@@ -71,7 +71,6 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 
-
 class ObservabilityEngine:
     """Provides telemetry and performance tracking for the agent fleet.
     def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
@@ -162,7 +161,6 @@ from src.core.base.lifecycle.version import VERSION
 __version__: str = VERSION
 
 logger: logging.Logger = logging.getLogger(__name__)
-
 
 
 
@@ -324,7 +322,6 @@ class ObservabilityEngine:
 
 
 
-
 class TokenCostEngine:
     def __init__(self) -> None:
         self.core = TokenCostCore()
@@ -332,7 +329,6 @@ class TokenCostEngine:
     def calculate_cost(self, model: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
         res: TokenCostResult = self.core.calculate_cost(input_tokens, output_tokens, model)
         return res.total_cost
-
 
 
 

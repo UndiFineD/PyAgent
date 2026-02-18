@@ -28,7 +28,6 @@ from .models import FSMTransitionTable
 
 
 
-
 class JsonSchemaGrammar(GrammarEngine):
         JSON Schema to grammar conversion.
     

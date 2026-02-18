@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.connector.types import KVConnectorRole, KVTransferMode, KVTransferConfig, KVConnectorMetadata, KVCacheBlocks, ForwardContext, Request
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.connector.types import KVConnectorRole, KVTransferMode, KVTransferConfig, KVConnectorMetadata, KVCacheBlocks, ForwardContext, Request
+except ImportError:
+    from infrastructure.storage.kv_transfer.connector.types import KVConnectorRole, KVTransferMode, KVTransferConfig, KVConnectorMetadata, KVCacheBlocks, ForwardContext, Request
+
 
 
 def test_kvconnectorrole_basic():

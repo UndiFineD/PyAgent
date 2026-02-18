@@ -38,7 +38,6 @@ from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 
 
-
 class BenchmarkSuite:
     """Unified suite for running performance benchmarks on PyAgent components.
     def __init__(self, logger: Optional[logging.Logger] = None) -> None:

@@ -15,15 +15,34 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Verifies draft tokens against target model outputs.
-import random
-import time
-from typing import Any, List, Optional
+try:
+    import random
+except ImportError:
+    import random
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, List, Optional
+except ImportError:
+    from typing import Any, List, Optional
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
-from .proposals import VerificationResult
+try:
+    from .proposals import VerificationResult
+except ImportError:
+    from .proposals import VerificationResult
 
 
 

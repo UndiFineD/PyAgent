@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.fleet_balancer import SwarmNode, FleetBalancer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.fleet_balancer import SwarmNode, FleetBalancer
+except ImportError:
+    from infrastructure.swarm.orchestration.fleet_balancer import SwarmNode, FleetBalancer
+
 
 
 def test_swarmnode_basic():

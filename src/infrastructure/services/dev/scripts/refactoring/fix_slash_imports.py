@@ -14,8 +14,16 @@
 
 
 Fix slash command imports by converting absolute imports to relative ones.
-import os
-from pathlib import Path
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 # Robustly find the repository root
 current_path = Path(__file__).resolve()

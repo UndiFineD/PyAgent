@@ -33,7 +33,6 @@ class ToolDefinition:
 
 
 
-
 class ToolDraftingCore:
     "Pure logic for agents generating their own OpenAPI "tools."    Handles schema drafting, parameter validation, and endpoint mapping.
 

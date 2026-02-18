@@ -18,12 +18,36 @@ Disaggregated package.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from .config import DCPConfig, InstanceInfo, KVTransferParams, ScheduledRequest  # noqa: F401
-from .enums import InstanceRole, SchedulingPolicy  # noqa: F401
-from .factory import SchedulerFactory, create_dcp_scheduler  # noqa: F401
-from .orchestrator import ProxyOrchestrator  # noqa: F401
-from .scheduler import DisaggregatedScheduler  # noqa: F401
-from .selectors import (HashSelector, InstanceSelector, LeastLoadedSelector,  # noqa: F401
+try:
+    from .config import DCPConfig, InstanceInfo, KVTransferParams, ScheduledRequest  # noqa: F401
+except ImportError:
+    from .config import DCPConfig, InstanceInfo, KVTransferParams, ScheduledRequest # noqa: F401
+
+try:
+    from .enums import InstanceRole, SchedulingPolicy  # noqa: F401
+except ImportError:
+    from .enums import InstanceRole, SchedulingPolicy # noqa: F401
+
+try:
+    from .factory import SchedulerFactory, create_dcp_scheduler  # noqa: F401
+except ImportError:
+    from .factory import SchedulerFactory, create_dcp_scheduler # noqa: F401
+
+try:
+    from .orchestrator import ProxyOrchestrator  # noqa: F401
+except ImportError:
+    from .orchestrator import ProxyOrchestrator # noqa: F401
+
+try:
+    from .scheduler import DisaggregatedScheduler  # noqa: F401
+except ImportError:
+    from .scheduler import DisaggregatedScheduler # noqa: F401
+
+try:
+    from .selectors import (HashSelector, InstanceSelector, LeastLoadedSelector,  # noqa: F401
+except ImportError:
+    from .selectors import (HashSelector, InstanceSelector, LeastLoadedSelector, # noqa: F401
+
                         RandomSelector, RoundRobinSelector)
 
 __all__ = [

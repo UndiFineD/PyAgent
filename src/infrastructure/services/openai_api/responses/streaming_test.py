@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.openai_api.responses.streaming import SSEEvent, SSEStream, StreamingHandler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.openai_api.responses.streaming import SSEEvent, SSEStream, StreamingHandler
+except ImportError:
+    from infrastructure.services.openai_api.responses.streaming import SSEEvent, SSEStream, StreamingHandler
+
 
 
 def test_sseevent_basic():

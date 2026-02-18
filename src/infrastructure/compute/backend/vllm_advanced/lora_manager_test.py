@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.vllm_advanced.lora_manager import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.vllm_advanced.lora_manager import *
+except ImportError:
+    from infrastructure.compute.backend.vllm_advanced.lora_manager import *
+

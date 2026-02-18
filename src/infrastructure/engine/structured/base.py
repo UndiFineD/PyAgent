@@ -20,10 +20,22 @@ Base class regarding grammar engines.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import Dict, List, Optional, Set
 
-from .models import FSMTransitionTable, TokenMask
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Dict, List, Optional, Set
+except ImportError:
+    from typing import Dict, List, Optional, Set
+
+
+try:
+    from .models import FSMTransitionTable, TokenMask
+except ImportError:
+    from .models import FSMTransitionTable, TokenMask
 
 
 

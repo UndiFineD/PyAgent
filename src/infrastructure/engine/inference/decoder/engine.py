@@ -19,15 +19,39 @@ Engine.py module.
 
 from __future__ import annotations
 
-import time
-from typing import Any, Sequence
 
-import numpy as np
+try:
+    import time
+except ImportError:
+    import time
 
-from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
+try:
+    from typing import Any, Sequence
+except ImportError:
+    from typing import Any, Sequence
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
+except ImportError:
+    from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
+
                      SpeculativeConfig, VerificationResult)
-from .proposers import NgramProposer, SuffixProposer
-from .verification import TreeSpeculator
+try:
+    from .proposers import NgramProposer, SuffixProposer
+except ImportError:
+    from .proposers import NgramProposer, SuffixProposer
+
+try:
+    from .verification import TreeSpeculator
+except ImportError:
+    from .verification import TreeSpeculator
 
 
 

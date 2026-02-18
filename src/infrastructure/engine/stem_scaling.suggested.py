@@ -17,8 +17,15 @@
 STEM: Dynamic Embedding Expansion for long-context handling.
 Implemented based on arXiv:2601.10639 (STEM Scaling, Jan 2026).
 
-import torch
-from torch import nn
+try:
+    import torch
+except ImportError:
+    import torch
+
+try:
+    from torch import nn
+except ImportError:
+    from torch import nn
 
 
 
@@ -53,7 +60,6 @@ class STEMScalingLayer(nn.Module):
             x = self.contraction_proj(expanded)
 
         return x
-
 
 
 

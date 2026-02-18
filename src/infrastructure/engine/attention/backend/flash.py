@@ -31,7 +31,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class FlashAttentionBackend(AttentionBackend[None]):
         FlashAttention-2 backend.
 

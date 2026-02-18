@@ -45,13 +45,25 @@ Auto-extracted class from agent_stats.py
 
 from __future__ import annotations
 
-import json
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

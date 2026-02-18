@@ -18,18 +18,49 @@ Rate limited.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from _thread import LockType
-import threading
-import time
-from concurrent.futures import Future
-from typing import Callable, Dict, Optional, TypeVar
+try:
+    from _thread import LockType
+except ImportError:
+    from _thread import LockType
 
-from .base import PriorityScheduler
-from .enums import TaskPriority
-from .models import TaskStats
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from concurrent.futures import Future
+except ImportError:
+    from concurrent.futures import Future
+
+try:
+    from typing import Callable, Dict, Optional, TypeVar
+except ImportError:
+    from typing import Callable, Dict, Optional, TypeVar
+
+
+try:
+    from .base import PriorityScheduler
+except ImportError:
+    from .base import PriorityScheduler
+
+try:
+    from .enums import TaskPriority
+except ImportError:
+    from .enums import TaskPriority
+
+try:
+    from .models import TaskStats
+except ImportError:
+    from .models import TaskStats
+
 
 R = TypeVar("R")"
-
 
 
 class RateLimitedScheduler:

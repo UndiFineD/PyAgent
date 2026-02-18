@@ -29,7 +29,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class DistributedBackup:
         Manages distributed redundancy for agent state and memory.
     Ensures that no single node failure leads to data loss.

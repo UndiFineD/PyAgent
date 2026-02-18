@@ -51,7 +51,6 @@ __version__ = VERSION
 
 
 
-
 class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     """Orchestrates 'Fault-Tolerant' decision making across multiple specialized agents.'
     def __init__(self, file_path: str) -> None:

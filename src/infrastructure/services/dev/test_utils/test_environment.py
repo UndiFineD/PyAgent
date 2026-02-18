@@ -15,15 +15,38 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .cleanup_strategy import CleanupStrategy
-from .isolation_level import IsolationLevel
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .cleanup_strategy import CleanupStrategy
+except ImportError:
+    from .cleanup_strategy import CleanupStrategy
+
+try:
+    from .isolation_level import IsolationLevel
+except ImportError:
+    from .isolation_level import IsolationLevel
+
 
 __version__ = VERSION
 

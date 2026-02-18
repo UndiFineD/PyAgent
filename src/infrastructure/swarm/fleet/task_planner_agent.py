@@ -22,18 +22,50 @@ Agent specializing in breaking down complex tasks into executable workflows.
 
 from __future__ import annotations
 
-import json
-import logging
-from typing import Any
 
-from src.core.base.common.base_utilities import as_tool, create_main_function
-from src.core.base.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.agent_state_manager import StateTransaction
-from src.core.base.models.communication_models import CascadeContext
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.base_utilities import as_tool, create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool, create_main_function
+
+try:
+    from .core.base.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.agent_state_manager import StateTransaction
+except ImportError:
+    from src.core.base.agent_state_manager import StateTransaction
+
+try:
+    from .core.base.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.models.communication_models import CascadeContext
+
 
 __version__ = VERSION
-
 
 
 

@@ -52,7 +52,6 @@ class ShellResult:
 
 
 
-
 class ShellCore:
     """Centralized handler for shell and subprocess operations.
     Provides consistent logging, error handling, and environmental setup.

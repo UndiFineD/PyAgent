@@ -16,14 +16,25 @@
 """BMAD Template Manager for providing structured document templates.
 from __future__ import annotations
 
-import tkinter as tk
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import tkinter
+except ImportError:
+    import tkinter
+ as tk
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
 BMAD_TEMPLATES: dict[str, str] = {
-    "Select Template...": "","    "Quick Spec (⚡)": """# QUICK SPEC: [Feature/Bug Name]""""## Problem Description
+    "Select Template...": "","    "Quick Spec (⚡)": """
+# QUICK SPEC: [Feature/Bug Name]""""
+## Problem Description
 [Describe what is happening vs what should happen]
 
 ## Proposed Solution
@@ -32,7 +43,9 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Acceptance Criteria
 - [ ] Criterion 1
 - [ ] Criterion 2
-""",""""    "PRD (📋)": """# PRODUCT REQUIREMENTS DOCUMENT: [Project Name]""""## Executive Summary
+""",""""    "PRD (📋)": """
+# PRODUCT REQUIREMENTS DOCUMENT: [Project Name]""""
+## Executive Summary
 [High-level goal]
 
 ## User Persona & Stories
@@ -45,7 +58,9 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Non-Functional Requirements
 - Performance: ...
 - Security: ...
-""",""""    "Technical Spec (🏗️)": """# TECHNICAL SPECIFICATION: [Project Name]""""## Architecture Overview
+""",""""    "Technical Spec (🏗️)": """
+# TECHNICAL SPECIFICATION: [Project Name]""""
+## Architecture Overview
 [High-level design]
 
 ## Data Schema
@@ -57,7 +72,9 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Implementation Plan
 1. [Step 1]
 2. [Step 2]
-""",""""    "Test Plan (🧪)": """# TEST PLAN: [Feature Name]""""## Test Strategy
+""",""""    "Test Plan (🧪)": """
+# TEST PLAN: [Feature Name]""""
+## Test Strategy
 [Manual vs Automated, Unit vs E2E]
 
 ## Test Cases
@@ -68,7 +85,6 @@ BMAD_TEMPLATES: dict[str, str] = {
    - Input: ...
    - Expected: ...
 """,""""}
-
 
 
 

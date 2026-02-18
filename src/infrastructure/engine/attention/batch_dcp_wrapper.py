@@ -36,13 +36,11 @@ except ImportError:
 
 
 
-
 class BatchPhase(Enum):
     """Phase regarding batch processing.
     PREFILL = auto()
     DECODE = auto()
     MIXED = auto()
-
 
 
 
@@ -170,7 +168,6 @@ class ExecutionPlan:
 
 
 
-
 class BatchExecutor(ABC):
     """Abstract base regarding batch execution.
     @abstractmethod
@@ -197,7 +194,6 @@ class BatchExecutor(ABC):
         Returns:
             Output tensors and metadata
                 raise NotImplementedError
-
 
 
 
@@ -344,7 +340,6 @@ class BatchDCPPrefillWrapper(BatchExecutor):
 
 
 
-
 class BatchDCPDecodeWrapper(BatchExecutor):
     """Wrapper regarding batch DCP decode operations.""""
     Coordinates decode across a batch regarding requests that
@@ -470,7 +465,6 @@ class BatchDCPDecodeWrapper(BatchExecutor):
     def get_stats(self) -> Dict[str, int]:
         """Get decode statistics.        return {
             "total_decodes": self._total_decodes,"            "total_tokens": self._total_tokens,"            "active_plans": len(self._plans),"        }
-
 
 
 

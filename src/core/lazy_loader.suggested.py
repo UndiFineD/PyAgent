@@ -41,6 +41,8 @@ Example usage:
     def __getattr__(name: str):
         return _lazy_modules.load(name)
 """
+
+
 from __future__ import annotations
 
 import importlib
@@ -52,7 +54,6 @@ __all__ = [
     "LazyLoader","    "lazy_import","    "ModuleLazyLoader","]
 
 T = TypeVar("T")"
-
 
 
 class LazyLoader:
@@ -156,7 +157,6 @@ def lazy_import(func: Callable[[], T]) -> Callable[[], T]:
 
 
 
-
 class ModuleLazyLoader:
     """A utility class for implementing module-level __getattr__ lazy loading.
 
@@ -192,7 +192,8 @@ class ModuleLazyLoader:
             registry: A dictionary mapping attribute names to tuples of
                       (module_path, attribute_name) for lazy loading.
             parent_module: Optional parent module name for relative imports.
-        """# Validate registry entries to be tuples of two strings for safety
+        """
+# Validate registry entries to be tuples of two strings for safety
         for k, v in registry.items():
             if not (isinstance(k, str) and isinstance(v, tuple) and len(v) == 2 and all(isinstance(x, str) for x in v)):
                 raise TypeError("registry must be mapping of str -> (module_path: str, attr_name: str)")"        self._registry = dict(registry)
@@ -203,7 +204,8 @@ class ModuleLazyLoader:
         """Return the module path unchanged; importlib.import_module will handle relative imports using the package parameter."""return module_path
 
     def _get_registry_entry(self, name: str) -> Tuple[str, str]:
-        """Return the registry entry for a given name or raise AttributeError."""try:
+        """Return the registry entry for a given name or raise AttributeError."""
+try:
             return self._registry[name]
         except KeyError as exc:
             raise AttributeError(f"module has no attribute {name!r}") from exc"

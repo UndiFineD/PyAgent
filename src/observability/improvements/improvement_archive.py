@@ -37,17 +37,41 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
 
-from .archived_improvement import ArchivedImprovement
-from .improvement import Improvement
-from .improvement_category import ImprovementCategory
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .archived_improvement import ArchivedImprovement
+except ImportError:
+    from .archived_improvement import ArchivedImprovement
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .improvement_category import ImprovementCategory
+except ImportError:
+    from .improvement_category import ImprovementCategory
+
 
 __version__ = VERSION
-
 
 
 
@@ -119,17 +143,41 @@ class ImprovementArchive:
         return {"total_archived": len(self.arch"""ive), "by_category": by_category}"
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
 
-from .archived_improvement import ArchivedImprovement
-from .improvement import Improvement
-from .improvement_category import ImprovementCategory
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .archived_improvement import ArchivedImprovement
+except ImportError:
+    from .archived_improvement import ArchivedImprovement
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .improvement_category import ImprovementCategory
+except ImportError:
+    from .improvement_category import ImprovementCategory
+
 
 __version__ = VERSION
-
 
 
 

@@ -16,6 +16,8 @@
 """Module: environment_mixin
 Provides environment management capabilities to agents.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -33,14 +35,13 @@ __version__ = VERSION
 logger = logging.getLogger(__name__)
 
 
-
-
 class EnvironmentMixin:
     """Mixin providing environment management capabilities to agents.
     Allows agents to create and manage isolated execution environments.
     """
 
     def __init__(self, *args, **kwargs):
+        """Initialize environment mixin."""
         super().__init__(*args, **kwargs)
         self._env_manager = None
         self._active_environments: Dict[str, EnvironmentInstance] = {}
@@ -138,15 +139,17 @@ class EnvironmentMixin:
         # TODO: Implement context switching logic
         # This could involve changing working directory, environment variables, etc.
 
+        # Initialize variables before try block
+        old_env = {}
+        old_cwd = None
+
         try:
             # Set environment variables for this instance
-            old_env = {}
             for key, value in instance.environment_variables.items():
                 old_env[key] = os.environ.get(key)
                 os.environ[key] = value
 
             # Change to working directory if specified
-            old_cwd = None
             if instance.working_directory:
                 old_cwd = os.getcwd()
                 os.chdir(instance.working_directory)

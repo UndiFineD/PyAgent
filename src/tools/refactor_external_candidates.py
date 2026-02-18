@@ -15,9 +15,21 @@
 
 Docstring for src.tools.refactor_external_candidates
 
-from pathlib import Path
-import re
-import json
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import json
+except ImportError:
+    import json
+
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC_DIR = ROOT / 'src' / 'external_candidates' / 'auto''DEST_DIR = ROOT / 'src' / 'external_candidates' / 'cleaned''

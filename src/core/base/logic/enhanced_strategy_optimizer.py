@@ -15,13 +15,28 @@
 
 """Enhanced Strategy Optimizer - AutoRAG-inspired optimization algorithms
 Based on AutoRAG's sophisticated strategy selection for multi-metric optimization'"""
-from typing import List, Dict, Any, Optional, Tuple
-from dataclasses import dataclass
-from enum import Enum
-import logging
+try:
+    from typing import List, Dict, Any, Optional, Tuple
+except ImportError:
+    from typing import List, Dict, Any, Optional, Tuple
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    import logging
+except ImportError:
+    import logging
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -42,7 +57,6 @@ class StrategyTrial:
     """Single strategy trial result"""strategy_id: str
     metrics: Dict[str, float]
     metadata: Dict[str, Any] = None
-
 
 
 

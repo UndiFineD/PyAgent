@@ -30,7 +30,8 @@ def extract_apk_with_jadx(apk_path, output_dir, target_package):
     try:
 # [BATCHFIX] Commented metadata/non-Python
 """         jadx_executable = "jadx.bat" if platform.system() == "Windows" else "jadx"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         jadx_path = os.path.join(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         jadx_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
             "installed-tools","            "jadx","            "bin","            jadx_executable,
         )
@@ -39,7 +40,8 @@ def extract_apk_with_jadx(apk_path, output_dir, target_package):
 # [BATCHFIX] Commented metadata/non-Python
 #             raise FileNotFoundError(fJADX not found at: {jadx_path}")"  # [BATCHFIX] closed string"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         command = [jadx_path, "-d", output_dir, apk_path]"        subprocess.run(command, check=True)
 # [BATCHFIX] Commented metadata/non-Python
 #         print(fDecompilation complete. Files saved to: {output_dir}")"  # [BATCHFIX] closed string"    except subprocess.CalledProcessError as e:
@@ -48,7 +50,8 @@ def extract_apk_with_jadx(apk_path, output_dir, target_package):
 
     manifest_path = os.path.join(output_dir, "resources", "AndroidManifest.xml")"    strings_path = os.path.join(output_dir, "resources", "res", "values", "strings.xml")"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     target_classes = []""""    for root, _, files in os.walk(output_dir):
         for file in files:
             if file.endswith(".java"):"                package_path = target_package.replace(".", os.sep)"                if package_path in os.path.normpath(root):

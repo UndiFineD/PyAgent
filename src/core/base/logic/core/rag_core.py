@@ -29,15 +29,12 @@ from src.core.base.common.base_core import BaseCore
 
 
 
-
 class VectorStoreType(str, Enum):
     """Supported vector store types."""QDRANT = "qdrant""    PINECONE = "pinecone""    CHROMA = "chroma""    WEAVIATE = "weaviate""    MILVUS = "milvus""
 
 
-
 class RetrievalStrategy(str, Enum):
     """Retrieval strategies for RAG."""SIMILARITY = "similarity""    MMR = "mmr"  # Maximal Marginal Relevance"    SELF_QUERY = "self_query""    MULTI_QUERY = "multi_query""    TIME_WEIGHTED = "time_weighted""    CONTEXTUAL_COMPRESSION = "contextual_compression""
-
 
 
 class DocumentType(str, Enum):
@@ -98,7 +95,6 @@ class RAGQuery:
 
 
 
-
 class VectorStoreInterface(Protocol):
     """Protocol for vector store implementations."""
     async def add_documents(self, documents: List[Document]) -> List[str]:
@@ -118,7 +114,6 @@ class VectorStoreInterface(Protocol):
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
         """Update a document in the vector store."""pass
-
 
 
 
@@ -145,7 +140,6 @@ class BaseVectorStore:
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
         """Update a document in the vector store."""raise NotImplementedError
-
 
 
 
@@ -359,7 +353,8 @@ class RAGCore(BaseCore):
 
         Returns:
             RAG query results with optional generated response
-        """# Retrieve relevant documents
+        """
+# Retrieve relevant documents
         retrieval_result = await self.retrieve(
             tool_id=tool_id,
             query=rag_query.query,
@@ -580,7 +575,8 @@ class RAGCore(BaseCore):
         return len(intersection) / len(union) if union else 0.0
 
     async def _expand_query(self, query: str) -> List[str]:
-        """Expand a query into multiple related queries."""# Simple query expansion - in practice, this would use an LLM
+        """Expand a query into multiple related queries."""
+# Simple query expansion - in practice, this would use an LLM
         expansions = [
             query,
             f"What is {query}?","            f"Explain {query}","            f"Details about {query}","            f"Information on {query}""        ]
@@ -593,7 +589,6 @@ class RAGCore(BaseCore):
         self.retrieval_cache.clear()
         self.text_splitters.clear()
         self.embedders.clear()
-
 
 
 
@@ -653,7 +648,6 @@ class QdrantVectorStore(BaseVectorStore):
 
 
 
-
 class MockVectorStore(BaseVectorStore):
     """Mock vector store for testing and development."""
     def __init__(self, config: Dict[str, Any]):
@@ -677,7 +671,8 @@ class MockVectorStore(BaseVectorStore):
         filters: Optional[Dict[str, Any]] = None,
         **kwargs
     ) -> List[tuple[Document, float]]:
-        """Perform mock similarity search."""# Simple keyword matching for mock
+        """Perform mock similarity search."""
+# Simple keyword matching for mock
         query_words = set(query.lower().split())
         results = []
 

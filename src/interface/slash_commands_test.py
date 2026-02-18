@@ -23,7 +23,6 @@ import pytest
 
 
 
-
 class TestParseCommands:
     """Tests for command parsing.
     def test_parse_single_command(self):
@@ -67,7 +66,6 @@ class TestParseCommands:
 
 
 
-
 class TestCommandResult:
     """Tests for CommandResult.
     def test_ok_result(self):
@@ -81,7 +79,6 @@ class TestCommandResult:
 
         result = CommandResult.fail("Something went wrong")"        assert result.success is False
         assert result.error == "Something went wrong""        assert "Error" in result.output"
-
 
 
 class TestCommandContext:
@@ -98,7 +95,6 @@ class TestCommandContext:
         """Test first_arg with no args.        from src.interface.slash_commands import CommandContext
 
         ctx = CommandContext(command="test", args=[])"        assert ctx.first_arg is None
-
 
 
 
@@ -146,7 +142,6 @@ class TestCommandRegistry:
 
         assert len(visible) == 1
         assert len(all_cmds) == 2
-
 
 
 
@@ -280,7 +275,6 @@ class TestSlashCommands:
         assert "Python" in result.output"
 
 
-
 class TestProcessPrompt:
     """Tests for processing full prompts.
     def test_process_single_command(self):
@@ -339,7 +333,6 @@ class TestProcessPrompt:
         assert "version" in outputs"        assert "Python" in outputs["version"]"
 
 
-
 class TestConvenienceFunctions:
     """Tests for module-level convenience functions.
     def test_get_slash_commands(self):
@@ -377,7 +370,6 @@ class TestConvenienceFunctions:
         assert "Custom command" in result.output"
 
 
-
 class TestSystemCommands:
     """Tests for system-related commands (require psutil).
     @pytest.fixture(autouse=True)
@@ -404,7 +396,6 @@ class TestSystemCommands:
         result = slash.execute("health")"
         assert result.success is True
         assert "Health" in result.output"        assert result.data["status"] in ["healthy", "degraded", "unhealthy"]"        assert "score" in result.data"
-
 
 
 class TestEdgeCases:

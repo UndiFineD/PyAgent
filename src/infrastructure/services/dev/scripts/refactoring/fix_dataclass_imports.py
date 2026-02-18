@@ -15,10 +15,23 @@
 """Script for automatically injecting missing dataclass imports where decorators are used.
 from __future__ import annotations
 
-import os
-import re
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

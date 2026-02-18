@@ -14,21 +14,37 @@
 
 
 """Learning objectives.py module.
-"""# Learning Objectives and Goals for Fleet Optimization - Phase 319 Enhanced
+"""
+# Learning Objectives and Goals for Fleet Optimization - Phase 319 Enhanced
 
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
 
 
 
 
 class ObjectiveStatus(Enum):
     NOT_STARTED = "not_started""    IN_PROGRESS = "in_progress""    ACHIEVED = "achieved""    FAILED = "failed""    STALLED = "stalled""
-
 
 
 class ObjectiveType(Enum):
@@ -99,7 +115,6 @@ class ObjectiveConstraint:
         if self.max_value is not None and value > self.max_value:
             return False
         return True
-
 
 
 

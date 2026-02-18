@@ -20,7 +20,12 @@ Tokenizer protocols.
 
 from __future__ import annotations
 
-from typing import List, Optional, Protocol, Sequence, runtime_checkable
+
+try:
+    from typing import List, Optional, Protocol, Sequence, runtime_checkable
+except ImportError:
+    from typing import List, Optional, Protocol, Sequence, runtime_checkable
+
 
 
 @runtime_checkable

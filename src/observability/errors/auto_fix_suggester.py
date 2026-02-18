@@ -19,7 +19,11 @@ AutoFixSuggester - Generate automated fix suggestions for runtime errors
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.tools.auto_fix_suggester import AutoFixSuggester
+try:
+    from .tools.auto_fix_suggester import AutoFixSuggester
+except ImportError:
+    from src.tools.auto_fix_suggester import AutoFixSuggester
+
 suggester = AutoFixSuggester()
 suggestion = suggester.suggest(error_entry)  # returns FixSuggestion or None
 # use suggest_all(list_of_errors) to get multiple suggestions
@@ -39,15 +43,31 @@ Auto-extracted class from agent_errors.py
 
 from __future__ import annotations
 
-import re
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import re
+except ImportError:
+    import re
 
-from .error_entry import ErrorEntry
-from .fix_suggestion import FixSuggestion
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .error_entry import ErrorEntry
+except ImportError:
+    from .error_entry import ErrorEntry
+
+try:
+    from .fix_suggestion import FixSuggestion
+except ImportError:
+    from .fix_suggestion import FixSuggestion
+
 
 __version__ = VERSION
-
 
 
 

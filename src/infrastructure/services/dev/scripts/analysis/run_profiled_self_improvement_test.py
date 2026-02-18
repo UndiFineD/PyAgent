@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.analysis.run_profiled_self_improvement import RustFunctionStats, RustProfiler, ComprehensiveProfileAnalyzer, save_profile_report
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.analysis.run_profiled_self_improvement import RustFunctionStats, RustProfiler, ComprehensiveProfileAnalyzer, save_profile_report
+except ImportError:
+    from infrastructure.services.dev.scripts.analysis.run_profiled_self_improvement import RustFunctionStats, RustProfiler, ComprehensiveProfileAnalyzer, save_profile_report
+
 
 
 def test_rustfunctionstats_basic():

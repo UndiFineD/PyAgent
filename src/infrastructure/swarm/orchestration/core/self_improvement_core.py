@@ -39,7 +39,6 @@ except ImportError:
 
 
 
-
 class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMixin):
         Pure logic core for identifying tech debt, security risks, and quality issues.
     This class contains no I/O and is suitable for Rust oxidation.

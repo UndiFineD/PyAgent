@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .error_impact import ErrorImpact
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .error_impact import ErrorImpact
+except ImportError:
+    from .error_impact import ErrorImpact
+
 
 
 def test_errorimpact_basic():

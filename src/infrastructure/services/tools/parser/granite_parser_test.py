@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.tools.parser.granite_parser import GraniteToolParser
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.tools.parser.granite_parser import GraniteToolParser
+except ImportError:
+    from infrastructure.services.tools.parser.granite_parser import GraniteToolParser
+
 
 
 def test_granitetoolparser_basic():

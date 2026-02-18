@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.speculative_decoder import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.speculative_decoder import *
+except ImportError:
+    from infrastructure.engine.speculative.speculative_decoder import *
+

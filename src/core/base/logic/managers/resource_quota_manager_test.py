@@ -24,7 +24,6 @@ from src.core.base.logic.managers.resource_quota_manager import (
 )
 
 
-
 class TestLocalTokenBucket:
     @pytest.mark.asyncio
     async def test_acquire_success(self):
@@ -55,7 +54,6 @@ class TestLocalTokenBucket:
         bucket = LocalTokenBucket(capacity=10, refill_rate=1.0)
         assert await bucket.try_acquire(5) is True
         assert await bucket.try_acquire(6) is False
-
 
 
 class TestDistributedTokenBucket:

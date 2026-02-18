@@ -21,8 +21,16 @@ This script is read-only for scanned files and only appends/edits
 the tracking/completed/candidates files in-place. It does not
 execute any code found in .external.
 
-import json
-from pathlib import Path
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORT = ROOT / '.external' / 'refactor_report.json''TRACKING = ROOT / '.external' / 'tracking.md''COMPLETED = ROOT / '.external' / 'completed.md''CANDIDATES = ROOT / '.external' / 'candidates.md''

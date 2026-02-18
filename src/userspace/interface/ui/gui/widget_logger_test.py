@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .widget_logger import WidgetLogger
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .widget_logger import WidgetLogger
+except ImportError:
+    from .widget_logger import WidgetLogger
+
 
 
 def test_widgetlogger_basic():

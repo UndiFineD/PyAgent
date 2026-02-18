@@ -36,7 +36,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class BaseWorker(ABC):
     """Abstract base class for distributed workers.""""
     Workers receive requests, process them, and return results.
@@ -71,7 +70,6 @@ class BaseWorker(ABC):
             total_processed=self._total_processed,
             error_count=self._error_count,
         )
-
 
 
 

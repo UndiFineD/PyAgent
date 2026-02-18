@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.tensor_parallel_transfer import TensorParallelTransfer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.tensor_parallel_transfer import TensorParallelTransfer
+except ImportError:
+    from infrastructure.storage.kv_transfer.tensor_parallel_transfer import TensorParallelTransfer
+
 
 
 def test_tensorparalleltransfer_basic():

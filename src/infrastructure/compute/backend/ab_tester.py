@@ -15,17 +15,35 @@
 
 """
 Auto-extracted class from agent_backend.py""""
+
+
 from __future__ import annotations
 
-import threading
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import threading
+except ImportError:
+    import threading
 
-from .ab_test_variant import ABTestVariant
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .ab_test_variant import ABTestVariant
+except ImportError:
+    from .ab_test_variant import ABTestVariant
+
 
 __version__ = VERSION
-
 
 
 

@@ -44,7 +44,6 @@ class LogEntry:
 
 
 
-
 class SwarmConsensus:
         SwarmConsensus (Phase 3.0): Replicated state machine using BFT-weighted Raft Lite.
     Ensures every node agrees on the routing table, MCP tool availability, and shard ownership.

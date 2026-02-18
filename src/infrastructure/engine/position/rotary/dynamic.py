@@ -15,16 +15,27 @@
 
 Dynamic.py module.
 
-from typing import Any, Optional, Tuple
+try:
+    from typing import Any, Optional, Tuple
+except ImportError:
+    from typing import Any, Optional, Tuple
 
-from .base import HAS_NUMPY, HAS_TORCH, RotaryEmbeddingBase
-from .config import RoPEConfig
+
+try:
+    from .base import HAS_NUMPY, HAS_TORCH, RotaryEmbeddingBase
+except ImportError:
+    from .base import HAS_NUMPY, HAS_TORCH, RotaryEmbeddingBase
+
+try:
+    from .config import RoPEConfig
+except ImportError:
+    from .config import RoPEConfig
+
 
 if HAS_TORCH:
     import torch
 if HAS_NUMPY:
     import numpy as np
-
 
 
 

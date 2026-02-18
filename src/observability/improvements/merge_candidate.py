@@ -19,7 +19,11 @@ MergeCandidate - Dataclass for representing a merge candidate between two improv
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.improvements.merge_candidate import MergeCandidate
+try:
+    from .core.improvements.merge_candidate import MergeCandidate
+except ImportError:
+    from src.core.improvements.merge_candidate import MergeCandidate
+
 mc = MergeCandidate(source_id="imp-123", target_id="imp-456", similarity_score=0.87, merge_reason="overlapping scope")"
 WHAT IT DOES:
 Provides a minimal, serializable data container describing a candidate pair of "improvement" records that may be merged; stores source and target IDs, a floating similarity score (default 0.0), and a free-text merge reason."
@@ -33,9 +37,18 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

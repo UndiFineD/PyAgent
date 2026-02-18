@@ -15,14 +15,29 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration and enums regarding speculative decoding.
-from dataclasses import dataclass
-from enum import Enum, auto
-from typing import Optional
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Optional
+except ImportError:
+    from typing import Optional
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

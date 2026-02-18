@@ -40,7 +40,6 @@ class ContextShard:
     precision: str = "float16"  # float16, fp8, int4, etc."
 
 
-
 class ContextShardManager:
         Manages distribution of long-context shards across the swarm.
     Prevents context replication bottleneck.

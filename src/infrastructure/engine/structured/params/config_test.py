@@ -13,8 +13,16 @@
 # limitations under the License.
 
 
-from .config import StructuredOutputConfig, ValidationResult
-from .enums import StructuredOutputType, GuidedDecodingBackend, WhitespacePattern
+try:
+    from .config import StructuredOutputConfig, ValidationResult
+except ImportError:
+    from .config import StructuredOutputConfig, ValidationResult
+
+try:
+    from .enums import StructuredOutputType, GuidedDecodingBackend, WhitespacePattern
+except ImportError:
+    from .enums import StructuredOutputType, GuidedDecodingBackend, WhitespacePattern
+
 
 
 def test_structured_output_config_to_dict():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.fleet_execution_core import FleetExecutionCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.fleet_execution_core import FleetExecutionCore
+except ImportError:
+    from infrastructure.swarm.fleet.fleet_execution_core import FleetExecutionCore
+
 
 
 def test_fleetexecutioncore_basic():

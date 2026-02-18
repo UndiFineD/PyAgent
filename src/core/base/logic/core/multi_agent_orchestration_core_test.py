@@ -15,17 +15,32 @@
 
 """Test Multi-Agent Orchestration Core
 """
-import asyncio
-import pytest
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.logic.core.multi_agent_orchestration_core import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .core.base.logic.core.multi_agent_orchestration_core import (
+except ImportError:
+    from src.core.base.logic.core.multi_agent_orchestration_core import (
+
     MultiAgentOrchestrationCore,
     AgentCoordinator,
     AgentTask,
     AgentResult,
     OrchestrationPlan
 )
-from src.core.base.common.models.communication_models import CascadeContext
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 

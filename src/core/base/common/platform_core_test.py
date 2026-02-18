@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.platform_core import PlatformCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.platform_core import PlatformCore
+except ImportError:
+    from core.base.common.platform_core import PlatformCore
+
 
 
 def test_platformcore_basic():

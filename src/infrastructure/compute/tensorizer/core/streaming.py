@@ -15,13 +15,32 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Streaming reader for large models.
-from pathlib import Path
-from typing import Dict, List, Optional, Union
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-import numpy as np
+try:
+    from typing import Dict, List, Optional, Union
+except ImportError:
+    from typing import Dict, List, Optional, Union
 
-from .config import TensorizerConfig
-from .reader import TensorizerReader
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import TensorizerConfig
+except ImportError:
+    from .config import TensorizerConfig
+
+try:
+    from .reader import TensorizerReader
+except ImportError:
+    from .reader import TensorizerReader
 
 
 

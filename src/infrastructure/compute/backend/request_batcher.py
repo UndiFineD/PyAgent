@@ -18,13 +18,34 @@
 
 from __future__ import annotations
 
-import threading
-import time
 
-from src.core.base.lifecycle.version import VERSION
-from .local_context_recorder import LocalContextRecorder
+try:
+    import threading
+except ImportError:
+    import threading
 
-from .batch_request import BatchRequest
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .local_context_recorder import LocalContextRecorder
+except ImportError:
+    from .local_context_recorder import LocalContextRecorder
+
+
+try:
+    from .batch_request import BatchRequest
+except ImportError:
+    from .batch_request import BatchRequest
+
 
 # Infrastructure
 __version__ = VERSION

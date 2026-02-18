@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.workspace.predictive_workspace import PredictiveWorkspace
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.workspace.predictive_workspace import PredictiveWorkspace
+except ImportError:
+    from infrastructure.engine.workspace.predictive_workspace import PredictiveWorkspace
+
 
 
 def test_predictiveworkspace_basic():

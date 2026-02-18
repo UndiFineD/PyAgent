@@ -15,10 +15,25 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration and data structures regarding the model runner.
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Optional
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
 
 
 

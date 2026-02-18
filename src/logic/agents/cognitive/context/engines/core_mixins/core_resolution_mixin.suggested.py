@@ -20,7 +20,6 @@ from datetime import datetime
 
 
 
-
 class CoreResolutionMixin:
 """"Methods for conflict resolution and fact preparation.
     def prepare_fact(self, _key: str, value: Any) -> dict[str, Any]:

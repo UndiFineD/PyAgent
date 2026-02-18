@@ -20,6 +20,7 @@ PyAgent SDK Version Info and Stability Gates.
 
 from __future__ import annotations
 
+
 # PyAgent SDK Version Info (Core/Fleet Version)
 VERSION: str = "4.0.0"
 SDK_VERSION: str = "4.0.0"

@@ -15,13 +15,25 @@
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

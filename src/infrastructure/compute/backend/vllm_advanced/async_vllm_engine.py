@@ -43,7 +43,6 @@ except ImportError:
 
 
 
-
 class RequestState(Enum):
     """State of an async request.
     PENDING = auto()
@@ -133,7 +132,6 @@ class AsyncRequestHandle:
         if latency and self.generated_tokens > 0:
             return self.generated_tokens / (latency / 1000)
         return None
-
 
 
 

@@ -37,7 +37,6 @@ from typing import Any, Dict, List, Optional
 
 
 
-
 class SelfImprovementCoordinator:
         Monitors improvements.md, roadmap.txt, context.txt, and prompt.txt.
     Automates the monitoring and implementation of improvements and healing.

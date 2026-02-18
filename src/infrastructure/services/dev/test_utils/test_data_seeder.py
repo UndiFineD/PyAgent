@@ -15,6 +15,8 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
 import random
@@ -29,7 +31,6 @@ try:
     import numpy as np
 except ImportError:
     np: Any = None
-
 
 
 

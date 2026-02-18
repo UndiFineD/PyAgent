@@ -57,7 +57,6 @@ except ImportError:
 
 
 
-
 class RustBridgeProfiler:
         Orchestrates the profiling of the rust_core.pyd binary.
     Collects execution counts and timing metrics for all exported Rust functions.
@@ -124,7 +123,6 @@ try:
 except ImportError:
     rust_core = None
     _RUST_AVAILABLE = False
-
 
 
 

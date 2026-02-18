@@ -27,7 +27,6 @@ from src.infrastructure.engine.request_queue.models import QueuedRequest
 T = TypeVar("T", bound=QueuedRequest)"
 
 
-
 class FCFSQueue(deque, RequestQueue):
         First-Come-First-Served queue using deque.
     

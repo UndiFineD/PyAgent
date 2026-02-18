@@ -17,6 +17,8 @@
 Core logic for web security scanning, refactored from aem-eye patterns.
 Implements asynchronous web application scanning with pattern matching for vulnerability detection.
 """
+
+
 from __future__ import annotations
 
 import asyncio
@@ -31,7 +33,6 @@ try:
 except ImportError:
     aiohttp = None
     HAS_AIOHTTP = False
-
 
 
 
@@ -160,7 +161,8 @@ class WebSecurityScannerCore:
 
         Returns:
             Dict of host -> list of detected CMS types
-        """# Common CMS detection patterns
+        """
+# Common CMS detection patterns
         cms_patterns = {
             'aem': r'href="/content/dam|/etc/clientlibs',"'            'wordpress': r'wp-content|wp-includes','            'drupal': r'Drupal|drupal','            'joomla': r'Joomla|joomla','            'magento': r'Magento|magento','            'shopify': r'shopify|myshopify','        }
 

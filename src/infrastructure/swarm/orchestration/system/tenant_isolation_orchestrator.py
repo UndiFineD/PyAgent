@@ -20,14 +20,30 @@ Tenant isolation orchestrator.py module.
 
 from __future__ import annotations
 
-import hashlib
-import os
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

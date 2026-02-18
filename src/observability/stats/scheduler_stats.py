@@ -23,10 +23,26 @@ Scheduler Statistics.Comprehensive metrics for LLM inference scheduling:
 Inspired by vLLM's v1/metrics/stats.py architecture.'
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 
@@ -392,7 +408,6 @@ class SchedulerStats:
             )
 
         return "\\n".join(lines)"
-
 
 
 class SchedulerStatsCollector:

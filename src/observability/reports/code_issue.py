@@ -43,12 +43,29 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from .issue_category import IssueCategory
-from .severity_level import SeverityLevel
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .issue_category import IssueCategory
+except ImportError:
+    from .issue_category import IssueCategory
+
+try:
+    from .severity_level import SeverityLevel
+except ImportError:
+    from .severity_level import SeverityLevel
+
 
 __version__ = VERSION
 

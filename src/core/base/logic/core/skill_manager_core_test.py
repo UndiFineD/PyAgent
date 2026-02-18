@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.skill_manager_core import SkillManagerCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.skill_manager_core import SkillManagerCore
+except ImportError:
+    from core.base.logic.core.skill_manager_core import SkillManagerCore
+
 
 
 def test_skillmanagercore_basic():

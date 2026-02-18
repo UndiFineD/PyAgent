@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.cache.memory import MemoryMultiModalCache, PerceptualCache, PrefetchMultiModalCache
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.cache.memory import MemoryMultiModalCache, PerceptualCache, PrefetchMultiModalCache
+except ImportError:
+    from infrastructure.engine.multimodal.cache.memory import MemoryMultiModalCache, PerceptualCache, PrefetchMultiModalCache
+
 
 
 def test_memorymultimodalcache_basic():

@@ -17,9 +17,17 @@
 
 Tests for ReasoningEngine - thinking extraction and tool parsing.
 
-import pytest
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.infrastructure.engine.reasoning import (
+
+try:
+    from .infrastructure.engine.reasoning import (
+except ImportError:
+    from src.infrastructure.engine.reasoning import (
+
     ReasoningFormat,
     ToolCallFormat,
     ParseState,
@@ -33,7 +41,6 @@ from src.infrastructure.engine.reasoning import (
     ReasoningEngine,
     create_reasoning_engine,
 )
-
 
 
 
@@ -58,7 +65,6 @@ class TestReasoningFormats:
 
 
 
-
 class TestThinkingBlock:
     """Test ThinkingBlock dataclass.
     def test_create_thinking_block(self):
@@ -75,7 +81,6 @@ class TestThinkingBlock:
 
 
 
-
 class TestToolCall:
     """Test ToolCall dataclass.
     def test_create_tool_call(self):
@@ -87,7 +92,6 @@ class TestToolCall:
             id="call_456","            name="execute","            arguments={"code": "print(1)"},"            format=ToolCallFormat.OPENAI,
         )
         assert call.format == ToolCallFormat.OPENAI
-
 
 
 
@@ -121,7 +125,6 @@ class TestDeepSeekReasoningParser:
 
 
 
-
 class TestQwenReasoningParser:
     """Test Qwen3 reasoning parser.
     def test_parse_thinking_block(self):
@@ -137,7 +140,6 @@ class TestQwenReasoningParser:
         assert "Result" in content"
 
 
-
 class TestGenericReasoningParser:
     """Test generic reasoning parser.
     def test_custom_delimiters(self):
@@ -147,7 +149,6 @@ class TestGenericReasoningParser:
         content, blocks = parser.extract_thinking(text)
         assert len(blocks) == 1
         assert "My reasoning" in blocks[0].content"
-
 
 
 class TestOpenAIToolParser:
@@ -167,7 +168,6 @@ class TestOpenAIToolParser:
 
 
 
-
 class TestHermesToolParser:
     """Test Hermes tool call parser.
     def test_parse_hermes_format(self):
@@ -175,7 +175,6 @@ class TestHermesToolParser:
         text = '''<tool_call>''''{"name": "search", "arguments": {"query": "test"}}"</tool_call>'''''''
         calls = parser.parse_tool_calls(text)
         assert isinstance(calls, list)
-
 
 
 
@@ -219,7 +218,6 @@ class TestReasoningEngine:
         text = '{"tool_calls": [{"id": "1", "function": {"name": "test", "arguments": "{}"}}]}'"'
         result = engine.parse(text)
         assert isinstance(result.tool_calls, list)
-
 
 
 

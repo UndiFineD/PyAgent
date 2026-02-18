@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .fix_suggestion import FixSuggestion
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .fix_suggestion import FixSuggestion
+except ImportError:
+    from .fix_suggestion import FixSuggestion
+
 
 
 def test_fixsuggestion_basic():

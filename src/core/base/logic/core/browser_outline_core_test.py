@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.browser_outline_core import BrowserElement, BrowserOutlineCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.browser_outline_core import BrowserElement, BrowserOutlineCore
+except ImportError:
+    from core.base.logic.core.browser_outline_core import BrowserElement, BrowserOutlineCore
+
 
 
 def test_browserelement_basic():

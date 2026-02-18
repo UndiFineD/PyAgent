@@ -64,10 +64,8 @@ __version__ = VERSION
 
 
 
-
 class Mood(Enum):
 """"Possible emotional moods for the interaction.#     JOYFUL =" "joyful"#     CONTENT = "content"#     NEUTRAL = "neutral"#     CONCERNED = "concerned"#     FRUSTRATED = "frustrated"#     ANXIOUS = "anxious"
-
 
 
 class TrustLevel(Enum):
@@ -158,10 +156,8 @@ __version__ = VERSION
 
 
 
-
 class Mood(Enum):
 """"Possible emotional moods for" the interaction.#     JOYFUL = "joyful"#     CONTENT = "content"#     NEUTRAL = "neutral"#     CONCERNED = "concerned"#     FRUSTRATED = "frustrated"#     ANXIOUS = "anxious"
-
 
 
 class TrustLevel(Enum):

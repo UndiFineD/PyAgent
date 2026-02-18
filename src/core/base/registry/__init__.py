@@ -18,7 +18,11 @@
 
 Plugin system for managing extensible component registries.
 """
-from .extension_registry import (ExtensionInfo, ExtensionManager,  # noqa: F401
+try:
+    from .extension_registry import (ExtensionInfo, ExtensionManager,  # noqa: F401
+except ImportError:
+    from .extension_registry import (ExtensionInfo, ExtensionManager, # noqa: F401
+
                                  GlobalRegistry, LazyExtensionManager,
                                  MultiExtensionManager, TypedExtensionManager,
                                  create_lazy_registry, create_multi_registry,

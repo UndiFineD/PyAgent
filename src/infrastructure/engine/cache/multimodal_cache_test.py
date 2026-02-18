@@ -39,7 +39,6 @@ from src.infrastructure.engine.multimodal.multi_modal_cache import (
 
 
 
-
 class TestEnums:
     """Test enum values.
     def test_media_type_values(self):
@@ -57,7 +56,6 @@ class TestEnums:
         assert HashAlgorithm.SHA256 is not None
         assert HashAlgorithm.XXHASH is not None
         assert HashAlgorithm.PERCEPTUAL is not None
-
 
 
 
@@ -80,7 +78,6 @@ class TestMediaHash:
 
 
 
-
 class TestCacheEntry:
     """Test CacheEntry dataclass.
     def test_create_cache_entry(self):
@@ -98,7 +95,6 @@ class TestCacheEntry:
             size_bytes=4,
             metadata={"format": "wav"},"        )
         assert entry.metadata["format"] == "wav""
-
 
 
 class TestMultiModalHasher:
@@ -127,7 +123,6 @@ class TestMultiModalHasher:
         data = b"test""
         h = hasher.hash_bytes(data)
         assert isinstance(h, str)
-
 
 
 
@@ -205,7 +200,6 @@ class TestMemoryMultiModalCache:
         assert result is None or result.data == b"data""
 
 
-
 class TestPerceptualCache:
     """Test perceptual similarity cache.
     def test_create_perceptual_cache(self):
@@ -220,7 +214,6 @@ class TestPerceptualCache:
         # Query (exact match)
         result = cache.get(key)
         assert result is not None
-
 
 
 
@@ -243,7 +236,6 @@ class TestPrefetchMultiModalCache:
 
 
 
-
 class TestFactoryFunctions:
     """Test factory functions.
     def test_compute_media_hash(self):
@@ -258,7 +250,6 @@ class TestFactoryFunctions:
 
     @pytest.mark.skipif(sys.platform == 'win32', reason='IPC cache uses /tmp which is not available on Windows')'    def test_create_shared_cache(self):
         """Test creating shared/IPC cache via factory.        cache = create_cache(CacheBackend.SHARED, name="factory_test")"        assert isinstance(cache, IPCMultiModalCache)
-
 
 
 
@@ -280,7 +271,6 @@ class TestCacheStats:
 
         # Hit ratio should be 0.8
         assert stats.hit_rate == 0.8
-
 
 
 

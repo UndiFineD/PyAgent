@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .error_cluster import ErrorCluster
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .error_cluster import ErrorCluster
+except ImportError:
+    from .error_cluster import ErrorCluster
+
 
 
 def test_errorcluster_basic():

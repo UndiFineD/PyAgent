@@ -17,14 +17,25 @@
 """
 Tenant bridge.py module.
 
-import logging
-from typing import Any, Dict
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import \
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+
+try:
+    from .infrastructure.swarm.orchestration.swarm.trace_synthesis import \
+except ImportError:
+    from src.infrastructure.swarm.orchestration.swarm.trace_synthesis import \
+
     SwarmTraceSynthesizer
 
 logger = logging.getLogger(__name__)
-
 
 
 

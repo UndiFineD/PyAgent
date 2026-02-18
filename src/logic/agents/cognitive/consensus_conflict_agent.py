@@ -19,7 +19,11 @@ Consensus Conflict Agent - Multi-agent arbitration and voting
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.agents.consensus_conflict_agent import ConsensusConflictAgent
+try:
+    from .core.agents.consensus_conflict_agent import ConsensusConflictAgent
+except ImportError:
+    from src.core.agents.consensus_conflict_agent import ConsensusConflictAgent
+
 agent = ConsensusConflictAgent(workspace_path="C:\\path\\to\\workspace")"agent.initiate_dispute("dispute-123", "decision context", ["option A", "option B"])"agent.cast_vote("dispute-123", "agent-1", 0, "Reasoning for A")"agent.resolve_dispute("dispute-123")"
 WHAT IT DOES:
 Provides a lightweight Tier 2 cognitive agent that coordinates simple consensus rounds between swarm agents. It supports initiating disputes, collecting per-agent votes (with reasoning), resolving by plurality/majority, and reporting basic dispute statistics.
@@ -33,11 +37,27 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Consensus Conflict Agent for multi-agent arbitration and voting.
 
-import time
-from typing import Any
+try:
+    import time
+except ImportError:
+    import time
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 __version__ = VERSION
 
@@ -88,11 +108,27 @@ class ConsensusConflictAgent(BaseAgent):
             "total_disputes": len(self.active_disputes),"            "resolved_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "resolved"]"            ),
             "pending_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "voting"]"     "       ),"        }
 
-import time
-from typing import Any
+try:
+    import time
+except ImportError:
+    import time
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 __version__ = VERSION
 

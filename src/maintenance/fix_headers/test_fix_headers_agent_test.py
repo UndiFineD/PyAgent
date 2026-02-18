@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from maintenance.fix_headers.test_fix_headers_agent import test_preserve_bom_and_encoding, test_remove_old_license_but_preserve_other_comments, test_keep_unrelated_top_comment
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from maintenance.fix_headers.test_fix_headers_agent import test_preserve_bom_and_encoding, test_remove_old_license_but_preserve_other_comments, test_keep_unrelated_top_comment
+except ImportError:
+    from maintenance.fix_headers.test_fix_headers_agent import test_preserve_bom_and_encoding, test_remove_old_license_but_preserve_other_comments, test_keep_unrelated_top_comment
+
 
 
 def test_test_preserve_bom_and_encoding_basic():

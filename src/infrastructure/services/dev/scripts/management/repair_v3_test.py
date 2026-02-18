@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.repair_v3 import fix_all
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.repair_v3 import fix_all
+except ImportError:
+    from infrastructure.services.dev.scripts.management.repair_v3 import fix_all
+
 
 
 def test_fix_all_basic():

@@ -28,7 +28,11 @@ USAGE:
 Import the compatibility module where older code expects it, or prefer the new path src.interface.commands for new code:
 from <package>.slash_commands import SlashCommands, parse_commands, register_command
 or
-from src.interface.commands import SlashCommands  # preferred
+try:
+    from .interface.commands import SlashCommands # preferred
+except ImportError:
+    from src.interface.commands import SlashCommands # preferred
+
 
 WHAT IT DOES:
 - Re-exports classes, functions, and decorators from the moved implementation to preserve backward compatibility.
@@ -46,7 +50,11 @@ SlashCommands - Chat prompt slash command parser and executor.
 Provides backward compatibility for the moved SlashCommands implementation.
 Moved to src/interface/commands/
 
-from .commands import (CommandContext, CommandDefinition, CommandParser,
+try:
+    from .commands import (CommandContext, CommandDefinition, CommandParser,
+except ImportError:
+    from .commands import (CommandContext, CommandDefinition, CommandParser,
+
                        CommandRegistry, CommandResult, ParsedCommand,
                        ProcessedPrompt, SlashCommands, command,
                        execute_command, get_slash_commands, parse_commands,
@@ -57,7 +65,11 @@ __all__ = [
     "SlashCommands","    "CommandParser","    "CommandContext","    "CommandResult","    "CommandDefinition","    "CommandRegistry","    "ParsedCommand","    "ProcessedPrompt","    # Functions
     "parse_commands","    "get_slash_commands","    "process_prompt","    "execute_command","    "register_command","    "command","]
 
-from .commands import (CommandContext, CommandDefinition, CommandParser,
+try:
+    from .commands import (CommandContext, CommandDefinition, CommandParser,
+except ImportError:
+    from .commands import (CommandContext, CommandDefinition, CommandParser,
+
                        CommandRegistry, CommandResult, ParsedCommand,
                        ProcessedPrompt, SlashCommands, command,
                        execute_command, get_slash_commands, parse_commands,

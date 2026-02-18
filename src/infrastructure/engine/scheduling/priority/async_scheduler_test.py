@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.priority.async_scheduler import AsyncPriorityScheduler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.priority.async_scheduler import AsyncPriorityScheduler
+except ImportError:
+    from infrastructure.engine.scheduling.priority.async_scheduler import AsyncPriorityScheduler
+
 
 
 def test_asyncpriorityscheduler_basic():

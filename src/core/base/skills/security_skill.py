@@ -16,16 +16,30 @@
 """Module: security_skill
 Implements security auditing and firewall enforcement for Universal Agents.
 """
+
+
 from __future__ import annotations
-import logging
-from typing import Any, TYPE_CHECKING
-from src.core.base.lifecycle.skill_core import SkillCore
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, TYPE_CHECKING
+except ImportError:
+    from typing import Any, TYPE_CHECKING
+
+try:
+    from .core.base.lifecycle.skill_core import SkillCore
+except ImportError:
+    from src.core.base.lifecycle.skill_core import SkillCore
+
 
 if TYPE_CHECKING:
     pass
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -49,6 +63,7 @@ class SecuritySkill(SkillCore):
 
     async def scan_content(self, content: str) -> bool:
         """Scan content for insecure patterns (delegates to rust_core if available).
-        """# TODO Placeholder for Rust-accelerated scanning
+        """
+# TODO Placeholder for Rust-accelerated scanning
         if "PRIVATE_KEY" in content:"            logger.danger("Security Alert: Private key leak detected in agent output!")"            return False
         return True

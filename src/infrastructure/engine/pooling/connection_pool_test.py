@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.pooling.connection_pool import ConnectionState, Closeable, Pingable, PoolStats, PooledConnection, ConnectionPool, AsyncConnectionPool, PooledConnectionManager, MultiHostPool
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.pooling.connection_pool import ConnectionState, Closeable, Pingable, PoolStats, PooledConnection, ConnectionPool, AsyncConnectionPool, PooledConnectionManager, MultiHostPool
+except ImportError:
+    from infrastructure.engine.pooling.connection_pool import ConnectionState, Closeable, Pingable, PoolStats, PooledConnection, ConnectionPool, AsyncConnectionPool, PooledConnectionManager, MultiHostPool
+
 
 
 def test_connectionstate_basic():

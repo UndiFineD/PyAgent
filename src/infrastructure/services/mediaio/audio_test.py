@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.mediaio.audio import AudioLoader
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.mediaio.audio import AudioLoader
+except ImportError:
+    from infrastructure.services.mediaio.audio import AudioLoader
+
 
 
 def test_audioloader_basic():

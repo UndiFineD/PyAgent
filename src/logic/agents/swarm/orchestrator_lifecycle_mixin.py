@@ -15,12 +15,32 @@
 
 from __future__ import annotations
 
-import logging
-from pathlib import Path
 
-from src.core.base.common.models import AgentHealthCheck, HealthStatus
-from src.core.base.lifecycle.graceful_shutdown import GracefulShutdown
-from src.core.base.logic.managers.system_managers import HealthChecker
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.common.models import AgentHealthCheck, HealthStatus
+except ImportError:
+    from src.core.base.common.models import AgentHealthCheck, HealthStatus
+
+try:
+    from .core.base.lifecycle.graceful_shutdown import GracefulShutdown
+except ImportError:
+    from src.core.base.lifecycle.graceful_shutdown import GracefulShutdown
+
+try:
+    from .core.base.logic.managers.system_managers import HealthChecker
+except ImportError:
+    from src.core.base.logic.managers.system_managers import HealthChecker
 
 
 

@@ -56,7 +56,6 @@ except ImportError:
 
 
 
-
 class DocInferenceAgent(BaseAgent):
 """"Manages high-accuracy OCR and document layout reconstruction.
     def __init__(self, file_path: str) -> None:
@@ -138,7 +137,6 @@ try:
     HAS_PYPDF = True
 except ImportError:
     HAS_PYPDF = False
-
 
 
 

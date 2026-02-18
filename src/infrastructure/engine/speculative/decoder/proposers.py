@@ -17,14 +17,39 @@
 """Implementations regarding speculative token proposers.
 from __future__ import annotations
 
-import time
-import functools
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
 
-import numpy as np
+try:
+    import time
+except ImportError:
+    import time
 
-from .tree import SpeculativeTree
+try:
+    import functools
+except ImportError:
+    import functools
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .tree import SpeculativeTree
+except ImportError:
+    from .tree import SpeculativeTree
+
 
 
 @dataclass
@@ -46,7 +71,6 @@ class ProposerStats:
         """Calculate average proposal time in milliseconds.        if self.proposals_made == 0:
             return 0.0
         return self.proposal_time_ms / self.proposals_made
-
 
 
 
@@ -77,7 +101,6 @@ class SpeculativeProposer(ABC):
 
     def reset_stats(self) -> None:
         """Reset statistics.        self.stats = ProposerStats()
-
 
 
 
@@ -174,7 +197,6 @@ class NgramProposer(SpeculativeProposer):
 
     def update(self, accepted_tokens: list[int], rejected_at: int) -> None:
         """Update statistics.        self.stats.tokens_accepted += len(accepted_tokens)
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.modules.signal_module import SignalModule
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.modules.signal_module import SignalModule
+except ImportError:
+    from core.modules.signal_module import SignalModule
+
 
 
 def test_signalmodule_basic():

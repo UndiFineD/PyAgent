@@ -14,7 +14,6 @@
 # limitations under the License.
 
 
-
 class DiscoveryService:
     """P2P mDNS Discovery and Peer Registration.    def __init__(self):
         self.peers = {}

@@ -16,16 +16,21 @@
 """Multimodal Mixin for BaseAgent.
 Provides support for interleaved modality tags and streaming sessions.
 """
+
+
 from __future__ import annotations
 
-from typing import Any, Dict, List
 
-from src.core.base.common.multimodal_core import (
-    MultimodalCore,
-    MultimodalStreamSession
-)
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
 
 
+try:
+    from .core.base.common.multimodal_core import (MultimodalCore, MultimodalStreamSession)
+except ImportError:
+    from src.core.base.common.multimodal_core import (MultimodalCore, MultimodalStreamSession)
 
 
 class MultimodalMixin:
@@ -41,10 +46,18 @@ class MultimodalMixin:
         """Returns the system instructions for the multimodal tag system."""
         channels: str = ", ".join(self.multimodal_core.active_channels.keys())
         return (
-            "MODALITY PROTOCOL ENABLED.\\n""            "You can interleave modality tags in your output using the format <Type:Channel_ID>.\\n""            f"Available Modalities: {channels}\\n""            "Use <Thought_...> for internal reasoning and ""            "<Hardware:NPU_...> for acceleration hooks.\\n""            "Example: '<Audio:EN_01> Hello world <Thought_Greeting user>'.""'        )
+            "MODALITY PROTOCOL ENABLED.\n"
+            "You can interleave modality tags in your output using the format <Type:Channel_ID>.\n"
+            f"Available Modalities: {channels}\n"
+            "Use <Thought_...> for internal reasoning and "
+            "<Hardware:NPU_...> for acceleration hooks.\n"
+            "Example: '<Audio:EN_01> Hello world <Thought_Greeting user>'."
+        )
 
     def process_multimodal_output(self, raw_output: str) -> List[Dict[str, Any]]:
-        """Processes agent output through the multimodal feedback loop and filter."""return self.multimodal_session.filter_response(raw_output)
+        """Processes agent output through the multimodal feedback loop and filter."""
+        return self.multimodal_session.filter_response(raw_output)
 
     def set_output_track(self, modality: str, channel: str) -> None:
-        """Switch the active output track for a modality."""self.multimodal_session.set_output_channel(modality, channel)
+        """Switch the active output track for a modality."""
+        self.multimodal_session.set_output_channel(modality, channel)

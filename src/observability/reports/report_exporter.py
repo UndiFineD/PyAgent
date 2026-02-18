@@ -15,8 +15,13 @@
 
 from __future__ import annotations
 
+
 """Report Exporter - exports reports to various formats."""
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

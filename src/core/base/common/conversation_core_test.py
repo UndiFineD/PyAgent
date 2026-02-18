@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.conversation_core import ConversationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.conversation_core import ConversationCore
+except ImportError:
+    from core.base.common.conversation_core import ConversationCore
+
 
 
 def test_conversationcore_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .bridge import MCPServerInfo, MCPServerType, MCPCategory, MCPServerConfig, MCPTool, MCPServerRegistry, MCPServerInstance, MCPBridge, MCPToolOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .bridge import MCPServerInfo, MCPServerType, MCPCategory, MCPServerConfig, MCPTool, MCPServerRegistry, MCPServerInstance, MCPBridge, MCPToolOrchestrator
+except ImportError:
+    from .bridge import MCPServerInfo, MCPServerType, MCPCategory, MCPServerConfig, MCPTool, MCPServerRegistry, MCPServerInstance, MCPBridge, MCPToolOrchestrator
+
 
 
 def test_mcpserverinfo_basic():

@@ -16,14 +16,24 @@
 """Manager regarding response post-processing and multimodal inputs.
 (Facade regarding src.core.base.common.processor_core)
 """
+
+
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.models import ResponsePostProcessor
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.models import ResponsePostProcessor
+except ImportError:
+    from src.core.base.common.models import ResponsePostProcessor
+
 
 __all__ = ["MultimodalProcessor", "ResponsePostProcessor", "SerializationManager"]"
-
 
 
 class MultimodalProcessor:
@@ -35,7 +45,6 @@ class MultimodalProcessor:
 
     def add_input(self, input_data: Any) -> None:
         """Add a multimodal input."""self._core.add_multimodal_input(input_data)
-
 
 
 

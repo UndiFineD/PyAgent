@@ -12,10 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
-import math
-from typing import Dict, Optional
-from dataclasses import dataclass
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from typing import Dict, Optional
+except ImportError:
+    from typing import Dict, Optional
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 
 @dataclass
@@ -24,7 +40,6 @@ class SwarmNode:
     capacity: int  # Max weight
     current_load: int = 0
     effective_weight: int = 0
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.merge_candidate import MergeCandidate
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.merge_candidate import MergeCandidate
+except ImportError:
+    from observability.improvements.merge_candidate import MergeCandidate
+
 
 
 def test_mergecandidate_basic():

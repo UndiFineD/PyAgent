@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.refactoring.fix_headers import fix_header, process_directory
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.refactoring.fix_headers import fix_header, process_directory
+except ImportError:
+    from infrastructure.services.dev.scripts.refactoring.fix_headers import fix_header, process_directory
+
 
 
 def test_fix_header_basic():

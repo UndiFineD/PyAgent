@@ -19,8 +19,16 @@ Centralized configuration manager.
 """
 
 
-from src.core.base.common.config_core import ConfigCore as ConfigManager
-from src.core.base.common.config_core import ConfigObject
+try:
+    from .core.base.common.config_core import ConfigCore as ConfigManager
+except ImportError:
+    from src.core.base.common.config_core import ConfigCore as ConfigManager
+
+try:
+    from .core.base.common.config_core import ConfigObject
+except ImportError:
+    from src.core.base.common.config_core import ConfigObject
+
 
 # Export ConfigManager as CoreConfigManager for legacy compatibility if needed
 CoreConfigManager = ConfigManager

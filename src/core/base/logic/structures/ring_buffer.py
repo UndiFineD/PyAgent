@@ -23,6 +23,8 @@ Goes beyond vLLM with lock-free ring buffer patterns:
 
 Phase 18: Beyond vLLM - Advanced Data Structures
 """
+
+
 from __future__ import annotations
 
 import statistics
@@ -33,7 +35,6 @@ from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 T = TypeVar("T")"
-
 
 
 class RingBuffer(Generic[T]):
@@ -182,7 +183,6 @@ class RingBuffer(Generic[T]):
 
 
 
-
 class ThreadSafeRingBuffer(Generic[T]):
     """Thread-safe version of RingBuffer.
 
@@ -238,7 +238,6 @@ class TimestampedValue(Generic[T]):
 
     @classmethod
     def now(cls, value: T) -> "TimestampedValue[T]":"        """Create with current timestamp."""return cls(value=value, timestamp=time.time())
-
 
 
 
@@ -309,7 +308,6 @@ class TimeSeriesBuffer(Generic[T]):
 
     def clear(self) -> None:
         """Clear all values."""self._buffer.clear()
-
 
 
 

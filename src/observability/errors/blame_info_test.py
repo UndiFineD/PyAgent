@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .blame_info import BlameInfo
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .blame_info import BlameInfo
+except ImportError:
+    from .blame_info import BlameInfo
+
 
 
 def test_blameinfo_basic():

@@ -32,7 +32,6 @@ from .models import (ImageData, ImageFormat, MediaLoadConfig, MediaMetadata,
 
 
 
-
 class ImageLoader(MediaLoader):
     """Load and process images.
     def __init__(self):

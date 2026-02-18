@@ -15,15 +15,38 @@
 
 """Coordinator for multi-group KV cache management.
 # SPDX-License-Identifier: Apache-2.0
-from typing import Any, Dict, List, Tuple
+try:
+    from typing import Any, Dict, List, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Tuple
 
-from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,
+
+try:
+    from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,
+except ImportError:
+    from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,
+
                            CacheGroupSpec, KVCacheBlock, KVCacheBlocks)
-from .enums import CacheGroupType
-from .managers import (CrossAttentionManager, FullAttentionManager,
+try:
+    from .enums import CacheGroupType
+except ImportError:
+    from .enums import CacheGroupType
+
+try:
+    from .managers import (CrossAttentionManager, FullAttentionManager,
+except ImportError:
+    from .managers import (CrossAttentionManager, FullAttentionManager,
+
                        SingleTypeKVCacheManager, SlidingWindowManager)
-from .pack_kv import PackKVManager
-from .structural import BlockPool
+try:
+    from .pack_kv import PackKVManager
+except ImportError:
+    from .pack_kv import PackKVManager
+
+try:
+    from .structural import BlockPool
+except ImportError:
+    from .structural import BlockPool
 
 
 

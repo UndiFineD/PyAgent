@@ -38,7 +38,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class RequestType(Enum):
     """Types of requests to engine core.
     ADD_REQUEST = auto()
@@ -59,7 +58,6 @@ class ClientConfig:
     log_stats: bool = True
     timeout_s: float = 60.0
     async_mode: bool = False
-
 
 
 
@@ -114,7 +112,6 @@ class EngineCoreClient(ABC):
         """Start or stop profiling (async).
     async def execute_dummy_batch_async(self) -> None:
         """Execute a dummy batch for warmup (async).
-
 
 
 class InprocClient(EngineCoreClient):
@@ -179,7 +176,6 @@ class InprocClient(EngineCoreClient):
 
     async def abort_requests_async(self, request_ids: List[str]) -> None:
         self.abort_requests(request_ids)
-
 
 
 
@@ -281,7 +277,6 @@ class SyncMPClient(EngineCoreClient):
         self._shutdown_flag.set()
         self._worker_thread.join(timeout=5.0)
         self.engine_core.shutdown()
-
 
 
 

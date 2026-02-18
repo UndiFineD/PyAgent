@@ -18,24 +18,56 @@
 Refactored to modular package structure for Phase 317.
 Original monolithic implementation delegated to src.core.base.common.utils.jsontree modules.
 """
-from src.core.base.common.utils.jsontree.iteration import (
+try:
+    from .core.base.common.utils.jsontree.iteration import (
+except ImportError:
+    from src.core.base.common.utils.jsontree.iteration import (
+
     json_iter_leaves, json_iter_leaves_with_path)
-from src.core.base.common.utils.jsontree.mapping import (json_map_leaves,
+try:
+    from .core.base.common.utils.jsontree.mapping import (json_map_leaves,
+except ImportError:
+    from src.core.base.common.utils.jsontree.mapping import (json_map_leaves,
+
                                                          json_map_leaves_async)
-from src.core.base.common.utils.jsontree.meta import (json_count_leaves,
+try:
+    from .core.base.common.utils.jsontree.meta import (json_count_leaves,
+except ImportError:
+    from src.core.base.common.utils.jsontree.meta import (json_count_leaves,
+
                                                       json_depth,
                                                       json_filter_leaves,
                                                       json_find_leaves,
                                                       json_validate_leaves)
-from src.core.base.common.utils.jsontree.path import (json_get_path,
+try:
+    from .core.base.common.utils.jsontree.path import (json_get_path,
+except ImportError:
+    from src.core.base.common.utils.jsontree.path import (json_get_path,
+
                                                       json_set_path)
-from src.core.base.common.utils.jsontree.reduction import json_reduce_leaves
-from src.core.base.common.utils.jsontree.rust import (
+try:
+    from .core.base.common.utils.jsontree.reduction import json_reduce_leaves
+except ImportError:
+    from src.core.base.common.utils.jsontree.reduction import json_reduce_leaves
+
+try:
+    from .core.base.common.utils.jsontree.rust import (
+except ImportError:
+    from src.core.base.common.utils.jsontree.rust import (
+
     RUST_ACCELERATION_AVAILABLE, json_count_leaves_fast, json_flatten_fast,
     json_iter_leaves_fast)
-from src.core.base.common.utils.jsontree.transmutation import (json_flatten,
+try:
+    from .core.base.common.utils.jsontree.transmutation import (json_flatten,
+except ImportError:
+    from src.core.base.common.utils.jsontree.transmutation import (json_flatten,
+
                                                                json_unflatten)
-from src.core.base.common.utils.jsontree.types import JSONTree
+try:
+    from .core.base.common.utils.jsontree.types import JSONTree
+except ImportError:
+    from src.core.base.common.utils.jsontree.types import JSONTree
+
 
 __all__ = [
     # Type aliases

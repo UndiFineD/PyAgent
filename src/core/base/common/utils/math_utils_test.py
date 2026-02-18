@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.math_utils import cdiv, next_power_of_2, prev_power_of_2, is_power_of_2, round_up, round_down, clamp, align_to, bit_count, gcd, lcm, batch_cdiv, batch_next_power_of_2, batch_round_up
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.math_utils import cdiv, next_power_of_2, prev_power_of_2, is_power_of_2, round_up, round_down, clamp, align_to, bit_count, gcd, lcm, batch_cdiv, batch_next_power_of_2, batch_round_up
+except ImportError:
+    from core.base.common.utils.math_utils import cdiv, next_power_of_2, prev_power_of_2, is_power_of_2, round_up, round_down, clamp, align_to, bit_count, gcd, lcm, batch_cdiv, batch_next_power_of_2, batch_round_up
+
 
 
 def test_cdiv_basic():

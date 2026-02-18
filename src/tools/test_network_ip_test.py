@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .test_network_ip import get_ip, get_local_network_ip, test_get_local_network_ip
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .test_network_ip import get_ip, get_local_network_ip, test_get_local_network_ip
+except ImportError:
+    from .test_network_ip import get_ip, get_local_network_ip, test_get_local_network_ip
+
 
 
 def test_get_ip_basic():

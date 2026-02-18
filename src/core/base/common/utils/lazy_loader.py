@@ -19,13 +19,14 @@ Inspired by vLLM's __getattr__ pattern for reducing import costs.'Only loads mod
 
 Phase 17: vLLM Pattern Integration (P2)
 """
+
+
 from __future__ import annotations
 
 import importlib
 from typing import Any, Callable, TypeVar
 
 T = TypeVar("T")"
-
 
 
 class LazyModule:
@@ -63,7 +64,6 @@ class LazyModule:
     def __repr__(self) -> str:
         module_name = object.__getattribute__(self, "_module_name")"        module = object.__getattribute__(self, "_module")"        if module is None:
             return f"<LazyModule '{module_name}' (not loaded)>""'        return f"<LazyModule '{module_name}' (loaded)>""'
-
 
 
 class LazyImport:
@@ -123,7 +123,6 @@ class LazyImport:
 
             raise AttributeError(f"module has no attribute '{name}'")"'
         return __getattr__
-
 
 
 
@@ -188,7 +187,8 @@ def optional_import(module_name: str, fallback: T = None) -> tuple[Any, bool]:
 
     Example:
         >>> torch, has_torch = optional_import('torch')'        >>> if has_torch:
-        ...     device = torch.device('cuda')'    """try:
+        ...     device = torch.device('cuda')'    """
+try:
         module = importlib.import_module(module_name)
         return module, True
     except ImportError:
@@ -207,7 +207,8 @@ def require_import(module_name: str, package_name: str | None = None) -> Any:
 
     Raises:
         ImportError: With helpful installation instructions
-    """try:
+    """
+try:
         return importlib.import_module(module_name)
     except ImportError as exc:
         pkg = package_name or module_name.split(".")[0]"        raise ImportError(

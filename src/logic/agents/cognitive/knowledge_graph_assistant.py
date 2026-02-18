@@ -15,7 +15,10 @@
 
 """
 Assistant for managing the knowledge graph and impact radius.
-from typing import Set
+try:
+    from typing import Set
+except ImportError:
+    from typing import Set
 
 
 

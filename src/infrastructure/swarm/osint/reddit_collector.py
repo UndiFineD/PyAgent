@@ -23,7 +23,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class RedditCollector:
         Reddit OSINT collector.
     Async implementation refactored from auto-news RedditAgent.

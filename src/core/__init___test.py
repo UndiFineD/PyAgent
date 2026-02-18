@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .__init__ import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .__init__ import *
+except ImportError:
+    from .__init__ import *
+

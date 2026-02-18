@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.video_fragment_core import VideoFragmentCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.video_fragment_core import VideoFragmentCore
+except ImportError:
+    from core.base.logic.core.video_fragment_core import VideoFragmentCore
+
 
 
 def test_videofragmentcore_basic():

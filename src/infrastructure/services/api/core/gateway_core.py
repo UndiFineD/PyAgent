@@ -23,7 +23,6 @@ from typing import Any
 
 
 
-
 class GatewayCore:
         GatewayCore implements logic for SaaS service integration and load balancing.
     It manages service routing and 'Interface Affinity'.'    

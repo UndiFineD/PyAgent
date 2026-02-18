@@ -18,6 +18,8 @@
 Inspired by vLLM's counter.py patterns for high-frequency atomic operations.'
 Phase 17: vLLM Pattern Integration
 """
+
+
 from __future__ import annotations
 
 import threading
@@ -29,7 +31,6 @@ try:
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
-
 
 
 
@@ -61,7 +62,6 @@ class Counter:
 
     def __repr__(self) -> str:
         return f"Counter({self._value})""
-
 
 
 class AtomicCounter:
@@ -177,7 +177,6 @@ class AtomicCounter:
 
 
 
-
 class AtomicFlag:
     """Thread-safe atomic boolean flag.
 
@@ -222,7 +221,6 @@ class AtomicFlag:
 
     def __repr__(self) -> str:
         return f"AtomicFlag({self.value})""
-
 
 
 class AtomicGauge:

@@ -59,7 +59,6 @@ class VoiceSession:
 
 
 
-
 class VoiceAgentOrchestrator:
     """Voice-controlled orchestrator for multi-agent systems.
 
@@ -193,7 +192,8 @@ class VoiceAgentOrchestrator:
     def _process_transcription(self, transcription: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
         """Process transcribed text and generate response.
 
-        This simulates the OpenAI Realtime API's tool calling and response generation.'        """# Simple intent detection (would be done by LLM in real implementation)
+        This simulates the OpenAI Realtime API's tool calling and response generation.'        """
+# Simple intent detection (would be done by LLM in real implementation)
         if "create" in transcription.lower() and "agent" in transcription.lower():"            return self._handle_create_agent(transcription, context)
         elif "list agents" in transcription.lower():"            return self._handle_list_agents(context)
         elif "run task" in transcription.lower() or "execute" in transcription.lower():"            return self._handle_run_task(transcription, context)
@@ -203,7 +203,8 @@ class VoiceAgentOrchestrator:
                 "ok": True,"                "text": f"I heard: '{transcription}'. How can I help you with the agents?","'                "audio_data": None"            }
 
     def _handle_create_agent(self, transcription: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """Handle agent creation requests."""# Extract agent type from transcription
+        """Handle agent creation requests."""
+# Extract agent type from transcription
         agent_type = "coding"  # Default"        if "browser" in transcription.lower():"            agent_type = "browser""        elif "voice" in transcription.lower():"            agent_type = "voice""
         result = self.orchestrator.create_agent(agent_type, context=context)
 
@@ -226,7 +227,8 @@ class VoiceAgentOrchestrator:
             "ok": True,"            "text": text,"            "audio_data": None,"            "agents": agents"        }
 
     def _handle_run_task(self, transcription: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """Handle task execution requests."""# Simple parsing - in real implementation, LLM would extract agent name and task
+        """Handle task execution requests."""
+# Simple parsing - in real implementation, LLM would extract agent name and task
         agents = self.orchestrator.list_agents()
         if not agents:
             return {
@@ -245,7 +247,8 @@ class VoiceAgentOrchestrator:
                 "ok": False,"                "text": f"Failed to dispatch task: {result['error']}","'                "audio_data": None"            }
 
     def _handle_check_status(self, transcription: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
-        """Handle status checking requests."""# Get all tasks from orchestrator (simplified)
+        """Handle status checking requests."""
+# Get all tasks from orchestrator (simplified)
         tasks = []
         for agent in self.orchestrator.list_agents():
             # In real implementation, would check actual task status
@@ -282,7 +285,8 @@ class VoiceAgentOrchestrator:
         ]
 
     def _simulate_transcription(self, audio_data: bytes) -> str:
-        """Simulate audio transcription (TODO Placeholder for real OpenAI API)."""# In real implementation, would send to OpenAI Realtime API
+        """Simulate audio transcription (TODO Placeholder for real OpenAI API)."""
+# In real implementation, would send to OpenAI Realtime API
         # For now, return a simulated transcription that doesn't trigger actions'        return "Hello, how can you help me with my agents?""
     def _audio_processing_loop(self):
         """Background audio processing loop."""while self.running:

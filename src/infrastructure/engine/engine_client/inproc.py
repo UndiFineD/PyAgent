@@ -20,19 +20,39 @@ Single-GPU in-process execution.
 
 from __future__ import annotations
 
-import asyncio
-import logging
-from typing import TYPE_CHECKING, Callable, Optional
 
-from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
-from src.infrastructure.engine.engine_client.types import EngineOutput
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING, Callable, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Callable, Optional
+
+
+try:
+    from .infrastructure.engine.engine_client.base import EngineCoreClientBase
+except ImportError:
+    from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
+
+try:
+    from .infrastructure.engine.engine_client.types import EngineOutput
+except ImportError:
+    from src.infrastructure.engine.engine_client.types import EngineOutput
+
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import (
         EngineClientConfig, SchedulerOutput)
 
 logger = logging.getLogger(__name__)
-
 
 
 

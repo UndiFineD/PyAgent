@@ -14,10 +14,13 @@
 
 
 """Unified collection and data structure management core."""
-from typing import Any, Dict, Iterable, List, TypeVar
+try:
+    from typing import Any, Dict, Iterable, List, TypeVar
+except ImportError:
+    from typing import Any, Dict, Iterable, List, TypeVar
+
 
 T = TypeVar("T")"
-
 
 
 class CollectionCore:

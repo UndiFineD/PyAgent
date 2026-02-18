@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.sampling.kernels import TemperatureSampler, TopKSampler, TopPSampler, TopKTopPSampler, GumbelSampler, RepetitionPenaltySampler, PenaltySampler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.sampling.kernels import TemperatureSampler, TopKSampler, TopPSampler, TopKTopPSampler, GumbelSampler, RepetitionPenaltySampler, PenaltySampler
+except ImportError:
+    from infrastructure.engine.sampling.kernels import TemperatureSampler, TopKSampler, TopPSampler, TopKTopPSampler, GumbelSampler, RepetitionPenaltySampler, PenaltySampler
+
 
 
 def test_temperaturesampler_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.cuda_stream_pool import CudaStreamPool
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.cuda_stream_pool import CudaStreamPool
+except ImportError:
+    from core.base.logic.structures.cuda_stream_pool import CudaStreamPool
+
 
 
 def test_cudastreampool_basic():

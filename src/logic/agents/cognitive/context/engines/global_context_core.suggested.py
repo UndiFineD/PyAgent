@@ -26,13 +26,29 @@
 """
 Global context core logic for cognitive agents.
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from .core_mixins.core_partition_mixin import CorePartitionMixin
-from .core_mixins.core_resolution_mixin import CoreResolutionMixin
-from .core_mixins.core_summary_mixin import CoreSummaryMixin
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core_mixins.core_partition_mixin import CorePartitionMixin
+except ImportError:
+    from .core_mixins.core_partition_mixin import CorePartitionMixin
+
+try:
+    from .core_mixins.core_resolution_mixin import CoreResolutionMixin
+except ImportError:
+    from .core_mixins.core_resolution_mixin import CoreResolutionMixin
+
+try:
+    from .core_mixins.core_summary_mixin import CoreSummaryMixin
+except ImportError:
+    from .core_mixins.core_summary_mixin import CoreSummaryMixin
+
 
 __version__ = VERSION
-
 
 
 

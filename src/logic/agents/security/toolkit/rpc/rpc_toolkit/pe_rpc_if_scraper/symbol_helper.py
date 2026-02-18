@@ -23,10 +23,8 @@ NULL_PTR = ctypes.POINTER(DWORD64)()
 
 
 
-
 class CantInitializeDebugHelperException(Exception):
     pass
-
 
 
 
@@ -35,16 +33,13 @@ class CantLoadDebugSymbolsException(Exception):
 
 
 
-
 class PeAlreadyLoadedException(Exception):
     pass
 
 
 
-
 class PeNotLoadedException(Exception):
     pass
-
 
 
 
@@ -54,11 +49,9 @@ class SYMBOL_INFO(ctypes.Structure):
 
 
 
-
 class MODULE_INFO(ctypes.Structure):
     _fields_ = [
         ("SizeOfStruct", wintypes.DWORD),"        ("BaseOfImage", wintypes.DWORD),"        ("ImageSize", wintypes.DWORD),"        ("TimeDateStamp", wintypes.DWORD),"        ("CheckSum", wintypes.DWORD),"        ("NumSyms", wintypes.DWORD),"        ("SymType", wintypes.DWORD),"        ("ModuleName", wintypes.CHAR * 32),"        ("ImageName", wintypes.CHAR * 256),"        ("LoadedImageName", wintypes.CHAR * 256),"    ]
-
 
 
 
@@ -70,7 +63,8 @@ class PESymbolMatcher(object):
 
         # self._hproc = ctypes.windll.kernel32.GetCurrentProcess()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         self._hproc = ctypes.windll.kernel32.OpenProcess(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         self._hproc = ctypes.windll.kernel32.OpenProcess(
             0x000F0000, False, ctypes.windll.kernel32.GetCurrentProcessId()
         )
         self.loaded_pe = None
@@ -99,7 +93,8 @@ class PESymbolMatcher(object):
     def _define_dbghelp_funcs(self):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         self._dbghelp.SymInitializeW.argtypes = [wintypes.HANDLE, wintypes.LPWSTR, wintypes.BOOL]""""        self._dbghelp.SymInitializeW.restype = wintypes.BOOL
         self._dbghelp.SymLoadModuleExW.argtypes = [
             wintypes.HANDLE,
@@ -120,12 +115,16 @@ class PESymbolMatcher(object):
         ]
         self._dbghelp.SymFromAddr.restype = wintypes.BOOL
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         self._dbghelp.SymUnloadModule64.argtypes = [wintypes.HANDLE, DWORD64]""""        self._dbghelp.SymUnloadModule64.restype = wintypes.BOOL
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         self._dbghelp.SymGetModuleInfo.argtypes = [wintypes.HANDLE, DWORD64, ctypes.POINTER(MODULE_INFO)]""""
         ctypes.windll.kernel32.GetCurrentProcess.restype = wintypes.HANDLE
 
@@ -133,7 +132,8 @@ class PESymbolMatcher(object):
         if self.loaded_pe:
             raise PeAlreadyLoadedException()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         self._loaded_pe_base_addr = self._dbghelp.SymLoadModuleExW(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         self._loaded_pe_base_addr = self._dbghelp.SymLoadModuleExW(
             self._hproc, 0, pe_path, ctypes.cast(NULL_PTR, wintypes.LPWSTR), 0, 0, 0, 0
         )
         if self._loaded_pe_base_addr:

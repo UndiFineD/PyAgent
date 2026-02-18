@@ -16,8 +16,15 @@
 PromptOptimizerAgent: Intercepts and enhances prompts for all self-improvement agents.
 Injects context, recent issues, and best-practice reminders before dispatching to LLMs.
 
-from typing import Optional, Any, Callable
-import logging
+try:
+    from typing import Optional, Any, Callable
+except ImportError:
+    from typing import Optional, Any, Callable
+
+try:
+    import logging
+except ImportError:
+    import logging
 
 
 

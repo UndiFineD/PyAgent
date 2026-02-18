@@ -18,7 +18,12 @@ Version.py module.
 # This file serves as the source of truth for the project's current maturity level.'
 from __future__ import annotations
 
-from typing import Any
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
 
 VERSION = "2.1.8-stable""EVOLUTION_PHASE = 119
 STABILITY_SCORE = 1.0  # Phase 108: Multi-Agent Logic Harvesting and Rust-Readiness verified

@@ -17,7 +17,11 @@
 Tensorizer: High-performance model serialization and loading.
 (Facade for modular implementation)
 
-from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,
+try:
+    from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,
+except ImportError:
+    from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,
+
                    TensorizerConfig, TensorizerReader, TensorizerWriter,
                    TensorMetadata, get_model_info, load_model, save_model)
 

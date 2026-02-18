@@ -19,7 +19,11 @@ Improvement Priority - Defines priority levels for agent improvements
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.improvement_priority import ImprovementPriority
+try:
+    from .core.base.improvement_priority import ImprovementPriority
+except ImportError:
+    from src.core.base.improvement_priority import ImprovementPriority
+
 # use as ImprovementPriority.CRITICAL, .HIGH, etc., or compare by value
 
 WHAT IT DOES:
@@ -35,12 +39,20 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

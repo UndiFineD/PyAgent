@@ -15,6 +15,8 @@
 """AgentRegistry: Central registry for all active agent instances.
 (Re-implemented using RegistryCore)
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -25,7 +27,6 @@ from src.core.base.lifecycle.version import VERSION
 
 
 __version__: str = VERSION
-
 
 
 

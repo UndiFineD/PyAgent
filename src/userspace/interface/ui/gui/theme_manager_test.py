@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .theme_manager import ThemeManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .theme_manager import ThemeManager
+except ImportError:
+    from .theme_manager import ThemeManager
+
 
 
 def test_thememanager_basic():

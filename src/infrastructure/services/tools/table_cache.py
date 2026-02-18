@@ -17,8 +17,16 @@
 TableCache: Trie-based metadata precomputation for Text-to-SQL.
 Implemented based on arXiv:2601.08743 (Jan 2026).
 
-import dataclasses
-from typing import Any, Dict, List, Optional
+try:
+    import dataclasses
+except ImportError:
+    import dataclasses
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
 
 
 @dataclasses.dataclass
@@ -29,12 +37,10 @@ class TableMetadata:
 
 
 
-
 class TableTrieNode:
     def __init__(self):
         self.children: Dict[str, TableTrieNode] = {}
         self.metadata: Optional[TableMetadata] = None
-
 
 
 

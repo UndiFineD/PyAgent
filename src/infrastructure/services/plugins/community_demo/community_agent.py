@@ -22,15 +22,31 @@ Demonstrates the Core/Shell pattern.
 
 from __future__ import annotations
 
-import logging
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .community_core import CommunityCore
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .community_core import CommunityCore
+except ImportError:
+    from .community_core import CommunityCore
+
 
 __version__ = VERSION
-
 
 
 

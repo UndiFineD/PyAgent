@@ -15,9 +15,21 @@
 
 Reduces consecutive newlines in Python files within a directory.
 
-import re
-import sys
-from pathlib import Path
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 
 def reduce_newlines(directory: Path):

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.output_processor.suggested import EventType, RequestEvent, LoRARequest, ParentRequest, SamplingParams, EngineCoreRequest, EngineCoreOutput, EngineCoreOutputs, RequestOutput, OutputProcessorOutput, RequestOutputCollector, RequestState, LoRARequestStates, OutputProcessor, IterationStats
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.output_processor.suggested import EventType, RequestEvent, LoRARequest, ParentRequest, SamplingParams, EngineCoreRequest, EngineCoreOutput, EngineCoreOutputs, RequestOutput, OutputProcessorOutput, RequestOutputCollector, RequestState, LoRARequestStates, OutputProcessor, IterationStats
+except ImportError:
+    from infrastructure.engine.output_processor.suggested import EventType, RequestEvent, LoRARequest, ParentRequest, SamplingParams, EngineCoreRequest, EngineCoreOutput, EngineCoreOutputs, RequestOutput, OutputProcessorOutput, RequestOutputCollector, RequestState, LoRARequestStates, OutputProcessor, IterationStats
+
 
 
 def test_eventtype_basic():

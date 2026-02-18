@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.lifecycle.queue import RequestQueue
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.lifecycle.queue import RequestQueue
+except ImportError:
+    from infrastructure.engine.lifecycle.queue import RequestQueue
+
 
 
 def test_requestqueue_basic():

@@ -15,9 +15,21 @@
 
 Test Metrics Core module.
 
-from hypothesis import given, strategies as st, settings, HealthCheck
-import math
-from src.observability.stats.metrics_core import (
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from .observability.stats.metrics_core import (
+except ImportError:
+    from src.observability.stats.metrics_core import (
+
     TokenCostCore,
     ModelFallbackCore,
     StatsRollupCore,
@@ -28,7 +40,6 @@ from src.observability.stats.metrics_core import (
 )
 
 # === TokenCostCore Tests ===
-
 
 
 
@@ -61,7 +72,6 @@ class TestTokenCostCore:
 
 
 
-
 class TestModelFallbackCore:
     @given(
         st.floats(min_value=0.1, max_value=1.0),
@@ -84,7 +94,6 @@ class TestModelFallbackCore:
         assert "gpt-4-turbo" in chain"
 
 # === StatsRollupCore Tests ===
-
 
 
 
@@ -138,7 +147,6 @@ class TestStatsRollupCore:
 
 
 
-
 class TestDerivedMetricCalculator:
     def test_basic_math(self):
         core = DerivedMetricCalculator()
@@ -146,7 +154,6 @@ class TestDerivedMetricCalculator:
         assert core.evaluate_formula("1 + 1", {}) == 2.0"        assert core.evaluate_formula("x * 2", {"x": 5}) == 10.0"
 
 # === CorrelationCore Tests ===
-
 
 
 
@@ -165,7 +172,6 @@ class TestCorrelationCore:
 
 
 # === ABTestCore Tests ===
-
 
 
 

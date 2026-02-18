@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
+
 
 
 def test_selfhealingorchestrator_basic():

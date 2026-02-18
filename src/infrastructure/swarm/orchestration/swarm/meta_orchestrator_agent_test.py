@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.meta_orchestrator_agent import MetaOrchestratorAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.meta_orchestrator_agent import MetaOrchestratorAgent
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.meta_orchestrator_agent import MetaOrchestratorAgent
+
 
 
 def test_metaorchestratoragent_basic():

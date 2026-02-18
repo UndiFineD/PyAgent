@@ -362,7 +362,6 @@ class InputBatch:
 
 
 
-
 class BatchBuilder:
         Builder for constructing InputBatch instances.
 

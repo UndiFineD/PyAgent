@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .refactor_external_batch import parse_allowlist, sanitize_filename, is_ast_safe, file_hash, process, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .refactor_external_batch import parse_allowlist, sanitize_filename, is_ast_safe, file_hash, process, main
+except ImportError:
+    from .refactor_external_batch import parse_allowlist, sanitize_filename, is_ast_safe, file_hash, process, main
+
 
 
 def test_parse_allowlist_basic():

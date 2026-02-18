@@ -16,17 +16,35 @@
 """Module: environment_skill
 Implements file system and workspace interactions for Universal Agents.
 """
+
+
 from __future__ import annotations
-import logging
-from pathlib import Path
-from typing import TYPE_CHECKING
-from src.core.base.lifecycle.skill_core import SkillCore
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+try:
+    from .core.base.lifecycle.skill_core import SkillCore
+except ImportError:
+    from src.core.base.lifecycle.skill_core import SkillCore
+
 
 if TYPE_CHECKING:
     pass
 
 logger = logging.getLogger(__name__)
-
 
 
 

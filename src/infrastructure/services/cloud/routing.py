@@ -37,7 +37,6 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 
-
 class RoutingStrategy(Enum):
     """Strategy for selecting providers.
     COST_OPTIMIZED = "cost_optimized""    LATENCY_OPTIMIZED = "latency_optimized""    QUALITY_OPTIMIZED = "quality_optimized""    ROUND_ROBIN = "round_robin""    FAILOVER = "failover""
@@ -62,7 +61,6 @@ class RoutingConstraints:
     preferred_providers: List[str] = field(default_factory=list)
     excluded_providers: List[str] = field(default_factory=list)
     require_streaming: bool = False
-
 
 
 

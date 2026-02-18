@@ -17,6 +17,8 @@
 
 Integrates AI-powered fuzzing capabilities into the PyAgent swarm.
 Based on the brainstorm repository's AI fuzzing approach.'"""
+
+
 from __future__ import annotations
 
 import asyncio
@@ -31,7 +33,6 @@ from src.tools.security.fuzzing import (
     FuzzingTechnique,
     MultiCycleFuzzing
 )
-
 
 
 
@@ -203,7 +204,6 @@ class SecurityFuzzingMixin:
         if len(findings) > 0:
             recommendations.append("Implement comprehensive input validation")"            recommendations.append("Use security headers (HSTS, X-Frame-Options, etc.)")"            recommendations.append("Regular security testing and code reviews")"
         return recommendations
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.stats.exporters.prometheus_exporter import PrometheusExporter
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.stats.exporters.prometheus_exporter import PrometheusExporter
+except ImportError:
+    from observability.stats.exporters.prometheus_exporter import PrometheusExporter
+
 
 
 def test_prometheusexporter_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .pyagent_cli import check_server, list_agents, run_task, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .pyagent_cli import check_server, list_agents, run_task, main
+except ImportError:
+    from .pyagent_cli import check_server, list_agents, run_task, main
+
 
 
 def test_check_server_basic():

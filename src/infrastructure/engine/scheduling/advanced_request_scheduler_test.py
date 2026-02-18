@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.advanced_request_scheduler import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.advanced_request_scheduler import *
+except ImportError:
+    from infrastructure.engine.scheduling.advanced_request_scheduler import *
+

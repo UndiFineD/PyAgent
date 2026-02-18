@@ -17,14 +17,29 @@
 Swarm Topology Manager (Phase 70).
 Handles dynamic expert cloning and load-based re-assignment.
 
-import asyncio
-import logging
-from typing import Any, Dict, List
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.common.models.communication_models import ExpertProfile
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .core.base.common.models.communication_models import ExpertProfile
+except ImportError:
+    from src.core.base.common.models.communication_models import ExpertProfile
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

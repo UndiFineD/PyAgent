@@ -22,16 +22,49 @@ Implementation of Adaptive Replacement Cache (ARC) and variants.
 
 from __future__ import annotations
 
-import threading
-import time
-from collections import OrderedDict
-from typing import TYPE_CHECKING, Any, Optional
 
-from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.storage.kv_transfer.arc.base import OffloadingManager
-from src.infrastructure.storage.kv_transfer.arc.types import (
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    from collections import OrderedDict
+
+try:
+    from typing import TYPE_CHECKING, Any, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Optional
+
+
+try:
+    from .core.base.logic.connectivity_manager import ConnectivityManager
+except ImportError:
+    from src.core.base.logic.connectivity_manager import ConnectivityManager
+
+try:
+    from .infrastructure.storage.kv_transfer.arc.base import OffloadingManager
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.arc.base import OffloadingManager
+
+try:
+    from .infrastructure.storage.kv_transfer.arc.types import (
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.arc.types import (
+
     BlockHash, BlockState, BlockStatus, OffloadingEvent, PrepareStoreOutput)
-from src.infrastructure.storage.kv_transfer.k_vzap import (KVzapConfig,
+try:
+    from .infrastructure.storage.kv_transfer.k_vzap import (KVzapConfig,
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.k_vzap import (KVzapConfig,
+
                                                            KVzapPruner)
 
 if TYPE_CHECKING:
@@ -39,7 +72,6 @@ if TYPE_CHECKING:
 
     from src.infrastructure.storage.kv_transfer.arc.backend import Backend
     from src.infrastructure.storage.kv_transfer.arc.types import LoadStoreSpec
-
 
 
 
@@ -277,7 +309,6 @@ class ARCOffloadManager(OffloadingManager):
 
 
 
-
 class AdaptiveARCManager(ARCOffloadManager):
     """ARC manager with enhanced adaptation features.
     def __init__(
@@ -350,7 +381,6 @@ class AdaptiveARCManager(ARCOffloadManager):
                 self.adaptation_speed = min(self.adaptation_speed * 1.1, self.max_adaptation_speed)
             elif recent_avg > overall_avg * 1.1:
                 self.adaptation_speed = max(self.adaptation_speed * 0.9, self.min_adaptation_speed)
-
 
 
 

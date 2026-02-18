@@ -15,6 +15,8 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
 import json
@@ -27,7 +29,6 @@ from .snapshot_comparison_result import SnapshotComparisonResult
 from .test_snapshot import TestSnapshot
 
 __version__ = VERSION
-
 
 
 

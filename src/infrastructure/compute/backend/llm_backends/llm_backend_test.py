@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.llm_backends.llm_backend import LLMBackend
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.llm_backends.llm_backend import LLMBackend
+except ImportError:
+    from infrastructure.compute.backend.llm_backends.llm_backend import LLMBackend
+
 
 
 def test_llmbackend_basic():

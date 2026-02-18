@@ -20,12 +20,29 @@ EBNF grammar constraint logic for structured output decoding.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Set
 
-import numpy as np
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .base import StructuredOutputGrammar
+try:
+    from typing import Callable, Dict, List, Set
+except ImportError:
+    from typing import Callable, Dict, List, Set
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .base import StructuredOutputGrammar
+except ImportError:
+    from .base import StructuredOutputGrammar
+
 
 
 @dataclass

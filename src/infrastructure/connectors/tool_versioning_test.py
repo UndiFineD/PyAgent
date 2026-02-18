@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.connectors.tool_versioning import CompatibilityLevel, VersionConstraint, ToolVersion, CompatibilityRule, ToolVersionManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.connectors.tool_versioning import CompatibilityLevel, VersionConstraint, ToolVersion, CompatibilityRule, ToolVersionManager
+except ImportError:
+    from infrastructure.connectors.tool_versioning import CompatibilityLevel, VersionConstraint, ToolVersion, CompatibilityRule, ToolVersionManager
+
 
 
 def test_compatibilitylevel_basic():

@@ -16,9 +16,21 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Guided decoding for structured output generation.
 
-from .decoder import GuidedDecoder, generate_choice, generate_json  # noqa: F401
-from .models import ChoiceConstraint, GuidedConfig, GuidedMode, RegexPattern  # noqa: F401
-from .schema import JsonSchema  # noqa: F401
+try:
+    from .decoder import GuidedDecoder, generate_choice, generate_json  # noqa: F401
+except ImportError:
+    from .decoder import GuidedDecoder, generate_choice, generate_json # noqa: F401
+
+try:
+    from .models import ChoiceConstraint, GuidedConfig, GuidedMode, RegexPattern  # noqa: F401
+except ImportError:
+    from .models import ChoiceConstraint, GuidedConfig, GuidedMode, RegexPattern # noqa: F401
+
+try:
+    from .schema import JsonSchema  # noqa: F401
+except ImportError:
+    from .schema import JsonSchema # noqa: F401
+
 
 __all__ = [
     "ChoiceConstraint","    "generate_choice","    "generate_json","    "GuidedConfig","    "GuidedDecoder","    "GuidedMode","    "JsonSchema","    "RegexPattern","]

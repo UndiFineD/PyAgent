@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.commands.observability.suggested import cmd_cache, cmd_counters, cmd_telemetry, cmd_logs
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.commands.observability.suggested import cmd_cache, cmd_counters, cmd_telemetry, cmd_logs
+except ImportError:
+    from interface.slash_commands.commands.observability.suggested import cmd_cache, cmd_counters, cmd_telemetry, cmd_logs
+
 
 
 def test_cmd_cache_basic():

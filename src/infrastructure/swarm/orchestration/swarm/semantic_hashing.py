@@ -17,13 +17,24 @@
 """
 Semantic hashing.py module.
 
-import logging
-from typing import Dict, List, Set
+try:
+    import logging
+except ImportError:
+    import logging
 
-import numpy as np
+try:
+    from typing import Dict, List, Set
+except ImportError:
+    from typing import Dict, List, Set
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 logger = logging.getLogger(__name__)
-
 
 
 

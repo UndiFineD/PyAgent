@@ -18,9 +18,16 @@ Allows agents to declare their domains and performance metrics for MoE routing.
 """
 
 
-from typing import Any, List, Optional
+try:
+    from typing import Any, List, Optional
+except ImportError:
+    from typing import Any, List, Optional
 
-from src.core.base.common.models.communication_models import ExpertProfile
+
+try:
+    from .core.base.common.models.communication_models import ExpertProfile
+except ImportError:
+    from src.core.base.common.models.communication_models import ExpertProfile
 
 
 class ExpertiseMixin:
@@ -28,6 +35,7 @@ class ExpertiseMixin:
     """
 
     def __init__(self, *args, **kwargs) -> None:
+        """Initialize expertise mixin."""
         super().__init__(*args, **kwargs)
         self.expertise_profile: Optional[ExpertProfile] = None
 

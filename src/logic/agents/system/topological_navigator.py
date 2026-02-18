@@ -40,18 +40,46 @@ Builds a semantic map of the codebase for graph-based dependency exploration.
 
 from __future__ import annotations
 
-import os
-from pathlib import Path
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import os
+except ImportError:
+    import os
 
-from .mixins.federation_mixin import FederationMixin
-from .mixins.graph_analysis_mixin import GraphAnalysisMixin
-from .mixins.map_builder_mixin import MapBuilderMixin
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .mixins.federation_mixin import FederationMixin
+except ImportError:
+    from .mixins.federation_mixin import FederationMixin
+
+try:
+    from .mixins.graph_analysis_mixin import GraphAnalysisMixin
+except ImportError:
+    from .mixins.graph_analysis_mixin import GraphAnalysisMixin
+
+try:
+    from .mixins.map_builder_mixin import MapBuilderMixin
+except ImportError:
+    from .mixins.map_builder_mixin import MapBuilderMixin
+
 
 __version__ = VERSION
-
 
 
 
@@ -70,18 +98,46 @@ class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, Feder
     # Logic delegated "to" mixins"
 from __future__ import annotations
 
-import os
-from pathlib import Path
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import os
+except ImportError:
+    import os
 
-from .mixins.federation_mixin import FederationMixin
-from .mixins.graph_analysis_mixin import GraphAnalysisMixin
-from .mixins.map_builder_mixin import MapBuilderMixin
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .mixins.federation_mixin import FederationMixin
+except ImportError:
+    from .mixins.federation_mixin import FederationMixin
+
+try:
+    from .mixins.graph_analysis_mixin import GraphAnalysisMixin
+except ImportError:
+    from .mixins.graph_analysis_mixin import GraphAnalysisMixin
+
+try:
+    from .mixins.map_builder_mixin import MapBuilderMixin
+except ImportError:
+    from .mixins.map_builder_mixin import MapBuilderMixin
+
 
 __version__ = VERSION
-
 
 
 

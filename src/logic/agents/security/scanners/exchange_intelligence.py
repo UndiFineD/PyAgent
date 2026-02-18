@@ -19,7 +19,6 @@ from typing import Dict, Any
 
 
 
-
 class ExchangeScanner:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -27,8 +26,10 @@ class ExchangeScanner:
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def check_proxynotshell(target: str, session: aiohttp.ClientSession) -> Dict[str, Any]:""""#         random_domain = ".join(random.choices(string.ascii_lowercase, k=10)) + ".com"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""     async def check_proxynotshell(target: str, session: aiohttp.ClientSession) -> Dict[str, Any]:""""
+#         random_domain = ".join(random.choices(string.ascii_lowercase, k=10)) + ".com"# [BATCHFIX] Commented metadata/non-Python
 """         path = f"/autodiscover/autodiscover.json@Powershell.{random_domain}/owa/"  # [BATCHFIX] closed string"#         url = fhttps://{target}{path}
 
         try:
@@ -37,7 +38,8 @@ class ExchangeScanner:
                     headers = resp.headers
                     is_vulnerable = "X-OWA-Version" in headers or "X-BEServer" in headers"                    return {
                         "vulnerable": True if is_vulnerable else "likely","                        "cve": "CVE-2022-41082","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         "details": ("#                             fDetected 401 response at autodiscover path.
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         "details": ("#                             fDetected 401 response at autodiscover path.
 #                             fX-OWA-Version: {headers.get('X-OWA-Version', 'N/A')}'                        ),
                     }
         except Exception as e:

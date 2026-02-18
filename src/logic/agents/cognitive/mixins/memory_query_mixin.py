@@ -33,7 +33,6 @@ __version__ = VERSION
 
 
 
-
 class MemoryQueryMixin:
 """"Mixin for hierarchical memory querying in HierarchicalMemoryAgent.
     @as_tool

@@ -36,7 +36,6 @@ __version__ = VERSION
 
 
 
-
 class InterpretableCore:
     "InterpretableCore implements a logic-bridge for Sparse Autoencoders "(SAE)."    It simulates the decomposition of LLM activations into human-interpretable features.
 

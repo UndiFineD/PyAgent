@@ -15,13 +15,37 @@
 
 Fused package.
 
-from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer  # noqa: F401
-from .config import (ExpertPlacementStrategy, FusedMoEConfig,  # noqa: F401
+try:
+    from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer  # noqa: F401
+except ImportError:
+    from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer # noqa: F401
+
+try:
+    from .config import (ExpertPlacementStrategy, FusedMoEConfig,  # noqa: F401
+except ImportError:
+    from .config import (ExpertPlacementStrategy, FusedMoEConfig, # noqa: F401
+
                      FusedMoEParallelConfig, FusedMoEQuantConfig)
-from .dispatcher import DenseDispatcher, SparseDispatcher  # noqa: F401
-from .layer import FusedMoELayer  # noqa: F401
-from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod  # noqa: F401
-from .utils import determine_expert_map  # noqa: F401
+try:
+    from .dispatcher import DenseDispatcher, SparseDispatcher  # noqa: F401
+except ImportError:
+    from .dispatcher import DenseDispatcher, SparseDispatcher # noqa: F401
+
+try:
+    from .layer import FusedMoELayer  # noqa: F401
+except ImportError:
+    from .layer import FusedMoELayer # noqa: F401
+
+try:
+    from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod  # noqa: F401
+except ImportError:
+    from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod # noqa: F401
+
+try:
+    from .utils import determine_expert_map  # noqa: F401
+except ImportError:
+    from .utils import determine_expert_map # noqa: F401
+
 
 __all__ = [
     "FusedMoEConfig","    "FusedMoEParallelConfig","    "FusedMoEQuantConfig","    "ExpertPlacementStrategy","    "FusedMoEMethodBase","    "UnquantizedFusedMoEMethod","    "SparseDispatcher","    "DenseDispatcher","    "determine_expert_map","    "FusedMoELayer","    "AdaptiveMoELayer","    "HierarchicalMoELayer","]

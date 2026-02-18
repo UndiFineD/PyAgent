@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.utils.entry_reorderer import EntryReorderer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.utils.entry_reorderer import EntryReorderer
+except ImportError:
+    from core.utils.entry_reorderer import EntryReorderer
+
 
 
 def test_entryreorderer_basic():

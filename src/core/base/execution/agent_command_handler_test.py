@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.execution.agent_command_handler import AgentCommandHandler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.execution.agent_command_handler import AgentCommandHandler
+except ImportError:
+    from core.base.execution.agent_command_handler import AgentCommandHandler
+
 
 
 def test_agentcommandhandler_basic():

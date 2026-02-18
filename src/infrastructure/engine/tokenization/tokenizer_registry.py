@@ -17,17 +17,53 @@
 Facade for Tokenizer Registry.
 Delegates to modularized sub-packages in src/infrastructure/tokenizer/.
 
-from .base import BaseTokenizer
-from .huggingface import HuggingFaceTokenizer
-from .mistral import MistralTokenizer
-from .models import (BatchTokenizeResult, PaddingStrategy,
+try:
+    from .base import BaseTokenizer
+except ImportError:
+    from .base import BaseTokenizer
+
+try:
+    from .huggingface import HuggingFaceTokenizer
+except ImportError:
+    from .huggingface import HuggingFaceTokenizer
+
+try:
+    from .mistral import MistralTokenizer
+except ImportError:
+    from .mistral import MistralTokenizer
+
+try:
+    from .models import (BatchTokenizeResult, PaddingStrategy,
+except ImportError:
+    from .models import (BatchTokenizeResult, PaddingStrategy,
+
                      SpecialTokenHandling, TokenizerBackend, TokenizerConfig,
                      TokenizeResult, TokenizerInfo, TruncationStrategy)
-from .pool import TokenizerPool
-from .protocol import TokenizerProtocol
-from .registry import TokenizerRegistry
-from .tiktoken import TiktokenTokenizer
-from .utils import (create_tokenizer, detect_tokenizer_backend,
+try:
+    from .pool import TokenizerPool
+except ImportError:
+    from .pool import TokenizerPool
+
+try:
+    from .protocol import TokenizerProtocol
+except ImportError:
+    from .protocol import TokenizerProtocol
+
+try:
+    from .registry import TokenizerRegistry
+except ImportError:
+    from .registry import TokenizerRegistry
+
+try:
+    from .tiktoken import TiktokenTokenizer
+except ImportError:
+    from .tiktoken import TiktokenTokenizer
+
+try:
+    from .utils import (create_tokenizer, detect_tokenizer_backend,
+except ImportError:
+    from .utils import (create_tokenizer, detect_tokenizer_backend,
+
                     estimate_token_count, get_tokenizer)
 
 __all__ = [

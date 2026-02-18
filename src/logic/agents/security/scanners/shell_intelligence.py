@@ -20,10 +20,25 @@ Safe Command Auditor: This module provides per-command auditing and execution ca
 It is explicitly NOT a background monitor or keylogger. It does not persistent-hook into
 the OS input stack and only processes commands explicitly passed to its execution methods.
 
-import asyncio
-import re
-import sys
-from typing import Tuple
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from typing import Tuple
+except ImportError:
+    from typing import Tuple
 
 
 
@@ -35,21 +50,29 @@ class ShellIntelligence:
     # Patterns for sensitive data redaction (Passwords, Tokens, Keys)
     REDACT_PATTERNS = [
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         (r"(?i)(password\\\\s*[:=]\\\\s*)(\\S+)", r"\\1[REDACTED]"),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         (r"(?i)(-p\\\\s+)(\\S+)", r"\\1[REDACTED]"),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         (r"(?i)(--password\\\\s+)(\\S+)", r"\\1[REDACTED]"),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         (r"(?i)(-t(?:oken)?\\\\s+)(\\S+)", r"\\1[REDACTED]"),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         (r"(?i)(--token\\\\s+)(\\S+)", r"\\1[REDACTED]"),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         (r"(?i)([A-Z0-9_]+_KEY\\\\s*=\\\\s*)(\\S+)", r"\\1[REDACTED]"),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         (r"(?i)([A-Z0-9_]+_TOKEN\\\\s*=\\\\s*)(\\S+)", r"\\1[REDACTED]"),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         (r"(?i)(authorization\\\\s*:\\\\s*(?:Bearer\\\\s+)?|api-key\\\\s*:\\\\s*)(\\S+)", r"\\1[REDACTED]"),"    ]
 
     def sanitize_command(self, command: str) -> str:
@@ -65,13 +88,16 @@ class ShellIntelligence:
         return stdout.strip() if stdout else stderr.strip()
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     async def execute_command(self, command: str) -> Tuple[str, str, int]:""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""     async def execute_command(self, command: str) -> Tuple[str, str, int]:""""
+# [BATCHFIX] Commented metadata/non-Python
 """         "Executes a command asynchronously without background listeners."  # [BATCHFIX] closed string"        # The command is scrubbed here if logging were to be added
         self.sanitize_command(command)
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         process = await asyncio.create_subprocess_shell(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         process = await asyncio.create_subprocess_shell(
             command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
         stdout_bytes, stderr_bytes = await process.communicate()

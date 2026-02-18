@@ -16,7 +16,11 @@
 # SPDX-License-Identifier: Apache-2.0
 DataParallelCoordinator Package.
 
-from typing import TYPE_CHECKING, Any
+try:
+    from typing import TYPE_CHECKING, Any
+except ImportError:
+    from typing import TYPE_CHECKING, Any
+
 
 if TYPE_CHECKING:
     from .balancer import P2CLoadBalancer

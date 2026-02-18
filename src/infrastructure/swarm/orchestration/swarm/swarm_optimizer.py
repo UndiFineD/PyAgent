@@ -21,15 +21,23 @@ Engine for Self-Referential Swarm Optimization.""""Monitors fleet performance an
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import TYPE_CHECKING, Any
+except ImportError:
+    from typing import TYPE_CHECKING, Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
-
 
 
 

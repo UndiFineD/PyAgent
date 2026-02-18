@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.security.external_tools import SecurityLevel, ThreatCategory, SecurityPolicy, ToolSignature, ExternalToolSecurity
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.security.external_tools import SecurityLevel, ThreatCategory, SecurityPolicy, ToolSignature, ExternalToolSecurity
+except ImportError:
+    from core.security.external_tools import SecurityLevel, ThreatCategory, SecurityPolicy, ToolSignature, ExternalToolSecurity
+
 
 
 def test_securitylevel_basic():

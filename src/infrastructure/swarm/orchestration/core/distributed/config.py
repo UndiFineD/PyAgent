@@ -21,9 +21,21 @@ Configuration and state enums for distributed coordination.
 
 from __future__ import annotations
 
-import uuid
-from dataclasses import dataclass, field
-from enum import Enum, auto
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -39,7 +51,6 @@ class EngineState(Enum):
 
 
 
-
 class WorkerState(Enum):
     """State of a worker process.
     STARTING = auto()
@@ -48,7 +59,6 @@ class WorkerState(Enum):
     STOPPING = auto()
     STOPPED = auto()
     ERROR = auto()
-
 
 
 

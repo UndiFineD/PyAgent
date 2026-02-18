@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .error_budget_manager import ErrorBudgetManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .error_budget_manager import ErrorBudgetManager
+except ImportError:
+    from .error_budget_manager import ErrorBudgetManager
+
 
 
 def test_errorbudgetmanager_basic():

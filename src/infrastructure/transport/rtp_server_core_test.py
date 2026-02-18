@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.transport.rtp_server_core import RTPSession, RTPServerCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.transport.rtp_server_core import RTPSession, RTPServerCore
+except ImportError:
+    from infrastructure.transport.rtp_server_core import RTPSession, RTPServerCore
+
 
 
 def test_rtpsession_basic():

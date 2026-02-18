@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.discovery.mdns_service.suggested import PyAgentServiceListener, MDNSService
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.discovery.mdns_service.suggested import PyAgentServiceListener, MDNSService
+except ImportError:
+    from infrastructure.swarm.discovery.mdns_service.suggested import PyAgentServiceListener, MDNSService
+
 
 
 def test_pyagentservicelistener_basic():

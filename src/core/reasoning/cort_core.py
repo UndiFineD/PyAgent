@@ -62,7 +62,6 @@ class CoRTResult:
 
 
 
-
 class CoRTReasoningCore:
     """Chain-of-Recursive-Thoughts reasoning system.
 
@@ -318,7 +317,8 @@ Corrected Response:"""
             self.logger.warning(f"Phase 321: Self-correction failed: {e}")"            return response
 
     async def _calculate_confidence(self, final_response: str, thinking_history: List[ThinkingRound]) -> float:
-        """Calculate confidence score based on thinking consistency and rounds."""try:
+        """Calculate confidence score based on thinking consistency and rounds."""
+try:
             # Base confidence on number of rounds and consistency
             total_rounds = max(1, max((r.round_number for r in thinking_history), default=1))
 
@@ -411,7 +411,8 @@ Corrected Response:"""
 
         Returns:
             Performance score (0.0-1.0)
-        """try:
+        """
+try:
             import time
 
             # Benchmark queries of varying complexity
@@ -549,11 +550,11 @@ Be comprehensive but concise in your reasoning."""
 
         Returns:
             Thinking result
-        """# Simple async wrapper
+        """
+# Simple async wrapper
         result = self.think_recursively(query)
         return {
             "final_answer": result["final_answer"]"        }
-
 
 
 

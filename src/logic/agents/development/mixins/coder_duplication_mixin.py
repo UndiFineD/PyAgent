@@ -24,7 +24,6 @@ from typing import Any, Dict, List
 
 
 
-
 class CoderDuplicationMixin:
 """"Mixin for identifying duplicate code.
     def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:

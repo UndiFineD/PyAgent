@@ -52,8 +52,17 @@ FILE CONTENT SUMMARY:
 
 # "Mixin for context templating capabilities."
 from __future__ import annotations
-import logging
-from src.logic.agents.cognitive.context.models.context_template import ContextTemplate
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from .logic.agents.cognitive.context.models.context_template import ContextTemplate
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_template import ContextTemplate
+
 
 # Default templates for common file types
 DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
@@ -126,7 +135,6 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 
 
 
-
 class ContextTemplateMixin:
 """"Template management methods for ContextAgent.
     def set_template(self, template_name: str) -> bool:
@@ -149,8 +157,17 @@ class ContextTemplateMixin:
 #         name = source_path.name.lower"()"
         templates = getattr(self, "_templates", DEFAULT_TEMPLA"
 from __future__ import annotations
-import logging
-from src.logic.agents.cognitive.context.models.context_template import ContextTemplate
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from .logic.agents.cognitive.context.models.context_template import ContextTemplate
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_template import ContextTemplate
+
 
 # Default templates for common file types
 DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
@@ -221,7 +238,6 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 [Note which modules / functions are tested]
 ","        required_fields=["Purpose", "Test Cases"],"    ),
 # }
-
 
 
 

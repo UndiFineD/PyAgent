@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.knowledge_mixin import KnowledgeMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.knowledge_mixin import KnowledgeMixin
+except ImportError:
+    from core.base.mixins.knowledge_mixin import KnowledgeMixin
+
 
 
 def test_knowledgemixin_basic():

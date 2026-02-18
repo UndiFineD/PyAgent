@@ -15,12 +15,24 @@
 
 Sampling infrastructure module.
 
-from .base import HAS_RUST, Sampler  # noqa: F401
-from .params import SamplingParams, SamplingState  # noqa: F401
+try:
+    from .base import HAS_RUST, Sampler  # noqa: F401
+except ImportError:
+    from .base import HAS_RUST, Sampler # noqa: F401
+
+try:
+    from .params import SamplingParams, SamplingState  # noqa: F401
+except ImportError:
+    from .params import SamplingParams, SamplingState # noqa: F401
+
 
 __all__ = [
     "SamplingParams","    "SamplingState","    "Sampler","    "HAS_RUST","]
-from .advanced_sampling_params import (AdvancedSamplingParams,  # noqa: F401
+try:
+    from .advanced_sampling_params import (AdvancedSamplingParams,  # noqa: F401
+except ImportError:
+    from .advanced_sampling_params import (AdvancedSamplingParams, # noqa: F401
+
                                        BadWordsProcessor, LogitBiasBuilder,
                                        MirostatSampler, OutputKind,
                                        SamplingEngine, StopCondition,
@@ -28,9 +40,21 @@ from .advanced_sampling_params import (AdvancedSamplingParams,  # noqa: F401
                                        TokenWhitelistProcessor,
                                        create_advanced_sampling_params,
                                        create_sampling_params)
-from .beam_search import BeamHypothesis, BeamSearchConfig, BeamSearchSampler  # noqa: F401
-from .engine import SamplingPipeline, sample_logits  # noqa: F401
-from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,  # noqa: F401
+try:
+    from .beam_search import BeamHypothesis, BeamSearchConfig, BeamSearchSampler  # noqa: F401
+except ImportError:
+    from .beam_search import BeamHypothesis, BeamSearchConfig, BeamSearchSampler # noqa: F401
+
+try:
+    from .engine import SamplingPipeline, sample_logits  # noqa: F401
+except ImportError:
+    from .engine import SamplingPipeline, sample_logits # noqa: F401
+
+try:
+    from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,  # noqa: F401
+except ImportError:
+    from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler, # noqa: F401
+
                       TemperatureSampler, TopKSampler, TopKTopPSampler,
                       TopPSampler)
 

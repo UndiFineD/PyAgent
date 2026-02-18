@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.capability_discovery import CapabilityDiscovery
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.capability_discovery import CapabilityDiscovery
+except ImportError:
+    from infrastructure.compute.backend.capability_discovery import CapabilityDiscovery
+
 
 
 def test_capabilitydiscovery_basic():

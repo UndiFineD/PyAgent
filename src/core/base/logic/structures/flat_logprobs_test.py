@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.flat_logprobs import Logprob, FlatLogprobs, LogprobsAccumulator, create_prompt_logprobs, create_sample_logprobs
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.flat_logprobs import Logprob, FlatLogprobs, LogprobsAccumulator, create_prompt_logprobs, create_sample_logprobs
+except ImportError:
+    from core.base.logic.structures.flat_logprobs import Logprob, FlatLogprobs, LogprobsAccumulator, create_prompt_logprobs, create_sample_logprobs
+
 
 
 def test_logprob_basic():

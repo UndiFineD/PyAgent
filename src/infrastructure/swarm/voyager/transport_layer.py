@@ -39,7 +39,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class VoyagerTransport:
         VoyagerTransport: High-performance P2P message bus using ZeroMQ.
     Uses DEALER/ROUTER pattern for asynchronous bi-directional communication.

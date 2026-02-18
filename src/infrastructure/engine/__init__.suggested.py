@@ -31,18 +31,42 @@ Phase 30 additions:
 - EngineCoreClient: Engine communication clients
 
 # Phase 30: Engine Core
-from .engine_core import (
+try:
+    from .engine_core import (
+except ImportError:
+    from .engine_core import (
+
     EngineCore,
     EngineCoreOutput,
     EngineCoreOutputs,  # noqa: F401
     EngineCoreProc,
     Executor,
 )
-from .engine_core import FinishReason as CoreFinishReason  # noqa: F401
-from .engine_core import MockExecutor, ModelRunnerOutput  # noqa: F401
-from .engine_core import Request as CoreRequest  # noqa: F401
-from .engine_core import RequestStatus as CoreRequestStatus  # noqa: F401
-from .engine_core import (
+try:
+    from .engine_core import FinishReason as CoreFinishReason  # noqa: F401
+except ImportError:
+    from .engine_core import FinishReason as CoreFinishReason # noqa: F401
+
+try:
+    from .engine_core import MockExecutor, ModelRunnerOutput  # noqa: F401
+except ImportError:
+    from .engine_core import MockExecutor, ModelRunnerOutput # noqa: F401
+
+try:
+    from .engine_core import Request as CoreRequest  # noqa: F401
+except ImportError:
+    from .engine_core import Request as CoreRequest # noqa: F401
+
+try:
+    from .engine_core import RequestStatus as CoreRequestStatus  # noqa: F401
+except ImportError:
+    from .engine_core import RequestStatus as CoreRequestStatus # noqa: F401
+
+try:
+    from .engine_core import (
+except ImportError:
+    from .engine_core import (
+
     Scheduler,
     SchedulerOutput,
     SimpleScheduler,  # noqa: F401
@@ -50,7 +74,11 @@ from .engine_core import (
 )
 
 # Phase 30: Engine Core Client
-from .engine_core_client import (
+try:
+    from .engine_core_client import (
+except ImportError:
+    from .engine_core_client import (
+
     AsyncMPClient,
     ClientConfig,
     EngineCoreClient,  # noqa: F401
@@ -59,10 +87,18 @@ from .engine_core_client import (
     SyncMPClient,
     create_client,
 )
-from .engine_lifecycle import EngineConfig, EngineLifecycleManager, EngineState  # noqa: F401
+try:
+    from .engine_lifecycle import EngineConfig, EngineLifecycleManager, EngineState  # noqa: F401
+except ImportError:
+    from .engine_lifecycle import EngineConfig, EngineLifecycleManager, EngineState # noqa: F401
+
 
 # Phase 30: Incremental Detokenizer
-from .incremental_detokenizer import (  # noqa: F401
+try:
+    from .incremental_detokenizer import (  # noqa: F401
+except ImportError:
+    from .incremental_detokenizer import ( # noqa: F401
+
     INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET,
     BaseIncrementalDetokenizer,
     FastIncrementalDetokenizer,
@@ -77,7 +113,11 @@ from .incremental_detokenizer import (  # noqa: F401
 )
 
 # Phase 30: Output Processor
-from .output_processor import (
+try:
+    from .output_processor import (
+except ImportError:
+    from .output_processor import (
+
     EngineCoreRequest,
     EventType,
     IterationStats,  # noqa: F401
@@ -87,8 +127,16 @@ from .output_processor import (
     OutputProcessorOutput,
     ParentRequest,
 )
-from .output_processor import RequestEvent as OutputRequestEvent  # noqa: F401
-from .output_processor import (
+try:
+    from .output_processor import RequestEvent as OutputRequestEvent  # noqa: F401
+except ImportError:
+    from .output_processor import RequestEvent as OutputRequestEvent # noqa: F401
+
+try:
+    from .output_processor import (
+except ImportError:
+    from .output_processor import (
+
     RequestOutput,
     RequestOutputCollector,  # noqa: F401
     RequestState,
@@ -96,7 +144,11 @@ from .output_processor import (
 )
 
 # Phase 30: Prefix Cache Manager
-from .prefix_cache_manager import (
+try:
+    from .prefix_cache_manager import (
+except ImportError:
+    from .prefix_cache_manager import (
+
     BlockHash,
     CacheBlock,
     HashAlgorithm,  # noqa: F401
@@ -110,7 +162,11 @@ from .prefix_cache_manager import (
     hash_block_tokens_rust,
     init_none_hash,
 )
-from .request_lifecycle import (
+try:
+    from .request_lifecycle import (
+except ImportError:
+    from .request_lifecycle import (
+
     FinishReason,
     Request,
     RequestEvent,  # noqa: F401

@@ -16,10 +16,21 @@
 """Mixin for agent configuration access."""
 
 
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from ..configuration.config_manager import config
-from ..common.config_core import ConfigCore
+
+try:
+    from ..configuration.config_manager import config
+except ImportError:
+    from ..configuration.config_manager import config
+
+try:
+    from ..common.config_core import ConfigCore
+except ImportError:
+    from ..common.config_core import ConfigCore
 
 
 class ConfigMixin:

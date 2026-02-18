@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.analysis.count_code import count_real_code
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.analysis.count_code import count_real_code
+except ImportError:
+    from infrastructure.services.dev.scripts.analysis.count_code import count_real_code
+
 
 
 def test_count_real_code_basic():

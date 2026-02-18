@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.recorded_request import RecordedRequest
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.recorded_request import RecordedRequest
+except ImportError:
+    from infrastructure.compute.backend.recorded_request import RecordedRequest
+
 
 
 def test_recordedrequest_basic():

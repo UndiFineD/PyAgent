@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.llm_backends.lmstudio.cache import ModelCache
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.llm_backends.lmstudio.cache import ModelCache
+except ImportError:
+    from infrastructure.compute.backend.llm_backends.lmstudio.cache import ModelCache
+
 
 
 def test_modelcache_basic():

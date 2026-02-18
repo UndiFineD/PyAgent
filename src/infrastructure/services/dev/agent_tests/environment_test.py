@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.agent_tests.environment import EnvironmentProvisioner, DataFactory
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.agent_tests.environment import EnvironmentProvisioner, DataFactory
+except ImportError:
+    from infrastructure.services.dev.agent_tests.environment import EnvironmentProvisioner, DataFactory
+
 
 
 def test_environmentprovisioner_basic():

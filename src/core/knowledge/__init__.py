@@ -15,14 +15,37 @@
 """Core Knowledge Storage Interfaces for PyAgent.
 Designed to handle high-volume parameters with efficient access patterns.
 """
+
+
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
 
-from .btree_store import BTreeKnowledgeStore  # noqa: F401
-from .graph_store import GraphKnowledgeStore  # noqa: F401
-from .storage_base import KnowledgeStore  # noqa: F401
-from .vector_store import VectorKnowledgeStore  # noqa: F401
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .btree_store import BTreeKnowledgeStore  # noqa: F401
+except ImportError:
+    from .btree_store import BTreeKnowledgeStore # noqa: F401
+
+try:
+    from .graph_store import GraphKnowledgeStore  # noqa: F401
+except ImportError:
+    from .graph_store import GraphKnowledgeStore # noqa: F401
+
+try:
+    from .storage_base import KnowledgeStore  # noqa: F401
+except ImportError:
+    from .storage_base import KnowledgeStore # noqa: F401
+
+try:
+    from .vector_store import VectorKnowledgeStore  # noqa: F401
+except ImportError:
+    from .vector_store import VectorKnowledgeStore # noqa: F401
+
 
 __version__ = VERSION
 

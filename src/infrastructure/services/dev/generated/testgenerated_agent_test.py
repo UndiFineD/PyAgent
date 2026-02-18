@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.generated.testgenerated_agent import TestGeneratedAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.generated.testgenerated_agent import TestGeneratedAgent
+except ImportError:
+    from infrastructure.services.dev.generated.testgenerated_agent import TestGeneratedAgent
+
 
 
 def test_testgeneratedagent_basic():

@@ -17,11 +17,27 @@ Visualize swarm graph.py module.
 
 # Add workspace root to sys.path
 
-import json
-import sys
-from pathlib import Path
+try:
+    import json
+except ImportError:
+    import json
 
-from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .infrastructure.swarm.orchestration.signals.signal_registry import \
+except ImportError:
+    from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+
     SignalRegistry
 
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))

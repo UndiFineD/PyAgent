@@ -12,10 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import socket
-import struct
-from dataclasses import dataclass, field
-from typing import Dict, Optional, Tuple
+try:
+    import socket
+except ImportError:
+    import socket
+
+try:
+    import struct
+except ImportError:
+    import struct
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Dict, Optional, Tuple
+except ImportError:
+    from typing import Dict, Optional, Tuple
+
 
 
 @dataclass
@@ -33,7 +49,6 @@ class RTPSession:
     jitter_buffer: list = field(default_factory=list)
     frames_received: int = 0
     frames_processed: int = 0
-
 
 
 

@@ -14,18 +14,36 @@
 
 
 """Enhanced security controls for external tools in MCP ecosystem."""
-import hashlib
-import re
-from typing import Dict, List, Any, Optional, Set
-from dataclasses import dataclass
-from enum import Enum
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Dict, List, Any, Optional, Set
+except ImportError:
+    from typing import Dict, List, Any, Optional, Set
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
 
 
 
 
 class SecurityLevel(Enum):
     """Security levels for tool execution."""HIGH = "high""    MEDIUM = "medium""    LOW = "low""    TRUSTED = "trusted""
-
 
 
 class ThreatCategory(Enum):
@@ -52,7 +70,6 @@ class ToolSignature:
 
 
 
-
 class ExternalToolSecurity:
     """Enhanced security controls for external tools in MCP ecosystem.
 
@@ -71,7 +88,8 @@ class ExternalToolSecurity:
         self._initialize_trusted_tools()
 
     def _initialize_security_policies(self):
-        """Initialize default security policies."""# High security for sensitive operations
+        """Initialize default security policies."""
+# High security for sensitive operations
         self._security_policies["database"] = SecurityPolicy("            allowed_domains={"localhost", "127.0.0.1"},"            blocked_patterns={"DROP", "DELETE", "TRUNCATE", "ALTER"},"            max_execution_time=30,
             max_memory_usage=100,
             network_access=False,
@@ -133,7 +151,8 @@ class ExternalToolSecurity:
 
         Returns:
             True if tool is approved for execution
-        """# Check if tool is explicitly blocked
+        """
+# Check if tool is explicitly blocked
         if tool_name in self._blocked_tools:
             return False
 
@@ -145,7 +164,8 @@ class ExternalToolSecurity:
         return self._perform_security_analysis(tool_name, context)
 
     def _perform_security_analysis(self, tool_name: str, context: Optional[Dict[str, Any]]) -> bool:
-        """Perform comprehensive security analysis."""# Check tool signature if available
+        """Perform comprehensive security analysis."""
+# Check tool signature if available
         if tool_name in self._tool_signatures:
             signature = self._tool_signatures[tool_name]
             if not signature.verified:
@@ -170,7 +190,8 @@ class ExternalToolSecurity:
         return any(pattern in tool_lower for pattern in suspicious_patterns)
 
     def _validate_execution_context(self, context: Dict[str, Any]) -> bool:
-        """Validate execution context against security policies."""# Check for required context fields
+        """Validate execution context against security policies."""
+# Check for required context fields
         required_fields = ["category", "parameters"]"        if not all(field in context for field in required_fields):
             return False
 
@@ -187,7 +208,8 @@ class ExternalToolSecurity:
         return True
 
     def _validate_parameters_against_policy(self, parameters: Dict[str, Any], policy: SecurityPolicy) -> bool:
-        """Validate parameters against security policy."""# Check for blocked patterns in string parameters
+        """Validate parameters against security policy."""
+# Check for blocked patterns in string parameters
         for key, value in parameters.items():
             if isinstance(value, str):
                 value_lower = value.lower()
@@ -287,7 +309,8 @@ class ExternalToolSecurity:
         return audit_report
 
     def _get_policy_for_tool(self, tool_name: str) -> Optional[SecurityPolicy]:
-        """Get security policy for a tool based on its category."""# This would typically involve looking up the tool's category'        # For now, return a default policy
+        """Get security policy for a tool based on its category."""
+# This would typically involve looking up the tool's category'        # For now, return a default policy
         return self._security_policies.get("development")"
     def _check_policy_violations(self, execution_result: Dict[str, Any], policy: SecurityPolicy) -> List[str]:
         """Check for policy violations in execution result."""violations = []

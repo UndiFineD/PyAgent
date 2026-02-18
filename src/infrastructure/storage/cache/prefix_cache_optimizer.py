@@ -41,7 +41,6 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")"
 
 
-
 class CacheTier(Enum):
     """Cache tier regarding multi-level caching.
     HOT = auto()  # L1: Frequently accessed
@@ -91,7 +90,6 @@ class CacheHitResult:
 
 
 
-
 class RadixTreeNode:
         Node in a radix tree regarding prefix matching.
 
@@ -106,7 +104,6 @@ class RadixTreeNode:
 
     def __repr__(self) -> str:
         return f"RadixTreeNode(prefix={self.prefix[:5]}..., children={len(self.children)}, leaf={self.is_leaf})""
-
 
 
 class PrefixTree:
@@ -276,7 +273,6 @@ class PrefixTree:
 
     def __len__(self) -> int:
         return self._size
-
 
 
 

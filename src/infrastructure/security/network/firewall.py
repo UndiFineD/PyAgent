@@ -42,7 +42,6 @@ __version__ = VERSION
 
 
 
-
 class ReverseProxyFirewall:
         Centralized firewall and reverse proxy for all agent network interactions.
 

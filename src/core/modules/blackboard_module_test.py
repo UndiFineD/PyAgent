@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.modules.blackboard_module import BlackboardModule
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.modules.blackboard_module import BlackboardModule
+except ImportError:
+    from core.modules.blackboard_module import BlackboardModule
+
 
 
 def test_blackboardmodule_basic():

@@ -52,7 +52,6 @@ class ContentTemplate:
 
 
 
-
 class AIContentEditorCore(BaseCore):
     """AI Content Editor Core for instruction-based content generation and editing.
 
@@ -67,7 +66,8 @@ class AIContentEditorCore(BaseCore):
         self.active_models: Dict[str, Any] = {}  # Mock model instances
 
     async def initialize(self) -> bool:
-        """Initialize the AI content editor core"""try:
+        """Initialize the AI content editor core"""
+try:
             # Initialize with default templates and models
             await self.load_default_templates()
             await self.initialize_models()
@@ -96,7 +96,8 @@ class AIContentEditorCore(BaseCore):
 
         self.logger.info(f"Loaded {len(default_templates)} default templates")"
     async def initialize_models(self) -> None:
-        """Initialize AI models for different content types"""# Mock model initialization - in real implementation, these would be actual ML models
+        """Initialize AI models for different content types"""
+# Mock model initialization - in real implementation, these would be actual ML models
         self.model_configs = {
             "text_processor": {"                "type": "transformer","                "max_tokens": 4096,"                "supported_languages": ["en", "es", "fr", "de", "zh"]"            },
             "image_processor": {"                "type": "diffusion","                "resolution": "1024x1024","                "supported_formats": ["png", "jpg", "webp"]"            },
@@ -165,7 +166,8 @@ class AIContentEditorCore(BaseCore):
         """Select appropriate model for the request"""if request.content_type == "text":"            return "text_processor""        elif request.content_type == "image":"            return "image_processor""        elif request.content_type in ["python", "javascript", "java", "cpp", "go"]:"            return "code_processor""        else:
             return "multimodal_processor""
     async def _select_template(self, request: ContentEditRequest) -> Optional[ContentTemplate]:
-        """Select appropriate template for the request"""# Try to match based on instruction keywords
+        """Select appropriate template for the request"""
+# Try to match based on instruction keywords
         instruction_lower = request.instruction.lower()
 
         if "summarize" in instruction_lower or "summary" in instruction_lower:"            return self.templates.get("text_summarizer")"        elif "enhance" in instruction_lower or "improve" in instruction_lower:"            if request.content_type == "image":"                return self.templates.get("image_enhancer")"            else:
@@ -177,7 +179,8 @@ class AIContentEditorCore(BaseCore):
         request: ContentEditRequest,
         template: Optional[ContentTemplate]
     ) -> str:
-        """Process text content editing"""# Ensure input content is string
+        """Process text content editing"""
+# Ensure input content is string
         input_content = """        if request.input_content:
             if isinstance(request.input_content, bytes):
                 input_content = request.input_content.decode(errors="replace")"            else:
@@ -201,7 +204,8 @@ class AIContentEditorCore(BaseCore):
         request: ContentEditRequest,
         template: Optional[ContentTemplate]
     ) -> bytes:
-        """Process image content editing"""# Mock image processing - in real implementation, this would use diffusion models
+        """Process image content editing"""
+# Mock image processing - in real implementation, this would use diffusion models
         if request.input_content:
             # If input is provided, return modified version
             input_bytes = request.input_content if isinstance(request.input_content, bytes) \
@@ -233,7 +237,8 @@ class AIContentEditorCore(BaseCore):
                 content = str(request.input_content)
         return f"Processed {request.content_type} content: {content}""
     async def _calculate_confidence(self, result_content: Any, request: ContentEditRequest) -> float:
-        """Calculate confidence score for the result"""# Mock confidence calculation
+        """Calculate confidence score for the result"""
+# Mock confidence calculation
         base_confidence = 0.8
 
         # Adjust based on content length/complexity

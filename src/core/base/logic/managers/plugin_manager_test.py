@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.managers.plugin_manager import PluginMetadata, PluginManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.managers.plugin_manager import PluginMetadata, PluginManager
+except ImportError:
+    from core.base.logic.managers.plugin_manager import PluginMetadata, PluginManager
+
 
 
 def test_pluginmetadata_basic():

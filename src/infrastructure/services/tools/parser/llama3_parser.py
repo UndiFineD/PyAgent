@@ -33,7 +33,6 @@ from .json_parser import JsonToolParser
 
 
 
-
 class Llama3ToolParser(ToolParser):
         Llama 3 tool call parser.
 

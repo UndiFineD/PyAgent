@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.fleet_routing_core import FleetRoutingCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.fleet_routing_core import FleetRoutingCore
+except ImportError:
+    from infrastructure.swarm.fleet.fleet_routing_core import FleetRoutingCore
+
 
 
 def test_fleetroutingcore_basic():

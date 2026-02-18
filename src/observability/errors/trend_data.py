@@ -34,11 +34,24 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .trend_direction import TrendDirection
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .trend_direction import TrendDirection
+except ImportError:
+    from .trend_direction import TrendDirection
+
 
 __version__ = VERSION
 

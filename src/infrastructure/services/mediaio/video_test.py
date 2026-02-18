@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.mediaio.video import VideoLoader
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.mediaio.video import VideoLoader
+except ImportError:
+    from infrastructure.services.mediaio.video import VideoLoader
+
 
 
 def test_videoloader_basic():

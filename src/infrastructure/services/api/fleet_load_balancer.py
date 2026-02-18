@@ -21,16 +21,36 @@ Fleet load balancer.py module.
 
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.services.api.core.gateway_core import GatewayCore
-from src.infrastructure.swarm.fleet.core.load_balancer_core import (
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.services.api.core.gateway_core import GatewayCore
+except ImportError:
+    from src.infrastructure.services.api.core.gateway_core import GatewayCore
+
+try:
+    from .infrastructure.swarm.fleet.core.load_balancer_core import (
+except ImportError:
+    from src.infrastructure.swarm.fleet.core.load_balancer_core import (
+
     AgentMetrics, LoadBalancerCore)
 
 __version__: str = VERSION
-
 
 
 

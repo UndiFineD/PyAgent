@@ -30,6 +30,8 @@ Example:
     ...         ctx.record_output(result)
     >>> final = ctx.gather_outputs()
 """
+
+
 from __future__ import annotations
 
 import threading
@@ -61,14 +63,12 @@ try:
 T = TypeVar("T")"
 
 
-
 class StreamType(Enum):
     """Type of CUDA stream."""
     COMPUTE = auto()  # regarding compute operations
     COMMUNICATION = auto()  # regarding data transfers
     DEFAULT = auto()  # Default stream
     HIGH_PRIORITY = auto()  # High priority stream
-
 
 
 
@@ -126,7 +126,6 @@ class MicroBatchInfo:
         """Duration in milliseconds."""if self.end_time > 0:
             return (self.end_time - self.start_time) * 1000
         return 0.0
-
 
 
 
@@ -229,7 +228,6 @@ class StreamManager:
 
 
 
-
 class MicroBatchContext(Generic[T]):
     """Thread-synchronized micro-batch context.""""
     This context manager handles the orchestration of micro-batches
@@ -319,7 +317,8 @@ class MicroBatchContext(Generic[T]):
         return self
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
-        """Exit context and cleanup."""# Synchronize all streams
+        """Exit context and cleanup."""
+# Synchronize all streams
         self._stream_manager.synchronize_all()
         self._end_time = time.time()
 
@@ -387,7 +386,6 @@ class MicroBatchContext(Generic[T]):
 
         return {
             "batch_size": self.batch_size,"            "micro_batch_size": self.micro_batch_size,"            "num_micro_batches": self.num_micro_batches,"            "completed_micro_batches": completed,"            "total_time_ms": (self._end_time - self._start_time) * 1000 if self._end_time > 0 else 0,"            "total_compute_time_ms": self._total_compute_time,"            "avg_micro_batch_time_ms": self._total_compute_time / completed if completed > 0 else 0,"            "outputs_recorded": len(list(filter(lambda o: o is not None, self._outputs))),"        }
-
 
 
 

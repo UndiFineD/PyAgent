@@ -15,17 +15,35 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
-import threading
-import time
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import threading
+except ImportError:
+    import threading
 
-from .resource_handle import ResourceHandle
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .resource_handle import ResourceHandle
+except ImportError:
+    from .resource_handle import ResourceHandle
+
 
 __version__ = VERSION
-
 
 
 

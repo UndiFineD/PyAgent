@@ -71,7 +71,6 @@ DEFAULT_PYTHON_STYLE_RULES: list[StyleRule] = [
 
 
 
-
 class CoderCore(
     LogicCore,
     CoderMetricsMixin,

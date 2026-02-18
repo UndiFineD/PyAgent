@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .workflow_manager import WorkflowManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .workflow_manager import WorkflowManager
+except ImportError:
+    from .workflow_manager import WorkflowManager
+
 
 
 def test_workflowmanager_basic():

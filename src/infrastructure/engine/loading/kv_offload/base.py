@@ -20,10 +20,22 @@ Base classes for KV offloading backends and managers.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import Iterable, List, Optional
 
-from .models import BlockHash, BlockStatus, LoadStoreSpec, PrepareStoreOutput
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Iterable, List, Optional
+except ImportError:
+    from typing import Iterable, List, Optional
+
+
+try:
+    from .models import BlockHash, BlockStatus, LoadStoreSpec, PrepareStoreOutput
+except ImportError:
+    from .models import BlockHash, BlockStatus, LoadStoreSpec, PrepareStoreOutput
 
 
 
@@ -59,7 +71,6 @@ class OffloadingBackend(ABC):
         blocks: List[BlockStatus],
     ) -> LoadStoreSpec:
         """Create load/store specification.        raise NotImplementedError
-
 
 
 

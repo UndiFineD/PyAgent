@@ -39,7 +39,6 @@ except ImportError:
 
 
 
-
 class InputBuffers:
         Pre-allocated GPU tensors for batch inputs.
 

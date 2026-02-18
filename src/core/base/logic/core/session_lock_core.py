@@ -12,10 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import secrets
-from typing import Dict, Any, Optional
-from datetime import datetime
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import secrets
+except ImportError:
+    import secrets
+
+try:
+    from typing import Dict, Any, Optional
+except ImportError:
+    from typing import Dict, Any, Optional
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
 
 
 
@@ -41,5 +56,6 @@ class SessionLockCore:
         return False
 
     def validate_space(self, tenant_id: str, space_id: str) -> bool:
-        """Ensure space belongs to tenant (Isolation)."""# TODO Placeholder for DB check
+        """Ensure space belongs to tenant (Isolation)."""
+# TODO Placeholder for DB check
         return True

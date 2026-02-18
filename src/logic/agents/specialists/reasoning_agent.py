@@ -55,21 +55,65 @@ FILE CONTENT SUMMARY:
 ReasoningAgent: Specialist agent for recursive and deep thinking - Phase 319 Enhanced"."
 from __future__ import annotations
 
-import contextlib
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.sharding_core import ShardingCore
-from src.core.base.common.config_core import ConfigCore
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.sharding_core import ShardingCore
+except ImportError:
+    from src.core.base.common.sharding_core import ShardingCore
+
+try:
+    from .core.base.common.config_core import ConfigCore
+except ImportError:
+    from src.core.base.common.config_core import ConfigCore
+
 
 __version__ = VERSION
-
 
 
 
@@ -132,21 +176,65 @@ class ReasoningAgent(BaseAgent):
 
 from __future__ import annotations
 
-import contextlib
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.sharding_core import ShardingCore
-from src.core.base.common.config_core import ConfigCore
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.sharding_core import ShardingCore
+except ImportError:
+    from src.core.base.common.sharding_core import ShardingCore
+
+try:
+    from .core.base.common.config_core import ConfigCore
+except ImportError:
+    from src.core.base.common.config_core import ConfigCore
+
 
 __version__ = VERSION
-
 
 
 

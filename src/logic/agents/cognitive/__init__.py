@@ -13,9 +13,20 @@
 # limitations under the License.
 
 # "Cognitive Agents for PyAgent Swarm."# from .knowledge_agent import KnowledgeAgent
-from .reasoning_agent import ReasoningAgent
+try:
+    from .reasoning_agent import ReasoningAgent
+except ImportError:
+    from .reasoning_agent import ReasoningAgent
+
 # from .context_agent import ContextAgent
-from .speciation_agent import SpeciationAgent
+try:
+    from .speciation_agent import SpeciationAgent
+except ImportError:
+    from .speciation_agent import SpeciationAgent
+
 
 __all__ = [
-    "KnowledgeAgent","    "ReasoningAgent","    "SpeciationAgent","]
+    "KnowledgeAgent",
+    "ReasoningAgent",
+    "SpeciationAgent",
+]

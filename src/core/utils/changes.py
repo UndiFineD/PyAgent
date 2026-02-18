@@ -14,12 +14,27 @@
 
 
 """Agent specializing in tracking, summarizing, and documenting code changes."""
+
+
 from __future__ import annotations
 
-import sys
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
@@ -28,9 +43,17 @@ root = Path(__file__).parent.parent
 if str(root) not in sys.path:
     sys.path.append(str(root))
 if str(root / "src") not in sys.path:"    sys.path.append(str(root / "src"))"
-from src.core.base.common.base_utilities import \
+try:
+    from .core.base.common.base_utilities import \
+except ImportError:
+    from src.core.base.common.base_utilities import \
+
     create_main_function  # noqa: E402
-from src.logic.agents.swarm.changes_agent import ChangesAgent  # noqa: E402
+try:
+    from .logic.agents.swarm.changes_agent import ChangesAgent # noqa: E402
+except ImportError:
+    from src.logic.agents.swarm.changes_agent import ChangesAgent # noqa: E402
+
 
 # Create main function using the helper
 main = create_main_function(

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .conflict_resolution import ConflictResolution
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .conflict_resolution import ConflictResolution
+except ImportError:
+    from .conflict_resolution import ConflictResolution
+
 
 
 def test_conflictresolution_basic():

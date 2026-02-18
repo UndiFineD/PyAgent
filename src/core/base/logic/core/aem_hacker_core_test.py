@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.aem_hacker_core import AEMFinding, AEMScanConfig, AEMScanResults, AEMHackerCore, AEMSSRFDetector, AEMSSRFHandler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.aem_hacker_core import AEMFinding, AEMScanConfig, AEMScanResults, AEMHackerCore, AEMSSRFDetector, AEMSSRFHandler
+except ImportError:
+    from core.base.logic.core.aem_hacker_core import AEMFinding, AEMScanConfig, AEMScanResults, AEMHackerCore, AEMSSRFDetector, AEMSSRFHandler
+
 
 
 def test_aemfinding_basic():

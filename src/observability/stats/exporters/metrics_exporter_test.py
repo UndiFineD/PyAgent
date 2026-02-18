@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.stats.exporters.metrics_exporter import MetricsExporter
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.stats.exporters.metrics_exporter import MetricsExporter
+except ImportError:
+    from observability.stats.exporters.metrics_exporter import MetricsExporter
+
 
 
 def test_metricsexporter_basic():

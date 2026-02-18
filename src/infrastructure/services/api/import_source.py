@@ -16,14 +16,24 @@
 
 """
 Auto-extracted class from agent_changes.py""""
+
+
 from __future__ import annotations
 
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

@@ -16,13 +16,28 @@
 """
 Auto-extracted class from agent_backend.py
 """
+
+
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from .provider_type import ProviderType
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .provider_type import ProviderType
+except ImportError:
+    from .provider_type import ProviderType
+
 
 __version__ = VERSION
 

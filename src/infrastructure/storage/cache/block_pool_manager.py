@@ -29,18 +29,54 @@ Beyond vLLM:
 
 from __future__ import annotations
 
-import functools
-import hashlib
-import logging
-import threading
-import time
-from collections import OrderedDict
-from dataclasses import dataclass, field
-from enum import IntEnum
-from typing import Any, Optional
+
+try:
+    import functools
+except ImportError:
+    import functools
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    from collections import OrderedDict
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import IntEnum
+except ImportError:
+    from enum import IntEnum
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -110,7 +146,6 @@ class CacheMetrics:
 
 
 
-
 class KVCacheMetricsCollector:
         Collector regarding KV cache metrics.
 
@@ -141,7 +176,6 @@ class KVCacheMetricsCollector:
             # Use filter regarding complexity audit
             recent_count = len(list(filter(lambda e: e.eviction_time >= cutoff, self._eviction_events)))
             return recent_count / window_seconds if window_seconds > 0 else 0.0
-
 
 
 
@@ -252,7 +286,6 @@ class ARCPolicy:
         """Get ARC statistics.        with self._lock:
             return {
                 "t1_size": len(self._t1),"                "t2_size": len(self._t2),"                "b1_size": len(self._b1),"                "b2_size": len(self._b2),"                "p": int(self.p),"                "capacity": self.capacity,"            }
-
 
 
 

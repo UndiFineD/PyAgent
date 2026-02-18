@@ -12,15 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Optional, Any
-from dataclasses import dataclass
+try:
+    from typing import List, Dict, Optional, Any
+except ImportError:
+    from typing import List, Dict, Optional, Any
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 
 @dataclass
 class BrowserElement:
     id: str       # e.g., "l1", "b2""    tag: str    # e.g., "button", "link", "input""    text: str
     attributes: Dict[str, str]
-
 
 
 

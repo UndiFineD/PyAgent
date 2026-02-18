@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.atomic_counter import Counter, AtomicCounter, AtomicFlag, AtomicGauge
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.atomic_counter import Counter, AtomicCounter, AtomicFlag, AtomicGauge
+except ImportError:
+    from core.base.common.utils.atomic_counter import Counter, AtomicCounter, AtomicFlag, AtomicGauge
+
 
 
 def test_counter_basic():

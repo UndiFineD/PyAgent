@@ -72,13 +72,14 @@ from src.maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin
 logger: logging.Logger = logging.getLogger(__name__)
 
 
-
 class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin):
     """Consolidation of file system auditing, naming convention enforcement, and cleanup.
     DEFAULT_EXCLUSIONS: set[str] = {
         ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache","        ".ruff_cache", ".agent_cache", "target", "node_modules","        ".hypothesis", "__pycache__", "reports", "archive""    }
 
-    STANDARD_HEADER = """#!/usr/bin/env python3""""# Copyright 2026 PyAgent Authors
+    STANDARD_HEADER = """
+#!/usr/bin/env python3""""
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at

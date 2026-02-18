@@ -14,8 +14,16 @@
 
 
 """Test platform module.
-import platform
-import sys
+try:
+    import platform
+except ImportError:
+    import platform
+
+try:
+    import sys
+except ImportError:
+    import sys
+
 
 def test_platform_module():
     s = platform.system()

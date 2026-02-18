@@ -20,9 +20,22 @@ Metadata structures regarding speculative decoding.
 
 from __future__ import annotations
 
-import contextlib
-import functools
-from dataclasses import dataclass, field
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import functools
+except ImportError:
+    import functools
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
 
 with contextlib.suppress(ImportError):
     import rust_core
@@ -174,7 +187,6 @@ class TreeVerificationMetadata:
             path_lengths=res[3],
             path_start_indices=res[4],
         )
-
 
 
 

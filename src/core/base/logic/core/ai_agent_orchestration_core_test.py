@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.ai_agent_orchestration_core import MessagePart, UIMessage, ConversationThread, ToolDefinition, AgentConfig, StreamingContext, MemoryProvider, ToolProvider, StreamingProvider, CodeExecutionProvider, AIAgentOrchestrationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.ai_agent_orchestration_core import MessagePart, UIMessage, ConversationThread, ToolDefinition, AgentConfig, StreamingContext, MemoryProvider, ToolProvider, StreamingProvider, CodeExecutionProvider, AIAgentOrchestrationCore
+except ImportError:
+    from core.base.logic.core.ai_agent_orchestration_core import MessagePart, UIMessage, ConversationThread, ToolDefinition, AgentConfig, StreamingContext, MemoryProvider, ToolProvider, StreamingProvider, CodeExecutionProvider, AIAgentOrchestrationCore
+
 
 
 def test_messagepart_basic():

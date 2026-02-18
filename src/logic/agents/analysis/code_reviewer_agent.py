@@ -67,7 +67,6 @@ __version__ = VERSION
 
 
 
-
 class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     "Automated code review system."
     Provides automated code review with actionable suggestions

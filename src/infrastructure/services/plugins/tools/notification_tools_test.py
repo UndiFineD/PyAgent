@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.plugins.tools.notification_tools import send_slack_notification, send_discord_notification
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.plugins.tools.notification_tools import send_slack_notification, send_discord_notification
+except ImportError:
+    from infrastructure.services.plugins.tools.notification_tools import send_slack_notification, send_discord_notification
+
 
 
 def test_send_slack_notification_basic():

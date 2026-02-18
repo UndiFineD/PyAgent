@@ -12,9 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
-from typing import List, Set, Optional
-from urllib.parse import urlparse
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import List, Set, Optional
+except ImportError:
+    from typing import List, Set, Optional
+
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
 
 
 

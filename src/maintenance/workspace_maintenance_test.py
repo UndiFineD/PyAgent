@@ -15,10 +15,25 @@
 
 Test Workspace Maintenance module.
 
-import unittest
-import tempfile
-from pathlib import Path
-from src.maintenance.workspace_maintenance import WorkspaceMaintenance
+try:
+    import unittest
+except ImportError:
+    import unittest
+
+try:
+    import tempfile
+except ImportError:
+    import tempfile
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from .maintenance.workspace_maintenance import WorkspaceMaintenance
+except ImportError:
+    from src.maintenance.workspace_maintenance import WorkspaceMaintenance
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.arc.types import OffloadMedium, BlockState, BlockStatus, LoadStoreSpec, OffloadingEvent, PrepareStoreOutput
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.arc.types import OffloadMedium, BlockState, BlockStatus, LoadStoreSpec, OffloadingEvent, PrepareStoreOutput
+except ImportError:
+    from infrastructure.storage.kv_transfer.arc.types import OffloadMedium, BlockState, BlockStatus, LoadStoreSpec, OffloadingEvent, PrepareStoreOutput
+
 
 
 def test_offloadmedium_basic():

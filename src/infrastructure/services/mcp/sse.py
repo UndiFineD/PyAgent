@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class SSEMCPServer(MCPToolServer):
     """MCP server using Server-Sent Events.
     def __init__(self, config: MCPServerConfig):
@@ -140,7 +139,6 @@ class SSEMCPServer(MCPToolServer):
                 error=str(e),
                 duration_ms=(time.time() - start_time) * 1000,
             )
-
 
 
 

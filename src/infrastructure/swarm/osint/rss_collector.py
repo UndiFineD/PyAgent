@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class RssCollector:
         RSS feed collector for OSINT agents.
     Refactored from auto-news ops_rss.

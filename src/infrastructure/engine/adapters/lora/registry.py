@@ -39,7 +39,6 @@ class LoRAModelEntry:
 
 
 
-
 class LoRARegistry:
     """Registry for managing multiple LoRA adapters.
     def __init__(

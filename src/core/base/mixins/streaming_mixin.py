@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
-from typing import AsyncGenerator, Any, Callable, Optional
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    from typing import AsyncGenerator, Any, Callable, Optional
+except ImportError:
+    from typing import AsyncGenerator, Any, Callable, Optional
 
 
 

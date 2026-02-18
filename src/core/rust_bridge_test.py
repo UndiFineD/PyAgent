@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .rust_bridge import RustBridge, get_bridge
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .rust_bridge import RustBridge, get_bridge
+except ImportError:
+    from .rust_bridge import RustBridge, get_bridge
+
 
 
 def test_rustbridge_basic():

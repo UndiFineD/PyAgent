@@ -30,6 +30,7 @@ class GovernanceMixin:
     """Handles resource quotas, preemption, and security clearance."""
 
     def __init__(self, config: Any, **_kwargs: Any) -> None:
+        """Initialize governance mixin with resource quotas."""
         self.quotas = ResourceQuotaManager(
             config=QuotaConfig(
                 max_tokens=getattr(config, "max_tokens_per_session", None),

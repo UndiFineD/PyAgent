@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.usage_quota import UsageQuota
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.usage_quota import UsageQuota
+except ImportError:
+    from infrastructure.compute.backend.usage_quota import UsageQuota
+
 
 
 def test_usagequota_basic():

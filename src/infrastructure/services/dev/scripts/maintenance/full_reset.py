@@ -16,10 +16,22 @@
 Full Reset / Rebirth Script (Phase 180).
 Re-scaffolds the entire swarm structure from a manifest.
 
-import os
-import time
+try:
+    import os
+except ImportError:
+    import os
 
-from src.infrastructure.services.dev.core.rebirth_core import RebirthCore
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .infrastructure.services.dev.core.rebirth_core import RebirthCore
+except ImportError:
+    from src.infrastructure.services.dev.core.rebirth_core import RebirthCore
+
 
 
 def full_reset() -> None:

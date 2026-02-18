@@ -21,16 +21,36 @@ Base platform abstraction.
 
 from __future__ import annotations
 
-import logging
-import threading
-from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Set
 
-from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, Dict, List, Set
+except ImportError:
+    from typing import Any, Dict, List, Set
+
+
+try:
+    from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
+except ImportError:
+    from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
+
                      DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
 
 logger = logging.getLogger(__name__)
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.voice_agent_orchestrator import VoiceSession, VoiceAgentOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.voice_agent_orchestrator import VoiceSession, VoiceAgentOrchestrator
+except ImportError:
+    from core.base.logic.voice_agent_orchestrator import VoiceSession, VoiceAgentOrchestrator
+
 
 
 def test_voicesession_basic():

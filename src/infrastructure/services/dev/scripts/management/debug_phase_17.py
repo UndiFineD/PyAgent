@@ -19,14 +19,43 @@ Debug phase 17.py module.
 
 from __future__ import annotations
 
-import logging
-import os
-import sys
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.logic.agents.intelligence.web_agent import WebAgent
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
+except ImportError:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+try:
+    from .logic.agents.intelligence.web_agent import WebAgent
+except ImportError:
+    from src.logic.agents.intelligence.web_agent import WebAgent
+
 
 sys.path.append(str(Path(__file__).parent))
 

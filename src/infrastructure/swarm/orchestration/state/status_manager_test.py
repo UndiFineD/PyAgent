@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.state.status_manager import StatusManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.state.status_manager import StatusManager
+except ImportError:
+    from infrastructure.swarm.orchestration.state.status_manager import StatusManager
+
 
 
 def test_statusmanager_basic():

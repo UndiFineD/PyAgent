@@ -19,13 +19,37 @@ Engine.py module.
 
 from __future__ import annotations
 
-import threading
-from typing import Any, Dict, List, Optional
 
-from .adapter import LoRAAdapter
-from .config import LoRAConfig, LoRAInfo, LoRARequest
-from .registry import LoRARegistry
-from .slot import LoRASlotManager
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .adapter import LoRAAdapter
+except ImportError:
+    from .adapter import LoRAAdapter
+
+try:
+    from .config import LoRAConfig, LoRAInfo, LoRARequest
+except ImportError:
+    from .config import LoRAConfig, LoRAInfo, LoRARequest
+
+try:
+    from .registry import LoRARegistry
+except ImportError:
+    from .registry import LoRARegistry
+
+try:
+    from .slot import LoRASlotManager
+except ImportError:
+    from .slot import LoRASlotManager
 
 
 

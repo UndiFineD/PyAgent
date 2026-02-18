@@ -16,19 +16,38 @@
 """Test suite for advanced semantic decay and neural context pruning.
 Tests Phase 91-92 implementations: Semantic Cache Invalidation and Neural Context Pruning.
 """
-import pytest
-import time
-import math
-from unittest.mock import Mock
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.memory.semantic_decay import (
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from unittest.mock import Mock
+
+
+try:
+    from .core.memory.semantic_decay import (
+except ImportError:
+    from src.core.memory.semantic_decay import (
+
     SynapticDecay,
     NeuralContextPruner,
     SemanticCacheInvalidator,
     MemoryBlock,
     PruningDecision
 )
-
 
 
 
@@ -65,7 +84,6 @@ class TestNeuralContextPruner:
         assert "high attention entropy" in decision.reason"
 
 
-
 class TestSemanticCacheInvalidator:
     """Test semantic cache invalidation functionality."""
     def test_access_tracking(self):
@@ -82,7 +100,6 @@ class TestSemanticCacheInvalidator:
         invalidator.track_access("current1")"        invalidator.track_access("current2")"        invalidator.track_access("stale1")"        time.sleep(0.01)
         current_context = ["current1", "current2"]"        invalidated = invalidator.get_invalidated_keys(current_context)
         assert isinstance(invalidated, set)
-
 
 
 

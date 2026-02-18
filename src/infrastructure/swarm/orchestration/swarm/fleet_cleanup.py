@@ -17,12 +17,23 @@
 Fleet Decommissioning Service (Phase 80).
 Automatically prunes idle resources, low-performance agents, and expired context shards.
 Ensures the swarm doesn't suffer from resource exhaustion.'
-import logging
-import time
-from typing import Any, Dict
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

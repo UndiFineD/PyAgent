@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.system_state import SystemState
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.system_state import SystemState
+except ImportError:
+    from infrastructure.compute.backend.system_state import SystemState
+
 
 
 def test_systemstate_basic():

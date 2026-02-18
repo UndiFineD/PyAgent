@@ -20,18 +20,42 @@ Utility functions and loaders for prompt rendering.
 
 from __future__ import annotations
 
-import base64
-import contextlib
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
-from .models import (EmbeddingInput, PromptConfig, RenderResult,
+try:
+    import base64
+except ImportError:
+    import base64
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+
+
+try:
+    from .models import (EmbeddingInput, PromptConfig, RenderResult,
+except ImportError:
+    from .models import (EmbeddingInput, PromptConfig, RenderResult,
+
                      TruncationResult, TruncationStrategy)
-from .salt import CacheSaltGenerator
-from .truncation import TruncationManager
+try:
+    from .salt import CacheSaltGenerator
+except ImportError:
+    from .salt import CacheSaltGenerator
+
+try:
+    from .truncation import TruncationManager
+except ImportError:
+    from .truncation import TruncationManager
+
 
 if TYPE_CHECKING:
     pass
-
 
 
 

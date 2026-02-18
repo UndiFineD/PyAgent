@@ -17,14 +17,30 @@
 Unified pooling infrastructure (AI and Connections).
 
 # Connection Pooling
-from .connection_pool import (AsyncConnectionPool, ConnectionPool,  # noqa: F401
+try:
+    from .connection_pool import (AsyncConnectionPool, ConnectionPool,  # noqa: F401
+except ImportError:
+    from .connection_pool import (AsyncConnectionPool, ConnectionPool, # noqa: F401
+
                               ConnectionState, MultiHostPool, PooledConnection,
                               PooledConnectionManager, PoolStats)
-from .engine import PoolingEngine, create_pooling_engine  # noqa: F401
+try:
+    from .engine import PoolingEngine, create_pooling_engine  # noqa: F401
+except ImportError:
+    from .engine import PoolingEngine, create_pooling_engine # noqa: F401
+
 # AI Pooling
-from .models import (EmbeddingOutput, PoolingConfig, PoolingResult,  # noqa: F401
+try:
+    from .models import (EmbeddingOutput, PoolingConfig, PoolingResult,  # noqa: F401
+except ImportError:
+    from .models import (EmbeddingOutput, PoolingConfig, PoolingResult, # noqa: F401
+
                      PoolingStrategy, PoolingTask)
-from .strategies import (AttentionPooler, BasePooler, CLSPooler,  # noqa: F401
+try:
+    from .strategies import (AttentionPooler, BasePooler, CLSPooler,  # noqa: F401
+except ImportError:
+    from .strategies import (AttentionPooler, BasePooler, CLSPooler, # noqa: F401
+
                          LastTokenPooler, MatryoshkaPooler, MaxPooler,
                          MeanPooler, MultiVectorPooler, StepPooler,
                          WeightedMeanPooler)

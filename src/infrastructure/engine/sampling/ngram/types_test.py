@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.sampling.ngram.types import MatchingStrategy, NgramConfig, ProposalStats
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.sampling.ngram.types import MatchingStrategy, NgramConfig, ProposalStats
+except ImportError:
+    from infrastructure.engine.sampling.ngram.types import MatchingStrategy, NgramConfig, ProposalStats
+
 
 
 def test_matchingstrategy_basic():

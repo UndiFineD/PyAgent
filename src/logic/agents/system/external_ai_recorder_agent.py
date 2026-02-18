@@ -52,7 +52,6 @@ __version__ = VERSION
 
 
 
-
 class ExternalAIRecorderAgent(BaseAgent):
 """"Records interactions with external AI models to build a rich local knowledge repository.
     def __init__(self, file_path: str) -> None:

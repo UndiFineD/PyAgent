@@ -101,7 +101,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class FleetManager(
     FleetTaskMixin,
     FleetRoutingMixin,

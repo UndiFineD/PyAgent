@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.v2.async_scheduler import AsyncSchedulerV2
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.v2.async_scheduler import AsyncSchedulerV2
+except ImportError:
+    from infrastructure.engine.scheduling.v2.async_scheduler import AsyncSchedulerV2
+
 
 
 def test_asyncschedulerv2_basic():

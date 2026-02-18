@@ -19,14 +19,30 @@ Hybrid Mamba Mixer - Combining SSM with Attention.
 
 from __future__ import annotations
 
-import math
 
-import numpy as np
+try:
+    import math
+except ImportError:
+    import math
 
-from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .infrastructure.compute.ssm.mamba.config import (MambaConfig,
+except ImportError:
+    from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
+
                                                          MambaOutput,
                                                          MambaState)
-from src.infrastructure.compute.ssm.mamba.mixer import MambaMixer
+try:
+    from .infrastructure.compute.ssm.mamba.mixer import MambaMixer
+except ImportError:
+    from src.infrastructure.compute.ssm.mamba.mixer import MambaMixer
 
 
 

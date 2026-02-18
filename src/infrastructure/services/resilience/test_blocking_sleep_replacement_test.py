@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.resilience.test_blocking_sleep_replacement import test_retry_strategy_uses_injected_sleep, test_tokenbucket_blocking_uses_injected_sleep, test_multiproc_monitor_interruptible
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.resilience.test_blocking_sleep_replacement import test_retry_strategy_uses_injected_sleep, test_tokenbucket_blocking_uses_injected_sleep, test_multiproc_monitor_interruptible
+except ImportError:
+    from infrastructure.services.resilience.test_blocking_sleep_replacement import test_retry_strategy_uses_injected_sleep, test_tokenbucket_blocking_uses_injected_sleep, test_multiproc_monitor_interruptible
+
 
 
 def test_test_retry_strategy_uses_injected_sleep_basic():

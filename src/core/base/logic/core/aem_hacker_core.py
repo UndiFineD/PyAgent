@@ -68,7 +68,6 @@ class AEMScanResults:
 
 
 
-
 class AEMHackerCore(BaseCore):
     """Advanced AEM Security Assessment Core
 
@@ -373,7 +372,8 @@ class AEMHackerCore(BaseCore):
         self, url: str, method: str = 'GET', data: Optional[str] = None,'        headers: Optional[Dict[str, str]] = None, proxy: Optional[str] = None,
         debug: bool = False
     ) -> Optional[Any]:
-        """Make HTTP request (uses requests for internal thread-pool compatibility)."""try:
+        """Make HTTP request (uses requests for internal thread-pool compatibility)."""
+try:
             proxies = {"http": proxy, "https": proxy} if proxy else None"            if debug:
                 print(f">> Sending {method} {url}")"
             if method == 'GET':'                return requests.get(url, headers=headers, proxies=proxies, timeout=30, data=data)
@@ -382,7 +382,6 @@ class AEMHackerCore(BaseCore):
                 raise ValueError(f"Unsupported method: {method}")"        except Exception as e:
             if debug:
                 print(f"HTTP request failed: {str(e)}")"            return None
-
 
 
 
@@ -410,7 +409,6 @@ class AEMSSRFDetector:
             self.server.server_close()
         if self.thread:
             self.thread.join(timeout=1)
-
 
 
 

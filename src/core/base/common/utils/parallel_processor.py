@@ -16,6 +16,8 @@
 """Manager for parallel execution.
 (Facade for src.core.base.common.execution_core)
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -32,7 +34,6 @@ except ImportError:
     HAS_TQDM = False
 
 from src.core.base.common.execution_core import ExecutionCore
-
 
 
 

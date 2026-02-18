@@ -30,7 +30,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class CompletionRenderer(PromptRenderer):
     """Renderer for completion-style prompts.
     def render(self, config: PromptConfig) -> RenderResult:
@@ -82,7 +81,6 @@ class CompletionRenderer(PromptRenderer):
             truncation_info=trunc_result,
             cache_salt=self._generate_cache_salt(config),
         )
-
 
 
 

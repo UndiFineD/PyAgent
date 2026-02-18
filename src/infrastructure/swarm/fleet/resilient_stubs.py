@@ -46,7 +46,6 @@ def resilient_import(module_name: str, class_name: str | None = None) -> Any:
 
 
 
-
 class ResilientStub:
     """A stub object that logs errors instead of crashing when called.
     def __init__(self, name: str, error: str) -> None:

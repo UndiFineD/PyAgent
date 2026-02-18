@@ -16,17 +16,36 @@
 Predictive Context Prefetching (Phase 67).
 Warms up upcoming KV shards before they are requested by experts.
 
-import logging
-from collections import deque
-from typing import Deque, Dict
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.infrastructure.engine.kv_cache.compression import \
+try:
+    from collections import deque
+except ImportError:
+    from collections import deque
+
+try:
+    from typing import Deque, Dict
+except ImportError:
+    from typing import Deque, Dict
+
+
+try:
+    from .infrastructure.engine.kv_cache.compression import \
+except ImportError:
+    from src.infrastructure.engine.kv_cache.compression import \
+
     AdaptiveSwarmCompressor
-from src.infrastructure.engine.kv_cache.context_sharder import \
+try:
+    from .infrastructure.engine.kv_cache.context_sharder import \
+except ImportError:
+    from src.infrastructure.engine.kv_cache.context_sharder import \
+
     ContextShardManager
 
 logger = logging.getLogger(__name__)
-
 
 
 

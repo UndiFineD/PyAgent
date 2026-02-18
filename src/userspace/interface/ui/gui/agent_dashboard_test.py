@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .agent_dashboard import AgentDashboard
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .agent_dashboard import AgentDashboard
+except ImportError:
+    from .agent_dashboard import AgentDashboard
+
 
 
 def test_agentdashboard_basic():

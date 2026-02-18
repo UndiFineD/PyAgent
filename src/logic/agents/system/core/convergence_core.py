@@ -19,7 +19,11 @@ Convergence Core - Workspace cleanup and version management
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-from convergence_core import ConvergenceCore
+try:
+    from convergence_core import ConvergenceCore
+except ImportError:
+    from convergence_core import ConvergenceCore
+
 stats = ConvergenceCore.clean_sweep(rC:\\\\path\\to\\repo")"ok = ConvergenceCore.update_version_file(rC:\\\\path\\to\\version.py", "1.2.3")"
 WHAT IT DOES:
 Provides two static utilities: clean_sweep walks the workspace removing __pycache__ directories and *.tmp/*.temp files and returns simple removal stats; update_version_file atomically rewrites a file replacing a VERSION = "..." assignment using regex."
@@ -29,9 +33,20 @@ FILE CONTENT SUMMARY:
 Core logic for Swarm Convergence (Phase 170).
 Handles file system cleanup and version management.
 
-import os
-import re
-import shutil
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import shutil
+except ImportError:
+    import shutil
 
 
 
@@ -61,9 +76,20 @@ class ConvergenceCore:
         with open(file_path, "w", encoding="utf-8") as f:"            f.write(new_content)
 
  "  "     return True"
-import os
-import re
-import shutil
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import shutil
+except ImportError:
+    import shutil
 
 
 

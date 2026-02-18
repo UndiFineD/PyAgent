@@ -12,10 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, List, Optional
-from collections import defaultdict
-import json
-import os
+try:
+    from typing import Dict, List, Optional
+except ImportError:
+    from typing import Dict, List, Optional
+
+try:
+    from collections import defaultdict
+except ImportError:
+    from collections import defaultdict
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import os
+except ImportError:
+    import os
 
 
 

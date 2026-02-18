@@ -17,16 +17,35 @@
 """
 Query deduplicator.py module.
 
-import asyncio
-import logging
-import time
-from typing import Any, Dict, Optional
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.infrastructure.engine.models.similarity import \
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .infrastructure.engine.models.similarity import \
+except ImportError:
+    from src.infrastructure.engine.models.similarity import \
+
     EmbeddingSimilarityService
 
 logger: logging.Logger = logging.getLogger(__name__)
-
 
 
 

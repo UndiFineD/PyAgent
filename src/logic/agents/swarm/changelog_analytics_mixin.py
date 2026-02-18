@@ -45,8 +45,16 @@ FILE CONTENT SUMMARY:
 Changelog analytics mixin.py module"."
 from __future__ import annotations
 
-import re
-from typing import Any
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 
@@ -74,8 +82,16 @@ class ChangelogAnalyticsMixin:
         setattr(self, "_statistics", stats)"        "return stats"
 from __future__ import annotations
 
-import re
-from typing import Any
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 

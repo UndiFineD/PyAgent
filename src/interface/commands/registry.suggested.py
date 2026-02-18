@@ -26,7 +26,6 @@ from .base import CommandDefinition, CommandHandler
 
 
 
-
 class CommandRegistry:
     """Registry for slash commands.
     def __init__(self) -> None:

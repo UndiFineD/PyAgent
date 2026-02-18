@@ -14,10 +14,21 @@
 
 
 """Base Work Pattern for PyAgent swarm collaboration patterns."""
-from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
 
-from src.core.base.common.models.communication_models import CascadeContext
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 

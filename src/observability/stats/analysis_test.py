@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.stats.analysis import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.stats.analysis import *
+except ImportError:
+    from observability.stats.analysis import *
+

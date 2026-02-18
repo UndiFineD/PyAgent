@@ -36,12 +36,20 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
 
-from .improvement import Improvement
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
 
 __version__ = VERSION
-
 
 
 

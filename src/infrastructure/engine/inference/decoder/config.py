@@ -19,9 +19,21 @@ Config.py module.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 

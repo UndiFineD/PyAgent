@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.config_hot_reloader import ConfigHotReloader
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.config_hot_reloader import ConfigHotReloader
+except ImportError:
+    from infrastructure.compute.backend.config_hot_reloader import ConfigHotReloader
+
 
 
 def test_confighotreloader_basic():

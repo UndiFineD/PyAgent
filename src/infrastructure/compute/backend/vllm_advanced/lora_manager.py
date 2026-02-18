@@ -18,7 +18,11 @@ LoRA Adapter Manager for vLLM.
 
 This module is now a facade for the modular sub-package in ./lora/.
 
-from .lora import (HAS_LORA, AdapterState, LoraAdapter, LoraConfig,
+try:
+    from .lora import (HAS_LORA, AdapterState, LoraAdapter, LoraConfig,
+except ImportError:
+    from .lora import (HAS_LORA, AdapterState, LoraAdapter, LoraConfig,
+
                    LoraManager, LoraRegistry, create_lora_request,
                    discover_adapters)
 

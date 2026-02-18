@@ -20,8 +20,16 @@ Base utilities and metadata regarding EAGLE.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Protocol
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Protocol
+except ImportError:
+    from typing import Any, Protocol
 
 
 

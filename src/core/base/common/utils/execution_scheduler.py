@@ -27,7 +27,6 @@ __version__ = VERSION
 
 
 
-
 class ExecutionScheduler:
     """Schedule agent executions.""""
     Example:

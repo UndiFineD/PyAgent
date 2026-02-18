@@ -14,11 +14,23 @@
 
 
 # "Auto-extracted class from agent_context.py"from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.sharing_permission import (
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.models.sharing_permission import (
+except ImportError:
+    from src.logic.agents.cognitive.context.models.sharing_permission import (
+
     SharingPermission,
 )
-from dataclasses import dataclass, field
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
 
 __version__ = VERSION
 

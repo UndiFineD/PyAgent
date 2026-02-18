@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.system.quantum_shard_orchestrator import QuantumShardOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.system.quantum_shard_orchestrator import QuantumShardOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.system.quantum_shard_orchestrator import QuantumShardOrchestrator
+
 
 
 def test_quantumshardorchestrator_basic():

@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
-from src.infrastructure.services.benchmarks.models import BenchmarkResult
+try:
+    from .logic.agents.analysis.benchmark_agent import BenchmarkAgent
+except ImportError:
+    from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
+
+try:
+    from .infrastructure.services.benchmarks.models import BenchmarkResult
+except ImportError:
+    from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 
 

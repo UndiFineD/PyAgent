@@ -17,15 +17,34 @@ P2P Shard Migration Service (Phase 72).
 Enables zero-copy (simulated RDMA) migration of context shards between DP-ranks.
 Reduces CPU overhead during swarm rebalancing.
 
-import asyncio
-import logging
-import time
-from typing import Any, Dict, List
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from .context_sharder import ContextShardManager
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .context_sharder import ContextShardManager
+except ImportError:
+    from .context_sharder import ContextShardManager
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

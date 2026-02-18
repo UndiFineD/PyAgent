@@ -17,8 +17,16 @@
 """Data models for PyAgent.
 Unified entry point for re-exporting all sub-modules via lazy loading.
 """
-from typing import TYPE_CHECKING, Any
-from src.core.lazy_loader import ModuleLazyLoader
+try:
+    from typing import TYPE_CHECKING, Any
+except ImportError:
+    from typing import TYPE_CHECKING, Any
+
+try:
+    from .core.lazy_loader import ModuleLazyLoader
+except ImportError:
+    from src.core.lazy_loader import ModuleLazyLoader
+
 
 if TYPE_CHECKING:
     from .agent_models import (AgentConfig, AgentHealthCheck, AgentParallel,  # noqa: F401

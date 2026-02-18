@@ -33,7 +33,6 @@ if TYPE_CHECKING:
 
 
 
-
 class GPTQQuantizer(Quantizer):
     """GPTQ Quantization using Hessian-based optimal rounding.
     def __init__(

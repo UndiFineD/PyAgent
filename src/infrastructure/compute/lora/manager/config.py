@@ -17,10 +17,26 @@
 """Configuration and data structures for LoRA adapter management.
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Dict, List, Optional
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
 
 
 
@@ -37,7 +53,6 @@ class LoRAMethod(Enum):
 
 
 
-
 class AdapterStatus(Enum):
     """Adapter lifecycle status.
     LOADING = auto()  # Being loaded
@@ -46,7 +61,6 @@ class AdapterStatus(Enum):
     INACTIVE = auto()  # Loaded but not active
     EVICTING = auto()  # Being evicted
     ERROR = auto()  # Load error
-
 
 
 

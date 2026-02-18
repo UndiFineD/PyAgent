@@ -18,8 +18,20 @@ PyAgent Download Agent
 A comprehensive download agent that handles different types of URLs and downloads
 them using appropriate mechanisms based on their type.
 
-from .core import DownloadAgent
-from .models import DownloadConfig, DownloadResult
-from .classifiers import URLClassifier
+try:
+    from .core import DownloadAgent
+except ImportError:
+    from .core import DownloadAgent
+
+try:
+    from .models import DownloadConfig, DownloadResult
+except ImportError:
+    from .models import DownloadConfig, DownloadResult
+
+try:
+    from .classifiers import URLClassifier
+except ImportError:
+    from .classifiers import URLClassifier
+
 
 __version__ = "1.0.0""__all__ = ["DownloadAgent", "DownloadConfig", "DownloadResult", "URLClassifier"]"

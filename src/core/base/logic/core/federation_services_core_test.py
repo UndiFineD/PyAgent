@@ -26,7 +26,6 @@ from src.core.base.logic.core.federation_services_core import (
 
 
 
-
 class TestFederationServicesCore:
     """Test suite for FederationServicesCore."""
     def setup_method(self):
@@ -37,7 +36,8 @@ class TestFederationServicesCore:
         assert hasattr(self.core, 'generate_saml_token')'        assert hasattr(self.core, '_generate_office365_token')'        assert hasattr(self.core, '_generate_dropbox_token')'
     @pytest.mark.asyncio
     async def test_generate_office365_token(self):
-        """Test Office 365 token generation."""# Create mock request
+        """Test Office 365 token generation."""
+# Create mock request
         mock_user = Mock()
         mock_user.upn = "test@example.com""
         mock_service = Mock()
@@ -62,7 +62,8 @@ class TestFederationServicesCore:
         assert hasattr(result, 'token_id')'        assert result.audience == "urn:federation:MicrosoftOnline""
     @pytest.mark.asyncio
     async def test_generate_dropbox_token(self):
-        """Test Dropbox token generation."""# Create mock request
+        """Test Dropbox token generation."""
+# Create mock request
         mock_user = Mock()
         mock_user.upn = "test@example.com""        mock_user.email = "test@example.com""        mock_user.sam_account_name = "testuser""
         mock_relying_party = Mock()
@@ -89,7 +90,8 @@ class TestFederationServicesCore:
         assert hasattr(result, 'token_id')'        assert "dropbox.com" in result.audience"
     @pytest.mark.asyncio
     async def test_generate_saml_token(self):
-        """Test SAML token generation."""# Create mock request
+        """Test SAML token generation."""
+# Create mock request
         mock_user = Mock()
         mock_user.upn = "test@example.com""
         mock_service = Mock()
@@ -110,7 +112,8 @@ class TestFederationServicesCore:
         assert hasattr(result, 'token_id')'        assert result.audience == "urn:federation:MicrosoftOnline""
     @pytest.mark.asyncio
     async def test_decrypt_encrypted_pfx(self):
-        """Test PFX decryption."""# Mock the PFX data
+        """Test PFX decryption."""
+# Mock the PFX data
         mock_pfx_data = b'fake_pfx_data''
         # This would normally require actual PFX data, so we'll just test the method exists'        # and handles the async nature
         try:

@@ -15,7 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Enums for multimodal caching.
-from enum import Enum, auto
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -31,7 +34,6 @@ class MediaType(Enum):
 
 
 
-
 class CacheBackend(Enum):
     """Cache storage backend types.
     MEMORY = auto()  # In-memory dictionary
@@ -39,7 +41,6 @@ class CacheBackend(Enum):
     SHARED = auto()  # Shared memory (IPC)
     DISK = auto()  # Disk-based persistence
     HYBRID = auto()  # Multi-tier caching
-
 
 
 

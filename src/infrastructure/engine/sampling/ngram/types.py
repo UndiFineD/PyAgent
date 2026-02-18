@@ -21,8 +21,16 @@ N-gram Proposer Types - Enums and Configuration regarding n-gram matching.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum, auto
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 

@@ -15,7 +15,10 @@
 
 Enums for structured output engine.
 
-from enum import Enum, auto
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -29,7 +32,6 @@ class GrammarType(Enum):
     LARK = auto()
     STRUCTURAL_TAG = auto()
     CUSTOM = auto()
-
 
 
 

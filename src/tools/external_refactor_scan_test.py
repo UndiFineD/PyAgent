@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .external_refactor_scan import extract_completed_from_tracking, scan_directory_for_candidates, is_definition_in_src, build_reuse_report, write_reports, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .external_refactor_scan import extract_completed_from_tracking, scan_directory_for_candidates, is_definition_in_src, build_reuse_report, write_reports, main
+except ImportError:
+    from .external_refactor_scan import extract_completed_from_tracking, scan_directory_for_candidates, is_definition_in_src, build_reuse_report, write_reports, main
+
 
 
 def test_extract_completed_from_tracking_basic():

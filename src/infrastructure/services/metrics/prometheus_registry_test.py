@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.metrics.prometheus_registry import MetricType, MetricsBackend, MetricSpec, MetricValue, MetricCollector, Counter, Gauge, HistogramBucket, Histogram, Summary, MetricsRegistry, SampledCounter, RateLimitedGauge, VLLMMetrics, get_metrics
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.metrics.prometheus_registry import MetricType, MetricsBackend, MetricSpec, MetricValue, MetricCollector, Counter, Gauge, HistogramBucket, Histogram, Summary, MetricsRegistry, SampledCounter, RateLimitedGauge, VLLMMetrics, get_metrics
+except ImportError:
+    from infrastructure.services.metrics.prometheus_registry import MetricType, MetricsBackend, MetricSpec, MetricValue, MetricCollector, Counter, Gauge, HistogramBucket, Histogram, Summary, MetricsRegistry, SampledCounter, RateLimitedGauge, VLLMMetrics, get_metrics
+
 
 
 def test_metrictype_basic():

@@ -15,7 +15,11 @@
 
 Prompt renderer.py module.
 
-from .__init__ import (CacheSaltGenerator, ChatRenderer, CompletionRenderer,
+try:
+    from .__init__ import (CacheSaltGenerator, ChatRenderer, CompletionRenderer,
+except ImportError:
+    from .__init__ import (CacheSaltGenerator, ChatRenderer, CompletionRenderer,
+
                        EmbeddingInput, EmbeddingLoader, InputType,
                        MultimodalInput, PromptConfig, PromptRenderer,
                        RenderMode, RenderResult, TruncationManager,

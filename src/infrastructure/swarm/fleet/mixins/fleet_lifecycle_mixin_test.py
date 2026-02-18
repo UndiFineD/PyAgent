@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.mixins.fleet_lifecycle_mixin import FleetLifecycleMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.mixins.fleet_lifecycle_mixin import FleetLifecycleMixin
+except ImportError:
+    from infrastructure.swarm.fleet.mixins.fleet_lifecycle_mixin import FleetLifecycleMixin
+
 
 
 def test_fleetlifecyclemixin_basic():

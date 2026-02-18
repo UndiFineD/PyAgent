@@ -22,9 +22,18 @@ Schema validation for tool calls.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Tuple
 
-from ..parser.base import ToolCall
+try:
+    from typing import Any, Dict, List, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Tuple
+
+
+try:
+    from ..parser.base import ToolCall
+except ImportError:
+    from ..parser.base import ToolCall
+
 
 
 def validate_tool_call(

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.cleanup_manager import CleanupManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.cleanup_manager import CleanupManager
+except ImportError:
+    from infrastructure.services.dev.test_utils.cleanup_manager import CleanupManager
+
 
 
 def test_cleanupmanager_basic():

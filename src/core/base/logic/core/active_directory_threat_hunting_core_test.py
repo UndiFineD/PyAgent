@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.active_directory_threat_hunting_core import ThreatLevel, ADObjectType, ADObject, ThreatFinding, HuntingResult, ActiveDirectoryThreatHuntingCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.active_directory_threat_hunting_core import ThreatLevel, ADObjectType, ADObject, ThreatFinding, HuntingResult, ActiveDirectoryThreatHuntingCore
+except ImportError:
+    from core.base.logic.core.active_directory_threat_hunting_core import ThreatLevel, ADObjectType, ADObject, ThreatFinding, HuntingResult, ActiveDirectoryThreatHuntingCore
+
 
 
 def test_threatlevel_basic():

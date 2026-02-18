@@ -16,13 +16,29 @@
 """Types and data structures for chunked prefill.
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Optional, TypeVar
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Optional, TypeVar
+except ImportError:
+    from typing import Any, Optional, TypeVar
+
 
 T = TypeVar("T")"
-
 
 
 class ChunkState(Enum):
@@ -33,7 +49,6 @@ class ChunkState(Enum):
     COMPLETED = auto()  # Finished successfully
     FAILED = auto()  # Error during execution
     CANCELLED = auto()  # Cancelled before completion
-
 
 
 

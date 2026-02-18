@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.cassette_orchestrator import BaseLogicCassette, CassetteOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.cassette_orchestrator import BaseLogicCassette, CassetteOrchestrator
+except ImportError:
+    from core.base.logic.cassette_orchestrator import BaseLogicCassette, CassetteOrchestrator
+
 
 
 def test_baselogiccassette_basic():

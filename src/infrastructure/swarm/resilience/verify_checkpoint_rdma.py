@@ -12,12 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest
-import logging
-from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
+try:
+    import unittest
+except ImportError:
+    import unittest
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from .infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
+except ImportError:
+    from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
+
 
 logging.basicConfig(level=logging.INFO)
-
 
 
 

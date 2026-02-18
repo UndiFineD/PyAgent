@@ -23,7 +23,11 @@ Provides:
 - SpeculativeVerifier: Token acceptance verification
 - SpeculativeTree: Tree structure regarding candidate tokens
 
-from .speculative_decoder import (  # noqa: F401
+try:
+    from .speculative_decoder import (  # noqa: F401
+except ImportError:
+    from .speculative_decoder import ( # noqa: F401
+
     # Enums; Data classes; Abstract base; Proposers; Verifier; Main decoder;
     # Factory functions
     AcceptanceMethod, MedusaProposer, NgramProposer, ProposerStats,

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.inference_scaling_core import ScalingStrategy, InferenceScalingCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.inference_scaling_core import ScalingStrategy, InferenceScalingCore
+except ImportError:
+    from core.base.logic.core.inference_scaling_core import ScalingStrategy, InferenceScalingCore
+
 
 
 def test_scalingstrategy_basic():

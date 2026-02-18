@@ -22,12 +22,29 @@ KV Connector for decode instance benchmarking.
 
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
-from src.infrastructure.storage.kv_transfer.connector.base import \
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+
+
+try:
+    from .infrastructure.storage.kv_transfer.connector.base import \
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.connector.base import \
+
     KVConnectorBase
-from src.infrastructure.storage.kv_transfer.connector.types import \
+try:
+    from .infrastructure.storage.kv_transfer.connector.types import \
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.connector.types import \
+
     KVConnectorMetadata
 
 if TYPE_CHECKING:
@@ -35,7 +52,6 @@ if TYPE_CHECKING:
         ForwardContext, KVCacheBlocks, KVTransferConfig, Request)
 
 logger = logging.getLogger(__name__)
-
 
 
 

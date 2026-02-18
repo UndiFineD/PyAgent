@@ -20,16 +20,48 @@ Core conversation context classes.
 
 from __future__ import annotations
 
-import json
-import time
-import uuid
-from abc import ABC, abstractmethod
-from typing import Any, Callable, Optional
 
-from .models import (ContextConfig, ContextSnapshot, ContextState,
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, Callable, Optional
+except ImportError:
+    from typing import Any, Callable, Optional
+
+
+try:
+    from .models import (ContextConfig, ContextSnapshot, ContextState,
+except ImportError:
+    from .models import (ContextConfig, ContextSnapshot, ContextState,
+
                      ConversationTurn, TokenMetrics, ToolExecution, TurnType)
-from .orchestrator import ToolOrchestrator
-from .tracker import TurnTracker
+try:
+    from .orchestrator import ToolOrchestrator
+except ImportError:
+    from .orchestrator import ToolOrchestrator
+
+try:
+    from .tracker import TurnTracker
+except ImportError:
+    from .tracker import TurnTracker
 
 
 
@@ -189,7 +221,6 @@ class ConversationContext(ABC):
     @abstractmethod
     async def cleanup(self) -> None:
         """Cleanup resources.
-
 
 
 class AgenticContext(ConversationContext):

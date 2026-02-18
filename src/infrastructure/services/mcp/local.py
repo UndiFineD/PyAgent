@@ -31,7 +31,6 @@ from .models import (MCPServerConfig, MCPSession, SessionState, ToolCall,
 
 
 
-
 class LocalMCPServer(MCPToolServer):
     """In-process MCP server for local tool execution.
     def __init__(self, config: MCPServerConfig):

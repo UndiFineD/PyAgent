@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .project_explorer import ProjectExplorer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .project_explorer import ProjectExplorer
+except ImportError:
+    from .project_explorer import ProjectExplorer
+
 
 
 def test_projectexplorer_basic():

@@ -19,7 +19,11 @@ ComplianceAgent - Monitoring and enforcing data privacy & compliance
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.agents.compliance_agent import ComplianceAgent
+try:
+    from .agents.compliance_agent import ComplianceAgent
+except ImportError:
+    from src.agents.compliance_agent import ComplianceAgent
+
 agent = ComplianceAgent("C:\\path\\to\\workspace")"result = agent.scan_shard(shard_text)  # returns dict with keys: compliant, findings, pii_detected
 
 WHAT IT DOES:
@@ -36,17 +40,41 @@ Automates compliance checks and remediation workflows.
 
 from __future__ import annotations
 
-from pathlib import Path
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
-from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+except ImportError:
+    from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+
+
+try:
+    from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
+except ImportError:
+    from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
+
+try:
+    from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
+except ImportError:
+    from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
+
 
 __version__ = VERSION
-
 
 
 

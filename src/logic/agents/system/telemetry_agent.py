@@ -69,7 +69,6 @@ __version__ = VERSION
 
 
 
-
 class TelemetryAgent(BaseAgent):
     Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet
     telemetry and archiving interactions for swarm intelligence" harvesting."
@@ -119,7 +118,6 @@ from src.infrastructure.compute.backend.local_context_recorder import \
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
-
 
 
 

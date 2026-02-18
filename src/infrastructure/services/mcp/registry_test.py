@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.mcp.registry import MCPServerRegistry, SessionManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.mcp.registry import MCPServerRegistry, SessionManager
+except ImportError:
+    from infrastructure.services.mcp.registry import MCPServerRegistry, SessionManager
+
 
 
 def test_mcpserverregistry_basic():

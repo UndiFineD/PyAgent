@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.system.lock_manager import LockManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.system.lock_manager import LockManager
+except ImportError:
+    from infrastructure.swarm.orchestration.system.lock_manager import LockManager
+
 
 
 def test_lockmanager_basic():

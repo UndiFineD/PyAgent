@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-import numpy as np
-from src.infrastructure.engine.sampling.rejection_sampler import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+try:
+    from .infrastructure.engine.sampling.rejection_sampler import (
+except ImportError:
+    from src.infrastructure.engine.sampling.rejection_sampler import (
+
     RejectionSampler,
     RejectionConfig,
     RejectionStrategy,

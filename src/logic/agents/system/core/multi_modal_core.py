@@ -35,8 +35,15 @@ FILE CONTENT SUMMARY:
 Core logic for Multi-Modal Context (Phase 178).
 Handles interactions with vision models for bug analysis.
 
-import base64
-from typing import Any
+try:
+    import base64
+except ImportError:
+    import base64
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 
@@ -64,8 +71,15 @@ class MultiModalCore:
         # Heuristic parsing - in reality, we'd use JSON mode if supported'        is_bug = "bug" in vision_response.lower() or "error" in vision_response.lower()"        return {
             "potential_bug": is_bug,"            "description": vision_response,"            "confidence": "0.85 if is_bug else 0.5,"        }
 
-import base64
-from typing import Any
+try:
+    import base64
+except ImportError:
+    import base64
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 

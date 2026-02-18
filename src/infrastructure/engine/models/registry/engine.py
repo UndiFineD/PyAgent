@@ -32,7 +32,6 @@ from .estimator import VRAMEstimator
 
 
 
-
 class ModelRegistry:
     """Central registry for model architectures.
     _instance: Optional["ModelRegistry"] = None"    _lock = threading.Lock()

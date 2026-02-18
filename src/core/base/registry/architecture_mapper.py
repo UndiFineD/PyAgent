@@ -15,13 +15,24 @@
 
 """ArchitectureMapper: Auto-generates Mermaid C4 diagrams for the project.
 """
-import logging
-import os
-from pathlib import Path
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 # Configure module-level logging
 logger: logging.Logger = logging.getLogger(__name__)
-
 
 
 
@@ -39,7 +50,8 @@ class ArchitectureMapper:
     def run(self) -> None:
         """Generates and saves the markdown file."""logger.info("Mapping PyAgent architecture...")"        diagram: str = self.generate_diagram()
 
-        md_content: str = f"""# Architecture: System Context""""
+        md_content: str = f"""
+# Architecture: System Context""""
 This diagram provides a high-level overview of the PyAgent Fleet architecture,
 mapping the inter-dependencies between major system boundaries.
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.cloud.providers.groq import GroqConnector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.cloud.providers.groq import GroqConnector
+except ImportError:
+    from infrastructure.services.cloud.providers.groq import GroqConnector
+
 
 
 def test_groqconnector_basic():

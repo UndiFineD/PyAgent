@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.system.service_mesh import ServiceMesh
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.system.service_mesh import ServiceMesh
+except ImportError:
+    from infrastructure.swarm.orchestration.system.service_mesh import ServiceMesh
+
 
 
 def test_servicemesh_basic():

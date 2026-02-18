@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.tokenization.detokenizer.stop_checker import StopChecker
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.tokenization.detokenizer.stop_checker import StopChecker
+except ImportError:
+    from infrastructure.engine.tokenization.detokenizer.stop_checker import StopChecker
+
 
 
 def test_stopchecker_basic():

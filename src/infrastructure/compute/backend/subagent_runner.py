@@ -52,7 +52,6 @@ except ImportError:
 
 
 
-
 class SubagentRunner:
     """Handles running subagents with multiple backend support and fallback logic.
     _command_cache: dict[str, bool] = {}

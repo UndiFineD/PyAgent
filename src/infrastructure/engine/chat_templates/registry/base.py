@@ -15,11 +15,26 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Abstract base classes for chat templates.
-import hashlib
-from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+try:
+    import hashlib
+except ImportError:
+    import hashlib
 
-from .config import RenderOptions, TemplateConfig, TemplateInfo, TemplateType
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .config import RenderOptions, TemplateConfig, TemplateInfo, TemplateType
+except ImportError:
+    from .config import RenderOptions, TemplateConfig, TemplateInfo, TemplateType
 
 
 

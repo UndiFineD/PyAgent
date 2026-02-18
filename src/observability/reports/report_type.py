@@ -15,6 +15,7 @@
 
 from __future__ import annotations
 
+
 report_type.py - Defines ReportType enum for agent report categories
 
 # DATE: 2026-02-12
@@ -39,12 +40,19 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 
 
-from enum import Enum
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

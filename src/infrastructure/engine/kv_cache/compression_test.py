@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
+except ImportError:
+    from infrastructure.engine.kv_cache.compression import AdaptiveSwarmCompressor
+
 
 
 def test_adaptiveswarmcompressor_basic():

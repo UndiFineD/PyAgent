@@ -15,17 +15,41 @@
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .effort_estimate import EffortEstimate
-from .effort_estimate_result import EffortEstimateResult
-from .improvement import Improvement
-from .improvement_category import ImprovementCategory
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .effort_estimate import EffortEstimate
+except ImportError:
+    from .effort_estimate import EffortEstimate
+
+try:
+    from .effort_estimate_result import EffortEstimateResult
+except ImportError:
+    from .effort_estimate_result import EffortEstimateResult
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .improvement_category import ImprovementCategory
+except ImportError:
+    from .improvement_category import ImprovementCategory
+
 
 __version__ = VERSION
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.cassette_mixin import CassetteMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.cassette_mixin import CassetteMixin
+except ImportError:
+    from core.base.mixins.cassette_mixin import CassetteMixin
+
 
 
 def test_cassettemixin_basic():

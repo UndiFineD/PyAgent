@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.quantization.engine.tensor import QuantizedTensor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.quantization.engine.tensor import QuantizedTensor
+except ImportError:
+    from infrastructure.compute.quantization.engine.tensor import QuantizedTensor
+
 
 
 def test_quantizedtensor_basic():

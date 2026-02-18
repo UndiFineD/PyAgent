@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.processor.base import ModalityType, MultiModalConfig, TODO PlaceholderInfo, MultiModalData, MultiModalInputs, BaseMultiModalProcessor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.processor.base import ModalityType, MultiModalConfig, TODO PlaceholderInfo, MultiModalData, MultiModalInputs, BaseMultiModalProcessor
+except ImportError:
+    from infrastructure.engine.multimodal.processor.base import ModalityType, MultiModalConfig, TODO PlaceholderInfo, MultiModalData, MultiModalInputs, BaseMultiModalProcessor
+
 
 
 def test_modalitytype_basic():

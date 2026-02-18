@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.micro_batch_context import StreamType, MicroBatchState, StreamHandle, MicroBatchInfo, StreamManager, MicroBatchContext, AdaptiveMicroBatchContext, create_micro_batch_context, micro_batch_scope
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.micro_batch_context import StreamType, MicroBatchState, StreamHandle, MicroBatchInfo, StreamManager, MicroBatchContext, AdaptiveMicroBatchContext, create_micro_batch_context, micro_batch_scope
+except ImportError:
+    from core.base.logic.core.micro_batch_context import StreamType, MicroBatchState, StreamHandle, MicroBatchInfo, StreamManager, MicroBatchContext, AdaptiveMicroBatchContext, create_micro_batch_context, micro_batch_scope
+
 
 
 def test_streamtype_basic():

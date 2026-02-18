@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.knowledge.storage_base import KnowledgeStore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.knowledge.storage_base import KnowledgeStore
+except ImportError:
+    from core.knowledge.storage_base import KnowledgeStore
+
 
 
 def test_knowledgestore_basic():

@@ -15,10 +15,26 @@
 
 """Simple validation script for HybridMemoryCore
 """
-from src.core.base.logic.memory_core import HybridMemoryCore
-import asyncio
-import os
-import sys
+try:
+    from .core.base.logic.memory_core import HybridMemoryCore
+except ImportError:
+    from src.core.base.logic.memory_core import HybridMemoryCore
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import sys
+except ImportError:
+    import sys
+
 
 # Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))'

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.analysis.batch_docstring_formatter import DocstringStandards, DocstringAnalyzer, DocstringFixer, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.analysis.batch_docstring_formatter import DocstringStandards, DocstringAnalyzer, DocstringFixer, main
+except ImportError:
+    from infrastructure.services.dev.scripts.analysis.batch_docstring_formatter import DocstringStandards, DocstringAnalyzer, DocstringFixer, main
+
 
 
 def test_docstringstandards_basic():

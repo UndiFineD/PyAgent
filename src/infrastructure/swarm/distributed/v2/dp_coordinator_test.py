@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.distributed.v2.dp_coordinator import DPCoordinatorV2
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.distributed.v2.dp_coordinator import DPCoordinatorV2
+except ImportError:
+    from infrastructure.swarm.distributed.v2.dp_coordinator import DPCoordinatorV2
+
 
 
 def test_dpcoordinatorv2_basic():

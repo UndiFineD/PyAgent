@@ -16,8 +16,20 @@
 
 """
 Voyager package.
-from .discovery_node import DiscoveryNode  # noqa: F401
-from .remote_neural_synapse import RemoteNeuralSynapse  # noqa: F401
-from .teleportation_engine import TeleportationEngine  # noqa: F401
+try:
+    from .discovery_node import DiscoveryNode  # noqa: F401
+except ImportError:
+    from .discovery_node import DiscoveryNode # noqa: F401
+
+try:
+    from .remote_neural_synapse import RemoteNeuralSynapse  # noqa: F401
+except ImportError:
+    from .remote_neural_synapse import RemoteNeuralSynapse # noqa: F401
+
+try:
+    from .teleportation_engine import TeleportationEngine  # noqa: F401
+except ImportError:
+    from .teleportation_engine import TeleportationEngine # noqa: F401
+
 
 __all__ = ["DiscoveryNode", "TeleportationEngine", "RemoteNeuralSynapse"]"

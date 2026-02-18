@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.test_task_prioritization import TestTask, TestAgentCapability, TestTaskManager, TestTaskScheduler, TestConvenienceFunctions
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.test_task_prioritization import TestTask, TestAgentCapability, TestTaskManager, TestTaskScheduler, TestConvenienceFunctions
+except ImportError:
+    from core.base.logic.test_task_prioritization import TestTask, TestAgentCapability, TestTaskManager, TestTaskScheduler, TestConvenienceFunctions
+
 
 
 def test_testtask_basic():

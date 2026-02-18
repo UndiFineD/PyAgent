@@ -54,7 +54,6 @@ except ImportError:
 
 
 
-
 class SearchCore(StandardSearchCore):
 """"Facade for SearchCore logic, providing specialized parsing.
     @staticmethod
@@ -103,7 +102,6 @@ try:
 except ImportError:
     rc = None
     HAS_RUST = False
-
 
 
 

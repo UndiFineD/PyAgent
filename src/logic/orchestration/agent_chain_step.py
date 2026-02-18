@@ -19,7 +19,11 @@ AgentChainStep - Represents a single step in an agent execution chain.
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.logic.orchestration.agent_chain_step import AgentChainStep
+try:
+    from .logic.orchestration.agent_chain_step import AgentChainStep
+except ImportError:
+    from src.logic.orchestration.agent_chain_step import AgentChainStep
+
 
 # Simple step that wraps and unwraps data for a downstream agent
 step = AgentChainStep(
@@ -52,11 +56,28 @@ Auto-extracted class from agent.py
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from dataclasses import dataclass
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections.abc import Callable
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

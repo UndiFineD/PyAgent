@@ -52,12 +52,29 @@ Reflexion strategy.py module.
 
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Dict, List, Optional
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .agent_strategy import AgentStrategy
+try:
+    from typing import TYPE_CHECKING, Dict, List, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Dict, List, Optional
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .agent_strategy import AgentStrategy
+except ImportError:
+    from .agent_strategy import AgentStrategy
+
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -65,7 +82,6 @@ if TYPE_CHECKING:
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
-
 
 
 

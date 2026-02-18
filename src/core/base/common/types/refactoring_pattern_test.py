@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.refactoring_pattern import RefactoringPattern
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.refactoring_pattern import RefactoringPattern
+except ImportError:
+    from core.base.common.types.refactoring_pattern import RefactoringPattern
+
 
 
 def test_refactoringpattern_basic():

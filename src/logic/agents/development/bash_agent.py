@@ -14,15 +14,33 @@
 
 
 # "Agent specializing in Bash and shell scripting."""" pylint: disable=too-many-ancestors""""
+
+
 from __future__ import annotations
 
-from src.core.base.common.base_utilities import as_tool, create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_agent import CoderAgent
-from src.logic.agents.development.core.bash_core import BashCore
+
+try:
+    from .core.base.common.base_utilities import as_tool, create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool, create_main_function
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.development.coder_agent import CoderAgent
+except ImportError:
+    from src.logic.agents.development.coder_agent import CoderAgent
+
+try:
+    from .logic.agents.development.core.bash_core import BashCore
+except ImportError:
+    from src.logic.agents.development.core.bash_core import BashCore
+
 
 __version__ = VERSION
-
 
 
 

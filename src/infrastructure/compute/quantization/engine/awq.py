@@ -19,18 +19,42 @@ Awq.py module.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-import numpy as np
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
 
-from .base import Quantizer
-from .config import QuantConfig
-from .linear import LinearQuantizer
-from .tensor import QuantizedTensor
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .base import Quantizer
+except ImportError:
+    from .base import Quantizer
+
+try:
+    from .config import QuantConfig
+except ImportError:
+    from .config import QuantConfig
+
+try:
+    from .linear import LinearQuantizer
+except ImportError:
+    from .linear import LinearQuantizer
+
+try:
+    from .tensor import QuantizedTensor
+except ImportError:
+    from .tensor import QuantizedTensor
+
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
-
 
 
 

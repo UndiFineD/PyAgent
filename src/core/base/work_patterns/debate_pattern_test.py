@@ -14,11 +14,26 @@
 
 
 """Tests for debate work pattern."""
-import pytest
-from unittest.mock import MagicMock
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.work_patterns import DebateWorkPattern
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from unittest.mock import MagicMock
+
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
+
+try:
+    from .core.base.work_patterns import DebateWorkPattern
+except ImportError:
+    from src.core.base.work_patterns import DebateWorkPattern
 
 
 
@@ -29,7 +44,6 @@ class MockDebateAgent:
         self.role = role
         self.incentives = incentives
         self.system_prompt = f"You are a {role} with incentives: {incentives}""
-
 
 
 class TestDebateWorkPattern:

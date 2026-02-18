@@ -15,14 +15,36 @@
 
 """Core logic for file priority and task ordering.
 """
+
+
 from __future__ import annotations
 
-import fnmatch
-from pathlib import Path
-from typing import List, Optional
 
-from .base_core import BaseCore
-from .models import FilePriority, FilePriorityConfig
+try:
+    import fnmatch
+except ImportError:
+    import fnmatch
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import List, Optional
+except ImportError:
+    from typing import List, Optional
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .models import FilePriority, FilePriorityConfig
+except ImportError:
+    from .models import FilePriority, FilePriorityConfig
 
 
 

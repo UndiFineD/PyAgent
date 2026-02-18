@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.scaling_core import ScalingCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.scaling_core import ScalingCore
+except ImportError:
+    from core.base.common.scaling_core import ScalingCore
+
 
 
 def test_scalingcore_basic():

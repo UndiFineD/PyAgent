@@ -18,11 +18,26 @@ Handles local file locks and distributed swarm locks.
 """
 
 
-import time
-import threading
-from typing import Any, Dict
+try:
+    import time
+except ImportError:
+    import time
 
-from .base_core import BaseCore
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
 
 
 

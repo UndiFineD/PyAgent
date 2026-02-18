@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .notification_config import NotificationConfig
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .notification_config import NotificationConfig
+except ImportError:
+    from .notification_config import NotificationConfig
+
 
 
 def test_notificationconfig_basic():

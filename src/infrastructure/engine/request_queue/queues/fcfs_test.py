@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.request_queue.queues.fcfs import FCFSQueue
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.request_queue.queues.fcfs import FCFSQueue
+except ImportError:
+    from infrastructure.engine.request_queue.queues.fcfs import FCFSQueue
+
 
 
 def test_fcfsqueue_basic():

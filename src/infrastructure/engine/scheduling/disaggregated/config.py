@@ -18,11 +18,27 @@ Config.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+try:
+    import time
+except ImportError:
+    import time
 
-from .enums import InstanceRole, SchedulingPolicy
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .enums import InstanceRole, SchedulingPolicy
+except ImportError:
+    from .enums import InstanceRole, SchedulingPolicy
+
 
 
 @dataclass

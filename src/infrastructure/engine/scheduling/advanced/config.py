@@ -15,8 +15,15 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration and enums for advanced request scheduling.
-from dataclasses import dataclass
-from enum import Enum, auto
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -31,7 +38,6 @@ class RequestPriority(Enum):
 
 
 
-
 class RequestState(Enum):
     """State of an inference request.
     WAITING = auto()  # In queue, not yet scheduled
@@ -41,7 +47,6 @@ class RequestState(Enum):
     COMPLETED = auto()  # Finished successfully
     ABORTED = auto()  # Cancelled by user
     FAILED = auto()  # Error during execution
-
 
 
 

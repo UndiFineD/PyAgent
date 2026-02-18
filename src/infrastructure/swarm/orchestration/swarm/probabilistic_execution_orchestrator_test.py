@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.probabilistic_execution_orchestrator import ProbabilisticExecutionOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.probabilistic_execution_orchestrator import ProbabilisticExecutionOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.probabilistic_execution_orchestrator import ProbabilisticExecutionOrchestrator
+
 
 
 def test_probabilisticexecutionorchestrator_basic():

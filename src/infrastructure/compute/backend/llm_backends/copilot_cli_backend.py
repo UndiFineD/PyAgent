@@ -45,7 +45,6 @@ __version__ = VERSION
 
 
 
-
 class CopilotCliBackend(LLMBackend):
     """GitHub Copilot CLI LLM Backend.
     def chat(

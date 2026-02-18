@@ -37,15 +37,35 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-import logging
 
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+try:
+    import logging
+except ImportError:
+    import logging
+
+
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+except ImportError:
+    from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+
 
 __version__ = VERSION
-
 
 
 
@@ -85,15 +105,35 @@ if __name__ == "__main__":"    main = create_main_function(DocumentationAgent, "
 
 from __future__ import annotations
 
-import logging
 
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+try:
+    import logging
+except ImportError:
+    import logging
+
+
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+except ImportError:
+    from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+
 
 __version__ = VERSION
-
 
 
 

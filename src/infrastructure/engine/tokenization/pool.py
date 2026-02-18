@@ -20,13 +20,37 @@ Tokenizer pool for parallel processing.
 
 from __future__ import annotations
 
-import threading
-import time
-from typing import List, Optional
 
-from .base import BaseTokenizer
-from .models import TokenizerConfig
-from .registry import TokenizerRegistry
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import List, Optional
+except ImportError:
+    from typing import List, Optional
+
+
+try:
+    from .base import BaseTokenizer
+except ImportError:
+    from .base import BaseTokenizer
+
+try:
+    from .models import TokenizerConfig
+except ImportError:
+    from .models import TokenizerConfig
+
+try:
+    from .registry import TokenizerRegistry
+except ImportError:
+    from .registry import TokenizerRegistry
 
 
 

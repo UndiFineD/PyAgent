@@ -37,7 +37,6 @@ from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
 
 
 
-
 class VideoLoader(MediaLoader):
     """Load and process videos.
     def __init__(self):

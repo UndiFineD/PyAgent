@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.payload_generator_mixin import PayloadGeneratorMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.payload_generator_mixin import PayloadGeneratorMixin
+except ImportError:
+    from core.base.mixins.payload_generator_mixin import PayloadGeneratorMixin
+
 
 
 def test_payloadgeneratormixin_basic():

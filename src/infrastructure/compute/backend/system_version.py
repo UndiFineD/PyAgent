@@ -15,9 +15,16 @@
 
 """
 Auto-extracted class from agent_backend.py""""
+
+
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
 
 
 @dataclass

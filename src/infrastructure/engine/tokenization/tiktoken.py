@@ -27,7 +27,6 @@ from .models import TokenizerConfig
 
 
 
-
 class TiktokenTokenizer(BaseTokenizer):
     """OpenAI tiktoken tokenizer wrapper.
     MODEL_ENCODINGS = {

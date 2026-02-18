@@ -14,9 +14,21 @@
 
 
 # "Auto-extracted class from agent_context.py"from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import TYPE_CHECKING
-from dataclasses import dataclass, field
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
 
 if TYPE_CHECKING:
     pass

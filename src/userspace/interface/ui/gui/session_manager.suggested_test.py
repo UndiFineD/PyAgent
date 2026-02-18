@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .session_manager.suggested import SessionManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .session_manager.suggested import SessionManager
+except ImportError:
+    from .session_manager.suggested import SessionManager
+
 
 
 def test_sessionmanager_basic():

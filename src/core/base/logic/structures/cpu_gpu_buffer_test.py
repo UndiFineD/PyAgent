@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.cpu_gpu_buffer import CpuGpuBuffer, CpuGpuBufferPool, is_pin_memory_available, get_device
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.cpu_gpu_buffer import CpuGpuBuffer, CpuGpuBufferPool, is_pin_memory_available, get_device
+except ImportError:
+    from core.base.logic.structures.cpu_gpu_buffer import CpuGpuBuffer, CpuGpuBufferPool, is_pin_memory_available, get_device
+
 
 
 def test_cpugpubuffer_basic():

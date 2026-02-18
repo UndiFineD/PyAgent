@@ -16,7 +16,12 @@
 """Report Cache Manager - manages report cache entries."""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

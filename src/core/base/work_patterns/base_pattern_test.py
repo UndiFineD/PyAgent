@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.work_patterns.base_pattern import WorkPattern
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.work_patterns.base_pattern import WorkPattern
+except ImportError:
+    from core.base.work_patterns.base_pattern import WorkPattern
+
 
 
 def test_workpattern_basic():

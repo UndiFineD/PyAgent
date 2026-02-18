@@ -51,7 +51,6 @@ with suppress(ImportError):
 
 
 
-
 class NgramProposer(DrafterBase):
     """N-gram based draft token proposer.
     def __init__(self, config: SpeculativeConfig) -> None:
@@ -213,7 +212,6 @@ class NgramProposer(DrafterBase):
 
 
 
-
 class SuffixProposer(DrafterBase):
     """Suffix-based draft token proposer.
     def __init__(self, config: SpeculativeConfig) -> None:
@@ -296,7 +294,6 @@ class SuffixProposer(DrafterBase):
 
 
 
-
 class EagleProposer(DrafterBase):
     """EAGLE tree-based draft token proposer.
     def __init__(self, config: SpeculativeConfig) -> None:
@@ -368,7 +365,6 @@ class EagleProposer(DrafterBase):
             proposal_time_ms=proposal_time,
             method_used=SpecMethod.EAGLE,
         )
-
 
 
 

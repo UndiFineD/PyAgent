@@ -16,10 +16,21 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Model cache for LM Studio handles.
 
-import time
-from typing import Any
+try:
+    import time
+except ImportError:
+    import time
 
-from .models import CachedModel
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .models import CachedModel
+except ImportError:
+    from .models import CachedModel
 
 
 

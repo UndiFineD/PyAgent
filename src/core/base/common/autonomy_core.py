@@ -25,7 +25,6 @@ except ImportError:
 
 
 
-
 class AutonomyCore(BaseCore):
     """Standard implementation for Agent Autonomy and Self-Model.
     Provides logic for identifying blind spots and calculating evolution sleep intervals.

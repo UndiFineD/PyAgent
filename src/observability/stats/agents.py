@@ -15,18 +15,50 @@
 
 from __future__ import annotations
 
-import json
-import logging
-from datetime import datetime
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from .engine import StatsCore
-from .observability_core import (Alert, Metric, MetricSnapshot, MetricType, Threshold)
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .engine import StatsCore
+except ImportError:
+    from .engine import StatsCore
+
+try:
+    from .observability_core import (Alert, Metric, MetricSnapshot, MetricType, Threshold)
+except ImportError:
+    from .observability_core import (Alert, Metric, MetricSnapshot, MetricType, Threshold)
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -79,7 +111,6 @@ class StatsAgent:
 
 
 
-
 class ReportingAgent(BaseAgent):
     """Observer agent that generates executive dashboards and reports.
     def __init__(self, fleet: Any) -> None:
@@ -88,7 +119,6 @@ class ReportingAgent(BaseAgent):
     async def generate_dashboard(self) -> str:
         summary = self.fleet.telemetry.summarize_performance()
         return f"# 🚀 PyAgent Active Progress Dashboard\\n\\n## 🛡️ Executive Summary\\n{json.dumps(summary, indent=2)}""
-
 
 
 class TransparencyAgent(BaseAgent):

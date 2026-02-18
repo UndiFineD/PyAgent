@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.v2.scheduler_output import ScheduledSequence, SchedulerOutput
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.v2.scheduler_output import ScheduledSequence, SchedulerOutput
+except ImportError:
+    from infrastructure.engine.scheduling.v2.scheduler_output import ScheduledSequence, SchedulerOutput
+
 
 
 def test_scheduledsequence_basic():

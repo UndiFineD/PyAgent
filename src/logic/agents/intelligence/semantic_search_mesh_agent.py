@@ -52,7 +52,6 @@ __version__ = VERSION
 
 
 
-
 class SemanticSearchMeshAgent:
     Coordinates federated semantic search across multiple providers and fleet shards.
 #     Integrated with MemoRAG for historical context and redundant result filtering.
@@ -135,7 +134,6 @@ except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
 
 
 

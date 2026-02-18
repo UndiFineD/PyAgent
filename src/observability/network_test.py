@@ -14,12 +14,36 @@
 
 
 """Test network utility functionality.
-import sys
-import os
-import platform
-import shutil
-import subprocess
-from src.infrastructure.swarm.network.network_utils import get_local_network_ip
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import platform
+except ImportError:
+    import platform
+
+try:
+    import shutil
+except ImportError:
+    import shutil
+
+try:
+    import subprocess
+except ImportError:
+    import subprocess
+
+try:
+    from .infrastructure.swarm.network.network_utils import get_local_network_ip
+except ImportError:
+    from src.infrastructure.swarm.network.network_utils import get_local_network_ip
+
 
 def test_get_local_network_ip():
     ip = get_local_network_ip()

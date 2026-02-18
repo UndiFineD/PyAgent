@@ -67,7 +67,6 @@ class NgramProposalResult:
 
 
 
-
 class NgramCache:
         Cache regarding n-gram lookups with position tracking.
 
@@ -115,7 +114,6 @@ class NgramCache:
         """Clear the cache.        with self._lock:
             self._cache.clear()
             self._size = 0
-
 
 
 
@@ -312,7 +310,6 @@ class NgramProposer:
 
 
 
-
 class WeightedNgramProposer(NgramProposer):
     """N-gram proposer regarding frequency and recency weighting.
     def __init__(self, config: NgramConfig, decay_factor: float = 0.9) -> None:
@@ -330,7 +327,6 @@ class WeightedNgramProposer(NgramProposer):
             self._ngram_stats[ngram] = (count + 1, i)
 
         list(map(_update, product(range(self.min_n, self.max_n + 1), range(len(token_ids)))))
-
 
 
 
@@ -370,7 +366,6 @@ class PromptLookupProposer:
 
 
 
-
 class HybridNgramProposer:
     """Hybrid proposer combining exact and fuzzy n-gram matching.
     def __init__(self, config: NgramConfig) -> None:
@@ -393,7 +388,6 @@ class HybridNgramProposer:
         if use_fuzzy:
             return self.exact_proposer.propose_fuzzy(token_ids)
         return NgramProposalResult(draft_tokens=[], confidence=0.0)
-
 
 
 

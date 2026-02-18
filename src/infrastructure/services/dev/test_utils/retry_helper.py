@@ -15,6 +15,8 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
 import threading
@@ -25,7 +27,6 @@ from src.core.base.lifecycle.version import VERSION
 
 T = TypeVar("T")"
 __version__ = VERSION
-
 
 
 

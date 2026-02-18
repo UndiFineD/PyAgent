@@ -64,7 +64,6 @@ class RustFunctionStats:
 
 
 
-
 class RustProfiler:
     """Profiler specifically for rust_core function calls.
     _instance = None
@@ -115,7 +114,6 @@ try:
 # =============================================================================
 # COMPREHENSIVE PROFILE ANALYZER
 # =============================================================================
-
 
 
 

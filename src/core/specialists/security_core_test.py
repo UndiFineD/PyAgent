@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.specialists.security_core import SecurityCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.specialists.security_core import SecurityCore
+except ImportError:
+    from core.specialists.security_core import SecurityCore
+
 
 
 def test_securitycore_basic():

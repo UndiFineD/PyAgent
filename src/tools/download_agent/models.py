@@ -18,8 +18,17 @@ Download agent data models: DownloadConfig and DownloadResult.
 
 
 from __future__ import annotations
-from dataclasses import dataclass
-from typing import Any, Dict, Optional
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
 
 
 @dataclass

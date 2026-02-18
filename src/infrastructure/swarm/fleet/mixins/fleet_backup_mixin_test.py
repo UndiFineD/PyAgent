@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackupMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackupMixin
+except ImportError:
+    from infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackupMixin
+
 
 
 def test_fleetbackupmixin_basic():

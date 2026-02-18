@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.sub_swarm_spawner import SubSwarm, SubSwarmSpawner
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.sub_swarm_spawner import SubSwarm, SubSwarmSpawner
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.sub_swarm_spawner import SubSwarm, SubSwarmSpawner
+
 
 
 def test_subswarm_basic():

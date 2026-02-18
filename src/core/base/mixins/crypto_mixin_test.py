@@ -15,10 +15,22 @@
 
 """Test module for crypto_mixin
 """
-import platform
-import pytest
+try:
+    import platform
+except ImportError:
+    import platform
 
-from src.core.base.mixins.crypto_mixin import CryptoMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .core.base.mixins.crypto_mixin import CryptoMixin
+except ImportError:
+    from src.core.base.mixins.crypto_mixin import CryptoMixin
+
 
 
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")"class TestCryptoMixin:

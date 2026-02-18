@@ -33,7 +33,6 @@ __version__ = VERSION
 
 
 
-
 class SqlMetadataHandler:
     """Relational metadata overlay for compressed interaction shards.
     def __init__(

@@ -19,8 +19,16 @@ Config.py module.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
 
 
 
@@ -28,7 +36,6 @@ from enum import Enum
 class ExpertPlacementStrategy(str, Enum):
     """Strategy for placing experts across devices.
     LINEAR = "linear""    ROUND_ROBIN = "round_robin""    BALANCED = "balanced""    LOCALITY = "locality""
-
 
 
 class MoEQuantMethod(str, Enum):

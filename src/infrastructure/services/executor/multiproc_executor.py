@@ -21,17 +21,45 @@ vLLM-inspired multiprocess executor with advanced coordination.
 Refactored to modular package structure for Phase 317.
 Decomposed into types, future, base, and specific implementation modules.
 
-from src.infrastructure.services.executor.multiproc.base import Executor
-from src.infrastructure.services.executor.multiproc.distributed import \
+try:
+    from .infrastructure.services.executor.multiproc.base import Executor
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.base import Executor
+
+try:
+    from .infrastructure.services.executor.multiproc.distributed import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.distributed import \
+
     DistributedExecutor
-from src.infrastructure.services.executor.multiproc.factory import \
+try:
+    from .infrastructure.services.executor.multiproc.factory import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.factory import \
+
     ExecutorFactory
-from src.infrastructure.services.executor.multiproc.future import FutureWrapper
-from src.infrastructure.services.executor.multiproc.multiproc_logic import \
+try:
+    from .infrastructure.services.executor.multiproc.future import FutureWrapper
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.future import FutureWrapper
+
+try:
+    from .infrastructure.services.executor.multiproc.multiproc_logic import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.multiproc_logic import \
+
     MultiprocExecutor
-from src.infrastructure.services.executor.multiproc.types import (
+try:
+    from .infrastructure.services.executor.multiproc.types import (
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.types import (
+
     ExecutorBackend, ResultMessage, TaskMessage, WorkerInfo, WorkerState)
-from src.infrastructure.services.executor.multiproc.uniproc import \
+try:
+    from .infrastructure.services.executor.multiproc.uniproc import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.uniproc import \
+
     UniprocExecutor
 
 __all__ = [

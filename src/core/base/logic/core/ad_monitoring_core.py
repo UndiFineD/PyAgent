@@ -45,15 +45,12 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class ChangeType(Enum):
     """Types of AD object changes"""CREATED = "created""    MODIFIED = "modified""    DELETED = "deleted""    MOVED = "moved""
 
 
-
 class AttributeChangeType(Enum):
     """Types of attribute changes"""ADDED = "added""    MODIFIED = "modified""    DELETED = "deleted""
-
 
 
 class SecurityEventType(Enum):
@@ -111,7 +108,6 @@ class MonitoringConfig:
 
 
 
-
 class ADConnectionProvider(Protocol):
     """Protocol for Active Directory connection providers"""
     async def connect(self, domain_controller: str, credentials: Optional[Dict[str, Any]] = None) -> Any:
@@ -136,7 +132,6 @@ class ADConnectionProvider(Protocol):
 
 
 
-
 class AlertProvider(Protocol):
     """Protocol for alert/notification providers"""
     async def send_alert(self, change: ADObjectChange, severity: str, context: Dict[str, Any]) -> None:
@@ -144,7 +139,6 @@ class AlertProvider(Protocol):
 
     async def send_security_alert(self, events: List[SecurityEventType], change: ADObjectChange) -> None:
         """Send security-specific alert"""...
-
 
 
 
@@ -197,7 +191,8 @@ class ADMonitoringCore(BaseCore):
             alert_thresholds=config.get("alert_thresholds", {}),"            retention_days=config.get("retention_days", 30)"        )
 
     def _initialize_security_rules(self) -> None:
-        """Initialize security monitoring rules"""# These would be loaded from configuration or database
+        """Initialize security monitoring rules"""
+# These would be loaded from configuration or database
         self.security_rules = {
             "user_account_control": self._check_user_account_control,"            "group_membership": self._check_group_membership,"            "password_changes": self._check_password_changes,"            "privilege_escalation": self._check_privilege_escalation,"            "admin_access": self._check_admin_access"        }
 
@@ -361,7 +356,8 @@ class ADMonitoringCore(BaseCore):
         return change
 
     async def _handle_change_detection(self, change: ADObjectChange, session: MonitoringSession) -> None:
-        """Handle detected change"""# Add to history
+        """Handle detected change"""
+# Add to history
         self.change_history.append(change)
         session.change_history.append(change)
 
@@ -440,7 +436,8 @@ class ADMonitoringCore(BaseCore):
             changes.append(f"Removed: {', '.join(removed)}")"'
         return "; ".join(changes) if changes else "UAC flags changed""
     def _explain_membership_change(self, new_value: Any, old_value: Any) -> str:
-        """Explain group membership changes"""# This would analyze member additions/removals
+        """Explain group membership changes"""
+# This would analyze member additions/removals
         return "Group membership changed""
     def _explain_time_change(self, attr_name: str, value: Any) -> str:
         """Explain time-based attribute changes"""if isinstance(value, int) and value > 0:
@@ -528,7 +525,8 @@ class ADMonitoringCore(BaseCore):
 
     # TODO Placeholder methods for security rule checks
     def _check_user_account_control(self, change: AttributeChange) -> Optional[SecurityEventType]:
-        """Check for suspicious UAC changes"""# Implementation would analyze UAC flag changes for security implications
+        """Check for suspicious UAC changes"""
+# Implementation would analyze UAC flag changes for security implications
         return None
 
     def _check_group_membership(self, change: AttributeChange) -> Optional[SecurityEventType]:
@@ -561,14 +559,16 @@ class ADMonitoringCore(BaseCore):
         logger.info("AD Monitoring Core cleaned up")"
     # BaseCore interface implementation
     async def initialize(self, context: CascadeContext = None) -> bool:
-        """Initialize the core"""try:
+        """Initialize the core"""
+try:
             self._initialize_core()
             return True
         except Exception as e:
             logger.error(f"Failed to initialize AD Monitoring Core: {e}")"            return False
 
     async def shutdown(self, context: CascadeContext = None) -> bool:
-        """Shutdown the core"""try:
+        """Shutdown the core"""
+try:
             await self.cleanup()
             return True
         except Exception as e:

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.rl_optimization_mixin import RLOptimizationMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.rl_optimization_mixin import RLOptimizationMixin
+except ImportError:
+    from core.base.mixins.rl_optimization_mixin import RLOptimizationMixin
+
 
 
 def test_rloptimizationmixin_basic():

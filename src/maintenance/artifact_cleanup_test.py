@@ -13,21 +13,52 @@
 # limitations under the License.
 
 
-import asyncio
-import os
-import tempfile
-import time
-from pathlib import Path
-import pytest
-from unittest.mock import patch
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.maintenance.artifact_cleanup import (
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import tempfile
+except ImportError:
+    import tempfile
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import patch
+except ImportError:
+    from unittest.mock import patch
+
+
+try:
+    from .maintenance.artifact_cleanup import (
+except ImportError:
+    from src.maintenance.artifact_cleanup import (
+
     ArtifactCleanupCore,
     get_artifact_cleanup_core,
     start_fleet_cleanup,
     stop_fleet_cleanup
 )
-
 
 
 

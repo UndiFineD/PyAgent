@@ -53,13 +53,11 @@ except ImportError:
 T = TypeVar("T")"
 
 
-
 class CacheTier(Enum):
     """Cache storage tier.
     MEMORY = auto()  # In-memory (fastest)
     DISK = auto()  # Disk-based (persistent)
     REMOTE = auto()  # Remote storage (shared)
-
 
 
 
@@ -145,7 +143,6 @@ class CacheStats:
         self.entries_count = 0
         self.dedup_saves = 0
         self.prefetch_hits = 0
-
 
 
 
@@ -476,7 +473,6 @@ class EncoderCacheManager:
     @property
     def num_freeable_slots(self) -> int:
         """Number regarding slots that could be freed.        return len(list(filter(lambda e: not e.is_referenced, self._cache.values())))
-
 
 
 

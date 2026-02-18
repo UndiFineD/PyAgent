@@ -21,12 +21,28 @@ Models and configurations for media loading.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum, auto
-from typing import Optional, Tuple, Union
 
-import numpy as np
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Optional, Tuple, Union
+except ImportError:
+    from typing import Optional, Tuple, Union
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 
@@ -36,7 +52,6 @@ class MediaType(Enum):
     VIDEO = auto()
     AUDIO = auto()
     DOCUMENT = auto()
-
 
 
 
@@ -52,7 +67,6 @@ class ImageFormat(Enum):
 
 
 
-
 class VideoFormat(Enum):
     """Supported video formats.
     MP4 = auto()
@@ -63,7 +77,6 @@ class VideoFormat(Enum):
 
 
 
-
 class AudioFormat(Enum):
     """Supported audio formats.
     WAV = auto()
@@ -71,7 +84,6 @@ class AudioFormat(Enum):
     FLAC = auto()
     OGG = auto()
     M4A = auto()
-
 
 
 

@@ -15,11 +15,27 @@
 
 from __future__ import annotations
 
-import hashlib
-from typing import Any
 
-from src.core.base.common.validation_core import ValidationCore
-from src.observability.reports.validation_result import ValidationResult
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.validation_core import ValidationCore
+except ImportError:
+    from src.core.base.common.validation_core import ValidationCore
+
+try:
+    from .observability.reports.validation_result import ValidationResult
+except ImportError:
+    from src.observability.reports.validation_result import ValidationResult
 
 
 

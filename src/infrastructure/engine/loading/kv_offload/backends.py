@@ -20,11 +20,27 @@ Storage backends for KV block offloading.
 
 from __future__ import annotations
 
-import threading
-from typing import Dict, Iterable, List
 
-from .base import OffloadingBackend
-from .models import BlockHash, BlockStatus, LoadStoreSpec, OffloadMedium
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Dict, Iterable, List
+except ImportError:
+    from typing import Dict, Iterable, List
+
+
+try:
+    from .base import OffloadingBackend
+except ImportError:
+    from .base import OffloadingBackend
+
+try:
+    from .models import BlockHash, BlockStatus, LoadStoreSpec, OffloadMedium
+except ImportError:
+    from .models import BlockHash, BlockStatus, LoadStoreSpec, OffloadMedium
 
 
 

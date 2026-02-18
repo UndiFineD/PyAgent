@@ -16,15 +16,34 @@
 Predictive Workspace Manager (Phase 58).
 Predicts upcoming batch memory requirements and pre-allocates resources.
 
-import logging
-import time
-from collections import deque
-from typing import Any, Dict, List, Optional
+try:
+    import logging
+except ImportError:
+    import logging
 
-import numpy as np
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections import deque
+except ImportError:
+    from collections import deque
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 logger = logging.getLogger(__name__)
-
 
 
 

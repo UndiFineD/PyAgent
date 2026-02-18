@@ -27,7 +27,6 @@ from .models import TokenizerConfig
 
 
 
-
 class MistralTokenizer(BaseTokenizer):
     """Mistral tokenizer wrapper.
     def __init__(self, config: TokenizerConfig) -> None:

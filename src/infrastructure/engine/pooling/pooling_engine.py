@@ -16,10 +16,22 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Facade for the Pooling Engine (AI-specific).
 
-from .engine import PoolingEngine, create_pooling_engine
-from .models import (ClassificationOutput, EmbeddingOutput, PoolingConfig,
+try:
+    from .engine import PoolingEngine, create_pooling_engine
+except ImportError:
+    from .engine import PoolingEngine, create_pooling_engine
+
+try:
+    from .models import (ClassificationOutput, EmbeddingOutput, PoolingConfig,
+except ImportError:
+    from .models import (ClassificationOutput, EmbeddingOutput, PoolingConfig,
+
                      PoolingResult, PoolingStrategy, PoolingTask)
-from .strategies import (AttentionPooler, BasePooler, CLSPooler,
+try:
+    from .strategies import (AttentionPooler, BasePooler, CLSPooler,
+except ImportError:
+    from .strategies import (AttentionPooler, BasePooler, CLSPooler,
+
                          LastTokenPooler, MatryoshkaPooler, MaxPooler,
                          MeanPooler, MultiVectorPooler, StepPooler,
                          WeightedMeanPooler)

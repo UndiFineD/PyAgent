@@ -22,7 +22,12 @@ Gpu monitor core.py module.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 
 @dataclass(frozen=True)
@@ -43,7 +48,6 @@ class GPUMetrics:
     @property
     def vram_percent(self) -> float:
         return (self.vram_used / self.vram_total) * 100 if self.vram_total > 0 else 0.0
-
 
 
 

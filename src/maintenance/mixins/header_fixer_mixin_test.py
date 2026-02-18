@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from maintenance.mixins.header_fixer_mixin import HeaderFixerMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from maintenance.mixins.header_fixer_mixin import HeaderFixerMixin
+except ImportError:
+    from maintenance.mixins.header_fixer_mixin import HeaderFixerMixin
+
 
 
 def test_headerfixermixin_basic():

@@ -51,7 +51,6 @@ __version__ = VERSION
 
 
 
-
 class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
     "Orchestrates multi-agent teams using battle-tested coordination patterns."#     Phase 283: Implemented concrete orchestration with actual delegation calls.
 
@@ -116,7 +115,6 @@ from src.core.base.lifecycle.version import EVOLUTION_PHASE, VERSION
 from src.logic.cognitive.prompt_templates import VIBE_CODING_2025_TRACKS
 
 __version__ = VERSION
-
 
 
 

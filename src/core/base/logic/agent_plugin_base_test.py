@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.agent_plugin_base import AgentPluginBase
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.agent_plugin_base import AgentPluginBase
+except ImportError:
+    from core.base.logic.agent_plugin_base import AgentPluginBase
+
 
 
 def test_agentpluginbase_basic():

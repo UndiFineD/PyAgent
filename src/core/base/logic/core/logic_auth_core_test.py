@@ -21,7 +21,6 @@ from src.core.base.logic.core.auth_core import AuthCore
 
 
 
-
 class TestAuthCore(unittest.TestCase):
     def setUp(self):
         self.core = AuthCore()

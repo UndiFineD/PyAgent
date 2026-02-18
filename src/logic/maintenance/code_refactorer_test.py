@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.maintenance.code_refactorer import CodeRefactorer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.maintenance.code_refactorer import CodeRefactorer
+except ImportError:
+    from logic.maintenance.code_refactorer import CodeRefactorer
+
 
 
 def test_coderefactorer_basic():

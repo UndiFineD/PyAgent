@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.parallel_sampling import SamplingStrategy, OutputKind, SamplingParams, CompletionOutput, ParentRequest, ParallelSamplingManager, BeamState, BeamSearchManager, DiverseSamplingManager, BestOfNFilter, IterationStats
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.parallel_sampling import SamplingStrategy, OutputKind, SamplingParams, CompletionOutput, ParentRequest, ParallelSamplingManager, BeamState, BeamSearchManager, DiverseSamplingManager, BestOfNFilter, IterationStats
+except ImportError:
+    from infrastructure.engine.parallel_sampling import SamplingStrategy, OutputKind, SamplingParams, CompletionOutput, ParentRequest, ParallelSamplingManager, BeamState, BeamSearchManager, DiverseSamplingManager, BestOfNFilter, IterationStats
+
 
 
 def test_samplingstrategy_basic():

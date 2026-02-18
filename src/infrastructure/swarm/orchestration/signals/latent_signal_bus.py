@@ -36,7 +36,6 @@ if TYPE_CHECKING:
 
 
 
-
 class LatentSignalBus:
         Implements Telepathic Signal Compression (Phase 30).
     Facilitates high-bandwidth inter-agent communication using compressed 'latent vectors''    (simulated as base64-encoded state payloads) instead of plain natural language.

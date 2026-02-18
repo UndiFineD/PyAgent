@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.prompt_loader_mixin import PromptLoaderMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.prompt_loader_mixin import PromptLoaderMixin
+except ImportError:
+    from core.base.mixins.prompt_loader_mixin import PromptLoaderMixin
+
 
 
 def test_promptloadermixin_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.validation_rule_manager import ValidationRuleManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.validation_rule_manager import ValidationRuleManager
+except ImportError:
+    from core.base.common.utils.validation_rule_manager import ValidationRuleManager
+
 
 
 def test_validationrulemanager_basic():

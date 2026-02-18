@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.api.suggested import get_slash_commands, reset_slash_commands, process_prompt, execute_command, get_help
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.api.suggested import get_slash_commands, reset_slash_commands, process_prompt, execute_command, get_help
+except ImportError:
+    from interface.slash_commands.api.suggested import get_slash_commands, reset_slash_commands, process_prompt, execute_command, get_help
+
 
 
 def test_get_slash_commands_basic():

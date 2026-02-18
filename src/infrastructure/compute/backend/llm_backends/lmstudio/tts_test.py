@@ -14,10 +14,22 @@
 
 
 """Tests to ensure basic type hints exist for LMStudio TTS stubs.
-from typing import get_type_hints
+try:
+    from typing import get_type_hints
+except ImportError:
+    from typing import get_type_hints
 
-from importlib import import_module
-import torch
+
+try:
+    from importlib import import_module
+except ImportError:
+    from importlib import import_module
+
+try:
+    import torch
+except ImportError:
+    import torch
+
 
 lm_tts = import_module("src.infrastructure.compute.backend.llm_backends.lmstudio.tts")"
 

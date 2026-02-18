@@ -26,14 +26,22 @@ USAGE:
 - Vector search: idxs = get_bridge().search_vector(query_vec, database, top_k)
 - Generic execute: result = get_bridge().execute("method_name", {"param": value})"
 WHAT IT DOES:
-- Provides a centralized, memory-safe bridge to an optional rust_core extension with graceful Python fallbacks.
-- Wraps Rust FFI calls with boundary checks, logging, and simple fallback implementations for metrics, sharding, vector search, block management, token hashing, and bulk text replace.
-- Exposes a singleton-like accessor (get_bridge) and a generic execute router for dynamic calls.
+- Provides a centralized, memory-safe bridge to an optional rust_core
+  extension with graceful Python fallbacks.
+- Wraps Rust FFI calls with boundary checks, logging, and simple
+  fallback implementations for metrics, sharding, vector search, block
+  management, token hashing, and bulk text replace.
+- Exposes a singleton-like accessor (get_bridge) and a generic execute
+  router for dynamic calls.
 
 WHAT IT SHOULD DO BETTER:
-- Add structured feature-detection and an initialization handshake to surface availability and version of rust_core at startup.
-- Improve error handling: return typed exceptions or result objects instead of None/empty values to aid upstream handling and testing.
-- Add extensive unit tests for fallbacks, and optimize fallback implementations (e.g., use thread-safe caches, deterministic hashing) and better typing for returned structures.
+- Add structured feature-detection and an initialization handshake to
+  surface availability and version of rust_core at startup.
+- Improve error handling: return typed exceptions or result objects
+  instead of None/empty values to aid upstream handling and testing.
+- Add extensive unit tests for fallbacks, and optimize fallback
+  implementations (e.g., use thread-safe caches, deterministic hashing)
+  and better typing for returned structures.
 """
 
 
@@ -133,13 +141,15 @@ class RustBridge:
     @staticmethod
     def get_token_hash(tokens: List[int]) -> str:
         """High-speed token sequence hashing for prefix caching."""
-        return RustBridge._try_rust_call("kv_block_hash_rust", tokens, fallback=lambda: str(hash(tuple(tokens))))
+        return RustBridge._try_rust_call(
+            "kv_block_hash_rust", tokens, fallback=lambda: str(hash(tuple(tokens)))
+        )
 
 
     def execute(self, method_name: str, params: Dict[str, Any]) -> Any:
         """Generic execution router for Rust functions."""
         attr = method_name if method_name.endswith("_rust") else f"{method_name}_rust"
-        return self._try_rust_call(attr, **params)
+        return RustBridge._try_rust_call(attr, **params)
 
 
     @staticmethod
@@ -147,7 +157,7 @@ class RustBridge:
         try:
             return getattr(rc, attr)(*args, **kwargs)  # type: ignore
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"RustBridge: {attr} failed: {e}")            
+            logger.error(f"RustBridge: {attr} failed: {e}")
             if fallback:
                 return fallback()
             return None
@@ -166,7 +176,7 @@ class RustBridge:
             return fallback()
 
         return RustBridge._try_rust_call(
-            "bulk_replace_rust",           
+            "bulk_replace_rust",
             content,
             replacements,
             fallback=fallback,

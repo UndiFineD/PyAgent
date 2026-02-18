@@ -19,7 +19,11 @@ SeverityLevel - Defines severity enumeration for issues
 # AUTHOR: Keimpe de Jong
 USAGE:
 Example:
-from src.core.base.severity_level import SeverityLevel
+try:
+    from .core.base.severity_level import SeverityLevel
+except ImportError:
+    from src.core.base.severity_level import SeverityLevel
+
 if issue.severity is SeverityLevel.ERROR:
     handle_error(issue)
 print(SeverityLevel.WARNING.name, SeverityLevel.WARNING.value)
@@ -50,12 +54,20 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

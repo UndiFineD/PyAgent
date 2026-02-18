@@ -13,14 +13,26 @@
 # limitations under the License.
 
 
-from .factory import (
+try:
+    from .factory import (
+except ImportError:
+    from .factory import (
+
     create_json_constraint,
     create_regex_constraint,
     create_choice_constraint,
     combine_constraints
 )
-from .config import StructuredOutputConfig
-from .enums import StructuredOutputType
+try:
+    from .config import StructuredOutputConfig
+except ImportError:
+    from .config import StructuredOutputConfig
+
+try:
+    from .enums import StructuredOutputType
+except ImportError:
+    from .enums import StructuredOutputType
+
 
 
 def test_create_json_constraint():

@@ -18,11 +18,26 @@ Factory.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from typing import List, Optional
+try:
+    from typing import List, Optional
+except ImportError:
+    from typing import List, Optional
 
-from .config import DCPConfig, InstanceInfo
-from .enums import SchedulingPolicy
-from .scheduler import DisaggregatedScheduler
+
+try:
+    from .config import DCPConfig, InstanceInfo
+except ImportError:
+    from .config import DCPConfig, InstanceInfo
+
+try:
+    from .enums import SchedulingPolicy
+except ImportError:
+    from .enums import SchedulingPolicy
+
+try:
+    from .scheduler import DisaggregatedScheduler
+except ImportError:
+    from .scheduler import DisaggregatedScheduler
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.file_system_isolator import FileSystemIsolator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.file_system_isolator import FileSystemIsolator
+except ImportError:
+    from infrastructure.services.dev.test_utils.file_system_isolator import FileSystemIsolator
+
 
 
 def test_filesystemisolator_basic():

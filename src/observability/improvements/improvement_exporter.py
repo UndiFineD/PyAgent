@@ -19,7 +19,11 @@ improvement_exporter.py - Export improvements to JSON/CSV
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.tools.improvement_exporter import ImprovementExporter
+try:
+    from .tools.improvement_exporter import ImprovementExporter
+except ImportError:
+    from src.tools.improvement_exporter import ImprovementExporter
+
 exporter = ImprovementExporter()
 json_text = exporter.export(improvements_list, output_format="json")"csv_text = exporter.export(improvements_list, output_format="csv")"
 WHAT IT DOES:
@@ -38,15 +42,31 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-import json
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import json
+except ImportError:
+    import json
 
-from .improvement import Improvement
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
 
 __version__ = VERSION
-
 
 
 

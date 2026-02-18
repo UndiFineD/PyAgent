@@ -16,16 +16,22 @@
 """Core logic regarding connectivity.
 (Facade regarding src.core.base.common.connectivity_core)
 """
-from typing import Any
-from src.core.base.common.connectivity_core import \
-    ConnectivityCore as StandardConnectivityCore
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
+try:
+    from .core.base.common.connectivity_core import \
+except ImportError:
+    from src.core.base.common.connectivity_core import \
+
+    ConnectivityCore as StandardConnectivityCore
 
 
 
 class ConnectivityCore(StandardConnectivityCore):
     """Facade regarding ConnectivityCore."""
-
 
 
 class BinaryTransport:

@@ -19,7 +19,11 @@ RequestLifecycle Facade.
 This module provides a backward-compatible interface to the modularized
 request lifecycle management implementation.
 
-from .lifecycle import (
+try:
+    from .lifecycle import (
+except ImportError:
+    from .lifecycle import (
+
     FINISH_REASON_STRINGS,
     FinishReason,
     Request,

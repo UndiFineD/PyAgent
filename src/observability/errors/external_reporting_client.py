@@ -52,13 +52,34 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .error_entry import ErrorEntry
-from .external_reporter import ExternalReporter
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .error_entry import ErrorEntry
+except ImportError:
+    from .error_entry import ErrorEntry
+
+try:
+    from .external_reporter import ExternalReporter
+except ImportError:
+    from .external_reporter import ExternalReporter
+
 
 __version__ = VERSION
 

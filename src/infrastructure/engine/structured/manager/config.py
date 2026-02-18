@@ -19,15 +19,31 @@ Config.py module.
 
 from __future__ import annotations
 
-import hashlib
-from dataclasses import dataclass
-from enum import Enum, auto
-from typing import TYPE_CHECKING, Optional
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import TYPE_CHECKING, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Optional
+
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.decoding.grammar.base import \
         StructuredOutputGrammar
-
 
 
 
@@ -41,7 +57,6 @@ class GrammarType(Enum):
     CHOICE = auto()  # Choice from list
     FUNCTION_CALL = auto()  # Function call schema
     STRUCTURAL_TAG = auto()  # XML-like structural tags
-
 
 
 

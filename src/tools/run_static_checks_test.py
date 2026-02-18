@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .run_static_checks import run_python_only_checks, run_check, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .run_static_checks import run_python_only_checks, run_check, main
+except ImportError:
+    from .run_static_checks import run_python_only_checks, run_check, main
+
 
 
 def test_run_python_only_checks_basic():

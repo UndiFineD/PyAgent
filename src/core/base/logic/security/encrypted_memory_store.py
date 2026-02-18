@@ -16,6 +16,8 @@
 """Encrypted Memory Store Adapter.
 Wraps the existing MemoryStore with E2EE capabilities.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -25,7 +27,6 @@ from src.core.base.logic.memory_core import MemoryNode, MemoryStore
 from src.core.base.logic.security.e2e_encryption_core import E2EEncryptionCore
 
 logger = logging.getLogger("pyagent.encrypted_memory")"
-
 
 
 class EncryptedMemoryStore:
@@ -44,7 +45,8 @@ class EncryptedMemoryStore:
     async def store_memory(self, user_id: str, node: MemoryNode) -> str:
         """Store a memory with E2EE.
         Content is encrypted before storage.
-        """# Encrypt memory content
+        """
+# Encrypt memory content
         memory_data = {
             "id": node.id,"            "content": node.content,"            "importance": node.importance,"            "tags": node.tags,"            "metadata": node.metadata,"            "created_at": node.created_at,"            "updated_at": node.updated_at"        }
 
@@ -101,7 +103,8 @@ class EncryptedMemoryStore:
     ) -> List[Tuple[MemoryNode, float]]:
         """Search for similar memories using vector similarity.
         Embeddings are not encrypted for performance, but content is.
-        """# Search using backend (embeddings are unencrypted)
+        """
+# Search using backend (embeddings are unencrypted)
         results = await self.backend.search_similar(query_embedding, limit, threshold)
 
         # Decrypt results
@@ -117,7 +120,8 @@ class EncryptedMemoryStore:
         return decrypted_results
 
     async def update_memory(self, user_id: str, memory_id: str, updates: Dict[str, Any]) -> bool:
-        """Update a memory with encryption."""# Get current memory
+        """Update a memory with encryption."""
+# Get current memory
         current_node = await self.get_memory(user_id, memory_id)
         if not current_node:
             return False
@@ -129,7 +133,8 @@ class EncryptedMemoryStore:
         return True
 
     async def delete_memory(self, user_id: str, memory_id: str) -> bool:
-        """Delete a memory (verifies ownership)."""# Verify ownership
+        """Delete a memory (verifies ownership)."""
+# Verify ownership
         node = await self.get_memory(user_id, memory_id)
         if not node:
             return False

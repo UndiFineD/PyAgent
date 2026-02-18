@@ -21,15 +21,44 @@ Model Context Protocol (MCP) Tool Integration.
 
 from __future__ import annotations
 
-from .adapter import SchemaAdapter  # noqa: F401
-from .base import MCPToolServer  # noqa: F401
-from .local import LocalMCPServer  # noqa: F401
-from .mcp_tool_server import (adapt_tool_schema, create_mcp_session,  # noqa: F401
+
+try:
+    from .adapter import SchemaAdapter  # noqa: F401
+except ImportError:
+    from .adapter import SchemaAdapter # noqa: F401
+
+try:
+    from .base import MCPToolServer  # noqa: F401
+except ImportError:
+    from .base import MCPToolServer # noqa: F401
+
+try:
+    from .local import LocalMCPServer  # noqa: F401
+except ImportError:
+    from .local import LocalMCPServer # noqa: F401
+
+try:
+    from .mcp_tool_server import (adapt_tool_schema, create_mcp_session,  # noqa: F401
+except ImportError:
+    from .mcp_tool_server import (adapt_tool_schema, create_mcp_session, # noqa: F401
+
                               discover_mcp_servers)
-from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,  # noqa: F401
+try:
+    from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,  # noqa: F401
+except ImportError:
+    from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState, # noqa: F401
+
                      ToolCall, ToolResult, ToolSchema, ToolStatus)
-from .registry import MCPServerRegistry, SessionManager  # noqa: F401
-from .sse import SSEMCPServer  # noqa: F401
+try:
+    from .registry import MCPServerRegistry, SessionManager  # noqa: F401
+except ImportError:
+    from .registry import MCPServerRegistry, SessionManager # noqa: F401
+
+try:
+    from .sse import SSEMCPServer  # noqa: F401
+except ImportError:
+    from .sse import SSEMCPServer # noqa: F401
+
 
 __all__ = [
     "MCPServerConfig","    "MCPServerType","    "ToolSchema","    "ToolCall","    "ToolResult","    "ToolStatus","    "SessionState","    "MCPSession","    "MCPToolServer","    "SSEMCPServer","    "LocalMCPServer","    "SchemaAdapter","    "MCPServerRegistry","    "SessionManager","    "adapt_tool_schema","    "create_mcp_session","    "discover_mcp_servers","]

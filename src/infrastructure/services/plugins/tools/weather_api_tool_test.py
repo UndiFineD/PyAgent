@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.plugins.tools.weather_api_tool import Weather_APITool
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.plugins.tools.weather_api_tool import Weather_APITool
+except ImportError:
+    from infrastructure.services.plugins.tools.weather_api_tool import Weather_APITool
+
 
 
 def test_weather_apitool_basic():

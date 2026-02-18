@@ -17,6 +17,8 @@
 Pure logic for payload formatting and domain extraction.
 No I/O or side effects.
 """
+
+
 from __future__ import annotations
 
 import time
@@ -29,7 +31,6 @@ __version__ = VERSION
 
 
 
-
 class NotificationCore:
     """Pure logic core for notification management."""
     @staticmethod
@@ -39,7 +40,8 @@ class NotificationCore:
 
     @staticmethod
     def get_domain_from_url(url: str) -> str:
-        """Extracts the network location (domain) from a URL for connectivity tracking."""try:
+        """Extracts the network location (domain) from a URL for connectivity tracking."""
+try:
             domain = urllib.parse.urlparse(url).netloc
             return domain or url
         except Exception:  # pylint: disable=broad-exception-caught
@@ -47,4 +49,5 @@ class NotificationCore:
 
     @staticmethod
     def validate_event_data(data: dict[str, Any]) -> bool:
-        """Basic validation for event data structures."""# Ensure it's a non-empty dictionary'        return isinstance(data, dict) and bool(data)
+        """Basic validation for event data structures."""
+# Ensure it's a non-empty dictionary'        return isinstance(data, dict) and bool(data)

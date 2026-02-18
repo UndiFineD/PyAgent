@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.models.fleet_models import HealthCheckResult, IncrementalState, RateLimitConfig, TokenBudget, ShutdownState
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.models.fleet_models import HealthCheckResult, IncrementalState, RateLimitConfig, TokenBudget, ShutdownState
+except ImportError:
+    from core.base.common.models.fleet_models import HealthCheckResult, IncrementalState, RateLimitConfig, TokenBudget, ShutdownState
+
 
 
 def test_healthcheckresult_basic():

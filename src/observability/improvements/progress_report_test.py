@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.progress_report import ProgressReport
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.progress_report import ProgressReport
+except ImportError:
+    from observability.improvements.progress_report import ProgressReport
+
 
 
 def test_progressreport_basic():

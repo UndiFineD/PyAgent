@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.agent_tests.debugging import ExecutionReplayer, TestProfiler, TestRecorder, TestReplayer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.agent_tests.debugging import ExecutionReplayer, TestProfiler, TestRecorder, TestReplayer
+except ImportError:
+    from infrastructure.services.dev.agent_tests.debugging import ExecutionReplayer, TestProfiler, TestRecorder, TestReplayer
+
 
 
 def test_executionreplayer_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.distributed.v2.dp_engine_sync import SyncState, DPEngineSync
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.distributed.v2.dp_engine_sync import SyncState, DPEngineSync
+except ImportError:
+    from infrastructure.swarm.distributed.v2.dp_engine_sync import SyncState, DPEngineSync
+
 
 
 def test_syncstate_basic():

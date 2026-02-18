@@ -33,7 +33,6 @@ __version__ = VERSION
 
 
 
-
 class DirectorAgent(BaseAgent):
     """Orchestrator agent that decomposes complex tasks and delegates to specialists.
     def __init__(self, file_path: str) -> None:

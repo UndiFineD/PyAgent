@@ -20,10 +20,26 @@ LoRA Stats Types - Enums and DataClasses for LoRA adapter tracking.
 
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Dict, Optional, Tuple
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Dict, Optional, Tuple
+except ImportError:
+    from typing import Dict, Optional, Tuple
 
 
 
@@ -35,7 +51,6 @@ class LoRALoadState(Enum):
     LOADED = auto()
     EVICTING = auto()
     FAILED = auto()
-
 
 
 

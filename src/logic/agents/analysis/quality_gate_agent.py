@@ -53,7 +53,6 @@ __version__ = VERSION
 
 
 
-
 class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Enforces thresholds for code quality, test coverage, and security before deployment.
     def __init__(self, file_path: str) -> None:
@@ -117,7 +116,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

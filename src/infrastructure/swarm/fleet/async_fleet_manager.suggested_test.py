@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.async_fleet_manager.suggested import AsyncFleetManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.async_fleet_manager.suggested import AsyncFleetManager
+except ImportError:
+    from infrastructure.swarm.fleet.async_fleet_manager.suggested import AsyncFleetManager
+
 
 
 def test_asyncfleetmanager_basic():

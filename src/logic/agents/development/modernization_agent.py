@@ -18,7 +18,11 @@ Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-from modernization_agent import ModernizationAgent
+try:
+    from modernization_agent import ModernizationAgent
+except ImportError:
+    from modernization_agent import ModernizationAgent
+
 agent = ModernizationAgent()
 suggestions = agent.analyze(source_code_text)
 # suggestions is a list of ModernizationSuggestion objects with fields:
@@ -41,14 +45,26 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-import re
 
-from src.core.base.common.types.modernization_suggestion import \
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.common.types.modernization_suggestion import \
+except ImportError:
+    from src.core.base.common.types.modernization_suggestion import \
+
     ModernizationSuggestion
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -104,14 +120,26 @@ class ModernizationAgent:
 
 from __future__ import annotations
 
-import re
 
-from src.core.base.common.types.modernization_suggestion import \
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.common.types.modernization_suggestion import \
+except ImportError:
+    from src.core.base.common.types.modernization_suggestion import \
+
     ModernizationSuggestion
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

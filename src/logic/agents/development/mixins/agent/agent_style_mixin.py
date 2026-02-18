@@ -13,11 +13,21 @@
 # limitations under the License.
 
 # "Style enforcement logic for CoderAgent."""" pylint: disable=too-many-ancestors""""
+
+
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.types.style_rule import StyleRule
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.types.style_rule import StyleRule
+except ImportError:
+    from src.core.base.common.types.style_rule import StyleRule
 
 
 

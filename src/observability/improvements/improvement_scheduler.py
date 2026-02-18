@@ -19,7 +19,11 @@ Improvement Scheduler - Manage improvement scheduling and resource allocation
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from improvement_scheduler import ImprovementScheduler
+try:
+    from improvement_scheduler import ImprovementScheduler
+except ImportError:
+    from improvement_scheduler import ImprovementScheduler
+
 sched = ImprovementScheduler()
 # legacy: pass Improvement instance + ISO date string
 sched.schedule_improvement(improvement_obj, "2026-02-15", resources=["alice"], sprint_id="sprint-1")"# newer: pass improvement id + datetime (or parseable string)
@@ -45,20 +49,56 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime, timedelta
+except ImportError:
+    from datetime import datetime, timedelta
 
-from .improvement import Improvement
-from .resource_allocation import ResourceAllocation
-from .schedule_status import ScheduleStatus
-from .schedule_store import _ScheduleStore
-from .scheduled_entry import ScheduledEntry
-from .scheduled_improvement import ScheduledImprovement
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .resource_allocation import ResourceAllocation
+except ImportError:
+    from .resource_allocation import ResourceAllocation
+
+try:
+    from .schedule_status import ScheduleStatus
+except ImportError:
+    from .schedule_status import ScheduleStatus
+
+try:
+    from .schedule_store import _ScheduleStore
+except ImportError:
+    from .schedule_store import _ScheduleStore
+
+try:
+    from .scheduled_entry import ScheduledEntry
+except ImportError:
+    from .scheduled_entry import ScheduledEntry
+
+try:
+    from .scheduled_improvement import ScheduledImprovement
+except ImportError:
+    from .scheduled_improvement import ScheduledImprovement
+
 
 __version__ = VERSION
-
 
 
 
@@ -144,22 +184,60 @@ class ImprovementScheduler:
             improvement_id,
             ResourceAllocation(improvement_id=improvement_id, resources=[]),
 """        )""""
+
+
 from __future__ import annotations
 
-from datetime import datetime, timedelta
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime, timedelta
+except ImportError:
+    from datetime import datetime, timedelta
 
-from .improvement import Improvement
-from .resource_allocation import ResourceAllocation
-from .schedule_status import ScheduleStatus
-from .schedule_store import _ScheduleStore
-from .scheduled_entry import ScheduledEntry
-from .scheduled_improvement import ScheduledImprovement
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .resource_allocation import ResourceAllocation
+except ImportError:
+    from .resource_allocation import ResourceAllocation
+
+try:
+    from .schedule_status import ScheduleStatus
+except ImportError:
+    from .schedule_status import ScheduleStatus
+
+try:
+    from .schedule_store import _ScheduleStore
+except ImportError:
+    from .schedule_store import _ScheduleStore
+
+try:
+    from .scheduled_entry import ScheduledEntry
+except ImportError:
+    from .scheduled_entry import ScheduledEntry
+
+try:
+    from .scheduled_improvement import ScheduledImprovement
+except ImportError:
+    from .scheduled_improvement import ScheduledImprovement
+
 
 __version__ = VERSION
-
 
 
 

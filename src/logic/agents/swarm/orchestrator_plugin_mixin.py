@@ -78,7 +78,6 @@ from src.core.base.logic.agent_plugin_base import AgentPluginBase
 
 
 
-
 class OrchestratorPluginMixin:
 """"Plugin system methods for OrchestratorAgent.
     def register_plugin(self, plugin: AgentPluginBase) -> None:

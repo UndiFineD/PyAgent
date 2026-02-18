@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.models.agent_models import AgentConfig, ComposedAgent, AgentHealthCheck, AgentPluginConfig, ExecutionProfile, AgentPipeline, AgentParallel, AgentRouter
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.models.agent_models import AgentConfig, ComposedAgent, AgentHealthCheck, AgentPluginConfig, ExecutionProfile, AgentPipeline, AgentParallel, AgentRouter
+except ImportError:
+    from core.base.common.models.agent_models import AgentConfig, ComposedAgent, AgentHealthCheck, AgentPluginConfig, ExecutionProfile, AgentPipeline, AgentParallel, AgentRouter
+
 
 
 def test_agentconfig_basic():

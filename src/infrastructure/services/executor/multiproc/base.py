@@ -21,13 +21,29 @@ Base.py module.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import Any, List
 
-from src.infrastructure.services.executor.multiproc.future import FutureWrapper
-from src.infrastructure.services.executor.multiproc.types import \
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, List
+except ImportError:
+    from typing import Any, List
+
+
+try:
+    from .infrastructure.services.executor.multiproc.future import FutureWrapper
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.future import FutureWrapper
+
+try:
+    from .infrastructure.services.executor.multiproc.types import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.types import \
+
     ExecutorBackend
-
 
 
 

@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from src.logic.agents.security.compliance_audit_agent import ComplianceAuditAgent
+try:
+    from .logic.agents.security.compliance_audit_agent import ComplianceAuditAgent
+except ImportError:
+    from src.logic.agents.security.compliance_audit_agent import ComplianceAuditAgent
+
 
 
 def test_complianceauditagent_basic():
@@ -34,7 +38,11 @@ def test_generate_audit_report():
     assert "Fleet Compliance Audit Report" in report"    assert "GDPR" in report"    assert "SOC2" in report"    assert "FAIL" in report  # Should mention at least one fail for GDPR"
 
 
-from src.logic.agents.security.compliance_assist import DummyRecorder
+try:
+    from .logic.agents.security.compliance_assist import DummyRecorder
+except ImportError:
+    from src.logic.agents.security.compliance_assist import DummyRecorder
+
 
 
 def test_complianceauditagent_recorder_privacy():

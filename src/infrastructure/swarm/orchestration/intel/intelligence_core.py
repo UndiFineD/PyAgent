@@ -48,7 +48,6 @@ class SwarmInsight:
         """Format the insight for the synthesis prompt.        return f"- {self.agent} ({self.confidence:.2f}): {self.insight}""
 
 
-
 class IntelligenceCore:
     """Logic-only core for swarm intelligence synthesis.
     def __init__(self, workspace_root: str | None = None) -> None:

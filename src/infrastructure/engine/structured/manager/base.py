@@ -19,13 +19,33 @@ Base.py module.
 
 from __future__ import annotations
 
-import threading
-from abc import ABC, abstractmethod
-from typing import Any, Callable, List, Optional, Sequence
 
-import numpy as np
+try:
+    import threading
+except ImportError:
+    import threading
 
-from .config import BackendStats, GrammarSpec, GrammarType
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, Callable, List, Optional, Sequence
+except ImportError:
+    from typing import Any, Callable, List, Optional, Sequence
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import BackendStats, GrammarSpec, GrammarType
+except ImportError:
+    from .config import BackendStats, GrammarSpec, GrammarType
 
 
 
@@ -108,7 +128,6 @@ class StructuredOutputGrammar(ABC):
         """Reset the grammar state.        self._is_terminated = False
         self._tokens_accepted = 0
         self._state_history.clear()
-
 
 
 

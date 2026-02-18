@@ -21,15 +21,35 @@ Implements register-level decompression during attention matmul.
 
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from .base import AttentionBackend
-from .models import AttentionCapabilities, AttentionMetadata
-from .sdpa import TorchSDPABackend
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .base import AttentionBackend
+except ImportError:
+    from .base import AttentionBackend
+
+try:
+    from .models import AttentionCapabilities, AttentionMetadata
+except ImportError:
+    from .models import AttentionCapabilities, AttentionMetadata
+
+try:
+    from .sdpa import TorchSDPABackend
+except ImportError:
+    from .sdpa import TorchSDPABackend
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

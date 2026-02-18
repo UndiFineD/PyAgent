@@ -15,21 +15,65 @@
 
 from __future__ import annotations
 
-import logging
-import time
-from pathlib import Path
-from typing import Any
 
-from .alerting import ThresholdAlertManager
-from .analysis import TokenCostEngine
-from .exporters.metrics_exporter import MetricsExporter
-from .exporters.otel_manager import OTelManager
-from .exporters.prometheus_exporter import PrometheusExporter
-from .metrics import AgentMetric, Metric
-from .rollup_engine import StatsQueryEngine, StatsRollupCalculator
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .alerting import ThresholdAlertManager
+except ImportError:
+    from .alerting import ThresholdAlertManager
+
+try:
+    from .analysis import TokenCostEngine
+except ImportError:
+    from .analysis import TokenCostEngine
+
+try:
+    from .exporters.metrics_exporter import MetricsExporter
+except ImportError:
+    from .exporters.metrics_exporter import MetricsExporter
+
+try:
+    from .exporters.otel_manager import OTelManager
+except ImportError:
+    from .exporters.otel_manager import OTelManager
+
+try:
+    from .exporters.prometheus_exporter import PrometheusExporter
+except ImportError:
+    from .exporters.prometheus_exporter import PrometheusExporter
+
+try:
+    from .metrics import AgentMetric, Metric
+except ImportError:
+    from .metrics import AgentMetric, Metric
+
+try:
+    from .rollup_engine import StatsQueryEngine, StatsRollupCalculator
+except ImportError:
+    from .rollup_engine import StatsQueryEngine, StatsRollupCalculator
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -55,7 +99,6 @@ class ObservabilityCore:
         count = len(self.metrics_history)
         return {
             "total_count": count,"            "avg_duration_ms": total_d / count,"            "total_cost_usd": round(total_c, 6),"        }
-
 
 
 
@@ -122,7 +165,6 @@ class ObservabilityEngine:
         self.metrics_exporter.record_agent_call(agent, duration, status == "success")"
 
 
-
 class StatsCore:
     """Core logic for statistics processing.
     def __init__(self) -> None:
@@ -143,7 +185,6 @@ class StatsCore:
         self.rollup.add_point(metric.name, time.time(), metric.value)
         self.query.add_metric(metric.name, metric)
         self.alerts.check(metric.name, metric.value)
-
 
 
 

@@ -26,7 +26,6 @@ from .data import CacheEntry, MediaHash
 
 
 
-
 class MemoryMultiModalCache(MultiModalCache):
         In-memory LRU cache for multimodal content.
     
@@ -114,7 +113,6 @@ class MemoryMultiModalCache(MultiModalCache):
 
 
 
-
 class PerceptualCache(MemoryMultiModalCache):
         Cache with perceptual similarity matching.
     
@@ -160,7 +158,6 @@ class PerceptualCache(MemoryMultiModalCache):
             except ValueError:
                 continue
         return similar
-
 
 
 

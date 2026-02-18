@@ -16,7 +16,10 @@
 """Core logic regarding Authentication.
 (Facade regarding src.core.base.common.auth_core)
 """
-from src.core.base.common.auth_core import AuthCore as StandardAuthCore
+try:
+    from .core.base.common.auth_core import AuthCore as StandardAuthCore
+except ImportError:
+    from src.core.base.common.auth_core import AuthCore as StandardAuthCore
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
+except ImportError:
+    from infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
+
 
 
 def test_dpasyncmpclient_basic():

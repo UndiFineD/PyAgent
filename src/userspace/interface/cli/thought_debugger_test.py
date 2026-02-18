@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .thought_debugger import ThoughtDebugger
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .thought_debugger import ThoughtDebugger
+except ImportError:
+    from .thought_debugger import ThoughtDebugger
+
 
 
 def test_thoughtdebugger_basic():

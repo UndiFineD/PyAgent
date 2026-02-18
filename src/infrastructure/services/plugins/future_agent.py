@@ -20,7 +20,12 @@ Future agent.py module.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
@@ -34,7 +39,6 @@ __version__ = VERSION
 
 """Plugin demonstrating forward-compatibility testing for the SDK.
 SDK_REQUIRED = "10.0.0""
-
 
 
 class FutureAgent:

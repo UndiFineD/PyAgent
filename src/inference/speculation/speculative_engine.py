@@ -15,11 +15,19 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative Decoding Engine - Facade pattern regarding backward compatibility.
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
-from .engine import (DrafterBase, DraftProposal, EagleProposer, HybridDrafter,
+try:
+    from .engine import (DrafterBase, DraftProposal, EagleProposer, HybridDrafter,
+except ImportError:
+    from .engine import (DrafterBase, DraftProposal, EagleProposer, HybridDrafter,
+
                      NgramProposer, SpecDecodingMetrics, SpecMethod,
                      SpeculativeConfig, SpeculativeEngine, SuffixProposer,
                      TokenVerifier, VerificationResult,

@@ -17,12 +17,32 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Tensor parallel coordination for distributed inference.
 
-import os
-from typing import Optional
+try:
+    import os
+except ImportError:
+    import os
 
-from .coordinator import GroupCoordinator  # noqa: F401
-from .group import TensorParallelGroup  # noqa: F401
-from .models import ParallelConfig, ParallelMode, RankInfo  # noqa: F401
+try:
+    from typing import Optional
+except ImportError:
+    from typing import Optional
+
+
+try:
+    from .coordinator import GroupCoordinator  # noqa: F401
+except ImportError:
+    from .coordinator import GroupCoordinator # noqa: F401
+
+try:
+    from .group import TensorParallelGroup  # noqa: F401
+except ImportError:
+    from .group import TensorParallelGroup # noqa: F401
+
+try:
+    from .models import ParallelConfig, ParallelMode, RankInfo  # noqa: F401
+except ImportError:
+    from .models import ParallelConfig, ParallelMode, RankInfo # noqa: F401
+
 
 __all__ = [
     "ParallelConfig","    "RankInfo","    "ParallelMode","    "GroupCoordinator","    "TensorParallelGroup","    "init_distributed","    "get_tp_group","    "get_tp_size","    "get_tp_rank","]

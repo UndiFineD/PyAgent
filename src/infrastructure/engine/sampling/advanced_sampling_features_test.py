@@ -17,10 +17,22 @@
 
 Tests for AdvancedSamplingParams - extended sampling strategies.
 
-import pytest
-import numpy as np
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.infrastructure.engine.sampling import (
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .infrastructure.engine.sampling import (
+except ImportError:
+    from src.infrastructure.engine.sampling import (
+
     OutputKind,
     StopCondition,
     TemperatureSchedule,
@@ -34,7 +46,6 @@ from src.infrastructure.engine.sampling import (
     create_sampling_params,
     create_advanced_sampling_params,
 )
-
 
 
 
@@ -55,7 +66,6 @@ class TestEnums:
         assert TemperatureSchedule.LINEAR_DECAY is not None
         assert TemperatureSchedule.COSINE_DECAY is not None
         assert TemperatureSchedule.ADAPTIVE is not None
-
 
 
 
@@ -104,7 +114,6 @@ class TestSamplingParams:
         )
 
         assert len(params.stop_token_ids) == 2
-
 
 
 
@@ -199,7 +208,6 @@ class TestAdvancedSamplingParams:
 
 
 
-
 class TestLogitBiasBuilder:
     """Test LogitBiasBuilder.
     def test_add_bias(self):
@@ -243,7 +251,6 @@ class TestLogitBiasBuilder:
 
 
 
-
 class TestBadWordsProcessor:
     """Test BadWordsProcessor.
     def test_single_token_ban(self):
@@ -274,7 +281,6 @@ class TestBadWordsProcessor:
         assert logits[5] == -float('inf')'
 
 
-
 class TestTokenWhitelistProcessor:
     """Test TokenWhitelistProcessor.
     def test_whitelist_tokens(self):
@@ -300,7 +306,6 @@ class TestTokenWhitelistProcessor:
         assert mask[5]
         assert not mask[0]
         assert not mask[2]
-
 
 
 
@@ -333,7 +338,6 @@ class TestMirostatSampler:
 
         # mu should change
         assert sampler.mu != initial_mu
-
 
 
 
@@ -431,7 +435,6 @@ class TestSamplingEngine:
 
         # Should not raise
         assert True
-
 
 
 

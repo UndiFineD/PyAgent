@@ -29,7 +29,6 @@ from ..base import (AuthenticationError, CloudProviderBase, CloudProviderError,
 
 
 
-
 class GeminiConnector(CloudProviderBase):
         Connector for Google Gemini API.
 

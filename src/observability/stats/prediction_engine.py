@@ -53,13 +53,29 @@ Prediction engine.py module.
 
 from __future__ import annotations
 
-import contextlib
-import logging
-import math
-from typing import Any, Callable
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -109,7 +125,6 @@ class StatsChangeDetector:
 
     def get_changes(self) -> list[dict[str, Any]]:
         return list(self._changes)
-
 
 
 
@@ -171,13 +186,29 @@ class StatsForecaster:
 
 from __future__ import annotations
 
-import contextlib
-import logging
-import math
-from typing import Any, Callable
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -227,7 +258,6 @@ class StatsChangeDetector:
 
     def get_changes(self) -> list[dict[str, Any]]:
         return list(self._changes)
-
 
 
 

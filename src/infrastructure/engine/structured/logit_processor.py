@@ -25,11 +25,28 @@ Provides:
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Callable, Dict, List, Optional, Set, Tuple
 
-import numpy as np  # noqa: F401
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Callable, Dict, List, Optional, Set, Tuple
+except ImportError:
+    from typing import Callable, Dict, List, Optional, Set, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np  # noqa: F401
 
 # =============================================================================
 # Data Classes
@@ -75,7 +92,6 @@ class ProcessorStats:
 # =============================================================================
 # Abstract Logit Processor
 # =============================================================================
-
 
 
 
@@ -129,7 +145,6 @@ class LogitProcessor(ABC):
 # =============================================================================
 # Constrained Logit Processor
 # =============================================================================
-
 
 
 
@@ -196,7 +211,6 @@ class ConstrainedLogitProcessor(LogitProcessor):
 # =============================================================================
 # Bitmask Logit Processor
 # =============================================================================
-
 
 
 
@@ -280,7 +294,6 @@ class BitmaskLogitProcessor(LogitProcessor):
 # =============================================================================
 # Bias Logit Processor
 # =============================================================================
-
 
 
 
@@ -372,7 +385,6 @@ class BiasLogitProcessor(LogitProcessor):
 
 
 
-
 class CompositeLogitProcessor(LogitProcessor):
         Combines multiple logit processors.
 
@@ -440,7 +452,6 @@ class CompositeLogitProcessor(LogitProcessor):
 
 
 
-
 class TemperatureProcessor(LogitProcessor):
     """Apply temperature scaling to logits.
     def __init__(self, vocab_size: int, temperature: float = 1.0) -> None:
@@ -458,7 +469,6 @@ class TemperatureProcessor(LogitProcessor):
         if not self._enabled or self.temperature == 1.0:
             return logits
         return logits / self.temperature
-
 
 
 
@@ -493,7 +503,6 @@ class TopKProcessor(LogitProcessor):
         list(map(process_top_k, range(result.shape[0])))
 
         return result
-
 
 
 
@@ -540,7 +549,6 @@ class TopPProcessor(LogitProcessor):
         list(map(process_top_p_batch, range(result.shape[0])))
 
         return result
-
 
 
 

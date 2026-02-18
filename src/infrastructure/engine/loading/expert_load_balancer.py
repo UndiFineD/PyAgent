@@ -52,7 +52,6 @@ if TYPE_CHECKING:
 
 
 
-
 class ExpertType(Enum):
     """Types of experts in MoE models.
     LOGICAL = auto()  # Original model expert
@@ -118,7 +117,6 @@ class ExpertMapping:
         if physical_idx >= len(self.phy_to_log[layer]):
             return -1
         return self.phy_to_log[layer][physical_idx]
-
 
 
 
@@ -191,7 +189,6 @@ class AbstractEplbPolicy(ABC):
 
         list(map(_assign_one_layer, range(num_layers)))
         return log_to_phy
-
 
 
 
@@ -355,7 +352,6 @@ class DefaultEplbPolicy(AbstractEplbPolicy):
 
 
 
-
 class LocalityAwarePolicy(AbstractEplbPolicy):
         Locality-aware EPLB policy.
 
@@ -392,7 +388,6 @@ class LocalityAwarePolicy(AbstractEplbPolicy):
             log_to_phy=log_to_phy,
             replica_count=log_count,
         )
-
 
 
 
@@ -576,7 +571,6 @@ class ExpertLoadBalancer:
     def get_stats(self) -> Dict[str, Any]:
         """Get load balancing statistics.        return {
             "num_layers": self.num_layers,"            "num_logical": self.num_logical,"            "num_physical": self.num_physical,"        }
-
 
 
 

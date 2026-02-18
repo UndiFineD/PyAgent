@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.security.secure_auth_manager import UserSession, SecureAuthManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.security.secure_auth_manager import UserSession, SecureAuthManager
+except ImportError:
+    from core.base.logic.security.secure_auth_manager import UserSession, SecureAuthManager
+
 
 
 def test_usersession_basic():

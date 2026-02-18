@@ -15,23 +15,75 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Reader for tensorizer file format.
-from _thread import LockType
-import hashlib
-import mmap
-import struct
-import threading
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
-from pathlib import Path
-from typing import (BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple,
+try:
+    from _thread import LockType
+except ImportError:
+    from _thread import LockType
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import mmap
+except ImportError:
+    import mmap
+
+try:
+    import struct
+except ImportError:
+    import struct
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from concurrent.futures import ThreadPoolExecutor
+except ImportError:
+    from concurrent.futures import ThreadPoolExecutor
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import (BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple,
+except ImportError:
+    from typing import (BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple,
+
                     Union)
 
-import numpy as np
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
-from .compression import decompress_data
-from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
+try:
+    from .compression import decompress_data
+except ImportError:
+    from .compression import decompress_data
+
+try:
+    from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
+except ImportError:
+    from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
+
                      CompressionType, TensorizerConfig)
-from .metadata import TensorMetadata
+try:
+    from .metadata import TensorMetadata
+except ImportError:
+    from .metadata import TensorMetadata
+
 
 
 @dataclass
@@ -53,7 +105,6 @@ class LoadProgress:
         """Returns the fraction of total bytes loaded (0.0 to 1.0).        if self.total_bytes == 0:
             return 0.0
         return self.loaded_bytes / self.total_bytes
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.llm_backends.ollama_backend import OllamaBackend
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.llm_backends.ollama_backend import OllamaBackend
+except ImportError:
+    from infrastructure.compute.backend.llm_backends.ollama_backend import OllamaBackend
+
 
 
 def test_ollamabackend_basic():

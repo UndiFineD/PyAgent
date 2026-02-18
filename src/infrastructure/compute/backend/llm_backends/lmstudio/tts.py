@@ -18,8 +18,15 @@ Text-to-speech backend integration TODO Placeholder for LMStudio backend.
 
 This module provides a minimal plugin stub used for integration tests and local
 development. It intentionally avoids pulling large external dependencies.
-from typing import Any
-import torch
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    import torch
+except ImportError:
+    import torch
 
 
 

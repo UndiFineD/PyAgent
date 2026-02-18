@@ -15,14 +15,37 @@
 
 Engine.py module.
 
-from typing import Dict, List
+try:
+    from typing import Dict, List
+except ImportError:
+    from typing import Dict, List
 
-import numpy as np
 
-from .config import AttentionConfig
-from .enums import KVCacheDtype
-from .ops import PagedAttentionOps
-from .storage import BlockTable, PagedKVCache, SlotMapping
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import AttentionConfig
+except ImportError:
+    from .config import AttentionConfig
+
+try:
+    from .enums import KVCacheDtype
+except ImportError:
+    from .enums import KVCacheDtype
+
+try:
+    from .ops import PagedAttentionOps
+except ImportError:
+    from .ops import PagedAttentionOps
+
+try:
+    from .storage import BlockTable, PagedKVCache, SlotMapping
+except ImportError:
+    from .storage import BlockTable, PagedKVCache, SlotMapping
 
 
 

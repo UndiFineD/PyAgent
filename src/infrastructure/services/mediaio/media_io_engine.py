@@ -17,7 +17,11 @@
 """
 Media IO Engine bridge.
 
-from .__init__ import (
+try:
+    from .__init__ import (
+except ImportError:
+    from .__init__ import (
+
     AudioData,
     AudioFormat,
     AudioLoader,

@@ -14,9 +14,20 @@
 
 
 """Tests for TaskQueueMixin."""
-import asyncio
-import pytest
-from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .core.base.mixins.task_queue_mixin import TaskQueueMixin
+except ImportError:
+    from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
 
@@ -29,7 +40,6 @@ class MockTaskQueueAgent(TaskQueueMixin):
     async def _process_task(self, task_data):
         """Mock task processing."""await asyncio.sleep(0.1)  # Simulate processing time
         return f"processed_{task_data['job_id']}""'
-
 
 
 class TestTaskQueueMixin:

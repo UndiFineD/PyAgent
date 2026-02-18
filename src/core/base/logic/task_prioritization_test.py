@@ -15,12 +15,32 @@
 
 """Tests for the Task Prioritization System.
 """
-import asyncio
-import pytest
-import pytest_asyncio
-from datetime import datetime, timedelta
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.logic.task_prioritization import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import pytest_asyncio
+except ImportError:
+    import pytest_asyncio
+
+try:
+    from datetime import datetime, timedelta
+except ImportError:
+    from datetime import datetime, timedelta
+
+
+try:
+    from .core.base.logic.task_prioritization import (
+except ImportError:
+    from src.core.base.logic.task_prioritization import (
+
     TaskManager,
     TaskScheduler,
     Task,
@@ -31,7 +51,6 @@ from src.core.base.logic.task_prioritization import (
     create_task,
     create_agent_capability
 )
-
 
 
 
@@ -69,7 +88,8 @@ class TestTask:
         assert task.is_overdue()
 
     def test_priority_score_calculation(self):
-        """Test priority score calculation."""# High priority task
+        """Test priority score calculation."""
+# High priority task
         high_priority = Task(
             title="High Priority","            description="Important task","            type=TaskType.CODE_GENERATION,
             priority=PriorityLevel.P0
@@ -89,7 +109,6 @@ class TestTask:
             dependencies=["task-1", "task-2"]"        )
 
         assert "task-1" in task.dependencies"        assert len(task.dependencies) == 2
-
 
 
 
@@ -157,7 +176,6 @@ class TestAgentCapability:
 
 
 
-
 class TestTaskManager:
     """Test TaskManager functionality."""
     @pytest.fixture
@@ -190,7 +208,8 @@ class TestTaskManager:
         assert task_id not in manager.tasks
 
     def test_assign_task(self, manager):
-        """Test manual task assignment."""# Create task
+        """Test manual task assignment."""
+# Create task
         task = create_task("Test Task", "Test", TaskType.CODE_GENERATION)"        task_id = manager.add_task(task)
 
         # Create agent
@@ -207,7 +226,8 @@ class TestTaskManager:
         assert agent.current_workload == 1
 
     def test_assign_incompatible_task(self, manager):
-        """Test assigning incompatible task."""# Create research task
+        """Test assigning incompatible task."""
+# Create research task
         task = create_task("Research", "Research task", TaskType.RESEARCH)"        task_id = manager.add_task(task)
 
         # Create code-only agent
@@ -220,7 +240,8 @@ class TestTaskManager:
         success = manager.assign_task(task_id, "agent-001")"        assert success is False
 
     def test_auto_assign_tasks(self, manager):
-        """Test automatic task assignment."""# Create tasks
+        """Test automatic task assignment."""
+# Create tasks
         task1 = create_task("Code Task", "Generate code", TaskType.CODE_GENERATION)"        task2 = create_task("Research Task", "Do research", TaskType.RESEARCH)"        manager.add_task(task1)
         manager.add_task(task2)
 
@@ -240,7 +261,8 @@ class TestTaskManager:
         assert len(assignments) == 2
         assert ("code-agent", task1.id) in [(a, t) for t, a in assignments]"        assert ("research-agent", task2.id) in [(a, t) for t, a in assignments]"
     def test_complete_task(self, manager):
-        """Test completing a task."""# Create and assign task
+        """Test completing a task."""
+# Create and assign task
         task = create_task("Test", "Test", TaskType.CODE_GENERATION)"        task_id = manager.add_task(task)
 
         agent = create_agent_capability("agent-001", "Agent", skills=[TaskType.CODE_GENERATION])"        manager.register_agent(agent)
@@ -253,7 +275,8 @@ class TestTaskManager:
         assert agent.current_workload == 0  # Workload should be reduced
 
     def test_get_overdue_tasks(self, manager):
-        """Test getting overdue tasks."""# Create overdue task
+        """Test getting overdue tasks."""
+# Create overdue task
         past_deadline = datetime.now() - timedelta(hours=1)
         overdue_task = Task(
             title="Overdue","            description="Overdue task","            type=TaskType.CODE_GENERATION,
@@ -269,7 +292,8 @@ class TestTaskManager:
         assert len(overdue) == 1
         assert overdue[0].title == "Overdue""
     def test_get_task_queue(self, manager):
-        """Test getting prioritized task queue."""# Create tasks with different priorities
+        """Test getting prioritized task queue."""
+# Create tasks with different priorities
         high_priority = create_task("High", "High priority", TaskType.CODE_GENERATION, PriorityLevel.P0)"        low_priority = create_task("Low", "Low priority", TaskType.CODE_GENERATION, PriorityLevel.P2)"
         manager.add_task(high_priority)
         manager.add_task(low_priority)
@@ -285,7 +309,6 @@ class TestTaskManager:
 
         workload = manager.get_agent_workload()
         assert "agent-001" in workload"        assert workload["agent-001"]["current_workload"] == 0"        assert workload["agent-001"]["max_concurrent_tasks"] == 3"
-
 
 
 class TestTaskScheduler:
@@ -309,7 +332,8 @@ class TestTaskScheduler:
 
     @pytest.mark.asyncio
     async def test_scheduler_auto_assignment(self, scheduler):
-        """Test scheduler automatic task assignment."""# Create tasks and agents
+        """Test scheduler automatic task assignment."""
+# Create tasks and agents
         task = create_task("Test Task", "Test", TaskType.CODE_GENERATION)"        scheduler.task_manager.add_task(task)
 
         agent = create_agent_capability(
@@ -331,7 +355,6 @@ class TestTaskScheduler:
         assert len(assigned_tasks) >= 1
 
         await scheduler.stop()
-
 
 
 

@@ -30,7 +30,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class MigrationTask(Enum):
     """Types of migration tasks supported"""CODE_REFACTORING = "code_refactoring""    LINT_RULE_ENFORCEMENT = "lint_rule_enforcement""    API_MIGRATION = "api_migration""    FRAMEWORK_UPGRADE = "framework_upgrade""    IMPORT_PATH_CHANGES = "import_path_changes""    CODE_MODERNIZATION = "code_modernization""
 
@@ -60,7 +59,6 @@ class MigrationResult:
 
 
 
-
 class MigrationStrategy(ABC):
     """Abstract base class for migration strategies"""
     @abstractmethod
@@ -70,7 +68,6 @@ class MigrationStrategy(ABC):
     @abstractmethod
     def get_migration_instructions(self) -> str:
         """Get the migration instructions for this strategy"""pass
-
 
 
 

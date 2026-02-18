@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.structured.manager.base import StructuredOutputGrammar, StructuredOutputBackend
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.structured.manager.base import StructuredOutputGrammar, StructuredOutputBackend
+except ImportError:
+    from infrastructure.engine.structured.manager.base import StructuredOutputGrammar, StructuredOutputBackend
+
 
 
 def test_structuredoutputgrammar_basic():

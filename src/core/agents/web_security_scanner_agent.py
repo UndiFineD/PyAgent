@@ -22,13 +22,37 @@ Implements multi-agent coordination for distributed scanning tasks.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
 
-from src.core.base.base_agent import BaseAgent
-from src.core.base.security.web_security_scanner_core import WebSecurityScannerCore
-from src.core.base.mixins.data_processing_mixin import DataProcessingMixin
-from src.core.base.mixins.security_mixin import SecurityMixin
-from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .core.base.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.base_agent import BaseAgent
+
+try:
+    from .core.base.security.web_security_scanner_core import WebSecurityScannerCore
+except ImportError:
+    from src.core.base.security.web_security_scanner_core import WebSecurityScannerCore
+
+try:
+    from .core.base.mixins.data_processing_mixin import DataProcessingMixin
+except ImportError:
+    from src.core.base.mixins.data_processing_mixin import DataProcessingMixin
+
+try:
+    from .core.base.mixins.security_mixin import SecurityMixin
+except ImportError:
+    from src.core.base.mixins.security_mixin import SecurityMixin
+
+try:
+    from .core.base.mixins.task_queue_mixin import TaskQueueMixin
+except ImportError:
+    from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
 

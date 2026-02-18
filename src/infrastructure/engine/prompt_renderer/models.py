@@ -20,9 +20,21 @@ Models for Prompt Rendering.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple
 
 
 
@@ -32,11 +44,9 @@ class TruncationStrategy(Enum):
     NONE = "none""    AUTO = "auto""    LEFT = "left""    RIGHT = "right""    MIDDLE = "middle""    SMART = "smart""
 
 
-
 class InputType(Enum):
     """Input types for prompt rendering.
     TEXT = "text""    TOKENS = "tokens""    EMBEDDING = "embedding""    MULTIMODAL = "multimodal""
-
 
 
 class RenderMode(Enum):

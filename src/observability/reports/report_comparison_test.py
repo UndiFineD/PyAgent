@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.reports.report_comparison import ReportComparison
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.reports.report_comparison import ReportComparison
+except ImportError:
+    from observability.reports.report_comparison import ReportComparison
+
 
 
 def test_reportcomparison_basic():

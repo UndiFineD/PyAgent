@@ -63,7 +63,6 @@ __version__ = VERSION
 
 
 
-
 class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Unified agent for web research, autonomous navigation, and internal self-search.
 #     Consolidates SearchAgent, WebAgent, BrowsingAgent, and SelfSearchAgent.
@@ -140,7 +139,6 @@ from src.logic.agents.intelligence.web_core import WebCore
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
-
 
 
 

@@ -21,12 +21,36 @@ MCP-related data models and enums.
 
 from __future__ import annotations
 
-import json
-import time
-import uuid
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional, Set
+except ImportError:
+    from typing import Any, Dict, List, Optional, Set
 
 
 
@@ -36,11 +60,9 @@ class MCPServerType(Enum):
     SSE = "sse"  # Server-Sent Events"    STDIO = "stdio"  # Standard I/O"    WEBSOCKET = "websocket""    HTTP = "http""    LOCAL = "local"  # In-process"
 
 
-
 class ToolStatus(Enum):
     """Tool execution status.
     PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""    TIMEOUT = "timeout""
-
 
 
 class SessionState(Enum):

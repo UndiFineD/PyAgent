@@ -21,18 +21,50 @@ Executor interface and implementations for distributed execution.
 
 from __future__ import annotations
 
-import logging
-import os
-from abc import ABC, abstractmethod
-from typing import Any, Callable, Optional
 
-from .client import DPLBAsyncMPClient
-from .config import LoadBalancingStrategy, ParallelConfig, WorkerIdentity
-from .messages import RequestMessage, ResponseMessage
-from .worker import BaseWorker
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, Callable, Optional
+except ImportError:
+    from typing import Any, Callable, Optional
+
+
+try:
+    from .client import DPLBAsyncMPClient
+except ImportError:
+    from .client import DPLBAsyncMPClient
+
+try:
+    from .config import LoadBalancingStrategy, ParallelConfig, WorkerIdentity
+except ImportError:
+    from .config import LoadBalancingStrategy, ParallelConfig, WorkerIdentity
+
+try:
+    from .messages import RequestMessage, ResponseMessage
+except ImportError:
+    from .messages import RequestMessage, ResponseMessage
+
+try:
+    from .worker import BaseWorker
+except ImportError:
+    from .worker import BaseWorker
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -60,7 +92,6 @@ class DistributedExecutor(ABC):
     @abstractmethod
     def is_ready(self) -> bool:
         """Check if executor is ready.        ...
-
 
 
 

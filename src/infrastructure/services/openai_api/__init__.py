@@ -19,7 +19,11 @@ Openai api package.
 
 # OpenAI Responses API Server - Phase 42
 # Full OpenAI Responses API compatibility
-from .responses_api import (AudioContent, ContentPart, ContentPartType,  # noqa: F401
+try:
+    from .responses_api import (AudioContent, ContentPart, ContentPartType,  # noqa: F401
+except ImportError:
+    from .responses_api import (AudioContent, ContentPart, ContentPartType, # noqa: F401
+
                             ConversationBuilder, ImageContent,
                             InMemoryResponseStore, Message, RefusalContent,
                             Response, ResponseConfig, ResponseOutput,

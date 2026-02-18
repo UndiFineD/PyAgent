@@ -14,14 +14,32 @@
 
 
 """Transition dynamics.py module.
-"""# Transition Dynamics for Markov Decision Processes - Phase 319 Enhanced
+"""
+# Transition Dynamics for Markov Decision Processes - Phase 319 Enhanced
 
 from __future__ import annotations
 
-import math
-import random
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Optional, Set, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Set, Tuple
+
 
 
 @dataclass
@@ -45,7 +63,6 @@ class StateActionStats:
     @property
     def avg_reward(self) -> float:
         return self.total_reward / self.visit_count if self.visit_count > 0 else 0.0
-
 
 
 

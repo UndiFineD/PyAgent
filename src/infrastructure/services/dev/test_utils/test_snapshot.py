@@ -15,14 +15,37 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
-import hashlib
-import json
-import time
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

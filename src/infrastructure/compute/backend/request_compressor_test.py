@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.request_compressor import RequestCompressor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.request_compressor import RequestCompressor
+except ImportError:
+    from infrastructure.compute.backend.request_compressor import RequestCompressor
+
 
 
 def test_requestcompressor_basic():

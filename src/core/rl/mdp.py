@@ -14,15 +14,37 @@
 
 
 """Mdp.py module.
-"""# Markov Decision Process (MDP) Implementation - Phase 319 Enhanced
+"""
+# Markov Decision Process (MDP) Implementation - Phase 319 Enhanced
 
 from __future__ import annotations
 
-import logging
-import random
-from collections import defaultdict
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from collections import defaultdict
+except ImportError:
+    from collections import defaultdict
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Tuple
+
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +84,6 @@ class ExperienceReplayBuffer:
         probs = [p / total for p in priorities]
         indices = random.choices(range(len(self.buffer)), weights=probs, k=min(batch_size, len(self.buffer)))
         return [self.buffer[i] for i in indices]
-
 
 
 

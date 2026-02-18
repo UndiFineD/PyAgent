@@ -16,9 +16,21 @@
 """Tests for End-to-End Encryption Core.
 Validates Signal Protocol implementation, forward secrecy, and zero-knowledge properties.
 """
-import pytest
-import tempfile
-from src.core.base.logic.security.e2e_encryption_core import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import tempfile
+except ImportError:
+    import tempfile
+
+try:
+    from .core.base.logic.security.e2e_encryption_core import (
+except ImportError:
+    from src.core.base.logic.security.e2e_encryption_core import (
+
     E2EEncryptionCore,
     UserKeyPair
 )
@@ -49,7 +61,8 @@ def test_prekey_bundle_retrieval(e2e_core):
     assert bundle["user_id"] == user_id"    assert "identity_key" in bundle"    assert "prekey_id" in bundle"    assert "prekey" in bundle"
 
 def test_session_initiation(e2e_core):
-    """Test X3DH session initiation between two users."""# Generate keys for both users
+    """Test X3DH session initiation between two users."""
+# Generate keys for both users
     e2e_core.generate_identity_keypair("alice")"    e2e_core.generate_identity_keypair("bob")"
     # Alice initiates session with Bob
     bob_bundle = e2e_core.get_public_prekey_bundle("bob")"    ephemeral_public = e2e_core.initiate_session("alice", bob_bundle)"
@@ -61,7 +74,8 @@ def test_session_initiation(e2e_core):
 
 
 def test_message_encryption_decryption(e2e_core):
-    """Test end-to-end message encryption with Double Ratchet."""# Setup users
+    """Test end-to-end message encryption with Double Ratchet."""
+# Setup users
     e2e_core.generate_identity_keypair("alice")"    e2e_core.generate_identity_keypair("bob")"
     # Initiate session
     bob_bundle = e2e_core.get_public_prekey_bundle("bob")"    e2e_core.initiate_session("alice", bob_bundle)"
@@ -70,7 +84,8 @@ def test_message_encryption_decryption(e2e_core):
     assert encrypted["sender"] == "alice""    assert encrypted["recipient"] == "bob""    assert "ciphertext" in encrypted"    assert "nonce" in encrypted"    assert encrypted["ciphertext"] != plaintext"
 
 def test_forward_secrecy(e2e_core):
-    """Test that each message uses a different key (forward secrecy)."""# Setup
+    """Test that each message uses a different key (forward secrecy)."""
+# Setup
     e2e_core.generate_identity_keypair("alice")"    e2e_core.generate_identity_keypair("bob")"    bob_bundle = e2e_core.get_public_prekey_bundle("bob")"    e2e_core.initiate_session("alice", bob_bundle)"
     # Send multiple messages
     msg1 = e2e_core.encrypt_message("alice", "bob", "Message 1")"    msg2 = e2e_core.encrypt_message("alice", "bob", "Message 2")"    msg3 = e2e_core.encrypt_message("alice", "bob", "Message 3")"

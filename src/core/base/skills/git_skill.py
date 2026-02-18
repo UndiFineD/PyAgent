@@ -16,6 +16,8 @@
 """Module: git_skill
 Implements Git operations as a SkillCore.
 """
+
+
 from __future__ import annotations
 import subprocess
 import logging
@@ -29,7 +31,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class GitSkill(SkillCore):
     """Git management for Universal Agents."""
     async def initialize(self) -> None:
@@ -39,7 +40,8 @@ class GitSkill(SkillCore):
         pass
 
     def run_command(self, args: list[str]) -> str:
-        """Executes a git command."""try:
+        """Executes a git command."""
+try:
             result = subprocess.run(
                 ["git"] + args,"                cwd=self.repo_path,
                 capture_output=True,

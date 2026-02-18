@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.models.agent_card import AgentCard
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.models.agent_card import AgentCard
+except ImportError:
+    from core.base.models.agent_card import AgentCard
+
 
 
 def test_agentcard_basic():

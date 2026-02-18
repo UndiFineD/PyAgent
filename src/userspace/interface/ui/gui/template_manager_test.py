@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .template_manager import TemplateManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .template_manager import TemplateManager
+except ImportError:
+    from .template_manager import TemplateManager
+
 
 
 def test_templatemanager_basic():

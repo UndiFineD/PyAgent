@@ -47,7 +47,6 @@ class AuthProof:
 
 
 
-
 class AuthCore(BaseCore):
     """Unified Authentication Core.
     Combines internal challenge-response logic and external API credential management.

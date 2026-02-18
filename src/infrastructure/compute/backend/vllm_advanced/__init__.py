@@ -23,13 +23,29 @@ Phase 31: Extends PyAgent's vLLM integration with:
 - Guided decoding for structured output (JSON, regex)
 """
 
-from .async_vllm_engine import (AsyncEngineConfig, AsyncRequestHandle,  # noqa: F401
-                                AsyncVllmEngine)
-from .guided_decoder import (ChoiceConstraint, GuidedConfig, GuidedDecoder,  # noqa: F401
-                             JsonSchema, RegexPattern)
-from .lora_manager import LoraAdapter, LoraConfig, LoraManager, LoraRegistry  # noqa: F401
-from .streaming_engine import (StreamCallback, StreamingConfig,  # noqa: F401
-                               StreamingVllmEngine, TokenStreamIterator)
+try:
+    from .async_vllm_engine import (AsyncEngineConfig, AsyncRequestHandle,  # noqa: F401
+                                    AsyncVllmEngine)
+except ImportError:
+    pass
+
+try:
+    from .guided_decoder import (ChoiceConstraint, GuidedConfig, GuidedDecoder,  # noqa: F401
+                                 JsonSchema, RegexPattern)
+except ImportError:
+    pass
+
+try:
+    from .lora_manager import (LoraAdapter, LoraConfig, LoraManager,  # noqa: F401
+                               LoraRegistry)
+except ImportError:
+    pass
+
+try:
+    from .streaming_engine import (StreamCallback, StreamingConfig,  # noqa: F401
+                                   StreamingVllmEngine, TokenStreamIterator)
+except ImportError:
+    pass
 
 __all__ = [
     # Async Engine

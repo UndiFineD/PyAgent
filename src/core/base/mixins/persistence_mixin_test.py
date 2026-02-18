@@ -12,9 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pathlib import Path
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from src.core.base.mixins.persistence_mixin import PersistenceMixin
+
+try:
+    from .core.base.mixins.persistence_mixin import PersistenceMixin
+except ImportError:
+    from src.core.base.mixins.persistence_mixin import PersistenceMixin
 
 
 

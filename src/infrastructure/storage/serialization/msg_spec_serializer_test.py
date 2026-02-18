@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.serialization.msg_spec_serializer import JSONEncoder, MsgPackEncoder, TypedSerializer, BenchmarkResult, is_msgspec_available, require_msgspec, encode_chat_request, decode_chat_response, decode_stream_chunk, benchmark_serialization
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.serialization.msg_spec_serializer import JSONEncoder, MsgPackEncoder, TypedSerializer, BenchmarkResult, is_msgspec_available, require_msgspec, encode_chat_request, decode_chat_response, decode_stream_chunk, benchmark_serialization
+except ImportError:
+    from infrastructure.storage.serialization.msg_spec_serializer import JSONEncoder, MsgPackEncoder, TypedSerializer, BenchmarkResult, is_msgspec_available, require_msgspec, encode_chat_request, decode_chat_response, decode_stream_chunk, benchmark_serialization
+
 
 
 def test_jsonencoder_basic():

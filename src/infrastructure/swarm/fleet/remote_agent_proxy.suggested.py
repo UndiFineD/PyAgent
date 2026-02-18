@@ -37,7 +37,6 @@ __version__ = VERSION
 
 
 
-
 class RemoteAgentProxy(BaseAgent):
     """Encapsulates a remote agent accessible via HTTP/JSON-RPC.""""
     Resilience (Phase 108): Implements a 15-minute TTL status cache for remote nodes.

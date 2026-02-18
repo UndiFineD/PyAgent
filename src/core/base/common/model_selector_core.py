@@ -15,14 +15,37 @@
 
 """Core logic for model selection and routing.
 """
+
+
 from __future__ import annotations
 
-import logging
-from dataclasses import dataclass, field
-from typing import Dict
 
-from .base_core import BaseCore
-from .models import ModelConfig
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Dict
+except ImportError:
+    from typing import Dict
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .models import ModelConfig
+except ImportError:
+    from .models import ModelConfig
+
 
 
 @dataclass

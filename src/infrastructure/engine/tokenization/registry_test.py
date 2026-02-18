@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.tokenization.registry import TokenizerRegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.tokenization.registry import TokenizerRegistry
+except ImportError:
+    from infrastructure.engine.tokenization.registry import TokenizerRegistry
+
 
 
 def test_tokenizerregistry_basic():

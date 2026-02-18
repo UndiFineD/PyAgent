@@ -29,7 +29,6 @@ except ImportError:
 __version__ = VERSION
 
 
-
 class
 class GraphContextEngine:
     """Manages an adjacency list of file and class dependencies."""

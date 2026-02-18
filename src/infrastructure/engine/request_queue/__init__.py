@@ -18,15 +18,51 @@ Request queue package.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from .base import RequestQueue  # noqa: F401
-from .enums import RequestStatus, SchedulingPolicy  # noqa: F401
-from .factory import create_request_queue  # noqa: F401
-from .manager import RequestQueueManager  # noqa: F401
-from .models import QueuedRequest, RequestPriority  # noqa: F401
-from .queues.fair import FairQueue  # noqa: F401
-from .queues.fcfs import FCFSQueue  # noqa: F401
-from .queues.mlfq import MLFQueue  # noqa: F401
-from .queues.priority import DeadlineQueue, PriorityQueue  # noqa: F401
+try:
+    from .base import RequestQueue  # noqa: F401
+except ImportError:
+    from .base import RequestQueue # noqa: F401
+
+try:
+    from .enums import RequestStatus, SchedulingPolicy  # noqa: F401
+except ImportError:
+    from .enums import RequestStatus, SchedulingPolicy # noqa: F401
+
+try:
+    from .factory import create_request_queue  # noqa: F401
+except ImportError:
+    from .factory import create_request_queue # noqa: F401
+
+try:
+    from .manager import RequestQueueManager  # noqa: F401
+except ImportError:
+    from .manager import RequestQueueManager # noqa: F401
+
+try:
+    from .models import QueuedRequest, RequestPriority  # noqa: F401
+except ImportError:
+    from .models import QueuedRequest, RequestPriority # noqa: F401
+
+try:
+    from .queues.fair import FairQueue  # noqa: F401
+except ImportError:
+    from .queues.fair import FairQueue # noqa: F401
+
+try:
+    from .queues.fcfs import FCFSQueue  # noqa: F401
+except ImportError:
+    from .queues.fcfs import FCFSQueue # noqa: F401
+
+try:
+    from .queues.mlfq import MLFQueue  # noqa: F401
+except ImportError:
+    from .queues.mlfq import MLFQueue # noqa: F401
+
+try:
+    from .queues.priority import DeadlineQueue, PriorityQueue  # noqa: F401
+except ImportError:
+    from .queues.priority import DeadlineQueue, PriorityQueue # noqa: F401
+
 
 __all__ = [
     "SchedulingPolicy","    "RequestStatus","    "RequestPriority","    "QueuedRequest","    "RequestQueue","    "FCFSQueue","    "PriorityQueue","    "DeadlineQueue","    "FairQueue","    "MLFQueue","    "RequestQueueManager","    "create_request_queue","]

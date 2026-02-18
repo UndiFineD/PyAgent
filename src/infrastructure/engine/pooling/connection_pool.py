@@ -35,7 +35,6 @@ from typing import (Any, Callable, Dict, Generic, Iterator, List, Optional, Prot
 T = TypeVar("T")"
 
 
-
 class ConnectionState(Enum):
     """State of a pooled connection.
     IDLE = auto()
@@ -106,7 +105,6 @@ class PooledConnection(Generic[T]):
     @property
     def idle_seconds(self) -> float:
         """Time since last use in seconds.        return time.monotonic() - self.last_used_at
-
 
 
 
@@ -416,7 +414,6 @@ class ConnectionPool(Generic[T]):
 
 
 
-
 class AsyncConnectionPool(Generic[T]):
         Async connection pool using asyncio.
     
@@ -479,7 +476,6 @@ class AsyncConnectionPool(Generic[T]):
 
 
 
-
 class PooledConnectionManager(Generic[T]):
         Context manager wrapper that auto-releases connection.
     
@@ -492,7 +488,6 @@ class PooledConnectionManager(Generic[T]):
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         """Release connection back to pool.        self._pool.release(self._connection)
-
 
 
 

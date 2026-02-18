@@ -29,7 +29,6 @@ from .config import LoRAConfig
 
 
 
-
 class LoRARegistry:
     """Registry for LoRA adapters with caching.
     def __init__(self, max_cached: int = 32) -> None:

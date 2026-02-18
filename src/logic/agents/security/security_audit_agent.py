@@ -16,8 +16,10 @@
 """
 SecurityAuditAgent - Scans workspace for secrets, insecure patterns, and permission issues
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-""" [Brief Summary]""""# DATE: 2026-02-13
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [Brief Summary]""""
+# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -51,7 +53,6 @@ __version__ = VERSION
 
 
 
-
 class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Scans the workspace for potential security risks including hardcoded secrets,
 #     vulnerable patterns, and insecure file permissions.
@@ -61,22 +62,27 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.workspace_path = workspace_path
         self.secret_patterns = [
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             r"(?i)api[-_]?key","            r"(?i)password","            r"(?i)secret","            r"(?i)token","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             r"(?i)auth[-_]?key","        ]
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def scan_file(self, file_path: str) -> list[dict[str, Any]]:"Scans a single file for security issues.# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         findings = []""""        try:
             with open(file_path, encoding="utf-8", errors="ignore") as f:"                content = f.read()
 
             # Rust acceleration for secret scanning
             try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 from rust_core import (  # type: ignore[attr-defined]""""                    scan_hardcoded_secrets_rust,
                     scan_insecure_patterns_rust,
                 )
@@ -85,22 +91,26 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 secret_findings = scan_hardcoded_secrets_rust(content)
                 for pattern_name, _ in secret_findings:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                     findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                     findings.append(
                         {
                             "file": file_path,"                            "type": "Hardcoded Secret","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#                             "detail": fMatched pattern: {pattern_name}","  # [BATCHFIX] closed string"                            "severity": "High","                        }
+""" [BATCHFIX] Commented unterminated string""""
+#                             "detail": fMatched pattern: {pattern_name}","  # [BATCHFIX] closed string"                            "severity": "High","                        }
                     )
 
                 # Scan for insecure patterns
                 insecure_findings = scan_insecure_patterns_rust(content)
                 for pattern_type, severity in insecure_findings:
                     if pattern_type == "eval_usage":"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         findings.append(
                             {
                                 "file": file_path,"                                "type": "Insecure Pattern","                                "detail": "Usage of ev" + "al() detected","                                "severity": severity,"                            }
                         )
                     elif pattern_type == "shell_true":"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         findings.append(
                             {
                                 "file": file_path,"                                "type": "Insecure Pattern","                                "detail": "Usage of shell=True in subprocess detected","                                "severity": severity,"                            }
                         )
@@ -111,28 +121,37 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 # Check for secrets
                 for pattern in self.secret_patterns:
                     if pattern.startswith("(?"):"                        flag_end = pattern.find(")") + 1"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""                         flags = pattern[:flag_end]""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""                         actual_pattern = pattern[flag_end:]""""#                         full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'                    else:
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""                         flags = pattern[:flag_end]""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""                         actual_pattern = pattern[flag_end:]""""
+#                         full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'                    else:
 #                         full_pattern = f"\\b{pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
                     matches = re.finditer(full_pattern, content)
                     for match in matches:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                         if "# nosec" in lines[content.count("\\n", 0, match.start())]:"                            continue
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         findings.append(
                             {
                                 "file": file_path,"                                "type": "Hardcoded Secret","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#                                 "detail": fMatched pattern: {pattern}","  # [BATCHFIX] closed string"                                "severity": "High","                            }
+""" [BATCHFIX] Commented unterminated string""""
+#                                 "detail": fMatched pattern: {pattern}","  # [BATCHFIX] closed string"                                "severity": "High","                            }
                         )
 
                 # Check for insecure patterns
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                 if (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                 if (
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                     re.search(r"\\b" +"
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                     re.search(r"\\b" +"
 from __future__ import annotations
 
 import os
@@ -146,7 +165,6 @@ __version__ = VERSION
 
 
 
-
 class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 #     Scans the workspace for potential security risks including "hardcoded secrets,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -156,22 +174,27 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.workspace_path = workspace_path
         self.secret_patterns = [
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             r"(?i)api[-_]?key","            r"(?i)password","            r"(?i)secret","            r"(?i)token","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             r"(?i)auth[-_]?key","        ]
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def scan_file(self, file_path: str) -> list[dict[str, Any]]:"Scans a single file for security issues.# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         findings = []""""        try:
             with open(file_path, encoding="utf-8", errors="ignore") as f:"                content = f.read()
 
             # Rust acceleration for secret scanning
             try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 from rust_core import (  # type: ignore[attr-defined]""""                    scan_hardcoded_secrets_rust,
                     scan_insecure_patterns_rust,
                 )
@@ -180,22 +203,26 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 secret_findings = scan_hardcoded_secrets_rust(content)
                 for pattern_name, _ in secret_findings:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                     findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                     findings.append(
                         {
                             "file": file_path,"                            "type": "Hardcoded Secret","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#                             "detail": fMatched pattern: {pattern_name}","  # [BATCHFIX] closed string"                            "severity": "High","                        }
+""" [BATCHFIX] Commented unterminated string""""
+#                             "detail": fMatched pattern: {pattern_name}","  # [BATCHFIX] closed string"                            "severity": "High","                        }
                     )
 
                 # Scan for insecure patterns
                 insecure_findings = scan_insecure_patterns_rust(content)
                 for pattern_type, severity in insecure_findings:
                     if pattern_type == "eval_usage":"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         findings.append(
                             {
                                 "file": file_path,"                                "type": "Insecure Pattern","                                "detail": "Usage of ev" + "al() detected","                                "severity": severity,"                            }
                         )
                     elif pattern_type == "shell_true":"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         findings.append(
                             {
                                 "file": file_path,"                                "type": "Insecure Pattern","                                "detail": "Usage of shell=True in subprocess detected","                                "severity": severity,"                            }
                         )
@@ -206,45 +233,56 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 # Check for secrets
                 for pattern in self.secret_patterns:
                     if pattern.startswith("(?"):"                        flag_end = pattern.find(")") + 1"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""                         flags = pattern[:flag_end]""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""                         actual_pattern = pattern[flag_end:]""""#                         full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'                    else:
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""                         flags = pattern[:flag_end]""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""                         actual_pattern = pattern[flag_end:]""""
+#                         full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'                    else:
 #                         full_pattern = f"\\b{pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
                     matches = re.finditer(full_pattern, content)
                     for match in matches:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                         if "# nosec" in lines[content.count("\\n", 0, match.start())]:"                            continue
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         findings.append(
                             {
                                 "file": file_path,"                                "type": "Hardcoded Secret","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#                                 "detail": fMatched pattern: {pattern}","  # [BATCHFIX] closed string"                                "severity": "High","                            }
+""" [BATCHFIX] Commented unterminated string""""
+#                                 "detail": fMatched pattern: {pattern}","  # [BATCHFIX] closed string"                                "severity": "High","                            }
                         )
 
                 # Check for insecure patterns
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                 if (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                 if (
 # [BATCHFIX] Commented metadata/non-Python
 #                     re.search(r"\\b" + "ev" + ral\\\\s*\(", content)"  # [BATCHFIX] closed string"                    and "SecurityAuditAgent" not in content"                    and "SecurityScanner" not in content"                ):
 # [BATCHFIX] Commented metadata/non-Python
 #                     eval_match = re.search(r".*\\b" + "ev" + ral\\\\s*\(.*", content)"  # [BATCHFIX] closed string"                    if eval_match and "# nosec" not in eval_match.group(0):"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         findings.append(
                             {
                                 "file": file_path,"                                "type": "Insecure Pattern","                                "detail": "Usage of ev" + "al() detected","                                "severity": "Medium","                            }
                         )
 
 # [BATCHFIX] Commented metadata/non-Python
 #                 if re.search(rshell\\\\s*=\\\\s*True", content) and "SecurityAuditAgent" not in content:"  # [BATCHFIX] closed string"                    shell_match = re.search(r".*shell\\\\s*=\\\\s*True.*", content)"                    if shell_match and "# nosec" not in shell_match.group(0):"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                         findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                         findings.append(
                             {
                                 "file": file_path,"                                "type": "Insecure Pattern","                                "detail": "Usage of shell=True in subprocess detected","                                "severity": "Medium","                            }
                         )
 
         except (IOError, UnicodeDecodeError) as e:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             findings.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             findings.append(
                 {
                     "file": file_path,"                    "type": "Error","                    "detail": str(e),"                    "severity": "Low","                }
             )
@@ -252,7 +290,8 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         # Phase 108: Intelligence Recording
         if findings:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             self._record(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             self._record(
 # [BATCHFIX] Commented metadata/non-Python
 #                 fScanning {file_path}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 #                 fFound {len(findings)} issues","  # [BATCHFIX] closed string"                provider="SecurityAudit","                model="FileScanner","                meta={"file": file_path, "findings_count": len(findings)},"            )
@@ -260,14 +299,19 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return findings
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def audit_workspace(self) -> dict[str, Any]:"Performs a comprehensive security audit of the entire workspace.# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""# "        total_findings = []"  # [BATCHFIX] closed string"        for root, dirs, files in os.walk(self.workspace_path):
+""" [BATCHFIX] Commented unterminated string""""
+# "        total_findings = []"  # [BATCHFIX] closed string"        for root, dirs, files in os.walk(self.workspace_path):
             # Skip hidden dirs and common excludes
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""             dirs[:] = [""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""             dirs[:] = [""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 d for d in dirs if not d.startswith(".") and d not in ["node_modules", "__pycache__", ".venv", "venv"]"            ]
 
             for file in files:

@@ -50,7 +50,6 @@ class HostHeaderTest:
 
 
 
-
 class AdvancedWebScanningCore:
     """Core for advanced web application scanning and vulnerability detection.
 
@@ -83,7 +82,8 @@ class AdvancedWebScanningCore:
 
         Returns:
             Response object or None if failed
-        """try:
+        """
+try:
             async with aiohttp.ClientSession() as session:
                 async with session.request(
                     method,

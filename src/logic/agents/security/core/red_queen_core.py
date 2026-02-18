@@ -39,7 +39,6 @@ class AttackVector:
 
 
 
-
 class RedQueenCore:
     """Pure logic for the 'Digital Red Queen' adversarial evolution.""""'    Generates and mutates prompts to test security guardrails.
     

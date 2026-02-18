@@ -32,9 +32,21 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Cognitive Super-Agent: A fused agent combining Reasoning and Reflection.
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
 
 __version__ = VERSION
 
@@ -57,9 +69,21 @@ class CognitiveSuperAgent(BaseAgent):
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Override to use cognitive acceleration."        "_ = target_file"        return self.accelerated_think(prompt)
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
 
 __version__ = VERSION
 

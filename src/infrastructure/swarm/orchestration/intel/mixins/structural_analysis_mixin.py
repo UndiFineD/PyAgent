@@ -19,14 +19,26 @@ Structural analysis mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
-import os
-import re
-from typing import TYPE_CHECKING, Any
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import TYPE_CHECKING, Any
+except ImportError:
+    from typing import TYPE_CHECKING, Any
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import \
         SelfImprovementAnalysis
-
 
 
 

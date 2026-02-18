@@ -18,8 +18,15 @@
 Core logic for Broken Import Self-Healing (Phase 186).
 Suggests fixes for ModuleNotFound errors and builds import maps.
 
-import os
-import re
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import re
+except ImportError:
+    import re
 
 
 

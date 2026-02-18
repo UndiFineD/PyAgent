@@ -16,6 +16,8 @@
 """
 """"Tool Framework Mixin for BaseAgent.
 Provides schema-based tool creation and management, inspired by Adorable's tool system.'"""
+
+
 from __future__ import annotations
 
 import inspect
@@ -71,16 +73,13 @@ class ToolDefinition:
 
 
 
-
 class ToolExecutionError(Exception):
     """Exception raised when tool execution fails."""pass
 
 
 
-
 class ToolValidationError(Exception):
     """Exception raised when tool parameters are invalid."""pass
-
 
 
 
@@ -256,7 +255,8 @@ class ToolFrameworkMixin:
         """Get usage statistics for all tools."""return self.tool_usage_stats.copy()
 
     def _auto_discover_tools(self) -> None:
-        """Auto-discover tools from methods decorated with @tool."""# This would scan the class for methods with tool decorators
+        """Auto-discover tools from methods decorated with @tool."""
+# This would scan the class for methods with tool decorators
         # For now, it's a TODO Placeholder for future implementation'        pass
 
     def _validate_tool_parameters(self, tool_def: ToolDefinition, parameters: Dict[str, Any]) -> Dict[str, Any]:

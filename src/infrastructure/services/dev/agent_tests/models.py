@@ -18,12 +18,29 @@
 Data models for test agent functionality.
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .enums import (BrowserType, CoverageType, MutationOperator, TestPriority,
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .enums import (BrowserType, CoverageType, MutationOperator, TestPriority,
+except ImportError:
+    from .enums import (BrowserType, CoverageType, MutationOperator, TestPriority,
+
                     TestSourceType, TestStatus)
 
 __version__ = VERSION

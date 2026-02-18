@@ -30,7 +30,6 @@ except ImportError:
 
 
 
-
 class ConsensusCore(BaseCore):
     """Standardized logic for multi-agent voting and consensus.
     Supports weighted voting and tie-breaking.

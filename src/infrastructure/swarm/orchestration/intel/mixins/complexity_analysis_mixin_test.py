@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.intel.mixins.complexity_analysis_mixin import ComplexityAnalysisMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.intel.mixins.complexity_analysis_mixin import ComplexityAnalysisMixin
+except ImportError:
+    from infrastructure.swarm.orchestration.intel.mixins.complexity_analysis_mixin import ComplexityAnalysisMixin
+
 
 
 def test_complexityanalysismixin_basic():

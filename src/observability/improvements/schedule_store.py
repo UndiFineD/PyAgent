@@ -29,11 +29,19 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
-from .scheduled_improvement import ScheduledImprovement
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .scheduled_improvement import ScheduledImprovement
+except ImportError:
+    from .scheduled_improvement import ScheduledImprovement
+
 
 __version__ = VERSION
-
 
 
 

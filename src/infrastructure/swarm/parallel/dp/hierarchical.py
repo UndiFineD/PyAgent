@@ -21,15 +21,35 @@ Hierarchical DP coordinator with locality awareness.
 
 from __future__ import annotations
 
-import logging
-import threading
-from typing import Any, Optional, Tuple
 
-from src.infrastructure.swarm.parallel.dp.engine import DPEngineCoreProc
-from src.infrastructure.swarm.parallel.dp.types import DPConfig, DPRole
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Any, Optional, Tuple
+except ImportError:
+    from typing import Any, Optional, Tuple
+
+
+try:
+    from .infrastructure.swarm.parallel.dp.engine import DPEngineCoreProc
+except ImportError:
+    from src.infrastructure.swarm.parallel.dp.engine import DPEngineCoreProc
+
+try:
+    from .infrastructure.swarm.parallel.dp.types import DPConfig, DPRole
+except ImportError:
+    from src.infrastructure.swarm.parallel.dp.types import DPConfig, DPRole
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

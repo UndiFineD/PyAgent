@@ -21,7 +21,6 @@ import re
 
 
 
-
 class ReconnaissanceMixin:
     """Mixin providing reconnaissance capabilities for target discovery.
 

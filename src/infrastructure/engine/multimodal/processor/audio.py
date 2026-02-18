@@ -13,19 +13,18 @@
 # limitations under the License.
 
 
-Audio.py module.
+# Audio.py module.
+
 
 from typing import Any, Dict, Optional, Tuple
-
 import numpy as np
-
 from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
 
 
 
 class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
-    """Processor for audio inputs.
+    """Processor for audio inputs."""
     modality = ModalityType.AUDIO
 
     def __init__(
@@ -36,6 +35,7 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
         feature_size: int = 80,  # Mel bins
         hop_length: int = 160,
     ) -> None:
+        """Initialize the audio processor with configuration and processing parameters."""
         super().__init__(config)
         self.target_sample_rate = target_sample_rate
         self.max_length_seconds = max_length_seconds
@@ -47,8 +47,10 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
         data: Tuple[np.ndarray, int],
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        """Process raw audio data into features. Expects a tuple of (waveform, sample_rate)."""
         waveform, sample_rate = data
-        target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)"        max_len = kwargs.get("max_length_seconds", self.max_length_seconds)"
+        target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)
+        max_len = kwargs.get("max_length_seconds", self.max_length_seconds)
         if waveform.ndim > 1:
             waveform = waveform.mean(axis=-1) if waveform.shape[-1] < waveform.shape[0] else waveform.mean(axis=0)
 
@@ -72,22 +74,32 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
                 features[i, 0] = np.sqrt(np.mean(segment**2))
 
         metadata = {
-            "original_sample_rate": sample_rate,"            "original_length": original_length,"            "processed_length": len(waveform),"            "num_frames": num_frames,"            "feature_size": self.feature_size,"            "duration_seconds": len(waveform) / sample_rate,"        }
+            "original_sample_rate": sample_rate,
+            "original_length": original_length,
+            "processed_length": len(waveform),
+            "num_frames": num_frames,
+            "feature_size": self.feature_size,
+            "duration_seconds": len(waveform) / sample_rate,
+        }
 
         return features, metadata
 
-    def get_TODO Placeholder_count(
+
+    def get_token_count(
         self,
         data: Tuple[np.ndarray, int],
         **kwargs: Any,
     ) -> int:
+        """Estimate the number of "tokens" (e.g., feature frames) that this audio input would produce."""
         waveform, sample_rate = data
-        target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)"        max_len = kwargs.get("max_length_seconds", self.max_length_seconds)"
+        target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)
+        max_len = kwargs.get("max_length_seconds", self.max_length_seconds)
         duration = min(len(waveform) / sample_rate, max_len)
         num_samples = int(duration * target_sr)
         num_frames = max(1, num_samples // self.hop_length)
 
         return num_frames
+
 
     def _resample(
         self,

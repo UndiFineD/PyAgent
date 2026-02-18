@@ -16,17 +16,45 @@
 """Knowledge Agent CLI Entry Point."""
 
 
-import sys
-import os
-import argparse
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import argparse
+except ImportError:
+    import argparse
+
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
-import logging
-from pathlib import Path
+try:
+    import logging
+except ImportError:
+    import logging
 
-from ....core.base.lifecycle.version import VERSION
-from ...knowledge_agent import KnowledgeAgent
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from ....core.base.lifecycle.version import VERSION
+except ImportError:
+    from ....core.base.lifecycle.version import VERSION
+
+try:
+    from ...knowledge_agent import KnowledgeAgent
+except ImportError:
+    from ...knowledge_agent import KnowledgeAgent
+
 
 __version__ = VERSION
 

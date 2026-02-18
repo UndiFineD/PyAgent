@@ -15,10 +15,22 @@
 
 Bench Transformer: Performance benchmarking utility for transformer models in PyAgent.
 
-import statistics
-import time
+try:
+    import statistics
+except ImportError:
+    import statistics
 
-import rust_core
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    import rust_core
+except ImportError:
+    import rust_core
+
 
 
 def run_performance_test(duration_secs=60):

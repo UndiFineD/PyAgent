@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .bmad_manager.suggested import BmadManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .bmad_manager.suggested import BmadManager
+except ImportError:
+    from .bmad_manager.suggested import BmadManager
+
 
 
 def test_bmadmanager_basic():

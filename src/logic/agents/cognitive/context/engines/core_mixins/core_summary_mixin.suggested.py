@@ -15,7 +15,10 @@
 
 """
 Core summary mixin for cognitive agents.
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 

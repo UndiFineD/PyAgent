@@ -18,14 +18,42 @@ Factory.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .base import RequestQueue
-from .enums import SchedulingPolicy
-from .queues.fair import FairQueue
-from .queues.fcfs import FCFSQueue
-from .queues.mlfq import MLFQueue
-from .queues.priority import DeadlineQueue, PriorityQueue
+
+try:
+    from .base import RequestQueue
+except ImportError:
+    from .base import RequestQueue
+
+try:
+    from .enums import SchedulingPolicy
+except ImportError:
+    from .enums import SchedulingPolicy
+
+try:
+    from .queues.fair import FairQueue
+except ImportError:
+    from .queues.fair import FairQueue
+
+try:
+    from .queues.fcfs import FCFSQueue
+except ImportError:
+    from .queues.fcfs import FCFSQueue
+
+try:
+    from .queues.mlfq import MLFQueue
+except ImportError:
+    from .queues.mlfq import MLFQueue
+
+try:
+    from .queues.priority import DeadlineQueue, PriorityQueue
+except ImportError:
+    from .queues.priority import DeadlineQueue, PriorityQueue
+
 
 
 def create_request_queue(

@@ -31,7 +31,6 @@ import time
 
 
 
-
 class DnsRecordType(Enum):
     """DNS record types"""
     A = 1
@@ -46,14 +45,12 @@ class DnsRecordType(Enum):
 
 
 
-
 class FilterAction(Enum):
     """DNS filtering actions"""
     ALLOW = "allow"
     BLOCK = "block"
     REDIRECT = "redirect"
     REWRITE = "rewrite"
-
 
 
 
@@ -102,7 +99,6 @@ class DnsStatistics:
     queries_by_type: Dict[str, int] = field(default_factory=dict)
     response_times: List[float] = field(default_factory=list)
     start_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-
 
 
 

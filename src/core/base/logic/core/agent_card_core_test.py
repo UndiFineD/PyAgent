@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.agent_card_core import AgentCapability, AgentCard, AgentCardCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.agent_card_core import AgentCapability, AgentCard, AgentCardCore
+except ImportError:
+    from core.base.logic.core.agent_card_core import AgentCapability, AgentCard, AgentCardCore
+
 
 
 def test_agentcapability_basic():

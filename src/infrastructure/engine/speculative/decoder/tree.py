@@ -17,8 +17,17 @@
 """Tree structure regarding speculative tokens.
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import List
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
 
 
 @dataclass(frozen=True)

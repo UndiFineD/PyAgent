@@ -14,9 +14,15 @@
 
 
 """Enum definitions for PyAgent models."""
+
+
 from __future__ import annotations
 
-from enum import Enum, auto
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -34,7 +40,6 @@ class AgentState(Enum):
     ERROR = "error"
 
 
-
 class ResponseQuality(Enum):
     """AI response quality levels."""
     EXCELLENT = 5
@@ -45,7 +50,6 @@ class ResponseQuality(Enum):
     POOR = 2
 
     INVALID = 1
-
 
 
 
@@ -63,7 +67,6 @@ class FailureClassification(Enum):
     UNKNOWN = "unknown"
 
 
-
 class OptimizationMetric(Enum):
     """Metrics for strategy optimization."""
     LATENCY = "latency"
@@ -74,7 +77,6 @@ class OptimizationMetric(Enum):
     F1_SCORE = "f1_score"
     COST = "cost"
     ROBUSTNESS = "robustness"
-
 
 
 class EventType(Enum):
@@ -88,7 +90,6 @@ class EventType(Enum):
     ERROR = "error"
 
 
-
 class AuthMethod(Enum):
     """Authentication methods for backends."""
     NONE = "none"
@@ -98,7 +99,6 @@ class AuthMethod(Enum):
     BASIC_AUTH = "basic_auth"
     OAUTH2 = "oauth2"
     CUSTOM = "custom"
-
 
 
 class SerializationFormat(Enum):
@@ -111,7 +111,6 @@ class SerializationFormat(Enum):
     CBOR = "cbor"
 
 
-
 class FilePriority(Enum):
     """File priority levels for request prioritization."""
     CRITICAL = 5
@@ -119,7 +118,6 @@ class FilePriority(Enum):
     NORMAL = 3
     LOW = 2
     BACKGROUND = 1
-
 
 
 
@@ -173,7 +171,6 @@ class InputType(Enum):
     PSI = "psi"
 
 
-
 class AgentType(Enum):
     """Agent type classifications."""
     GENERAL = "general"
@@ -183,7 +180,6 @@ class AgentType(Enum):
     REFACTORING = "refactoring"
 
 
-
 class MessageRole(Enum):
     """Roles for conversation messages."""
     USER = "user"
@@ -191,13 +187,11 @@ class MessageRole(Enum):
     SYSTEM = "system"
 
 
-
 class AgentEvent(Enum):
     """Agent event types."""
     START = "start"
     COMPLETE = "complete"
     ERROR = "error"
-
 
 
 class AgentExecutionState(Enum):
@@ -211,7 +205,6 @@ class AgentExecutionState(Enum):
 
 
 
-
 class AgentPriority(Enum):
     """Priority level for agent execution."""
     CRITICAL = 1
@@ -219,7 +212,6 @@ class AgentPriority(Enum):
     NORMAL = 3
     LOW = 4
     BACKGROUND = 5
-
 
 
 
@@ -232,14 +224,12 @@ class ConfigFormat(Enum):
 
 
 
-
 class DiffOutputFormat(Enum):
     """Output format for diff preview."""
     UNIFIED = auto()  # Unified diff format
     CONTEXT = auto()  # Context diff format
     SIDE_BY_SIDE = auto()  # Side by side diff
     HTML = auto()  # HTML formatted diff
-
 
 
 
@@ -252,13 +242,11 @@ class HealthStatus(Enum):
 
 
 
-
 class LockType(Enum):
     """File locking type."""
     SHARED = auto()  # Multiple readers allowed
     EXCLUSIVE = auto()  # Single writer only
     ADVISORY = auto()  # Advisory lock (not enforced by OS)
-
 
 
 
@@ -271,7 +259,6 @@ class RateLimitStrategy(Enum):
 
 
 
-
 class EnvironmentStatus(Enum):
     """Environment instance status."""
     PENDING = "pending"
@@ -280,7 +267,6 @@ class EnvironmentStatus(Enum):
     FAILED = "failed"
     TERMINATED = "terminated"
     EXPIRED = "expired"
-
 
 
 class EnvironmentIsolation(Enum):

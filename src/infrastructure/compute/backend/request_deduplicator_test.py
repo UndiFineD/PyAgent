@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.request_deduplicator import RequestDeduplicator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.request_deduplicator import RequestDeduplicator
+except ImportError:
+    from infrastructure.compute.backend.request_deduplicator import RequestDeduplicator
+
 
 
 def test_requestdeduplicator_basic():

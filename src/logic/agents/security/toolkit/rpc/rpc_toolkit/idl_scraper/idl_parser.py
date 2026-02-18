@@ -11,11 +11,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Iterator, Tuple, List
-import pandas as pd
-import argparse
-import os
-import re
+try:
+    from typing import Iterator, Tuple, List
+except ImportError:
+    from typing import Iterator, Tuple, List
+
+try:
+    import pandas
+except ImportError:
+    import pandas
+ as pd
+try:
+    import argparse
+except ImportError:
+    import argparse
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import re
+except ImportError:
+    import re
+
 
 # [BATCHFIX] Commented metadata/non-Python
 """ _OUTPUT_FILENAME = "idl_functions.csv"  # [BATCHFIX] closed string"_typedefs = {}
@@ -26,21 +46,25 @@ def get_interfaces(idl_content):
     # First group is the interface name;
     # Second group is the interface block content
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     return re.finditer(r"(?:interface|coclass)\\\\s([\\w\\\\s:]+){(.*?)};?\\\\s*$", idl_content, flags=re.DOTALL | re.MULTILINE)"
 
 def get_interface_name(interface_name_raw):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     return interface_name_raw.split(":")[0].strip()"
 
 def get_interface_uuid(content_block: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     return next(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     return next(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         re.finditer(r"([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})", content_block)"    ).group(0)
 
 
@@ -56,15 +80,19 @@ def get_typedefs(idl_name: str, idl_content: str) -> None:
         return
     else:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         _typedefs[idl_name] = {}""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         _typedefs[idl_name] = {}""""
+# [BATCHFIX] Commented metadata/non-Python
 #     for typedef in re.findall(rtypedef (.+);", idl_content):"  # [BATCHFIX] closed string"        typedef = drop_compilation_attributes(typedef)
         name_ind = typedef.rfind(" ")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         _typedefs[idl_name][typedef[name_ind + 1 :]] = typedef[:name_ind]""""
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ def get_import_typedefs(idl_folder: str, imports: List[str]) -> None:""""    for idl_name in imports:
         if idl_name in _typedefs:
             continue
@@ -75,22 +103,26 @@ def get_typedefs(idl_name: str, idl_content: str) -> None:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ def parse_function_parameters(parameters: str, idl_deps: List[str]) -> Iterator[Tuple[str]]:""""    parameters = parameters.strip()
     if not parameters or parameters.lower() == "void":"        return
     clean_params = drop_compilation_attributes(parameters)  # Drop the direction attributes that drop in compilation
     for param in clean_params.split(","):"        param = param.strip()
         if "\\n" in param:"            for mparam in param.split("\\n"):"                name_ind = mparam.rfind(" ")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 yield mparam[:name_ind].strip(), mparam[name_ind + 1 :].strip()""""        else:
             name_ind = param.rfind(" ")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             yield param[:name_ind].strip(), param[name_ind + 1 :].strip()""""
 
 def parse_idl(idl_folder: str, idl_name: str) -> pd.DataFrame:
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     idl_df = pd.DataFrame(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     idl_df = pd.DataFrame(
         columns=[
             "idl_name","            "interface_uuid","            "interface_name","            "function_return_type","            "function_name","            "function_params","        ],
         dtype=object,
@@ -100,7 +132,8 @@ def parse_idl(idl_folder: str, idl_name: str) -> pd.DataFrame:
     start = 0
     for interface in interfaces:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         interface_uuid = get_interface_uuid(content[start : interface.start()])""""        func_count = 0
         start = interface.start()
         ifc_decl, ifc_block = interface.groups()
@@ -111,16 +144,20 @@ def parse_idl(idl_folder: str, idl_name: str) -> pd.DataFrame:
             if ret_type == "define":"                continue
             row = {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#                 "idl_name": idl_name.replace(".idl", "),"  # [BATCHFIX] closed string"                "interface_uuid": interface_uuid,"                "interface_name": get_interface_name(ifc_decl),"                "function_name": func_name,"                "function_return_type": ret_type,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#                 "idl_name": idl_name.replace(".idl", "),"  # [BATCHFIX] closed string"                "interface_uuid": interface_uuid,"                "interface_name": get_interface_name(ifc_decl),"                "function_name": func_name,"                "function_return_type": ret_type,"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 "function_params": list(parse_function_parameters(func_params, [])),"            }
             idl_df = idl_df.append(row, ignore_index=True)
         if not func_count:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             idl_df = idl_df.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             idl_df = idl_df.append(
                 {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#                     "idl_name": idl_name.replace(".idl", "),"  # [BATCHFIX] closed string"                    "interface_uuid": interface_uuid,"                    "interface_name": get_interface_name(ifc_decl),"                    "function_name": None,"                    "function_return_type": None,"                    "function_params": None,"                },
+""" [BATCHFIX] Commented unterminated string""""
+#                     "idl_name": idl_name.replace(".idl", "),"  # [BATCHFIX] closed string"                    "interface_uuid": interface_uuid,"                    "interface_name": get_interface_name(ifc_decl),"                    "function_name": None,"                    "function_return_type": None,"                    "function_params": None,"                },
                 ignore_index=True,
             )
     return idl_df
@@ -138,8 +175,10 @@ if __name__ == "__main__":"    args = get_args()
         output = parse_idl(folder, name)
     elif args.should_recurse:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         output = pd.concat([parse_idl(root, f) for root, _, files in os.walk(args.input_path) for f in files])""""    else:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         output = pd.concat([parse_idl(args.input_path, f) for f in os.listdir(args.input_path)])""""    output.to_csv(args.output_path, index=False)

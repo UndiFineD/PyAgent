@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .notification_channel import NotificationChannel
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .notification_channel import NotificationChannel
+except ImportError:
+    from .notification_channel import NotificationChannel
+
 
 
 def test_notificationchannel_basic():

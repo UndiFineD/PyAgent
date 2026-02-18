@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.analysis_core import AnalysisCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.analysis_core import AnalysisCore
+except ImportError:
+    from core.base.common.analysis_core import AnalysisCore
+
 
 
 def test_analysiscore_basic():

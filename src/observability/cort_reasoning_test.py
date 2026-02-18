@@ -12,9 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from unittest.mock import Mock
-import inspect
-import pytest
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from unittest.mock import Mock
+
+try:
+    import inspect
+except ImportError:
+    import inspect
+
+try:
+    import pytest
+except ImportError:
+    import pytest
 
 
 

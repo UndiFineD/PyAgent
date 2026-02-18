@@ -29,7 +29,6 @@ from .regex import RegexGrammar
 
 
 
-
 class EBNFGrammar(GrammarEngine):
         EBNF/Lark grammar engine.
     

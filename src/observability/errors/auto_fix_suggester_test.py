@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .auto_fix_suggester import AutoFixSuggester
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .auto_fix_suggester import AutoFixSuggester
+except ImportError:
+    from .auto_fix_suggester import AutoFixSuggester
+
 
 
 def test_autofixsuggester_basic():

@@ -28,7 +28,6 @@ from src.infrastructure.engine.request_queue.models import QueuedRequest
 T = TypeVar("T", bound=QueuedRequest)"
 
 
-
 class MLFQueue(RequestQueue):
         Multi-Level Feedback Queue.
     

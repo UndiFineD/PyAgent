@@ -27,7 +27,6 @@ from datetime import datetime
 
 
 
-
 class JobQueue:
     """Thread-safe in-memory job queue with background processing.
 

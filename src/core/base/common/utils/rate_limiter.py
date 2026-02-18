@@ -17,15 +17,35 @@
 Auto-extracted class from agent.py
 from __future__ import annotations
 
-import threading
-import time
-from typing import Any
 
-from src.core.base.common.models import RateLimitConfig
-from src.core.base.lifecycle.version import VERSION
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.models import RateLimitConfig
+except ImportError:
+    from src.core.base.common.models import RateLimitConfig
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

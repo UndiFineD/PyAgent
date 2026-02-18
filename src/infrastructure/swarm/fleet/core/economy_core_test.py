@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.core.economy_core import EconomyCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.core.economy_core import EconomyCore
+except ImportError:
+    from infrastructure.swarm.fleet.core.economy_core import EconomyCore
+
 
 
 def test_economycore_basic():

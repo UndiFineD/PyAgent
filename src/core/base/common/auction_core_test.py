@@ -13,8 +13,15 @@
 # limitations under the License.
 """Test Auction Core module.
 """
-from hypothesis import given, strategies as st, settings, HealthCheck
-from src.core.base.common.auction_core import AuctionCore
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    from .core.base.common.auction_core import AuctionCore
+except ImportError:
+    from src.core.base.common.auction_core import AuctionCore
 
 
 

@@ -32,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class DistributedSyncProvider(ABC):
     """Base class for distributed synchronization providers.
     @abstractmethod
@@ -46,7 +45,6 @@ class DistributedSyncProvider(ABC):
     @abstractmethod
     def get_remote_state(self, key: str, rank: int) -> Optional[Any]:
         """Fetch state from a specific remote rank.        ...
-
 
 
 
@@ -85,7 +83,6 @@ class NixlSyncProvider(DistributedSyncProvider):
     def get_remote_state(self, key: str, rank: int) -> Optional[Any]:
         """Direct remote memory access (RDMA READ).        # Stub implementation
         pass
-
 
 
 

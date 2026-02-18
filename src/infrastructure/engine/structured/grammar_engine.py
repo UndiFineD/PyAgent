@@ -17,12 +17,36 @@
 Facade for Grammar Engine.
 Delegates to modularized sub-packages in src.infrastructure.engine.structured/.
 
-from .base import GrammarEngine
-from .choice import ChoiceGrammar
-from .ebnf import EBNFGrammar
-from .json_schema import JsonSchemaGrammar
-from .models import FSMState, FSMTransitionTable, TokenMask
-from .regex import RegexGrammar
+try:
+    from .base import GrammarEngine
+except ImportError:
+    from .base import GrammarEngine
+
+try:
+    from .choice import ChoiceGrammar
+except ImportError:
+    from .choice import ChoiceGrammar
+
+try:
+    from .ebnf import EBNFGrammar
+except ImportError:
+    from .ebnf import EBNFGrammar
+
+try:
+    from .json_schema import JsonSchemaGrammar
+except ImportError:
+    from .json_schema import JsonSchemaGrammar
+
+try:
+    from .models import FSMState, FSMTransitionTable, TokenMask
+except ImportError:
+    from .models import FSMState, FSMTransitionTable, TokenMask
+
+try:
+    from .regex import RegexGrammar
+except ImportError:
+    from .regex import RegexGrammar
+
 
 __all__ = [
     "FSMState","    "FSMTransitionTable","    "TokenMask","    "GrammarEngine","    "RegexGrammar","    "JsonSchemaGrammar","    "ChoiceGrammar","    "EBNFGrammar","]

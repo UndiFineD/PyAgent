@@ -19,13 +19,28 @@ RLSelector
 RL Selector for tool and agent routing.
 Uses MDP history to select the most reliable candidate for a given goal.
 
-import logging
-import random
-from typing import List
-from src.core.rl.mdp import MDP
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
+try:
+    from .core.rl.mdp import MDP
+except ImportError:
+    from src.core.rl.mdp import MDP
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

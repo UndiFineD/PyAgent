@@ -64,7 +64,6 @@ __version__ = VERSION
 
 
 
-
 class NoteType(Enum):
 """"Types of notes in the Obsidian vault.#     FILE" = "file"#     CLASS = "class"#     FUNCTION = "function"#     MODULE = "module"#     CONCEPT = "concept"#     INDEX = "index"
 
@@ -164,7 +163,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

@@ -17,7 +17,11 @@
 Kv cache coordinator.py module.
 
 # SPDX-License-Identifier: Apache-2.0
-from .kv_cache import (AllocationStrategy, AsyncPrefetchCoordinator, BlockHash,
+try:
+    from .kv_cache import (AllocationStrategy, AsyncPrefetchCoordinator, BlockHash,
+except ImportError:
+    from .kv_cache import (AllocationStrategy, AsyncPrefetchCoordinator, BlockHash,
+
                        BlockHashCache, BlockHashWithGroupId, BlockPool,
                        CacheConfig, CacheGroupSpec, CacheGroupType,
                        CrossAttentionManager, EvictionPolicy, FreeBlockQueue,

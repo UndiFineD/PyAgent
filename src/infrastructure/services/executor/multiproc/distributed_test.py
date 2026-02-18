@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.executor.multiproc.distributed import DistributedExecutor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.executor.multiproc.distributed import DistributedExecutor
+except ImportError:
+    from infrastructure.services.executor.multiproc.distributed import DistributedExecutor
+
 
 
 def test_distributedexecutor_basic():

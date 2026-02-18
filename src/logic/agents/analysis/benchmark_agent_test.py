@@ -13,8 +13,15 @@
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
-from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
-from src.infrastructure.services.benchmarks.models import BenchmarkResult
+try:
+    from .logic.agents.analysis.benchmark_agent import BenchmarkAgent
+except ImportError:
+    from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
+
+try:
+    from .infrastructure.services.benchmarks.models import BenchmarkResult
+except ImportError:
+    from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 
 

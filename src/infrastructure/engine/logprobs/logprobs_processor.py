@@ -15,7 +15,11 @@
 
 Logprobs Processing Facade.
 
-from .processor import (FlatLogprobs, LogprobEntry, LogprobFormat,
+try:
+    from .processor import (FlatLogprobs, LogprobEntry, LogprobFormat,
+except ImportError:
+    from .processor import (FlatLogprobs, LogprobEntry, LogprobFormat,
+
                         LogprobsAnalyzer, LogprobsProcessor, LogprobsResult,
                         PromptLogprobs, SampleLogprobs, StreamingLogprobs,
                         TopLogprob, compute_entropy, compute_perplexity,

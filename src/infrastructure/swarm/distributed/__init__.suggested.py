@@ -21,10 +21,18 @@ Phase 33 modules:
 - TensorParallelGroup: Tensor parallel coordination
 - NCCLCommunicator: NCCL collective operations
 
-from .nccl_communicator import (
+try:
+    from .nccl_communicator import (
+except ImportError:
+    from .nccl_communicator import (
+
     NCCLConfig,  # noqa: F401
     )
-from .tensor_parallel_group import (
+try:
+    from .tensor_parallel_group import (
+except ImportError:
+    from .tensor_parallel_group import (
+
     GroupCoordinator,
     ParallelConfig,  # noqa: F401
     ParallelMode,

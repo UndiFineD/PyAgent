@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.chunked_prefill_manager import ChunkedPrefillManager, create_prefill_manager, chunk_prompt
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.chunked_prefill_manager import ChunkedPrefillManager, create_prefill_manager, chunk_prompt
+except ImportError:
+    from infrastructure.engine.scheduling.chunked_prefill_manager import ChunkedPrefillManager, create_prefill_manager, chunk_prompt
+
 
 
 def test_chunkedprefillmanager_basic():

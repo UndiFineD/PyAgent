@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.prefix_cache_manager import HashAlgorithm, BlockHash, CacheBlock, PrefixCacheManager, get_hash_function, hash_block_tokens, hash_block_tokens_rust, init_none_hash, compute_prefix_match, compute_prefix_match_rust, compute_cache_keys, compute_cache_keys_rust
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.prefix_cache_manager import HashAlgorithm, BlockHash, CacheBlock, PrefixCacheManager, get_hash_function, hash_block_tokens, hash_block_tokens_rust, init_none_hash, compute_prefix_match, compute_prefix_match_rust, compute_cache_keys, compute_cache_keys_rust
+except ImportError:
+    from infrastructure.engine.prefix_cache_manager import HashAlgorithm, BlockHash, CacheBlock, PrefixCacheManager, get_hash_function, hash_block_tokens, hash_block_tokens_rust, init_none_hash, compute_prefix_match, compute_prefix_match_rust, compute_cache_keys, compute_cache_keys_rust
+
 
 
 def test_hashalgorithm_basic():

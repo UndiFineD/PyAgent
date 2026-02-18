@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.pipeline_parallel_transfer import PipelineParallelTransfer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.pipeline_parallel_transfer import PipelineParallelTransfer
+except ImportError:
+    from infrastructure.storage.kv_transfer.pipeline_parallel_transfer import PipelineParallelTransfer
+
 
 
 def test_pipelineparalleltransfer_basic():

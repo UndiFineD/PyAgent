@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.mcp_validator_core import McpValidatorCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.mcp_validator_core import McpValidatorCore
+except ImportError:
+    from core.base.logic.core.mcp_validator_core import McpValidatorCore
+
 
 
 def test_mcpvalidatorcore_basic():

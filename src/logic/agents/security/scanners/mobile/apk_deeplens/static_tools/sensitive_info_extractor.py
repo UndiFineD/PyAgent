@@ -24,7 +24,6 @@ import re
 
 
 
-
 class bcolors:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -39,15 +38,16 @@ class bcolors:
 """     UNDERLINE = "\\033[4m"  # [BATCHFIX] closed string"
 
 
-
 class SensitiveInfoExtractor(object):
     def get_all_file_paths(self, file_path):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         totalFiles = []""""        for root, dirs, files in os.walk(file_path):
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             tempFiles = [os.path.join(file_path, os.path.join(root, i)) for i in files]""""            totalFiles += tempFiles
 
         return totalFiles
@@ -59,10 +59,12 @@ class SensitiveInfoExtractor(object):
             relative - gives the path relative to this path
         Out: string path: key type: value
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         all_sensitive_info_list = []         indent =""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         excluded_extensions = [".ttf", ".otf", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".dex", ".gradle"]"
         try:
             for file in list_of_files:
@@ -75,7 +77,8 @@ class SensitiveInfoExtractor(object):
                         print(indent + items)
                         ioc_and_type = items.split()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                         secret_info = {"type": ioc_and_type[0], "ioc": ioc_and_type[1], "path": real_relative_path}"                        all_sensitive_info_list.append(secret_info)
                         items = "{}: {}".format(real_relative_path, items)"            return all_sensitive_info_list
         except Exception as e:
@@ -88,11 +91,13 @@ class SensitiveInfoExtractor(object):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(script_dir, "known_false_positives.txt")"        # Read known false positives from a file
         with open(file_path, "r") as f:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             known_false_positives = [line.strip() for line in f]""""        for file in list_of_files:
             try:
                 read = open(file, "r", encoding="utf-8", errors="ignore").read()"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#                 regex_for_insecure_conn = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#                 regex_for_insecure_conn = (
 # [BATCHFIX] Commented metadata/non-Python
 """                     r"((?:http://|s?ftp://|smtp://|:javascript:|www\\\\d{0,3}[.])[\\w().=/;,#:@?&~*+!$%{}-]+)"  # [BATCHFIX] closed string"                )
                 a = re.findall(regex_for_insecure_conn, read)
@@ -108,61 +113,94 @@ class SensitiveInfoExtractor(object):
         This function is used to scan the given text for predefined patterns of sensitive information.
         Detected potential security issues in "{pattern_name}: {match}" format."        patterns = {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "slack_token": r"(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "slack_webhook": rhttps://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "slack_webhook": rhttps://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "facebook_oauth": r"[f|F][a|A][c|C][e|E][b|B][o|O][o|O][k|K].{0,30}['\"\\\\s][0-9a-f]{32}['\"\\\\s]","'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "twitter_oauth": r"[t|T][w|W][i|I][t|T][t|T][e|E][r|R].{0,30}['\"\\\\s][0-9a-zA-Z]{35,44}['\"\\\\s]","'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "twitter_access_token": r"[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*[1-9][0-9]+-[0-9a-zA-Z]{40}","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             "heroku_api": ("# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             "heroku_api": ("# [BATCHFIX] Commented metadata/non-Python
 """                 r"[h|H][e|E][r|R][o|O][k|K][u|U].{0,30}[0-9A-F]{8}-[0-9A-F]{4}-"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """                 r"[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}"  # [BATCHFIX] closed string"            ),
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "mailgun_api": rkey-[0-9a-zA-Z]{32}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "mailgun_api": rkey-[0-9a-zA-Z]{32}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "mailchamp_api": r"[0-9a-f]{32}-us[0-9]{1,2}","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "picatic_api": rsk_live_[0-9a-z]{32}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "picatic_api": rsk_live_[0-9a-z]{32}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "google_oauth_id": r"[0-9(+-[0-9A-Za-z_]{32}.apps.googleusercontent.com","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "google_api": rAIza[0-9A-Za-z-_]{35}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "google_api": rAIza[0-9A-Za-z-_]{35}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "google_captcha": r"^6[0-9a-zA-Z_-]{39}$","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "google_oauth": rya29\\.[0-9A-Za-z\-_]+","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "amazon_aws_access_key_id": rAKIA[0-9A-Z]{16}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "amazon_mws_auth_token": ramzn\\.mws\\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "amazonaws_url": rs3\\.amazonaws.com[/]+|[a-zA-Z0-9_-]*\\.s3\\.amazonaws.com","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "facebook_access_token": rEAACEdEose0cBA[0-9A-Za-z]+","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "google_oauth": rya29\\.[0-9A-Za-z\-_]+","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "amazon_aws_access_key_id": rAKIA[0-9A-Z]{16}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "amazon_mws_auth_token": ramzn\\.mws\\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "amazonaws_url": rs3\\.amazonaws.com[/]+|[a-zA-Z0-9_-]*\\.s3\\.amazonaws.com","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "facebook_access_token": rEAACEdEose0cBA[0-9A-Za-z]+","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "twilio_api_key": r"\\bSK[0-9a-fA-F]{32}\\b","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "twilio_account_sid": r"\\bAC[a-zA-Z0-9_\\-]{32}\\b","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "twilio_app_sid": r"\\bAP[a-zA-Z0-9_\\-]{32}\\b","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "paypal_braintree_access_token": raccess_token\$production\$[0-9a-z]{16}\$[0-9a-f]{32}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "square_oauth_secret": rsq0csp-[ 0-9A-Za-z\-_]{43}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "square_access_token": rsq0[a-z]{3}-[0-9A-Za-z\-_]{22,43}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "stripe_standard_api": rsk_live_[0-9a-zA-Z]{24}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "stripe_restricted_api": rrk_live_[0-9a-zA-Z]{24}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "paypal_braintree_access_token": raccess_token\$production\$[0-9a-z]{16}\$[0-9a-f]{32}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "square_oauth_secret": rsq0csp-[ 0-9A-Za-z\-_]{43}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "square_access_token": rsq0[a-z]{3}-[0-9A-Za-z\-_]{22,43}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "stripe_standard_api": rsk_live_[0-9a-zA-Z]{24}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#             "stripe_restricted_api": rrk_live_[0-9a-zA-Z]{24}","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "github_access_token": r"[a-zA-Z0-9_-]*:[a-zA-Z0-9_\-]+@github\\.com*","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "private_ssh_key": r"-----BEGIN PRIVATE KEY-----[a-zA-Z0-9\\S]{100,}-----END PRIVATE KEY-----","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "private_rsa_key": r"-----BEGIN RSA PRIVATE KEY-----[a-zA-Z0-9\\S]{100,}-----END RSA PRIVATE KEY-----","            "gpg_private_key_block": r"-----BEGIN PGP PRIVATE KEY BLOCK-----","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "generic_api_key": r"[a|A][p|P][i|I][_]?[k|K][e|E][y|Y].*['\"][0-9a-zA-Z]{32,45}['\"]","'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "generic_secret": r"[s|S][e|E][c|C][r|R][e|E][t|T].*['\"][0-9a-zA-Z]{32,45}['\"]","'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             "ip_address": ("# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             "ip_address": ("# [BATCHFIX] Commented metadata/non-Python
 """                 r"(?:(?:1\\\\d\\\\d|2[0-5][0-5]|2[0-4]\\\\d|0?[1-9]\\\\d|0?0?\\\\d)\\.){3}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """                 r"(?:1\\\\d\\\\d|2[0-5][0-5]|2[0-4]\\\\d|0?[1-9]\\\\d|0?0?\\\\d)"  # [BATCHFIX] closed string"            ),
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "password_in_url": r"[a-zA-Z]{3,10}://[^/\\\\s:@]{3,20}:[^/\\\\s:@]{3,20}@.{1,100}[\"'~\\\\s]","  # [BATCHFIX] closed string"'        }
+""" [BATCHFIX] Commented unterminated string""""
+#             "password_in_url": r"[a-zA-Z]{3,10}://[^/\\\\s:@]{3,20}:[^/\\\\s:@]{3,20}@.{1,100}[\"'~\\\\s]","  # [BATCHFIX] closed string"'        }
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         compiled_patterns = [(key, re.compile(pattern)) for key, pattern in patterns.items()]""""
         script_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(script_dir, "known_false_positives.txt")"
@@ -170,7 +208,8 @@ class SensitiveInfoExtractor(object):
                 re.compile(line.strip()) for line in f if line.strip() and not line.startswith("#")"            ]
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         ioc_list = []""""        for key, compiled_pattern in compiled_patterns:
             res = list(set(compiled_pattern.findall(text)))
             for i in res:

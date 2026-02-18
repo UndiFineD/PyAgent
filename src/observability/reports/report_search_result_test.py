@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.reports.report_search_result import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.reports.report_search_result import *
+except ImportError:
+    from observability.reports.report_search_result import *
+

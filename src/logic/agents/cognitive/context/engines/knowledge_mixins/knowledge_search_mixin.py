@@ -19,7 +19,6 @@ from pathlib import Path
 
 
 
-
 class KnowledgeSearchMixin:
 """"Methods for workspace search and snippet extraction.
     def search_index(self, query: str, index: dict, root: Path) -> list[str]:

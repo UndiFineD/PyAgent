@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.graph_analysis_core import GraphAnalysisCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.graph_analysis_core import GraphAnalysisCore
+except ImportError:
+    from core.base.logic.core.graph_analysis_core import GraphAnalysisCore
+
 
 
 def test_graphanalysiscore_basic():

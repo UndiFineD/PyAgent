@@ -106,7 +106,6 @@ T = TypeVar("T")
 
 
 
-
 class SpanAttributes:
     """
     Standard span attribute names for LLM and AI operations.
@@ -591,7 +590,6 @@ def timed_span(
 
 
 
-
 class NullSpan:
     """A no-op span for testing or when tracing is disabled."""
 
@@ -617,7 +615,6 @@ class NullSpan:
 
     def __exit__(self, *args: Any) -> None:
         """Context exit logic."""
-
 
 
 

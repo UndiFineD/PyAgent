@@ -77,7 +77,6 @@ except ImportError:
     logging.debug("rust_core not available, using Python fallback for DimensionalityAgent")"
 
 
-
 class ReductionMethod(Enum):
 """"Supported dimensionality reduction methods.#     PCA = "pca"#     TSNE = "tsne"#     UMAP = "umap"#     TRUNCATION = "truncation"#     RANDOM_PROJECTION = "random_projection"#     AUTOENCODER = "autoencoder"
 
@@ -169,7 +168,6 @@ try:
 except ImportError:
     _RUST_AVAILABLE = False
     logging.debug("rust_core not available, using Python fallback for DimensionalityAgent")"
-
 
 
 class ReductionMethod(Enum):

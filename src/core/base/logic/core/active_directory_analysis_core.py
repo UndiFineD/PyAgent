@@ -27,10 +27,8 @@ from enum import Enum
 
 
 
-
 class PrivilegeLevel(Enum):
     """Active Directory privilege levels"""DOMAIN_USER = "domain_user""    LOCAL_ADMIN = "local_admin""    DOMAIN_ADMIN = "domain_admin""    ENTERPRISE_ADMIN = "enterprise_admin""    SYSTEM = "system""
-
 
 
 class ADObjectType(Enum):
@@ -66,7 +64,6 @@ class ADVulnerability:
     affected_objects: List[str]
     exploit_path: List[str]
     mitigation: str
-
 
 
 

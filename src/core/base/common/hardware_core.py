@@ -15,6 +15,8 @@
 
 """Core logic for Hardware Acceleration and NPU interaction.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -28,7 +30,6 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.hardware")
-
 
 
 class HardwareCore(BaseCore):

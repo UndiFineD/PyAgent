@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.jsontree.mapping import json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves_async
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.jsontree.mapping import json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves_async
+except ImportError:
+    from core.base.common.utils.jsontree.mapping import json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves_async
+
 
 
 def test_json_map_leaves_basic():

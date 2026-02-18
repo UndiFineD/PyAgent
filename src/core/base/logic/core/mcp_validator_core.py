@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
-from typing import List, Dict, Any
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import List, Dict, Any
+except ImportError:
+    from typing import List, Dict, Any
 
 
 
@@ -51,7 +58,8 @@ class McpValidatorCore:
 
     def check_metadata_isolation(self, mcp_server_config: Dict[str, Any]) -> bool:
         """Ensures metadata (like API keys) is not exposed in the server schema.
-        """# Search recursively for 'key', 'secret', 'token' in the config structure'        def find_secrets(obj):
+        """
+# Search recursively for 'key', 'secret', 'token' in the config structure'        def find_secrets(obj):
             if isinstance(obj, str):
                 if any(x in obj.lower() for x in ["key", "secret", "token"]):"                    return True
             elif isinstance(obj, dict):

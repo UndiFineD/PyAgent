@@ -15,13 +15,41 @@
 
 Rotary package.
 
-from .base import RotaryEmbeddingBase  # noqa: F401
-from .config import RoPEConfig, RoPEScalingType, RoPEVariant  # noqa: F401
-from .dynamic import XDRotaryEmbedding  # noqa: F401
-from .engine import RotaryEmbeddingEngine, create_rope_embedding  # noqa: F401
-from .gptj import GptJRotaryEmbedding  # noqa: F401
-from .multimodal import MRotaryEmbedding  # noqa: F401
-from .neox import NeoxRotaryEmbedding  # noqa: F401
+try:
+    from .base import RotaryEmbeddingBase  # noqa: F401
+except ImportError:
+    from .base import RotaryEmbeddingBase # noqa: F401
+
+try:
+    from .config import RoPEConfig, RoPEScalingType, RoPEVariant  # noqa: F401
+except ImportError:
+    from .config import RoPEConfig, RoPEScalingType, RoPEVariant # noqa: F401
+
+try:
+    from .dynamic import XDRotaryEmbedding  # noqa: F401
+except ImportError:
+    from .dynamic import XDRotaryEmbedding # noqa: F401
+
+try:
+    from .engine import RotaryEmbeddingEngine, create_rope_embedding  # noqa: F401
+except ImportError:
+    from .engine import RotaryEmbeddingEngine, create_rope_embedding # noqa: F401
+
+try:
+    from .gptj import GptJRotaryEmbedding  # noqa: F401
+except ImportError:
+    from .gptj import GptJRotaryEmbedding # noqa: F401
+
+try:
+    from .multimodal import MRotaryEmbedding  # noqa: F401
+except ImportError:
+    from .multimodal import MRotaryEmbedding # noqa: F401
+
+try:
+    from .neox import NeoxRotaryEmbedding  # noqa: F401
+except ImportError:
+    from .neox import NeoxRotaryEmbedding # noqa: F401
+
 
 __all__ = [
     "RoPEConfig","    "RoPEVariant","    "RoPEScalingType","    "RotaryEmbeddingBase","    "NeoxRotaryEmbedding","    "GptJRotaryEmbedding","    "MRotaryEmbedding","    "XDRotaryEmbedding","    "RotaryEmbeddingEngine","    "create_rope_embedding","]

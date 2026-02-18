@@ -49,13 +49,11 @@ except ImportError:
 
 
 
-
 class CUDAGraphMode(Enum):
     """CUDA graph execution modes.
     NONE = auto()  # No CUDA graph, eager execution
     PIECEWISE = auto()  # Piecewise capture (attention separate)
     FULL = auto()  # Full model capture
-
 
 
 
@@ -86,7 +84,6 @@ class CUDAGraphEntry:
     def mark_used(self) -> None:
         """Update usage statistics.        self.replay_count += 1
         self.last_used = time.time()
-
 
 
 
@@ -198,7 +195,6 @@ def generate_warmup_sizes(max_tokens: int, max_reqs: int, granularity: int = 8) 
                            filter(lambda nr: nr <= max_reqs, req_counts)))
 
     return sorted(set(p2_sizes + max_tokens_size + multi_req_sizes))
-
 
 
 

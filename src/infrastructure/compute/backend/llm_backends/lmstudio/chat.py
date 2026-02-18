@@ -29,7 +29,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class ChatHandler:
     """Handler for chat operations with SDK-first and HTTP fallback support.
     def __init__(self, api_client: LMStudioAPIClient):

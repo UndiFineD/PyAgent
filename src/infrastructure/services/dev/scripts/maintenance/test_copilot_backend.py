@@ -15,8 +15,16 @@
 
 Test script for verifying Copilot backend integration.
 
-import sys
-from pathlib import Path
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 # Robustly find the repository root
 current_path = Path(__file__).resolve()
@@ -27,7 +35,11 @@ if project_root.name == 'src':'    project_root = project_root.parent
 # Ensure the project root is in PYTHONPATH
 sys.path.insert(0, str(project_root))
 
-from src.infrastructure.compute.backend.llm_backends.copilot_cli_backend import \
+try:
+    from .infrastructure.compute.backend.llm_backends.copilot_cli_backend import \
+except ImportError:
+    from src.infrastructure.compute.backend.llm_backends.copilot_cli_backend import \
+
     CopilotCliBackend  # noqa: E402 # pylint: disable=wrong-import-position
 
 

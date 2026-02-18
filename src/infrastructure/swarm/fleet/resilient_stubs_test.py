@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.resilient_stubs import ResilientStub, resilient_import
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.resilient_stubs import ResilientStub, resilient_import
+except ImportError:
+    from infrastructure.swarm.fleet.resilient_stubs import ResilientStub, resilient_import
+
 
 
 def test_resilientstub_basic():

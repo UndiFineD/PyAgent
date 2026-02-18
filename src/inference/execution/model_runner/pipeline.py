@@ -22,7 +22,6 @@ from .config import SchedulerOutput
 
 
 
-
 class ExecutionPipeline:
     """Pipelined execution with prefetching.
 
@@ -40,7 +39,8 @@ class ExecutionPipeline:
         """Submit work to pipeline."""await self._prefetch_stage.put(scheduler_output)
 
     async def get_next_batch(self) -> Optional[SchedulerOutput]:
-        """Get next batch ready regarding execution."""try:
+        """Get next batch ready regarding execution."""
+try:
             return await asyncio.wait_for(self._execute_stage.get(), timeout=0.01)
         except asyncio.TimeoutError:
             return None

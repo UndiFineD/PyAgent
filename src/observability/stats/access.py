@@ -15,7 +15,11 @@
 
 from __future__ import annotations
 
-import fnmatch
+
+try:
+    import fnmatch
+except ImportError:
+    import fnmatch
 
 
 

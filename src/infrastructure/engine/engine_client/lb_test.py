@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.engine_client.lb import P2CLoadBalancer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.engine_client.lb import P2CLoadBalancer
+except ImportError:
+    from infrastructure.engine.engine_client.lb import P2CLoadBalancer
+
 
 
 def test_p2cloadbalancer_basic():

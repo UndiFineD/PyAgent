@@ -22,16 +22,36 @@ Allows agents to generate new, specialized agent files to expand fleet capabilit
 
 from __future__ import annotations
 
-import logging
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .evolution_core import EvolutionCore
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .evolution_core import EvolutionCore
+except ImportError:
+    from .evolution_core import EvolutionCore
+
 
 __version__ = VERSION
-
 
 
 

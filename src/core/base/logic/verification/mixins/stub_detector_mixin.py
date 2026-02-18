@@ -14,8 +14,12 @@
 
 
 """Stub detector mixin.py module.
-"""# Licensed under the Apache License, Version 2.0 (the "License");"
-import ast
+"""
+# Licensed under the Apache License, Version 2.0 (the "License");"
+try:
+    import ast
+except ImportError:
+    import ast
 
 
 
@@ -24,8 +28,10 @@ class StubDetectorMixin:
     """Methods regarding detecting stub nodes in the AST."""
     @staticmethod
     def _is_stub_node(node: ast.AST) -> bool | str:
-        """Determines regarding the stub status of a node functionally (pass/NotImplementedError)."""def is_docstring(s: ast.AST) -> bool:
-            """Checks if a node is a docstring constant."""    return (isinstance(s, ast.Expr) and
+        """Determines regarding the stub status of a node functionally (pass/NotImplementedError)."""
+        def is_docstring(s: ast.AST) -> bool:
+            """Checks if a node is a docstring constant."""
+            return (isinstance(s, ast.Expr) and
                     isinstance(s.value, ast.Constant) and
                     isinstance(s.value.value, str))
 
@@ -42,26 +48,29 @@ class StubDetectorMixin:
             if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Constant) and stmt.value.value is Ellipsis:
                 return True
             if isinstance(stmt, ast.Raise):
-                exc_name = """                if isinstance(stmt.exc, ast.Call) and isinstance(stmt.exc.func, ast.Name):
+                exc_name = None
+                if isinstance(stmt.exc, ast.Call) and isinstance(stmt.exc.func, ast.Name):
                     exc_name = stmt.exc.func.id
                 elif isinstance(stmt.exc, ast.Name):
                     exc_name = stmt.exc.id
-                if exc_name == "NotImplementedError":"                    return True
+                if exc_name == "NotImplementedError":
+                    return True
             return False
 
         if isinstance(node, ast.ClassDef):
             # Check bases regarding ABC/Protocol functionally
             def is_abc_base(base: ast.AST) -> bool:
-                return isinstance(base, ast.Name) and base.id in ("ABC", "Protocol")"
+                return isinstance(base, ast.Name) and base.id in ("ABC", "Protocol")
             if any(map(is_abc_base, node.bases)):
-                return "IS_ABC""
+                return "IS_ABC"
             # Filter non-docstring body items regarding the class functionally
             body = list(filter(lambda s: not is_docstring(s), node.body))
             if not body:
                 return True
 
             def evaluate_item(item: ast.AST) -> bool | str:
-                """Evaluates an item regarding its stub status."""        if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                """Evaluates an item regarding its stub status."""
+                if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     from .stub_detector_mixin import StubDetectorMixin
                     return StubDetectorMixin._is_stub_node(item)
                 if isinstance(item, ast.Pass):
@@ -72,5 +81,7 @@ class StubDetectorMixin:
 
             if any(map(lambda r: r is False, results)):
                 return False
-            if any(map(lambda r: r == "IS_ABC", results)):"                return "IS_ABC""            return True
+            if any(map(lambda r: r == "IS_ABC", results)):
+                return "IS_ABC"
+            return True
         return True

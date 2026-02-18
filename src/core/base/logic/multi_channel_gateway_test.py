@@ -14,12 +14,32 @@
 
 
 """Tests for Multi-Channel Gateway Core."""
-import json
-import pytest
-from typing import Optional
-from unittest.mock import AsyncMock
+try:
+    import json
+except ImportError:
+    import json
 
-from src.core.base.logic.multi_channel_gateway import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from typing import Optional
+except ImportError:
+    from typing import Optional
+
+try:
+    from unittest.mock import AsyncMock
+except ImportError:
+    from unittest.mock import AsyncMock
+
+
+try:
+    from .core.base.logic.multi_channel_gateway import (
+except ImportError:
+    from src.core.base.logic.multi_channel_gateway import (
+
     ChannelType,
     MessageType,
     SessionActivationMode,
@@ -30,7 +50,6 @@ from src.core.base.logic.multi_channel_gateway import (
     GatewayProtocol,
     MultiChannelGatewayCore,
 )
-
 
 
 
@@ -57,7 +76,6 @@ class MockChannelProvider(ChannelProvider):
 
 
 
-
 class TestChannelMessage:
     """Test ChannelMessage dataclass."""
     def test_channel_message_creation(self):
@@ -72,7 +90,6 @@ class TestChannelMessage:
 
 
 
-
 class TestGatewayPresence:
     """Test GatewayPresence dataclass."""
     def test_gateway_presence_creation(self):
@@ -81,7 +98,6 @@ class TestGatewayPresence:
 
         assert presence.client_id == "client_123""        assert presence.status == "online""        assert presence.last_seen > 0
         assert presence.metadata == {"device": "mobile"}"
-
 
 
 class TestGatewaySession:
@@ -108,7 +124,6 @@ class TestGatewaySession:
         assert session.is_active is True
         assert session.created_at > 0
         assert session.last_activity > 0
-
 
 
 
@@ -165,7 +180,6 @@ class TestGatewayProtocol:
         assert response["type"] == "session_created""        assert response["session_id"] == session.session_id"
 
 
-
 class TestMultiChannelGatewayCore:
     """Test MultiChannelGatewayCore class."""
     @pytest.fixture
@@ -178,7 +192,8 @@ class TestMultiChannelGatewayCore:
         assert gateway.channel_providers[ChannelType.TELEGRAM] == provider
 
     def test_get_active_sessions(self, gateway):
-        """Test getting active sessions."""# Add some sessions
+        """Test getting active sessions."""
+# Add some sessions
         session1 = GatewaySession(
             agent_id="agent1","            channel_type=ChannelType.TELEGRAM,
             channel_id="chat1""        )
@@ -195,7 +210,8 @@ class TestMultiChannelGatewayCore:
         assert active_sessions[0].session_id == session1.session_id
 
     def test_get_sessions_by_channel(self, gateway):
-        """Test getting sessions by channel."""# Add sessions
+        """Test getting sessions by channel."""
+# Add sessions
         session1 = GatewaySession(
             agent_id="agent1","            channel_type=ChannelType.TELEGRAM,
             channel_id="chat1""        )
@@ -216,7 +232,8 @@ class TestMultiChannelGatewayCore:
 
     @pytest.mark.asyncio
     async def test_send_channel_message(self, gateway):
-        """Test sending channel message."""# Register provider
+        """Test sending channel message."""
+# Register provider
         provider = MockChannelProvider(ChannelType.TELEGRAM)
         gateway.register_channel_provider(provider)
 

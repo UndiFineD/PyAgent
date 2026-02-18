@@ -25,12 +25,21 @@ that have been moved to src/userspace/ for better architectural separation.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION as VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION as VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION as VERSION
+
 
 __version__ = VERSION
 
 # Import user space components for backward compatibility
-from src.userspace import interface, agents, dashboard, mobile
+try:
+    from .userspace import interface, agents, dashboard, mobile
+except ImportError:
+    from src.userspace import interface, agents, dashboard, mobile
+
 
 # Re-export for backward compatibility
 __all__ = ["interface", "agents", "dashboard", "mobile"]"

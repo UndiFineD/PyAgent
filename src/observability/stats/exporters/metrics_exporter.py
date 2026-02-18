@@ -52,15 +52,31 @@ Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cl
 
 from __future__ import annotations
 
-import logging
-import time
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .prometheus_exporter import PrometheusExporter
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .prometheus_exporter import PrometheusExporter
+except ImportError:
+    from .prometheus_exporter import PrometheusExporter
+
 
 __version__ = VERSION
-
 
 
 

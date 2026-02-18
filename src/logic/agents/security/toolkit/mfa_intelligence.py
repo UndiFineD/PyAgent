@@ -20,7 +20,6 @@ from urllib.parse import quote
 
 
 
-
 class MFAIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -30,7 +29,8 @@ class MFAIntelligence:
         "GraphAPI": "https://graph.microsoft.com","        "AzureManagement": "https://management.core.windows.net","        "ExchangeServices": "https://outlook.office365.com/EWS/Exchange.asmx","        "ActiveSync": "https://outlook.office365.com/Microsoft-Server-ActiveSync","        "WebPortal": "https://portal.office.com","    }
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""        self.session = session
         self._own_session = False
 
@@ -59,7 +59,8 @@ class MFAIntelligence:
         Attempts basic authentication to multiple O365 endpoints to detect MFA.
         WARNING: May trigger lockouts.
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         "results = {}"  # [BATCHFIX] closed string"        session = await self.get_session()
+""" [BATCHFIX] Commented unterminated string""""
+#         "results = {}"  # [BATCHFIX] closed string"        session = await self.get_session()
 
         async def check_endpoint(name, url):
             # This is a simplified check. Real MFASweep does more complex header handling.
@@ -69,12 +70,15 @@ class MFAIntelligence:
                     # Logic: 401 with specific headers often indicates MFA requirement
                     # whereas 200/302 might mean successful login (MFA bypassed or not enabled)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                     results[name] = {""""                        "status_code": response.status,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#                         "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", "),"  # [BATCHFIX] closed string"                    }
+""" [BATCHFIX] Commented unterminated string""""
+#                         "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", "),"  # [BATCHFIX] closed string"                    }
             except Exception as e:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 results[name] = {"error": str(e)}"
         await asyncio.gather(*(check_endpoint(n, u) for n, u in self.O365_ENDPOINTS.items()))
         return results

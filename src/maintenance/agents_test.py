@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .agents import AgentsMaintenance
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .agents import AgentsMaintenance
+except ImportError:
+    from .agents import AgentsMaintenance
+
 
 
 def test_agentsmaintenance_basic():

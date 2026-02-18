@@ -18,12 +18,20 @@
 Enums for test agent functionality.
 from __future__ import annotations
 
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -42,7 +50,6 @@ class TestPriority(Enum):
 
 
 
-
 class TestStatus(Enum):
     """Test execution status.
     __test__ = False
@@ -51,11 +58,9 @@ class TestStatus(Enum):
     ERROR = "error""    FLAKY = "flaky""
 
 
-
 class CoverageType(Enum):
     """Types of coverage to track.
     LINE = "line""    BRANCH = "branch""    FUNCTION = "function""    CLASS = "class""
-
 
 
 class BrowserType(Enum):
@@ -64,18 +69,15 @@ class BrowserType(Enum):
     EDGE = "edge""    IE = "ie""
 
 
-
 class TestSourceType(Enum):
     """Types of test result sources for aggregation.
     __test__ = False
     PYTEST = "pytest""    UNITTEST = "unittest""    JEST = "jest""    MOCHA = "mocha""    JUNIT = "junit""
 
 
-
 class MutationOperator(Enum):
     """Mutation operators for mutation testing.
     ARITHMETIC = "arithmetic""    RELATIONAL = "relational""    LOGICAL = "logical""    ASSIGNMENT = "assignment""    RETURN_VALUE = "return_value""
-
 
 
 class ExecutionMode(Enum):

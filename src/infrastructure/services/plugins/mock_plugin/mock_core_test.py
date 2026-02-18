@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.plugins.mock_plugin.mock_core import MockCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.plugins.mock_plugin.mock_core import MockCore
+except ImportError:
+    from infrastructure.services.plugins.mock_plugin.mock_core import MockCore
+
 
 
 def test_mockcore_basic():

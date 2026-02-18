@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .improvement_web.suggested import load_reasoning_chains, load_audit_log, save_steering_directive, load_self_improvement_log_tail, format_timestamp, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .improvement_web.suggested import load_reasoning_chains, load_audit_log, save_steering_directive, load_self_improvement_log_tail, format_timestamp, main
+except ImportError:
+    from .improvement_web.suggested import load_reasoning_chains, load_audit_log, save_steering_directive, load_self_improvement_log_tail, format_timestamp, main
+
 
 
 def test_load_reasoning_chains_basic():

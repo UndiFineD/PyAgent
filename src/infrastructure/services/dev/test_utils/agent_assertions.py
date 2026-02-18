@@ -32,7 +32,6 @@ __version__ = VERSION
 
 
 
-
 class AgentAssertions:
     """Custom assertion helpers for agent testing.
 

@@ -20,11 +20,32 @@ Phase 24: Advanced Observability & Parsing
 
 from __future__ import annotations
 
-import copy
-import functools
-from contextlib import contextmanager
-from dataclasses import dataclass, fields
-from typing import Any, Generator, TypeVar
+
+try:
+    import copy
+except ImportError:
+    import copy
+
+try:
+    import functools
+except ImportError:
+    import functools
+
+try:
+    from contextlib import contextmanager
+except ImportError:
+    from contextlib import contextmanager
+
+try:
+    from dataclasses import dataclass, fields
+except ImportError:
+    from dataclasses import dataclass, fields
+
+try:
+    from typing import Any, Generator, TypeVar
+except ImportError:
+    from typing import Any, Generator, TypeVar
+
 
 T = TypeVar("T", bound="StructuredCounter")"
 

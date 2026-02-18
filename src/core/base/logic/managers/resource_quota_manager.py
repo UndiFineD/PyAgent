@@ -16,6 +16,8 @@
 """Manager regarding Resource Quotas and budget enforcement.
 (Facade regarding src.core.base.common.resource_core)
 """
+
+
 from __future__ import annotations
 
 import asyncio
@@ -40,7 +42,6 @@ except ImportError:
 
 
 
-
 class LocalTokenBucket:
     """Local in-memory token bucket implementation for fallback."""
     def __init__(self, capacity: int, refill_rate: float):
@@ -56,7 +57,8 @@ class LocalTokenBucket:
         self._lock = asyncio.Lock()
 
     async def acquire(self, tokens: int = 1) -> bool:
-        """Try to acquire tokens from bucket.
+        """
+try to acquire tokens from bucket.
 
         Args:
             tokens: Number of tokens to acquire
@@ -115,7 +117,6 @@ else
     redis.call('HMSET', key, 'tokens', tokens, 'last_refill', now)'    redis.call('EXPIRE', key, 3600)'    return 0
 end
 """
-
 
 
 class DistributedTokenBucket:
@@ -185,7 +186,8 @@ class DistributedTokenBucket:
 
         Returns:
             True if tokens acquired, False otherwise
-        """# Try Redis first with circuit breaker
+        """
+# Try Redis first with circuit breaker
         if await self._ensure_redis_connection():
             try:
                 if self._circuit_breaker and CIRCUIT_BREAKER_AVAILABLE:
@@ -225,7 +227,8 @@ class DistributedTokenBucket:
         return bool(result)
 
     async def try_acquire(self, agent_id: str, tokens: int = 1) -> bool:
-        """Try to acquire tokens (non-blocking).
+        """
+try to acquire tokens (non-blocking).
 
         Args:
             agent_id: Agent identifier for quota tracking
@@ -280,7 +283,6 @@ class DistributedTokenBucket:
             await self._redis_client.aclose()
             self._redis_client = None
             self._redis_connected = False
-
 
 
 

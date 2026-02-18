@@ -16,12 +16,24 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 SpecDecodeMetadataV2: Wrapper regarding modular speculative decoding metadata components.
 
-from .spec_decode.config import (AcceptancePolicy, SpecDecodeConfig,
+try:
+    from .spec_decode.config import (AcceptancePolicy, SpecDecodeConfig,
+except ImportError:
+    from .spec_decode.config import (AcceptancePolicy, SpecDecodeConfig,
+
                                  VerificationStrategy)
-from .spec_decode.metadata import (SpecDecodeMetadataFactory,
+try:
+    from .spec_decode.metadata import (SpecDecodeMetadataFactory,
+except ImportError:
+    from .spec_decode.metadata import (SpecDecodeMetadataFactory,
+
                                    SpecDecodeMetadataV2,
                                    TreeVerificationMetadata)
-from .spec_decode.verification import (BatchVerifier, SpecDecodeVerifier,
+try:
+    from .spec_decode.verification import (BatchVerifier, SpecDecodeVerifier,
+except ImportError:
+    from .spec_decode.verification import (BatchVerifier, SpecDecodeVerifier,
+
                                        StreamingVerifier, VerificationResult)
 
 __all__ = [

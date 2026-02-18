@@ -20,13 +20,29 @@ KV Transfer Connector - Base framework for disaggregated prefill-decode inferenc
 Refactored to modular package structure for Phase 317.
 Decomposed into types, base, implementations, and factory modules.
 
-from src.infrastructure.storage.kv_transfer.connector.base import \
+try:
+    from .infrastructure.storage.kv_transfer.connector.base import \
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.connector.base import \
+
     KVConnectorBase
-from src.infrastructure.storage.kv_transfer.connector.decode_bench import \
+try:
+    from .infrastructure.storage.kv_transfer.connector.decode_bench import \
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.connector.decode_bench import \
+
     DecodeBenchConnector
-from src.infrastructure.storage.kv_transfer.connector.factory import (
+try:
+    from .infrastructure.storage.kv_transfer.connector.factory import (
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.connector.factory import (
+
     get_kv_connector, list_kv_connectors, register_kv_connector)
-from src.infrastructure.storage.kv_transfer.connector.types import (
+try:
+    from .infrastructure.storage.kv_transfer.connector.types import (
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.connector.types import (
+
     ForwardContext, KVCacheBlocks, KVConnectorMetadata, KVConnectorRole,
     KVTransferConfig, KVTransferMode, Request)
 

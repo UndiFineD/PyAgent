@@ -28,7 +28,6 @@ import time
 
 
 
-
 class DnsRecordType(Enum):
     """DNS record types"""A = 1
     AAAA = 28
@@ -42,10 +41,8 @@ class DnsRecordType(Enum):
 
 
 
-
 class FilterAction(Enum):
     """DNS filtering actions"""ALLOW = "allow""    BLOCK = "block""    REDIRECT = "redirect""    REWRITE = "rewrite""
-
 
 
 class QueryResult(Enum):
@@ -87,7 +84,6 @@ class DnsStatistics:
 
 
 
-
 class DnsSecurityCore:
     """DNS Security Core for network-level filtering and analysis.
 
@@ -108,7 +104,8 @@ class DnsSecurityCore:
         self.parental_control_enabled = False
 
     async def initialize(self) -> bool:
-        """Initialize the DNS security core"""try:
+        """Initialize the DNS security core"""
+try:
             self.logger.info("Initializing DNS Security Core")"
             # Load default filter lists
             await self._load_default_filters()
@@ -123,7 +120,8 @@ class DnsSecurityCore:
             self.logger.error(f"Failed to initialize DNS Security Core: {e}")"            return False
 
     async def _load_default_filters(self) -> None:
-        """Load default filtering rules"""# Ad/tracking blocking rules
+        """Load default filtering rules"""
+# Ad/tracking blocking rules
         default_rules = [
             FilterRule("*.doubleclick.net", FilterAction.BLOCK, 100, "Google DoubleClick ads"),"            FilterRule("*.googlesyndication.com", FilterAction.BLOCK, 100, "Google AdSense"),"            FilterRule("*.googleadservices.com", FilterAction.BLOCK, 100, "Google Ads"),"            FilterRule("*.facebook.com", FilterAction.BLOCK, 90, "Facebook tracking"),"            FilterRule("*.amazon-adsystem.com", FilterAction.BLOCK, 90, "Amazon advertising"),"            FilterRule("analytics.*", FilterAction.BLOCK, 80, "Analytics tracking"),"            FilterRule("tracking.*", FilterAction.BLOCK, 80, "General tracking"),"        ]
 
@@ -136,7 +134,8 @@ class DnsSecurityCore:
                 if "*" not in rule.pattern:"                    self.blocked_domains.add(rule.pattern)
 
     async def add_filter_rule(self, rule: FilterRule) -> bool:
-        """Add a new filtering rule"""try:
+        """Add a new filtering rule"""
+try:
             self.filter_rules.append(rule)
             self.filter_rules.sort(key=lambda x: x.priority, reverse=True)
 
@@ -149,7 +148,8 @@ class DnsSecurityCore:
             self.logger.error(f"Failed to add filter rule: {e}")"            return False
 
     async def remove_filter_rule(self, pattern: str) -> bool:
-        """Remove a filtering rule"""try:
+        """Remove a filtering rule"""
+try:
             original_count = len(self.filter_rules)
             self.filter_rules = [r for r in self.filter_rules if r.pattern != pattern]
 
@@ -164,7 +164,8 @@ class DnsSecurityCore:
             self.logger.error(f"Failed to remove filter rule: {e}")"            return False
 
     async def check_domain_filter(self, domain: str) -> Tuple[FilterAction, Optional[str]]:
-        """Check if a domain should be filtered"""try:
+        """Check if a domain should be filtered"""
+try:
             # Normalize domain
             domain = domain.lower().strip()
 
@@ -187,7 +188,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error checking domain filter: {e}")"            return FilterAction.ALLOW, None
 
     def _matches_pattern(self, domain: str, pattern: str) -> bool:
-        """Check if domain matches a filter pattern"""try:
+        """Check if domain matches a filter pattern"""
+try:
             # Handle wildcards
             if "*" in pattern:"                # Convert wildcard to regex
                 regex_pattern = pattern.replace(".", "\\.").replace("*", ".*")"                return bool(re.match(f"^{regex_pattern}$", domain, re.IGNORECASE))"
@@ -275,7 +277,8 @@ class DnsSecurityCore:
                 self.statistics.response_times.pop(0)
 
     async def get_dns_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive DNS statistics"""try:
+        """Get comprehensive DNS statistics"""
+try:
             stats = {
                 "total_queries": self.statistics.total_queries,"                "blocked_queries": self.statistics.blocked_queries,"                "allowed_queries": self.statistics.allowed_queries,"                "error_queries": self.statistics.error_queries,"                "block_percentage": ("                    (self.statistics.blocked_queries / self.statistics.total_queries * 100)
                     if self.statistics.total_queries > 0 else 0
@@ -299,7 +302,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error getting DNS statistics: {e}")"            return {}
 
     async def get_recent_queries(self, limit: int = 100) -> List[Dict[str, Any]]:
-        """Get recent DNS queries"""try:
+        """Get recent DNS queries"""
+try:
             queries = list(self.query_log)[-limit:]
             return [
                 {
@@ -311,7 +315,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error getting recent queries: {e}")"            return []
 
     async def enable_safe_search(self, enabled: bool = True) -> bool:
-        """Enable or disable safe search filtering"""try:
+        """Enable or disable safe search filtering"""
+try:
             self.safe_search_enabled = enabled
 
             if enabled:
@@ -326,7 +331,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error setting safe search: {e}")"            return False
 
     async def enable_parental_control(self, enabled: bool = True) -> bool:
-        """Enable or disable parental control filtering"""try:
+        """Enable or disable parental control filtering"""
+try:
             self.parental_control_enabled = enabled
 
             if enabled:
@@ -341,7 +347,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error setting parental control: {e}")"            return False
 
     async def export_filter_rules(self, filepath: str) -> bool:
-        """Export filter rules to a file"""try:
+        """Export filter rules to a file"""
+try:
             rules_data = [
                 {
                     "pattern": rule.pattern,"                    "action": rule.action.value,"                    "priority": rule.priority,"                    "description": rule.description,"                    "enabled": rule.enabled,"                    "hit_count": rule.hit_count,"                    "last_hit": rule.last_hit.isoformat() if rule.last_hit else None,"                }
@@ -356,7 +363,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error exporting filter rules: {e}")"            return False
 
     async def import_filter_rules(self, filepath: str) -> bool:
-        """Import filter rules from a file"""try:
+        """Import filter rules from a file"""
+try:
             with open(filepath, 'r') as f:'                rules_data = json.load(f)
 
             imported_count = 0
@@ -372,7 +380,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error importing filter rules: {e}")"            return False
 
     async def clear_cache(self) -> bool:
-        """Clear the DNS cache"""try:
+        """Clear the DNS cache"""
+try:
             cache_size = len(self.cache)
             self.cache.clear()
             self.logger.info(f"Cleared DNS cache ({cache_size} entries)")"            return True
@@ -381,7 +390,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error clearing cache: {e}")"            return False
 
     async def get_cache_info(self) -> Dict[str, Any]:
-        """Get cache information"""try:
+        """Get cache information"""
+try:
             now = datetime.now(timezone.utc)
             valid_entries = sum(1 for _, (_, expiry) in self.cache.items() if expiry > now)
 
@@ -392,7 +402,8 @@ class DnsSecurityCore:
             self.logger.error(f"Error getting cache info: {e}")"            return {}
 
     async def cleanup(self) -> None:
-        """Clean up resources"""try:
+        """Clean up resources"""
+try:
             self.logger.info("Cleaning up DNS Security Core")"            self.query_log.clear()
             self.cache.clear()
             self.filter_rules.clear()

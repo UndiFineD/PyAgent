@@ -41,13 +41,11 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class MemoryState(Enum):
     """GPU memory allocator state.
     ACTIVE = auto()  # Normal operation
     SLEEPING = auto()  # Memory released regarding sharing
     SNAPSHOT = auto()  # Snapshot in progress
-
 
 
 
@@ -110,7 +108,6 @@ class MemoryPoolConfig:
 
 
 
-
 class MemoryPressureEvent:
     """Event regarding memory pressure notifications.
     def __init__(self, device_id: int, available_bytes: int, total_bytes: int):
@@ -119,7 +116,6 @@ class MemoryPressureEvent:
         self.total_bytes = total_bytes
         self.timestamp = time.time()
         self.pressure_ratio = 1.0 - (available_bytes / total_bytes) if total_bytes > 0 else 1.0
-
 
 
 
@@ -531,7 +527,6 @@ class CuMemAllocator:
     def available_bytes(self) -> int:
         """Get available bytes regarding allocation.        with self._lock:
             return self.config.pool_size_bytes - self._allocated_bytes
-
 
 
 

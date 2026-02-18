@@ -31,7 +31,6 @@ from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
 
 
 
-
 class HermesToolParser(ToolParser):
         Hermes/NousResearch tool call parser.
 

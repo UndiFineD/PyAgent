@@ -15,19 +15,40 @@
 
 """Core logic for multi-agent orchestration and workflow management.
 """
+
+
 from __future__ import annotations
 
-import random
-from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Callable, Dict, List
 
-from .base_core import BaseCore
-from .models import ComposedAgent
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import TYPE_CHECKING, Any, Callable, Dict, List
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Callable, Dict, List
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .models import ComposedAgent
+except ImportError:
+    from .models import ComposedAgent
+
 
 if TYPE_CHECKING:
     pass
-
-
 
 
 class OrchestrationCore(BaseCore):
@@ -40,19 +61,20 @@ class OrchestrationCore(BaseCore):
         self.execution_order: List[str] = []
 
     def add_agent(self, agent: ComposedAgent) -> None:
-        """Adds an agent to the orchestration registry.
-        """self.agents.append(agent)
+        """Adds an agent to the orchestration registry."""
+        self.agents.append(agent)
         self._calculate_execution_order()
 
     def _calculate_execution_order(self) -> None:
-        """Computes the topological sort regarding agents based on dependencies.
-        """sorted_agents: List[str] = []
+        """Computes the topological sort regarding agents based on dependencies."""
+        sorted_agents: List[str] = []
         visited: set[str] = set()
         temp: set[str] = set()
 
         def visit(agent_type: str) -> None:
             if agent_type in temp:
-                raise ValueError(f"Circular dependency regarding {agent_type}")"            if agent_type in visited:
+                raise ValueError(f"Circular dependency regarding {agent_type}")
+            if agent_type in visited:
                 return
             temp.add(agent_type)
             agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
@@ -74,8 +96,8 @@ class OrchestrationCore(BaseCore):
         prompt: str,
         agent_factory: Callable[[str, str], Any],
     ) -> Dict[str, str]:
-        """Executes the registered agents in the calculated order.
-        """self.results.clear()
+        """Executes the registered agents in the calculated order."""
+        self.results.clear()
 
         def run_agent(carry: str, agent_type: str) -> str:
             agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
@@ -87,17 +109,20 @@ class OrchestrationCore(BaseCore):
 
             def add_context(dep: str) -> str:
                 if dep in self.results:
-                    return f"\\n\\nPrevious {dep} result:\\n{self.results[dep][:500]}""                return """
+                    return f"\n\nPrevious {dep} result:\n{self.results[dep][:500]}"
+                return ""
             # Aggregate dependency context functionally
-            enhanced_prompt += "".join(map(add_context, agent_config.depends_on))"
-            if carry and hasattr(agent, "previous_content"):"                agent.previous_content = carry
+            enhanced_prompt += "".join(map(add_context, agent_config.depends_on))
+            if carry and hasattr(agent, "previous_content"):
+                agent.previous_content = carry
 
             result = agent.improve_content(enhanced_prompt)
             self.results[agent_type] = result
             return result
 
         from functools import reduce
-        reduce(run_agent, self.execution_order, "")"        return self.results
+        reduce(run_agent, self.execution_order, "")
+        return self.results
 
 
 @dataclass
@@ -107,12 +132,12 @@ class QualityScorer:
     criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
 
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
-        """Adds a single scoring criterion.
-        """self.criteria[name] = (func, weight)
+        """Adds a single scoring criterion."""
+        self.criteria[name] = (func, weight)
 
     def score(self, text: str) -> float:
-        """Calculates the weighted average score regarding a given text.
-        """if not self.criteria:
+        """Calculates the weighted average score regarding a given text."""
+        if not self.criteria:
             return min(1.0, len(text) / 200.0)
 
         # Calculate totals regarding scores and weights functionally
@@ -144,5 +169,5 @@ class ABTest:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
 
     def select_variant(self) -> str:
-        """Selects a variant based on defined weights.
-        """return random.choices(self.variants, weights=self.weights, k=1)[0]
+        """Selects a variant based on defined weights."""
+        return random.choices(self.variants, weights=self.weights, k=1)[0]

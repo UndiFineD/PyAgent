@@ -12,13 +12,41 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import time
-import subprocess
-import json
-from typing import Dict, Any, List
-from openai import OpenAI
-import sanitizer
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import subprocess
+except ImportError:
+    import subprocess
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from typing import Dict, Any, List
+except ImportError:
+    from typing import Dict, Any, List
+
+try:
+    from openai import OpenAI
+except ImportError:
+    from openai import OpenAI
+
+try:
+    import sanitizer
+except ImportError:
+    import sanitizer
+
 
 # --- CONFIGURATION ---
 ADB_PATH = "adb"  # Ensure adb is in your PATH"MODEL = "gpt-4.1"  # Or "gpt-4-turbo" for faster/cheaper execution"# SCREEN_DUMP_PATH = "/sdcard/window_dump.xml"# LOCAL_DUMP_PATH = "window_dump.xml"

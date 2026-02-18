@@ -16,33 +16,53 @@
 """Module: logic_manifest
 Defines the cognitive structure and capability set for a Universal Agent.
 """
+
+
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import Any
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
 
 
 @dataclass
 class LogicManifest:
-    """The 'Logic Shard' that defines how an agent thinks and what it can do.'    This replaces hard-coded specialist logic.
-    """version: str = "1.0.0""    role: str = "generalist""    description: str = "A universal autonomous agent""
+    """
+    The 'Logic Shard' that defines how an agent thinks and what it can do.
+    This replaces hard-coded specialist logic.
+    """
+    version: str = "1.0.0"
+    role: str = "generalist"
+    description: str = "A universal autonomous agent"
     # Required skill cores to load
-    required_skills: list[str] = field(default_factory=lambda: ["identity", "environment", "security"])"
+    required_skills: list[str] = field(default_factory=lambda: ["identity", "environment", "security"])
     # Cognitive configuration
-    reasoning_mode: str = "cot"  # Chain of Thought"    memory_strategy: str = "autovault""
+    reasoning_mode: str = "cot"  # Chain of Thought
+    memory_strategy: str = "autovault"
     # Permissions and Boundaries
     permissions: dict[str, Any] = field(default_factory=lambda: {
-        "fs_read": True,"        "fs_write": False,"        "network": True,"        "execution": False"    })
-
+        "fs_read": True,
+        "fs_write": False,
+        "network": True,
+        "execution": False
+    })
     # Toolsets available
     tools: list[str] = field(default_factory=list)
-
     # Pillar 4: Industrial Factory (Branching Workflows)
     flow_nodes: list[dict[str, Any]] = field(default_factory=list)
     connectors: list[dict[str, Any]] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> LogicManifest:
-        """Hydrate a manifest from a dictionary."""# Ensure only known fields are passed
+        """Hydrate a manifest from a dictionary."""
+# Ensure only known fields are passed
         valid_fields = cls.__dataclass_fields__.keys()
         filtered_data = {k: v for k, v in data.items() if k in valid_fields}
         return cls(**filtered_data)

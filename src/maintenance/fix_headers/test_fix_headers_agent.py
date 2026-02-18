@@ -1,9 +1,25 @@
-import os
-from pathlib import Path
+try:
+    import os
+except ImportError:
+    import os
 
-import pytest
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from src.maintenance.fix_headers.fix_headers_agent import FixHeadersAgent
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .maintenance.fix_headers.fix_headers_agent import FixHeadersAgent
+except ImportError:
+    from src.maintenance.fix_headers.fix_headers_agent import FixHeadersAgent
+
 
 
 def test_preserve_bom_and_encoding(tmp_path: Path):

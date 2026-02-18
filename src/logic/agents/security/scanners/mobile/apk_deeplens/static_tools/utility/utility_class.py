@@ -12,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
-import traceback
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import traceback
+except ImportError:
+    import traceback
+
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")"
-
 
 
 class Util:
@@ -38,8 +45,10 @@ class Util:
         file name in which error occured.
         stack = traceback.extract_stack()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         filename, line_no, func_name, text = stack[-2]""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         filename, line_no, func_name, text = stack[-2]""""
+# [BATCHFIX] Commented metadata/non-Python
 """         formatted_message = f"{filename}:{line_no}: {text_output}"  # [BATCHFIX] closed string"        print(color + formatted_message + Util.ENDC)
 
     @staticmethod

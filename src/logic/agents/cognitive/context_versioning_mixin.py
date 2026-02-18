@@ -56,12 +56,36 @@ FILE CONTENT SUMMARY:
 
 # "Mixin for context versioning and snapshotting."
 from __future__ import annotations
-import hashlib
-import logging
-import zlib
-from datetime import datetime
-from typing import Any
-from src.logic.agents.cognitive.context.models.context_version import ContextVersion
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import zlib
+except ImportError:
+    import zlib
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .logic.agents.cognitive.context.models.context_version import ContextVersion
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_version import ContextVersion
 
 
 
@@ -122,12 +146,36 @@ class ContextVersioningMixin:
         return 1 - (compressed_size / original_size)
 
 from __future__ import annotations
-import hashlib
-import logging
-import zlib
-from datetime import datetime
-from typing import Any
-from src.logic.agents.cognitive.context.models.context_version import ContextVersion
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import zlib
+except ImportError:
+    import zlib
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .logic.agents.cognitive.context.models.context_version import ContextVersion
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_version import ContextVersion
 
 
 

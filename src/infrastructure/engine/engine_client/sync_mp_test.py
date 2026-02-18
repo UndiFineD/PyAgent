@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.engine_client.sync_mp import SyncMPClient
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.engine_client.sync_mp import SyncMPClient
+except ImportError:
+    from infrastructure.engine.engine_client.sync_mp import SyncMPClient
+
 
 
 def test_syncmpclient_basic():

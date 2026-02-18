@@ -14,8 +14,16 @@
 
 # Licensed under the Apache License, Version 2.0
 
-import logging
-from src.core.base.common.registry_core import RegistryCore
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from .core.base.common.registry_core import RegistryCore
+except ImportError:
+    from src.core.base.common.registry_core import RegistryCore
+
 
 
 def test_hook_failure_logged(caplog):

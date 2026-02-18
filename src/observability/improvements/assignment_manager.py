@@ -19,7 +19,11 @@ Assignment Manager - Tracks assignees and ownership history
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.assignment_manager import AssignmentManager
+try:
+    from .core.base.assignment_manager import AssignmentManager
+except ImportError:
+    from src.core.base.assignment_manager import AssignmentManager
+
 
 mgr = AssignmentManager()
 mgr.assign("impr-123", "alice")"current = mgr.get_assignee("impr-123")"history = mgr.get_ownership_history("impr-123")"
@@ -39,13 +43,25 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

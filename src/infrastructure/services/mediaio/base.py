@@ -21,11 +21,27 @@ Base loader class for all media types.
 
 from __future__ import annotations
 
-import hashlib
-from abc import ABC, abstractmethod
-from typing import BinaryIO, Union
 
-from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import BinaryIO, Union
+except ImportError:
+    from typing import BinaryIO, Union
+
+
+try:
+    from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
+except ImportError:
+    from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
 
 
 

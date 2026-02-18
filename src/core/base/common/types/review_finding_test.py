@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.review_finding import ReviewFinding
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.review_finding import ReviewFinding
+except ImportError:
+    from core.base.common.types.review_finding import ReviewFinding
+
 
 
 def test_reviewfinding_basic():

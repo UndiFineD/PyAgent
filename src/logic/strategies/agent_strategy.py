@@ -49,10 +49,23 @@ Auto-extracted class from agent_strategies.py
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -60,7 +73,6 @@ if TYPE_CHECKING:
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
-
 
 
 

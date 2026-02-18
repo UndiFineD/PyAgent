@@ -36,7 +36,6 @@ __version__ = VERSION
 
 
 
-
 class ArchCore:
 """"Pure logic core for architectural analysis.
     @staticmethod

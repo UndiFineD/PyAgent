@@ -15,15 +15,34 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Abstract base class regarding draft token proposers.
-from abc import ABC, abstractmethod
-from typing import Any, List, Optional
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any, List, Optional
+except ImportError:
+    from typing import Any, List, Optional
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
-from .config import SpeculativeConfig
-from .proposals import DraftProposal, SpecDecodingMetrics
+try:
+    from .config import SpeculativeConfig
+except ImportError:
+    from .config import SpeculativeConfig
+
+try:
+    from .proposals import DraftProposal, SpecDecodingMetrics
+except ImportError:
+    from .proposals import DraftProposal, SpecDecodingMetrics
 
 
 

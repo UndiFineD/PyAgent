@@ -15,6 +15,10 @@
 
 """
 System orchestration components.
-from .lock_manager import LockManager
+try:
+    from .lock_manager import LockManager
+except ImportError:
+    from .lock_manager import LockManager
+
 
 __all__ = ["LockManager"]"

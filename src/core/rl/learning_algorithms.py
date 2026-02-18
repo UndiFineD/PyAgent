@@ -14,16 +14,38 @@
 
 
 """Learning algorithms.py module.
-"""# Reinforcement Learning Algorithms Implementation - Phase 319 Enhanced
+"""
+# Reinforcement Learning Algorithms Implementation - Phase 319 Enhanced
 
 from __future__ import annotations
 
-import logging
-import random
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple
 
-import numpy as np
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +83,6 @@ class PolicyGradientBuffer:
             gae = delta + gamma * lam * gae
             advantages.insert(0, gae)
         return advantages
-
 
 
 
@@ -173,7 +194,8 @@ class LearningAlgorithms:
         gamma: float = 0.99,
         lam: float = 0.9,
     ) -> None:
-        """TD(λ) with eligibility traces."""# Compute TD error
+        """TD(λ) with eligibility traces."""
+# Compute TD error
         delta = reward + gamma * q_table.get((next_state, next_action), 0.0) - q_table.get((state, action), 0.0)
 
         # Update eligibility trace
@@ -185,7 +207,6 @@ class LearningAlgorithms:
             eligibility_traces[(s, a)] = gamma * lam * e
             if eligibility_traces[(s, a)] < 1e-6:
                 del eligibility_traces[(s, a)]
-
 
 
 

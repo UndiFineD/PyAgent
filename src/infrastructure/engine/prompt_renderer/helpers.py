@@ -23,7 +23,8 @@ def _try_rust_render_template(
     messages: List[Dict[str, Any]],
     add_generation_prompt: bool,
 ) -> Optional[str]:
-    """Try Rust-accelerated template rendering.    try:
+    """
+try Rust-accelerated template rendering.    try:
         from rust_core import render_chat_template_rust
 
         return render_chat_template_rust(template, messages, add_generation_prompt)
@@ -35,7 +36,8 @@ def _try_rust_find_TODO Placeholders(
     text: str,
     patterns: List[str],
 ) -> Optional[List[int]]:
-    """Try Rust-accelerated TODO Placeholder finding.    try:
+    """
+try Rust-accelerated TODO Placeholder finding.    try:
         from rust_core import find_TODO Placeholders_rust
 
         return find_TODO Placeholders_rust(text, patterns)

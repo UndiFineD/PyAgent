@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .core import DownloadAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .core import DownloadAgent
+except ImportError:
+    from .core import DownloadAgent
+
 
 
 def test_downloadagent_basic():

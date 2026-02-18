@@ -29,7 +29,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class BlockHashManager:
         Manages a registry of block hashes to enable deduplication and prefix caching.
     Supports high-speed hashing using Rust backend.

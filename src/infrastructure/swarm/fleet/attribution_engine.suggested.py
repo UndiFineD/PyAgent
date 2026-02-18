@@ -21,19 +21,55 @@ Tracks the lineage and provenance of every generated piece of content or code.
 
 from __future__ import annotations
 
-import hashlib
-import json
-import logging
-import os
-import time
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.core.attribution_core import AttributionCore
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.core.attribution_core import AttributionCore
+except ImportError:
+    from src.infrastructure.swarm.fleet.core.attribution_core import AttributionCore
+
 
 __version__ = VERSION
-
 
 
 

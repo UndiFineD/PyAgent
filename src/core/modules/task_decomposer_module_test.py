@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.modules.task_decomposer_module import PlanStep, TaskDecomposerModule
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.modules.task_decomposer_module import PlanStep, TaskDecomposerModule
+except ImportError:
+    from core.modules.task_decomposer_module import PlanStep, TaskDecomposerModule
+
 
 
 def test_planstep_basic():

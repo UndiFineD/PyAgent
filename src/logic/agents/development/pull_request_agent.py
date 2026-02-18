@@ -54,7 +54,6 @@ __version__ = VERSION
 
 
 
-
 class PullRequestAgent(BaseAgent):
 """"Analyzes differences in the codebase and generates summaries or review comments.
     def __init__(self, file_path: str) -> None:

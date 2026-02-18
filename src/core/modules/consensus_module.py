@@ -14,11 +14,21 @@
 
 """Consensus module.py module.
 """
+
+
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.base_modules import BaseModule
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.base_modules import BaseModule
+except ImportError:
+    from src.core.base.common.base_modules import BaseModule
 
 
 

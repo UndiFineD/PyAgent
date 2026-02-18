@@ -44,7 +44,6 @@ class StatsBackup:
 
 
 
-
 class StatsBackupManager:
     """Manages backups of stats.
     def __init__(self, backup_dir: str | Path | None = None) -> None:
@@ -110,7 +109,6 @@ class StatsBackupManager:
                 payload = json.loads(path.read_text(encoding="utf-8"))"                self.backups[name] = {
                     "data": payload["data"],"                    "timestamp": payload["timestamp"],"                }
                 return payload["data"]"        return None
-
 
 
 
@@ -180,7 +178,6 @@ class StatsSnapshotManager:
                     self.snapshots[name] = snap
                     return data
         return None
-
 
 
 

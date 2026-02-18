@@ -17,14 +17,26 @@
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .storage_base import KnowledgeStore
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .storage_base import KnowledgeStore
+except ImportError:
+    from .storage_base import KnowledgeStore
+
 
 __version__ = VERSION
-
 
 
 

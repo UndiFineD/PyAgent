@@ -18,16 +18,32 @@
 
 from __future__ import annotations
 
-import logging
-import time
-from typing import TYPE_CHECKING, Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import TYPE_CHECKING, Any
+except ImportError:
+    from typing import TYPE_CHECKING, Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 if TYPE_CHECKING:
     from .knowledge_engine import KnowledgeEngine
-
 
 
 

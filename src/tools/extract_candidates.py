@@ -99,7 +99,8 @@ def sanitize_filename(s: str) -> str:
         return re.sub(r'[^0-9A-Za-z_]+', '_', s).strip('_')[:120]'
 
 def write_extracted(source_path: Path, dest_path: Path, provenance: str, content: str):
-    """Write the extracted content to dest_path with a provenance header.    header = f"""# Extracted from: {provenance}\\n# NOTE: extracted with static-only rules; review before use\\n\\n    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    """Write the extracted content to dest_path with a provenance header.    header = f"""
+# Extracted from: {provenance}\\n# NOTE: extracted with static-only rules; review before use\\n\\n    dest_path.parent.mkdir(parents=True, exist_ok=True)
     dest_path.write_text(header + content, encoding='utf-8')'
 
 def make_test(module_path: Path, defs: list[str], test_path: Path):

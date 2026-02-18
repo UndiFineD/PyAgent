@@ -33,7 +33,6 @@ except ImportError:
 
 
 
-
 class GitCore(BaseCore):
     """Standard implementation for Git operations.
     If rc is available, delegates to native libgit2 hooks for speed.

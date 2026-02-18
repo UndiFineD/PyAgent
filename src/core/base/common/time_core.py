@@ -13,8 +13,9 @@
 # limitations under the License.
 
 
-"""Unified time and timestamp management core.
-"""
+"""Unified time and timestamp management core."""
+
+
 import time
 from datetime import datetime, timezone
 
@@ -24,14 +25,14 @@ except ImportError:
     rc = None
 
 
-
-
 class TimeCore:
-    """Ensures consistent time handling across the swarm (UTC focused).
-    """
+    """Ensures consistent time handling across the swarm (UTC focused)."""
+
     @staticmethod
     def now() -> datetime:
-        """Get current UTC datetime."""if rc and hasattr(rc, "get_utc_timestamp_rust"):"            try:
+        """Get current UTC datetime."""
+        if rc and hasattr(rc, "get_utc_timestamp_rust"):
+            try:
                 ts = rc.get_utc_timestamp_rust()  # pylint: disable=no-member
                 return datetime.fromtimestamp(ts, tz=timezone.utc)
             except RuntimeError:  # pylint: disable=broad-exception-caught, unused-variable
@@ -39,29 +40,42 @@ class TimeCore:
                 pass
         return datetime.now(timezone.utc)
 
+
     @staticmethod
     def timestamp() -> float:
-        """Get current UTC timestamp."""if rc and hasattr(rc, "get_utc_timestamp_rust"):"            try:
+        """Get current UTC timestamp."""
+        if rc and hasattr(rc, "get_utc_timestamp_rust"):
+            try:
                 return float(rc.get_utc_timestamp_rust())  # pylint: disable=no-member
             except RuntimeError:  # pylint: disable=broad-exception-caught, unused-variable
                 # Rust bridge reported an error; fall back to Python
                 pass
         return time.time()
 
+
     @classmethod
     def iso_now(cls, include_z: bool = True) -> str:
-        """Get ISO 8601 formatted UTC string."""ts = cls.now().isoformat()
+        """Get ISO 8601 formatted UTC string."""
+        ts = cls.now().isoformat()
         if include_z:
-            return ts.replace("+00:00", "Z")"        return ts
+            return ts.replace("+00:00", "Z")
+        return ts
+
 
     @staticmethod
     def format_duration(seconds: float) -> str:
-        """Format seconds into HH:MM:SS."""m, s = divmod(seconds, 60)
+        """Format seconds into HH:MM:SS."""
+        m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
-        return f"{int(h):02d}:{int(m):02d}:{float(s):05.2f}""
+        return f"{int(h):02d}:{int(m):02d}:{float(s):05.2f}"
+
+
     @staticmethod
     def parse_iso(iso_string: str) -> datetime:
-        """Parse ISO string back to UTC datetime."""if iso_string.endswith("Z"):"            iso_string = iso_string.replace("Z", "+00:00")"        dt = datetime.fromisoformat(iso_string)
+        """Parse ISO string back to UTC datetime."""
+        if iso_string.endswith("Z"):
+            iso_string = iso_string.replace("Z", "+00:00")
+        dt = datetime.fromisoformat(iso_string)
         if dt.tzinfo is None:
             return dt.replace(tzinfo=timezone.utc)
         return dt.astimezone(timezone.utc)

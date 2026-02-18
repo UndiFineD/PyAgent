@@ -15,20 +15,50 @@
 
 """
 Auto-extracted class from agent_backend.py""""
+
+
 from __future__ import annotations
 
-import json
-import threading
-import time
-import uuid
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import json
+except ImportError:
+    import json
 
-from .recorded_request import RecordedRequest
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .recorded_request import RecordedRequest
+except ImportError:
+    from .recorded_request import RecordedRequest
+
 
 __version__ = VERSION
-
 
 
 

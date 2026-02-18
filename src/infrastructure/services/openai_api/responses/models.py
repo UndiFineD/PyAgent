@@ -20,13 +20,38 @@ Models.py module.
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
-import time
-import uuid
-from abc import ABC
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union
 
-from .enums import (ContentPartType, ResponseStatus, ResponseType, RoleType,
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from abc import ABC
+except ImportError:
+    from abc import ABC
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Optional, Union
+except ImportError:
+    from typing import Any, Dict, List, Optional, Union
+
+
+try:
+    from .enums import (ContentPartType, ResponseStatus, ResponseType, RoleType,
+except ImportError:
+    from .enums import (ContentPartType, ResponseStatus, ResponseType, RoleType,
+
                     ToolType)
 
 

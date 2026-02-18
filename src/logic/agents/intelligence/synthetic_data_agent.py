@@ -47,17 +47,45 @@ Synthetic data agent.py module.
 
 from __future__ import annotations
 
-import json
-import logging
-import os
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.intelligence.core.synthesis_core import SynthesisCore
+except ImportError:
+    from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
+
 
 __version__ = VERSION
-
 
 
 
@@ -108,17 +136,45 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
-import json
-import logging
-import os
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.intelligence.core.synthesis_core import SynthesisCore
+except ImportError:
+    from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
+
 
 __version__ = VERSION
-
 
 
 

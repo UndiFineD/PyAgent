@@ -17,11 +17,28 @@
 """Request and metrics data structures for scheduling.
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from typing import Any, Optional
 
-from .config import PreemptionReason, RequestPriority, RequestState
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
+
+try:
+    from .config import PreemptionReason, RequestPriority, RequestState
+except ImportError:
+    from .config import PreemptionReason, RequestPriority, RequestState
+
 
 
 @dataclass

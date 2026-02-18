@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .app_menu import AppMenu
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .app_menu import AppMenu
+except ImportError:
+    from .app_menu import AppMenu
+
 
 
 def test_appmenu_basic():

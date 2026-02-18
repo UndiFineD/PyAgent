@@ -22,15 +22,27 @@ Abstract base for offloading managers.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
 
-from src.infrastructure.storage.kv_transfer.arc.types import (
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    from .infrastructure.storage.kv_transfer.arc.types import (
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.arc.types import (
+
     BlockHash, LoadStoreSpec, PrepareStoreOutput)
 
 if TYPE_CHECKING:
     pass
-
 
 
 

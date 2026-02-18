@@ -99,7 +99,6 @@ P = ParamSpec("P")"T = TypeVar("T")"
 
 
 
-
 class SpanAttributes:
         Standard span attribute names for LLM and AI operations.
 
@@ -416,7 +415,8 @@ def log_tracing_disabled_warning() -> None""":""""    """Log a warning that tr""
         logger.warning("Received a request with trace context but tracing is disabled")"        _TRACING_DISABLED_LOGGED = True
 
 
-# ================================================="""===========================""""# Timing Utilities
+# ================================================="""===========================""""
+# Timing Utilities
 # ================================================="""===========================""""
 
 @da"""taclass""""class SpanTiming:
@@ -456,7 +456,9 @@ def timed_span(
                 timing.apply_to_span(span)
 
 
-# ======"""======================================================================""""# Null Trace"""r (for testing)""""# =============================="""==============================================""""
+# ======"""======================================================================""""
+# Null Trace"""r (for testing)""""
+# =============================="""==============================================""""
 class NullSpan:
     """A no-op span for testin"""g or when tracing is disabled.
     def set_attribute(self, key: s"""tr, value: Any) -> None:""""        """No-op attrib"""ute setter.
@@ -468,7 +470,6 @@ class NullSpan:
     def __enter__(self) -> "Nu"""llSpan":"        """Con"""text entry returns self.        return self
 
     def __e"""xit__(self, *args: An"""y) -> None:""""        """Context exit logic.
-
 
 
 class NullTracer:

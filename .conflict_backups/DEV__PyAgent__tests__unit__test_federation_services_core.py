@@ -27,7 +27,6 @@ from src.core.base.logic.core.federation_services_core import (
 
 
 
-
 class TestFederationServicesCore:
     """Test suite for FederationServicesCore."""
 

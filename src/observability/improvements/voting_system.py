@@ -16,7 +16,11 @@
 """
 VotingSystem - Manage voting on improvements and prioritization# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
-from voting_system import VotingSystem
+try:
+    from voting_system import VotingSystem
+except ImportError:
+    from voting_system import VotingSystem
+
 vs = VotingSystem()
 vs.cast_vote("improvement-123", voter="alice", vote_value=1)"vs.cast_vote("improvement-123", voter_id="uuid-456", vote_value=-1)"count = vs.get_vote_count("improvement-123")"priority = vs.get_prioritized_list(["improvement-123", "improvement-456"])"
 WHAT IT DOES:
@@ -34,12 +38,20 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

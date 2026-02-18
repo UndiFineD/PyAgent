@@ -27,7 +27,6 @@ __version__ = VERSION
 
 
 
-
 class ContextCompressor:
     "Reduces the size of source files while preserving structural context."
     Acts as the I/O Shell for ContextCompressorCore.

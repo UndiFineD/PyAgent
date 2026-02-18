@@ -47,14 +47,34 @@ Javascript accessibility mixin.py module"."
 
 from __future__ import annotations
 
-import re
 
-from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-from src.core.base.common.types.accessibility_issue_type import \
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.common.types.accessibility_issue import AccessibilityIssue
+except ImportError:
+    from src.core.base.common.types.accessibility_issue import AccessibilityIssue
+
+try:
+    from .core.base.common.types.accessibility_issue_type import \
+except ImportError:
+    from src.core.base.common.types.accessibility_issue_type import \
+
     AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import \
+try:
+    from .core.base.common.types.accessibility_severity import \
+except ImportError:
+    from src.core.base.common.types.accessibility_severity import \
+
     AccessibilitySeverity
-from src.core.base.common.types.wcag_level import WCAGLevel
+try:
+    from .core.base.common.types.wcag_level import WCAGLevel
+except ImportError:
+    from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 
@@ -95,14 +115,34 @@ class JavascriptAccessibilityMixin:
 
 from __future__ import annotations
 
-import re
 
-from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-from src.core.base.common.types.accessibility_issue_type import \
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.common.types.accessibility_issue import AccessibilityIssue
+except ImportError:
+    from src.core.base.common.types.accessibility_issue import AccessibilityIssue
+
+try:
+    from .core.base.common.types.accessibility_issue_type import \
+except ImportError:
+    from src.core.base.common.types.accessibility_issue_type import \
+
     AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import \
+try:
+    from .core.base.common.types.accessibility_severity import \
+except ImportError:
+    from src.core.base.common.types.accessibility_severity import \
+
     AccessibilitySeverity
-from src.core.base.common.types.wcag_level import WCAGLevel
+try:
+    from .core.base.common.types.wcag_level import WCAGLevel
+except ImportError:
+    from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 

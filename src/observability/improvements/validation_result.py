@@ -40,11 +40,24 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .validation_severity import ValidationSeverity
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .validation_severity import ValidationSeverity
+except ImportError:
+    from .validation_severity import ValidationSeverity
+
 
 __version__ = VERSION
 
@@ -68,13 +81,28 @@ class ValidationResult:
     @property
     def errors(self) -> list[str]:
         """Compatibility accessor used by tests.        return [msg for sev, msg in self.issues if sev == ValidationSev"""er"""ity.ERROR]""""
+
+
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .validation_severity import ValidationSeverity
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .validation_severity import ValidationSeverity
+except ImportError:
+    from .validation_severity import ValidationSeverity
+
 
 __version__ = VERSION
 

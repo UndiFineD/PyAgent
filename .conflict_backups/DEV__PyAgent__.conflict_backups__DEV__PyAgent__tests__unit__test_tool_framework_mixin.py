@@ -42,7 +42,6 @@ class MockToolFrameworkMixin(ToolFrameworkMixin):
 
 
 
-
 class TestToolFramework:
     """Test cases for ToolFrameworkMixin."""
 

@@ -19,7 +19,11 @@ Improvement - Dataclass for representing a single improvement suggestion
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from improvement import Improvement, ImprovementPriority, ImprovementCategory, ImprovementStatus, EffortEstimate
+try:
+    from improvement import Improvement, ImprovementPriority, ImprovementCategory, ImprovementStatus, EffortEstimate
+except ImportError:
+    from improvement import Improvement, ImprovementPriority, ImprovementCategory, ImprovementStatus, EffortEstimate
+
 imp = Improvement(
     id="IMP-0001","    title="Reduce cyclomatic complexity in parser.py","    description="Refactor long functions into smaller units and add unit tests.","    file_path="src/parser.py","    priority=ImprovementPriority.HIGH,
     category=ImprovementCategory.REFACTOR,
@@ -43,14 +47,39 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .effort_estimate import EffortEstimate
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
-from .improvement_status import ImprovementStatus
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .effort_estimate import EffortEstimate
+except ImportError:
+    from .effort_estimate import EffortEstimate
+
+try:
+    from .improvement_category import ImprovementCategory
+except ImportError:
+    from .improvement_category import ImprovementCategory
+
+try:
+    from .improvement_priority import ImprovementPriority
+except ImportError:
+    from .improvement_priority import ImprovementPriority
+
+try:
+    from .improvement_status import ImprovementStatus
+except ImportError:
+    from .improvement_status import ImprovementStatus
+
 
 __version__ = VERSION
 

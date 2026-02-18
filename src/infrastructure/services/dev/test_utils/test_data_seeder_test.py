@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.test_data_seeder import TestDataSeeder
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.test_data_seeder import TestDataSeeder
+except ImportError:
+    from infrastructure.services.dev.test_utils.test_data_seeder import TestDataSeeder
+
 
 
 def test_testdataseeder_basic():

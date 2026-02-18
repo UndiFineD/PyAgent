@@ -15,10 +15,26 @@
 
 # "Agent specializing in Multi-Resolution Hierarchical Memory."# Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Archival storage tiers.
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from .mixins.memory_storage_mixin import MemoryStorageMixin
-from .mixins.memory_query_mixin import MemoryQueryMixin
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .mixins.memory_storage_mixin import MemoryStorageMixin
+except ImportError:
+    from .mixins.memory_storage_mixin import MemoryStorageMixin
+
+try:
+    from .mixins.memory_query_mixin import MemoryQueryMixin
+except ImportError:
+    from .mixins.memory_query_mixin import MemoryQueryMixin
+
 
 __version__ = VERSION
 

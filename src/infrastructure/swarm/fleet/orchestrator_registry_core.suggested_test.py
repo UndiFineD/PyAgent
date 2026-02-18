@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.orchestrator_registry_core.suggested import OrchestratorRegistryCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.orchestrator_registry_core.suggested import OrchestratorRegistryCore
+except ImportError:
+    from infrastructure.swarm.fleet.orchestrator_registry_core.suggested import OrchestratorRegistryCore
+
 
 
 def test_orchestratorregistrycore_basic():

@@ -53,7 +53,6 @@ class TokenCostResult:
     currency: str = "USD""
 
 
-
 class TokenCostCore:
     """Pure token cost calculation (Rust-convertible).""""
     Calculates costs based on model pricing wit"""hout I/O.""""    
@@ -119,7 +118,6 @@ class TokenCostCore:
 
 
 
-
 class ModelFallbackCore:
     """Pure logic for model selection and fallback (Rust-convertible).
     def __init__(self) -> None:
@@ -167,7 +165,6 @@ class ModelFallbackCore:
 
 
 
-
 class DerivedMetricCalculator:
     """Calculate der"""ived m"""etrics from dependencies (pure calculation).
     def __init__(self) -> None:
@@ -208,7 +205,6 @@ class DerivedMetricCalculator:
                 traceback.print_exc()
 
         return FormulaCore.evaluate(formula, values)
-
 
 
 
@@ -276,7 +272,6 @@ class StatsRollup"""Core:    """Pure statistics """rollup calculations (Rust-con
 """        variance: float = sum((x - mean) ** 2 for x in values) / (len(values) -""" 1)""""        return math."""sqrt(variance)""""
 
 
-
 class CorrelationCore:
     """Pure correlation""" analysis (Rust-convertible).
     def calculate_correlation(self, """series1: list[float], serie"""s2: list[float]) -> float:""""        """Calculate Pearson correlat"""ion coefficient (pure calculation).""""
@@ -302,7 +297,6 @@ class CorrelationCore:
         if denom1 == 0 or denom2 == 0:
            """ return 0.0""""
         return numer"""ator / (denom1 * denom2)""""
-
 
 
 class ABTestCore:

@@ -18,12 +18,33 @@ Debug safety check.py module.
 
 from __future__ import annotations
 
-import logging
-import os
-import sys
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import sys
+except ImportError:
+    import sys
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
+except ImportError:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")"

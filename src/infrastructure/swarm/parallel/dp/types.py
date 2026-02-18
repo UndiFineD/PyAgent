@@ -21,10 +21,26 @@ Types and configuration for data parallel coordination.
 
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Optional
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
 
 
 
@@ -37,14 +53,12 @@ class DPRole(Enum):
 
 
 
-
 class WorkerHealth(Enum):
     """Worker health status.
     HEALTHY = auto()
     DEGRADED = auto()
     RECOVERING = auto()
     FAILED = auto()
-
 
 
 

@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.agents.cognitive.context.engines.knowledge_mixins.knowledge_search_mixin.suggested import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.agents.cognitive.context.engines.knowledge_mixins.knowledge_search_mixin.suggested import *
+except ImportError:
+    from logic.agents.cognitive.context.engines.knowledge_mixins.knowledge_search_mixin.suggested import *
+

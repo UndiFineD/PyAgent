@@ -53,13 +53,25 @@ SwarmVisualizerAgent: Swarm agent for visualizing agent activity and system stat
 Provides dashboards and real-time observability for distributed workflows in the PyAgent swarm"."
 from __future__ import annotations
 
-import time
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -101,13 +113,25 @@ class SwarmVisualizerAgent:
 
 from __future__ import annotations
 
-import time
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

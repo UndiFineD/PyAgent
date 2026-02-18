@@ -20,17 +20,37 @@ Strategy-based poolers for sequence representations.
 
 from __future__ import annotations
 
-import math
-from abc import ABC, abstractmethod
-from typing import Dict, Optional
 
-import numpy as np
+try:
+    import math
+except ImportError:
+    import math
 
-from .models import PoolingConfig
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Dict, Optional
+except ImportError:
+    from typing import Dict, Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .models import PoolingConfig
+except ImportError:
+    from .models import PoolingConfig
+
 
 __all__ = [
     "BasePooler","    "MeanPooler","    "CLSPooler","    "LastTokenPooler","    "MaxPooler","    "AttentionPooler","    "WeightedMeanPooler","    "MatryoshkaPooler","    "MultiVectorPooler","    "StepPooler","]
-
 
 
 
@@ -61,7 +81,6 @@ class BasePooler(ABC):
 
 
 
-
 class MeanPooler(BasePooler):
     """Mean pooling over sequence.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
@@ -75,12 +94,10 @@ class MeanPooler(BasePooler):
 
 
 
-
 class CLSPooler(BasePooler):
     """First token ([CLS]) pooling.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         return hidden_states[:, 0, :]
-
 
 
 
@@ -97,7 +114,6 @@ class LastTokenPooler(BasePooler):
 
 
 
-
 class MaxPooler(BasePooler):
     """Max pooling over sequence.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
@@ -107,7 +123,6 @@ class MaxPooler(BasePooler):
         mask = attention_mask[:, :, np.newaxis].astype(bool)
         masked = np.where(mask, hidden_states, -1e9)
         return masked.max(axis=1)
-
 
 
 
@@ -126,7 +141,6 @@ class AttentionPooler(BasePooler):
         weights = np.exp(scores)
         weights = weights / (weights.sum(axis=1, keepdims=True) + 1e-9)
         return np.einsum("bs,bsh->bh", weights, hidden_states)"
-
 
 
 class WeightedMeanPooler(BasePooler):
@@ -158,7 +172,6 @@ class WeightedMeanPooler(BasePooler):
 
 
 
-
 class MatryoshkaPooler(BasePooler):
         Matryoshka Representation Learning (MRL) pooler.
     Allows for truncate-able embeddings.
@@ -174,7 +187,6 @@ class MatryoshkaPooler(BasePooler):
 
     def get_dimension(self, dim: int) -> int:
         """Returns the nearest supported dimension.        return min(self.supported_dims, key=lambda x: abs(x - dim))
-
 
 
 
@@ -197,7 +209,6 @@ class MultiVectorPooler(BasePooler):
         """MaxSim score between query and document vectors.        # query: (q_len, dim), doc: (d_len, dim)
         scores = np.dot(query_vectors, doc_vectors.T)  # (q_len, d_len)
         return float(np.sum(np.max(scores, axis=1)))
-
 
 
 

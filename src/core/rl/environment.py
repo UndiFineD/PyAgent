@@ -14,16 +14,38 @@
 
 
 """Environment.py module.
-"""# Reinforcement Learning Environment Framework - Phase 319 Enhanced
+"""
+# Reinforcement Learning Environment Framework - Phase 319 Enhanced
 
 from __future__ import annotations
 
-import abc
-import logging
-from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from src.core.rl.action_space import ActionSpace, DiscreteActionSpace
+try:
+    import abc
+except ImportError:
+    import abc
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Callable, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Callable, Dict, List, Optional, Tuple
+
+
+try:
+    from .core.rl.action_space import ActionSpace, DiscreteActionSpace
+except ImportError:
+    from src.core.rl.action_space import ActionSpace, DiscreteActionSpace
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +58,6 @@ class EpisodeStats:
     steps: int = 0
     done: bool = False
     info: Dict[str, Any] = field(default_factory=dict)
-
 
 
 
@@ -95,7 +116,6 @@ class RLEnvironment(abc.ABC):
     def get_episode_stats(self) -> Dict[str, Any]:
         """Get statistics for completed episodes."""return {
             "episode_count": self._episode_count,"            "avg_reward": sum(self._episode_rewards) / len(self._episode_rewards) if self._episode_rewards else 0.0,"            "total_episodes": len(self._episode_rewards),"            "best_episode_reward": max(self._episode_rewards) if self._episode_rewards else 0.0,"        }
-
 
 
 

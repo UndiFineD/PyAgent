@@ -16,6 +16,8 @@
 """Stream Management Mixin for BaseAgent.
 Provides Redis-backed streaming capabilities with resumability, adapted from Adorable patterns.
 """
+
+
 from __future__ import annotations
 
 import asyncio
@@ -68,7 +70,6 @@ class StreamInfo:
 
 
 
-
 class StreamManagerMixin:
     """Mixin providing Redis-backed stream management capabilities.
     Adapted from Adorable's stream-manager.ts patterns for Python/asyncio.'    """
@@ -99,7 +100,8 @@ class StreamManagerMixin:
             self._cleanup_task = asyncio.create_task(self._stream_cleanup_worker())
 
     async def shutdown_stream_manager(self) -> None:
-        """Shutdown the stream manager and cleanup resources."""# Cancel all keepalive tasks
+        """Shutdown the stream manager and cleanup resources."""
+# Cancel all keepalive tasks
         for task in self._keepalive_tasks.values():
             task.cancel()
         self._keepalive_tasks.clear()
@@ -223,7 +225,8 @@ class StreamManagerMixin:
         """Handle stream error event."""await self.clear_stream_state(agent_id)
 
     async def _keepalive_worker(self, agent_id: str) -> None:
-        """Background task to maintain stream keepalive."""try:
+        """Background task to maintain stream keepalive."""
+try:
             while agent_id in self.active_streams:
                 await asyncio.sleep(self.keepalive_interval)
                 await self.update_keepalive(agent_id)
@@ -232,7 +235,8 @@ class StreamManagerMixin:
         except Exception as e:
             logging.error(f"Keepalive worker error for {agent_id}: {e}")"
     async def _stream_cleanup_worker(self) -> None:
-        """Background task to cleanup expired streams."""try:
+        """Background task to cleanup expired streams."""
+try:
             while True:
                 await asyncio.sleep(60)  # Check every minute
                 current_time = time.time()

@@ -20,7 +20,6 @@ import re
 from typing import Any
 
 from src.core.base.common.models import AgentPriority
-from src.core.base.logic.core.identity_core import IdentityCore
 
 
 class IdentityMixin:  # pylint: disable=too-few-public-methods
@@ -35,8 +34,8 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
         # CamelCase to snake_case conversion
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)        
         agent_type = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-        self.identity = IdentityCore(agent_type=agent_type or "base")
-        self.agent_name: str = self.identity.agent_type
+        self.agent_type: str = agent_type or "base"
+        self.agent_name: str = self.agent_type
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)
         self._suspended: bool = False
@@ -56,9 +55,13 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
             import asyncio
 
             # TODO: Verify correct module path for SignalRegistry
-            from src.infrastructure.orchestration.signals.signal_registry import (
-                 SignalRegistry
-            )
+            try:
+                from src.infrastructure.orchestration.signals.signal_registry import (
+                    SignalRegistry
+                )
+            except (ModuleNotFoundError, ImportError):
+                # SignalRegistry module not available; skip capability registration
+                return
             signals = SignalRegistry()
             # Note: We expect the class using this mixin to have agent_logic_core
             if hasattr(self, "agent_logic_core"):

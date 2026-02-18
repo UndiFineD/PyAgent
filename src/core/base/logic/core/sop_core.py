@@ -12,9 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Any, Optional
-from pydantic import BaseModel, Field
-import uuid
+try:
+    from typing import List, Dict, Any, Optional
+except ImportError:
+    from typing import List, Dict, Any, Optional
+
+try:
+    from pydantic import BaseModel, Field
+except ImportError:
+    from pydantic import BaseModel, Field
+
+try:
+    import uuid
+except ImportError:
+    import uuid
 
 
 
@@ -28,7 +39,6 @@ class SopStep(BaseModel):
 
 
 
-
 class SopManifest(BaseModel):
     name: str
     domain: str
@@ -36,7 +46,6 @@ class SopManifest(BaseModel):
     steps: List[SopStep] = Field(default_factory=list)
     success_rate: float = 0.0
     usage_count: int = 0
-
 
 
 

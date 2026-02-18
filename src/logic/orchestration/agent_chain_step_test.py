@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.orchestration.agent_chain_step import AgentChainStep
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.orchestration.agent_chain_step import AgentChainStep
+except ImportError:
+    from logic.orchestration.agent_chain_step import AgentChainStep
+
 
 
 def test_agentchainstep_basic():

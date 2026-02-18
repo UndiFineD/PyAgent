@@ -35,13 +35,25 @@ Auto-extracted class from agent_coder.py
 
 from __future__ import annotations
 
-import re
 
-from src.core.base.common.types.consistency_issue import ConsistencyIssue
-from src.core.base.lifecycle.version import VERSION
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.common.types.consistency_issue import ConsistencyIssue
+except ImportError:
+    from src.core.base.common.types.consistency_issue import ConsistencyIssue
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

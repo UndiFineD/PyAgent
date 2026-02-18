@@ -19,7 +19,11 @@ error_category.py - ErrorCategory Enum
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.error_category import ErrorCategory
+try:
+    from .core.base.error_category import ErrorCategory
+except ImportError:
+    from src.core.base.error_category import ErrorCategory
+
 # Use ErrorCategory.SYNTAX, ErrorCategory.RUNTIME, etc., to classify or tag errors.
 
 WHAT IT DOES:
@@ -32,12 +36,20 @@ Add richer documentation for each category, provide mappings to severity/HTTP co
 
 from __future__ import annotations
 
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

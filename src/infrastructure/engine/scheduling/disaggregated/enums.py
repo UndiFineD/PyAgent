@@ -18,7 +18,10 @@ Enums.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from enum import Enum, auto
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -28,7 +31,6 @@ class InstanceRole(Enum):
     PREFILL = auto()  # Handles prefill phase only
     DECODE = auto()  # Handles decode phase only
     UNIFIED = auto()  # Handles both (traditional mode)
-
 
 
 

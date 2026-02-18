@@ -15,17 +15,56 @@
 
 Compiler regarding grammar definitions to state machines.
 
-import json
-import threading
-import time
-from typing import Any, Dict, List, Optional, Union
+try:
+    import json
+except ImportError:
+    import json
 
-from .compiled_grammar import CompiledGrammar
-from .ebnf import EBNFGrammar
-from .enums import GrammarType
-from .json_schema import JsonSchemaGrammar
-from .regex import RegexGrammar
-from .tokenizer_info import TokenizerInfo
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict, List, Optional, Union
+except ImportError:
+    from typing import Any, Dict, List, Optional, Union
+
+
+try:
+    from .compiled_grammar import CompiledGrammar
+except ImportError:
+    from .compiled_grammar import CompiledGrammar
+
+try:
+    from .ebnf import EBNFGrammar
+except ImportError:
+    from .ebnf import EBNFGrammar
+
+try:
+    from .enums import GrammarType
+except ImportError:
+    from .enums import GrammarType
+
+try:
+    from .json_schema import JsonSchemaGrammar
+except ImportError:
+    from .json_schema import JsonSchemaGrammar
+
+try:
+    from .regex import RegexGrammar
+except ImportError:
+    from .regex import RegexGrammar
+
+try:
+    from .tokenizer_info import TokenizerInfo
+except ImportError:
+    from .tokenizer_info import TokenizerInfo
 
 
 

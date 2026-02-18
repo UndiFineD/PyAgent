@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.resilience.adaptive_rate_limiter import RateLimitExceededError, RateLimiterStats, TokenBucket, SlidingWindowCounter, AdaptiveRateLimiter, PerKeyRateLimiter, rate_limit
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.resilience.adaptive_rate_limiter import RateLimitExceededError, RateLimiterStats, TokenBucket, SlidingWindowCounter, AdaptiveRateLimiter, PerKeyRateLimiter, rate_limit
+except ImportError:
+    from infrastructure.services.resilience.adaptive_rate_limiter import RateLimitExceededError, RateLimiterStats, TokenBucket, SlidingWindowCounter, AdaptiveRateLimiter, PerKeyRateLimiter, rate_limit
+
 
 
 def test_ratelimitexceedederror_basic():

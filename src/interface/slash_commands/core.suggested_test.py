@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.core.suggested import CommandContext, CommandResult, CommandDefinition, CommandRegistry, ParsedCommand, ProcessedPrompt, SlashCommands, parse_commands
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.core.suggested import CommandContext, CommandResult, CommandDefinition, CommandRegistry, ParsedCommand, ProcessedPrompt, SlashCommands, parse_commands
+except ImportError:
+    from interface.slash_commands.core.suggested import CommandContext, CommandResult, CommandDefinition, CommandRegistry, ParsedCommand, ProcessedPrompt, SlashCommands, parse_commands
+
 
 
 def test_commandcontext_basic():

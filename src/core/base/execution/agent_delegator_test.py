@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.execution.agent_delegator import AgentDelegator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.execution.agent_delegator import AgentDelegator
+except ImportError:
+    from core.base.execution.agent_delegator import AgentDelegator
+
 
 
 def test_agentdelegator_basic():

@@ -21,7 +21,12 @@ Broken agent.py module.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
@@ -35,7 +40,6 @@ __version__ = VERSION
 
 """Plugin containing intentional syntax errors for resilience testing.
 # DANGER: Intentional syntax error to test resilience
-
 
 
 

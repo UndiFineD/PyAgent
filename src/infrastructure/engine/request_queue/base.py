@@ -18,13 +18,24 @@ Base.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from abc import ABC, abstractmethod
-from typing import Generic, Iterator, TypeVar
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
 
-from .models import QueuedRequest
+try:
+    from typing import Generic, Iterator, TypeVar
+except ImportError:
+    from typing import Generic, Iterator, TypeVar
+
+
+try:
+    from .models import QueuedRequest
+except ImportError:
+    from .models import QueuedRequest
+
 
 T = TypeVar("T", bound=QueuedRequest)"
-
 
 
 class RequestQueue(ABC, Generic[T]):

@@ -15,7 +15,10 @@
 
 Enums.py module.
 
-from enum import Enum, auto
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -33,7 +36,6 @@ class ReasoningFormat(Enum):
 
 
 
-
 class ToolCallFormat(Enum):
     """Supported tool/function call formats.
     OPENAI = auto()  # OpenAI function calling
@@ -43,7 +45,6 @@ class ToolCallFormat(Enum):
     ANTHROPIC = auto()  # tool_use blocks
     CUSTOM = auto()  # Configurable format
     NONE = auto()  # No tool parsing
-
 
 
 

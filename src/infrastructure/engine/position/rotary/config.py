@@ -15,9 +15,20 @@
 
 Config.py module.
 
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import List, Optional
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import List, Optional
+except ImportError:
+    from typing import List, Optional
 
 
 
@@ -29,7 +40,6 @@ class RoPEVariant(Enum):
     MROPE = auto()  # Multimodal (vision-language)
     XDROPE = auto()  # Extended Dynamic (NTK, etc.)
     LONGROPE = auto()  # Specialized for very long contexts
-
 
 
 

@@ -19,12 +19,32 @@ Slot.py module.
 
 from __future__ import annotations
 
-from _thread import LockType
-import threading
-import time
-from typing import Any, Dict, List, Optional
 
-from .config import AdapterSlot
+try:
+    from _thread import LockType
+except ImportError:
+    from _thread import LockType
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .config import AdapterSlot
+except ImportError:
+    from .config import AdapterSlot
 
 
 

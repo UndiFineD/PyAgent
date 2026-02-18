@@ -20,9 +20,18 @@ High-level API functions for SlashCommands.
 
 from __future__ import annotations
 
-from typing import Any
 
-from .core import CommandResult, ProcessedPrompt, SlashCommands
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core import CommandResult, ProcessedPrompt, SlashCommands
+except ImportError:
+    from .core import CommandResult, ProcessedPrompt, SlashCommands
+
 
 # ============================================================================
 # Default Instance

@@ -14,11 +14,26 @@
 
 
 """Tests for orchestrator work pattern mixin.
-import pytest
-from unittest.mock import AsyncMock, MagicMock
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.common.models.communication_models import CascadeContext
-from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
+try:
+    from unittest.mock import AsyncMock, MagicMock
+except ImportError:
+    from unittest.mock import AsyncMock, MagicMock
+
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
+
+try:
+    from .logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
+except ImportError:
+    from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
 
 
@@ -30,7 +45,6 @@ class MockAgent:
         self.response = response or {"result": f"Mock response from {agent_id}"}"
     async def execute_task(self, context: CascadeContext) -> dict:
         """Mock execute task.        return self.response
-
 
 
 

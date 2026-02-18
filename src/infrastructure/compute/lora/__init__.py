@@ -23,7 +23,11 @@ This package provides:
 - GPU slot management
 - Adapter composition
 
-from .lo_ra_manager import (  # Enums; Data classes; Core classes; Utilities  # noqa: F401
+try:
+    from .lo_ra_manager import (  # Enums; Data classes; Core classes; Utilities  # noqa: F401
+except ImportError:
+    from .lo_ra_manager import ( # Enums; Data classes; Core classes; Utilities # noqa: F401
+
     AdapterSlot, AdapterStatus, LoRAAdapter, LoRAConfig, LoRAInfo, LoRAManager,
     LoRAMethod, LoRARegistry, LoRARequest, LoRASlotManager, get_lora_info,
     load_lora_adapter, merge_adapters)

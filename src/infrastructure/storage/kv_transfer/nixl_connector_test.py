@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.nixl_connector import NixlMemoryRegionStatus, NixlMemoryRegion, NixlConnector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.nixl_connector import NixlMemoryRegionStatus, NixlMemoryRegion, NixlConnector
+except ImportError:
+    from infrastructure.storage.kv_transfer.nixl_connector import NixlMemoryRegionStatus, NixlMemoryRegion, NixlConnector
+
 
 
 def test_nixlmemoryregionstatus_basic():

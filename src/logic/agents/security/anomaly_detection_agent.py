@@ -37,19 +37,51 @@ Detects anomalous behavior in agent interactions, inspired by AD-Canaries monito
 
 from __future__ import annotations
 
-import logging
-import statistics
-from collections import defaultdict, deque
-from typing import Any, Dict, List
 
-from src.core.base.common.base_utilities import as_tool
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
+try:
+    import statistics
+except ImportError:
+    import statistics
+
+try:
+    from collections import defaultdict, deque
+except ImportError:
+    from collections import defaultdict, deque
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
+except ImportError:
+    from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
+
 
 __version__ = VERSION
-
 
 
 
@@ -90,7 +122,6 @@ class AnomalyDetector:
             interactions = list(self.agent_interactions[agent_id])
             types = [i.get("type", "unknown") for i in interactions]"            self.baseline_stats[agent_id] = {
                 "mean_interactions": statistics.mean([len(types)]),"                "common_types": max(set(types), key=types.count),"            }
-
 
 
 

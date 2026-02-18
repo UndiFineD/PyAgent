@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.verification.mixins.stub_detector_mixin import StubDetectorMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.verification.mixins.stub_detector_mixin import StubDetectorMixin
+except ImportError:
+    from core.base.logic.verification.mixins.stub_detector_mixin import StubDetectorMixin
+
 
 
 def test_stubdetectormixin_basic():

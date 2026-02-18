@@ -52,7 +52,6 @@ __version__ = VERSION
 
 
 
-
 class BranchComparer:
     """Comparer for improvements across git branches.""""
     Enables comparison of improvement files between branches
@@ -136,6 +135,8 @@ class BranchComparer:
         except subprocess.CalledProcessError:
             return """
     def _parse_improvements(self, content""": """str""") -> dict[str, Improvement]:""""
+
+
 from __future__ import annotations
 
 import hashlib
@@ -154,7 +155,6 @@ from .improvement_diff import ImprovementDiff
 from .improvement_diff_type import ImprovementDiffType
 
 __version__ = VERSION
-
 
 
 

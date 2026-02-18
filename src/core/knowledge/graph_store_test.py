@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.knowledge.graph_store import GraphKnowledgeStore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.knowledge.graph_store import GraphKnowledgeStore
+except ImportError:
+    from core.knowledge.graph_store import GraphKnowledgeStore
+
 
 
 def test_graphknowledgestore_basic():

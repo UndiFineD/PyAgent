@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .update_tracking_from_report import load_report, append_tracking, move_completed_rows, build_candidates, write_candidates, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .update_tracking_from_report import load_report, append_tracking, move_completed_rows, build_candidates, write_candidates, main
+except ImportError:
+    from .update_tracking_from_report import load_report, append_tracking, move_completed_rows, build_candidates, write_candidates, main
+
 
 
 def test_load_report_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.config_mixin import ConfigMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.config_mixin import ConfigMixin
+except ImportError:
+    from core.base.mixins.config_mixin import ConfigMixin
+
 
 
 def test_configmixin_basic():

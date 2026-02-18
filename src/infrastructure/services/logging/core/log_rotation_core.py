@@ -21,13 +21,37 @@ Log rotation core.py module.
 
 from __future__ import annotations
 
-import contextlib
-import gzip
-import os
-import shutil
-from datetime import datetime
 
-from src.core.base.common.file_system_core import FileSystemCore
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import gzip
+except ImportError:
+    import gzip
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import shutil
+except ImportError:
+    import shutil
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+
+try:
+    from .core.base.common.file_system_core import FileSystemCore
+except ImportError:
+    from src.core.base.common.file_system_core import FileSystemCore
 
 
 

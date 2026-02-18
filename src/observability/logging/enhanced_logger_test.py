@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.logging.enhanced_logger import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.logging.enhanced_logger import *
+except ImportError:
+    from observability.logging.enhanced_logger import *
+

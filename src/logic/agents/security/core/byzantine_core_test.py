@@ -13,10 +13,25 @@
 # limitations under the License.
 Test Byzantine Core module.
 
-import math
-import pytest
-from hypothesis import given, strategies as st, settings, HealthCheck
-from src.logic.agents.security.core.byzantine_core import ByzantineCore
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    from .logic.agents.security.core.byzantine_core import ByzantineCore
+except ImportError:
+    from src.logic.agents.security.core.byzantine_core import ByzantineCore
 
 
 

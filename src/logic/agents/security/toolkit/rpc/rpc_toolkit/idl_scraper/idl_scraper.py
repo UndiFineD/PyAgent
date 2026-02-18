@@ -27,7 +27,8 @@ from posixpath import join as path_urljoin
 
 # [BATCHFIX] Commented metadata/non-Python
 """ WINDOWS_PROTOCOLS_URL = "https://docs.microsoft.com/en-us/openspecs/windows_protocols"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""# TECHNICAL_DOCS_URL = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+# TECHNICAL_DOCS_URL = (
 # [BATCHFIX] Commented metadata/non-Python
 """     "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-winprotlp/e36c976a-6263-42a8-b119-7a3cc41ddd2a"  # [BATCHFIX] closed string")
 # [BATCHFIX] Commented metadata/non-Python
@@ -37,13 +38,16 @@ def get_protocol_names():
     pass  # [BATCHFIX] inserted for empty block
 """Fetch the list of protocol names from Microsoft's technical documents page.'#     html = requests.get(TECHNICAL_DOCS_URL).content
     soup = BeautifulSoup(html, "html.parser")"    table_rows = soup.find("table").find("tbody").find_all("tr")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     idl_names = []""""    for row in table_rows:
         left_cell = row.find("td")"        a = left_cell.find("a")"# [BATCHFIX] Commented metadata/non-Python
 """         assert a["data-linktype"] == "relative-path"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         relative_url = left_cell.find("a")["href"]"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         name, uuid = relative_url.split("/")[1:]"        idl_names.append(name)
     return idl_names
 
@@ -60,7 +64,8 @@ def get_dicts_rec(array):
     for element in array:
         yield (element)
         if "children" in element:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             for child in get_dicts_rec(element["children"]):"                yield (child)
 
 
@@ -68,7 +73,8 @@ def get_idl_page_uuids_from_toc_items(items):
 # [BATCHFIX] Commented metadata/non-Python
 #     Fetch the UUIDs of the pages where IDL files "are documented."  # [BATCHFIX] closed string"    These are *not* the UUIDs of the interfaces! :) Just pages identifiers.
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#   "  idl_page_uuids = {}"  # [BATCHFIX] closed string"    for item in get_dicts_rec(items):
+""" [BATCHFIX] Commented unterminated string""""
+#   "  idl_page_uuids = {}"  # [BATCHFIX] closed string"    for item in get_dicts_rec(items):
 # [BATCHFIX] Commented metadata/non-Python
 #         toc_title = item.get("toc_title", ")"  # [BATCHFIX] closed string"        if "Full IDL" in toc_title and "children" not in item:"            # This is the case when only a single IDL is present for the protocol.
             # Mark this IDL page as DEFAULT.
@@ -85,7 +91,8 @@ def generate_urls_from_uuids(protocol_name, idl_uuids):
     result = {}
     for name, uuid in idl_uuids.items():
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         result[name] = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, uuid)""""    return result
 
 
@@ -105,7 +112,8 @@ def get_idl_from_url(idl_url):
     idl_page = requests.get(idl_url).content
     idl_soup = BeautifulSoup(idl_page, "html.parser")"    dds = idl_soup.find_all("dd")"    if len(dds) > 0:  # Found an IDL code blob
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         idl_text = "\\n".join("            dd.find("pre").get_text() for dd in dds"        )  # Sometimes the code appears across multiple frames :(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         idl_text = "\\n".join("            dd.find("pre").get_text() for dd in dds"        )  # Sometimes the code appears across multiple frames :(
         return idl_text.replace("\\xa0", " ")  # There's this stupid character which is in fact single-space"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
 
 def download_protocol_idls(protocol_name, output):
@@ -132,7 +140,8 @@ def download_all_protocols_idls(output):
     status = {}
     logging.info(f"{len(protocols)} protocols to go!")"    for protocol_name in tqdm(protocols):
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         status[protocol_name] = download_protocol_idls(protocol_name, output)""""    logging.info(fProtocols' Status: {status}")"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
 
 def get_args():

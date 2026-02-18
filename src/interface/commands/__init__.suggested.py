@@ -20,9 +20,18 @@ Slash commands package.
 
 from __future__ import annotations
 
-from typing import Any, Callable
 
-from .base import (
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
+
+
+try:
+    from .base import (
+except ImportError:
+    from .base import (
+
     AsyncCommandHandler,
     CommandContext,
     CommandDefinition,  # noqa: F401
@@ -31,8 +40,16 @@ from .base import (
     ParsedCommand,
     ProcessedPrompt,
 )
-from .parser import CommandParser, SlashCommands, parse_commands  # noqa: F401
-from .registry import CommandRegistry  # noqa: F401
+try:
+    from .parser import CommandParser, SlashCommands, parse_commands  # noqa: F401
+except ImportError:
+    from .parser import CommandParser, SlashCommands, parse_commands # noqa: F401
+
+try:
+    from .registry import CommandRegistry  # noqa: F401
+except ImportError:
+    from .registry import CommandRegistry # noqa: F401
+
 
 __all__ = [
     "CommandContext","    "CommandResult","    "CommandDefinition","    "ParsedCommand","    "ProcessedPrompt","    "CommandHandler","    "AsyncCommandHandler","    "CommandRegistry","    "CommandParser","    "SlashCommands","    "parse_commands","    "get_slash_commands","    "process_prompt","    "execute_command","]

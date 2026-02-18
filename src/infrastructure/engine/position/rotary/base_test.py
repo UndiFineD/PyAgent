@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.position.rotary.base import RotaryEmbeddingBase
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.position.rotary.base import RotaryEmbeddingBase
+except ImportError:
+    from infrastructure.engine.position.rotary.base import RotaryEmbeddingBase
+
 
 
 def test_rotaryembeddingbase_basic():

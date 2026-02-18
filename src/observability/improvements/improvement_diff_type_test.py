@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.improvement_diff_type import ImprovementDiffType
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.improvement_diff_type import ImprovementDiffType
+except ImportError:
+    from observability.improvements.improvement_diff_type import ImprovementDiffType
+
 
 
 def test_improvementdifftype_basic():

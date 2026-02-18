@@ -18,8 +18,15 @@
 Supports hierarchical storage, retrieval, and promotion of agent memory fragments across
 short, mid, long, and archival tiers.
 
-import logging
-from typing import Any, List, Dict, Optional
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, List, Dict, Optional
+except ImportError:
+    from typing import Any, List, Dict, Optional
 
 
 

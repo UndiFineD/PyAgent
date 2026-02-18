@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.stats.scheduler_stats import MetricExportFormat, PrefixCacheStats, SpecDecodingStats, CUDAGraphStats, PerfStats, KVCacheEvictionEvent, SchedulerStats, SchedulerStatsCollector, create_scheduler_stats, create_stats_collector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.stats.scheduler_stats import MetricExportFormat, PrefixCacheStats, SpecDecodingStats, CUDAGraphStats, PerfStats, KVCacheEvictionEvent, SchedulerStats, SchedulerStatsCollector, create_scheduler_stats, create_stats_collector
+except ImportError:
+    from observability.stats.scheduler_stats import MetricExportFormat, PrefixCacheStats, SpecDecodingStats, CUDAGraphStats, PerfStats, KVCacheEvictionEvent, SchedulerStats, SchedulerStatsCollector, create_scheduler_stats, create_stats_collector
+
 
 
 def test_metricexportformat_basic():

@@ -58,7 +58,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class HeaderFixerMixin:
     """Provides automated fixes for license headers and __future__ imports.
     def clean_file_headers(self, file_path: Path) -> bool:

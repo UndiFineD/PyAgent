@@ -32,7 +32,6 @@ except ImportError:
 
 
 
-
 class SecretCore(BaseCore):
     """Standard implementation for secret safety.
     Provides masking logic for logs and validation for naming.

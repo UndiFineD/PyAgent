@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.rollback_tracker import RollbackTracker
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.rollback_tracker import RollbackTracker
+except ImportError:
+    from observability.improvements.rollback_tracker import RollbackTracker
+
 
 
 def test_rollbacktracker_basic():

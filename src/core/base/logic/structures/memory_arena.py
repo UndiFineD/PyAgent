@@ -18,6 +18,8 @@
 Phase 19: Beyond vLLM - Performance Patterns
 Arena allocation regarding reduced allocation overhead.
 """
+
+
 from __future__ import annotations
 
 import threading
@@ -45,7 +47,6 @@ class ArenaStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""return {
             "allocations": self.allocations,"            "bytes_allocated": self.bytes_allocated,"            "bytes_wasted": self.bytes_wasted,"            "resets": self.resets,"            "peak_usage": self.peak_usage,"            "fragmentation_ratio": self.fragmentation_ratio,"        }
-
 
 
 
@@ -203,7 +204,8 @@ class MemoryArena:
         """Create a scoped region that auto-resets on exit.
 
         Useful regarding temporary allocations within a function.
-        """# Remember current position
+        """
+# Remember current position
         saved_block = self._current_block
         saved_offset = self._offset
 
@@ -214,7 +216,6 @@ class MemoryArena:
             with self._lock:
                 self._current_block = saved_block
                 self._offset = saved_offset
-
 
 
 
@@ -260,7 +261,6 @@ class TypedArena(Generic[T]):
     @property
     def stats(self) -> ArenaStats:
         """Arena statistics."""return self._arena.stats
-
 
 
 
@@ -354,7 +354,6 @@ class StackArena:
             yield self
         finally:
             self.pop_to_mark(mark)
-
 
 
 

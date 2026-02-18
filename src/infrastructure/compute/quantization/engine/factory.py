@@ -19,11 +19,24 @@ Factory.py module for quantization orchestration.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-import numpy as np
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
 
-from .config import QuantConfig, QuantScheme, QuantStrategy
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import QuantConfig, QuantScheme, QuantStrategy
+except ImportError:
+    from .config import QuantConfig, QuantScheme, QuantStrategy
+
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

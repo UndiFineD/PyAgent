@@ -79,10 +79,22 @@ def pytest_ignore_collect(collection_path, config):
 def agent_module():
     """Provides a mock module with Agent and CircuitBreaker classes."""
     # Lazy imports to avoid circular dependencies
-    from src.core.base.lifecycle.base_agent import BaseAgent
-    from src.core.base.logic.circuit_breaker import CircuitBreaker
-    from src.core.base.logic.agent_plugin_base import AgentPluginBase
-    from src.core.base.common.models.core_enums import HealthStatus
+    try:
+        from .core.base.lifecycle.base_agent import BaseAgent
+    except ImportError:
+        from src.core.base.lifecycle.base_agent import BaseAgent
+    try:
+        from .core.base.logic.circuit_breaker import CircuitBreaker
+    except ImportError:
+        from src.core.base.logic.circuit_breaker import CircuitBreaker
+    try:
+        from .core.base.logic.agent_plugin_base import AgentPluginBase
+    except ImportError:
+        from src.core.base.logic.agent_plugin_base import AgentPluginBase
+    try:
+        from .core.base.common.models.core_enums import HealthStatus
+    except ImportError:
+        from src.core.base.common.models.core_enums import HealthStatus
     
     mod = types.SimpleNamespace()
     mod.Agent = BaseAgent
@@ -98,13 +110,34 @@ def agent_backend_module():
     mod = types.SimpleNamespace()
     # Lazy imports to avoid circular dependencies
     try:
-        from src.infrastructure.compute.backend.request_queue import RequestQueue
-        from src.infrastructure.compute.backend.request_batcher import RequestBatcher
-        from src.infrastructure.compute.backend.request_priority import RequestPriority
-        from src.infrastructure.compute.backend.system_health_monitor import SystemHealthMonitor
-        from src.infrastructure.compute.backend.load_balancer import LoadBalancer
-        from src.infrastructure.compute.backend.request_tracer import RequestTracer
-        from src.infrastructure.compute.backend.audit_logger import AuditLogger
+        try:
+            from .infrastructure.compute.backend.request_queue import RequestQueue
+        except ImportError:
+            from src.infrastructure.compute.backend.request_queue import RequestQueue
+        try:
+            from .infrastructure.compute.backend.request_batcher import RequestBatcher
+        except ImportError:
+            from src.infrastructure.compute.backend.request_batcher import RequestBatcher
+        try:
+            from .infrastructure.compute.backend.request_priority import RequestPriority
+        except ImportError:
+            from src.infrastructure.compute.backend.request_priority import RequestPriority
+        try:
+            from .infrastructure.compute.backend.system_health_monitor import SystemHealthMonitor
+        except ImportError:
+            from src.infrastructure.compute.backend.system_health_monitor import SystemHealthMonitor
+        try:
+            from .infrastructure.compute.backend.load_balancer import LoadBalancer
+        except ImportError:
+            from src.infrastructure.compute.backend.load_balancer import LoadBalancer
+        try:
+            from .infrastructure.compute.backend.request_tracer import RequestTracer
+        except ImportError:
+            from src.infrastructure.compute.backend.request_tracer import RequestTracer
+        try:
+            from .infrastructure.compute.backend.audit_logger import AuditLogger
+        except ImportError:
+            from src.infrastructure.compute.backend.audit_logger import AuditLogger
 
         mod.RequestQueue = RequestQueue
         mod.RequestBatcher = RequestBatcher
@@ -123,7 +156,10 @@ def base_agent_module():
     """Provides core base agent classes including BatchManagers."""
     mod = types.SimpleNamespace()
     try:
-        from src.core.base.logic.managers.batch_managers import BatchRequest, RequestBatcher
+        try:
+            from .core.base.logic.managers.batch_managers import BatchRequest, RequestBatcher
+        except ImportError:
+            from src.core.base.logic.managers.batch_managers import BatchRequest, RequestBatcher
 
         mod.BatchRequest = BatchRequest
         mod.RequestBatcher = RequestBatcher
@@ -153,7 +189,10 @@ def transactional_test_env(agent_sandbox):
     Ensures that file modifications are tracked and can be rolled back on failure.
     """
     # Lazy import to avoid circular dependencies
-    from src.core.base.state.agent_state_manager import StateTransaction
+    try:
+        from .core.base.state.agent_state_manager import StateTransaction
+    except ImportError:
+        from src.core.base.state.agent_state_manager import StateTransaction
     
     # Track core files in the sandbox
     target_files = list(agent_sandbox.glob("**/*.py"))

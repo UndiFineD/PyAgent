@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.decoder.proposers import ProposerStats, SpeculativeProposer, NgramProposer, MedusaProposer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.decoder.proposers import ProposerStats, SpeculativeProposer, NgramProposer, MedusaProposer
+except ImportError:
+    from infrastructure.engine.speculative.decoder.proposers import ProposerStats, SpeculativeProposer, NgramProposer, MedusaProposer
+
 
 
 def test_proposerstats_basic():

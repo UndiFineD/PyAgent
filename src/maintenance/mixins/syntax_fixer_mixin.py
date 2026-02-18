@@ -60,7 +60,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class SyntaxFixerMixin:
     """Provides automated fixes for specific Python syntax patterns.
     def fix_invalid_for_loop_type_hints(self, file_path: Path) -> bool:

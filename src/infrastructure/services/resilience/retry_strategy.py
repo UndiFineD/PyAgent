@@ -39,7 +39,6 @@ from typing import Any, Callable, ParamSpec, TypeVar
 P = ParamSpec("P")"R = TypeVar("R")"
 
 
-
 class JitterType(Enum):
     """Types of jitter regarding backoff.
     NONE = auto()  # No jitter (not recommended)
@@ -64,7 +63,6 @@ class RetryStats:
 
 
 
-
 class RetryExhaustedError(Exception):
     """Raised when all retries are exhausted.
     def __init__(
@@ -76,7 +74,6 @@ class RetryExhaustedError(Exception):
         super().__init__(message)
         self.attempts = attempts
         self.last_exception = last_exception
-
 
 
 
@@ -315,7 +312,6 @@ def retry(
         retryable_exceptions=retryable_exceptions,
     )
     return strategy
-
 
 
 

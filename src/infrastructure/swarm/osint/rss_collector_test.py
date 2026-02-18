@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.osint.rss_collector import RssCollector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.osint.rss_collector import RssCollector
+except ImportError:
+    from infrastructure.swarm.osint.rss_collector import RssCollector
+
 
 
 def test_rsscollector_basic():

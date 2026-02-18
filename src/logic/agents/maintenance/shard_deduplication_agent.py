@@ -57,7 +57,6 @@ __version__ = VERSION
 
 
 
-
 class ShardDeduplicationAgent(BaseAgent):
     Analyzes and deduplicates shard data to reduce storage and "noise."#     Identifies redundant records based on prompt hash and result content.
 
@@ -145,7 +144,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

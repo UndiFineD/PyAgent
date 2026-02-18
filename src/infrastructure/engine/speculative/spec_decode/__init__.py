@@ -16,10 +16,22 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Speculative decoding verification package.
 
-from .config import AcceptancePolicy, SpecDecodeConfig, VerificationStrategy  # noqa: F401
-from .metadata import (SpecDecodeMetadataFactory, SpecDecodeMetadataV2,  # noqa: F401
+try:
+    from .config import AcceptancePolicy, SpecDecodeConfig, VerificationStrategy  # noqa: F401
+except ImportError:
+    from .config import AcceptancePolicy, SpecDecodeConfig, VerificationStrategy # noqa: F401
+
+try:
+    from .metadata import (SpecDecodeMetadataFactory, SpecDecodeMetadataV2,  # noqa: F401
+except ImportError:
+    from .metadata import (SpecDecodeMetadataFactory, SpecDecodeMetadataV2, # noqa: F401
+
                        TreeVerificationMetadata)
-from .verification import (BatchVerifier, SpecDecodeVerifier,  # noqa: F401
+try:
+    from .verification import (BatchVerifier, SpecDecodeVerifier,  # noqa: F401
+except ImportError:
+    from .verification import (BatchVerifier, SpecDecodeVerifier, # noqa: F401
+
                            StreamingVerifier, VerificationResult)
 
 __all__ = [

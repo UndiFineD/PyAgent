@@ -16,16 +16,38 @@
 """Module: identity_skill
 Implements identity management as a SkillCore.
 """
+
+
 from __future__ import annotations
-import re
-from typing import TYPE_CHECKING
-from src.core.base.lifecycle.skill_core import SkillCore
-from src.core.base.logic.core.identity_core import IdentityCore
-from src.core.base.common.models import AgentPriority
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+try:
+    from .core.base.lifecycle.skill_core import SkillCore
+except ImportError:
+    from src.core.base.lifecycle.skill_core import SkillCore
+
+try:
+    from .core.base.logic.core.identity_core import IdentityCore
+except ImportError:
+    from src.core.base.logic.core.identity_core import IdentityCore
+
+try:
+    from .core.base.common.models import AgentPriority
+except ImportError:
+    from src.core.base.common.models import AgentPriority
+
 
 if TYPE_CHECKING:
     from src.core.base.lifecycle.base_agent import BaseAgent
-
 
 
 
@@ -42,7 +64,8 @@ class IdentitySkill(SkillCore):
         self.capabilities: list[str] = ["base"]"        self.priority: AgentPriority = AgentPriority.NORMAL
 
     async def initialize(self) -> None:
-        """Initialize identity and register capabilities."""# Ported from IdentityMixin._register_capabilities
+        """Initialize identity and register capabilities."""
+# Ported from IdentityMixin._register_capabilities
         pass
 
     async def shutdown(self) -> None:

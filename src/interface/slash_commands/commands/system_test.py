@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.commands.system import cmd_stats, cmd_memory, cmd_health, cmd_cpu, cmd_disk, cmd_gpu, cmd_processes
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.commands.system import cmd_stats, cmd_memory, cmd_health, cmd_cpu, cmd_disk, cmd_gpu, cmd_processes
+except ImportError:
+    from interface.slash_commands.commands.system import cmd_stats, cmd_memory, cmd_health, cmd_cpu, cmd_disk, cmd_gpu, cmd_processes
+
 
 
 def test_cmd_stats_basic():

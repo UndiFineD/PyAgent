@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.core_utils import load_codeignore, setup_logging
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.core_utils import load_codeignore, setup_logging
+except ImportError:
+    from core.base.common.utils.core_utils import load_codeignore, setup_logging
+
 
 
 def test_load_codeignore_basic():

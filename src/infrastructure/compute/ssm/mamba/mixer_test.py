@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.ssm.mamba.mixer import MambaMixer, Mamba2Mixer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.ssm.mamba.mixer import MambaMixer, Mamba2Mixer
+except ImportError:
+    from infrastructure.compute.ssm.mamba.mixer import MambaMixer, Mamba2Mixer
+
 
 
 def test_mambamixer_basic():

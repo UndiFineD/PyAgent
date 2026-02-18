@@ -39,7 +39,6 @@ except ImportError:
 
 
 
-
 class NaiveAttentionBackend(AttentionBackend[None]):
         Naive reference implementation for testing.
 

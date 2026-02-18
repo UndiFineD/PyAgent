@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.verification.code_integrity_verifier import CodeIntegrityVerifier
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.verification.code_integrity_verifier import CodeIntegrityVerifier
+except ImportError:
+    from core.base.logic.verification.code_integrity_verifier import CodeIntegrityVerifier
+
 
 
 def test_codeintegrityverifier_basic():

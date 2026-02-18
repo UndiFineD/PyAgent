@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.collection_utils import LazyDict, as_list, as_iter, is_list_of, chunk_list, chunk_iter, flatten_2d_lists, flatten_deep, full_groupby, partition, first, first_or_raise, last, swap_dict_values, deep_merge_dicts, invert_dict, invert_dict_multi, filter_none, pick_keys, omit_keys, unique, unique_by, sliding_window, pairwise
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.collection_utils import LazyDict, as_list, as_iter, is_list_of, chunk_list, chunk_iter, flatten_2d_lists, flatten_deep, full_groupby, partition, first, first_or_raise, last, swap_dict_values, deep_merge_dicts, invert_dict, invert_dict_multi, filter_none, pick_keys, omit_keys, unique, unique_by, sliding_window, pairwise
+except ImportError:
+    from core.base.common.utils.collection_utils import LazyDict, as_list, as_iter, is_list_of, chunk_list, chunk_iter, flatten_2d_lists, flatten_deep, full_groupby, partition, first, first_or_raise, last, swap_dict_values, deep_merge_dicts, invert_dict, invert_dict_multi, filter_none, pick_keys, omit_keys, unique, unique_by, sliding_window, pairwise
+
 
 
 def test_lazydict_basic():

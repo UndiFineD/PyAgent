@@ -16,6 +16,10 @@
 """Manager for diff generation.
 (Facade for src.core.base.common.diff_core)
 """
-from src.core.base.common.diff_core import DiffCore as DiffGenerator
+try:
+    from .core.base.common.diff_core import DiffCore as DiffGenerator
+except ImportError:
+    from src.core.base.common.diff_core import DiffCore as DiffGenerator
+
 
 __all__ = ["DiffGenerator"]"

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.cloud_asset_discovery_core import CertificateInfo, AssetFinding, DiscoveryResult, CloudAssetDiscoveryCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.cloud_asset_discovery_core import CertificateInfo, AssetFinding, DiscoveryResult, CloudAssetDiscoveryCore
+except ImportError:
+    from core.base.logic.core.cloud_asset_discovery_core import CertificateInfo, AssetFinding, DiscoveryResult, CloudAssetDiscoveryCore
+
 
 
 def test_certificateinfo_basic():

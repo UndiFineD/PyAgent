@@ -17,7 +17,6 @@ import torch.nn as nn
 from typing import Tuple
 
 
-
 class KVzapSurrogate(nn.Module):
     """
     Lightweight surrogate model to predict KV importance scores from hidden states.

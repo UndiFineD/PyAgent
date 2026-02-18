@@ -19,16 +19,32 @@ using automated or specified resolution strategies.
 
 
 from __future__ import annotations
-import re
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.utils.conflict_resolution import (
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.utils.conflict_resolution import (
+except ImportError:
+    from src.logic.agents.cognitive.context.utils.conflict_resolution import (
+
     ConflictResolution,
 )
-from src.logic.agents.cognitive.context.models.merge_conflict import MergeConflict
+try:
+    from .logic.agents.cognitive.context.models.merge_conflict import MergeConflict
+except ImportError:
+    from src.logic.agents.cognitive.context.models.merge_conflict import MergeConflict
+
 
 __version__ = VERSION
-
 
 
 

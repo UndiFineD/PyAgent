@@ -25,7 +25,6 @@ __version__ = VERSION
 
 
 
-
 class GraphStorageMixin:
 """"Mixin for graph storage and bead persistence.
     def _load_graph(self) -> None:

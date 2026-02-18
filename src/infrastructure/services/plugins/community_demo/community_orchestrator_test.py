@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.plugins.community_demo.community_orchestrator import CommunityOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.plugins.community_demo.community_orchestrator import CommunityOrchestrator
+except ImportError:
+    from infrastructure.services.plugins.community_demo.community_orchestrator import CommunityOrchestrator
+
 
 
 def test_communityorchestrator_basic():

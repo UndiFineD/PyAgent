@@ -14,6 +14,8 @@
 
 
 """Helper functions for dataclass default factories."""
+
+
 from __future__ import annotations
 
 from collections.abc import Iterable
@@ -62,5 +64,6 @@ else:
 
 
 def _empty_plugin_config_list() -> list[AgentPluginConfig]:
-    """Helper function for default factory in dataclass fields."""# Import here to avoid circular dependency
+    """Helper function for default factory in dataclass fields."""
+# Import here to avoid circular dependency
     return []

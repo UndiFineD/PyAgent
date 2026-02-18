@@ -15,13 +15,29 @@
 
 """Factory for creating KV cache coordinators.
 # SPDX-License-Identifier: Apache-2.0
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .advanced import (AsyncPrefetchCoordinator,
+
+try:
+    from .advanced import (AsyncPrefetchCoordinator,
+except ImportError:
+    from .advanced import (AsyncPrefetchCoordinator,
+
                        HierarchicalKVCacheCoordinator,
                        PredictiveKVCacheCoordinator)
-from .coordinator import KVCacheCoordinator
-from .data_classes import CacheConfig
+try:
+    from .coordinator import KVCacheCoordinator
+except ImportError:
+    from .coordinator import KVCacheCoordinator
+
+try:
+    from .data_classes import CacheConfig
+except ImportError:
+    from .data_classes import CacheConfig
+
 
 
 def create_kv_cache_coordinator(

@@ -54,7 +54,6 @@ __version__ = VERSION
 
 
 
-
 class CodeQualityAgent(BaseAgent):
     Automated Code Quality Guard: Performs linting, formatting checks,
 #     and complexity analysis for Python, Rust, and JavaScript.

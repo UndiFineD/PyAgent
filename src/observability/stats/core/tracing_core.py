@@ -64,7 +64,6 @@ except ImportError:
 
 
 
-
 class TracingCore:
         TracingCore handles the logic for distributed tracing and latency breakdown.
     It prepares trace data for OpenTelemetry (OTel) exporters.

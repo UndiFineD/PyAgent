@@ -29,7 +29,6 @@ except ImportError:  # type: ignore[assignment]
 
 
 
-
 class ByzantineCore:
         Pure logic for Byzantine Fault Tolerance (BFT) consensus.
     Calculates weighted agreement scores and detect malicious deviations.

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.resource_predictor_orchestrator import ResourcePredictorOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.resource_predictor_orchestrator import ResourcePredictorOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.resource_predictor_orchestrator import ResourcePredictorOrchestrator
+
 
 
 def test_resourcepredictororchestrator_basic():

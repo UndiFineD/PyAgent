@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.rl.reward_functions import RewardType, RewardSignal, RewardFunctions, CompositeRewardFunction, RewardShaper
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.rl.reward_functions import RewardType, RewardSignal, RewardFunctions, CompositeRewardFunction, RewardShaper
+except ImportError:
+    from core.rl.reward_functions import RewardType, RewardSignal, RewardFunctions, CompositeRewardFunction, RewardShaper
+
 
 
 def test_rewardtype_basic():

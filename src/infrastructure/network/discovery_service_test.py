@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.network.discovery_service import DiscoveryService
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.network.discovery_service import DiscoveryService
+except ImportError:
+    from infrastructure.network.discovery_service import DiscoveryService
+
 
 
 def test_discoveryservice_basic():

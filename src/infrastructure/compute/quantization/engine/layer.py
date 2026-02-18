@@ -19,15 +19,27 @@ Layer.py module.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-import numpy as np
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
 
-from .tensor import QuantizedTensor
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .tensor import QuantizedTensor
+except ImportError:
+    from .tensor import QuantizedTensor
+
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
-
 
 
 

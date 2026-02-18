@@ -16,11 +16,21 @@
 """Manager for agent templates.
 (Facade for src.core.base.common.template_core)
 """
+
+
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.template_core import TemplateCore
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.template_core import TemplateCore
+except ImportError:
+    from src.core.base.common.template_core import TemplateCore
 
 
 
@@ -32,7 +42,6 @@ class Template:
         self.agents = ["coder", "researcher", "reviewer"]  # Default agents for testing"
     def __str__(self) -> str:
         return self.content
-
 
 
 

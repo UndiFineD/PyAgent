@@ -19,15 +19,27 @@ to context files by analyzing similar reference contexts and patterns.
 
 
 from __future__ import annotations
-import re
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.context_recommendation import (
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.models.context_recommendation import (
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_recommendation import (
+
     ContextRecommendation,
 )
 
 __version__ = VERSION
-
 
 
 

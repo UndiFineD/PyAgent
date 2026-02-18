@@ -50,6 +50,10 @@ Manager for error notifications.
 (Facade for src.core.base.common.utils.notification_manager)
 """
 
-from src.core.base.common.utils.notification_manager import NotificationManager
+try:
+    from .core.base.common.utils.notification_manager import NotificationManager
+except ImportError:
+    from src.core.base.common.utils.notification_manager import NotificationManager
+
 
 __all__ = ["NotificationManager"]

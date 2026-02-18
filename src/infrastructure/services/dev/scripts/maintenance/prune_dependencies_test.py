@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.maintenance.prune_dependencies import prune_requirements
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.maintenance.prune_dependencies import prune_requirements
+except ImportError:
+    from infrastructure.services.dev.scripts.maintenance.prune_dependencies import prune_requirements
+
 
 
 def test_prune_requirements_basic():

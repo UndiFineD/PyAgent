@@ -26,7 +26,6 @@ except ImportError:
 
 
 
-
 class WorkspaceCore:
     """Centralized handler for workspace-wide path logic and file ignore rules.
     """

@@ -32,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class ResponsesAPIServer:
         OpenAI Responses API server implementation.
     

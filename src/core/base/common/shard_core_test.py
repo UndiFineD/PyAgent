@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.shard_core import ShardCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.shard_core import ShardCore
+except ImportError:
+    from core.base.common.shard_core import ShardCore
+
 
 
 def test_shardcore_basic():

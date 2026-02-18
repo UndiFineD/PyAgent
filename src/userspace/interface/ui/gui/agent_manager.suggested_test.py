@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .agent_manager.suggested import AgentManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .agent_manager.suggested import AgentManager
+except ImportError:
+    from .agent_manager.suggested import AgentManager
+
 
 
 def test_agentmanager_basic():

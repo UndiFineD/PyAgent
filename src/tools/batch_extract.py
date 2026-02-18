@@ -26,13 +26,42 @@ run on untrusted machines unless you understand the risks.
 
 
 from __future__ import annotations
-import argparse
-import asyncio
-import json
-from pathlib import Path
-import subprocess
-import shutil
-from typing import Any
+
+try:
+    import argparse
+except ImportError:
+    import argparse
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    import subprocess
+except ImportError:
+    import subprocess
+
+try:
+    import shutil
+except ImportError:
+    import shutil
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORT_DEFAULT = ROOT / '.external' / 'refactor_report.json''TMP_DIR = ROOT / '.external' / 'tmp_reports''EXTRACTOR = ROOT / 'src' / 'tools' / 'extract_candidates.py''

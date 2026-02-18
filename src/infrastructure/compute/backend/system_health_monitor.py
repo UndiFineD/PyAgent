@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
-from src.core.base.common.health_core import HealthCore as StandardHealthCore
+try:
+    from .core.base.common.health_core import HealthCore as StandardHealthCore
+except ImportError:
+    from src.core.base.common.health_core import HealthCore as StandardHealthCore
 
 
 class SystemHealthMonitor(StandardHealthCore):
@@ -26,7 +29,7 @@ class SystemHealthMonitor(StandardHealthCore):
         window_size: int = 100,
     ) -> None:
         super().__init__()
-        from src.observability.stats.core.stability_core import StabilityCore
+        from src.core.base.common.stability_core import StabilityCore
 
         self.health_threshold = health_threshold
         self.window_size = window_size

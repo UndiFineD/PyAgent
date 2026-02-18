@@ -18,17 +18,36 @@
 Speculative Swarm Orchestrator (Phase 56).
 Enables cross-agent speculative execution where fast agents draft for accurate agents.
 
-import logging
-import time
-from typing import Any, Dict, Optional
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.common.models.communication_models import (
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .core.base.common.models.communication_models import (
+except ImportError:
+    from src.core.base.common.models.communication_models import (
+
     CascadeContext, SpeculativeProposal, VerificationOutcome)
-from src.infrastructure.engine.models.similarity import \
+try:
+    from .infrastructure.engine.models.similarity import \
+except ImportError:
+    from src.infrastructure.engine.models.similarity import \
+
     EmbeddingSimilarityService
 
 logger = logging.getLogger(__name__)
-
 
 
 

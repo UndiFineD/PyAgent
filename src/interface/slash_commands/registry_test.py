@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.registry import get_global_registry, reset_global_registry, register, register_command, command, unregister, enable_command, disable_command, list_commands
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.registry import get_global_registry, reset_global_registry, register, register_command, command, unregister, enable_command, disable_command, list_commands
+except ImportError:
+    from interface.slash_commands.registry import get_global_registry, reset_global_registry, register, register_command, command, unregister, enable_command, disable_command, list_commands
+
 
 
 def test_get_global_registry_basic():

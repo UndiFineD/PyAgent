@@ -35,7 +35,6 @@ __version__ = VERSION
 
 
 
-
 class McpToolRegistry:
         McpToolRegistry recovered after Copilot CLI deprecation event.
     Standardized TODO Placeholder for future re-implementation.

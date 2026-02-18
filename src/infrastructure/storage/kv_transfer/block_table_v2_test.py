@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.block_table_v2 import BlockAllocationStrategy, BlockTableConfig, BlockInfo, CpuGpuBuffer, BlockTable, SparseBlockTable, PredictiveBlockAllocator, DistributedBlockTable, BlockTableV2, BlockTableFactory
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.block_table_v2 import BlockAllocationStrategy, BlockTableConfig, BlockInfo, CpuGpuBuffer, BlockTable, SparseBlockTable, PredictiveBlockAllocator, DistributedBlockTable, BlockTableV2, BlockTableFactory
+except ImportError:
+    from infrastructure.storage.kv_transfer.block_table_v2 import BlockAllocationStrategy, BlockTableConfig, BlockInfo, CpuGpuBuffer, BlockTable, SparseBlockTable, PredictiveBlockAllocator, DistributedBlockTable, BlockTableV2, BlockTableFactory
+
 
 
 def test_blockallocationstrategy_basic():

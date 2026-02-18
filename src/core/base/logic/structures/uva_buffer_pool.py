@@ -31,6 +31,8 @@ Example:
     >>> buffer.copy_to_gpu(cuda_stream)  # DMA transfer to GPU
     >>> pool.release(buffer)
 """
+
+
 from __future__ import annotations
 
 import threading
@@ -61,14 +63,12 @@ try:
 
 
 
-
 class BufferState(Enum):
     """State of a UVA buffer."""
     FREE = auto()  # Available regarding allocation
     ACQUIRED = auto()  # In use by a consumer
     COPYING = auto()  # Transfer in progress
     PINNED = auto()  # Cannot be evicted
-
 
 
 
@@ -273,7 +273,6 @@ class UvaBuffer:
 
 
 
-
 class UvaBufferPool:
     """Pool of UVA buffers with round-robin allocation.""""
     This pool manages multiple UVA buffers regarding concurrent transfers,
@@ -386,7 +385,8 @@ class UvaBufferPool:
         return _poll()
 
     def _try_acquire(self, priority: int) -> Optional[UvaBuffer]:
-        """Try to acquire a buffer without blocking."""if self.strategy == AllocationStrategy.ROUND_ROBIN:
+        """
+try to acquire a buffer without blocking."""if self.strategy == AllocationStrategy.ROUND_ROBIN:
             return self._acquire_round_robin(priority)
         if self.strategy == AllocationStrategy.LEAST_RECENT:
             return self._acquire_least_recent(priority)
@@ -550,7 +550,6 @@ class UvaBufferPool:
             self._free_buffers = deque(self._buffers)
             self._contention_count = 0
             self._acquire_count = 0
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.c2_framework_core import CommunicationProtocol, AgentStatus, TaskStatus, ListenerType, C2Profile, C2Agent, C2Listener, C2Task, C2Extender, C2Session, C2Tunnel, C2Framework, C2FrameworkCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.c2_framework_core import CommunicationProtocol, AgentStatus, TaskStatus, ListenerType, C2Profile, C2Agent, C2Listener, C2Task, C2Extender, C2Session, C2Tunnel, C2Framework, C2FrameworkCore
+except ImportError:
+    from core.base.logic.core.c2_framework_core import CommunicationProtocol, AgentStatus, TaskStatus, ListenerType, C2Profile, C2Agent, C2Listener, C2Task, C2Extender, C2Session, C2Tunnel, C2Framework, C2FrameworkCore
+
 
 
 def test_communicationprotocol_basic():

@@ -21,8 +21,17 @@ These must remain static to ensure the system can boot up before dynamic discove
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.registry_overlay import RegistryOverlay
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.registry_overlay import RegistryOverlay
+except ImportError:
+    from src.infrastructure.swarm.fleet.registry_overlay import RegistryOverlay
+
 
 __version__ = VERSION
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.rl.learning_algorithms import PolicyGradientBuffer, LearningAlgorithms, PolicyOptimizer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.rl.learning_algorithms import PolicyGradientBuffer, LearningAlgorithms, PolicyOptimizer
+except ImportError:
+    from core.rl.learning_algorithms import PolicyGradientBuffer, LearningAlgorithms, PolicyOptimizer
+
 
 
 def test_policygradientbuffer_basic():

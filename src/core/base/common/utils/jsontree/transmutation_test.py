@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.jsontree.transmutation import json_flatten, json_unflatten
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.jsontree.transmutation import json_flatten, json_unflatten
+except ImportError:
+    from core.base.common.utils.jsontree.transmutation import json_flatten, json_unflatten
+
 
 
 def test_json_flatten_basic():

@@ -20,12 +20,32 @@ Base Prompt Renderer class.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import Any, List, Optional, Tuple
 
-from .models import PromptConfig, RenderResult, TruncationResult
-from .salt import CacheSaltGenerator
-from .truncation import TruncationManager
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, List, Optional, Tuple
+except ImportError:
+    from typing import Any, List, Optional, Tuple
+
+
+try:
+    from .models import PromptConfig, RenderResult, TruncationResult
+except ImportError:
+    from .models import PromptConfig, RenderResult, TruncationResult
+
+try:
+    from .salt import CacheSaltGenerator
+except ImportError:
+    from .salt import CacheSaltGenerator
+
+try:
+    from .truncation import TruncationManager
+except ImportError:
+    from .truncation import TruncationManager
 
 
 

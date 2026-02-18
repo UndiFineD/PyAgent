@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.resilience.verify_checkpoint_rdma import TestCheckpointRDMA
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.resilience.verify_checkpoint_rdma import TestCheckpointRDMA
+except ImportError:
+    from infrastructure.swarm.resilience.verify_checkpoint_rdma import TestCheckpointRDMA
+
 
 
 def test_testcheckpointrdma_basic():

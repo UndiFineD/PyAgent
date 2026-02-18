@@ -14,7 +14,8 @@
 
 # Instruction for the code scanner
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""# instruction = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+# instruction = (
 # [BATCHFIX] Commented metadata/non-Python
 """     "You are a static analysis tool designed to perform a security review of Android application source code."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     "You will analyze the following files:\\n\\n"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python

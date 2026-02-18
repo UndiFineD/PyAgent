@@ -19,7 +19,11 @@ RegressionInfo - Error regression metadata dataclass
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.regression_info import RegressionInfo
+try:
+    from .core.base.regression_info import RegressionInfo
+except ImportError:
+    from src.core.base.regression_info import RegressionInfo
+
 
 # create a simple record
 ri = RegressionInfo(
@@ -39,9 +43,18 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

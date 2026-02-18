@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.skills.identity_skill import IdentitySkill
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.skills.identity_skill import IdentitySkill
+except ImportError:
+    from core.base.skills.identity_skill import IdentitySkill
+
 
 
 def test_identityskill_basic():

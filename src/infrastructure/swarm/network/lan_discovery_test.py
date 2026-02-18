@@ -20,7 +20,6 @@ from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
 
 
 
-
 class DummySocket:
     def __init__(self, *args, **kwargs):
         self.sent = []

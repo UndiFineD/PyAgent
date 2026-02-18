@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.apt_simulation_core import APTGroup, APTSimulationResult, C2Profile, APTSimulationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.apt_simulation_core import APTGroup, APTSimulationResult, C2Profile, APTSimulationCore
+except ImportError:
+    from core.base.logic.core.apt_simulation_core import APTGroup, APTSimulationResult, C2Profile, APTSimulationCore
+
 
 
 def test_aptgroup_basic():

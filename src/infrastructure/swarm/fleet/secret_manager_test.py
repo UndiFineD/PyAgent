@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.secret_manager import SecretManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.secret_manager import SecretManager
+except ImportError:
+    from infrastructure.swarm.fleet.secret_manager import SecretManager
+
 
 
 def test_secretmanager_basic():

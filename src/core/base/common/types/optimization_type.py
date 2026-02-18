@@ -34,7 +34,6 @@ __version__ = VERSION
 
 
 
-
 class OptimizationType(Enum):
     """Types of code optimization."""
     ALGORITHMIC = "algorithmic"

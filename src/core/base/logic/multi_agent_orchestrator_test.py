@@ -30,7 +30,6 @@ def temp_dir():
 
 
 
-
 class TestMultiAgentOrchestrator:
     """Test the multi-agent orchestrator core."""
     def test_orchestrator_initialization(self, temp_dir):
@@ -79,7 +78,6 @@ class TestMultiAgentOrchestrator:
         # Check task status
         status = orchestrator.get_task_status(task_result["task_id"])"        assert status is not None
         assert status.status in ["completed", "running"]"
-
 
 
 class TestVoiceAgentOrchestrator:

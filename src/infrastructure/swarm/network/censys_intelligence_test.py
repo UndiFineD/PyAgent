@@ -13,11 +13,31 @@
 # limitations under the License.
 
 
-import pytest
-from src.infrastructure.swarm.network.censys_intelligence import CensysIntelligence
-from src.logic.agents.forensics.file_classifier import FileClassifier
-from src.infrastructure.swarm.network.dns_takeover_signatures import DNS_TAKEOVER_SIGNATURES
-from src.logic.agents.security.cors_scanner import CORSScanner
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .infrastructure.swarm.network.censys_intelligence import CensysIntelligence
+except ImportError:
+    from src.infrastructure.swarm.network.censys_intelligence import CensysIntelligence
+
+try:
+    from .logic.agents.forensics.file_classifier import FileClassifier
+except ImportError:
+    from src.logic.agents.forensics.file_classifier import FileClassifier
+
+try:
+    from .infrastructure.swarm.network.dns_takeover_signatures import DNS_TAKEOVER_SIGNATURES
+except ImportError:
+    from src.infrastructure.swarm.network.dns_takeover_signatures import DNS_TAKEOVER_SIGNATURES
+
+try:
+    from .logic.agents.security.cors_scanner import CORSScanner
+except ImportError:
+    from src.logic.agents.security.cors_scanner import CORSScanner
+
 
 
 @pytest.mark.asyncio

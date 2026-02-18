@@ -17,10 +17,23 @@
 Auto-extracted class from agent_coder.py
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.common.types.review_category import ReviewCategory
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+
+try:
+    from .core.base.common.types.review_category import ReviewCategory
+except ImportError:
+    from src.core.base.common.types.review_category import ReviewCategory
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

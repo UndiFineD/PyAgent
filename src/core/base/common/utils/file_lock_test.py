@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.file_lock import FileLock
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.file_lock import FileLock
+except ImportError:
+    from core.base.common.utils.file_lock import FileLock
+
 
 
 def test_filelock_basic():

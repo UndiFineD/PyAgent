@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import subprocess
-import socket
-import pytest
+try:
+    import subprocess
+except ImportError:
+    import subprocess
+
+try:
+    import socket
+except ImportError:
+    import socket
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
 
 def test_interface_scan():
     result = subprocess.run(["ipconfig", "/all"], capture_output=True, text=True, timeout=10)"    assert result.returncode == 0

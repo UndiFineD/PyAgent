@@ -22,13 +22,25 @@ Contains pure logic for tool scoring, capability mapping, and state transition v
 
 from __future__ import annotations
 
-from functools import lru_cache
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from functools import lru_cache
+except ImportError:
+    from functools import lru_cache
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

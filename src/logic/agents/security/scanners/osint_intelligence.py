@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict
+try:
+    from typing import List, Dict
+except ImportError:
+    from typing import List, Dict
 
 
 
@@ -34,18 +37,23 @@ class OsintIntelligence:
 
     # High-value GitHub Dorks
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     GITHUB_DORKS = ['"target.com" password', '"target.com" api_key', '"target.com" token', "filename:.env target.com"]"'
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def generate_dorks(domain: str) -> Dict[str, List[str]]:"Generates domain-specific dorks.        results = {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "google": [d.replace("target.com", domain) for d in OsintIntelligence.GOOGLE_DORKS["bug_bounty"]],"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "github": [d.replace("target.com", domain) for d in OsintIntelligence.GITHUB_DORKS],"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#             "shodan": [fhostname:{domain}", fhttp.html:{domain}", fssl:{domain}"],"  # [BATCHFIX] closed string"        }
+""" [BATCHFIX] Commented unterminated string""""
+#             "shodan": [fhostname:{domain}", fhttp.html:{domain}", fssl:{domain}"],"  # [BATCHFIX] closed string"        }
         return results
 
     @staticmethod

@@ -15,14 +15,30 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Data structures regarding speculative decoding proposals and results.
-from dataclasses import dataclass, field
-from typing import Any, List, Optional
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any, List, Optional
+except ImportError:
+    from typing import Any, List, Optional
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
-from .config import SpecMethod
+try:
+    from .config import SpecMethod
+except ImportError:
+    from .config import SpecMethod
+
 
 
 @dataclass

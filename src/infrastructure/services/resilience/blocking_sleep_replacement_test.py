@@ -12,11 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.infrastructure.services.resilience.retry_strategy import RetryStrategy, JitterType
-from src.infrastructure.services.resilience.adaptive_rate_limiter import TokenBucket
-from src.infrastructure.services.executor.multiproc.multiproc_logic import MultiprocExecutor
+
+try:
+    from .infrastructure.services.resilience.retry_strategy import RetryStrategy, JitterType
+except ImportError:
+    from src.infrastructure.services.resilience.retry_strategy import RetryStrategy, JitterType
+
+try:
+    from .infrastructure.services.resilience.adaptive_rate_limiter import TokenBucket
+except ImportError:
+    from src.infrastructure.services.resilience.adaptive_rate_limiter import TokenBucket
+
+try:
+    from .infrastructure.services.executor.multiproc.multiproc_logic import MultiprocExecutor
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.multiproc_logic import MultiprocExecutor
+
 
 def test_retry_strategy_uses_injected_sleep(monkeypatch):
     calls = []

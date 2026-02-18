@@ -16,12 +16,20 @@
 # "Search algorithms for Cognitive agents."This module defines the available algorithms for semantic and keyword-based
 search within the agent's context and memory.'
 from __future__ import annotations
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

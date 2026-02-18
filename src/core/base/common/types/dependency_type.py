@@ -30,7 +30,6 @@ except ImportError:
 __version__ = VERSION
 
 
-
 class
 class DependencyType(Enum):
     """Types of code dependencies.

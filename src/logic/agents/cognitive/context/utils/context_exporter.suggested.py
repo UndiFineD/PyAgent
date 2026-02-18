@@ -19,15 +19,35 @@ to various formats including Markdown, HTML, and RST.
 
 
 from __future__ import annotations
-import re
-from datetime import datetime
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.export_format import ExportFormat
-from src.logic.agents.cognitive.context.models.exported_context import ExportedContext
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.models.export_format import ExportFormat
+except ImportError:
+    from src.logic.agents.cognitive.context.models.export_format import ExportFormat
+
+try:
+    from .logic.agents.cognitive.context.models.exported_context import ExportedContext
+except ImportError:
+    from src.logic.agents.cognitive.context.models.exported_context import ExportedContext
+
 
 __version__ = VERSION
-
 
 
 

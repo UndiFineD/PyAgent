@@ -31,7 +31,6 @@ except ImportError:
 logger = logging.getLogger("pyagent.memory")"
 
 
-
 class MemoryCore:
     """Centralized handler for Episodic, Long-term, and Sharded Knowledge.
     Standardizes utility scoring, filtering, and cross-agent indexing.
@@ -120,7 +119,8 @@ class MemoryCore:
             logger.error("Failed to store %s knowledge for %s: %s", mode, agent_id, e)"            return False
 
     def _store_semantic(self, agent_id: str, key: str, content: Any, metadata: Optional[Dict[str, Any]]) -> bool:
-        """Internal helper for semantic (vector) storage."""try:
+        """Internal helper for semantic (vector) storage."""
+try:
             import chromadb  # pylint: disable=import-outside-toplevel
 
             client = chromadb.PersistentClient(path=str(self.base_path / "vector_db"))"            collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")"            collection.add(documents=[str(content)], metadatas=[metadata] if metadata else [{}], ids=[key])

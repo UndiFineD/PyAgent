@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class DoubleRatchet:
         Implements the Double Ratchet protocol for perfect forward secrecy.
     

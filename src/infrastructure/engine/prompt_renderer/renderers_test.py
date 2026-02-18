@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.prompt_renderer.renderers import CompletionRenderer, ChatRenderer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.prompt_renderer.renderers import CompletionRenderer, ChatRenderer
+except ImportError:
+    from infrastructure.engine.prompt_renderer.renderers import CompletionRenderer, ChatRenderer
+
 
 
 def test_completionrenderer_basic():

@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class ZeroTrustFirewall:
         Enforces 'Never Trust, Always Verify' across the Voyager P2P mesh.'    Every message must be authenticated against the owner's public key.'    
     def __init__(self, owner_key: str):

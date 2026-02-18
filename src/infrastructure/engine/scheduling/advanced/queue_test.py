@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.advanced.queue import PriorityRequestQueue
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.advanced.queue import PriorityRequestQueue
+except ImportError:
+    from infrastructure.engine.scheduling.advanced.queue import PriorityRequestQueue
+
 
 
 def test_priorityrequestqueue_basic():

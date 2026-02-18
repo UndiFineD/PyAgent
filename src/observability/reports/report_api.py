@@ -15,10 +15,15 @@
 
 from __future__ import annotations
 
+
 """ReportApi - Provide API access to error reports.
 """
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

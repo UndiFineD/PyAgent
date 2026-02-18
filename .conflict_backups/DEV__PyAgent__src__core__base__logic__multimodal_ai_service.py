@@ -43,7 +43,6 @@ class AIServiceConfig:
 
 
 
-
 class AIServiceProvider(ABC):
     """Abstract base class for AI service providers."""
 
@@ -64,7 +63,6 @@ class AIServiceProvider(ABC):
     def get_model_for_service(self, service_type: str) -> str:
         """Get the model name for a service type."""
         return self.config.models.get(service_type, "")
-
 
 
 
@@ -102,7 +100,6 @@ class OpenAIProvider(AIServiceProvider):
         except Exception as e:
             self.logger.error(f"OpenAI API error: {e}")
             raise
-
 
 
 
@@ -215,7 +212,6 @@ class CloudflareProvider(AIServiceProvider):
             return {"translated_text": "Mock translated text"}
         else:
             return {"result": "Mock response"}
-
 
 
 

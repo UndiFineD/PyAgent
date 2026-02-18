@@ -15,9 +15,21 @@
 
 """
 Core package.
-from .profiling_core import ProfileStats, ProfilingCore  # noqa: F401
-from .stability_core import FleetMetrics, StabilityCore  # noqa: F401
-from .tracing_core import TracingCore  # noqa: F401
+try:
+    from .profiling_core import ProfileStats, ProfilingCore  # noqa: F401
+except ImportError:
+    from .profiling_core import ProfileStats, ProfilingCore # noqa: F401
+
+try:
+    from .stability_core import FleetMetrics, StabilityCore  # noqa: F401
+except ImportError:
+    from .stability_core import FleetMetrics, StabilityCore # noqa: F401
+
+try:
+    from .tracing_core import TracingCore  # noqa: F401
+except ImportError:
+    from .tracing_core import TracingCore # noqa: F401
+
 
 __all__ = [
     "ProfilingCore","    "ProfileStats","    "StabilityCore","    "FleetMetrics","    "TracingCore","]

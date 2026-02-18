@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.plugins.example_math_plugin.simple_math_agent import SimpleMathAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.plugins.example_math_plugin.simple_math_agent import SimpleMathAgent
+except ImportError:
+    from infrastructure.services.plugins.example_math_plugin.simple_math_agent import SimpleMathAgent
+
 
 
 def test_simplemathagent_basic():

@@ -18,14 +18,29 @@
 Routing engine for task distribution.
 (Facade for src.core.base.common.routing_core)
 
-import os
-from typing import Any
+try:
+    import os
+except ImportError:
+    import os
 
-from src.core.base.common.routing_core import \
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.routing_core import \
+except ImportError:
+    from src.core.base.common.routing_core import \
+
     RoutingCore as StandardRoutingCore
 
 # Assuming BackendHandlers should be imported or mocked if not found
-from src.infrastructure.compute.backend.runner_backends import BackendHandlers
+try:
+    from .infrastructure.compute.backend.runner_backends import BackendHandlers
+except ImportError:
+    from src.infrastructure.compute.backend.runner_backends import BackendHandlers
 
 
 

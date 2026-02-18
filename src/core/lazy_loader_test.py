@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .lazy_loader import LazyLoader, ModuleLazyLoader, lazy_import
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .lazy_loader import LazyLoader, ModuleLazyLoader, lazy_import
+except ImportError:
+    from .lazy_loader import LazyLoader, ModuleLazyLoader, lazy_import
+
 
 
 def test_lazyloader_basic():

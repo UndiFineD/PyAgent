@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.cache.base import MultiModalCache
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.cache.base import MultiModalCache
+except ImportError:
+    from infrastructure.engine.multimodal.cache.base import MultiModalCache
+
 
 
 def test_multimodalcache_basic():

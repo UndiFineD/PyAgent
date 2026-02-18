@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .move_completed import parse_row, is_completed_status, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .move_completed import parse_row, is_completed_status, main
+except ImportError:
+    from .move_completed import parse_row, is_completed_status, main
+
 
 
 def test_parse_row_basic():

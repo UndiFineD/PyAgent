@@ -32,7 +32,6 @@ from ..parser import (GraniteToolParser, HermesToolParser, JsonToolParser,
 
 
 
-
 class ToolParserRegistry:
         Registry for tool parsers.
 
@@ -109,7 +108,6 @@ class ToolParserRegistry:
             return ToolParserType.GRANITE
 
         return ToolParserType.GENERIC_JSON
-
 
 
 

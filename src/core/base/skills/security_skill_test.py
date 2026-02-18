@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.skills.security_skill import SecuritySkill
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.skills.security_skill import SecuritySkill
+except ImportError:
+    from core.base.skills.security_skill import SecuritySkill
+
 
 
 def test_securityskill_basic():

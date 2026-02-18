@@ -16,17 +16,52 @@
 """Module: communication_models
 Defines context lineage and communication models for agent task attribution.
 """
+
+
 from __future__ import annotations
 
-import time
-import uuid
-from dataclasses import dataclass, field
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Callable
 
-from .base_models import _empty_dict_str_any, _empty_list_dict_str_any, _empty_list_str
-from .core_enums import FilePriority, InputType, MessageRole
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
+
+
+try:
+    from .base_models import _empty_dict_str_any, _empty_list_dict_str_any, _empty_list_str
+except ImportError:
+    from .base_models import _empty_dict_str_any, _empty_list_dict_str_any, _empty_list_str
+
+try:
+    from .core_enums import FilePriority, InputType, MessageRole
+except ImportError:
+    from .core_enums import FilePriority, InputType, MessageRole
+
 
 
 @dataclass(slots=True)
@@ -165,7 +200,6 @@ class ConversationMessage:
 
 
 
-
 class ConversationHistory:
     """Manages a conversation history with message storage and retrieval."""
     def __init__(self, max_messages: int = 100) -> None:
@@ -281,7 +315,6 @@ class ExpertEvaluation:
 
 
 
-
 class PromptTemplateManager:
     """Manages a collection of prompt templates."""
     def __init__(self) -> None:
@@ -295,7 +328,6 @@ class PromptTemplateManager:
         """Render a registered template."""
         template = self.templates[template_name]
         return template.render(**kwargs)
-
 
 
 
@@ -356,7 +388,6 @@ class PromptVersion:
         self.template_id = template_id or """        self.variant = variant or """
         self.prompt_text = self.content
         self.weight = weight
-
 
 
 
@@ -487,7 +518,6 @@ class TelemetrySpan:
     end_time: float | None = None
     attributes: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     events: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
-
 
 
 

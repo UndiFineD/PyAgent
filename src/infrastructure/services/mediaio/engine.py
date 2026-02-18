@@ -21,16 +21,52 @@ Unified media loading engine.
 
 from __future__ import annotations
 
-import asyncio
-import hashlib
-from pathlib import Path
-from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
 
-from .audio import AudioLoader
-from .base import MediaLoader
-from .image import ImageLoader
-from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
-from .video import VideoLoader
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
+except ImportError:
+    from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
+
+
+try:
+    from .audio import AudioLoader
+except ImportError:
+    from .audio import AudioLoader
+
+try:
+    from .base import MediaLoader
+except ImportError:
+    from .base import MediaLoader
+
+try:
+    from .image import ImageLoader
+except ImportError:
+    from .image import ImageLoader
+
+try:
+    from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
+except ImportError:
+    from .models import AudioData, ImageData, MediaLoadConfig, MediaType, VideoData
+
+try:
+    from .video import VideoLoader
+except ImportError:
+    from .video import VideoLoader
 
 
 

@@ -32,7 +32,6 @@ class ExecutionResult:
 
 
 
-
 class SafeLocalInterpreter:
     """
 safe_executor.py - SafeLocalInterpreter
@@ -84,7 +83,6 @@ class ExecutionResult:
     stderr: str
     result: Any
     success: bool
-
 
 
 

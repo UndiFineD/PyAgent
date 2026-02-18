@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.execution.async_output_handler import AsyncState, CudaEvent, CudaStream, AsyncOutput, AsyncBarrier, AsyncOutputHandler, DoubleBuffer, async_copy_to_np, async_copy_batch, async_barrier
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.execution.async_output_handler import AsyncState, CudaEvent, CudaStream, AsyncOutput, AsyncBarrier, AsyncOutputHandler, DoubleBuffer, async_copy_to_np, async_copy_batch, async_barrier
+except ImportError:
+    from infrastructure.services.execution.async_output_handler import AsyncState, CudaEvent, CudaStream, AsyncOutput, AsyncBarrier, AsyncOutputHandler, DoubleBuffer, async_copy_to_np, async_copy_batch, async_barrier
+
 
 
 def test_asyncstate_basic():

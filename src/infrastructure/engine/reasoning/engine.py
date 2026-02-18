@@ -15,17 +15,48 @@
 
 Engine.py module.
 
-import json
-import time
-from collections import deque
-from typing import Dict, Generator, Iterator, Optional, Tuple
+try:
+    import json
+except ImportError:
+    import json
 
-from .data_classes import ParseResult, ThinkingBlock, ToolCall
-from .enums import ParseState, ReasoningFormat, ToolCallFormat
-from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections import deque
+except ImportError:
+    from collections import deque
+
+try:
+    from typing import Dict, Generator, Iterator, Optional, Tuple
+except ImportError:
+    from typing import Dict, Generator, Iterator, Optional, Tuple
+
+
+try:
+    from .data_classes import ParseResult, ThinkingBlock, ToolCall
+except ImportError:
+    from .data_classes import ParseResult, ThinkingBlock, ToolCall
+
+try:
+    from .enums import ParseState, ReasoningFormat, ToolCallFormat
+except ImportError:
+    from .enums import ParseState, ReasoningFormat, ToolCallFormat
+
+try:
+    from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
+except ImportError:
+    from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
+
                               HermesToolParser, OpenAIToolParser,
                               QwenReasoningParser)
-from .parsers import ReasoningParser, ToolParser
+try:
+    from .parsers import ReasoningParser, ToolParser
+except ImportError:
+    from .parsers import ReasoningParser, ToolParser
 
 
 

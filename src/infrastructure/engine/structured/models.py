@@ -15,10 +15,23 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple
 
-import numpy as np
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Dict, FrozenSet, List, Optional, Set, Tuple
+except ImportError:
+    from typing import Dict, FrozenSet, List, Optional, Set, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 @dataclass(frozen=True)

@@ -17,11 +17,24 @@
 Auto-extracted class from agent_changes.py
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from .compliance_category import ComplianceCategory
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .compliance_category import ComplianceCategory
+except ImportError:
+    from .compliance_category import ComplianceCategory
+
 
 __version__ = VERSION
 

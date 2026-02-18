@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .blame_tracker import BlameTracker
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .blame_tracker import BlameTracker
+except ImportError:
+    from .blame_tracker import BlameTracker
+
 
 
 def test_blametracker_basic():

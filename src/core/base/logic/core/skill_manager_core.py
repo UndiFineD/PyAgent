@@ -19,7 +19,6 @@ from typing import Dict, Any, List, Optional
 
 
 
-
 class SkillManagerCore:
     """Manages the dynamic discovery and registration of agent skills (MCP tools).
     Harvested from awesome-mcp patterns.
@@ -28,7 +27,8 @@ class SkillManagerCore:
         self.active_skills: Dict[str, Any] = {}
 
     async def discover_skills(self) -> List[str]:
-        """Scans for mcp.json manifests in the skills directory."""discovered = []
+        """Scans for mcp.json manifests in the skills directory."""
+discovered = []
         if not os.path.exists(self.skills_dir):
             return discovered
 

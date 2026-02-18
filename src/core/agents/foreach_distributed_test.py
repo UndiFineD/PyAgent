@@ -13,9 +13,21 @@
 # limitations under the License.
 
 
-import json
-from src.core.agents.foreach_distributed import Worker
-from src.core.base.common.utils.file_lock_manager import FileLockManager
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from .core.agents.foreach_distributed import Worker
+except ImportError:
+    from src.core.agents.foreach_distributed import Worker
+
+try:
+    from .core.base.common.utils.file_lock_manager import FileLockManager
+except ImportError:
+    from src.core.base.common.utils.file_lock_manager import FileLockManager
+
 
 
 def test_worker_claim_and_release(tmp_path):

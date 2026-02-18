@@ -22,12 +22,19 @@ For more information, visit:
 
 No commands will be executed.
 
-import logging
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

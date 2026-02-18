@@ -19,7 +19,11 @@ TimelineTracker - Error timeline tracking and aggregation
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.agents.timeline_tracker import TimelineTracker
+try:
+    from .core.agents.timeline_tracker import TimelineTracker
+except ImportError:
+    from src.core.agents.timeline_tracker import TimelineTracker
+
 tracker = TimelineTracker()
 tracker.record_event("err-123", "created", "initial occurrence")
 events = tracker.get_events_for_error("err-123")
@@ -40,12 +44,29 @@ and include unit tests and error handling for malformed timestamps.
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
 
-from .timeline_event import TimelineEvent
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .timeline_event import TimelineEvent
+except ImportError:
+    from .timeline_event import TimelineEvent
+
 
 __version__ = VERSION
 

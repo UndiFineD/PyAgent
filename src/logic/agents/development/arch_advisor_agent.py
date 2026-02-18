@@ -14,17 +14,39 @@
 
 
 # "Agent specializing in architectural analysis and decoupled system design."""" pylint: disable=too-many-ancestors""""
+
+
 from __future__ import annotations
 
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.engines.graph_context_engine import \
+
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.engines.graph_context_engine import \
+except ImportError:
+    from src.logic.agents.cognitive.context.engines.graph_context_engine import \
+
     GraphContextEngine
-from src.logic.agents.development.arch_core import ArchCore
+try:
+    from .logic.agents.development.arch_core import ArchCore
+except ImportError:
+    from src.logic.agents.development.arch_core import ArchCore
+
 
 __version__ = VERSION
-
 
 
 

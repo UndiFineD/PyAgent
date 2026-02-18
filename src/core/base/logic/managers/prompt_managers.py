@@ -16,11 +16,21 @@
 """Manager regarding prompt templates and versioning.
 (Facade regarding src.core.base.common.prompt_core)
 """
+
+
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.models import PromptTemplate, PromptVersion
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.models import PromptTemplate, PromptVersion
+except ImportError:
+    from src.core.base.common.models import PromptTemplate, PromptVersion
 
 
 
@@ -37,7 +47,6 @@ class PromptTemplateManager:
 
     def render_template(self, name: str, **kwargs: Any) -> str:
         """Render a template."""return self._core.render_template(name, **kwargs)
-
 
 
 

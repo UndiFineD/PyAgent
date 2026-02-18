@@ -51,7 +51,6 @@ class EvolutionHistory:
 
 
 
-
 class SelfEvolutionMixin:
         Mixin that enables self-evolving capabilities for PyAgent orchestrators.
 

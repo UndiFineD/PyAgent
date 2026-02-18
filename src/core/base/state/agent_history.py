@@ -15,6 +15,8 @@
 """Logic for Agent Conversation History.
 Extracted from BaseAgent for decomposition.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -25,7 +27,6 @@ from src.core.base.common.models import ConversationMessage, MessageRole
 if TYPE_CHECKING:
     from src.core.base.lifecycle.agent_core import BaseCore
     from src.core.base.lifecycle.base_agent_core import BaseAgentCore
-
 
 
 

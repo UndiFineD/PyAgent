@@ -17,8 +17,13 @@
 # This module provides the agent namespace for specialized swarm agent implementations.
 # from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 # from .swarm.orchestrator_agent import OrchestratorAgent as Agent  # noqa: F401
 
-__all__ = ["Agent"]"__version__ = VERSION
+__all__ = ["Agent"]
+__version__ = VERSION

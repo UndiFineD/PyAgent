@@ -21,15 +21,44 @@ N-gram Proposers - Implementation regarding speculative decoding token proposers
 
 from __future__ import annotations
 
-import contextlib
-import logging
-from typing import TYPE_CHECKING
 
-import numpy as np
+try:
+    import contextlib
+except ImportError:
+    import contextlib
 
-from src.infrastructure.engine.sampling.ngram.accelerators import HAS_RUST
-from src.infrastructure.engine.sampling.ngram.index import SuffixIndex
-from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .infrastructure.engine.sampling.ngram.accelerators import HAS_RUST
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.accelerators import HAS_RUST
+
+try:
+    from .infrastructure.engine.sampling.ngram.index import SuffixIndex
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.index import SuffixIndex
+
+try:
+    from .infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+except ImportError:
+    from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
+
                                                             NgramConfig,
                                                             ProposalStats)
 
@@ -41,7 +70,6 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -265,7 +293,6 @@ class NgramProposer:
         """Clear suffix index cache.        if self._suffix_index is not None:
             self._suffix_index.clear()
         self._cached_tokens = None
-
 
 
 

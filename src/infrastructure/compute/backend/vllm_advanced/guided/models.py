@@ -27,7 +27,6 @@ from typing import Any, Dict, List, Optional
 
 
 
-
 class GuidedMode(Enum):
     """Mode of guided decoding.
     NONE = auto()

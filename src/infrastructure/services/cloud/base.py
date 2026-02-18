@@ -24,9 +24,22 @@ along with standardized request/response dataclasses.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Any, AsyncIterator, Dict, List, Optional, Self
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, AsyncIterator, Dict, List, Optional, Self
+except ImportError:
+    from typing import Any, AsyncIterator, Dict, List, Optional, Self
+
 
 
 @dataclass
@@ -74,7 +87,6 @@ class InferenceResponse:
     """Reason generation stopped (e.g., 'stop', 'length', 'content_filter').'
     raw_response: Optional[Dict[str, Any]] = None
     """Raw response from the provider for debugging.
-
 
 
 class CloudProviderBase(ABC):
@@ -175,7 +187,6 @@ class CloudProviderBase(ABC):
 
 
 
-
 class CloudProviderError(Exception):
     """Base exception for cloud provider errors.
     def __init__(self, message: str, provider: str, retriable: bool = False) -> None:
@@ -185,13 +196,11 @@ class CloudProviderError(Exception):
 
 
 
-
 class RateLimitError(CloudProviderError):
     """Raised when rate limits are exceeded.
     def __init__(self, message: str, provider: str, retry_after: Optional[float] = None) -> None:
         super().__init__(message, provider, retriable=True)
         self.retry_after: float | None = retry_after
-
 
 
 

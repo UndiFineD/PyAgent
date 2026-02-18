@@ -15,9 +15,25 @@
 
 Specialized request queue implementations.
 
-from src.infrastructure.engine.request_queue.queues.fair import FairQueue
-from src.infrastructure.engine.request_queue.queues.fcfs import FCFSQueue
-from src.infrastructure.engine.request_queue.queues.mlfq import MLFQueue
-from src.infrastructure.engine.request_queue.queues.priority import PriorityQueue
+try:
+    from .infrastructure.engine.request_queue.queues.fair import FairQueue
+except ImportError:
+    from src.infrastructure.engine.request_queue.queues.fair import FairQueue
+
+try:
+    from .infrastructure.engine.request_queue.queues.fcfs import FCFSQueue
+except ImportError:
+    from src.infrastructure.engine.request_queue.queues.fcfs import FCFSQueue
+
+try:
+    from .infrastructure.engine.request_queue.queues.mlfq import MLFQueue
+except ImportError:
+    from src.infrastructure.engine.request_queue.queues.mlfq import MLFQueue
+
+try:
+    from .infrastructure.engine.request_queue.queues.priority import PriorityQueue
+except ImportError:
+    from src.infrastructure.engine.request_queue.queues.priority import PriorityQueue
+
 
 __all__ = ["FairQueue", "FCFSQueue", "MLFQueue", "PriorityQueue"]"

@@ -24,7 +24,6 @@ from src.core.base.lifecycle.version import is_gate_open
 
 
 
-
 class OrchestratorCycleMixin:
     """Methods for managing the improvement cycle and gates.
     def run_improvement_cycle(self, target_dir: str = "src", allow_triton_check: bool = True) -> dict[str, Any]:"        """Runs a full scan and fix cycle across the specified directory.        if not self._check_gate_stability():

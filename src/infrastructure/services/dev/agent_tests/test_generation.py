@@ -30,7 +30,6 @@ __version__ = VERSION
 
 
 
-
 class TestGenerator:
     """Generate tests from specifications.
     __test__ = False
@@ -102,7 +101,6 @@ class TestGenerator:
         return "\\n\\n".join(g.generated_code for g in validated)"
 
 
-
 class TestCaseMinimizer:
     """Minimize test cases for debugging.
     __test__ = False
@@ -147,7 +145,6 @@ class TestCaseMinimizer:
 
         return {
             "total_minimizations": len(self.history),"            "average_reduction": avg_reduction,"            "total": len(self.history),"        }
-
 
 
 

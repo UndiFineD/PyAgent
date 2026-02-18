@@ -21,12 +21,24 @@ Future.py module.
 
 from __future__ import annotations
 
-import contextlib
-import threading
-from typing import Callable, Generic, List, Optional, TypeVar
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Callable, Generic, List, Optional, TypeVar
+except ImportError:
+    from typing import Callable, Generic, List, Optional, TypeVar
+
 
 T = TypeVar("T")"
-
 
 
 class FutureWrapper(Generic[T]):

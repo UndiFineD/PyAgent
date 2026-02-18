@@ -40,7 +40,6 @@ except ImportError:
 
 
 
-
 class EagleProposer:
         EAGLE-style speculative decoding proposer.
     
@@ -288,7 +287,6 @@ class EagleProposer:
 
 
 
-
 class EagleProposerFactory:
     """Factory regarding creating EAGLE proposers.
     @staticmethod
@@ -320,7 +318,6 @@ class EagleProposerFactory:
             **kwargs,
         )
         return EagleProposer(config)
-
 
 
 

@@ -23,7 +23,6 @@ except ImportError:
 
 
 
-
 class StreamingVisionEncoder:
     """Handles efficient vision streaming using adaptive delta compression.
     Only sends changed pixels between frames to conserve bandwidth.
@@ -37,18 +36,21 @@ class StreamingVisionEncoder:
     def adapt_threshold(self, entropy: float) -> None:
         """Adjust threshold based on motion complexity.
         Higher entropy (lots of motion) -> higher threshold to save bandwidth.
-        """# Logic: If entropy is high, we can afford to skip subtle changes
+        """
+# Logic: If entropy is high, we can afford to skip subtle changes
         self.threshold = int(self.base_threshold * (1.0 + entropy))
 
     def encode(self, frame: bytes, entropy: float = 0.0) -> Union[bytes, List[Tuple[int, int, int, int]]]:
-        """Encode frame: returns full bytes for keyframes, or deltas for P-frames."""if entropy > 0:
+        """Encode frame: returns full bytes for keyframes, or deltas for P-frames."""
+        if entropy > 0:
             self.adapt_threshold(entropy)
 
         if self.prev_frame is None:
             self.prev_frame = frame
             return frame  # Keyframe
 
-        if rc and hasattr(rc, "calculate_visual_deltas_rust"):"            deltas = rc.calculate_visual_deltas_rust(list(self.prev_frame), list(frame), self.threshold)
+        if rc and hasattr(rc, "calculate_visual_deltas_rust"):
+            deltas = rc.calculate_visual_deltas_rust(list(self.prev_frame), list(frame), self.threshold)
             self.prev_frame = frame
             return deltas
 
@@ -56,9 +58,10 @@ class StreamingVisionEncoder:
         return frame
 
     def decode(self, base_frame: bytes, deltas: List[Tuple[int, int, int, int]]) -> bytes:
-        """Reconstruct a frame using a base and incoming deltas."""if rc and hasattr(rc, "apply_visual_deltas_rust"):"            return bytes(rc.apply_visual_deltas_rust(list(base_frame), deltas))
+        """Reconstruct a frame using a base and incoming deltas."""
+        if rc and hasattr(rc, "apply_visual_deltas_rust"):
+            return bytes(rc.apply_visual_deltas_rust(list(base_frame), deltas))
         return base_frame
-
 
 
 
@@ -73,7 +76,8 @@ class StreamingAudioProcessor:
 
     def push(self, chunk: List[float]) -> List[List[float]]:
         """Push new audio samples and return extracted Mel features for completed frames.
-        """self.buffer.extend(chunk)
+        """
+        self.buffer.extend(chunk)
         frames = []
 
         while len(self.buffer) >= self.frame_size:
@@ -82,10 +86,12 @@ class StreamingAudioProcessor:
 
             # Check for voice activity
             is_active = True
-            if rc and hasattr(rc, "speech_vad_rust"):"                is_active = rc.speech_vad_rust(frame, 0.01)
+            if rc and hasattr(rc, "speech_vad_rust"):
+                is_active = rc.speech_vad_rust(frame, 0.01)
 
             if is_active:
-                if rc and hasattr(rc, "calculate_mel_features_rust"):"                    features = rc.calculate_mel_features_rust(frame, 80, self.sample_rate)
+                if rc and hasattr(rc, "calculate_mel_features_rust"):
+                    features = rc.calculate_mel_features_rust(frame, 80, self.sample_rate)
                     frames.append(features)
                 else:
                     # Generic fallback

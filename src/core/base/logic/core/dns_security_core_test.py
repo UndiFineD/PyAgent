@@ -12,10 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from unittest.mock import Mock, patch, AsyncMock
-from datetime import datetime, timedelta, timezone
-from src.core.base.logic.core.dns_security_core import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import Mock, patch, AsyncMock
+except ImportError:
+    from unittest.mock import Mock, patch, AsyncMock
+
+try:
+    from datetime import datetime, timedelta, timezone
+except ImportError:
+    from datetime import datetime, timedelta, timezone
+
+try:
+    from .core.base.logic.core.dns_security_core import (
+except ImportError:
+    from src.core.base.logic.core.dns_security_core import (
+
     DnsSecurityCore,
     DnsRecordType,
     FilterAction,
@@ -23,7 +39,6 @@ from src.core.base.logic.core.dns_security_core import (
     FilterRule,
     DnsQuery
 )
-
 
 
 
@@ -48,7 +63,8 @@ class TestDnsSecurityCore:
         assert "test.com" in self.core.blocked_domains"
     @pytest.mark.asyncio
     async def test_remove_filter_rule(self):
-        """Test removing filter rules."""# Add a rule first
+        """Test removing filter rules."""
+# Add a rule first
         rule = FilterRule("test.com", FilterAction.BLOCK, 100, "Test rule")"        await self.core.add_filter_rule(rule)
 
         # Remove it
@@ -67,7 +83,8 @@ class TestDnsSecurityCore:
 
     @pytest.mark.asyncio
     async def test_process_dns_query_blocked(self):
-        """Test processing a blocked DNS query."""# Create a new core without default filters
+        """Test processing a blocked DNS query."""
+# Create a new core without default filters
         core = DnsSecurityCore()
         rule = FilterRule("malicious-site.com", FilterAction.BLOCK, 100, "Malicious site")"        await core.add_filter_rule(rule)
 
@@ -82,7 +99,8 @@ class TestDnsSecurityCore:
         assert query.domain == "allowed.com""
     @pytest.mark.asyncio
     async def test_get_dns_statistics(self):
-        """Test getting DNS statistics."""# Create a new core and add a specific block rule
+        """Test getting DNS statistics."""
+# Create a new core and add a specific block rule
         core = DnsSecurityCore()
         rule = FilterRule("ads.example.com", FilterAction.BLOCK, 100, "Ad blocking")"        await core.add_filter_rule(rule)
 
@@ -119,7 +137,8 @@ class TestDnsSecurityCore:
 
     @pytest.mark.asyncio
     async def test_clear_cache(self):
-        """Test clearing DNS cache."""# Add something to cache (mock)
+        """Test clearing DNS cache."""
+# Add something to cache (mock)
         self.core.cache["test.com"] = ("1.2.3.4", datetime.now(timezone.utc) + timedelta(hours=1))"
         result = await self.core.clear_cache()
         assert result is True
@@ -127,14 +146,16 @@ class TestDnsSecurityCore:
 
     @pytest.mark.asyncio
     async def test_get_cache_info(self):
-        """Test getting cache information."""# Add some cache entries
+        """Test getting cache information."""
+# Add some cache entries
         now = datetime.now(timezone.utc)
         self.core.cache["valid.com"] = ("1.2.3.4", now + timedelta(hours=1))"        self.core.cache["expired.com"] = ("5.6.7.8", now - timedelta(hours=1))"
         info = await self.core.get_cache_info()
         assert info["total_entries"] == 2"        assert info["valid_entries"] == 1"        assert info["expired_entries"] == 1"
     @pytest.mark.asyncio
     async def test_export_import_filter_rules(self, tmp_path):
-        """Test exporting and importing filter rules."""# Add some rules
+        """Test exporting and importing filter rules."""
+# Add some rules
         rules = [
             FilterRule("test1.com", FilterAction.BLOCK, 100, "Test rule 1"),"            FilterRule("test2.com", FilterAction.ALLOW, 50, "Test rule 2"),"        ]
 
@@ -158,7 +179,8 @@ class TestDnsSecurityCore:
         """Test pattern matching for wildcards."""assert self.core._matches_pattern("sub.test.com", "*.test.com") is True"        assert self.core._matches_pattern("test.com", "*.test.com") is False"        assert self.core._matches_pattern("sub.domain.test.com", "*.test.com") is True"
     @pytest.mark.asyncio
     async def test_cleanup(self):
-        """Test cleanup functionality."""# Add some data
+        """Test cleanup functionality."""
+# Add some data
         await self.core.add_filter_rule(FilterRule("test.com", FilterAction.BLOCK))"        self.core.query_log.append(DnsQuery("test.com", DnsRecordType.A, "1.2.3.4", datetime.now(timezone.utc)))"        self.core.cache["test.com"] = ("1.2.3.4", datetime.now(timezone.utc))"
         await self.core.cleanup()
 

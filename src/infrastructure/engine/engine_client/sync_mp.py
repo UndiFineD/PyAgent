@@ -36,7 +36,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"        Synchronous multi-process engine client with ZMQ.
 
     Blocking request/response pattern.

@@ -17,13 +17,24 @@
 """
 Context distillation.py module.
 
-import logging
-from typing import Any, Dict, Optional, Tuple
+try:
+    import logging
+except ImportError:
+    import logging
 
-import numpy as np
+try:
+    from typing import Any, Dict, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, Optional, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 logger = logging.getLogger(__name__)
-
 
 
 

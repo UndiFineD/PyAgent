@@ -107,7 +107,8 @@ def _try_rust_render_template(
     messages: List[Dict[str, Any]],
     add_generation_prompt: bool,
 ) -> Optional[str]:
-    """Try Rust-accelerated template rendering.    try:
+    """
+try Rust-accelerated template rendering.    try:
         from rust_core import render_jinja_template_rust
 
         return render_jinja_template_rust(
@@ -120,7 +121,8 @@ def _try_rust_render_template(
 
 
 def _try_rust_detect_template(model_name: str) -> Optional[str]:
-    """Try Rust-accelerated template detection.    try:
+    """
+try Rust-accelerated template detection.    try:
         from rust_core import detect_chat_template_rust
 
         return detect_chat_template_rust(model_name)

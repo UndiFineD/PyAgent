@@ -16,16 +16,30 @@
 """RL Optimization Mixin.
 Allows agents to record and learn from decision-making using Markov Decision Processes (MDP).
 """
+
+
 from __future__ import annotations
-import logging
-from typing import Any, Optional, TYPE_CHECKING
-from src.core.rl.mdp import MDP
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Optional, TYPE_CHECKING
+except ImportError:
+    from typing import Any, Optional, TYPE_CHECKING
+
+try:
+    from .core.rl.mdp import MDP
+except ImportError:
+    from src.core.rl.mdp import MDP
+
 
 if TYPE_CHECKING:
     pass
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -53,7 +67,8 @@ class RLOptimizationMixin:
         self.last_action = action
 
     def get_best_action(self, state: Any) -> Optional[Any]:
-        """Queries the MDP policy for the best action in the given state."""# Value iteration or simple policy lookup
+        """Queries the MDP policy for the best action in the given state."""
+# Value iteration or simple policy lookup
         return self.mdp.policy.get(state)
 
     def optimize_policy(self):

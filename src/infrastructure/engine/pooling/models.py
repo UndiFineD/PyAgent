@@ -20,12 +20,28 @@ Data models and Enums for the Pooling Engine.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 
@@ -37,7 +53,6 @@ class PoolingTask(Enum):
     TOKEN_EMBED = auto()  # Token-level embeddings
     TOKEN_CLASSIFY = auto()  # Token-level classification (NER, etc.)
     RERANK = auto()  # Cross-encoder reranking
-
 
 
 

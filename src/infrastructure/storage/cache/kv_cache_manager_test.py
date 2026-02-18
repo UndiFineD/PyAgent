@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.cache.kv_cache_manager import DeviceType, DType, KVCacheConfig, KVCacheBlock, KVCacheBlocks, KVCacheAllocator, PagedKVCache, KVCacheTransfer, KVCacheManager, create_kv_cache_manager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.cache.kv_cache_manager import DeviceType, DType, KVCacheConfig, KVCacheBlock, KVCacheBlocks, KVCacheAllocator, PagedKVCache, KVCacheTransfer, KVCacheManager, create_kv_cache_manager
+except ImportError:
+    from infrastructure.storage.cache.kv_cache_manager import DeviceType, DType, KVCacheConfig, KVCacheBlock, KVCacheBlocks, KVCacheAllocator, PagedKVCache, KVCacheTransfer, KVCacheManager, create_kv_cache_manager
+
 
 
 def test_devicetype_basic():

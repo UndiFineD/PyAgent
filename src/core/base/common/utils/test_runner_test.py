@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.test_runner import run_focused_tests_for_files
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.test_runner import run_focused_tests_for_files
+except ImportError:
+    from core.base.common.utils.test_runner import run_focused_tests_for_files
+
 
 
 def test_run_focused_tests_for_files_basic():

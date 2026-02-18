@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.response_transformer_base import ResponseTransformerBase
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.response_transformer_base import ResponseTransformerBase
+except ImportError:
+    from infrastructure.compute.backend.response_transformer_base import ResponseTransformerBase
+
 
 
 def test_responsetransformerbase_basic():

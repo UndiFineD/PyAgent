@@ -20,10 +20,23 @@ JSON Schema builder for guided decoding.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union
 
-from .models import GuidedConfig, GuidedMode
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Optional, Union
+except ImportError:
+    from typing import Any, Dict, List, Optional, Union
+
+
+try:
+    from .models import GuidedConfig, GuidedMode
+except ImportError:
+    from .models import GuidedConfig, GuidedMode
+
 
 
 @dataclass

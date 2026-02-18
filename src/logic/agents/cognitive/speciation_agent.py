@@ -114,7 +114,6 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-
 class Test{agent_name}(unittest.TestCase):
     def setUp(self) -> None:
         self.agent = {agent_name}("dummy_path.py")"

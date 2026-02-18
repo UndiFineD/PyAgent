@@ -20,12 +20,20 @@ Serialization infrastructure.
 Phase 19: Beyond vLLM - Fast serialization patterns.
 Phase 21: MsgSpec high-performance serialization.
 
-from src.infrastructure.storage.serialization.fast_serializer import (
+try:
+    from .infrastructure.storage.serialization.fast_serializer import (
+except ImportError:
+    from src.infrastructure.storage.serialization.fast_serializer import (
+
     BinarySerializer, CBORSerializer, JSONSerializer, MsgPackSerializer,
     PickleSerializer, SerializationFormat, Serializer, SerializerRegistry,
     SerializerStats, fast_deserialize, fast_serialize, from_json, from_msgpack,
     get_serializer_registry, to_json, to_msgpack)
-from src.infrastructure.storage.serialization.msg_spec_serializer import (  # noqa: F401
+try:
+    from .infrastructure.storage.serialization.msg_spec_serializer import ( # noqa: F401
+except ImportError:
+    from src.infrastructure.storage.serialization.msg_spec_serializer import ( # noqa: F401
+
     # Availability; Encoders; Chat helpers; Benchmarking
     MSGSPEC_AVAILABLE, BenchmarkResult, JSONEncoder, MsgPackEncoder,
     TypedSerializer, benchmark_serialization, decode_chat_response,

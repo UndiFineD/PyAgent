@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.execution_scheduler import ExecutionScheduler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.execution_scheduler import ExecutionScheduler
+except ImportError:
+    from core.base.common.utils.execution_scheduler import ExecutionScheduler
+
 
 
 def test_executionscheduler_basic():

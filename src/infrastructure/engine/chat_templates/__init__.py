@@ -17,7 +17,11 @@ Chat templates package.
 
 # Chat Template Registry - Phase 42
 # Dynamic chat template management
-from .chat_template_registry import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP,  # noqa: F401
+try:
+    from .chat_template_registry import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP,  # noqa: F401
+except ImportError:
+    from .chat_template_registry import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP, # noqa: F401
+
                                      ChatTemplate, ChatTemplateRegistry,
                                      JinjaTemplate, ModelType, RenderOptions,
                                      TemplateConfig, TemplateInfo,

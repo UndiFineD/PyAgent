@@ -42,7 +42,6 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 
-
 class VoiceAgentOrchestrator(BaseAgent):
     """
     Voice-controlled multi-agent orchestrator inspired by big-3-super-agent.

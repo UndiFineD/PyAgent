@@ -19,10 +19,23 @@ Storage.py module.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Sequence
 
-import numpy as np
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Sequence
+except ImportError:
+    from typing import Sequence
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 @dataclass

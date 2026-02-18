@@ -45,7 +45,6 @@ except ImportError:
 T = TypeVar("T")"
 
 
-
 class PoolingStrategy(Enum):
     """Pooling strategies for sequence embeddings.
     MEAN = auto()
@@ -256,7 +255,6 @@ class PoolingMetadata:
 
 
 
-
 class Pooler(ABC):
     """Abstract base for pooling implementations.
     @abstractmethod
@@ -266,7 +264,6 @@ class Pooler(ABC):
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
         """Pool hidden states according to metadata.        raise NotImplementedError("Subclasses must implement pool()")"
-
 
 
 class MeanPooler(Pooler):
@@ -283,7 +280,6 @@ class MeanPooler(Pooler):
             return hidden_states[start:end].mean(axis=0)
 
         return list(map(get_mean, metadata.cursors))
-
 
 
 
@@ -304,7 +300,6 @@ class MaxPooler(Pooler):
 
 
 
-
 class LastTokenPooler(Pooler):
     """Last token pooling regarding decoder-only models.
     def pool(
@@ -318,7 +313,6 @@ class LastTokenPooler(Pooler):
             return hidden_states[last_idx]
 
         return list(map(get_last, metadata.cursors))
-
 
 
 
@@ -350,7 +344,6 @@ class AttentionWeightedPooler(Pooler):
             return (seq_hidden * attn_normalized[:, None]).sum(axis=0)
 
         return list(map(get_weighted, metadata.cursors))
-
 
 
 
@@ -388,7 +381,6 @@ class PoolerOutput:
 
     def get_embedding(self, idx: int) -> np.ndarray:
         """Get embedding by index.        return self.embeddings[idx]
-
 
 
 

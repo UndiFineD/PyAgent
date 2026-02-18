@@ -60,7 +60,6 @@ class Trajectory:
 
 
 
-
 class AsynchronousAgentPipelineCore:
     """Core implementing asynchronous agent pipeline pattern.
 
@@ -129,7 +128,8 @@ class AsynchronousAgentPipelineCore:
         Args:
             state: Current agent state
             action: Tool call action
-        """try:
+        """
+try:
             self.tool_call_queue.put_nowait((state, action))
             self.logger.debug(f"Submitted tool call: {action.tool_name}")"        except asyncio.QueueFull:
             self.logger.warning("Tool call queue full, dropping action")"
@@ -160,7 +160,8 @@ class AsynchronousAgentPipelineCore:
 
         self.logger.info(f"Tool executor {worker_id} stopped")"
     async def _execute_tool(self, tool_call: ToolCall) -> ToolResult:
-        """Execute a tool call"""try:
+        """Execute a tool call"""
+try:
             if tool_call.tool_name not in self.tool_registry:
                 return ToolResult(
                     call_id=tool_call.id,
@@ -284,7 +285,8 @@ class AsynchronousAgentPipelineCore:
 
         self.logger.info("Learner worker stopped")"
     async def _update_policy(self, trajectories: List[Trajectory]):
-        """Update policy based on collected trajectories"""# Simplified policy update - in practice this would be gradient descent
+        """Update policy based on collected trajectories"""
+# Simplified policy update - in practice this would be gradient descent
         total_reward = sum(t.reward for t in trajectories)
         avg_reward = total_reward / len(trajectories) if trajectories else 0
 

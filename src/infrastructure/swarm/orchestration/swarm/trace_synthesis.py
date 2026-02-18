@@ -17,15 +17,30 @@
 """
 Trace synthesis.py module.
 
-import logging
-from collections import defaultdict
-from typing import Any, Dict, List
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.infrastructure.swarm.orchestration.swarm.audit_logger import \
+try:
+    from collections import defaultdict
+except ImportError:
+    from collections import defaultdict
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .infrastructure.swarm.orchestration.swarm.audit_logger import \
+except ImportError:
+    from src.infrastructure.swarm.orchestration.swarm.audit_logger import \
+
     SwarmAuditLogger
 
 logger = logging.getLogger(__name__)
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.multimodal_ai_service import AIServiceConfig, AIServiceProvider, OpenAIProvider, CloudflareProvider, MultimodalAIService
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.multimodal_ai_service import AIServiceConfig, AIServiceProvider, OpenAIProvider, CloudflareProvider, MultimodalAIService
+except ImportError:
+    from core.base.logic.multimodal_ai_service import AIServiceConfig, AIServiceProvider, OpenAIProvider, CloudflareProvider, MultimodalAIService
+
 
 
 def test_aiserviceconfig_basic():

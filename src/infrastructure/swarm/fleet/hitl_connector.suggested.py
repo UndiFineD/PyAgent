@@ -22,19 +22,51 @@ Supports Slack and Discord notification patterns for critical agent decisions.
 
 from __future__ import annotations
 
-import logging
-import time
-import urllib.parse
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import urllib.parse
+except ImportError:
+    import urllib.parse
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.logic.connectivity_manager import ConnectivityManager
+except ImportError:
+    from src.core.base.logic.connectivity_manager import ConnectivityManager
+
+try:
+    from .infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+except ImportError:
+    from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+
 
 # Infrastructure
 __version__ = VERSION
-
 
 
 

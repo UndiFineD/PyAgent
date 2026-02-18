@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .diff_viewer import DiffViewer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .diff_viewer import DiffViewer
+except ImportError:
+    from .diff_viewer import DiffViewer
+
 
 
 def test_diffviewer_basic():

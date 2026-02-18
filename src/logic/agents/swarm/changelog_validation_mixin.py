@@ -48,7 +48,6 @@ if TYPE_CHECKING:
 
 
 
-
 class ChangelogValidationMixin:
 """"Mixin for validating changelog entries and content.
     def validate_entry(self, entry: ChangelogEntry) -> list[dict[str, str]]:

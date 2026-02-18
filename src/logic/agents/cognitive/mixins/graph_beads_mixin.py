@@ -14,12 +14,24 @@
 
 # "Beads task logic for GraphMemoryAgent."Provides hierarchical task management and dependency tracking using the 'Beads' pattern.'
 from __future__ import annotations
-import logging
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.base_utilities import as_tool
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
 
 __version__ = VERSION
-
 
 
 

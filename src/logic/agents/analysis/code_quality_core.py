@@ -50,7 +50,6 @@ __version__ = VERSION
 
 
 
-
 class CodeQualityCore:
     Pure logic for code quality analysis.
     Decoupled from file I/O and subprocesses.

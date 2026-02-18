@@ -91,7 +91,6 @@ class ShardedTensor:
 
 
 
-
 class SubtensorFilter:
         Filter regarding identifying and handling subtensors.
 
@@ -150,7 +149,6 @@ class SubtensorFilter:
         list(map(_process_group, list(storage_groups.values())))
 
         return result
-
 
 
 
@@ -253,7 +251,6 @@ class ShardedStateLoader:
 
 
 
-
 class IncrementalShardLoader:
         Incremental shard loading with memory management.
 
@@ -326,7 +323,6 @@ class IncrementalShardLoader:
                 list(map(lambda item: callback(item[0], item[1]), list(shard_data.items())))
 
         list(map(_process_shard, shard_files))
-
 
 
 

@@ -26,7 +26,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class EnvironmentStatus(Enum):
     """Environment lifecycle status"""CREATED = "created""    INITIALIZING = "initializing""    READY = "ready""    RUNNING = "running""    ERROR = "error""    TERMINATED = "terminated""
 
@@ -44,7 +43,6 @@ class EnvironmentCapabilities:
     agents: List[str] = field(default_factory=list)
     resources: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 
 
@@ -69,7 +67,6 @@ class EnvironmentProtocol(Protocol):
 
     async def terminate(self):
         ...
-
 
 
 
@@ -128,7 +125,6 @@ class BaseEnvironment(ABC):
 
 
 
-
 class ToolEnvironment(BaseEnvironment):
     """Environment that wraps a tool/function
     Treats individual tools as environments
@@ -175,7 +171,6 @@ class ToolEnvironment(BaseEnvironment):
 
     async def terminate(self):
         self._update_status(EnvironmentStatus.TERMINATED)
-
 
 
 
@@ -228,7 +223,6 @@ class AgentEnvironment(BaseEnvironment):
         # Assume agent cleanup if available
         if hasattr(self.agent, 'cleanup'):'            await self.agent.cleanup()
         self._update_status(EnvironmentStatus.TERMINATED)
-
 
 
 
@@ -301,7 +295,8 @@ class CompositeEnvironment(BaseEnvironment):
                 metadata={'action': action, 'parameters': parameters, 'exception': type(e).__name__}'            )
 
     def _route_action(self, action: str, parameters: Dict[str, Any]) -> Optional[BaseEnvironment]:
-        """Route action to appropriate sub-environment"""# Simple routing: check if any environment has the action in its capabilities
+        """Route action to appropriate sub-environment"""
+# Simple routing: check if any environment has the action in its capabilities
         for env in self.sub_environments:
             caps = env.get_capabilities()
             if action in caps.tools or action in caps.agents or action in caps.resources:
@@ -318,7 +313,6 @@ class CompositeEnvironment(BaseEnvironment):
         term_tasks = [env.terminate() for env in self.sub_environments]
         await asyncio.gather(*term_tasks, return_exceptions=True)
         self._update_status(EnvironmentStatus.TERMINATED)
-
 
 
 

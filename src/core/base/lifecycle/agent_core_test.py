@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.lifecycle.agent_core import CodeQualityReport, LogicCore, BaseCore, AgentCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.lifecycle.agent_core import CodeQualityReport, LogicCore, BaseCore, AgentCore
+except ImportError:
+    from core.base.lifecycle.agent_core import CodeQualityReport, LogicCore, BaseCore, AgentCore
+
 
 
 def test_codequalityreport_basic():

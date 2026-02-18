@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.validation import ValidationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.validation import ValidationCore
+except ImportError:
+    from core.base.logic.core.validation import ValidationCore
+
 
 
 def test_validationcore_basic():

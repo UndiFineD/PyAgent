@@ -32,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class LoadBalancerClient:
         Client-side load balancer for distributing requests.
     Optimizes for peak throughput and minimum latency variance.

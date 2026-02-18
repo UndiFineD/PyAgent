@@ -16,10 +16,22 @@
 """
 Test module for credential_extraction_agent
 """
-import platform
-import pytest
+try:
+    import platform
+except ImportError:
+    import platform
 
-from src.core.agents.credential_extraction_agent import CredentialExtractionAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .core.agents.credential_extraction_agent import CredentialExtractionAgent
+except ImportError:
+    from src.core.agents.credential_extraction_agent import CredentialExtractionAgent
+
 
 
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")

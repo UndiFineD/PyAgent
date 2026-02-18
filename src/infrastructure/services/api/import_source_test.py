@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.api.import_source import ImportSource
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.api.import_source import ImportSource
+except ImportError:
+    from infrastructure.services.api.import_source import ImportSource
+
 
 
 def test_importsource_basic():

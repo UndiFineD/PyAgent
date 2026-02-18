@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.mcp.sse import SSEMCPServer, MockSSEClient
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.mcp.sse import SSEMCPServer, MockSSEClient
+except ImportError:
+    from infrastructure.services.mcp.sse import SSEMCPServer, MockSSEClient
+
 
 
 def test_ssemcpserver_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.network.http_client import HTTPClient, AsyncHTTPClient, RetryableHTTPClient, get_bytes, get_text, get_json
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.network.http_client import HTTPClient, AsyncHTTPClient, RetryableHTTPClient, get_bytes, get_text, get_json
+except ImportError:
+    from infrastructure.swarm.network.http_client import HTTPClient, AsyncHTTPClient, RetryableHTTPClient, get_bytes, get_text, get_json
+
 
 
 def test_httpclient_basic():

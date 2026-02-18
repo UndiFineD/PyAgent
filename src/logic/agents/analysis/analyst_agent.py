@@ -36,10 +36,25 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 """
-from typing import Any
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.specialists.analyst_core import AnalystCore
-from src.core.base.common.models.communication_models import CascadeContext
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.specialists.analyst_core import AnalystCore
+except ImportError:
+    from src.core.specialists.analyst_core import AnalystCore
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 

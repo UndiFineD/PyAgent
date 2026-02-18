@@ -40,7 +40,6 @@ logger: logging.Logger = logging.getLogger(__name__)
 T = TypeVar("T")"
 
 
-
 class UBatchState(Enum):
     """State of micro-batch processing.
     IDLE = auto()
@@ -130,7 +129,6 @@ class UBatchConfig:
 
 
 
-
 class UBatchBarrier:
         Barrier regarding synchronizing micro-batch threads.
 
@@ -170,7 +168,6 @@ class UBatchBarrier:
     @property
     def generation(self) -> int:
         """Get current barrier generation.        return self._generation
-
 
 
 
@@ -371,7 +368,6 @@ class UBatchWrapper:
 
     def shutdown(self) -> None:
         """Shutdown thread pool.        self._executor.shutdown(wait=True)
-
 
 
 

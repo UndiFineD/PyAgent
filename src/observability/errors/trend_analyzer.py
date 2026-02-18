@@ -46,12 +46,29 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from datetime import datetime
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
 
-from .trend_data import TrendData
-from .trend_direction import TrendDirection
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .trend_data import TrendData
+except ImportError:
+    from .trend_data import TrendData
+
+try:
+    from .trend_direction import TrendDirection
+except ImportError:
+    from .trend_direction import TrendDirection
+
 
 __version__ = VERSION
 

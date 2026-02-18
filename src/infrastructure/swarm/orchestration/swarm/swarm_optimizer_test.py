@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.swarm_optimizer import SwarmOptimizer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.swarm_optimizer import SwarmOptimizer
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.swarm_optimizer import SwarmOptimizer
+
 
 
 def test_swarmoptimizer_basic():

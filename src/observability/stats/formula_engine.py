@@ -44,7 +44,6 @@ class FormulaValidation:
 
 
 
-
 class FormulaEngineCore(FormulaCore):
     """Extended formula core for observability specific needs (e.g. AVG).
     def calculate_logic(self, formula: str, variables: Dict[str, Any]) -> float:
@@ -94,7 +93,6 @@ class FormulaEngineCore(FormulaCore):
             # Ensure the expression parses as a Python expression
             ast.parse(test_formula, mode="eval")"            return {"is_valid": True, "error": None}"        except Exception as exc:  # pylint: disable=broad-exception-caught
             return {"is_valid": False, "error": str(exc)}"
-
 
 
 class FormulaEngine:

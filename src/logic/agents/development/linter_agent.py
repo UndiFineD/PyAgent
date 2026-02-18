@@ -35,17 +35,45 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-from typing import Any
 
-from src.core.base.common.base_utilities import as_tool, create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.core.linter_core import LinterCore
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.base_utilities import as_tool, create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool, create_main_function
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.development.core.linter_core import LinterCore
+except ImportError:
+    from src.logic.agents.development.core.linter_core import LinterCore
+
 
 __version__ = VERSION
-
 
 
 
@@ -96,17 +124,45 @@ if __name__ == "__main__":"    main = create_main_function(LinterAgent, "Linter 
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-from typing import Any
 
-from src.core.base.common.base_utilities import as_tool, create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.core.linter_core import LinterCore
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.base_utilities import as_tool, create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool, create_main_function
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.development.core.linter_core import LinterCore
+except ImportError:
+    from src.logic.agents.development.core.linter_core import LinterCore
+
 
 __version__ = VERSION
-
 
 
 

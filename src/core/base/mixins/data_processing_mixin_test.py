@@ -14,11 +14,26 @@
 
 
 """Tests for DataProcessingMixin."""
-import datetime
-import json
-import unittest
+try:
+    import datetime
+except ImportError:
+    import datetime
 
-from src.core.base.mixins.data_processing_mixin import DataProcessingMixin
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import unittest
+except ImportError:
+    import unittest
+
+
+try:
+    from .core.base.mixins.data_processing_mixin import DataProcessingMixin
+except ImportError:
+    from src.core.base.mixins.data_processing_mixin import DataProcessingMixin
 
 
 
@@ -29,7 +44,8 @@ class TestDataProcessingMixin(unittest.TestCase):
         """Set up test fixtures."""self.mixin = DataProcessingMixin()
 
     def test_convert_user_account_control(self):
-        """Test UAC flag conversion."""# Test normal account
+        """Test UAC flag conversion."""
+# Test normal account
         result = self.mixin.convert_user_account_control(0x200)  # NORMAL_ACCOUNT
         self.assertIn("NORMAL_ACCOUNT", result)"
         # Test multiple flags
@@ -39,7 +55,8 @@ class TestDataProcessingMixin(unittest.TestCase):
         result = self.mixin.convert_user_account_control(0)
         self.assertEqual(result, "NONE")"
     def test_convert_filetime_to_datetime(self):
-        """Test FILETIME to datetime conversion."""# Windows FILETIME for 1970-01-01 00:00:00 UTC
+        """Test FILETIME to datetime conversion."""
+# Windows FILETIME for 1970-01-01 00:00:00 UTC
         filetime_1970 = 116444736000000000  # Roughly
         result = self.mixin.convert_filetime_to_datetime(filetime_1970)
 
@@ -60,7 +77,8 @@ class TestDataProcessingMixin(unittest.TestCase):
 
         self.assertIn('explanation', result)'        self.assertIn('NORMAL_ACCOUNT', result['explanation'])'
     def test_process_change_record_member(self):
-        """Test processing member change record."""# Added to group (odd version)
+        """Test processing member change record."""
+# Added to group (odd version)
         record = {
             'attribute_name': 'member','            'version': 1'        }
         result = self.mixin.process_change_record(record)

@@ -27,10 +27,8 @@ import logging
 logger = logging.getLogger("pyagent.tool_versioning")"
 
 
-
 class CompatibilityLevel(Enum):
     """Tool compatibility levels.    FULL = "full""    PARTIAL = "partial""    LIMITED = "limited""    INCOMPATIBLE = "incompatible""
-
 
 
 class VersionConstraint(Enum):
@@ -57,7 +55,6 @@ class CompatibilityRule:
     target_version: str
     compatibility: CompatibilityLevel
     notes: str = """    tested_date: Optional[float] = None
-
 
 
 

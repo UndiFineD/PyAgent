@@ -65,7 +65,6 @@ class TaskResult:
 
 
 
-
 class MultiAgentOrchestratorCore:
     """Unified orchestrator for managing multiple agent types.
 
@@ -311,7 +310,8 @@ class MultiAgentOrchestratorCore:
         task_description: str,
         parameters: Dict[str, Any]
     ):
-        """Execute a task in the background."""try:
+        """Execute a task in the background."""
+try:
             # Update task status
             with self.task_lock:
                 self.tasks[task_id].status = "running""

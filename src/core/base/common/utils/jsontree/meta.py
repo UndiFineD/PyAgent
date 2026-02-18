@@ -19,13 +19,28 @@ Helper utilities for analyzing and transforming nested JSON-like trees used
 across the codebase. Functions include counting leaves, computing depth,
 filtering leaves by predicate, and validating leaf values.
 """
+
+
 from __future__ import annotations
 
-from typing import Callable
 
-from src.core.base.common.utils.jsontree.iteration import (
+try:
+    from typing import Callable
+except ImportError:
+    from typing import Callable
+
+
+try:
+    from .core.base.common.utils.jsontree.iteration import (
+except ImportError:
+    from src.core.base.common.utils.jsontree.iteration import (
+
     json_iter_leaves, json_iter_leaves_with_path)
-from src.core.base.common.utils.jsontree.types import _T, JSONTree
+try:
+    from .core.base.common.utils.jsontree.types import _T, JSONTree
+except ImportError:
+    from src.core.base.common.utils.jsontree.types import _T, JSONTree
+
 
 
 def json_count_leaves(value: JSONTree[_T]) -> int:

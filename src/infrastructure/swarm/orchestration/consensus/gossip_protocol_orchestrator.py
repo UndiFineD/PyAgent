@@ -37,7 +37,6 @@ __version__ = VERSION
 
 
 
-
 class GossipProtocolOrchestrator:
         Handles state synchronization across the swarm using an epidemic (gossip) protocol.
     Designed for high-scale, decentralized state consistency where nodes exchange

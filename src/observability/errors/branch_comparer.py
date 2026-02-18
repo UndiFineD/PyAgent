@@ -41,12 +41,20 @@ interfaces for large datasets.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
 
-from .branch_comparison import BranchComparison
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .branch_comparison import BranchComparison
+except ImportError:
+    from .branch_comparison import BranchComparison
+
 
 __version__ = VERSION
-
 
 
 

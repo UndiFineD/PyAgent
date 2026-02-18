@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.stats.exporters.otel_manager import Span, OTelManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.stats.exporters.otel_manager import Span, OTelManager
+except ImportError:
+    from observability.stats.exporters.otel_manager import Span, OTelManager
+
 
 
 def test_span_basic():

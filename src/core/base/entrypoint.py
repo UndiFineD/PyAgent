@@ -18,6 +18,11 @@ Delegates to src.core.base.common.base_utilities.
 """
 
 from __future__ import annotations
-from .common.base_utilities import create_main_function
+
+try:
+    from .common.base_utilities import create_main_function
+except ImportError:
+    from .common.base_utilities import create_main_function
+
 
 __all__ = ["create_main_function"]

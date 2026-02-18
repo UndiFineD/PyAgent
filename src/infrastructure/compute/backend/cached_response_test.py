@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.cached_response import CachedResponse
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.cached_response import CachedResponse
+except ImportError:
+    from infrastructure.compute.backend.cached_response import CachedResponse
+
 
 
 def test_cachedresponse_basic():

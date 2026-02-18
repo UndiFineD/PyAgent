@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.reasoning.parsers import ReasoningParser, ToolParser
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.reasoning.parsers import ReasoningParser, ToolParser
+except ImportError:
+    from infrastructure.engine.reasoning.parsers import ReasoningParser, ToolParser
+
 
 
 def test_reasoningparser_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.file_system_core import FileSystemCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.file_system_core import FileSystemCore
+except ImportError:
+    from core.base.common.file_system_core import FileSystemCore
+
 
 
 def test_filesystemcore_basic():

@@ -26,10 +26,22 @@
 # See the License for the specific language governing
 # permissions and limitations under the License.
 
-import r2pipe
+try:
+    import r2pipe
+except ImportError:
+    import r2pipe
 
-from typing import List, Tuple, Dict
-import json
+
+try:
+    from typing import List, Tuple, Dict
+except ImportError:
+    from typing import List, Tuple, Dict
+
+try:
+    import json
+except ImportError:
+    import json
+
 
 # [BATCHFIX] Commented metadata/non-Python
 """ TEMP_OUTPUT_FILE = "radare2_rpc_reg_info.tmp"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -39,9 +51,12 @@ r2: r2pipe.open = None
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-""" def find_rpc_server_registration_funcs() -> List[Tuple[str, int]]:""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+""" def find_rpc_server_registration_funcs() -> List[Tuple[str, int]]:""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     rpc_reg_imports = []""""
     imports = r2.cmdj("iij")"    if not imports:
         return rpc_reg_imports
@@ -49,19 +64,25 @@ r2: r2pipe.open = None
     for imp in imports:
 # [BATCHFIX] Commented metadata/non-Python
 #         if imp.get("name", ").startswith("RpcServerRegisterIf"):"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             rpc_reg_imports.append((imp["name"], imp["plt"]))"
     return rpc_reg_imports
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-""" def find_all_func_xrefs(func_ea: int) -> List[int]:""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     xref_eas = []""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+""" def find_all_func_xrefs(func_ea: int) -> List[int]:""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""     xref_eas = []""""
+# [BATCHFIX] Commented metadata/non-Python
 #     for xref in r2.cmdj(faxtj @{func_ea}"):"  # [BATCHFIX] closed string"        if "from" not in xref:"            continue
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         xref_eas.append(xref["from"])"
     return xref_eas
 
@@ -71,35 +92,43 @@ def get_func_start(ins_ea: int) -> int:
 #     return r2.cmdj(fpdj1 @{ins_ea}")[0]["fcn_addr"]"  # [BATCHFIX] closed string"
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ def get_reg_value(arg_ea: int, reg_name: str):  # -> Union[str, int]""""    func_start_ea = get_func_start(arg_ea)
 # [BATCHFIX] Commented metadata/non-Python
 #     for opcode_dism in reversed(r2.cmdj(fpDj{arg_ea - func_start_ea} @{func_start_ea}")):"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         if "," not in opcode_dism["opcode"]:"            # not relevant to argument setting
             continue
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         _, vals = opcode_dism["opcode"].split(" ", 1)"        dest_arg, _ = vals.split(",")"        if dest_arg == reg_name:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             return parse_argument(opcode_dism["offset"])"    return PARSING_ERROR
 
 
 def is_reg(reg: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     return (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     return (
         (reg.startswith("r") or reg.startswith("e")) and (reg.endswith("x") or reg.endswith("p") or reg.endswith("i"))"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     ) or (reg.startswith("r") and reg[1] in ["1", "8", "9"])"
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ def parse_argument(arg_ea: int):  # -> Union[str, int]""""    if arg_ea != BADADDR:
 # [BATCHFIX] Commented metadata/non-Python
 #         opcode_dism = r2.cmdj(fpdj1 @{arg_ea}")[0]["disasm"]"  # [BATCHFIX] closed string"        mnem, vals = opcode_dism.split(" ", 1)"        dest_arg, source_arg = vals.split(",")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         source_arg = source_arg.replace("[", ").replace("]", ").strip()"        if mnem == "xor":"            if dest_arg == source_arg:
                 return 0
             else:
@@ -111,20 +140,25 @@ def is_reg(reg: str) -> bool:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ def get_func_call_args(func_ea: int, arg_count: int):  # -> Union[str, int]""""    xref_args = {}
     for xref_ea in find_all_func_xrefs(func_ea):
         args_addrs = get_call_args_manually(xref_ea, max_args=arg_count)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         args_addrs += [BADADDR] * (arg_count - len(args_addrs))""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         args_addrs += [BADADDR] * (arg_count - len(args_addrs))""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         xref_args[hex(xref_ea)] = [parse_argument(arg_ea) for arg_ea in args_addrs] if args_addrs else []""""
     return xref_args
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ def get_call_args_manually(call_ea: int, max_look_behind: int = 20, max_args: int = 8) -> List[int]:""""    func_start_ea = get_func_start(call_ea)
     stack_params = {}
     rcx = rdx = r8 = r9 = None
@@ -133,41 +167,53 @@ def is_reg(reg: str) -> bool:
             break
         if opcode_dism["fcn_addr"] != func_start_ea:  # We've went outside the scope of the function call"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'            break
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         if "," not in opcode_dism["opcode"]:"            # not relevant to argument setting
             continue
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         mnem, vals = opcode_dism["opcode"].split(" ", 1)"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         dest_arg = vals[: vals.find(",")]"        if "[" in dest_arg:"            # print(dest_arg)
             if dest_arg.count("+") != 1:"                continue
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             reg, disp = dest_arg[dest_arg.find("[") + 1 : dest_arg.find("]")].split("+")"            reg = reg.strip()
             disp = disp.strip()
             # print(reg, disp)
             if reg == "rsp" or reg == "esp":"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 stack_params[disp] = opcode_dism["offset"]"        else:
             # doesn't really matter if it's out of order since subsequent inserts will fix it,'            # unless something has gone really wrong, and we've moved past the argument setup code."  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'            if dest_arg.endswith("cx") and rcx is None:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 rcx = opcode_dism["offset"]"            elif dest_arg.endswith("dx") and rdx is None:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 rdx = opcode_dism["offset"]"            elif dest_arg.startswith("r8") and r8 is None:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 r8 = opcode_dism["offset"]"            elif dest_arg.startswith("r9") and r9 is None:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 r9 = opcode_dism["offset"]"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     args = [val if val else PARSING_ERROR for val in (rcx, rdx, r8, r9)]""""    if len(args) < 4 or len(args) >= max_args:
         return args
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     return args + [stack_params[off] for off in sorted(stack_params, key=stack_params.get, reverse=True)]""""
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ def get_rpc_server_registration_info() -> Dict[str, List[Dict[int, Tuple]]]:""""    return {
         func_name: get_func_call_args(func_ea, get_arg_count_for_function_name(func_name))
         for func_name, func_ea in find_rpc_server_registration_funcs()

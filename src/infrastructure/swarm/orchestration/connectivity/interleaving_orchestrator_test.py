@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.connectivity.interleaving_orchestrator import InterleavingOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.connectivity.interleaving_orchestrator import InterleavingOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.connectivity.interleaving_orchestrator import InterleavingOrchestrator
+
 
 
 def test_interleavingorchestrator_basic():

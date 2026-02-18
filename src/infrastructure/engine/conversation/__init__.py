@@ -17,7 +17,11 @@ Conversation package.
 
 # Conversation Context Management - Phase 42
 # Multi-turn conversation state management
-from .conversation_context import (AgenticContext, ContextConfig,  # noqa: F401
+try:
+    from .conversation_context import (AgenticContext, ContextConfig,  # noqa: F401
+except ImportError:
+    from .conversation_context import (AgenticContext, ContextConfig, # noqa: F401
+
                                    ContextManager, ContextOrchestrator,
                                    ContextSnapshot, ContextState,
                                    ConversationContext, ConversationTurn,

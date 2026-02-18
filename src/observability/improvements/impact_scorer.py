@@ -31,7 +31,6 @@ __version__ = VERSION
 
 
 
-
 class ImpactScorer:
     """Scores improvements based on weighted impact factors.
     def __init__(self) -> None:

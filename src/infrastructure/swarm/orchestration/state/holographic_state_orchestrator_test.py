@@ -14,9 +14,21 @@
 
 # Phase 330: Holographic Memory Verification
 
-import pytest
-import asyncio
-from src.infrastructure.swarm.orchestration.state.holographic_state_orchestrator import HolographicStateOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    from .infrastructure.swarm.orchestration.state.holographic_state_orchestrator import HolographicStateOrchestrator
+except ImportError:
+    from src.infrastructure.swarm.orchestration.state.holographic_state_orchestrator import HolographicStateOrchestrator
+
 
 
 @pytest.mark.asyncio

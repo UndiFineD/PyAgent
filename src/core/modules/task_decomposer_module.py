@@ -14,12 +14,27 @@
 
 """Task decomposer module.py module.
 """
+
+
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
 
-from src.core.base.common.base_modules import BaseModule
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.base_modules import BaseModule
+except ImportError:
+    from src.core.base.common.base_modules import BaseModule
+
 
 
 @dataclass
@@ -32,13 +47,13 @@ class PlanStep:
 
 
 
-
 class TaskDecomposerModule(BaseModule):
     """Consolidated core module for task decomposition.
     Migrated from TaskDecomposerCore.
     """
     def initialize(self) -> bool:
-        """Initialize decomposition heuristics."""# Future: Load dynamic heuristics from a config file
+        """Initialize decomposition heuristics."""
+# Future: Load dynamic heuristics from a config file
         return super().initialize()
 
     def execute(self, request: str) -> list[dict[str, Any]]:

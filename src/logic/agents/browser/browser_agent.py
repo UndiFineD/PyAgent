@@ -50,7 +50,6 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 
-
 class BrowserAgent(BaseAgent):
     Web browser automation agent inspired by big-3-super-"agent."
     Features:
@@ -131,7 +130,6 @@ from rich.console import Console
 
 from src.core.base.base_agent import BaseAgent
 from src.core.base.common.models.communication_models import CascadeContext
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.system.agent_dao import AgentDAO
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.system.agent_dao import AgentDAO
+except ImportError:
+    from infrastructure.swarm.orchestration.system.agent_dao import AgentDAO
+
 
 
 def test_agentdao_basic():

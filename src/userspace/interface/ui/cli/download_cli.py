@@ -16,12 +16,32 @@
 """
 Dedicated CLI manager for PyAgent Download System.
 
-import sys
-import argparse
-from pathlib import Path
+try:
+    import sys
+except ImportError:
+    import sys
 
-from src.tools.download_agent.core import DownloadAgent
-from src.tools.download_agent.models import DownloadConfig
+try:
+    import argparse
+except ImportError:
+    import argparse
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .tools.download_agent.core import DownloadAgent
+except ImportError:
+    from src.tools.download_agent.core import DownloadAgent
+
+try:
+    from .tools.download_agent.models import DownloadConfig
+except ImportError:
+    from src.tools.download_agent.models import DownloadConfig
+
 
 
 def main():

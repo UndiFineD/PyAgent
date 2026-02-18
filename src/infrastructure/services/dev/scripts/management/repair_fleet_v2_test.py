@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.repair_fleet_v2 import repair
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.repair_fleet_v2 import repair
+except ImportError:
+    from infrastructure.services.dev.scripts.management.repair_fleet_v2 import repair
+
 
 
 def test_repair_basic():

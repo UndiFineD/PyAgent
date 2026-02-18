@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.intel.emotional_regulation_orchestrator import EmotionalRegulationOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.intel.emotional_regulation_orchestrator import EmotionalRegulationOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.intel.emotional_regulation_orchestrator import EmotionalRegulationOrchestrator
+
 
 
 def test_emotionalregulationorchestrator_basic():

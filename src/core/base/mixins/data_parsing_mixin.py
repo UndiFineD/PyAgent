@@ -17,11 +17,21 @@
 Data parsing mixin for BaseAgent, implementing XML and HTML parsing patterns.
 Inspired by ADSyncDump-BOF XML parsing techniques.
 """
+
+
 from __future__ import annotations
 
-from typing import Any, Optional
 
-from src.core.base.logic.processing.data_parsing_core import DataParsingCore
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
+
+try:
+    from .core.base.logic.processing.data_parsing_core import DataParsingCore
+except ImportError:
+    from src.core.base.logic.processing.data_parsing_core import DataParsingCore
 
 
 

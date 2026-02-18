@@ -16,16 +16,43 @@
 """
 Auto-extracted class from agent_backend.py
 """
+
+
 from __future__ import annotations
 
-import time
-import uuid
-from dataclasses import dataclass, field
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import time
+except ImportError:
+    import time
 
-from .request_priority import RequestPriority
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .request_priority import RequestPriority
+except ImportError:
+    from .request_priority import RequestPriority
+
 
 __version__ = VERSION
 

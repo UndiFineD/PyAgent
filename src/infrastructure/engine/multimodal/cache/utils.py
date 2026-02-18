@@ -15,16 +15,48 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Utility functions for multimodal caching.
-from typing import Any, Union
+try:
+    from typing import Any, Union
+except ImportError:
+    from typing import Any, Union
 
-import numpy as np
 
-from .base import MultiModalCache
-from .data import MediaHash
-from .enums import CacheBackend, HashAlgorithm, MediaType
-from .hasher import HAS_PIL, MultiModalHasher
-from .ipc import IPCMultiModalCache
-from .memory import MemoryMultiModalCache
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .base import MultiModalCache
+except ImportError:
+    from .base import MultiModalCache
+
+try:
+    from .data import MediaHash
+except ImportError:
+    from .data import MediaHash
+
+try:
+    from .enums import CacheBackend, HashAlgorithm, MediaType
+except ImportError:
+    from .enums import CacheBackend, HashAlgorithm, MediaType
+
+try:
+    from .hasher import HAS_PIL, MultiModalHasher
+except ImportError:
+    from .hasher import HAS_PIL, MultiModalHasher
+
+try:
+    from .ipc import IPCMultiModalCache
+except ImportError:
+    from .ipc import IPCMultiModalCache
+
+try:
+    from .memory import MemoryMultiModalCache
+except ImportError:
+    from .memory import MemoryMultiModalCache
+
 
 
 def compute_media_hash(

@@ -18,15 +18,30 @@
 Expert Specialization Evolution (Phase 68).
 Reinforcement loop that adjusts expert scores based on real-world outcomes.
 
-import logging
-from typing import List
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.common.models.communication_models import ExpertEvaluation
-from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
+
+try:
+    from .core.base.common.models.communication_models import ExpertEvaluation
+except ImportError:
+    from src.core.base.common.models.communication_models import ExpertEvaluation
+
+try:
+    from .infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+except ImportError:
+    from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+
     MoEGatekeeper
 
 logger = logging.getLogger(__name__)
-
 
 
 

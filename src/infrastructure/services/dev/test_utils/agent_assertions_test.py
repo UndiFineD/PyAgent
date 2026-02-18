@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.agent_assertions import AgentAssertions
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.agent_assertions import AgentAssertions
+except ImportError:
+    from infrastructure.services.dev.test_utils.agent_assertions import AgentAssertions
+
 
 
 def test_agentassertions_basic():

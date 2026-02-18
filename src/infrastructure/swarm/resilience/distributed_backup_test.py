@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import shutil
-from pathlib import Path
-from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+try:
+    import shutil
+except ImportError:
+    import shutil
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from .infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+except ImportError:
+    from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+
 
 
 def test_raid10_sharding_and_reconstruction():

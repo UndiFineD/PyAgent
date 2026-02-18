@@ -15,15 +15,26 @@
 
 """Tests for AgentPoolManager - Self-evolving agent pool implementation
 """
-import tempfile
-from unittest.mock import Mock
+try:
+    import tempfile
+except ImportError:
+    import tempfile
 
-from src.core.base.logic.agent_pool_manager import (
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from unittest.mock import Mock
+
+
+try:
+    from .core.base.logic.agent_pool_manager import (
+except ImportError:
+    from src.core.base.logic.agent_pool_manager import (
+
     AgentPoolManager,
     TaskRequirements,
     AgentStatus
 )
-
 
 
 
@@ -62,7 +73,8 @@ class TestAgentPoolManager:
         assert manifest.status == AgentStatus.ACTIVE
 
     def test_agent_metrics_update(self):
-        """Test agent metrics tracking"""# Register agent
+        """Test agent metrics tracking"""
+# Register agent
         mock_agent = Mock()
         mock_agent.name = "metrics_agent""        self.manager.register_agent(mock_agent, {"coding"})"
         # Update metrics
@@ -80,7 +92,8 @@ class TestAgentPoolManager:
         manifest = self.manager.agent_pool["elite_candidate"]"        assert manifest.status == AgentStatus.ELITE
         assert "elite_candidate" in self.manager.elite_agents"
     def test_agent_selection(self):
-        """Test optimal agent selection"""# Register agents with different capabilities
+        """Test optimal agent selection"""
+# Register agents with different capabilities
         agents = [
             ("coder_agent", {"coding", "python"}),"            ("writer_agent", {"writing", "documentation"}),"            ("fullstack_agent", {"coding", "python", "writing", "testing"})"        ]
 
@@ -113,7 +126,8 @@ class TestAgentPoolManager:
         # Low coverage -> create new
         assert self.manager.decide_agent_action(0.3, requirements) == "create_new""
     def test_integrated_agent_creation(self):
-        """Test integrated agent creation"""# Register base agents
+        """Test integrated agent creation"""
+# Register base agents
         agents = [
             ("agent_a", {"coding"}),"            ("agent_b", {"testing"})"        ]
 
@@ -146,7 +160,8 @@ class TestAgentPoolManager:
         assert manifest.capabilities == {"security", "networking"}"        assert manifest.status == AgentStatus.ACTIVE
 
     def test_manifest_persistence(self):
-        """Test manifest loading and saving"""# Register and save
+        """Test manifest loading and saving"""
+# Register and save
         mock_agent = Mock()
         mock_agent.name = "persistent_agent""        self.manager.register_agent(mock_agent, {"coding"})"
         # Create new manager and load
@@ -155,7 +170,8 @@ class TestAgentPoolManager:
 
         assert "persistent_agent" in new_manager.agent_pool"        manifest = new_manager.agent_pool["persistent_agent"]"        assert manifest.capabilities == {"coding"}"
     def test_pool_statistics(self):
-        """Test pool statistics generation"""# Register some agents
+        """Test pool statistics generation"""
+# Register some agents
         agents = [
             ("agent1", {"coding"}),"            ("agent2", {"testing"}),"            ("agent3", {"writing"})"        ]
 

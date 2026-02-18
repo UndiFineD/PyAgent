@@ -35,7 +35,6 @@ __version__: str = VERSION
 
 
 
-
 class EmergencyEventLog:
     """Phase 278: Ring buffer recording the last 10 filesystem actions for recovery."""
 

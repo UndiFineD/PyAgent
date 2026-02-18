@@ -14,10 +14,22 @@
 
 
 """Tests for graph-based orchestration system.
-import pytest
-from typing import Any
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.logic.agents.swarm.graph_orchestration import (
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .logic.agents.swarm.graph_orchestration import (
+except ImportError:
+    from src.logic.agents.swarm.graph_orchestration import (
+
     OrchestrationState,
     OrchestrationStatus,
     OrchestrationRunnable,
@@ -31,7 +43,6 @@ from src.logic.agents.swarm.graph_orchestration import (
     GraphOrchestrationMixin,
     ExecutionContext
 )
-
 
 
 
@@ -49,7 +60,6 @@ class MockRunnable(OrchestrationRunnable):
             success=True,
             output=self.result
         )
-
 
 
 
@@ -124,7 +134,6 @@ class TestOrchestrationGraphBuilder:
         with pytest.raises(ValueError, match="Cannot modify graph after build"):"            builder.add_runnable(MockRunnable("new"))"
 
 
-
 class TestOrchestrationGraph:
     """Test the orchestration graph.
     def test_graph_initialization(self):
@@ -153,7 +162,6 @@ class TestOrchestrationGraph:
 
         assert graph.is_exit_runnable(exit_runnable)
         assert not graph.is_exit_runnable(MockRunnable("other"))"
-
 
 
 class TestOrchestrator:
@@ -217,7 +225,6 @@ class TestOrchestrator:
         runner_names = [h["runner"] for h in result_state.execution_history]"        assert "success" in runner_names"
 
 
-
 class TestAgentRunner:
     """Test the agent runner.
     @pytest.mark.asyncio
@@ -240,7 +247,6 @@ class TestAgentRunner:
 
         assert not result.success
         assert result.error == "Agent failed""
-
 
 
 class TestConditionalRunner:
@@ -271,11 +277,9 @@ class TestConditionalRunner:
         assert result.output["condition"] is False"        assert result.output["next_runner"] == "false_path""
 
 
-
 class MockOrchestratorWithMixin(GraphOrchestrationMixin):
     """Mock orchestrator with graph orchestration mixin.
     pass
-
 
 
 

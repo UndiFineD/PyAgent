@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.cuda.u_batch_processor import UBatchState, UBatchSlice, UBatchContext, UbatchMetadata, UBatchConfig, UBatchBarrier, UBatchWrapper, DynamicUBatchWrapper, make_ubatch_contexts
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.cuda.u_batch_processor import UBatchState, UBatchSlice, UBatchContext, UbatchMetadata, UBatchConfig, UBatchBarrier, UBatchWrapper, DynamicUBatchWrapper, make_ubatch_contexts
+except ImportError:
+    from infrastructure.compute.cuda.u_batch_processor import UBatchState, UBatchSlice, UBatchContext, UbatchMetadata, UBatchConfig, UBatchBarrier, UBatchWrapper, DynamicUBatchWrapper, make_ubatch_contexts
+
 
 
 def test_ubatchstate_basic():

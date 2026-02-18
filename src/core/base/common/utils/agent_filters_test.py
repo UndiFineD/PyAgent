@@ -14,8 +14,16 @@
 
 
 """Unit tests for agent-specific file filtering logic."""
-from pathlib import Path
-from src.core.base.common.utils.agent_file_manager import AgentFileManager
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from .core.base.common.utils.agent_file_manager import AgentFileManager
+except ImportError:
+    from src.core.base.common.utils.agent_file_manager import AgentFileManager
+
 
 
 def test_agents_only_filters_agent_files(tmp_path: Path) -> None:

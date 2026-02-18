@@ -22,13 +22,25 @@ Handles deployment and lifecycle of agent-specific containers.
 
 from __future__ import annotations
 
-import json
-import logging
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

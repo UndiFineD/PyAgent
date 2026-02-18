@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.reports.severity_level import SeverityLevel
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.reports.severity_level import SeverityLevel
+except ImportError:
+    from observability.reports.severity_level import SeverityLevel
+
 
 
 def test_severitylevel_basic():

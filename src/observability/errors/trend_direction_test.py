@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .trend_direction import TrendDirection
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .trend_direction import TrendDirection
+except ImportError:
+    from .trend_direction import TrendDirection
+
 
 
 def test_trenddirection_basic():

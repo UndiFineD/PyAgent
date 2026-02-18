@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.reward_predictor import ExpertRewardPredictor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.reward_predictor import ExpertRewardPredictor
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.reward_predictor import ExpertRewardPredictor
+
 
 
 def test_expertrewardpredictor_basic():

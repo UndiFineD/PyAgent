@@ -19,14 +19,43 @@ Debug phase 18 19.py module.
 
 from __future__ import annotations
 
-import logging
-import sqlite3
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.logic.agents.intelligence.sql_query_agent import SQLQueryAgent
-from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import sqlite3
+except ImportError:
+    import sqlite3
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
+except ImportError:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+try:
+    from .logic.agents.intelligence.sql_query_agent import SQLQueryAgent
+except ImportError:
+    from src.logic.agents.intelligence.sql_query_agent import SQLQueryAgent
+
+try:
+    from .logic.agents.security.security_guard_agent import SecurityGuardAgent
+except ImportError:
+    from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
+
 
 __version__ = VERSION
 

@@ -21,15 +21,39 @@ Execution engine regarding the sampling pipeline.
 
 from __future__ import annotations
 
-from functools import reduce
-from typing import List, Optional
 
-import numpy as np
+try:
+    from functools import reduce
+except ImportError:
+    from functools import reduce
 
-from .base import Sampler, _sample_from_probs, _softmax
-from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,
+try:
+    from typing import List, Optional
+except ImportError:
+    from typing import List, Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .base import Sampler, _sample_from_probs, _softmax
+except ImportError:
+    from .base import Sampler, _sample_from_probs, _softmax
+
+try:
+    from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,
+except ImportError:
+    from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,
+
                       TemperatureSampler, TopKTopPSampler)
-from .params import SamplingParams, SamplingState
+try:
+    from .params import SamplingParams, SamplingState
+except ImportError:
+    from .params import SamplingParams, SamplingState
 
 
 

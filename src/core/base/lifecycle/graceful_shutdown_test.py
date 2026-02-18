@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.lifecycle.graceful_shutdown import GracefulShutdown
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.lifecycle.graceful_shutdown import GracefulShutdown
+except ImportError:
+    from core.base.lifecycle.graceful_shutdown import GracefulShutdown
+
 
 
 def test_gracefulshutdown_basic():

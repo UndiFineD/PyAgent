@@ -18,12 +18,23 @@
 Locality Manager (Phase 59).
 Optimizes cross-node communication by identifying network topology and grouping ranks.
 
-import logging
-import socket
-from typing import Dict, List, Optional, Set
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import socket
+except ImportError:
+    import socket
+
+try:
+    from typing import Dict, List, Optional, Set
+except ImportError:
+    from typing import Dict, List, Optional, Set
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -33,7 +44,6 @@ class LocalityGroup:
         self.name = name
         self.ranks: Set[int] = set()
         self.latency_matrix: Dict[int, Dict[int, float]] = {}
-
 
 
 

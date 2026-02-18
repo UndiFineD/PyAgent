@@ -16,13 +16,37 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 Chat template registry package for Jinja2 and custom template management.
 
-from .base import ChatTemplate  # noqa: F401
-from .config import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP, ModelType,  # noqa: F401
+try:
+    from .base import ChatTemplate  # noqa: F401
+except ImportError:
+    from .base import ChatTemplate # noqa: F401
+
+try:
+    from .config import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP, ModelType,  # noqa: F401
+except ImportError:
+    from .config import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP, ModelType, # noqa: F401
+
                      RenderOptions, TemplateConfig, TemplateInfo, TemplateType)
-from .jinja import JinjaTemplate  # noqa: F401
-from .registry import ChatTemplateRegistry  # noqa: F401
-from .resolver import TemplateResolver  # noqa: F401
-from .utils import (detect_template_type, get_template, register_template,  # noqa: F401
+try:
+    from .jinja import JinjaTemplate  # noqa: F401
+except ImportError:
+    from .jinja import JinjaTemplate # noqa: F401
+
+try:
+    from .registry import ChatTemplateRegistry  # noqa: F401
+except ImportError:
+    from .registry import ChatTemplateRegistry # noqa: F401
+
+try:
+    from .resolver import TemplateResolver  # noqa: F401
+except ImportError:
+    from .resolver import TemplateResolver # noqa: F401
+
+try:
+    from .utils import (detect_template_type, get_template, register_template,  # noqa: F401
+except ImportError:
+    from .utils import (detect_template_type, get_template, register_template, # noqa: F401
+
                     render_template)
 
 __all__ = [

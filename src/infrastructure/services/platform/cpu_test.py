@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.platform.cpu import CpuPlatform
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.platform.cpu import CpuPlatform
+except ImportError:
+    from infrastructure.services.platform.cpu import CpuPlatform
+
 
 
 def test_cpuplatform_basic():

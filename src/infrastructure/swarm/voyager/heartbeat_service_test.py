@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.voyager.heartbeat_service import SwarmHeartbeatService
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.voyager.heartbeat_service import SwarmHeartbeatService
+except ImportError:
+    from infrastructure.swarm.voyager.heartbeat_service import SwarmHeartbeatService
+
 
 
 def test_swarmheartbeatservice_basic():

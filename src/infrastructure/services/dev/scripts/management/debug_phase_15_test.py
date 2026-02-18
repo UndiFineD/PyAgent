@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.debug_phase_15 import test_ethics_and_safety
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.debug_phase_15 import test_ethics_and_safety
+except ImportError:
+    from infrastructure.services.dev.scripts.management.debug_phase_15 import test_ethics_and_safety
+
 
 
 def test_test_ethics_and_safety_basic():

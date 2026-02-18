@@ -15,12 +15,26 @@
 
 """Core logic for execution profiles and configuration management.
 """
+
+
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
 
-from .base_core import BaseCore
-from .models import ExecutionProfile
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .models import ExecutionProfile
+except ImportError:
+    from .models import ExecutionProfile
 
 
 

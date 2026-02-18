@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.commands.datetime_cmds.suggested import cmd_datetime, cmd_date, cmd_time, cmd_uptime, cmd_timestamp
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.commands.datetime_cmds.suggested import cmd_datetime, cmd_date, cmd_time, cmd_uptime, cmd_timestamp
+except ImportError:
+    from interface.slash_commands.commands.datetime_cmds.suggested import cmd_datetime, cmd_date, cmd_time, cmd_uptime, cmd_timestamp
+
 
 
 def test_cmd_datetime_basic():

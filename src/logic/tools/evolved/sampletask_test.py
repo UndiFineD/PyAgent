@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.tools.evolved.sampletask import sample_automated_task
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.tools.evolved.sampletask import sample_automated_task
+except ImportError:
+    from logic.tools.evolved.sampletask import sample_automated_task
+
 
 
 def test_sample_automated_task_basic():

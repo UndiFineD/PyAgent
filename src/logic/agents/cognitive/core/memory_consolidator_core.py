@@ -34,7 +34,6 @@ __version__ = VERSION
 
 
 
-
 class MemoryConsolidatorCore:
 """"Pure logic core for memory consolidation.
     @staticmethod

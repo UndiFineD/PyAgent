@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.ad_monitoring_core import ChangeType, AttributeChangeType, SecurityEventType, ADObjectChange, AttributeChange, MonitoringSession, MonitoringConfig, ADConnectionProvider, AlertProvider, ADMonitoringCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.ad_monitoring_core import ChangeType, AttributeChangeType, SecurityEventType, ADObjectChange, AttributeChange, MonitoringSession, MonitoringConfig, ADConnectionProvider, AlertProvider, ADMonitoringCore
+except ImportError:
+    from core.base.logic.core.ad_monitoring_core import ChangeType, AttributeChangeType, SecurityEventType, ADObjectChange, AttributeChange, MonitoringSession, MonitoringConfig, ADConnectionProvider, AlertProvider, ADMonitoringCore
+
 
 
 def test_changetype_basic():

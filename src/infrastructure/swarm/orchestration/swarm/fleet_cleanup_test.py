@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.fleet_cleanup import FleetDecommissioner
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.fleet_cleanup import FleetDecommissioner
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.fleet_cleanup import FleetDecommissioner
+
 
 
 def test_fleetdecommissioner_basic():

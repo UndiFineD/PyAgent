@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.incremental_detokenizer import StopMatch, IncrementalDetokenizer, NoOpDetokenizer, BaseIncrementalDetokenizer, FastIncrementalDetokenizer, SlowIncrementalDetokenizer, check_stop_strings, check_stop_strings_rust, validate_utf8, validate_utf8_rust
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.incremental_detokenizer import StopMatch, IncrementalDetokenizer, NoOpDetokenizer, BaseIncrementalDetokenizer, FastIncrementalDetokenizer, SlowIncrementalDetokenizer, check_stop_strings, check_stop_strings_rust, validate_utf8, validate_utf8_rust
+except ImportError:
+    from infrastructure.engine.incremental_detokenizer import StopMatch, IncrementalDetokenizer, NoOpDetokenizer, BaseIncrementalDetokenizer, FastIncrementalDetokenizer, SlowIncrementalDetokenizer, check_stop_strings, check_stop_strings_rust, validate_utf8, validate_utf8_rust
+
 
 
 def test_stopmatch_basic():

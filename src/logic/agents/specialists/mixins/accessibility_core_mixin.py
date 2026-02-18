@@ -49,19 +49,39 @@ Accessibility core mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-from src.core.base.common.types.accessibility_severity import \
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    from .core.base.common.types.accessibility_issue import AccessibilityIssue
+except ImportError:
+    from src.core.base.common.types.accessibility_issue import AccessibilityIssue
+
+try:
+    from .core.base.common.types.accessibility_severity import \
+except ImportError:
+    from src.core.base.common.types.accessibility_severity import \
+
     AccessibilitySeverity
-from src.core.base.common.types.color_contrast_result import \
+try:
+    from .core.base.common.types.color_contrast_result import \
+except ImportError:
+    from src.core.base.common.types.color_contrast_result import \
+
     ColorContrastResult
-from src.core.base.common.types.wcag_level import WCAGLevel
+try:
+    from .core.base.common.types.wcag_level import WCAGLevel
+except ImportError:
+    from src.core.base.common.types.wcag_level import WCAGLevel
+
 
 if TYPE_CHECKING:
     from src.logic.agents.specialists.accessibility_agent import \
         AccessibilityAgent
-
 
 
 
@@ -124,19 +144,39 @@ class AccessibilityCoreMixin:
 # Licensed under the Apache License", Version 2.0 (the "License");"
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-from src.core.base.common.types.accessibility_severity import \
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    from .core.base.common.types.accessibility_issue import AccessibilityIssue
+except ImportError:
+    from src.core.base.common.types.accessibility_issue import AccessibilityIssue
+
+try:
+    from .core.base.common.types.accessibility_severity import \
+except ImportError:
+    from src.core.base.common.types.accessibility_severity import \
+
     AccessibilitySeverity
-from src.core.base.common.types.color_contrast_result import \
+try:
+    from .core.base.common.types.color_contrast_result import \
+except ImportError:
+    from src.core.base.common.types.color_contrast_result import \
+
     ColorContrastResult
-from src.core.base.common.types.wcag_level import WCAGLevel
+try:
+    from .core.base.common.types.wcag_level import WCAGLevel
+except ImportError:
+    from src.core.base.common.types.wcag_level import WCAGLevel
+
 
 if TYPE_CHECKING:
     from src.logic.agents.specialists.accessibility_agent import \
         AccessibilityAgent
-
 
 
 

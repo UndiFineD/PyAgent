@@ -29,7 +29,6 @@ if TYPE_CHECKING:
 
 
 
-
 class ComplexityAnalysisMixin:
     """Mixin for workspace-wide complexity scanning in SelfImprovementAnalysis.
     def scan_workspace_complexity(self: SelfImprovementAnalysis, target_dir: str = "src") -> list[dict[str, Any]]:"                Scans the workspace for high-complexity files using the Rust bridge.

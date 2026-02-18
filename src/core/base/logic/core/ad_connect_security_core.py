@@ -88,7 +88,6 @@ class ADConnectSecurityAssessment:
 
 
 
-
 class ADConnectSecurityCore(BaseCore):
     """Core for Azure AD Connect security analysis and assessment.
 
@@ -117,7 +116,8 @@ class ADConnectSecurityCore(BaseCore):
 
         Returns:
             ADConnectServiceAccount: Service account analysis results
-        """try:
+        """
+try:
             # Check if running on Windows
             if platform.system() != 'Windows':'                raise ValueError("Azure AD Connect analysis requires Windows environment")"
             # Find ADSync service
@@ -154,7 +154,8 @@ class ADConnectSecurityCore(BaseCore):
 
         Returns:
             ADConnectDatabase: Database security analysis results
-        """try:
+        """
+try:
             # Check LocalDB instance
             db_info = await self._get_localdb_instance_info()
 
@@ -181,7 +182,8 @@ class ADConnectSecurityCore(BaseCore):
 
         Returns:
             ADConnectConfiguration: Configuration analysis results
-        """try:
+        """
+try:
             # Read configuration from registry and files
             config_data = await self._read_adsync_configuration()
 
@@ -214,7 +216,8 @@ class ADConnectSecurityCore(BaseCore):
 
         Returns:
             ADConnectSecurityAssessment: Complete security assessment
-        """try:
+        """
+try:
             # Analyze all components
             service_account = await self.analyze_service_account(context)
             database = await self.analyze_database_security(context)
@@ -251,7 +254,8 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to perform security assessment: {e}")"            raise
 
     async def _get_adsync_service_info(self) -> Dict[str, Any]:
-        """Get Azure AD Connect service information."""try:
+        """Get Azure AD Connect service information."""
+try:
             # Use PowerShell to get service information
             cmd = [
                 'powershell.exe','                '-Command','                'Get-Service -Name ADSync | Select-Object -Property Name, Status, StartType | ConvertTo-Json''            ]
@@ -263,7 +267,8 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to get ADSync service info: {e}")"            return {}
 
     async def _analyze_service_account_details(self, _service_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze service account details."""try:
+        """Analyze service account details."""
+try:
             # Get service account from registry
             cmd = [
                 'powershell.exe','                '-Command','                (
@@ -306,13 +311,15 @@ class ADConnectSecurityCore(BaseCore):
         return privileges
 
     async def _check_password_policy_compliance(self, _account_info: Dict[str, Any]) -> bool:
-        """Check if service account complies with password policy."""try:
+        """Check if service account complies with password policy."""
+try:
             # This is a simplified check - in practice, you'd need domain policy analysis'            return True  # TODO Placeholder
         except Exception:  # noqa: BLE001
             return False
 
     async def _get_localdb_instance_info(self) -> Dict[str, Any]:
-        """Get LocalDB instance information."""try:
+        """Get LocalDB instance information."""
+try:
             # Check for LocalDB instances
             cmd = [
                 'powershell.exe','                '-Command','                (
@@ -334,10 +341,12 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to get LocalDB info: {e}")"            return {}
 
     async def _check_database_encryption(self, _db_info: Dict[str, Any]) -> str:
-        """Check database encryption status."""# Simplified check - in practice, would query database encryption status
+        """Check database encryption status."""
+# Simplified check - in practice, would query database encryption status
         return "TDE_Enabled"  # TODO Placeholder"
     async def _analyze_backup_status(self, _db_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze database backup status."""# Simplified check - in practice, would check backup history
+        """Analyze database backup status."""
+# Simplified check - in practice, would check backup history
         return {
             'status': 'Current','            'last_backup': datetime.now() - timedelta(days=1)'        }
 
@@ -362,7 +371,8 @@ class ADConnectSecurityCore(BaseCore):
         return config
 
     async def _parse_sync_rules(self, _config_data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Parse synchronization rules."""# Simplified - in practice, would parse actual sync rules
+        """Parse synchronization rules."""
+# Simplified - in practice, would parse actual sync rules
         return []
 
     async def _get_sync_domains(self, config_data: Dict[str, Any]) -> Dict[str, List[str]]:
@@ -439,7 +449,8 @@ class ADConnectSecurityCore(BaseCore):
         return recommendations
 
     async def _run_powershell_command(self, cmd: List[str]) -> Optional[str]:
-        """Run a PowerShell command and return output."""try:
+        """Run a PowerShell command and return output."""
+try:
             result = await asyncio.create_subprocess_exec(
                 *cmd,
                 stdout=asyncio.subprocess.PIPE,
@@ -455,7 +466,8 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to run PowerShell command: {e}")"            return None
 
     async def _get_account_sid(self, account_name: str) -> Optional[str]:
-        """Get SID for account name."""try:
+        """Get SID for account name."""
+try:
             cmd = [
                 'powershell.exe','                '-Command','                (
                     f'$objUser = New-Object System.Security.Principal.NTAccount("{account_name}"); '"'                    f'$strSID = $objUser.Translate([System.Security.Principal.SecurityIdentifier]); ''                    f'$strSID.Value''                )
@@ -468,7 +480,8 @@ class ADConnectSecurityCore(BaseCore):
             logger.error(f"Failed to get account SID: {e}")"            return None
 
     async def _check_account_privilege(self, account_name: str, privilege: str) -> bool:
-        """Check if account has specific privilege."""# Simplified check - in practice, would use Windows API
+        """Check if account has specific privilege."""
+# Simplified check - in practice, would use Windows API
         return False
 
     async def execute_task(self, context: CascadeContext) -> Dict[str, Any]:
@@ -479,7 +492,8 @@ class ADConnectSecurityCore(BaseCore):
 
         Returns:
             Dict containing analysis results
-        """try:
+        """
+try:
             # Type safe access to task from context
             task_data = getattr(context, 'task', {}) if hasattr(context, 'task') else {}'            task_type = task_data.get('type', 'assessment')'
             if task_type == 'service_account_analysis':'                sa_result = await self.analyze_service_account(context)

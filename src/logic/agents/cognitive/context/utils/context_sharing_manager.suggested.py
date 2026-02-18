@@ -19,16 +19,32 @@ different users and agents within the team.
 
 
 from __future__ import annotations
-from datetime import datetime
 
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.shared_context import SharedContext
-from src.logic.agents.cognitive.context.models.sharing_permission import (
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.models.shared_context import SharedContext
+except ImportError:
+    from src.logic.agents.cognitive.context.models.shared_context import SharedContext
+
+try:
+    from .logic.agents.cognitive.context.models.sharing_permission import (
+except ImportError:
+    from src.logic.agents.cognitive.context.models.sharing_permission import (
+
     SharingPermission,
 )
 
 __version__ = VERSION
-
 
 
 

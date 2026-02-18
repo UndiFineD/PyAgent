@@ -17,15 +17,34 @@
 # Contains pure regex and indexing logic for fast symbol discovery.
 This file is optimized for Rust migration (Phase 114).
 
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from .knowledge_mixins.knowledge_symbol_mixin import KnowledgeSymbolMixin
-from .knowledge_mixins.knowledge_search_mixin import KnowledgeSearchMixin
-from .knowledge_mixins.knowledge_process_mixin import KnowledgeProcessMixin
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .knowledge_mixins.knowledge_symbol_mixin import KnowledgeSymbolMixin
+except ImportError:
+    from .knowledge_mixins.knowledge_symbol_mixin import KnowledgeSymbolMixin
+
+try:
+    from .knowledge_mixins.knowledge_search_mixin import KnowledgeSearchMixin
+except ImportError:
+    from .knowledge_mixins.knowledge_search_mixin import KnowledgeSearchMixin
+
+try:
+    from .knowledge_mixins.knowledge_process_mixin import KnowledgeProcessMixin
+except ImportError:
+    from .knowledge_mixins.knowledge_process_mixin import KnowledgeProcessMixin
+
 
 __version__ = VERSION
-
 
 
 class

@@ -44,9 +44,18 @@ Available lazy imports:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Type
 
-from src.core.lazy_loader import lazy_import
+try:
+    from typing import TYPE_CHECKING, Type
+except ImportError:
+    from typing import TYPE_CHECKING, Type
+
+
+try:
+    from .core.lazy_loader import lazy_import
+except ImportError:
+    from src.core.lazy_loader import lazy_import
+
 
 __all__ = [
     "get_eagle_proposer","    "get_arc_offload_manager","    "get_tool_parser_registry","    "get_reasoning_engine","    "get_paged_attention_engine","    "get_mooncake_connector","    "get_nixl_connector","    "get_prefill_worker","    "get_decode_worker","    "get_pp_transfer","    "get_tp_transfer","]

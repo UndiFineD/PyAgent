@@ -15,6 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
 Module: engine
 PyAgent engine package initialization.
 
@@ -29,53 +30,47 @@ Phase 30 additions:
 - IncrementalDetokenizer: Fast streaming decode
 - PrefixCacheManager: Block-level caching
 - EngineCoreClient: Engine communication clients
-
+"""
 
 # Phase 30: Engine Core
-from .engine_core import (EngineCore, EngineCoreOutput, EngineCoreOutputs,  # noqa: F401
-                          EngineCoreProc, Executor)
+from .engine_core import EngineCore, EngineCoreOutput, EngineCoreOutputs, EngineCoreProc, Executor  # noqa: F401
 from .engine_core import FinishReason as CoreFinishReason  # noqa: F401
+
 from .engine_core import MockExecutor, ModelRunnerOutput  # noqa: F401
+
 from .engine_core import Request as CoreRequest  # noqa: F401
+
 from .engine_core import RequestStatus as CoreRequestStatus  # noqa: F401
-from .engine_core import (Scheduler, SchedulerOutput, SimpleScheduler,  # noqa: F401
-                          create_engine_core)
+
+from .engine_core import Scheduler, SchedulerOutput, SimpleScheduler, create_engine_core  # noqa: F401
 # Phase 30: Engine Core Client
-from .engine_core_client import (AsyncMPClient, ClientConfig, EngineCoreClient,  # noqa: F401
-                                 InprocClient, RequestType, SyncMPClient,
-                                 create_client)
+from .engine_core_client import AsyncMPClient, ClientConfig, EngineCoreClient, InprocClient, RequestType, SyncMPClient, create_client  # noqa: F401
 from .engine_lifecycle import EngineConfig, EngineLifecycleManager, EngineState  # noqa: F401
+
 # Phase 30: Incremental Detokenizer
-from .incremental_detokenizer import (  # noqa: F401
-    INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET, BaseIncrementalDetokenizer,
-    FastIncrementalDetokenizer, IncrementalDetokenizer, NoOpDetokenizer,
-    SlowIncrementalDetokenizer, StopMatch, check_stop_strings,
-    check_stop_strings_rust, validate_utf8, validate_utf8_rust)
+from .incremental_detokenizer import INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET, BaseIncrementalDetokenizer, FastIncrementalDetokenizer, IncrementalDetokenizer, NoOpDetokenizer, SlowIncrementalDetokenizer, StopMatch, check_stop_strings, check_stop_strings_rust, validate_utf8, validate_utf8_rust  # noqa: F401
 # Phase 30: Output Processor
-from .output_processor import (EngineCoreRequest, EventType, IterationStats,  # noqa: F401
-                               LoRARequest, LoRARequestStates, OutputProcessor,
-                               OutputProcessorOutput, ParentRequest)
+from .output_processor import EngineCoreRequest, EventType, IterationStats, LoRARequest, LoRARequestStates, OutputProcessor, OutputProcessorOutput, ParentRequest  # noqa: F401
 from .output_processor import RequestEvent as OutputRequestEvent  # noqa: F401
-from .output_processor import (RequestOutput, RequestOutputCollector,  # noqa: F401
-                               RequestState, SamplingParams)
+
+from .output_processor import RequestOutput, RequestOutputCollector, RequestState, SamplingParams  # noqa: F401
 # Phase 30: Prefix Cache Manager
-from .prefix_cache_manager import (BlockHash, CacheBlock, HashAlgorithm,  # noqa: F401
-                                   PrefixCacheManager, compute_cache_keys,
-                                   compute_cache_keys_rust,
-                                   compute_prefix_match,
-                                   compute_prefix_match_rust,
-                                   get_hash_function, hash_block_tokens,
-                                   hash_block_tokens_rust, init_none_hash)
-from .request_lifecycle import (FinishReason, Request, RequestEvent,  # noqa: F401
-                                RequestEventType, RequestQueue, RequestStatus,
-                                RequestTracker)
+from .prefix_cache_manager import BlockHash, CacheBlock, HashAlgorithm, PrefixCacheManager, compute_cache_keys, compute_cache_keys_rust, compute_prefix_match, compute_prefix_match_rust, get_hash_function, hash_block_tokens, hash_block_tokens_rust, init_none_hash  # noqa: F401
+from .request_lifecycle import FinishReason, Request, RequestEvent, RequestEventType, RequestQueue, RequestStatus, RequestTracker  # noqa: F401
 
 __all__: list[str] = [
     # Request Lifecycle
-    "FinishReason","    "Request","    "RequestEvent","    "RequestEventType","    "RequestQueue","    "RequestStatus","    "RequestTracker","    # Engine Lifecycle
-    "EngineConfig","    "EngineLifecycleManager","    "EngineState","    # Phase 30: EngineCore
-    "CoreRequestStatus","    "CoreFinishReason","    "CoreRequest","    "SchedulerOutput","    "ModelRunnerOutput","    "EngineCoreOutput","    "EngineCoreOutputs","    "Scheduler","    "SimpleScheduler","    "Executor","    "MockExecutor","    "EngineCore","    "EngineCoreProc","    "create_engine_core","    # Phase 30: OutputProcessor
-    "EventType","    "OutputRequestEvent","    "LoRARequest","    "ParentRequest","    "SamplingParams","    "EngineCoreRequest","    "RequestOutput","    "OutputProcessorOutput","    "RequestOutputCollector","    "RequestState","    "LoRARequestStates","    "OutputProcessor","    "IterationStats","    # Phase 30: IncrementalDetokenizer
-    "StopMatch","    "check_stop_strings","    "check_stop_strings_rust","    "IncrementalDetokenizer","    "NoOpDetokenizer","    "BaseIncrementalDetokenizer","    "FastIncrementalDetokenizer","    "SlowIncrementalDetokenizer","    "validate_utf8","    "validate_utf8_rust","    "INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET","    # Phase 30: PrefixCacheManager
-    "HashAlgorithm","    "BlockHash","    "CacheBlock","    "get_hash_function","    "hash_block_tokens","    "hash_block_tokens_rust","    "init_none_hash","    "PrefixCacheManager","    "compute_prefix_match","    "compute_prefix_match_rust","    "compute_cache_keys","    "compute_cache_keys_rust","    # Phase 30: EngineCoreClient
-    "RequestType","    "ClientConfig","    "EngineCoreClient","    "InprocClient","    "SyncMPClient","    "AsyncMPClient","    "create_client","]
+    "FinishReason", "Request", "RequestEvent", "RequestEventType", "RequestQueue", "RequestStatus", "RequestTracker",
+    # Engine Lifecycle
+    "EngineConfig", "EngineLifecycleManager", "EngineState",
+    # Phase 30: EngineCore
+    "CoreRequestStatus", "CoreFinishReason", "CoreRequest", "SchedulerOutput", "ModelRunnerOutput", "EngineCoreOutput", "EngineCoreOutputs", "Scheduler", "SimpleScheduler", "Executor", "MockExecutor", "EngineCore", "EngineCoreProc", "create_engine_core",
+    # Phase 30: OutputProcessor
+    "EventType", "OutputRequestEvent", "LoRARequest", "ParentRequest", "SamplingParams", "EngineCoreRequest", "RequestOutput", "OutputProcessorOutput", "RequestOutputCollector", "RequestState", "LoRARequestStates", "OutputProcessor", "IterationStats",
+    # Phase 30: IncrementalDetokenizer
+    "StopMatch", "check_stop_strings", "check_stop_strings_rust", "IncrementalDetokenizer", "NoOpDetokenizer", "BaseIncrementalDetokenizer", "FastIncrementalDetokenizer", "SlowIncrementalDetokenizer", "validate_utf8", "validate_utf8_rust", "INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET",
+    # Phase 30: PrefixCacheManager
+    "HashAlgorithm", "BlockHash", "CacheBlock", "get_hash_function", "hash_block_tokens", "hash_block_tokens_rust", "init_none_hash", "PrefixCacheManager", "compute_prefix_match", "compute_prefix_match_rust", "compute_cache_keys", "compute_cache_keys_rust",
+    # Phase 30: EngineCoreClient
+    "RequestType", "ClientConfig", "EngineCoreClient", "InprocClient", "SyncMPClient", "AsyncMPClient", "create_client",
+]

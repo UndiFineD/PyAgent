@@ -123,7 +123,6 @@ def _capture_gc_stats(snapshot: MemorySnapshot) -> None:
 
 
 
-
 class MemoryProfiler:
         Context manager for profiling memory usage.
 
@@ -175,7 +174,6 @@ def memory_profile(name: str = "profile", include_gpu: bool = True) -> Iterator[
         profiler = MemoryProfiler(name, include_gpu)
     with profiler:
         yield profiler
-
 
 
 

@@ -17,11 +17,18 @@
 """
 Reward predictor.py module.
 
-import logging
-from typing import Any, Dict
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

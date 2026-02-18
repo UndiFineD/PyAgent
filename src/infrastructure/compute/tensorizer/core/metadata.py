@@ -15,11 +15,27 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Metadata structure for serialized tensors.
-import struct
-from dataclasses import dataclass
-from typing import Tuple
+try:
+    import struct
+except ImportError:
+    import struct
 
-from .config import CompressionType, TensorDtype
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Tuple
+except ImportError:
+    from typing import Tuple
+
+
+try:
+    from .config import CompressionType, TensorDtype
+except ImportError:
+    from .config import CompressionType, TensorDtype
+
 
 
 @dataclass

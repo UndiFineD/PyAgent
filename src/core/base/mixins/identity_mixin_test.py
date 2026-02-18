@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.identity_mixin import IdentityMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.identity_mixin import IdentityMixin
+except ImportError:
+    from core.base.mixins.identity_mixin import IdentityMixin
+
 
 
 def test_identitymixin_basic():

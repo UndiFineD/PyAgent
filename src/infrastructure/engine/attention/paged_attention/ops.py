@@ -15,10 +15,21 @@
 
 Ops.py module.
 
-import numpy as np
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
-from .config import AttentionConfig
-from .storage import PagedKVCache
+try:
+    from .config import AttentionConfig
+except ImportError:
+    from .config import AttentionConfig
+
+try:
+    from .storage import PagedKVCache
+except ImportError:
+    from .storage import PagedKVCache
 
 
 

@@ -22,18 +22,38 @@ Part of the Phase 130 performance optimization suite.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum, auto
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.services.simulation.core.simulation_core import \
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.services.simulation.core.simulation_core import \
+except ImportError:
+    from src.infrastructure.services.simulation.core.simulation_core import \
+
     SimulationCore
-from src.observability.structured_logger import StructuredLogger
+try:
+    from .observability.structured_logger import StructuredLogger
+except ImportError:
+    from src.observability.structured_logger import StructuredLogger
+
 
 __version__ = VERSION
 
 logger = StructuredLogger("HopperSim")"
-
 
 
 class Precision(Enum):
@@ -52,7 +72,6 @@ class HopperConfig:
     clock_ghz: float = 1.83
     mem_bandwidth_gb_s: int = 3350
     tma_units_per_sm: int = 1
-
 
 
 

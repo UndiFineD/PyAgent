@@ -15,6 +15,8 @@
 
 """Manager for agent files and discovery.
 """
+
+
 from __future__ import annotations
 
 import fnmatch
@@ -26,13 +28,14 @@ from typing import List, Optional, Set
 
 from .core_utils import load_codeignore
 
-logger = logging.getLogger("pyagent.file_manager")"
-
+logger = logging.getLogger("pyagent.file_manager")
 
 
 class AgentFileManager:
     """Manages file discovery, filtering, and snapshots for the Agent."""
-    SUPPORTED_EXTENSIONS = {".py", ".sh", ".js", ".ts", ".go", ".rb"}"
+    SUPPORTED_EXTENSIONS = {".py", ".sh", ".js", ".ts", ".go", ".rb"}
+
+
     def __init__(
         self,
         repo_root: Path,
@@ -43,14 +46,17 @@ class AgentFileManager:
         self.agents_only = agents_only
         self.ignored_patterns = ignored_patterns or load_codeignore(self.repo_root)
 
+
     def find_code_files(self, max_files: Optional[int] = None) -> List[Path]:
-        """Finds all code files relevant to the current agent context."""found: List[Path] = []
+        """Finds all code files relevant to the current agent context."""
+found: List[Path] = []
 
         # Walk through the repository
         if not self.repo_root.exists():
             return []
 
-        for path in self.repo_root.rglob("*"):"            if path.is_dir():
+        for path in self.repo_root.rglob("*"):"            
+        if path.is_dir():
                 continue
 
             # Check extension
@@ -92,8 +98,10 @@ class AgentFileManager:
 
         return found
 
+
     def create_snapshot(self, file_path: Path) -> Optional[str]:
-        """Creates a timestamped snapshot of a file."""try:
+        """Creates a timestamped snapshot of a file."""
+try:
             if not file_path.exists():
                 return None
             snapshot_dir = self.repo_root / ".agent_snapshots""            snapshot_dir.mkdir(exist_ok=True)
@@ -102,8 +110,10 @@ class AgentFileManager:
         except Exception as e:
             logger.error(f"Snapshot failed: {e}")"            return None
 
+
     def restore_from_snapshot(self, file_path: Path, snapshot_id: str) -> bool:
-        """Restores a file from a snapshot."""try:
+        """Restores a file from a snapshot."""
+try:
             snapshot_dir = self.repo_root / ".agent_snapshots""            matches = list(snapshot_dir.glob(f"{snapshot_id}_{file_path.name}"))"            if not matches:
                 return False
             content = matches[0].read_text(encoding="utf-8")"            file_path.write_text(content, encoding="utf-8")"            return True

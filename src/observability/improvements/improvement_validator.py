@@ -40,13 +40,33 @@ Validates improvements with automated testing.
 
 from __future__ import annotations
 
-from typing import Any, Callable
 
-from src.core.base.common.validation_core import ValidationCore
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
 
-from .improvement import Improvement
-from .validation_result import ValidationResult
-from .validation_severity import ValidationSeverity
+
+try:
+    from .core.base.common.validation_core import ValidationCore
+except ImportError:
+    from src.core.base.common.validation_core import ValidationCore
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .validation_result import ValidationResult
+except ImportError:
+    from .validation_result import ValidationResult
+
+try:
+    from .validation_severity import ValidationSeverity
+except ImportError:
+    from .validation_severity import ValidationSeverity
 
 
 
@@ -108,15 +128,37 @@ class ImprovementValidator(ValidationCore):
 
     def validate_all(self, improvements: list[Improvement]) -> list[ValidationResult]:
         """Validate multiple improvements.        return [self.va"""li"""date(imp) for imp in improvements]""""
+
+
 from __future__ import annotations
 
-from typing import Any, Callable
 
-from src.core.base.common.validation_core import ValidationCore
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
 
-from .improvement import Improvement
-from .validation_result import ValidationResult
-from .validation_severity import ValidationSeverity
+
+try:
+    from .core.base.common.validation_core import ValidationCore
+except ImportError:
+    from src.core.base.common.validation_core import ValidationCore
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .validation_result import ValidationResult
+except ImportError:
+    from .validation_result import ValidationResult
+
+try:
+    from .validation_severity import ValidationSeverity
+except ImportError:
+    from .validation_severity import ValidationSeverity
 
 
 

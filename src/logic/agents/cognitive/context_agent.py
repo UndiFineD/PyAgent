@@ -44,23 +44,83 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
-from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
-from src.logic.agents.cognitive.context.models.file_category import FileCategory
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from src.logic.agents.cognitive.context_template_mixin import ContextTemplateMixin, DEFAULT_TEMPLATES
-from src.logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
-from src.logic.agents.cognitive.context_versioning_mixin import ContextVersioningMixin
-from src.logic.agents.cognitive.context_validation_mixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
-from src.logic.agents.cognitive.context_annotation_mixin import ContextAnnotationMixin
-from src.logic.agents.cognitive.context_categorization_mixin import ContextCategorizationMixin
-from src.logic.agents.cognitive.context_rag_mixin import ContextRAGMixin
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
+except ImportError:
+    from src.logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
+
+try:
+    from .logic.agents.cognitive.context.models.context_priority import ContextPriority
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
+
+try:
+    from .logic.agents.cognitive.context.models.file_category import FileCategory
+except ImportError:
+    from src.logic.agents.cognitive.context.models.file_category import FileCategory
+
+
+try:
+    from .logic.agents.cognitive.context_template_mixin import ContextTemplateMixin, DEFAULT_TEMPLATES
+except ImportError:
+    from src.logic.agents.cognitive.context_template_mixin import ContextTemplateMixin, DEFAULT_TEMPLATES
+
+try:
+    from .logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
+
+try:
+    from .logic.agents.cognitive.context_versioning_mixin import ContextVersioningMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_versioning_mixin import ContextVersioningMixin
+
+try:
+    from .logic.agents.cognitive.context_validation_mixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
+except ImportError:
+    from src.logic.agents.cognitive.context_validation_mixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
+
+try:
+    from .logic.agents.cognitive.context_annotation_mixin import ContextAnnotationMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_annotation_mixin import ContextAnnotationMixin
+
+try:
+    from .logic.agents.cognitive.context_categorization_mixin import ContextCategorizationMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_categorization_mixin import ContextCategorizationMixin
+
+try:
+    from .logic.agents.cognitive.context_rag_mixin import ContextRAGMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_rag_mixin import ContextRAGMixin
+
 
 __version__ = VERSION
 
@@ -134,23 +194,83 @@ class ContextAgent(
 # Example usage
 
 
-import logging
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
-from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
-from src.logic.agents.cognitive.context.models.file_category import FileCategory
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
 
-from src.logic.agents.cognitive.context_template_mixin import ContextTemplateMixin, DEFAULT_TEMPLATES
-from src.logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
-from src.logic.agents.cognitive.context_versioning_mixin import ContextVersioningMixin
-from src.logic.agents.cognitive.context_validation_mixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
-from src.logic.agents.cognitive.context_annotation_mixin import ContextAnnotationMixin
-from src.logic.agents.cognitive.context_categorization_mixin import ContextCategorizationMixin
-from src.logic.agents.cognitive.context_rag_mixin import ContextRAGMixin
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
+except ImportError:
+    from src.logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
+
+try:
+    from .logic.agents.cognitive.context.models.context_priority import ContextPriority
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
+
+try:
+    from .logic.agents.cognitive.context.models.file_category import FileCategory
+except ImportError:
+    from src.logic.agents.cognitive.context.models.file_category import FileCategory
+
+
+try:
+    from .logic.agents.cognitive.context_template_mixin import ContextTemplateMixin, DEFAULT_TEMPLATES
+except ImportError:
+    from src.logic.agents.cognitive.context_template_mixin import ContextTemplateMixin, DEFAULT_TEMPLATES
+
+try:
+    from .logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_tagging_mixin import ContextTaggingMixin
+
+try:
+    from .logic.agents.cognitive.context_versioning_mixin import ContextVersioningMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_versioning_mixin import ContextVersioningMixin
+
+try:
+    from .logic.agents.cognitive.context_validation_mixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
+except ImportError:
+    from src.logic.agents.cognitive.context_validation_mixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
+
+try:
+    from .logic.agents.cognitive.context_annotation_mixin import ContextAnnotationMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_annotation_mixin import ContextAnnotationMixin
+
+try:
+    from .logic.agents.cognitive.context_categorization_mixin import ContextCategorizationMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_categorization_mixin import ContextCategorizationMixin
+
+try:
+    from .logic.agents.cognitive.context_rag_mixin import ContextRAGMixin
+except ImportError:
+    from src.logic.agents.cognitive.context_rag_mixin import ContextRAGMixin
+
 
 __version__ = VERSION
 

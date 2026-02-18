@@ -22,7 +22,6 @@ from typing import Protocol, Set
 """ DOMAIN_REGEX = r"(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}"  # [BATCHFIX] closed string"
 
 
-
 class LLMInterface(Protocol):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -30,7 +29,8 @@ class LLMInterface(Protocol):
     async def chat(self, prompt: str) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """         "Sends a chat prompt to the LLM."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#      "   ..."  # [BATCHFIX] closed string"
+""" [BATCHFIX] Commented unterminated string""""
+#      "   ..."  # [BATCHFIX] closed string"
 
 @dataclass
 class DomainGenerationResult:
@@ -39,9 +39,9 @@ class DomainGenerationResult:
 """"Stores results of domain generation.
     seed_domain: str
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     generated_domains: Set[str]""""    model_used: str
-
 
 
 
@@ -56,7 +56,8 @@ class DomainGenerator:
     async def generate_permutations(self, seed_domain: str, count: int = 20) -> DomainGenerationResult:
 # [BATCHFIX] Commented metadata/non-Python
 #         Asks the LLM to generate potential phishing/typosquatting variations "for a seed domain."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         prompt = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         prompt = (
 #             fGenerate {count} domain name variations for '{seed_domain}' that might be used for'# [BATCHFIX] Commented metadata/non-Python
 """             "typosquatting or phishing. Similar to tools like dnstwist but focusing on semantic variations"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """             "or visually similar characters. Output only the domain names, one per line. Do not include numbering or"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -76,7 +77,8 @@ class DomainGenerator:
                         found_domains.add(match.group(0))
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             return DomainGenerationResult(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             return DomainGenerationResult(
                 seed_domain=seed_domain,
                 generated_domains=found_domains,
                 model_used=getattr(self.llm, "model_name", "unknown"),"            )
@@ -85,7 +87,6 @@ class DomainGenerator:
             # Fallback or error logging
 # [BATCHFIX] Commented metadata/non-Python
 #             print(fError generating domains: {e}")"  # [BATCHFIX] closed string"            return DomainGenerationResult(seed_domain, set(), "error")"
-
 
 
 class MockLLM:

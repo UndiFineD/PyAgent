@@ -20,12 +20,28 @@ Models and configurations for tokenization.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 
@@ -39,7 +55,6 @@ class TokenizerBackend(Enum):
 
 
 
-
 class SpecialTokenHandling(Enum):
     """How to handle special tokens.
     INCLUDE = auto()
@@ -50,14 +65,12 @@ class SpecialTokenHandling(Enum):
 
 
 
-
 class TruncationStrategy(Enum):
     """Truncation strategies for long sequences.
     NONE = auto()
     LEFT = auto()
     RIGHT = auto()
     LONGEST_FIRST = auto()
-
 
 
 

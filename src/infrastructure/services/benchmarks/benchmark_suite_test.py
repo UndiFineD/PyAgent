@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite
+except ImportError:
+    from infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite
+
 
 
 def test_benchmarksuite_basic():

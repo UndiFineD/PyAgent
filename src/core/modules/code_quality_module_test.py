@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.modules.code_quality_module import CodeQualityModule
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.modules.code_quality_module import CodeQualityModule
+except ImportError:
+    from core.modules.code_quality_module import CodeQualityModule
+
 
 
 def test_codequalitymodule_basic():

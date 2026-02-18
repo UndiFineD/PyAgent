@@ -47,7 +47,6 @@ _GLOBAL_RUNTIME_DATA: dict[str, str | int | bool] = {}
 
 
 
-
 class UsageContext(str, Enum):
     """Context in which PyAgent is being used.
     UNKNOWN = "UNKNOWN""    CLI = "CLI""    API_SERVER = "API_SERVER""    FLEET_ORCHESTRATION = "FLEET_ORCHESTRATION""    AGENT_TASK = "AGENT_TASK""    TESTING = "TESTING""

@@ -13,9 +13,20 @@
 # limitations under the License.
 """Test Autonomy Core module.
 """
-import pytest
-from hypothesis import given, strategies as st, settings, HealthCheck
-from src.core.base.common.autonomy_core import AutonomyCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    from .core.base.common.autonomy_core import AutonomyCore
+except ImportError:
+    from src.core.base.common.autonomy_core import AutonomyCore
 
 
 

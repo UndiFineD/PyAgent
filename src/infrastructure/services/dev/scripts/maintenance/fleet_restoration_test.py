@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.maintenance.fleet_restoration import restoration
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.maintenance.fleet_restoration import restoration
+except ImportError:
+    from infrastructure.services.dev.scripts.maintenance.fleet_restoration import restoration
+
 
 
 def test_restoration_basic():

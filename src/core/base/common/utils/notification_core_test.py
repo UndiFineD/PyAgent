@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.notification_core import NotificationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.notification_core import NotificationCore
+except ImportError:
+    from core.base.common.utils.notification_core import NotificationCore
+
 
 
 def test_notificationcore_basic():

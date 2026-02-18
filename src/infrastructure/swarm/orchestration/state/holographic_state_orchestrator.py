@@ -16,17 +16,41 @@
 # Phase 330: Holographic Memory & State Mirroring (VOYAGER STABILITY)
 
 from __future__ import annotations
-import logging
-import asyncio
-import json
-from typing import Any, Dict, List, Optional
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+except ImportError:
+    from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+
 
 __version__ = VERSION
 
 logger = logging.getLogger(__name__)
-
 
 
 

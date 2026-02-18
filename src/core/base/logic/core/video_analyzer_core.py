@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Any
-import math
+try:
+    from typing import List, Any
+except ImportError:
+    from typing import List, Any
+
+try:
+    import math
+except ImportError:
+    import math
 
 
 
@@ -47,5 +54,6 @@ class VideoAnalyzerCore:
         return [frames[i] for i in indices]
 
     def get_token_budget_ratio(self, width: int, height: int) -> float:
-        """Calculates token overhead based on frame resolution."""# Simple heuristic based on Q-former logic
+        """Calculates token overhead based on frame resolution."""
+# Simple heuristic based on Q-former logic
         return (width * height) / (self.target_dim * self.target_dim)

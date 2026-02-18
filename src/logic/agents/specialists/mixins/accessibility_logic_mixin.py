@@ -53,15 +53,27 @@ Accessibility logic mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
-from pathlib import Path
-from typing import TYPE_CHECKING
 
-from src.core.base.common.types.accessibility_report import AccessibilityReport
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    from .core.base.common.types.accessibility_report import AccessibilityReport
+except ImportError:
+    from src.core.base.common.types.accessibility_report import AccessibilityReport
+
 
 if TYPE_CHECKING:
     from src.logic.agents.specialists.accessibility_agent import \
         AccessibilityAgent
-
 
 
 
@@ -92,15 +104,27 @@ class AccessibilityLogicMixin:
 # Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
-from pathlib import Path
-from typing import TYPE_CHECKING
 
-from src.core.base.common.types.accessibility_report import AccessibilityReport
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    from .core.base.common.types.accessibility_report import AccessibilityReport
+except ImportError:
+    from src.core.base.common.types.accessibility_report import AccessibilityReport
+
 
 if TYPE_CHECKING:
     from src.logic.agents.specialists.accessibility_agent import \
         AccessibilityAgent
-
 
 
 

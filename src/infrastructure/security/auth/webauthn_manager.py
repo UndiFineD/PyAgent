@@ -46,7 +46,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class WebAuthnManager:
     """Manages WebAuthn registration and authentication logic.
     def __init__(self, rp_id: str = "localhost", rp_name: str = "PyAgent"):"        self.rp_id = rp_id

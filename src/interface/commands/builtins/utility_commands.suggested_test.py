@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.commands.builtins.utility_commands.suggested import register_utility_commands
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.commands.builtins.utility_commands.suggested import register_utility_commands
+except ImportError:
+    from interface.commands.builtins.utility_commands.suggested import register_utility_commands
+
 
 
 def test_register_utility_commands_basic():

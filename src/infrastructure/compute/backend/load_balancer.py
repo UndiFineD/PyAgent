@@ -18,15 +18,44 @@
 
 from __future__ import annotations
 
-import logging
-import threading
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .load_balance_strategy import LoadBalanceStrategy
-from .provider_type import ProviderType
-from .system_config import SystemConfig
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .load_balance_strategy import LoadBalanceStrategy
+except ImportError:
+    from .load_balance_strategy import LoadBalanceStrategy
+
+try:
+    from .provider_type import ProviderType
+except ImportError:
+    from .provider_type import ProviderType
+
+try:
+    from .system_config import SystemConfig
+except ImportError:
+    from .system_config import SystemConfig
+
 
 __version__ = VERSION
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.chunked_prefill.types import ChunkState, ChunkPriority, ChunkMetrics, PrefillChunk, ChunkedRequest, ChunkedPrefillConfig
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.chunked_prefill.types import ChunkState, ChunkPriority, ChunkMetrics, PrefillChunk, ChunkedRequest, ChunkedPrefillConfig
+except ImportError:
+    from infrastructure.engine.scheduling.chunked_prefill.types import ChunkState, ChunkPriority, ChunkMetrics, PrefillChunk, ChunkedRequest, ChunkedPrefillConfig
+
 
 
 def test_chunkstate_basic():

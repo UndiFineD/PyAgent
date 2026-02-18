@@ -32,7 +32,6 @@ if TYPE_CHECKING:
 
 
 
-
 class FleetRoutingCore:
     """Handles task routing and capability-based agent selection.
     def __init__(self, fleet: FleetManager) -> None:

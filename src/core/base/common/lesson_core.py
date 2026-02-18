@@ -39,7 +39,6 @@ class Lesson:
 
 
 
-
 class LessonCore(BaseCore):
     """Standard implementation for managing shared learnings across the fleet.
     Inherits from BaseCore for standardized persistence.

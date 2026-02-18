@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .branch_comparison_status import BranchComparisonStatus
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .branch_comparison_status import BranchComparisonStatus
+except ImportError:
+    from .branch_comparison_status import BranchComparisonStatus
+
 
 
 def test_branchcomparisonstatus_basic():

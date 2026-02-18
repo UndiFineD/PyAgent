@@ -48,7 +48,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 
-
 class OperationalCostAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 286: Operational Cost "Agent."#     Estimates the real-world dollar cost of improvement cycles based on model usage.
 

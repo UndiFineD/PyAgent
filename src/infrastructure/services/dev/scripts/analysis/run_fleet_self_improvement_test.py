@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import DirectiveParser, IntelligenceHarvester, CycleOrchestrator, run_cycle, consult_external_models, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import DirectiveParser, IntelligenceHarvester, CycleOrchestrator, run_cycle, consult_external_models, main
+except ImportError:
+    from infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import DirectiveParser, IntelligenceHarvester, CycleOrchestrator, run_cycle, consult_external_models, main
+
 
 
 def test_directiveparser_basic():

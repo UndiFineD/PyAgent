@@ -13,7 +13,11 @@
 # limitations under the License.
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
-from src.core.base.common.shell_core import ShellCore
+try:
+    from .core.base.common.shell_core import ShellCore
+except ImportError:
+    from src.core.base.common.shell_core import ShellCore
+
 
 
 def test_strip_ansi_handles_none_and_empty():

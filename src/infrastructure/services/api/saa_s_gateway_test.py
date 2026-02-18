@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.api.saa_s_gateway import SaaSGateway
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.api.saa_s_gateway import SaaSGateway
+except ImportError:
+    from infrastructure.services.api.saa_s_gateway import SaaSGateway
+
 
 
 def test_saasgateway_basic():

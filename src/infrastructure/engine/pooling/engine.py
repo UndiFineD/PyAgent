@@ -20,19 +20,39 @@ Core Pooling Engine implementation.
 
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict, Optional, Type
 
-import numpy as np
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .models import PoolingConfig, PoolingResult, PoolingStrategy
-from .strategies import (AttentionPooler, BasePooler, CLSPooler,
+try:
+    from typing import Any, Dict, Optional, Type
+except ImportError:
+    from typing import Any, Dict, Optional, Type
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .models import PoolingConfig, PoolingResult, PoolingStrategy
+except ImportError:
+    from .models import PoolingConfig, PoolingResult, PoolingStrategy
+
+try:
+    from .strategies import (AttentionPooler, BasePooler, CLSPooler,
+except ImportError:
+    from .strategies import (AttentionPooler, BasePooler, CLSPooler,
+
                          LastTokenPooler, MatryoshkaPooler, MaxPooler,
                          MeanPooler, MultiVectorPooler, StepPooler,
                          WeightedMeanPooler)
 
 logger = logging.getLogger(__name__)
-
 
 
 

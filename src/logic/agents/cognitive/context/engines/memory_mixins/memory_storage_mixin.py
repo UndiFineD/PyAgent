@@ -27,7 +27,6 @@ except ImportError:
 
 
 
-
 class MemoryStorageMixin:
 """"Methods for storage and DB initialization.
     def _init_db(self) -> Any:

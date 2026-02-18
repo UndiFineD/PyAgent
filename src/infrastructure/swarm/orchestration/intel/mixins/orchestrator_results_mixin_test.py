@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.intel.mixins.orchestrator_results_mixin import OrchestratorResultsMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.intel.mixins.orchestrator_results_mixin import OrchestratorResultsMixin
+except ImportError:
+    from infrastructure.swarm.orchestration.intel.mixins.orchestrator_results_mixin import OrchestratorResultsMixin
+
 
 
 def test_orchestratorresultsmixin_basic():

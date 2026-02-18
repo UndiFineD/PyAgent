@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.stats.core.stability_core import FleetMetrics, StabilityCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.stats.core.stability_core import FleetMetrics, StabilityCore
+except ImportError:
+    from observability.stats.core.stability_core import FleetMetrics, StabilityCore
+
 
 
 def test_fleetmetrics_basic():

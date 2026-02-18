@@ -15,13 +15,37 @@
 
 # "Agent for Neuro-Symbolic reasoning, verifying neural output against symbolic rules."# from __future__ import annotations
 
-import logging
-import re
-from typing import Any
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
 
 __version__ = VERSION
 

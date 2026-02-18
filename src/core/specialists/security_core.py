@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
-from typing import Dict, Any, List
+try:
+    from typing import Dict, Any, List
+except ImportError:
+    from typing import Dict, Any, List
 
 
 

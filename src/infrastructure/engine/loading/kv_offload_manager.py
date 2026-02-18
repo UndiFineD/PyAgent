@@ -16,7 +16,11 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Facade for KV offloading management.
 
-from .kv_offload import (ARCOffloadingManager, BlockHash, BlockStatus,
+try:
+    from .kv_offload import (ARCOffloadingManager, BlockHash, BlockStatus,
+except ImportError:
+    from .kv_offload import (ARCOffloadingManager, BlockHash, BlockStatus,
+
                          LoadStoreSpec, LRUOffloadingManager, MemoryBackend,
                          OffloadingBackend, OffloadingEvent, OffloadingManager,
                          OffloadMedium, PrepareStoreOutput,

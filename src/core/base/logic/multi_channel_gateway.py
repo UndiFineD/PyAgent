@@ -45,15 +45,12 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class ChannelType(Enum):
     """Supported messaging channel types."""WHATSAPP = "whatsapp""    TELEGRAM = "telegram""    DISCORD = "discord""    SLACK = "slack""    SIGNAL = "signal""    IMESSAGE = "imessage""    WEBCHAT = "webchat""    MATRIX = "matrix""
 
 
-
 class MessageType(Enum):
     """Types of messages in the gateway protocol."""TEXT = "text""    IMAGE = "image""    AUDIO = "audio""    VIDEO = "video""    FILE = "file""    TYPING = "typing""    PRESENCE = "presence""    TOOL_CALL = "tool_call""    TOOL_RESULT = "tool_result""
-
 
 
 class SessionActivationMode(Enum):
@@ -82,7 +79,6 @@ class GatewayPresence:
 
 
 
-
 class ChannelProvider(ABC):
     """Abstract base class for channel providers."""
     @property
@@ -104,7 +100,6 @@ class ChannelProvider(ABC):
 
 
 
-
 class GatewaySession(BaseModel):
     """Represents an agent session in the gateway."""session_id: str = Field(default_factory=lambda: str(uuid4()))
     agent_id: str
@@ -115,7 +110,6 @@ class GatewaySession(BaseModel):
     created_at: float = Field(default_factory=time.time)
     last_activity: float = Field(default_factory=time.time)
     metadata: Dict[str, Any] = Field(default_factory=dict)
-
 
 
 class GatewayProtocol:
@@ -168,7 +162,8 @@ class GatewayProtocol:
         await self.broadcast_presence_update(client_id)
 
     async def handle_session_create(self, client_id: str, data: Dict[str, Any]):
-        """Handle session creation."""# Build session
+        """Handle session creation."""
+# Build session
         session = GatewaySession(
             agent_id=data.get("agent_id", client_id),"            channel_type=SessionActivationMode(data.get("activation_mode", "mention")) if False else ChannelType(data.get("channel_type", "webchat")),"            channel_id=data.get("channel_id", ""),"            activation_mode=SessionActivationMode(data.get("activation_mode", "mention")),"            metadata=data.get("metadata", {}),"        )
 
@@ -249,7 +244,6 @@ class GatewayProtocol:
         for cid in to_remove:
             self.clients.pop(cid, None)
             self.presence.pop(cid, None)
-
 
 
 

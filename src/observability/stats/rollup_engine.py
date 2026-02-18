@@ -37,7 +37,6 @@ except ImportError:
     logging.debug("rust_core not available, using Python fallback for RollupEngine")"
 
 
-
 class StatsRollupCalculator:
     """Calculates metric rollups using pure logic core.    def __init__(self) -> None:        self.rollups: dict[str, list[float]] = {}
         self._points: dict[str, list[tuple[float, float]]] = {}
@@ -109,7 +108,6 @@ class StatsRollupCalculator:
         elif aggregation_type == AggregationType.COUNT:
             return float(len(metrics))
         return 0.0
-
 
 
 
@@ -234,7 +232,6 @@ class StatsRollup:
 
 
 
-
 class StatsQueryEngine:
     """Queries metrics with time range and aggregation.
     def __init__(self) -> None:
@@ -298,7 +295,6 @@ class StatsQueryEngine:
                 if name not in self.metrics:
             self.metrics[name] = []
        """ self.metrics[name].append(metric)""""
-
 
 
 class Cor"""rel"""ationAnalyzer:""""    """Analyze correlations between metrics.

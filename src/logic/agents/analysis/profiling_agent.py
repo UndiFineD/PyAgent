@@ -51,7 +51,6 @@ __version__ = VERSION
 
 
 
-
 class ProfilingAgent(BaseAgent):
     "Provides code profiling suggestions."    Integrated with ProfilingCore for cProfile analysis and bottleneck detection.
 #     Can identify slow functions (>1s) and hand them over for Rust conversion.
@@ -139,7 +138,6 @@ from src.observability.stats.core.profiling_core import (ProfileStats,
                                                          ProfilingCore)
 
 __version__ = VERSION
-
 
 
 

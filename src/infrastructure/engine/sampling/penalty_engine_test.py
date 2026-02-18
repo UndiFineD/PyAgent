@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.sampling.penalty_engine import PenaltyType, PenaltySchedule, PenaltyConfig, PenaltyState, PenaltyEngine, BatchPenaltyEngine, apply_repetition_penalty, apply_frequency_penalty, apply_presence_penalty
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.sampling.penalty_engine import PenaltyType, PenaltySchedule, PenaltyConfig, PenaltyState, PenaltyEngine, BatchPenaltyEngine, apply_repetition_penalty, apply_frequency_penalty, apply_presence_penalty
+except ImportError:
+    from infrastructure.engine.sampling.penalty_engine import PenaltyType, PenaltySchedule, PenaltyConfig, PenaltyState, PenaltyEngine, BatchPenaltyEngine, apply_repetition_penalty, apply_frequency_penalty, apply_presence_penalty
+
 
 
 def test_penaltytype_basic():

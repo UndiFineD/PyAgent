@@ -6,11 +6,11 @@ from pathlib import Path
 
 
 
-
 class FixHeadersAgent:
     """"Agent for fixing and standardizing license headers in Python files."""
 
-    HEADER_TEMPLATE = """#!/usr/bin/env python3
+    HEADER_TEMPLATE = """
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

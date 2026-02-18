@@ -18,11 +18,19 @@ Speculation module for accelerated LLM inference.
 
 Provides speculative decoding implementations for faster token generation.
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
-from .speculative_engine import (DrafterBase, DraftProposal, EagleProposer,  # noqa: F401
+try:
+    from .speculative_engine import (DrafterBase, DraftProposal, EagleProposer,  # noqa: F401
+except ImportError:
+    from .speculative_engine import (DrafterBase, DraftProposal, EagleProposer, # noqa: F401
+
                                  HybridDrafter, NgramProposer,
                                  SpecDecodingMetrics, SpecMethod,
                                  SpeculativeConfig, SpeculativeEngine,

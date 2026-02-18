@@ -48,7 +48,8 @@ class CertificateInfo:
 
 @dataclass
 class AssetFinding:
-    """Discovered cloud asset"""ip_address: str
+    """
+discovered cloud asset"""ip_address: str
     domain: str
     certificate_info: CertificateInfo
     matched_keywords: List[str]
@@ -64,7 +65,6 @@ class DiscoveryResult:
     assets_discovered: List[AssetFinding]
     scan_duration: float
     errors: List[str]
-
 
 
 
@@ -231,7 +231,8 @@ class CloudAssetDiscoveryCore:
                 self.logger.debug(f"Error scanning {ip}:{port}: {e}")"                return None
 
     async def _get_certificate_info(self, ip: str, port: int) -> Optional[CertificateInfo]:
-        """Retrieve SSL certificate information from IP:port"""try:
+        """Retrieve SSL certificate information from IP:port"""
+try:
             # Create SSL context
             context = ssl.create_default_context()
             context.check_hostname = False
@@ -322,7 +323,8 @@ class CloudAssetDiscoveryCore:
             return "medium""        else:
             return "low""
     async def _store_certificate(self, cert_info: CertificateInfo):
-        """Store certificate information in database"""try:
+        """Store certificate information in database"""
+try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
 
@@ -358,7 +360,8 @@ class CloudAssetDiscoveryCore:
 
         Returns:
             List of matching certificates
-        """try:
+        """
+try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
 

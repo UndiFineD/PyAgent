@@ -15,8 +15,16 @@
 # Licensed under the Apache License, Version 2.0
 
 """Tests for the docstring auditor utilities.
-from pathlib import Path
-from src.maintenance.docstring_auditor import parse_prompt_file, generate_next_batch
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from .maintenance.docstring_auditor import parse_prompt_file, generate_next_batch
+except ImportError:
+    from src.maintenance.docstring_auditor import parse_prompt_file, generate_next_batch
+
 
 
 def test_parse_prompt_file_non_empty():

@@ -15,11 +15,22 @@
 
 Base.py module.
 
-from abc import ABC, abstractmethod
-from typing import Any, Optional, Tuple
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any, Optional, Tuple
+except ImportError:
+    from typing import Any, Optional, Tuple
 
 
-from .config import RoPEConfig
+
+try:
+    from .config import RoPEConfig
+except ImportError:
+    from .config import RoPEConfig
 
 
 

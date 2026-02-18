@@ -18,11 +18,27 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any, Callable, List, Optional
 
-from .base_core import BaseCore
-from .models import BatchResult, FilePriority
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any, Callable, List, Optional
+except ImportError:
+    from typing import Any, Callable, List, Optional
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .models import BatchResult, FilePriority
+except ImportError:
+    from .models import BatchResult, FilePriority
 
 
 class BatchRequest:

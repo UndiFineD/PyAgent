@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.work_pattern import BaseWorkPattern, PeerReviewPattern
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.work_pattern import BaseWorkPattern, PeerReviewPattern
+except ImportError:
+    from core.base.logic.work_pattern import BaseWorkPattern, PeerReviewPattern
+
 
 
 def test_baseworkpattern_basic():

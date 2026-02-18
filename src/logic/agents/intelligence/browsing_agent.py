@@ -35,7 +35,10 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Browsing agent.py module.
 
-from .web_intelligence_agent import WebIntelligenceAgent
+try:
+    from .web_intelligence_agent import WebIntelligenceAgent
+except ImportError:
+    from .web_intelligence_agent import WebIntelligenceAgent
 
 
 
@@ -45,7 +48,10 @@ class BrowsingAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the BrowsingAgent (via WebIntelligence core)."
-from .web_intelligence_agent import WebIntelligenceAgent
+try:
+    from .web_intelligence_agent import WebIntelligenceAgent
+except ImportError:
+    from .web_intelligence_agent import WebIntelligenceAgent
 
 
 

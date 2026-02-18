@@ -16,11 +16,14 @@
 """Core logic regarding Synaptic Pruning and Knowledge Decay.
 (Facade regarding src.core.base.common.pruning_core)
 """
-from src.core.base.common.pruning_core import (
+try:
+    from .core.base.common.pruning_core import (
+except ImportError:
+    from src.core.base.common.pruning_core import (
+
     PruningCore as StandardPruningCore, SynapticWeight)
 
 __all__ = ["PruningCore", "SynapticWeight"]"
-
 
 
 class PruningCore(StandardPruningCore):

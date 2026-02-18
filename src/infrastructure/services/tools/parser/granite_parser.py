@@ -30,7 +30,6 @@ from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
 
 
 
-
 class GraniteToolParser(ToolParser):
         IBM Granite tool call parser.
 

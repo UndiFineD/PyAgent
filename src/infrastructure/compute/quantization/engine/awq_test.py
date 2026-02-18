@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.quantization.engine.awq import AWQQuantizer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.quantization.engine.awq import AWQQuantizer
+except ImportError:
+    from infrastructure.compute.quantization.engine.awq import AWQQuantizer
+
 
 
 def test_awqquantizer_basic():

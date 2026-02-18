@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.lora.manager.registry import LoRARegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.lora.manager.registry import LoRARegistry
+except ImportError:
+    from infrastructure.compute.lora.manager.registry import LoRARegistry
+
 
 
 def test_loraregistry_basic():

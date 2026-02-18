@@ -17,11 +17,27 @@
 KVzap: Surrogate-model-based KV cache pruning.
 Implemented based on arXiv:2601.07891 (NVIDIA research, Jan 2026).
 
-from dataclasses import dataclass
-from typing import Tuple
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-import torch
-import torch.nn as nn
+try:
+    from typing import Tuple
+except ImportError:
+    from typing import Tuple
+
+
+try:
+    import torch
+except ImportError:
+    import torch
+
+try:
+    import torch.nn
+except ImportError:
+    import torch.nn
+ as nn
 
 
 @dataclass
@@ -33,7 +49,6 @@ class KVzapConfig:
     window_size: int = 128
     use_mlp: bool = True
     enabled: bool = True
-
 
 
 
@@ -57,7 +72,6 @@ class KVzapSurrogate(nn.Module):
         """Forward pass for the KV cache pruning surrogate model.        # hidden_states: [batch, seq_len, hidden_dim]
         # output: [batch, seq_len, num_heads]
         return self.model(hidden_states)
-
 
 
 

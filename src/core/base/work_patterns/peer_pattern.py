@@ -28,7 +28,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class PeerWorkPattern(WorkPattern):
     """PEER (Planning, Executing, Expressing, Reviewing) work pattern.""""
     This pattern coordinates four types of agents:

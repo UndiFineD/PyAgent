@@ -24,17 +24,33 @@ This module provides grammar-based token constraints for:
 - Choice constraints
 - Function call validation
 
-from src.infrastructure.engine.structured.grammar_engine import (
+try:
+    from .infrastructure.engine.structured.grammar_engine import (
+except ImportError:
+    from src.infrastructure.engine.structured.grammar_engine import (
+
     ChoiceGrammar, EBNFGrammar, FSMState, GrammarEngine, JsonSchemaGrammar,
     RegexGrammar, TokenMask)
-from src.infrastructure.engine.structured.logit_processor import (
+try:
+    from .infrastructure.engine.structured.logit_processor import (
+except ImportError:
+    from src.infrastructure.engine.structured.logit_processor import (
+
     BitmaskLogitProcessor, CompositeLogitProcessor, ConstrainedLogitProcessor,
     LogitBias, LogitProcessor)
-from src.infrastructure.engine.structured.structured_output_manager import (
+try:
+    from .infrastructure.engine.structured.structured_output_manager import (
+except ImportError:
+    from src.infrastructure.engine.structured.structured_output_manager import (
+
     CompilationResult, GrammarSpec, GrammarType, StructuredOutputBackend,
     StructuredOutputGrammar, StructuredOutputManager)
 # Phase 41: Enhanced structured output parameters
-from src.infrastructure.engine.structured.structured_output_params import (
+try:
+    from .infrastructure.engine.structured.structured_output_params import (
+except ImportError:
+    from src.infrastructure.engine.structured.structured_output_params import (
+
     ChoiceConstraint, ConstraintBuilder, ConstraintType, GrammarConstraint,
     GuidedDecodingBackend, JsonSchemaConstraint, OutputConstraint,
     RegexConstraint, SchemaFormat, StructuredOutputConfig,

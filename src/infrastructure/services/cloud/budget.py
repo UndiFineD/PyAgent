@@ -55,7 +55,6 @@ class BudgetAlert:
 
 
 
-
 class BudgetManager:
         Thread-safe budget manager for cloud AI spending.
 

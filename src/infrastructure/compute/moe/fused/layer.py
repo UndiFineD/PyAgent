@@ -19,15 +19,43 @@ Layer.py module.
 
 from __future__ import annotations
 
-import threading
-from typing import Any
 
-import numpy as np
+try:
+    import threading
+except ImportError:
+    import threading
 
-from .config import FusedMoEConfig, FusedMoEParallelConfig, FusedMoEQuantConfig
-from .dispatcher import SparseDispatcher
-from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
-from .utils import determine_expert_map
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import FusedMoEConfig, FusedMoEParallelConfig, FusedMoEQuantConfig
+except ImportError:
+    from .config import FusedMoEConfig, FusedMoEParallelConfig, FusedMoEQuantConfig
+
+try:
+    from .dispatcher import SparseDispatcher
+except ImportError:
+    from .dispatcher import SparseDispatcher
+
+try:
+    from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
+except ImportError:
+    from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
+
+try:
+    from .utils import determine_expert_map
+except ImportError:
+    from .utils import determine_expert_map
 
 
 

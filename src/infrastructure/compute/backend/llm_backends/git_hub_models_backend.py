@@ -31,7 +31,6 @@ __version__ = VERSION
 
 
 
-
 class GitHubModelsBackend(LLMBackend):
     """GitHub Models LLM Backend.
     def chat(

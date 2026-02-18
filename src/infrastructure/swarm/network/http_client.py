@@ -24,13 +24,25 @@ Decomposed into mixins for sync, async, and retry logic.
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.infrastructure.swarm.network.http.connection import HTTPConnection
-from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .infrastructure.swarm.network.http.connection import HTTPConnection
+except ImportError:
+    from src.infrastructure.swarm.network.http.connection import HTTPConnection
+
+try:
+    from .infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
+except ImportError:
+    from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
+
 
 # Convenience aliases
-
 
 
 
@@ -39,11 +51,9 @@ class HTTPClient(HTTPConnection):
     
 
 
-
 class AsyncHTTPClient(HTTPConnection):
         Alias for HTTPConnection with async-focused interface.
     
-
 
 
 class RetryableHTTPClient(HTTPConnection, RetryHTTPMixin):

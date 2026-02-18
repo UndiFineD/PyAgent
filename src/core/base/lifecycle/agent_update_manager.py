@@ -14,6 +14,8 @@
 
 
 """Specialized manager for handling agent improvement iterations."""
+
+
 from __future__ import annotations
 
 import logging
@@ -26,7 +28,6 @@ from src.core.base.lifecycle.version import (EVOLUTION_PHASE, VERSION,
                                              is_gate_open)
 
 __version__ = VERSION
-
 
 
 

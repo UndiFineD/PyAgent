@@ -14,7 +14,6 @@
 
 
 
-
 class QAIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -44,4 +43,5 @@ Evaluate the end state of the application against the success criteria.
     <step id="id1" label="1">Go to {url}</step>"    <step id="id2" label="2">Interact with {element}</step>"  </steps>
   <evaluation>Success criteria description</evaluation>
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""# "</test>"  # [BATCHFIX] closed string"
+""" [BATCHFIX] Commented unterminated string""""
+# "</test>"  # [BATCHFIX] closed string"

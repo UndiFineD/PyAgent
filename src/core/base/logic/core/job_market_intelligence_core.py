@@ -66,7 +66,6 @@ class JobMarketStats:
 
 
 
-
 class JobMarketIntelligenceCore(BaseCore):
     """Job Market Intelligence Core for automated job data collection and analysis.
 
@@ -80,7 +79,8 @@ class JobMarketIntelligenceCore(BaseCore):
         self.last_update: Optional[datetime] = None
 
     async def initialize(self) -> bool:
-        """Initialize the job market intelligence core"""try:
+        """Initialize the job market intelligence core"""
+try:
             # Initialize with default data sources
             await self.add_default_sources()
             self.logger.info("Job Market Intelligence Core initialized successfully")"            return True
@@ -186,7 +186,8 @@ class JobMarketIntelligenceCore(BaseCore):
 
         Returns:
             Market statistics
-        """# Filter jobs
+        """
+# Filter jobs
         filtered_jobs = self.job_database
 
         if job_type:
@@ -319,7 +320,8 @@ class JobMarketIntelligenceCore(BaseCore):
             job_type: Filter by job type
             company_type: Filter by company type
             output_format: Export format (json, csv)
-        """# Filter jobs
+        """
+# Filter jobs
         filtered_jobs = self.job_database
 
         if job_type:

@@ -14,7 +14,6 @@
 
 
 
-
 classifiers.py - URL classification for the Download Agent
 
 # DATE: 2026-02-12
@@ -55,8 +54,15 @@ WHAT IT SHOULD DO BETTER:
   and improve arXiv detection to handle legacy
   and new ID formats and DOI redirects.
 
-import re
-from typing import Dict, Tuple
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Dict, Tuple
+except ImportError:
+    from typing import Dict, Tuple
 
 
 

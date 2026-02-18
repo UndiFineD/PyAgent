@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.security.firewall.infection_guard import InfectionGuard
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.security.firewall.infection_guard import InfectionGuard
+except ImportError:
+    from infrastructure.security.firewall.infection_guard import InfectionGuard
+
 
 
 def test_infectionguard_basic():

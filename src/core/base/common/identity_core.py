@@ -40,7 +40,6 @@ class AgentIdentity:
 
 
 
-
 class IdentityCore(BaseCore):
     """Pure logic for decentralized agent identity and payload signing.
     Handles cryptographic verification and agent-ID generation.

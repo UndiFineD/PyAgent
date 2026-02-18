@@ -13,9 +13,21 @@
 # limitations under the License.
 
 
-import pytest
-import numpy as np
-from src.infrastructure.engine.adapters.lora.weights import LoRALayerWeights
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+try:
+    from .infrastructure.engine.adapters.lora.weights import LoRALayerWeights
+except ImportError:
+    from src.infrastructure.engine.adapters.lora.weights import LoRALayerWeights
+
 
 
 @pytest.fixture

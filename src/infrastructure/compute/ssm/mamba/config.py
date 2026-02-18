@@ -19,11 +19,28 @@ Mamba Configuration and State Classes.
 
 from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-from typing import NamedTuple
 
-import numpy as np
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import NamedTuple
+except ImportError:
+    from typing import NamedTuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 @dataclass(frozen=True)
@@ -89,7 +106,6 @@ class MambaState:
             conv_state=self.conv_state.copy(),
             ssm_state=self.ssm_state.copy(),
         )
-
 
 
 

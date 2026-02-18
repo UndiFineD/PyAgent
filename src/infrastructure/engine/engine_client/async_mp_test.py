@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.engine_client.async_mp import AsyncMPClient
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.engine_client.async_mp import AsyncMPClient
+except ImportError:
+    from infrastructure.engine.engine_client.async_mp import AsyncMPClient
+
 
 
 def test_asyncmpclient_basic():

@@ -33,9 +33,21 @@ OrchestratorDelegates: Delegation methods for OrchestratorAgent.
 
 from __future__ import annotations
 
-import logging
-from pathlib import Path
-from typing import Any
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 
@@ -78,9 +90,21 @@ class OrchestratorDelegates:
 """"Delegates to ParallelProcessor.        return getattr(self, "parallel_processor").process_files_threaded(files, getattr(self, "process_file"))"
 from __future__ import annotations
 
-import logging
-from pathlib import Path
-from typing import Any
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 

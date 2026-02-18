@@ -39,17 +39,41 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-import re
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import re
+except ImportError:
+    import re
 
-from .analysis_tool_type import AnalysisToolType
-from .improvement_category import ImprovementCategory
-from .tool_suggestion import ToolSuggestion
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .analysis_tool_type import AnalysisToolType
+except ImportError:
+    from .analysis_tool_type import AnalysisToolType
+
+try:
+    from .improvement_category import ImprovementCategory
+except ImportError:
+    from .improvement_category import ImprovementCategory
+
+try:
+    from .tool_suggestion import ToolSuggestion
+except ImportError:
+    from .tool_suggestion import ToolSuggestion
+
 
 __version__ = VERSION
-
 
 
 
@@ -111,17 +135,41 @@ class ToolIntegration:
 
 from __future__ import annotations
 
-import re
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import re
+except ImportError:
+    import re
 
-from .analysis_tool_type import AnalysisToolType
-from .improvement_category import ImprovementCategory
-from .tool_suggestion import ToolSuggestion
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .analysis_tool_type import AnalysisToolType
+except ImportError:
+    from .analysis_tool_type import AnalysisToolType
+
+try:
+    from .improvement_category import ImprovementCategory
+except ImportError:
+    from .improvement_category import ImprovementCategory
+
+try:
+    from .tool_suggestion import ToolSuggestion
+except ImportError:
+    from .tool_suggestion import ToolSuggestion
+
 
 __version__ = VERSION
-
 
 
 

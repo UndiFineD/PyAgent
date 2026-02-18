@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.adapters.lora.manager import LoRAManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.adapters.lora.manager import LoRAManager
+except ImportError:
+    from infrastructure.engine.adapters.lora.manager import LoRAManager
+
 
 
 def test_loramanager_basic():

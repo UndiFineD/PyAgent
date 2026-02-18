@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.metrics.lo_ra_stats_manager import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.metrics.lo_ra_stats_manager import *
+except ImportError:
+    from infrastructure.services.metrics.lo_ra_stats_manager import *
+

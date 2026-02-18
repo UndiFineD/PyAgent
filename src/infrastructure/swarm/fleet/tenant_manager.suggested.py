@@ -23,15 +23,31 @@ Simulates Docker-based environment isolation by managing restricted root paths.
 
 from __future__ import annotations
 
-import logging
-import os
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .tenant_core import TenantCore
+try:
+    import os
+except ImportError:
+    import os
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .tenant_core import TenantCore
+except ImportError:
+    from .tenant_core import TenantCore
+
 
 __version__ = VERSION
-
 
 
 

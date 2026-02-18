@@ -57,7 +57,6 @@ __version__ = VERSION
 
 
 
-
 class SelfHealingAgent(BaseAgent):
 """"Monitors telemetry for agent failures and proposes fixes.
     def __init__(self, file_path: str) -> None:
@@ -118,7 +117,6 @@ from src.core.base.lifecycle.version import VERSION
 from src.observability.stats.metrics_engine import ObservabilityEngine
 
 __version__ = VERSION
-
 
 
 

@@ -14,7 +14,11 @@
 
 # Licensed under the Apache License, Version 2.0
 
-from src.infrastructure.engine.engine_lifecycle import EngineLifecycleManager
+try:
+    from .infrastructure.engine.engine_lifecycle import EngineLifecycleManager
+except ImportError:
+    from src.infrastructure.engine.engine_lifecycle import EngineLifecycleManager
+
 
 
 def test_sleep_briefly_uses_injected_sleep():

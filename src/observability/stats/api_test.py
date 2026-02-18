@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.stats.api import APIEndpoint, StatsAPIServer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.stats.api import APIEndpoint, StatsAPIServer
+except ImportError:
+    from observability.stats.api import APIEndpoint, StatsAPIServer
+
 
 
 def test_apiendpoint_basic():

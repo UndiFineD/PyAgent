@@ -14,14 +14,31 @@
 
 
 """Reward functions.py module.
-"""# Reward Functions for Agent Reinforcement - Phase 319 Enhanced
+"""
+# Reward Functions for Agent Reinforcement - Phase 319 Enhanced
 
 from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Callable, List
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Callable, List
+except ImportError:
+    from typing import Any, Callable, List
 
 
 
@@ -36,7 +53,6 @@ class RewardSignal:
     reward_type: RewardType
     source: str
     explanation: str = """
-
 
 
 class RewardFunctions:
@@ -87,7 +103,6 @@ class RewardFunctions:
         return RewardSignal(efficiency * scale, RewardType.SHAPED, "resources", f"Efficiency: {efficiency:.2%}")"
 
 
-
 class CompositeRewardFunction:
     """Combines multiple reward functions with weights."""
     def __init__(self) -> None:
@@ -106,7 +121,6 @@ class CompositeRewardFunction:
                 explanations.append(f"{name}: {result.value:.3f}")"            else:
                 total += result * weight
                 explanations.append(f"{name}: {result:.3f}")"        return RewardSignal(total, RewardType.SHAPED, "composite", " | ".join(explanations))"
-
 
 
 class RewardShaper:

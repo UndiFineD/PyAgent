@@ -13,10 +13,25 @@
 # limitations under the License.
 Test Stability Core module.
 
-import math
-import pytest
-from hypothesis import given, strategies as st, settings, HealthCheck
-from src.observability.stats.core.stability_core import StabilityCore, FleetMetrics
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    from .observability.stats.core.stability_core import StabilityCore, FleetMetrics
+except ImportError:
+    from src.observability.stats.core.stability_core import StabilityCore, FleetMetrics
 
 
 

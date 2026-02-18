@@ -43,26 +43,21 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class Role(str, Enum):
     """Message role enumeration."""USER = "user""    AGENT = "agent""
-
 
 
 class TaskState(str, Enum):
     """Task execution states."""PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""
 
 
-
 class SecuritySchemeType(str, Enum):
     """Supported security scheme types."""OAUTH2 = "oauth2""    HTTP = "http""    API_KEY = "apiKey""    OPENID_CONNECT = "openIdConnect""
-
 
 
 class MessagePart(BaseModel):
     """Base class for message parts."""kind: str = Field(..., description="Type of content part")"
     model_config = ConfigDict(validate_by_name=True)
-
 
 
 
@@ -72,18 +67,15 @@ class TextPart(BaseModel):
 
 
 
-
 class FilePart(BaseModel):
     """File content part."""kind: str = Field(default="file", description="Type of content part")"    filename: str = Field(..., description="File name")"    mime_type: str = Field(..., description="MIME type")"    data: bytes = Field(..., description="File data")"
     model_config = ConfigDict(validate_by_name=True)
 
 
 
-
 class DataPart(BaseModel):
     """Structured data part."""kind: str = Field(default="data", description="Type of content part")"    mime_type: str = Field(..., description="MIME type")"    data: Any = Field(..., description="Structured data")"
     model_config = ConfigDict(validate_by_name=True)
-
 
 
 
@@ -100,15 +92,12 @@ class Message(BaseModel):
 
 
 
-
 class AgentCapabilities(BaseModel):
     """Agent capabilities declaration."""streaming: bool = Field(default=False, description="Supports streaming responses")"    push_notifications: Optional[bool] = Field(default=None, description="Supports push notifications")"    state_transition_history: Optional[bool] = Field(default=None, description="Tracks state transitions")"    extensions: List[Dict[str, Any]] = Field(default_factory=list, description="Custom extensions")"
 
 
-
 class AgentAuthentication(BaseModel):
     """Agent authentication configuration."""schemes: List[str] = Field(default_factory=list, description="Supported authentication schemes")"    credentials: Optional[str] = Field(default=None, description="Authentication credentials")"
-
 
 
 class AgentCard(BaseModel):
@@ -119,10 +108,8 @@ class AgentCard(BaseModel):
     documentation_url: Optional[str] = Field(default=None, description="Documentation URL")"    icon_url: Optional[str] = Field(default=None, description="Icon URL")"
 
 
-
 class TaskStatus(BaseModel):
     """Task execution status."""state: TaskState = Field(..., description="Current task state")"    message: Optional[Message] = Field(default=None, description="Status message")"    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Status timestamp")"    progress: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Progress percentage")"    error: Optional[str] = Field(default=None, description="Error message if failed")"
-
 
 
 class Task(BaseModel):
@@ -130,30 +117,24 @@ class Task(BaseModel):
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="Task metadata")"
 
 
-
 class JsonRpcRequest(BaseModel):
     """JSON-RPC request structure."""jsonrpc: str = Field(default="2.0", description="JSON-RPC version")"    id: Union[str, int] = Field(..., description="Request ID")"    method: str = Field(..., description="Method name")"    params: Dict[str, Any] = Field(default_factory=dict, description="Method parameters")"
-
 
 
 class JsonRpcResponse(BaseModel):
     """JSON-RPC response structure."""jsonrpc: str = Field(default="2.0", description="JSON-RPC version")"    id: Union[str, int] = Field(..., description="Request ID")"    result: Any = Field(..., description="Response result")"
 
 
-
 class JsonRpcError(BaseModel):
     """JSON-RPC error structure."""jsonrpc: str = Field(default="2.0", description="JSON-RPC version")"    id: Union[str, int] = Field(..., description="Request ID")"    error: Dict[str, Any] = Field(..., description="Error details")"
-
 
 
 class A2AMessage(BaseModel):
     """A2A protocol message envelope."""request: Optional[JsonRpcRequest] = Field(default=None, description="RPC request")"    response: Optional[JsonRpcResponse] = Field(default=None, description="RPC response")"    error: Optional[JsonRpcError] = Field(default=None, description="RPC error")"
 
 
-
 class AgentEndpoint(BaseModel):
     """Agent endpoint configuration."""url: str = Field(..., description="Agent service URL")"    agent_card: Optional[AgentCard] = Field(default=None, description="Cached agent card")"    authentication: Optional[Dict[str, Any]] = Field(default=None, description="Authentication config")"
-
 
 
 class InterAgentCommunicationCore(BaseCore):
@@ -167,7 +148,8 @@ class InterAgentCommunicationCore(BaseCore):
     - Security scheme handling
     """
     def __init__(self):
-        """Initialize the inter-agent communication core."""# Agent registry
+        """Initialize the inter-agent communication core."""
+# Agent registry
         self.registered_agents: Dict[str, AgentEndpoint] = {}
 
         # Active tasks
@@ -196,7 +178,8 @@ class InterAgentCommunicationCore(BaseCore):
         Args:
             agent_id: Unique agent identifier
             endpoint: Agent endpoint configuration
-        """# Fetch and cache agent card
+        """
+# Fetch and cache agent card
         try:
             card = await self._fetch_agent_card(endpoint.url)
             endpoint.agent_card = card

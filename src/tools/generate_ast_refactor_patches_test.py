@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .generate_ast_refactor_patches import SubprocessTransformer, load_bandit_results, top_files_from_bandit, create_patch_for_file, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .generate_ast_refactor_patches import SubprocessTransformer, load_bandit_results, top_files_from_bandit, create_patch_for_file, main
+except ImportError:
+    from .generate_ast_refactor_patches import SubprocessTransformer, load_bandit_results, top_files_from_bandit, create_patch_for_file, main
+
 
 
 def test_subprocesstransformer_basic():

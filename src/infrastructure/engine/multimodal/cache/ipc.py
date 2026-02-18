@@ -24,7 +24,6 @@ from .memory import MemoryMultiModalCache
 
 
 
-
 class IPCMultiModalCache(MultiModalCache):
         IPC-enabled cache for cross-process sharing.
     

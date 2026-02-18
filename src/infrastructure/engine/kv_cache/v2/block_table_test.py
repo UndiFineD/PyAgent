@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.kv_cache.v2.block_table import BlockTableV2
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.kv_cache.v2.block_table import BlockTableV2
+except ImportError:
+    from infrastructure.engine.kv_cache.v2.block_table import BlockTableV2
+
 
 
 def test_blocktablev2_basic():

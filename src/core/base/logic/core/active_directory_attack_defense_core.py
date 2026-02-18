@@ -24,15 +24,12 @@ from enum import Enum
 
 
 
-
 class KillChainPhase(Enum):
     """Active Directory Kill Chain phases"""RECONNAISSANCE = "reconnaissance""    WEAPONIZATION = "weaponization""    DELIVERY = "delivery""    EXPLOITATION = "exploitation""    INSTALLATION = "installation""    COMMAND_AND_CONTROL = "command_and_control""    PRIVILEGE_ESCALATION = "privilege_escalation""    PERSISTENCE = "persistence""    CREDENTIAL_DUMPING = "credential_dumping""    LATERAL_MOVEMENT = "lateral_movement""    ACTIONS_ON_OBJECTIVES = "actions_on_objectives""
 
 
-
 class AttackTechnique(Enum):
     """Common AD attack techniques"""KERBEROASTING = "kerberoasting""    ASREP_ROASTING = "asrep_roasting""    PASS_THE_HASH = "pass_the_hash""    PASS_THE_TICKET = "pass_the_ticket""    GOLDEN_TICKET = "golden_ticket""    SILVER_TICKET = "silver_ticket""    DCSYNC = "dcsync""    DC_SHADOW = "dc_shadow""    UNCONSTRAINED_DELEGATION = "unconstrained_delegation""    CONSTRAINED_DELEGATION = "constrained_delegation""    RESOURCE_BASED_CONSTRAINED_DELEGATION = "resource_based_constrained_delegation""    GPO_ABUSE = "gpo_abuse""    ACL_ABUSE = "acl_abuse""    TRUST_EXPLOITATION = "trust_exploitation""    LAPS_ABUSE = "laps_abuse""    SYSVOL_CREDENTIALS = "sysvol_credentials""    DNSADMIN_ESCALATION = "dnsadmin_escalation""
-
 
 
 class DefenseControl(Enum):
@@ -85,7 +82,6 @@ class SecurityPosture:
 
 
 
-
 class ActiveDirectoryAttackDefenseCore:
     """Active Directory Attack & Defense Core for comprehensive AD security analysis.
 
@@ -100,7 +96,8 @@ class ActiveDirectoryAttackDefenseCore:
         self.security_postures: Dict[str, SecurityPosture] = {}
 
     async def initialize(self) -> bool:
-        """Initialize the AD attack & defense core"""try:
+        """Initialize the AD attack & defense core"""
+try:
             await self.load_attack_vectors()
             await self.initialize_defense_assessments()
             self.logger.info("Active Directory Attack & Defense Core initialized successfully")"            return True
@@ -347,7 +344,8 @@ class ActiveDirectoryAttackDefenseCore:
         attack_vectors: List[AttackVector],
         defense_assessments: Dict[DefenseControl, DefenseAssessment]
     ) -> float:
-        """Calculate overall security posture score"""# Base score
+        """Calculate overall security posture score"""
+# Base score
         score = 100.0
 
         # Deduct points for applicable attack vectors
@@ -423,7 +421,8 @@ class ActiveDirectoryAttackDefenseCore:
 
         Returns:
             Kill chain analysis of the simulated attack
-        """# Mock attack chain simulation
+        """
+# Mock attack chain simulation
         # In real implementation, this would use graph algorithms
 
         chain = KillChainAnalysis(

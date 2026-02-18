@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.sampling.advanced_sampling_params import OutputKind, StopCondition, TemperatureSchedule, SamplingParams, AdvancedSamplingParams, LogitBiasBuilder, BadWordsProcessor, TokenWhitelistProcessor, MirostatSampler, SamplingEngine, create_sampling_engine, create_sampling_params, create_advanced_sampling_params
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.sampling.advanced_sampling_params import OutputKind, StopCondition, TemperatureSchedule, SamplingParams, AdvancedSamplingParams, LogitBiasBuilder, BadWordsProcessor, TokenWhitelistProcessor, MirostatSampler, SamplingEngine, create_sampling_engine, create_sampling_params, create_advanced_sampling_params
+except ImportError:
+    from infrastructure.engine.sampling.advanced_sampling_params import OutputKind, StopCondition, TemperatureSchedule, SamplingParams, AdvancedSamplingParams, LogitBiasBuilder, BadWordsProcessor, TokenWhitelistProcessor, MirostatSampler, SamplingEngine, create_sampling_engine, create_sampling_params, create_advanced_sampling_params
+
 
 
 def test_outputkind_basic():

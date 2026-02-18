@@ -15,14 +15,24 @@
 
 """
 Auto-extracted class from agent_backend.py""""
+
+
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

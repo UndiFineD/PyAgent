@@ -25,7 +25,6 @@ from src.core.base.common.types.code_language import CodeLanguage
 
 
 
-
 class CoderDocMixin:
 """"Mixin for generating documentation from code.
     def generate_documentation(self, content: str) -> str:

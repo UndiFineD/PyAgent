@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.jsontree.path import json_get_path, json_set_path
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.jsontree.path import json_get_path, json_set_path
+except ImportError:
+    from core.base.common.utils.jsontree.path import json_get_path, json_set_path
+
 
 
 def test_json_get_path_basic():

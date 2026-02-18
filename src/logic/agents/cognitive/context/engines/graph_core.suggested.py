@@ -34,7 +34,6 @@ __version__ = VERSION
 
 
 
-
 class CodeGraphVisitor(ast.NodeVisitor):
 """"AST visitor to extract imports, classes, and function calls.
     def __init__(self, file_path: str) -> None:
@@ -72,7 +71,6 @@ class CodeGraphVisitor(ast.NodeVisitor):
         elif isinstance(node.func, ast.Attribute):
             self.calls.add(node.func.attr)
         self.generic_visit(node)
-
 
 
 

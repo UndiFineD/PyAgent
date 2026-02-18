@@ -16,13 +16,13 @@ from typing import Dict, Any
 
 
 
-
 class ProtocolIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
 """"Intelligence engine for decoding and analyzing binary protocols.#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def decode_protobuf(data: bytes) -> Dict[int, Any]:""""        Minimal pure-python protobuf decoder (best effort).
         Extracts field number and wire type.
 # [BATCHFIX] Commented metadata/non-Python
@@ -34,7 +34,8 @@ class ProtocolIntelligence:
                 shift = 0
                 while True:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                     b = data[index]""""                    tag |= (b & 0x7F) << shift
                     index += 1
                     if not (b & 0x80):
@@ -49,27 +50,31 @@ class ProtocolIntelligence:
                     shift = 0
                     while True:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                         b = data[index]""""                        val |= (b & 0x7F) << shift
                         index += 1
                         if not (b & 0x80):
                             break
                         shift += 7
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                     results[field_number] = val""""                elif wire_type == 2:  # Length-delimited
                     length = 0
                     shift = 0
                     while True:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                         b = data[index]""""                        length |= (b & 0x7F) << shift
                         index += 1
                         if not (b & 0x80):
                             break
                         shift += 7
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                     results[field_number] = data[index : index + length]""""                    index += length
                 else:
                     # Skip other types for now (fixme: add wire type 1, 5)
@@ -92,8 +97,11 @@ class ProtocolIntelligence:
 """         return "Unknown"  # [BATCHFIX] closed string"
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def get_tls_poisoning_info() -> Dict[str, Any]:"Details on TLS Poisoning techniques for SSRF/CSRF.# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#     "    return {"  # [BATCHFIX] closed string"            "concept": "Using TLS Session Resumption or Session IDs to smuggle data through security boundaries.","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#     "    return {"  # [BATCHFIX] closed string"            "concept": "Using TLS Session Resumption or Session IDs to smuggle data through security boundaries.","# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             "target_protocols": ["SMTP", "IMAP", "Memcached"],"            "vulnerability_type": "SSRF / Protocol Smuggling","            "mitigation": "Disable TLS Session Resumption or strictly validate SNI.","        }

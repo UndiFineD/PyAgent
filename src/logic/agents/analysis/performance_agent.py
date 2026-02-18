@@ -67,7 +67,6 @@ __version__ = VERSION
 
 
 
-
 class PerformanceAgent:
     "Identifies and suggests code optimizations."
     Analyzes code for performance bottlenecks and suggests

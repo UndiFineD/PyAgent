@@ -42,7 +42,6 @@ except ImportError:
 
 
 
-
 class MultiModalHasher:
         Content-aware hasher for multimodal data.
 

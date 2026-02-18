@@ -17,11 +17,22 @@
 LatentLink: Cross-model KV alignment for latent communication.
 Implemented based on arXiv:2601.06123 (Latent space communication for multi-agent systems).
 
-from typing import Dict, Tuple
+try:
+    from typing import Dict, Tuple
+except ImportError:
+    from typing import Dict, Tuple
 
-import torch
-import torch.nn as nn
 
+try:
+    import torch
+except ImportError:
+    import torch
+
+try:
+    import torch.nn
+except ImportError:
+    import torch.nn
+ as nn
 
 
 
@@ -35,7 +46,6 @@ class SynapticAdapter(nn.Module):
     def forward(self, source_kv: torch.Tensor) -> torch.Tensor:
         # project source KV to target latent space
         return self.projector(source_kv)
-
 
 
 
@@ -56,7 +66,6 @@ class LatentLinkManager:
             raise ValueError(f"No LatentLink registered from {source_id} to {target_id}")"
         with torch.no_grad():
             return adapter(source_kv)
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .project_status_panel.suggested import ProjectStatusPanel
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .project_status_panel.suggested import ProjectStatusPanel
+except ImportError:
+    from .project_status_panel.suggested import ProjectStatusPanel
+
 
 
 def test_projectstatuspanel_basic():

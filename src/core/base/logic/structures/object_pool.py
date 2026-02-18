@@ -18,6 +18,8 @@
 Phase 19: Beyond vLLM - Performance Patterns
 Reusable object pooling to minimize allocations.
 """
+
+
 from __future__ import annotations
 
 import threading
@@ -58,7 +60,6 @@ class PoolStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""return {
             "created": self.created,"            "reused": self.reused,"            "returned": self.returned,"            "discarded": self.discarded,"            "current_size": self.current_size,"            "peak_size": self.peak_size,"            "reuse_ratio": self.reuse_ratio,"            "total_acquisitions": self.total_acquisitions,"        }
-
 
 
 
@@ -243,7 +244,6 @@ class ObjectPool(Generic[T]):
 
 
 
-
 class TypedObjectPool(Generic[T]):
     """Object pool that works with Resettable objects.
 
@@ -279,7 +279,6 @@ class TypedObjectPool(Generic[T]):
     @property
     def stats(self) -> PoolStats:
         """Pool statistics."""return self._pool.stats
-
 
 
 
@@ -324,7 +323,6 @@ class BufferPool:
     @property
     def stats(self) -> PoolStats:
         """Pool statistics."""return self._pool.stats
-
 
 
 
@@ -409,7 +407,6 @@ class TieredBufferPool:
 
 
 
-
 class PooledContextManager(Generic[T]):
     """Wrapper that makes any pooled object a context manager.
     """
@@ -431,7 +428,8 @@ _SET_POOL: Optional[ObjectPool[set]] = None
 
 
 def get_list_pool(max_size: int = 1000) -> ObjectPool[list]:
-    """Get global list pool."""# pylint: disable=global-statement
+    """Get global list pool."""
+# pylint: disable=global-statement
     global _LIST_POOL
     if _LIST_POOL is None:
         _LIST_POOL = ObjectPool(
@@ -443,7 +441,8 @@ def get_list_pool(max_size: int = 1000) -> ObjectPool[list]:
 
 
 def get_dict_pool(max_size: int = 1000) -> ObjectPool[dict]:
-    """Get global dict pool."""# pylint: disable=global-statement
+    """Get global dict pool."""
+# pylint: disable=global-statement
     global _DICT_POOL
     if _DICT_POOL is None:
         _DICT_POOL = ObjectPool(
@@ -455,7 +454,8 @@ def get_dict_pool(max_size: int = 1000) -> ObjectPool[dict]:
 
 
 def get_set_pool(max_size: int = 1000) -> ObjectPool[set]:
-    """Get global set pool."""# pylint: disable=global-statement
+    """Get global set pool."""
+# pylint: disable=global-statement
     global _SET_POOL
     if _SET_POOL is None:
         _SET_POOL = ObjectPool(

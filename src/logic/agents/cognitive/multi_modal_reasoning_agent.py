@@ -15,9 +15,21 @@
 
 # "Agent capable of analyzing visual inputs to complement textual code analysis."# from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from .core.vision_core import VisionCore
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.vision_core import VisionCore
+except ImportError:
+    from .core.vision_core import VisionCore
+
 
 __version__ = VERSION
 

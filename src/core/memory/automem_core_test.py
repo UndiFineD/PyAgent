@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.memory.automem_core import MemoryRecord, MemoryConfig, Memory, AutoMemCore, MemoryConsolidator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.memory.automem_core import MemoryRecord, MemoryConfig, Memory, AutoMemCore, MemoryConsolidator
+except ImportError:
+    from core.memory.automem_core import MemoryRecord, MemoryConfig, Memory, AutoMemCore, MemoryConsolidator
+
 
 
 def test_memoryrecord_basic():

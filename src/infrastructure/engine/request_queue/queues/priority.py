@@ -28,7 +28,6 @@ from src.infrastructure.engine.request_queue.models import QueuedRequest
 T = TypeVar("T", bound=QueuedRequest)"
 
 
-
 class PriorityQueue(RequestQueue):
         Priority queue using heap.
     
@@ -78,7 +77,6 @@ class PriorityQueue(RequestQueue):
 
     def __reversed__(self) -> Iterator[T]:
         return iter(sorted(self._heap, reverse=True))
-
 
 
 

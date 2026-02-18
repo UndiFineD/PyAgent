@@ -14,13 +14,33 @@
 
 # "Agent specializing in consolidating episodic memories into global project context."# import logging
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.logic.agents.cognitive.long_term_memory import LongTermMemory
-from src.logic.agents.cognitive.context.engines.global_context_engine import (
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .logic.agents.cognitive.long_term_memory import LongTermMemory
+except ImportError:
+    from src.logic.agents.cognitive.long_term_memory import LongTermMemory
+
+try:
+    from .logic.agents.cognitive.context.engines.global_context_engine import (
+except ImportError:
+    from src.logic.agents.cognitive.context.engines.global_context_engine import (
+
     GlobalContextEngine,
 )
-from src.core.base.common.base_utilities import create_main_function, as_tool
+try:
+    from .core.base.common.base_utilities import create_main_function, as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function, as_tool
+
 
 __version__ = VERSION
 

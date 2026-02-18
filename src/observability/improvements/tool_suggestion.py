@@ -34,11 +34,24 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from .analysis_tool_type import AnalysisToolType
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .analysis_tool_type import AnalysisToolType
+except ImportError:
+    from .analysis_tool_type import AnalysisToolType
+
 
 __version__ = VERSION
 
@@ -60,13 +73,28 @@ class ToolSuggestion:
     line_number: int
     message: str
     suggested_fix:""" str = """
+
+
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from .analysis_tool_type import AnalysisToolType
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .analysis_tool_type import AnalysisToolType
+except ImportError:
+    from .analysis_tool_type import AnalysisToolType
+
 
 __version__ = VERSION
 

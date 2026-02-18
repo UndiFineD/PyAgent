@@ -16,10 +16,21 @@
 """Test environment mixin functionality.
 """
 
-import pytest
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.common.models.core_enums import EnvironmentIsolation
-from src.core.base.mixins.environment_mixin import EnvironmentMixin
+
+try:
+    from .core.base.common.models.core_enums import EnvironmentIsolation
+except ImportError:
+    from src.core.base.common.models.core_enums import EnvironmentIsolation
+
+try:
+    from .core.base.mixins.environment_mixin import EnvironmentMixin
+except ImportError:
+    from src.core.base.mixins.environment_mixin import EnvironmentMixin
 
 
 
@@ -29,7 +40,6 @@ class MockAgent(EnvironmentMixin):
     def __init__(self):
         super().__init__()
         self.name = "test-agent""
-
 
 
 class TestEnvironmentMixin:
@@ -54,7 +64,8 @@ class TestEnvironmentMixin:
 
     @pytest.mark.asyncio
     async def test_use_environment_context_manager(self, agent):
-        """Test using environment with context manager."""# Create config first
+        """Test using environment with context manager."""
+# Create config first
         await agent.create_environment_config(
             name="test-env","            version="1.0.0","            isolation=EnvironmentIsolation.NONE
         )
@@ -68,7 +79,8 @@ class TestEnvironmentMixin:
 
     @pytest.mark.asyncio
     async def test_list_available_environments(self, agent):
-        """Test listing available environments."""# Get initial count
+        """Test listing available environments."""
+# Get initial count
         envs = await agent.list_available_environments()
         initial_count = len(envs)
 

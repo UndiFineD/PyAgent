@@ -17,10 +17,21 @@
 """
 Sandbox runtime.py module.
 
-import logging
-from typing import Any
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.infrastructure.services.sandbox.core.sandbox_core import SandboxCore
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .infrastructure.services.sandbox.core.sandbox_core import SandboxCore
+except ImportError:
+    from src.infrastructure.services.sandbox.core.sandbox_core import SandboxCore
 
 
 

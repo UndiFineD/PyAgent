@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.plugins.mock_plugin.mock_agent import MockAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.plugins.mock_plugin.mock_agent import MockAgent
+except ImportError:
+    from infrastructure.services.plugins.mock_plugin.mock_agent import MockAgent
+
 
 
 def test_mockagent_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.loading.expert_load_balancer import ExpertType, EplbMetrics, ExpertMapping, AbstractEplbPolicy, DefaultEplbPolicy, LocalityAwarePolicy, ExpertLoadBalancer, AsyncExpertRebalancer, compute_balanced_packing_rust, compute_expert_replication_rust, compute_load_imbalance_rust
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.loading.expert_load_balancer import ExpertType, EplbMetrics, ExpertMapping, AbstractEplbPolicy, DefaultEplbPolicy, LocalityAwarePolicy, ExpertLoadBalancer, AsyncExpertRebalancer, compute_balanced_packing_rust, compute_expert_replication_rust, compute_load_imbalance_rust
+except ImportError:
+    from infrastructure.engine.loading.expert_load_balancer import ExpertType, EplbMetrics, ExpertMapping, AbstractEplbPolicy, DefaultEplbPolicy, LocalityAwarePolicy, ExpertLoadBalancer, AsyncExpertRebalancer, compute_balanced_packing_rust, compute_expert_replication_rust, compute_load_imbalance_rust
+
 
 
 def test_experttype_basic():

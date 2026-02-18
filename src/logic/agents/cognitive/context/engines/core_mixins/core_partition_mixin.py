@@ -27,7 +27,6 @@ except ImportError:
 
 
 
-
 class CorePartitionMixin:
 """"Methods for partitioning and bloat detection.
     def partition_memory(

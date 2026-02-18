@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.analysis.generate_agent_catalog import generate_catalog
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.analysis.generate_agent_catalog import generate_catalog
+except ImportError:
+    from infrastructure.services.dev.scripts.analysis.generate_agent_catalog import generate_catalog
+
 
 
 def test_generate_catalog_basic():

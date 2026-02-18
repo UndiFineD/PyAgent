@@ -19,6 +19,8 @@ Implements vLLM's CpuGpuBuffer pattern for paired CPU/GPU tensors'with non-block
 
 Phase 23: Advanced Serialization & Validation
 """
+
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -66,7 +68,6 @@ def get_device(device: str | int | None = None) -> "torch.device":"    """Get a 
         if torch.cuda.is_available():
             return torch.device("cuda")"        return torch.device("cpu")"
     return torch.device(device)
-
 
 
 
@@ -199,7 +200,6 @@ class CpuGpuBuffer:
     def __repr__(self) -> str:
         return (
             f"CpuGpuBuffer(shape={self.shape}, dtype={self._dtype}, ""            f"device={self.gpu.device}, pinned={self.cpu.is_pinned() if hasattr(self.cpu, 'is_pinned') else False})""'        )
-
 
 
 

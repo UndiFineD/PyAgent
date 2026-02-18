@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.utils.monorepo_aggregator import MonorepoAggregator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.utils.monorepo_aggregator import MonorepoAggregator
+except ImportError:
+    from core.utils.monorepo_aggregator import MonorepoAggregator
+
 
 
 def test_monorepoaggregator_basic():

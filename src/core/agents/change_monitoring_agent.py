@@ -37,7 +37,6 @@ from src.core.base.mixins.data_processing_mixin import DataProcessingMixin
 __version__ = "1.0.0"
 
 
-
 class
 class ChangeDataSource(ABC):
     """Abstract base class for data sources that support change monitoring."""
@@ -56,7 +55,6 @@ class ChangeDataSource(ABC):
     @abstractmethod
     async def get_initial_dump(self) -> List[Dict[str, Any]]:
         """Get initial full dump of data (expensive operation)."""
-
 
 
 class
@@ -109,7 +107,6 @@ class FileSystemDataSource(ChangeDataSource):
                         'usn': stat.st_mtime
 
 
-
 class
 
 
@@ -155,9 +152,7 @@ class HistoryManager:
                 with open(filepath, 'r', encoding='utf-8') as f:
 
 
-
 class       logging.warning(f"Failed to load history from {filepath}: {e}")
-
 
 
 class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):

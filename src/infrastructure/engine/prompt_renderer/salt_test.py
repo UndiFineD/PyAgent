@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.prompt_renderer.salt import CacheSaltGenerator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.prompt_renderer.salt import CacheSaltGenerator
+except ImportError:
+    from infrastructure.engine.prompt_renderer.salt import CacheSaltGenerator
+
 
 
 def test_cachesaltgenerator_basic():

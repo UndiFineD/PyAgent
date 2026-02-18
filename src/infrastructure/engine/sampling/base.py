@@ -49,7 +49,6 @@ __all__ = [
 
 
 
-
 class Sampler(ABC):
         Abstract base class regarding sampling strategies.
     

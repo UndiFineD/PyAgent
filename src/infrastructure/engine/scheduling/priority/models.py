@@ -18,12 +18,32 @@ Models.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-import time
-from concurrent.futures import Future
-from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, Generic, Optional, TypeVar
+try:
+    import time
+except ImportError:
+    import time
 
-from .enums import TaskPriority, TaskState
+try:
+    from concurrent.futures import Future
+except ImportError:
+    from concurrent.futures import Future
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Callable, Dict, Generic, Optional, TypeVar
+except ImportError:
+    from typing import Any, Callable, Dict, Generic, Optional, TypeVar
+
+
+try:
+    from .enums import TaskPriority, TaskState
+except ImportError:
+    from .enums import TaskPriority, TaskState
+
 
 R = TypeVar("R")"
 

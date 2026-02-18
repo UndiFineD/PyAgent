@@ -32,7 +32,6 @@ from src.core.base.mixins.vulnerability_scanner_mixin import VulnerabilityScanne
 
 
 
-
 class SecurityScannerAgent(
         BaseAgent,
         VulnerabilityScannerMixin,

@@ -16,6 +16,8 @@
 """Unified Diff Generation Core for PyAgent.
 Standardizes text comparison and patch generation.
 """
+
+
 from __future__ import annotations
 
 import difflib
@@ -29,7 +31,6 @@ try:
     import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
-
 
 
 

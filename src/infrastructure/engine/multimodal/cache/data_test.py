@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.cache.data import MediaHash, CacheEntry, CacheStats, TODO PlaceholderRange
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.cache.data import MediaHash, CacheEntry, CacheStats, TODO PlaceholderRange
+except ImportError:
+    from infrastructure.engine.multimodal.cache.data import MediaHash, CacheEntry, CacheStats, TODO PlaceholderRange
+
 
 
 def test_mediahash_basic():

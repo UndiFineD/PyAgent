@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.network.ip_intelligence import IPIntelligence
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.network.ip_intelligence import IPIntelligence
+except ImportError:
+    from infrastructure.swarm.network.ip_intelligence import IPIntelligence
+
 
 
 def test_ipintelligence_basic():

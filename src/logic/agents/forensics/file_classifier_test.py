@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.agents.forensics.file_classifier import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.agents.forensics.file_classifier import *
+except ImportError:
+    from logic.agents.forensics.file_classifier import *
+

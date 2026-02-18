@@ -19,16 +19,26 @@ Inspired by vLLM's inputs.data module for type-safe prompt handling'with TypedDi
 
 Phase 24: Advanced Observability & Parsing
 """
+
+
 from __future__ import annotations
 
-from typing import Any, Generic, TypeAlias, TypeVar
 
-from typing_extensions import NotRequired, TypedDict, TypeIs
+try:
+    from typing import Any, Generic, TypeAlias, TypeVar
+except ImportError:
+    from typing import Any, Generic, TypeAlias, TypeVar
+
+
+try:
+    from typing_extensions import NotRequired, TypedDict, TypeIs
+except ImportError:
+    from typing_extensions import NotRequired, TypedDict, TypeIs
+
 
 # ============================================================================
 # Prompt TypedDicts
 # ============================================================================
-
 
 
 
@@ -45,7 +55,6 @@ class TextPrompt(TypedDict):
     """Optional processor kwargs for multi-modal handling."""
     cache_salt: NotRequired[str]
     """Optional cache salt for prefix caching."""
-
 
 
 class TokensPrompt(TypedDict):
@@ -67,7 +76,6 @@ class TokensPrompt(TypedDict):
     """Optional cache salt for prefix caching."""
 
 
-
 class EmbedsPrompt(TypedDict):
     """Schema for a prompt provided via embeddings.
 
@@ -77,7 +85,6 @@ class EmbedsPrompt(TypedDict):
     """The embeddings of the prompt."""
     cache_salt: NotRequired[str]
     """Optional cache salt for prefix caching."""
-
 
 
 class DataPrompt(TypedDict):
@@ -103,7 +110,6 @@ SingletonPrompt: TypeAlias = str | TextPrompt | TokensPrompt | EmbedsPrompt
 """
 # TypeVar without default for Python 3.12 compatibility
 T1 = TypeVar("T1", bound=SingletonPrompt)  # pylint: disable=invalid-name"T2 = TypeVar("T2", bound=SingletonPrompt)  # pylint: disable=invalid-name"
-
 
 
 class ExplicitEncoderDecoderPrompt(TypedDict, Generic[T1, T2]):

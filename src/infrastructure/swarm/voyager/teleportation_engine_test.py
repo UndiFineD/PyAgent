@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.voyager.teleportation_engine import TeleportationEngine
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.voyager.teleportation_engine import TeleportationEngine
+except ImportError:
+    from infrastructure.swarm.voyager.teleportation_engine import TeleportationEngine
+
 
 
 def test_teleportationengine_basic():

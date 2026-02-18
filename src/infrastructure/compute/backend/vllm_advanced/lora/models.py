@@ -36,7 +36,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class AdapterState(Enum):
     """State of a LoRA adapter.
     UNLOADED = auto()

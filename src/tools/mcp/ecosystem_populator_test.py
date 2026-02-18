@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .ecosystem_populator import get_expanded_ecosystem
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .ecosystem_populator import get_expanded_ecosystem
+except ImportError:
+    from .ecosystem_populator import get_expanded_ecosystem
+
 
 
 def test_get_expanded_ecosystem_basic():

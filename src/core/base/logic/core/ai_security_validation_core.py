@@ -18,11 +18,31 @@
 Inspired by ai-security-llm repository patterns for LLM security assessment.
 Implements prompt injection detection, jailbreak prevention, and security validation.
 """
-import logging
-import re
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
-from datetime import datetime
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Dict, List, Optional, Any
+except ImportError:
+    from typing import Dict, List, Optional, Any
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
 
 
 @dataclass
@@ -52,7 +72,6 @@ class JailbreakAttempt:
     pattern: str
     confidence: float
     description: str
-
 
 
 
@@ -325,7 +344,8 @@ class AISecurityValidationCore:
 
         Returns:
             SecurityScanResult for the output
-        """# For outputs, we're mainly concerned with harmful content and data leaks'        return await self.scan_input_security(output_text, input_context)
+        """
+# For outputs, we're mainly concerned with harmful content and data leaks'        return await self.scan_input_security(output_text, input_context)
 
     def get_security_metrics(self) -> Dict[str, Any]:
         """Get security scanning metrics"""return {

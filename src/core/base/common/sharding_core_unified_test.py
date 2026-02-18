@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from src.core.base.common.sharding_core import ShardingCore
+try:
+    from .core.base.common.sharding_core import ShardingCore
+except ImportError:
+    from src.core.base.common.sharding_core import ShardingCore
+
 
 def test_sharding_core_calculate_splits():
     core = ShardingCore(cluster_size=4)

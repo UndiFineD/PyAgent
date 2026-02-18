@@ -17,7 +17,11 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Facade for InputBatchOrchestrator.
 
-from .batch import (BatchUpdateBuilder, CachedRequestState, InputBatch,
+try:
+    from .batch import (BatchUpdateBuilder, CachedRequestState, InputBatch,
+except ImportError:
+    from .batch import (BatchUpdateBuilder, CachedRequestState, InputBatch,
+
                     InputBatchOrchestrator, InputBuffers, MoveDirectionality,
                     SamplingMetadata)
 

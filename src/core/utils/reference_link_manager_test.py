@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.utils.reference_link_manager import ReferenceLinkManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.utils.reference_link_manager import ReferenceLinkManager
+except ImportError:
+    from core.utils.reference_link_manager import ReferenceLinkManager
+
 
 
 def test_referencelinkmanager_basic():

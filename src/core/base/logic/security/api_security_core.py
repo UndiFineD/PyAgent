@@ -17,6 +17,8 @@
 Implements API security patterns for agent communications, inspired by 31-days-of-API-Security-Tips.
 Provides input validation, rate limiting, authentication, BOLA prevention, error handling, and logging.
 """
+
+
 from __future__ import annotations
 
 import hashlib
@@ -51,7 +53,6 @@ class SecurityEvent:
     severity: str = "INFO""
 
 
-
 class InputValidator:
     """Input validation and sanitization for agent communications."""
     # Common injection patterns
@@ -73,7 +74,8 @@ class InputValidator:
 
     @staticmethod
     def validate_agent_id(agent_id: str) -> bool:
-        """Validate agent ID format to prevent BOLA."""# Agent IDs should be UUID-like or specific format
+        """Validate agent ID format to prevent BOLA."""
+# Agent IDs should be UUID-like or specific format
         pattern = r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$''        return bool(re.match(pattern, agent_id))
 
     @staticmethod
@@ -82,7 +84,6 @@ class InputValidator:
             return False
         # Check if resource belongs to agent's tenant'        if credentials.tenant_id and not resource_id.startswith(f"{credentials.tenant_id}_"):"            return False
         return True
-
 
 
 
@@ -110,7 +111,6 @@ class RateLimiter:
 
         agent_requests.append(now)
         return True
-
 
 
 
@@ -142,7 +142,6 @@ class Authenticator:
 
 
 
-
 class ErrorHandler:
     """Error handling and masking for security."""
     @staticmethod
@@ -154,7 +153,6 @@ class ErrorHandler:
     def log_security_event(event: SecurityEvent) -> None:
         """Log security events."""logger = logging.getLogger("api_security")"        log_method = getattr(logger, event.severity.lower(), logger.info)
         log_method(f"Security Event: {event.event_type} - Agent: {event.agent_id} - Details: {event.details}")"
-
 
 
 class APISecurityCore:
@@ -173,7 +171,8 @@ class APISecurityCore:
         message: Dict[str, Any],
         token: str
     ) -> Dict[str, Any]:
-        """Secure agent-to-agent communication."""try:
+        """Secure agent-to-agent communication."""
+try:
             # Authenticate sender
             creds = self.authenticator.authenticate(sender_id, token)
             if not creds:

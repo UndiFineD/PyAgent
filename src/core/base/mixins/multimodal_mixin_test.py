@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.multimodal_mixin import MultimodalMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.multimodal_mixin import MultimodalMixin
+except ImportError:
+    from core.base.mixins.multimodal_mixin import MultimodalMixin
+
 
 
 def test_multimodalmixin_basic():

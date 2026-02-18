@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import SelfImprovementOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import SelfImprovementOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import SelfImprovementOrchestrator
+
 
 
 def test_selfimprovementorchestrator_basic():

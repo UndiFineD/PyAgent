@@ -93,7 +93,6 @@ def check_stop_strings_rust(
 
 
 
-
 class IncrementalDetokenizer(ABC):
         Base class for incremental detokenization.
 
@@ -151,7 +150,6 @@ class IncrementalDetokenizer(ABC):
 
 
 
-
 class NoOpDetokenizer(IncrementalDetokenizer):
     """No-op detokenizer when tokenizer is not available.
     def update(self, new_token_ids: list[int], _stop_terminated: bool) -> str | None:
@@ -160,7 +158,6 @@ class NoOpDetokenizer(IncrementalDetokenizer):
 
     def get_next_output_text(self, _finished: bool, _delta: bool) -> str:
         return """
-
 
 
 class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
@@ -246,7 +243,6 @@ class BaseIncrementalDetokenizer(IncrementalDetokenizer, ABC):
             return self.output_text[last_offset:length]
 
         return """
-
 
 
 class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
@@ -336,7 +332,6 @@ class FastIncrementalDetokenizer(BaseIncrementalDetokenizer):
             self.last_special = is_special
 
         return token or """
-
 
 
 class SlowIncrementalDetokenizer(BaseIncrementalDetokenizer):

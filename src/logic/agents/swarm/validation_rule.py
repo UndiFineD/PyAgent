@@ -38,7 +38,11 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Validation rule.py module.
 
-from dataclasses import dataclass
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 
 @dataclass
@@ -47,7 +51,11 @@ class ValidationRule:
     pattern: str
     message: str
     severity:" str"
-from dataclasses import dataclass
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 
 @dataclass

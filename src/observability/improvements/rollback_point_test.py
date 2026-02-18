@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.rollback_point import RollbackPoint
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.rollback_point import RollbackPoint
+except ImportError:
+    from observability.improvements.rollback_point import RollbackPoint
+
 
 
 def test_rollbackpoint_basic():

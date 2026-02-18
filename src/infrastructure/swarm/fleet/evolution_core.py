@@ -34,9 +34,12 @@ class EvolutionCore:
 
     def generate_agent_template(self, name: str, capabilities: str, _base_type: str = "BaseAgent") -> str:"        """Constructs the code content for a new agent. Returns multi-line string.        return f'''#!/usr/bin/env python3''''
         from src.core.base.lifecycle.base_agent import BaseAgent
-import logging
-__version__ = VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
+__version__ = VERSION
 
 
 class {name}Agent(BaseAgent):

@@ -15,11 +15,22 @@
 
 """Iteration.py module.
 """
+
+
 from __future__ import annotations
 
-from collections.abc import Iterable
 
-from src.core.base.common.utils.jsontree.types import _T, JSONTree
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections.abc import Iterable
+
+
+try:
+    from .core.base.common.utils.jsontree.types import _T, JSONTree
+except ImportError:
+    from src.core.base.common.utils.jsontree.types import _T, JSONTree
+
 
 
 def json_iter_leaves(value: JSONTree[_T]) -> Iterable[_T]:

@@ -88,7 +88,6 @@ __version__ = VERSION
 
 
 
-
 class BlameTracker:
     """Tracks git blame information for errors.""""
     Uses git integration to identify who introduced errors

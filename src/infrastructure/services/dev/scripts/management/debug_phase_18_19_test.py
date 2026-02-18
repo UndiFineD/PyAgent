@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.debug_phase_18_19 import test_sql_and_adversarial
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.debug_phase_18_19 import test_sql_and_adversarial
+except ImportError:
+    from infrastructure.services.dev.scripts.management.debug_phase_18_19 import test_sql_and_adversarial
+
 
 
 def test_test_sql_and_adversarial_basic():

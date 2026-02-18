@@ -15,12 +15,36 @@
 
 from __future__ import annotations
 
-from .orchestrator_diff_mixin import OrchestratorDiffMixin
-from .orchestrator_execution_mixin import OrchestratorExecutionMixin
-from .orchestrator_lifecycle_mixin import OrchestratorLifecycleMixin
-from .orchestrator_plugin_mixin import OrchestratorPluginMixin
-from .orchestrator_resource_mixin import OrchestratorResourceMixin
-from .orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
+
+try:
+    from .orchestrator_diff_mixin import OrchestratorDiffMixin
+except ImportError:
+    from .orchestrator_diff_mixin import OrchestratorDiffMixin
+
+try:
+    from .orchestrator_execution_mixin import OrchestratorExecutionMixin
+except ImportError:
+    from .orchestrator_execution_mixin import OrchestratorExecutionMixin
+
+try:
+    from .orchestrator_lifecycle_mixin import OrchestratorLifecycleMixin
+except ImportError:
+    from .orchestrator_lifecycle_mixin import OrchestratorLifecycleMixin
+
+try:
+    from .orchestrator_plugin_mixin import OrchestratorPluginMixin
+except ImportError:
+    from .orchestrator_plugin_mixin import OrchestratorPluginMixin
+
+try:
+    from .orchestrator_resource_mixin import OrchestratorResourceMixin
+except ImportError:
+    from .orchestrator_resource_mixin import OrchestratorResourceMixin
+
+try:
+    from .orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
+except ImportError:
+    from .orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
 
 

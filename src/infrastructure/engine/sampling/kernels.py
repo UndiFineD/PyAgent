@@ -35,7 +35,6 @@ except ImportError:
 
 
 
-
 class TemperatureSampler(Sampler):
     """Temperature scaling sampler.
     def forward(
@@ -51,7 +50,6 @@ class TemperatureSampler(Sampler):
         if params.temperature == 1.0:
             return logits
         return logits / params.temperature
-
 
 
 
@@ -73,7 +71,6 @@ class TopKSampler(Sampler):
         threshold = np.min(top_k_values, axis=-1, keepdims=True)
         mask = logits < threshold
         return np.where(mask, -float("inf"), logits)"
-
 
 
 class TopPSampler(Sampler):
@@ -109,7 +106,6 @@ class TopPSampler(Sampler):
         list(map(_apply_one, range(batch_size)))
 
         return result.squeeze(0) if was_1d else result
-
 
 
 
@@ -161,7 +157,6 @@ class TopKTopPSampler(Sampler):
 
 
 
-
 class GumbelSampler(Sampler):
     """Gumbel-max trick sampler.
     def forward(
@@ -194,7 +189,6 @@ class GumbelSampler(Sampler):
 
 
 
-
 class RepetitionPenaltySampler(Sampler):
     """Repetition penalty sampler.
     def forward(
@@ -220,7 +214,6 @@ class RepetitionPenaltySampler(Sampler):
         result[0, valid_tokens[~pos_mask]] *= params.repetition_penalty
 
         return result
-
 
 
 

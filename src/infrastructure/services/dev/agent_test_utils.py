@@ -18,9 +18,22 @@
 
 
 from __future__ import annotations
-from pathlib import Path
-from typing import Union
-from src.infrastructure.services.dev.test_utils import (
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Union
+except ImportError:
+    from typing import Union
+
+try:
+    from .infrastructure.services.dev.test_utils import (
+except ImportError:
+    from src.infrastructure.services.dev.test_utils import (
+
     FileSystemIsolator,
     MockAIBackend,
     ModuleLoader,

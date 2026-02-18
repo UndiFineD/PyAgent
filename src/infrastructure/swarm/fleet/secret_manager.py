@@ -35,7 +35,6 @@ __version__ = VERSION
 
 
 
-
 class SecretManager(StandardSecretCore):
         Provides secure access to credentials and API keys.
     Shell for SecretCore.

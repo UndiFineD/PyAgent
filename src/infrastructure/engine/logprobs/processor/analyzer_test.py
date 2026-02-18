@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.logprobs.processor.analyzer import LogprobsAnalyzer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.logprobs.processor.analyzer import LogprobsAnalyzer
+except ImportError:
+    from infrastructure.engine.logprobs.processor.analyzer import LogprobsAnalyzer
+
 
 
 def test_logprobsanalyzer_basic():

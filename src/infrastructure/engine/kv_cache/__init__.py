@@ -16,18 +16,50 @@
 Kv cache package.
 
 # SPDX-License-Identifier: Apache-2.0
-from .advanced import (AsyncPrefetchCoordinator,  # noqa: F401
+try:
+    from .advanced import (AsyncPrefetchCoordinator,  # noqa: F401
+except ImportError:
+    from .advanced import (AsyncPrefetchCoordinator, # noqa: F401
+
                        HierarchicalKVCacheCoordinator,
                        PredictiveKVCacheCoordinator)
-from .coordinator import KVCacheCoordinator  # noqa: F401
-from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,  # noqa: F401
+try:
+    from .coordinator import KVCacheCoordinator  # noqa: F401
+except ImportError:
+    from .coordinator import KVCacheCoordinator # noqa: F401
+
+try:
+    from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,  # noqa: F401
+except ImportError:
+    from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig, # noqa: F401
+
                            CacheGroupSpec, KVCacheBlock, KVCacheBlocks)
-from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy  # noqa: F401
-from .factory import create_kv_cache_coordinator  # noqa: F401
-from .managers import (CrossAttentionManager, FullAttentionManager,  # noqa: F401
+try:
+    from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy  # noqa: F401
+except ImportError:
+    from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy # noqa: F401
+
+try:
+    from .factory import create_kv_cache_coordinator  # noqa: F401
+except ImportError:
+    from .factory import create_kv_cache_coordinator # noqa: F401
+
+try:
+    from .managers import (CrossAttentionManager, FullAttentionManager,  # noqa: F401
+except ImportError:
+    from .managers import (CrossAttentionManager, FullAttentionManager, # noqa: F401
+
                        SingleTypeKVCacheManager, SlidingWindowManager)
-from .pack_kv import PackKVManager  # noqa: F401
-from .structural import BlockHashCache, BlockPool, FreeBlockQueue  # noqa: F401
+try:
+    from .pack_kv import PackKVManager  # noqa: F401
+except ImportError:
+    from .pack_kv import PackKVManager # noqa: F401
+
+try:
+    from .structural import BlockHashCache, BlockPool, FreeBlockQueue  # noqa: F401
+except ImportError:
+    from .structural import BlockHashCache, BlockPool, FreeBlockQueue # noqa: F401
+
 
 __all__ = [
     "CacheGroupType","    "AllocationStrategy","    "EvictionPolicy","    "BlockHash","    "BlockHashWithGroupId","    "KVCacheBlock","    "KVCacheBlocks","    "CacheGroupSpec","    "CacheConfig","    "FreeBlockQueue","    "BlockHashCache","    "BlockPool","    "SingleTypeKVCacheManager","    "FullAttentionManager","    "SlidingWindowManager","    "CrossAttentionManager","    "PackKVManager","    "KVCacheCoordinator","    "HierarchicalKVCacheCoordinator","    "PredictiveKVCacheCoordinator","    "AsyncPrefetchCoordinator","    "create_kv_cache_coordinator","]

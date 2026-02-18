@@ -13,11 +13,30 @@
 # limitations under the License.
 """Test Pruning Core module.
 """
-import unittest
-from hypothesis import given, strategies as st, settings, HealthCheck
-import math
-import time
-from src.core.base.common.pruning_core import PruningCore, SynapticWeight
+try:
+    import unittest
+except ImportError:
+    import unittest
+
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from .core.base.common.pruning_core import PruningCore, SynapticWeight
+except ImportError:
+    from src.core.base.common.pruning_core import PruningCore, SynapticWeight
 
 
 

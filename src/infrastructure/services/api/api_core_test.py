@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.api.api_core import APICore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.api.api_core import APICore
+except ImportError:
+    from infrastructure.services.api.api_core import APICore
+
 
 
 def test_apicore_basic():

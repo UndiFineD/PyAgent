@@ -13,9 +13,20 @@
 # limitations under the License.
 Test Model Fallback Core module.
 
-import pytest
-from hypothesis import given, strategies as st, settings, HealthCheck
-from src.observability.stats.metrics_core import ModelFallbackCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    from .observability.stats.metrics_core import ModelFallbackCore
+except ImportError:
+    from src.observability.stats.metrics_core import ModelFallbackCore
 
 
 

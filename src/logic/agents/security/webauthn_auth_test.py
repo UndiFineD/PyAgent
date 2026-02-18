@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest
-from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
+try:
+    import unittest
+except ImportError:
+    import unittest
+
+try:
+    from .infrastructure.security.auth.webauthn_manager import WebAuthnManager
+except ImportError:
+    from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
 
 
 

@@ -47,7 +47,6 @@ __version__ = VERSION
 
 
 
-
 class AuditLogger:
     """Logger for report audit trail.""""    Records all actions performed on reports for compliance.
     Attributes:

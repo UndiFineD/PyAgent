@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.gpu_scaling_manager.suggested import GPUScalingManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.gpu_scaling_manager.suggested import GPUScalingManager
+except ImportError:
+    from infrastructure.swarm.fleet.gpu_scaling_manager.suggested import GPUScalingManager
+
 
 
 def test_gpuscalingmanager_basic():

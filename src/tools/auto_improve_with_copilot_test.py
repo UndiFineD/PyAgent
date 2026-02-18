@@ -1,10 +1,30 @@
-import subprocess
-import sys
-from pathlib import Path
+try:
+    import subprocess
+except ImportError:
+    import subprocess
 
-import pytest
+try:
+    import sys
+except ImportError:
+    import sys
 
-from tools import auto_improve_with_copilot as ai
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from tools import auto_improve_with_copilot as ai
+except ImportError:
+    from tools import auto_improve_with_copilot as ai
+
 
 
 def test_extract_comments_and_docstring():

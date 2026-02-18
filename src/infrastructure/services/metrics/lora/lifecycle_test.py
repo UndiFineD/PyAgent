@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.metrics.lora.lifecycle import RequestLifecycle, RequestLifecycleManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.metrics.lora.lifecycle import RequestLifecycle, RequestLifecycleManager
+except ImportError:
+    from infrastructure.services.metrics.lora.lifecycle import RequestLifecycle, RequestLifecycleManager
+
 
 
 def test_requestlifecycle_basic():

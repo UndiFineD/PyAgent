@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.multimodal_state import StreamState
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.multimodal_state import StreamState
+except ImportError:
+    from core.base.common.multimodal_state import StreamState
+
 
 
 def test_streamstate_basic():

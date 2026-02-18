@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.accessibility_report import AccessibilityReport
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.accessibility_report import AccessibilityReport
+except ImportError:
+    from core.base.common.types.accessibility_report import AccessibilityReport
+
 
 
 def test_accessibilityreport_basic():

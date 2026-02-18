@@ -41,7 +41,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class CUDAGraphMode(Enum):
         CUDA graph execution modes.
 
@@ -185,7 +184,6 @@ class CUDAGraphEntry:
 
 
 
-
 class CUDAGraphRegistry:
         Registry for captured CUDA graphs.
 
@@ -306,7 +304,6 @@ class CUDAGraphRegistry:
 # ============================================================================
 # CUDA Graph Manager
 # ============================================================================
-
 
 
 

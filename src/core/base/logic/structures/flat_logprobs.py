@@ -19,11 +19,26 @@ Inspired by vLLM's FlatLogprobs pattern for reduced GC overhead compared'to list
 
 Phase 24: Advanced Observability & Parsing
 """
+
+
 from __future__ import annotations
 
-from collections.abc import Iterable, Iterator, MutableSequence, Sequence
-from dataclasses import dataclass, field
-from typing import Any, overload
+
+try:
+    from collections.abc import Iterable, Iterator, MutableSequence, Sequence
+except ImportError:
+    from collections.abc import Iterable, Iterator, MutableSequence, Sequence
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, overload
+except ImportError:
+    from typing import Any, overload
+
 
 
 @dataclass
@@ -209,7 +224,8 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
 
         FlatLogprobs is more efficient when there are many positions
         with few tokens each, as it avoids dict overhead.
-        """# Each dict has ~232 bytes overhead, each entry ~96 bytes
+        """
+# Each dict has ~232 bytes overhead, each entry ~96 bytes
         # FlatLogprobs has 6 list overhead (~448 bytes) + 8 bytes per entry
         positions = len(self)
         entries = self.total_entries

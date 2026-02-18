@@ -50,7 +50,6 @@ logger = logging.getLogger(__name__)
 # pylint: disable=too-many-ancestors
 
 
-
 class OllamaConnectorAgent(BaseAgent):
     Handles local and network inference requests via the Ollama API (OpenAI-compatible).
     Supports Chat, Reasoning (<think>), and FIM (Fill-In-The-Middle).
@@ -146,7 +145,6 @@ logger = logging.getLogger(__name__)
 
 
 # pylint: disable=too-many-ancestors
-
 
 
 class OllamaConnectorAgent(BaseAgent):

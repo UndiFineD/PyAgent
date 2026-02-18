@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .dependency_resolver import DependencyResolver
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .dependency_resolver import DependencyResolver
+except ImportError:
+    from .dependency_resolver import DependencyResolver
+
 
 
 def test_dependencyresolver_basic():

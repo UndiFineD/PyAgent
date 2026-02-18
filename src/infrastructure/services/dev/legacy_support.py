@@ -17,9 +17,20 @@ Legacy support utilities for PyAgent tests.
 This module provides mixins and wrappers to maintain backward compatibility
 with legacy test patterns during the migration to the new BaseAgent architecture.
 
-from typing import Any, Optional
-from pathlib import Path
-import logging
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    import logging
+except ImportError:
+    import logging
 
 
 

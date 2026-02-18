@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.attention.batch_dcp_wrapper import BatchPhase, AllReduceStrategy, BatchRequest, BatchMetadata, DCPPlanConfig, ExecutionPlan, BatchExecutor, BatchDCPPrefillWrapper, BatchDCPDecodeWrapper, UnifiedBatchWrapper, create_prefill_wrapper, create_decode_wrapper, create_unified_wrapper
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.attention.batch_dcp_wrapper import BatchPhase, AllReduceStrategy, BatchRequest, BatchMetadata, DCPPlanConfig, ExecutionPlan, BatchExecutor, BatchDCPPrefillWrapper, BatchDCPDecodeWrapper, UnifiedBatchWrapper, create_prefill_wrapper, create_decode_wrapper, create_unified_wrapper
+except ImportError:
+    from infrastructure.engine.attention.batch_dcp_wrapper import BatchPhase, AllReduceStrategy, BatchRequest, BatchMetadata, DCPPlanConfig, ExecutionPlan, BatchExecutor, BatchDCPPrefillWrapper, BatchDCPDecodeWrapper, UnifiedBatchWrapper, create_prefill_wrapper, create_decode_wrapper, create_unified_wrapper
+
 
 
 def test_batchphase_basic():

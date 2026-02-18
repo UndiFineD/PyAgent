@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.agent_registry_core.suggested import AgentRegistryCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.agent_registry_core.suggested import AgentRegistryCore
+except ImportError:
+    from infrastructure.swarm.fleet.agent_registry_core.suggested import AgentRegistryCore
+
 
 
 def test_agentregistrycore_basic():

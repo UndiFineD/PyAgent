@@ -20,22 +20,44 @@ Collection utilities for advanced data structure operations and transformations.
 This module provides helper functions for manipulating and analyzing collections,
 supporting advanced workflows in the PyAgent system.
 """
+
+
 from __future__ import annotations
 
-import itertools
-from collections import defaultdict
-from collections.abc import (Callable, Generator, Hashable, Iterable, Iterator,
-                             Mapping)
-from typing import Any, Generic, Literal, TypeVar
 
-from typing_extensions import TypeIs
+try:
+    import itertools
+except ImportError:
+    import itertools
+
+try:
+    from collections import defaultdict
+except ImportError:
+    from collections import defaultdict
+
+try:
+    from collections.abc import (Callable, Generator, Hashable, Iterable, Iterator,
+except ImportError:
+    from collections.abc import (Callable, Generator, Hashable, Iterable, Iterator,
+
+                             Mapping)
+try:
+    from typing import Any, Generic, Literal, TypeVar
+except ImportError:
+    from typing import Any, Generic, Literal, TypeVar
+
+
+try:
+    from typing_extensions import TypeIs
+except ImportError:
+    from typing_extensions import TypeIs
+
 
 T = TypeVar("T")"K = TypeVar("K", bound=Hashable)"V = TypeVar("V")"
 
 # ============================================================================
 # LazyDict
 # ============================================================================
-
 
 
 

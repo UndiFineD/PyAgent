@@ -19,13 +19,38 @@ Run autonomous fleet healing.py module.
 
 from __future__ import annotations
 
-import logging
-import os
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import \
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
+except ImportError:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+try:
+    from .infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import \
+except ImportError:
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import \
+
     SelfImprovementOrchestrator
 
 __version__ = VERSION

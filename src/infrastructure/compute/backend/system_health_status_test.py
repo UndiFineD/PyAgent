@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.system_health_status import SystemHealthStatus
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.system_health_status import SystemHealthStatus
+except ImportError:
+    from infrastructure.compute.backend.system_health_status import SystemHealthStatus
+
 
 
 def test_systemhealthstatus_basic():

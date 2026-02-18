@@ -16,15 +16,30 @@
 Adaptive Swarm Compression (Phase 65).
 Dynamically manages KV-cache precision and eviction based on shard activity.
 
-import logging
-import time
-from typing import Any, Dict
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.infrastructure.engine.kv_cache.context_sharder import \
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+
+try:
+    from .infrastructure.engine.kv_cache.context_sharder import \
+except ImportError:
+    from src.infrastructure.engine.kv_cache.context_sharder import \
+
     ContextShardManager
 
 logger = logging.getLogger(__name__)
-
 
 
 

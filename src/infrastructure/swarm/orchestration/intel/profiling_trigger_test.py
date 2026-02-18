@@ -14,10 +14,25 @@
 
 
 """Test profiling trigger logic.
-from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
-from src.infrastructure.swarm.orchestration.intel.mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
-import os
-import sys
+try:
+    from .infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
+except ImportError:
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
+
+try:
+    from .infrastructure.swarm.orchestration.intel.mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
+except ImportError:
+    from src.infrastructure.swarm.orchestration.intel.mixins.profiling_analysis_mixin import ProfilingAnalysisMixin
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import sys
+except ImportError:
+    import sys
 
 
 

@@ -20,11 +20,32 @@ Abstract base class for all engine client implementations.
 
 from __future__ import annotations
 
-import logging
-import threading
-import uuid
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Generic, Optional, TypeVar
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import TYPE_CHECKING, Generic, Optional, TypeVar
+except ImportError:
+    from typing import TYPE_CHECKING, Generic, Optional, TypeVar
+
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import \
@@ -33,7 +54,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T")"R = TypeVar("R")"
-
 
 
 class EngineCoreClientBase(ABC, Generic[T, R]):

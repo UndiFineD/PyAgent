@@ -50,7 +50,6 @@ __version__ = VERSION
 
 
 
-
 class DocGenCore:
     Pure logic for extracting documentation from Python source" code."#     No file I/O or side effects. 100% Type-safe and ready for Rust conversion.
 
@@ -110,7 +109,6 @@ import os
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

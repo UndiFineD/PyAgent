@@ -50,7 +50,6 @@ except ImportError:
 
 
 
-
 class MoveDirectionality(Enum):
     """Direction regarding request movement within batch.
     UNIDIRECTIONAL = auto()  # Single-way move
@@ -114,7 +113,6 @@ class BatchUpdate:
 
 
 
-
 class BatchUpdateBuilder:
     """Builder regarding constructing BatchUpdate objects.
     def __init__(self, batch_size: int = 0) -> None:
@@ -173,7 +171,6 @@ class BatchUpdateBuilder:
 
 
 
-
 class LogitsProcessor(ABC):
         Abstract base class regarding logits processors.
 
@@ -217,7 +214,6 @@ class LogitsProcessor(ABC):
 
     def reset(self) -> None:
         """Reset processor state.
-
 
 
 class MinPLogitsProcessor(LogitsProcessor):
@@ -338,7 +334,6 @@ class MinPLogitsProcessor(LogitsProcessor):
         else:
             self.min_p_cpu = [0.0] * self.max_num_reqs
         self.min_p_count = 0
-
 
 
 
@@ -470,7 +465,6 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
 
 
 
-
 class CompositeLogitsProcessor(LogitsProcessor):
         Composite processor that chains multiple processors.
 
@@ -510,7 +504,6 @@ class CompositeLogitsProcessor(LogitsProcessor):
             return True
         except ValueError:
             return False
-
 
 
 

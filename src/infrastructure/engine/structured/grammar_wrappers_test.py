@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.structured.grammar_wrappers import XGrammarGrammar, CompositeGrammar
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.structured.grammar_wrappers import XGrammarGrammar, CompositeGrammar
+except ImportError:
+    from infrastructure.engine.structured.grammar_wrappers import XGrammarGrammar, CompositeGrammar
+
 
 
 def test_xgrammargrammar_basic():

@@ -19,14 +19,38 @@ Impl.py module.
 
 from __future__ import annotations
 
-import contextlib
-import json
-from typing import Callable, Sequence
 
-import numpy as np
+try:
+    import contextlib
+except ImportError:
+    import contextlib
 
-from .base import StructuredOutputGrammar
-from .config import GrammarSpec
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from typing import Callable, Sequence
+except ImportError:
+    from typing import Callable, Sequence
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .base import StructuredOutputGrammar
+except ImportError:
+    from .base import StructuredOutputGrammar
+
+try:
+    from .config import GrammarSpec
+except ImportError:
+    from .config import GrammarSpec
 
 
 
@@ -118,7 +142,6 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         Returns:
             list of all token IDs.
                 return list(range(self.vocab_size))
-
 
 
 

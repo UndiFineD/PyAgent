@@ -52,8 +52,16 @@ FILE CONTENT SUMMARY:
 Preview management logic for ChangesAgent"."
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
 
 
 
@@ -81,8 +89,16 @@ class ChangesPreviewMixin:
 
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
 
 
 

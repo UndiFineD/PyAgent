@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.commands.parser.suggested import CommandParser, parse_commands
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.commands.parser.suggested import CommandParser, parse_commands
+except ImportError:
+    from interface.commands.parser.suggested import CommandParser, parse_commands
+
 
 
 def test_commandparser_basic():

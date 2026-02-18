@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.parallel_test_result import ParallelTestResult
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.parallel_test_result import ParallelTestResult
+except ImportError:
+    from infrastructure.services.dev.test_utils.parallel_test_result import ParallelTestResult
+
 
 
 def test_paralleltestresult_basic():

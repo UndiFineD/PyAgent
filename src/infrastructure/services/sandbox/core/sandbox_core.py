@@ -21,8 +21,17 @@ Sandbox core.py module.
 
 from __future__ import annotations
 
-import typing
-from dataclasses import dataclass, field
+
+try:
+    import typing
+except ImportError:
+    import typing
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
 
 
 @dataclass(frozen=True)
@@ -34,7 +43,6 @@ class SandboxConfig:
     network_enabled: bool = False
     read_only_paths: list[str] = field(default_factory=list)
     timeout_sec: int = 30
-
 
 
 

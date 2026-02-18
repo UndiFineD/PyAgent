@@ -14,9 +14,21 @@
 
 
 # "Auto-extracted class from agent_context.py"from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.inheritance_mode import InheritanceMode
-from dataclasses import dataclass, field
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.models.inheritance_mode import InheritanceMode
+except ImportError:
+    from src.logic.agents.cognitive.context.models.inheritance_mode import InheritanceMode
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
 
 __version__ = VERSION
 

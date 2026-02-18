@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.engine_coordinator_v2 import EngineState, EngineCoordinator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.engine_coordinator_v2 import EngineState, EngineCoordinator
+except ImportError:
+    from infrastructure.engine.engine_coordinator_v2 import EngineState, EngineCoordinator
+
 
 
 def test_enginestate_basic():

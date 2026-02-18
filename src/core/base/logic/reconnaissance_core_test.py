@@ -12,16 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from unittest.mock import AsyncMock, patch
-from src.core.base.logic.reconnaissance_core import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import AsyncMock, patch
+except ImportError:
+    from unittest.mock import AsyncMock, patch
+
+try:
+    from .core.base.logic.reconnaissance_core import (
+except ImportError:
+    from src.core.base.logic.reconnaissance_core import (
+
     ReconnaissanceCore,
     ReconConfig,
     DNSSource,
     CertificateTransparencySource,
     ThreatCrowdSource
 )
-
 
 
 
@@ -108,7 +119,6 @@ class TestReconnaissanceCore:
 
             assert len(results) == 1
             assert results[0].subdomain == "www.example.com""            assert results[0].source == "crtsh""
-
 
 
 class MockARecord:

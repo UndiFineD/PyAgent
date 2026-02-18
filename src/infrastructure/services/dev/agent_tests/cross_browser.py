@@ -29,7 +29,6 @@ __version__ = VERSION
 
 
 
-
 class CrossBrowserRunner:
     """Cross-browser testing configuration and execution.""""
     Manages cross-browser test execution with

@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .move_external_to_src import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .move_external_to_src import *
+except ImportError:
+    from .move_external_to_src import *
+

@@ -15,12 +15,19 @@
 
 """
 Logic Prover Agent for formal verification of reasoning chains.
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

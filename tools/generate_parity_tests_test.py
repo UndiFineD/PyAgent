@@ -33,7 +33,8 @@ def generate_tests():
         # Determine import path
         # src/external_candidates/cleaned/name.py -> src.external_candidates.cleaned.name
         
-        content = f"""#!/usr/bin/env python3
+        content = f"""
+#!/usr/bin/env python3
 from pathlib import Path
 import importlib.util
 import sys

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.rl.action_space import ActionMetadata, ActionSpace, DiscreteActionSpace, BoxActionSpace, MultiDiscreteActionSpace, DictActionSpace
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.rl.action_space import ActionMetadata, ActionSpace, DiscreteActionSpace, BoxActionSpace, MultiDiscreteActionSpace, DictActionSpace
+except ImportError:
+    from core.rl.action_space import ActionMetadata, ActionSpace, DiscreteActionSpace, BoxActionSpace, MultiDiscreteActionSpace, DictActionSpace
+
 
 
 def test_actionmetadata_basic():

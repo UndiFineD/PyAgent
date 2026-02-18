@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class HashAlgorithm(Enum):
     """Supported hash algorithms dedicated to prefix caching.
     SHA256 = "sha256""    XXHASH = "xxhash""    MD5 = "md5""
@@ -152,7 +151,6 @@ def hash_block_tokens_rust(
 
 def init_none_hash(hash_function: Callable[[Any], bytes]) -> bytes:
     """Initialize a null hash value.    return hash_function(b"")"
-
 
 
 class PrefixCacheManager:

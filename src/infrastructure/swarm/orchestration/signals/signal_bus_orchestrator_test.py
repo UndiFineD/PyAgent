@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.signals.signal_bus_orchestrator import SignalBusOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.signals.signal_bus_orchestrator import SignalBusOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.signals.signal_bus_orchestrator import SignalBusOrchestrator
+
 
 
 def test_signalbusorchestrator_basic():

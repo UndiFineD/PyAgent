@@ -15,6 +15,8 @@
 
 """Core logic for plugin discovery, loading, and registration.
 """
+
+
 from __future__ import annotations
 
 import importlib
@@ -63,9 +65,11 @@ class PluginCore(BaseCore):
     def __init__(self, workspace_root: Optional[Path] = None) -> None:
         super().__init__()
         self.workspace_root = workspace_root or Path.cwd()
-        self.plugins_dir = self.workspace_root / "plugins""        self.registry_path = self.plugins_dir / "manifest.json""        self.loaded_meta: Dict[str, PluginMetadata] = {}
+        self.plugins_dir = self.workspace_root / "plugins"
+        self.registry_path = self.plugins_dir / "manifest.json"
+        self.loaded_meta: Dict[str, PluginMetadata] = {}
         self.active_plugins: Dict[str, Any] = {}  # Any to avoid circular dependency on logic
-        self.logger = logging.getLogger("pyagent.plugin_core")"
+        self.logger = logging.getLogger("pyagent.plugin_core")
         if not self.plugins_dir.exists():
             try:
                 self.plugins_dir.mkdir(parents=True, exist_ok=True)
@@ -73,60 +77,82 @@ class PluginCore(BaseCore):
                 pass
 
     def discover(self) -> List[str]:
-        """Scans manifest and directory for compatible plugins."""discovered = []
+        """Scans manifest and directory for compatible plugins."""
+discovered = []
         discovered += self._load_manifest_plugins()
         discovered += self._scan_plugin_directories()
         return list(set(discovered))
 
     def _load_manifest_plugins(self) -> List[str]:
-        """Load plugins from the central manifest file."""discovered = []
+        """Load plugins from the central manifest file."""
+discovered = []
         if self.registry_path.exists():
             try:
-                with open(self.registry_path, encoding="utf-8") as f:"                    data = json.load(f)
+                with open(self.registry_path, encoding="utf-8") as f:
+                    data = json.load(f)
                     for key, raw_meta in data.items():
                         self._register_plugin_meta(key, raw_meta)
                         if key in self.loaded_meta:
                             discovered.append(key)
             except (json.JSONDecodeError, OSError) as e:
-                self.logger.error("Failed to load plugin manifest: %s", e)"        return discovered
+                self.logger.error("Failed to load plugin manifest: %s", e)
+            return discovered
 
     def _scan_plugin_directories(self) -> List[str]:
-        """Scan plugin directories for auto-discovery and heuristics."""discovered = []
+        """Scan plugin directories for auto-discovery and heuristics."""
+        discovered = []
         for item in self.plugins_dir.iterdir():
-            if not item.is_dir() or item.name.startswith(("_", ".")):"                continue
+            if not item.is_dir() or item.name.startswith(("_", ".")):
+                continue
             if item.name in self.loaded_meta:
                 continue  # Already registered via manifest
-            if not (item / "__init__.py").exists():"                continue
-            meta_path = item / "manifest.json""            plugin_json = item / "plugin.json""            if meta_path.exists() or plugin_json.exists():
+            if not (item / "__init__.py").exists():
+                continue
+            if not (item / "__init__.py").exists():
+                continue
+            meta_path = item / "manifest.json"
+            plugin_json = item / "plugin.json"
+            if meta_path.exists() or plugin_json.exists():
                 discovered += self._register_plugin_from_metadata_file(item, meta_path, plugin_json)
                 continue
             discovered.append(self._register_heuristic_plugin(item))
         return discovered
 
     def _register_plugin_from_metadata_file(self, item: Path, meta_path: Path, plugin_json: Path) -> List[str]:
-        """Register plugin from manifest.json or plugin.json in the plugin directory."""discovered = []
+        """Register plugin from manifest.json or plugin.json in the plugin directory."""
+discovered = []
         target = meta_path if meta_path.exists() else plugin_json
         try:
-            with open(target, encoding="utf-8") as f:"                raw_meta = json.load(f)
+            with open(target, encoding="utf-8") as f:
+            raw_meta = json.load(f)
                 self._register_plugin_meta(item.name, raw_meta)
                 discovered.append(item.name)
         except (json.JSONDecodeError, OSError) as e:
-            self.logger.warning("Failed to load plugin meta in %s: %s", item.name, e)"        return discovered
+            self.logger.warning("Failed to load plugin meta in %s: %s", item.name, e)
+            return discovered
 
     def _register_heuristic_plugin(self, item: Path) -> str:
-        """Register a plugin using heuristic discovery."""class_name = item.name.replace("_", " ").title().replace(" ", "")"        perms = []
-        perms_file = item / "permissions.json""        if perms_file.exists():
+        """Register a plugin using heuristic discovery."""
+        class_name = item.name.replace("_", " ").title().replace(" ", "")
+        perms = []
+        perms_file = item / "permissions.json""        
+        if perms_file.exists():
             try:
-                with open(perms_file, encoding="utf-8") as f:"                    perms = json.load(f)
+                with open(perms_file, encoding="utf-8") as f:"                    
+                perms = json.load(f)
             except (json.JSONDecodeError, OSError):
                 pass
         raw_meta = {
-            "module_path": f"plugins.{item.name}","            "class_name": class_name,"            "permissions": perms"        }
+            "module_path": f"plugins.{item.name}",
+            "            "class_name": class_name,
+            "            "permissions": perms"        
+            }
         self._register_plugin_meta(item.name, raw_meta)
         return item.name
 
     def _register_plugin_meta(self, key: str, raw_meta: Any) -> None:
-        """Helper to register plugin metadata from raw dict or list."""try:
+        """Helper to register plugin metadata from raw dict or list."""
+        try:
             if isinstance(raw_meta, list):
                 meta = PluginMetadata(
                     module_path=raw_meta[0],
@@ -137,9 +163,10 @@ class PluginCore(BaseCore):
                 meta = PluginMetadata(**raw_meta)
             self.loaded_meta[key] = meta
         except (TypeError, ValueError, KeyError) as e:
-            self.logger.warning("Skipping malformed plugin meta '%s': %s", key, e)"'
+            self.logger.warning("Skipping malformed plugin meta '%s': %s", key, e)
     def validate_version(self, required_version: str, current_version: str) -> bool:
-        """Centralized semantic version gatekeeper."""# Simple version check if VersionGate is not available
+        """Centralized semantic version gatekeeper."""
+# Simple version check if VersionGate is not available
         if VersionGate:
             try:
                 return VersionGate.is_compatible(current_version, required_version)
@@ -148,7 +175,8 @@ class PluginCore(BaseCore):
         return True  # Default to true if validator is missing
 
     def load_plugin(self, plugin_name: str) -> Optional[Any]:
-        """Loads and initializes a plugin instance."""if plugin_name not in self.loaded_meta:
+        """Loads and initializes a plugin instance."""
+if plugin_name not in self.loaded_meta:
             return None
 
         meta = self.loaded_meta[plugin_name]
@@ -160,25 +188,32 @@ class PluginCore(BaseCore):
             plugin_class = getattr(module, meta.class_name)
 
             instance = plugin_class()
-            if hasattr(instance, "setup"):"                instance.setup()
+            if hasattr(instance, "setup"):"                
+            instance.setup()
 
             # Health check immediately after setup
-            if hasattr(instance, "health_check"):"                health = instance.health_check()
+            if hasattr(instance, "health_check"):"                
+            health = instance.health_check()
                 if hasattr(health, "status") and health.status != HealthStatus.HEALTHY:"                    self.logger.error("Plugin '%s' failed health check", plugin_name)"'                    return None
 
             self.active_plugins[plugin_name] = instance
             return instance
         except (ImportError, AttributeError, RuntimeError) as e:
-            self.logger.error("Failed to load plugin '%s': %s", plugin_name, e)"'            return None
+            self.logger.error("Failed to load plugin '%s': %s", plugin_name, e)"'            
+            return None
 
     def _load_sandboxed_plugin(self, name: str, meta: PluginMetadata) -> Optional[Any]:
-        """Phase 288: Implement Docker-based or native sandboxing for untrusted plugins."""try:
+        """Phase 288: Implement Docker-based or native sandboxing for untrusted plugins."""
+try:
             if docker is None:
-                raise ImportError("Docker SDK not installed")"            client = docker.from_env()
+                raise ImportError("Docker SDK not installed")"            
+                client = docker.from_env()
             client.ping()
-            self.logger.info("Plugin '%s': Using Docker sandbox.", name)"'            return self._setup_permission_proxy(name, meta)
+            self.logger.info("Plugin '%s': Using Docker sandbox.", name)"'            
+            return self._setup_permission_proxy(name, meta)
         except (ImportError, RuntimeError) as e:
-            self.logger.warning("Plugin '%s': Docker sandbox unavailable (%s).", name, e)"'            return self._setup_permission_proxy(name, meta)
+            self.logger.warning("Plugin '%s': Docker sandbox unavailable (%s).", name, e)"'            
+            return self._setup_permission_proxy(name, meta)
 
     def _setup_permission_proxy(self, name: str, meta: PluginMetadata) -> Any:
         """Enforces permissions via a runtime wrapper."""module = importlib.import_module(meta.module_path)
@@ -203,9 +238,11 @@ class PluginCore(BaseCore):
             self.load_plugin(name)
 
     def deactivate(self, name: str) -> None:
-        """Deactivates a specific plugin by name."""if name in self.active_plugins:
+        """Deactivates a specific plugin by name."""
+if name in self.active_plugins:
             plugin = self.active_plugins[name]
-            if hasattr(plugin, "shutdown"):"                plugin.shutdown()
+            if hasattr(plugin, "shutdown"):"                
+            plugin.shutdown()
             del self.active_plugins[name]
 
     def register_plugin(self, name: str, plugin: Any) -> None:
@@ -218,5 +255,7 @@ class PluginCore(BaseCore):
         """Gracefully shuts down all active plugins."""for name, plugin in self.active_plugins.items():
             if hasattr(plugin, "shutdown"):"                try:
                     plugin.shutdown()
-                    self.logger.info("Plugin shutdown: %s", name)"                except (RuntimeError, AttributeError) as e:
-                    self.logger.error("Error during plugin shutdown (%s): %s", name, e)"        self.active_plugins.clear()
+                    self.logger.info("Plugin shutdown: %s", name)"                
+                    except (RuntimeError, AttributeError) as e:
+                    self.logger.error("Error during plugin shutdown (%s): %s", name, e)"        
+                    self.active_plugins.clear()

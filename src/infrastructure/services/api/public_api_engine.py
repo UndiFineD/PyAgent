@@ -21,15 +21,31 @@ Public API Engine for PyAgent.""""Generates OpenAPI/Swagger specs and handles ex
 
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .api_core import APICore
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .api_core import APICore
+except ImportError:
+    from .api_core import APICore
+
 
 __version__ = VERSION
-
 
 
 

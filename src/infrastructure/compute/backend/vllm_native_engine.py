@@ -36,7 +36,6 @@ except ImportError:
 
 
 
-
 class VllmNativeEngine:
         Manages a local vLLM instance using the library directly.
     Preferred for 'Own AI' where local hardware is sufficient.'    

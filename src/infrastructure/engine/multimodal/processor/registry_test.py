@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.processor.registry import MultiModalRegistry, process_multimodal_inputs, get_TODO Placeholder_tokens
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.processor.registry import MultiModalRegistry, process_multimodal_inputs, get_TODO Placeholder_tokens
+except ImportError:
+    from infrastructure.engine.multimodal.processor.registry import MultiModalRegistry, process_multimodal_inputs, get_TODO Placeholder_tokens
+
 
 
 def test_multimodalregistry_basic():

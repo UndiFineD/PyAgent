@@ -37,14 +37,34 @@ Auto-extracted class from agent_changes.py
 from __future__ import annotations
 
 
-from src.core.base.common.types.changelog_entry import ChangelogEntry
-from src.core.base.common.types.compliance_category import ComplianceCategory
-from src.core.base.common.types.compliance_result import ComplianceResult
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
+
+try:
+    from .core.base.common.types.changelog_entry import ChangelogEntry
+except ImportError:
+    from src.core.base.common.types.changelog_entry import ChangelogEntry
+
+try:
+    from .core.base.common.types.compliance_category import ComplianceCategory
+except ImportError:
+    from src.core.base.common.types.compliance_category import ComplianceCategory
+
+try:
+    from .core.base.common.types.compliance_result import ComplianceResult
+except ImportError:
+    from src.core.base.common.types.compliance_result import ComplianceResult
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
+except ImportError:
+    from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard
+
 
 __version__ = VERSION
-
 
 
 

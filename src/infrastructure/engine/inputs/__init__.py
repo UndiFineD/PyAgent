@@ -23,7 +23,11 @@ This package provides:
 - Multi-turn conversation linearization
 - Input size estimation for scheduling
 
-from .input_preprocessor import (  # Enums; Data classes; Core classes; Utilities  # noqa: F401
+try:
+    from .input_preprocessor import (  # Enums; Data classes; Core classes; Utilities  # noqa: F401
+except ImportError:
+    from .input_preprocessor import ( # Enums; Data classes; Core classes; Utilities # noqa: F401
+
     ChatMessage, ChatPrompt, ConversationLinearizer, EmbedsPrompt,
     EncoderDecoderPrompt, InputFormat, InputMetadata, InputPreprocessor,
     ProcessedInput, PromptTemplate, PromptType, PromptValidator, TextPrompt,

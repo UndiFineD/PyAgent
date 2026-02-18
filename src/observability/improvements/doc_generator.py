@@ -38,14 +38,26 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from typing import Any, cast
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any, cast
+except ImportError:
+    from typing import Any, cast
 
-from .improvement import Improvement
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
 
 __version__ = VERSION
-
 
 
 
@@ -61,16 +73,30 @@ class DocGenerator:
                 base += "\\n## Metadata\\n""                meta_dict = cast(dict[str, Any], meta)
                 for k, v in meta_dict.items():
                     base += f"- {k}: {v}\\n""        retur"""n base""""
+
+
 from __future__ import annotations
 
-from typing import Any, cast
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any, cast
+except ImportError:
+    from typing import Any, cast
 
-from .improvement import Improvement
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
 
 __version__ = VERSION
-
 
 
 

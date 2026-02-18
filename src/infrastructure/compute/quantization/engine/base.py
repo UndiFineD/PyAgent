@@ -19,17 +19,37 @@ Base.py module.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
 
-import numpy as np
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
 
-from .config import QuantConfig
-from .tensor import QuantizedTensor
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import QuantConfig
+except ImportError:
+    from .config import QuantConfig
+
+try:
+    from .tensor import QuantizedTensor
+except ImportError:
+    from .tensor import QuantizedTensor
+
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
-
 
 
 

@@ -12,11 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
-import logging
-import importlib
-import pytest
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import importlib
+except ImportError:
+    import importlib
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 def test_notify_webhooks_backoff(monkeypatch):
     """Test that _notify_webhooks implements backoff correctly when requests.post raises an exception.""""    """class Dummy:
@@ -39,7 +59,8 @@ def test_notify_webhooks_no_requests(monkeypatch):
     BaseAgent._notify_webhooks.__get__(dummy, BaseAgent)("test_event", {"k": "v"})"
 @pytest.mark.asyncio
 async def test_think_importerror(monkeypatch):
-    """Test that think handles ImportError from backend.run_subagent gracefully."""# Patch backend.run_subagent to raise ImportError
+    """Test that think handles ImportError from backend.run_subagent gracefully."""
+# Patch backend.run_subagent to raise ImportError
     backend = importlib.import_module("src.infrastructure.compute.backend")"    def run_subagent(description, prompt, original_content):
         """Mock run_subagent that raises ImportError to simulate missing backend."""raise ImportError("no backend available")"    monkeypatch.setattr(backend, "run_subagent", run_subagent)"    # Create an instance without full init to avoid heavy deps
     agent = BaseAgent.__new__(BaseAgent)

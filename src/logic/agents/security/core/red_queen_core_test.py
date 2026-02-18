@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.agents.security.core.red_queen_core import AttackVector, RedQueenCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.agents.security.core.red_queen_core import AttackVector, RedQueenCore
+except ImportError:
+    from logic.agents.security.core.red_queen_core import AttackVector, RedQueenCore
+
 
 
 def test_attackvector_basic():

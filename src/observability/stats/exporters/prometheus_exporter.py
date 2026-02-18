@@ -51,7 +51,6 @@ __version__ = VERSION
 
 
 
-
 class PrometheusExporter:
     """Formats fleet telemetry into Prometheus-compatible metrics.
     def __init__(self) -> None:

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.batch_core import BatchRequest, BatchCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.batch_core import BatchRequest, BatchCore
+except ImportError:
+    from core.base.common.batch_core import BatchRequest, BatchCore
+
 
 
 def test_batchrequest_basic():

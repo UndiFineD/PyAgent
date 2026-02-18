@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.uva_buffer_pool import BufferState, AllocationStrategy, BufferStats, UvaBuffer, UvaBufferPool, UvaBackedTensor, create_uva_buffer, create_uva_pool
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.uva_buffer_pool import BufferState, AllocationStrategy, BufferStats, UvaBuffer, UvaBufferPool, UvaBackedTensor, create_uva_buffer, create_uva_pool
+except ImportError:
+    from core.base.logic.structures.uva_buffer_pool import BufferState, AllocationStrategy, BufferStats, UvaBuffer, UvaBufferPool, UvaBackedTensor, create_uva_buffer, create_uva_pool
+
 
 
 def test_bufferstate_basic():

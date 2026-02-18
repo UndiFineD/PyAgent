@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.consciousness_registry.suggested import ConsciousnessRegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.consciousness_registry.suggested import ConsciousnessRegistry
+except ImportError:
+    from infrastructure.swarm.fleet.consciousness_registry.suggested import ConsciousnessRegistry
+
 
 
 def test_consciousnessregistry_basic():

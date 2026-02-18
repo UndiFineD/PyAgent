@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.cache.block_pool_manager import BlockState, Block, BlockPoolConfig, EvictionEvent, CacheMetrics, KVCacheMetricsCollector, ARCPolicy, BlockPool, compute_block_hash
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.cache.block_pool_manager import BlockState, Block, BlockPoolConfig, EvictionEvent, CacheMetrics, KVCacheMetricsCollector, ARCPolicy, BlockPool, compute_block_hash
+except ImportError:
+    from infrastructure.storage.cache.block_pool_manager import BlockState, Block, BlockPoolConfig, EvictionEvent, CacheMetrics, KVCacheMetricsCollector, ARCPolicy, BlockPool, compute_block_hash
+
 
 
 def test_blockstate_basic():

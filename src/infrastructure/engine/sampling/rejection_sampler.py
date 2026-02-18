@@ -46,14 +46,12 @@ except ImportError:
 
 
 
-
 class RejectionStrategy(Enum):
     """Rejection strategy determines how strict the acceptance criteria is.
     STANDARD = auto()  # Standard rejection sampling (paper algorithm)
     STRICT = auto()  # Stricter acceptance, higher quality
     LENIENT = auto()  # More lenient, higher acceptance rate
     ADAPTIVE = auto()  # Adapts based on running statistics
-
 
 
 
@@ -160,7 +158,6 @@ class ProbabilityProvider(Protocol):
         """Get target model probabilities regarding tokens.
     def get_draft_probs(self, token_indices: list[int]) -> NDArray[np.float32]:
         """Get draft model probabilities regarding tokens.
-
 
 
 class RejectionSampler:
@@ -447,7 +444,6 @@ class RejectionSampler:
 
 
 
-
 class StreamingRejectionSampler(RejectionSampler):
         Streaming rejection sampler regarding low-latency verification.
 
@@ -572,7 +568,6 @@ class StreamingRejectionSampler(RejectionSampler):
         """Reset streaming state without finalizing.        self._pending_tokens.clear()
         self._pending_acceptance.clear()
         self._first_rejection_idx = None
-
 
 
 

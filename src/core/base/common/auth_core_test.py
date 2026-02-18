@@ -21,7 +21,6 @@ from src.core.base.common.auth_core import AuthCore
 
 
 
-
 class TestAuthCore:
     @pytest.fixture
     def core(self):

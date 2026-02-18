@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.processing.crypto_core import DATA_BLOB, CREDENTIALW, CryptoCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.processing.crypto_core import DATA_BLOB, CREDENTIALW, CryptoCore
+except ImportError:
+    from core.base.logic.processing.crypto_core import DATA_BLOB, CREDENTIALW, CryptoCore
+
 
 
 def test_data_blob_basic():

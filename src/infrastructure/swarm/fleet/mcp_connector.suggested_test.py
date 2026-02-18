@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.mcp_connector.suggested import MCPConnector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.mcp_connector.suggested import MCPConnector
+except ImportError:
+    from infrastructure.swarm.fleet.mcp_connector.suggested import MCPConnector
+
 
 
 def test_mcpconnector_basic():

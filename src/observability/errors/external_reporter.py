@@ -19,7 +19,11 @@ ExternalReporter - Enumeration of external error reporting systems
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.external_reporter import ExternalReporter
+try:
+    from .core.base.external_reporter import ExternalReporter
+except ImportError:
+    from src.core.base.external_reporter import ExternalReporter
+
 reporter = ExternalReporter.SENTRY
 if reporter == ExternalReporter.SENTRY:
     # use Sentry-specific client mapping or configuration
@@ -35,12 +39,20 @@ Should include explanatory module-level docstring, mapping utilities to provider
 
 from __future__ import annotations
 
-from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

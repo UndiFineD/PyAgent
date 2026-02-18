@@ -48,6 +48,7 @@ Vibe-Coding 2026persona and track definitions.
 
 from __future__ import annotations
 
+
 VIBE_CODING_2025_TRACKS = {
     "RESEARCH": {"        "persona": "Creative Explorer. Focus on discoverability, edge cases, and high-level architectural research.","        "workflow": "Explorative search, prototyping, and DCAP research cycles.","        "phase_range": (0, 100),"    },
     "DEFINE": {"        "persona": ("            "Requirement Analyst. Focus on technical specifications, ""            "contract definitions, and interface design.""        ),

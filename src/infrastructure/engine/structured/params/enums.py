@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
-from enum import Enum, auto
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -29,14 +32,12 @@ class StructuredOutputType(Enum):
 
 
 
-
 class ConstraintType(Enum):
     """Internal constraint type."""
     INCLUDE = auto()  # Must match
     EXCLUDE = auto()  # Must not match
     PREFIX = auto()  # Prefix constraint
     SUFFIX = auto()  # Suffix constraint
-
 
 
 
@@ -49,7 +50,6 @@ class SchemaFormat(Enum):
 
 
 
-
 class GuidedDecodingBackend(Enum):
     """Guided decoding backend."""
     AUTO = auto()  # Auto-select best backend
@@ -57,7 +57,6 @@ class GuidedDecodingBackend(Enum):
     LMFE = auto()  # lm-format-enforcer
     XGRAMMAR = auto()  # xgrammar
     PYAGENT = auto()  # Native PyAgent engine
-
 
 
 

@@ -37,7 +37,6 @@ except ImportError:
 
 
 
-
 class FusedMoEMethodBase(ABC):
     """Base class for MoE computation methods.
     @abstractmethod
@@ -58,7 +57,6 @@ class FusedMoEMethodBase(ABC):
         weights: dict[str, Any],
     ) -> Any:
         pass
-
 
 
 

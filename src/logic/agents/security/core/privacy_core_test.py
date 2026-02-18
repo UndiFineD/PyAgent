@@ -13,8 +13,15 @@
 # limitations under the License.
 Test Privacy Core module.
 
-from hypothesis import given, strategies as st
-from src.logic.agents.security.core.privacy_core import PrivacyCore
+try:
+    from hypothesis import given, strategies as st
+except ImportError:
+    from hypothesis import given, strategies as st
+
+try:
+    from .logic.agents.security.core.privacy_core import PrivacyCore
+except ImportError:
+    from src.logic.agents.security.core.privacy_core import PrivacyCore
 
 
 

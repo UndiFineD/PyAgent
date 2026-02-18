@@ -15,21 +15,40 @@
 
 """Test for MAESTRO Security Analyzer
 """
-import pytest
-import tempfile
-from pathlib import Path
-from src.core.base.logic.maestro_security_analyzer import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import tempfile
+except ImportError:
+    import tempfile
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from .core.base.logic.maestro_security_analyzer import (
+except ImportError:
+    from src.core.base.logic.maestro_security_analyzer import (
+
     MAESTROSecurityAnalyzer,
     AgentNode
 )
-from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
+try:
+    from .core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
+except ImportError:
+    from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
+
 
 
 @pytest.fixture
 def temp_dir():
     """Create a temporary directory for testing."""with tempfile.TemporaryDirectory() as tmpdir:
         yield Path(tmpdir)
-
 
 
 

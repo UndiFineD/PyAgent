@@ -26,7 +26,6 @@ __version__ = VERSION
 
 
 
-
 class ThemeManager:
     """Handles switching between light and dark themes for the GUI.
     def __init__(self, root: tk.Tk) -> None:

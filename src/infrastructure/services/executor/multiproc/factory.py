@@ -21,18 +21,42 @@ Factory.py module.
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict
 
-from src.infrastructure.services.executor.multiproc.base import Executor
-from src.infrastructure.services.executor.multiproc.distributed import \
+try:
+    from typing import Any, Callable, Dict
+except ImportError:
+    from typing import Any, Callable, Dict
+
+
+try:
+    from .infrastructure.services.executor.multiproc.base import Executor
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.base import Executor
+
+try:
+    from .infrastructure.services.executor.multiproc.distributed import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.distributed import \
+
     DistributedExecutor
-from src.infrastructure.services.executor.multiproc.multiproc_logic import \
-    MultiprocExecutor
-from src.infrastructure.services.executor.multiproc.types import \
-    ExecutorBackend
-from src.infrastructure.services.executor.multiproc.uniproc import \
-    UniprocExecutor
+try:
+    from .infrastructure.services.executor.multiproc.multiproc_logic import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.multiproc_logic import \
 
+    MultiprocExecutor
+try:
+    from .infrastructure.services.executor.multiproc.types import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.types import \
+
+    ExecutorBackend
+try:
+    from .infrastructure.services.executor.multiproc.uniproc import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.uniproc import \
+
+    UniprocExecutor
 
 
 

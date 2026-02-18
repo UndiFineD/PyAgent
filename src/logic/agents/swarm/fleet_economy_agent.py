@@ -48,7 +48,6 @@ __version__ = VERSION
 
 
 
-
 class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets","#     credits, and resource bidding mechanisms using a persistent SQLite backend.
 
@@ -121,7 +120,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

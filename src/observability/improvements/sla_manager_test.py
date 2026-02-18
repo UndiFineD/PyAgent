@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from observability.improvements.sla_manager import SLAManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from observability.improvements.sla_manager import SLAManager
+except ImportError:
+    from observability.improvements.sla_manager import SLAManager
+
 
 
 def test_slamanager_basic():

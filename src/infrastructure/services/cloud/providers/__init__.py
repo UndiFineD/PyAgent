@@ -22,12 +22,33 @@ for various cloud AI providers.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-from src.infrastructure.services.cloud.providers.azure import AzureAIConnector
-from src.infrastructure.services.cloud.providers.bedrock import AWSBedrockConnector
-from src.infrastructure.services.cloud.providers.gemini import GeminiConnector
-from src.infrastructure.services.cloud.providers.groq import GroqConnector
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    from .infrastructure.services.cloud.providers.azure import AzureAIConnector
+except ImportError:
+    from src.infrastructure.services.cloud.providers.azure import AzureAIConnector
+
+try:
+    from .infrastructure.services.cloud.providers.bedrock import AWSBedrockConnector
+except ImportError:
+    from src.infrastructure.services.cloud.providers.bedrock import AWSBedrockConnector
+
+try:
+    from .infrastructure.services.cloud.providers.gemini import GeminiConnector
+except ImportError:
+    from src.infrastructure.services.cloud.providers.gemini import GeminiConnector
+
+try:
+    from .infrastructure.services.cloud.providers.groq import GroqConnector
+except ImportError:
+    from src.infrastructure.services.cloud.providers.groq import GroqConnector
+
 
 __all__: list[str] = [
     "GeminiConnector","    "AWSBedrockConnector","    "GroqConnector","    "AzureAIConnector","]

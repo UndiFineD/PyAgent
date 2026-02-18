@@ -24,17 +24,37 @@ Phase 29: Execution Context, Batching & Async Streaming
 
 from __future__ import annotations
 
-import threading
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 # ============================================================================
 # Memory Placement
 # ============================================================================
-
 
 
 
@@ -149,7 +169,6 @@ class CpuGpuBuffer:
 
 
 
-
 class UvaBufferPool:
         Pool of CPU/GPU buffers for efficient reuse.
 
@@ -228,7 +247,6 @@ class UvaBufferPool:
 # ============================================================================
 # Pinned Memory Manager
 # ============================================================================
-
 
 
 

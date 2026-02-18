@@ -16,17 +16,41 @@
 Params package.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
-from .builder import ConstraintBuilder  # noqa: F401
-from .config import StructuredOutputConfig, ValidationResult  # noqa: F401
-from .constraints import (ChoiceConstraint, GrammarConstraint,
+try:
+    from .builder import ConstraintBuilder  # noqa: F401
+except ImportError:
+    from .builder import ConstraintBuilder # noqa: F401
+
+try:
+    from .config import StructuredOutputConfig, ValidationResult  # noqa: F401
+except ImportError:
+    from .config import StructuredOutputConfig, ValidationResult # noqa: F401
+
+try:
+    from .constraints import (ChoiceConstraint, GrammarConstraint,
+except ImportError:
+    from .constraints import (ChoiceConstraint, GrammarConstraint,
+
                           JsonSchemaConstraint, OutputConstraint,
                           RegexConstraint, TypeConstraint)
-from .enums import (ConstraintType, GuidedDecodingBackend, SchemaFormat,
+try:
+    from .enums import (ConstraintType, GuidedDecodingBackend, SchemaFormat,
+except ImportError:
+    from .enums import (ConstraintType, GuidedDecodingBackend, SchemaFormat,
+
                     StructuredOutputType, WhitespacePattern)  # noqa: F401
-from .factory import (combine_constraints, create_choice_constraint,
+try:
+    from .factory import (combine_constraints, create_choice_constraint,
+except ImportError:
+    from .factory import (combine_constraints, create_choice_constraint,
+
                       create_json_constraint,
                       create_regex_constraint)  # noqa: F401
-from .validator import StructuredOutputValidator  # noqa: F401
+try:
+    from .validator import StructuredOutputValidator  # noqa: F401
+except ImportError:
+    from .validator import StructuredOutputValidator # noqa: F401
+
 
 __all__ = [
     "StructuredOutputType","    "ConstraintType","    "SchemaFormat","    "GuidedDecodingBackend","    "WhitespacePattern","    "OutputConstraint","    "JsonSchemaConstraint","    "RegexConstraint","    "ChoiceConstraint","    "GrammarConstraint","    "TypeConstraint","    "StructuredOutputConfig","    "ValidationResult","    "ConstraintBuilder","    "StructuredOutputValidator","    "combine_constraints","    "create_json_constraint","    "create_regex_constraint","    "create_choice_constraint","]

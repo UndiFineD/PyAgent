@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.diff_view_mode import DiffViewMode
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.diff_view_mode import DiffViewMode
+except ImportError:
+    from core.base.common.types.diff_view_mode import DiffViewMode
+
 
 
 def test_diffviewmode_basic():

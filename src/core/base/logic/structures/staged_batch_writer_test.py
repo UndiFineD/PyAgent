@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.staged_batch_writer import WritePolicy, CoalesceStrategy, StagedWrite, WriteStats, StagedBatchWriter, StagedWriteTensor, create_staged_tensor, coalesce_write_indices
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.staged_batch_writer import WritePolicy, CoalesceStrategy, StagedWrite, WriteStats, StagedBatchWriter, StagedWriteTensor, create_staged_tensor, coalesce_write_indices
+except ImportError:
+    from core.base.logic.structures.staged_batch_writer import WritePolicy, CoalesceStrategy, StagedWrite, WriteStats, StagedBatchWriter, StagedWriteTensor, create_staged_tensor, coalesce_write_indices
+
 
 
 def test_writepolicy_basic():

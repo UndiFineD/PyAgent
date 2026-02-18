@@ -13,9 +13,21 @@
 # limitations under the License.
 
 
-import pytest
-from src.logic.agents.interpreter.safe_executor import SafeLocalInterpreter
-from src.logic.agents.security.recon.domain_generator import DomainGenerator, MockLLM
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .logic.agents.interpreter.safe_executor import SafeLocalInterpreter
+except ImportError:
+    from src.logic.agents.interpreter.safe_executor import SafeLocalInterpreter
+
+try:
+    from .logic.agents.security.recon.domain_generator import DomainGenerator, MockLLM
+except ImportError:
+    from src.logic.agents.security.recon.domain_generator import DomainGenerator, MockLLM
+
 
 
 @pytest.mark.asyncio

@@ -15,6 +15,8 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
 import time
@@ -28,7 +30,6 @@ from .performance_metric import PerformanceMetric
 from .performance_metric_type import PerformanceMetricType
 
 __version__ = VERSION
-
 
 
 

@@ -18,11 +18,26 @@
 Core logic for Swarm Rebirth (Phase 180).
 Handles mass directory scaffolding and cleanup.
 
-import os
-import shutil
-from typing import Any
+try:
+    import os
+except ImportError:
+    import os
 
-import yaml
+try:
+    import shutil
+except ImportError:
+    import shutil
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    import yaml
+except ImportError:
+    import yaml
 
 
 

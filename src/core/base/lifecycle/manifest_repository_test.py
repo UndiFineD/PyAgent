@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.lifecycle.manifest_repository import ManifestRepository
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.lifecycle.manifest_repository import ManifestRepository
+except ImportError:
+    from core.base.lifecycle.manifest_repository import ManifestRepository
+
 
 
 def test_manifestrepository_basic():

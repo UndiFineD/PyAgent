@@ -130,7 +130,6 @@ class DirectiveParser:
                 logging.error(f"   - Command failed: {e}")"
 
 
-
 class IntelligenceHarvester:
     """Orchestrates external intelligence harvesting.
     def __init__(self, fleet: FleetManager, model_name: str) -> None:
@@ -169,7 +168,6 @@ class IntelligenceHarvester:
 
 
 # Global flag to ensure Triton compatibility is only checked/logged on the first cycle
-
 
 
 

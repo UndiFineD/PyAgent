@@ -19,11 +19,31 @@ TensorParallelGroup - Tensor parallel coordination for distributed inference.
 
 This module is now a facade for the modular sub-package in ./tp/.
 
-from .tp.group_coordinator import GroupCoordinator
-from .tp.parallel_config import ParallelConfig, ParallelMode
-from .tp.rank_info import RankInfo
-from .tp.tensor_parallel_group import TensorParallelGroup
-from .tp.distributed_utils import get_tp_group, get_tp_rank, get_tp_size, init_distributed
+try:
+    from .tp.group_coordinator import GroupCoordinator
+except ImportError:
+    from .tp.group_coordinator import GroupCoordinator
+
+try:
+    from .tp.parallel_config import ParallelConfig, ParallelMode
+except ImportError:
+    from .tp.parallel_config import ParallelConfig, ParallelMode
+
+try:
+    from .tp.rank_info import RankInfo
+except ImportError:
+    from .tp.rank_info import RankInfo
+
+try:
+    from .tp.tensor_parallel_group import TensorParallelGroup
+except ImportError:
+    from .tp.tensor_parallel_group import TensorParallelGroup
+
+try:
+    from .tp.distributed_utils import get_tp_group, get_tp_rank, get_tp_size, init_distributed
+except ImportError:
+    from .tp.distributed_utils import get_tp_group, get_tp_rank, get_tp_size, init_distributed
+
 
 __all__ = [
     "ParallelConfig","    "RankInfo","    "ParallelMode","    "GroupCoordinator","    "TensorParallelGroup","    "init_distributed","    "get_tp_group","    "get_tp_size","    "get_tp_rank","]

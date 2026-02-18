@@ -35,14 +35,39 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from .effort_estimate import EffortEstimate
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .effort_estimate import EffortEstimate
+except ImportError:
+    from .effort_estimate import EffortEstimate
+
+try:
+    from .improvement_category import ImprovementCategory
+except ImportError:
+    from .improvement_category import ImprovementCategory
+
+try:
+    from .improvement_priority import ImprovementPriority
+except ImportError:
+    from .improvement_priority import ImprovementPriority
+
 
 __version__ = VERSION
 
@@ -89,14 +114,39 @@ class ImprovementTemplate:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from .effort_estimate import EffortEstimate
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .effort_estimate import EffortEstimate
+except ImportError:
+    from .effort_estimate import EffortEstimate
+
+try:
+    from .improvement_category import ImprovementCategory
+except ImportError:
+    from .improvement_category import ImprovementCategory
+
+try:
+    from .improvement_priority import ImprovementPriority
+except ImportError:
+    from .improvement_priority import ImprovementPriority
+
 
 __version__ = VERSION
 

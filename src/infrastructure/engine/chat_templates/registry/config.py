@@ -15,9 +15,20 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration and built-in templates for chat template management.
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, Optional
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
 
 
 
@@ -25,7 +36,6 @@ from typing import Any, Dict, Optional
 class TemplateType(Enum):
     """Chat template types.
     CHATML = "chatml""    LLAMA2 = "llama2""    LLAMA3 = "llama3""    MISTRAL = "mistral""    ZEPHYR = "zephyr""    VICUNA = "vicuna""    ALPACA = "alpaca""    GEMMA = "gemma""    PHI = "phi""    QWEN = "qwen""    DEEPSEEK = "deepseek""    YI = "yi""    COMMAND = "command"  # Cohere"    JINJA = "jinja"  # Custom Jinja"    MULTIMODAL = "multimodal""    CUSTOM = "custom""
-
 
 
 class ModelType(Enum):

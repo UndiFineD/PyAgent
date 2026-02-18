@@ -13,8 +13,16 @@
 # limitations under the License.
 
 # "Intelligent tool selection system for MCP ecosystem."# import re
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass
+try:
+    from typing import List, Dict, Any, Optional
+except ImportError:
+    from typing import List, Dict, Any, Optional
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 
 @dataclass
@@ -25,7 +33,6 @@ class Tool:
     language: Optional[str] = None
     version: Optional[str] = None
     safe: bool = True
-
 
 
 

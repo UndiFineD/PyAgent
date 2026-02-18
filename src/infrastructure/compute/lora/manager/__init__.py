@@ -15,13 +15,37 @@
 
 Manager package.
 
-from .adapter import LoRAAdapter, get_lora_info, load_lora_adapter  # noqa: F401
-from .config import (AdapterSlot, AdapterStatus, LoRAConfig, LoRAInfo,  # noqa: F401
+try:
+    from .adapter import LoRAAdapter, get_lora_info, load_lora_adapter  # noqa: F401
+except ImportError:
+    from .adapter import LoRAAdapter, get_lora_info, load_lora_adapter # noqa: F401
+
+try:
+    from .config import (AdapterSlot, AdapterStatus, LoRAConfig, LoRAInfo,  # noqa: F401
+except ImportError:
+    from .config import (AdapterSlot, AdapterStatus, LoRAConfig, LoRAInfo, # noqa: F401
+
                      LoRAMethod, LoRARequest, TargetModule)
-from .engine import LoRAManager  # noqa: F401
-from .registry import LoRARegistry  # noqa: F401
-from .slot import LoRASlotManager  # noqa: F401
-from .weights import LoRAWeights, merge_adapters  # noqa: F401
+try:
+    from .engine import LoRAManager  # noqa: F401
+except ImportError:
+    from .engine import LoRAManager # noqa: F401
+
+try:
+    from .registry import LoRARegistry  # noqa: F401
+except ImportError:
+    from .registry import LoRARegistry # noqa: F401
+
+try:
+    from .slot import LoRASlotManager  # noqa: F401
+except ImportError:
+    from .slot import LoRASlotManager # noqa: F401
+
+try:
+    from .weights import LoRAWeights, merge_adapters  # noqa: F401
+except ImportError:
+    from .weights import LoRAWeights, merge_adapters # noqa: F401
+
 
 __all__ = [
     "LoRAMethod","    "AdapterStatus","    "TargetModule","    "LoRAConfig","    "LoRARequest","    "LoRAInfo","    "AdapterSlot","    "LoRAWeights","    "merge_adapters","    "LoRAAdapter","    "load_lora_adapter","    "get_lora_info","    "LoRARegistry","    "LoRASlotManager","    "LoRAManager","]

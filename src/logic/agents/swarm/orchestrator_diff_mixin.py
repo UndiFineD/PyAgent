@@ -22,11 +22,27 @@ allowing it to offer diff preview capabilities without bloating the main agent f
 
 from __future__ import annotations
 
-import logging
-from pathlib import Path
 
-from src.core.base.common.models import DiffOutputFormat
-from src.core.base.common.utils.diff_generator import DiffGenerator
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.common.models import DiffOutputFormat
+except ImportError:
+    from src.core.base.common.models import DiffOutputFormat
+
+try:
+    from .core.base.common.utils.diff_generator import DiffGenerator
+except ImportError:
+    from src.core.base.common.utils.diff_generator import DiffGenerator
 
 
 

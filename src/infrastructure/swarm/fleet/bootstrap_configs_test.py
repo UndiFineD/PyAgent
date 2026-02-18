@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.bootstrap_configs import get_bootstrap_agents
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.bootstrap_configs import get_bootstrap_agents
+except ImportError:
+    from infrastructure.swarm.fleet.bootstrap_configs import get_bootstrap_agents
+
 
 
 def test_get_bootstrap_agents_basic():

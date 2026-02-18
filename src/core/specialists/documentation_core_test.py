@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.specialists.documentation_core import DocumentationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.specialists.documentation_core import DocumentationCore
+except ImportError:
+    from core.specialists.documentation_core import DocumentationCore
+
 
 
 def test_documentationcore_basic():

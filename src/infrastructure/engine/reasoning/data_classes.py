@@ -15,12 +15,32 @@
 
 Data classes.py module.
 
-import json
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+try:
+    import json
+except ImportError:
+    import json
 
-from .enums import ReasoningFormat, ToolCallFormat
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .enums import ReasoningFormat, ToolCallFormat
+except ImportError:
+    from .enums import ReasoningFormat, ToolCallFormat
+
 
 
 @dataclass

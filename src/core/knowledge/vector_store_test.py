@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.knowledge.vector_store import VectorKnowledgeStore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.knowledge.vector_store import VectorKnowledgeStore
+except ImportError:
+    from core.knowledge.vector_store import VectorKnowledgeStore
+
 
 
 def test_vectorknowledgestore_basic():

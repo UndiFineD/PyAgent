@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.dependency_graph import DependencyGraph
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.dependency_graph import DependencyGraph
+except ImportError:
+    from core.base.logic.dependency_graph import DependencyGraph
+
 
 
 def test_dependencygraph_basic():

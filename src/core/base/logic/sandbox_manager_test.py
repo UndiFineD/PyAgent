@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.sandbox_manager import SandboxManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.sandbox_manager import SandboxManager
+except ImportError:
+    from core.base.logic.sandbox_manager import SandboxManager
+
 
 
 def test_sandboxmanager_basic():

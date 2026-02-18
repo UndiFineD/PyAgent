@@ -15,9 +15,20 @@
 
 """Mixin regarding Synaptic Modularization (Cassette-based logic).
 """
-from typing import Any, Optional
-from src.core.base.logic.cassette_orchestrator import CassetteOrchestrator, BaseLogicCassette
-from src.core.base.common.models.communication_models import CascadeContext
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
+try:
+    from .core.base.logic.cassette_orchestrator import CassetteOrchestrator, BaseLogicCassette
+except ImportError:
+    from src.core.base.logic.cassette_orchestrator import CassetteOrchestrator, BaseLogicCassette
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 

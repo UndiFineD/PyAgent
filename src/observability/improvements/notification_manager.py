@@ -37,9 +37,17 @@ FILE CONTENT SUMMARY:
 Manager for improvement notifications.
 (Facade for src.core.base.common.utils.notification_manager)
 
-from src.core.base.common.utils.notification_manager import NotificationManager
+try:
+    from .core.base.common.utils.notification_manager import NotificationManager
+except ImportError:
+    from src.core.base.common.utils.notification_manager import NotificationManager
+
 
 __all__ = ["NotificationManage"""r"]"
-from src.core.base.common.utils.notification_manager import NotificationManager
+try:
+    from .core.base.common.utils.notification_manager import NotificationManager
+except ImportError:
+    from src.core.base.common.utils.notification_manager import NotificationManager
+
 
 __all__ = ["NotificationManager"]"

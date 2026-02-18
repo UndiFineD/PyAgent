@@ -39,17 +39,45 @@ identity management.
 
 from __future__ import annotations
 
-import hashlib
-import time
-import uuid
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.logic.core.identity_core import IdentityCore
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.logic.core.identity_core import IdentityCore
+except ImportError:
+    from src.core.base.logic.core.identity_core import IdentityCore
+
 
 __version__ = VERSION
-
 
 
 
@@ -99,17 +127,45 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
-import hashlib
-import time
-import uuid
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.logic.core.identity_core import IdentityCore
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.logic.core.identity_core import IdentityCore
+except ImportError:
+    from src.core.base.logic.core.identity_core import IdentityCore
+
 
 __version__ = VERSION
-
 
 
 

@@ -19,10 +19,18 @@ Mamba Operations - Causal Convolution and Selective Scan.
 
 from __future__ import annotations
 
-import math
 
-import numpy as np
+try:
+    import math
+except ImportError:
+    import math
 
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 
@@ -93,7 +101,6 @@ class CausalConv1d:
             output = output + self.bias
 
         return output, new_state
-
 
 
 

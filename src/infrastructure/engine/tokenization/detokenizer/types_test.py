@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.tokenization.detokenizer.types import TokenizerLike, DetokenizeResult
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.tokenization.detokenizer.types import TokenizerLike, DetokenizeResult
+except ImportError:
+    from infrastructure.engine.tokenization.detokenizer.types import TokenizerLike, DetokenizeResult
+
 
 
 def test_tokenizerlike_basic():

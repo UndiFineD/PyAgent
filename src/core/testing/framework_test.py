@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.testing.framework import ScenarioResult, TestType, TestStatus, TestResult, TestScenario, TestSuite, AgentTestingPyramidCore, ScenarioTestingEngine, PromptVersioningSystem, EvaluationNotebookSystem, assert_equal, run_scenario
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.testing.framework import ScenarioResult, TestType, TestStatus, TestResult, TestScenario, TestSuite, AgentTestingPyramidCore, ScenarioTestingEngine, PromptVersioningSystem, EvaluationNotebookSystem, assert_equal, run_scenario
+except ImportError:
+    from core.testing.framework import ScenarioResult, TestType, TestStatus, TestResult, TestScenario, TestSuite, AgentTestingPyramidCore, ScenarioTestingEngine, PromptVersioningSystem, EvaluationNotebookSystem, assert_equal, run_scenario
+
 
 
 def test_scenarioresult_basic():

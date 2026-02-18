@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Optional, Any
-from dataclasses import dataclass, field
-import collections
+try:
+    from typing import List, Dict, Optional, Any
+except ImportError:
+    from typing import List, Dict, Optional, Any
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    import collections
+except ImportError:
+    import collections
+
 
 
 @dataclass
@@ -24,7 +36,6 @@ class WorkflowNode:
     dependencies: List[str] = field(default_factory=list)
     results: Any = None
     status: str = "pending"  # pending, running, completed, failed"
-
 
 
 class DAGWorkflowCore:
@@ -56,7 +67,8 @@ class DAGWorkflowCore:
     def is_workflow_complete(self) -> bool:
         """Returns True if all nodes are completed."""return all(node.status == "completed" for node in self.nodes.values())"
     def get_order(self) -> List[str]:
-        """Returns the topological sort order of the DAG."""# Simple Kahn's algorithm'        in_degree = {u: 0 for u in self.nodes}
+        """Returns the topological sort order of the DAG."""
+# Simple Kahn's algorithm'        in_degree = {u: 0 for u in self.nodes}
         for u in self.nodes:
             for v in self.edges[u]:
                 in_degree[v] += 1

@@ -21,9 +21,17 @@ Tool schema adapter for MCP and OpenAI formats.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
 
-from .models import ToolSchema
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .models import ToolSchema
+except ImportError:
+    from .models import ToolSchema
 
 
 

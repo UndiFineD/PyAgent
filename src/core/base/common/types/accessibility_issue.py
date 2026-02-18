@@ -17,14 +17,35 @@
 Auto-extracted class from agent_coder.py
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.common.types.accessibility_issue_type import \
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+
+try:
+    from .core.base.common.types.accessibility_issue_type import \
+except ImportError:
+    from src.core.base.common.types.accessibility_issue_type import \
+
     AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import \
+try:
+    from .core.base.common.types.accessibility_severity import \
+except ImportError:
+    from src.core.base.common.types.accessibility_severity import \
+
     AccessibilitySeverity
-from src.core.base.common.types.wcag_level import WCAGLevel
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.common.types.wcag_level import WCAGLevel
+except ImportError:
+    from src.core.base.common.types.wcag_level import WCAGLevel
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

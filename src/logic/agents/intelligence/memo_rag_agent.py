@@ -50,7 +50,6 @@ __version__ = VERSION
 
 
 
-
 class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Memory-Augmented RAG agent for deep context discovery with sharding.
     def __init__(self, file_path: str) -> None:
@@ -113,7 +112,6 @@ except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
 
 
 

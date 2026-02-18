@@ -15,9 +15,18 @@
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
 
-from . import system
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from . import system
+except ImportError:
+    from . import system
+
 
 __version__ = VERSION
 __all__ = ["VERSION", "system"]"

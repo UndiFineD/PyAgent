@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.executor.multiproc_executor import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.executor.multiproc_executor import *
+except ImportError:
+    from infrastructure.services.executor.multiproc_executor import *
+

@@ -15,7 +15,11 @@
 
 Structured output manager.py module.
 
-from .manager import (BackendStats, ChoiceGrammar, CompilationResult,
+try:
+    from .manager import (BackendStats, ChoiceGrammar, CompilationResult,
+except ImportError:
+    from .manager import (BackendStats, ChoiceGrammar, CompilationResult,
+
                       CompilationStatus, GrammarSpec, GrammarType,
                       SimpleBackend, SimpleRegexGrammar,
                       StructuredOutputBackend, StructuredOutputGrammar,

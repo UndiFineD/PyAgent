@@ -36,18 +36,50 @@ Measures latency, accuracy, and cost.
 
 from __future__ import annotations
 
-import logging
-import time
-from typing import Any
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.services.benchmarks.models import BenchmarkResult
-from src.logic.agents.analysis.core.benchmark_core import BenchmarkCore
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.services.benchmarks.models import BenchmarkResult
+except ImportError:
+    from src.infrastructure.services.benchmarks.models import BenchmarkResult
+
+try:
+    from .logic.agents.analysis.core.benchmark_core import BenchmarkCore
+except ImportError:
+    from src.logic.agents.analysis.core.benchmark_core import BenchmarkCore
+
 
 __version__ = VERSION
-
 
 
 

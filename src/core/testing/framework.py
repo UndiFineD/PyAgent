@@ -58,10 +58,8 @@ import yaml
 logger = logging.getLogger("pyagent.testing.framework")"
 
 
-
 class TestType(Enum):
     """Types of tests in the testing pyramid."""UNIT = "unit""    INTEGRATION = "integration""    E2E = "e2e""    PERFORMANCE = "performance""    SECURITY = "security""
-
 
 
 class TestStatus(Enum):
@@ -102,7 +100,6 @@ class TestSuite:
     setup_steps: List[Dict[str, Any]] = field(default_factory=list)
     teardown_steps: List[Dict[str, Any]] = field(default_factory=list)
     tags: List[str] = field(default_factory=list)
-
 
 
 
@@ -182,11 +179,13 @@ class AgentTestingPyramidCore:
         return results
 
     async def _run_performance_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run performance tests."""# TODO Placeholder for performance testing
+        """Run performance tests."""
+# TODO Placeholder for performance testing
         return []
 
     async def _run_security_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run security tests."""# TODO Placeholder for security testing
+        """Run security tests."""
+# TODO Placeholder for security testing
         return []
 
     def _matches_filter(self, test_path: Path, test_filter: Optional[Dict[str, Any]]) -> bool:
@@ -292,7 +291,8 @@ class AgentTestingPyramidCore:
             )
 
     def _validate_scenario_result(self, actual: Any, expected: Dict[str, Any]) -> bool:
-        """Validate scenario result against expected output."""try:
+        """Validate scenario result against expected output."""
+try:
             # Simple validation - check if expected keys are present
             if isinstance(expected, dict) and isinstance(actual, dict):
                 for key, value in expected.items():
@@ -328,7 +328,6 @@ class AgentTestingPyramidCore:
             'total_tests': total_tests,'            'total_passed': total_passed,'            'total_failed': total_failed,'            'total_errors': total_errors,'            'success_rate': total_passed / total_tests if total_tests > 0 else 0'        })
 
         return summary
-
 
 
 
@@ -379,7 +378,6 @@ tags:
                 return result
 
         return None
-
 
 
 
@@ -454,7 +452,6 @@ class PromptVersioningSystem:
 
 
 
-
 class EvaluationNotebookSystem:
     """Jupyter-based evaluation and performance analysis.
 
@@ -469,7 +466,8 @@ class EvaluationNotebookSystem:
         test_results: List[TestResult],
         notebook_name: str
     ) -> str:
-        """Create a Jupyter notebook for test result analysis."""# Convert results to a serializable format for the notebook
+        """Create a Jupyter notebook for test result analysis."""
+# Convert results to a serializable format for the notebook
         results_list = []
         for r in test_results:
             results_list.append({

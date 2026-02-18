@@ -16,13 +16,19 @@
 """Core logic regarding Agent Identity.
 (Facade regarding src.core.base.common.identity_core)
 """
+
+
 from __future__ import annotations
 
-from src.core.base.common.identity_core import (
+
+try:
+    from .core.base.common.identity_core import (
+except ImportError:
+    from src.core.base.common.identity_core import (
+
     IdentityCore as StandardIdentityCore, AgentIdentity)
 
 __all__ = ["IdentityCore", "AgentIdentity"]"
-
 
 
 class IdentityCore(StandardIdentityCore):

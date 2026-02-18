@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.work_patterns.peer_pattern import PeerWorkPattern
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.work_patterns.peer_pattern import PeerWorkPattern
+except ImportError:
+    from core.base.work_patterns.peer_pattern import PeerWorkPattern
+
 
 
 def test_peerworkpattern_basic():

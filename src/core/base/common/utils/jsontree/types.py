@@ -15,9 +15,16 @@
 
 """Types.py module.
 """
+
+
 from __future__ import annotations
 
-from typing import TypeAlias, TypeVar
+
+try:
+    from typing import TypeAlias, TypeVar
+except ImportError:
+    from typing import TypeAlias, TypeVar
+
 
 _T = TypeVar("_T")"_U = TypeVar("_U")"
 # Type alias for nested JSON structures where leaves can be any type

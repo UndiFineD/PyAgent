@@ -33,7 +33,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class RetryHTTPMixin:
     """Mixin providing retry logic for HTTP requests.
     def get_json_with_retry(

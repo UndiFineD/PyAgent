@@ -30,20 +30,16 @@ from src.core.base.common.base_core import BaseCore
 
 
 
-
 class ProcessType(str, Enum):
     """Crew process types."""SEQUENTIAL = "sequential""    HIERARCHICAL = "hierarchical""    CONSENSUAL = "consensual""
-
 
 
 class ToolType(str, Enum):
     """Tool types supported."""BUILTIN = "builtin""    FUNCTION = "function""    RAG = "rag""
 
 
-
 class AgentStatus(str, Enum):
     """Agent status states."""ACTIVE = "active""    INACTIVE = "inactive""    ERROR = "error""
-
 
 
 class TaskStatus(str, Enum):
@@ -130,7 +126,6 @@ class ExecutionResult:
     execution_time: float = 0.0
     token_usage: Optional[Dict[str, int]] = None
     completed_at: Optional[datetime] = None
-
 
 
 

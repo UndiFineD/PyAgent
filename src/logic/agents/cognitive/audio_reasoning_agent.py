@@ -37,10 +37,22 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Audio Reasoning Agent for multimedia grounding.
 
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 __version__ = VERSION
 
@@ -66,10 +78,22 @@ class AudioReasoningAgent(BaseAgent):
 #         "Correlates audio findings with numerical sensor data."        if (
             "engine" in audio_analysis["entities"]"            and sensor_data.get("vibration_level", 0) > 0.8"        ):
 #             return "Audio finding confirmed by high vibration sensors."#         return "Audio finding remains unconfirmed by numerical telemetry."
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 __version__ = VERSION
 

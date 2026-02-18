@@ -59,7 +59,6 @@ class ReconnaissanceConfig:
 
 
 
-
 class NetworkReconnaissanceCore(BaseCore):
     """Network Reconnaissance Core implementing comprehensive asset discovery patterns.
 
@@ -194,7 +193,8 @@ class NetworkReconnaissanceCore(BaseCore):
         await asyncio.gather(*tasks, return_exceptions=True)
 
     async def _analyze_certificates(self, domain: str, result: AssetDiscoveryResult) -> None:
-        """Analyze SSL/TLS certificates for subdomains."""try:
+        """Analyze SSL/TLS certificates for subdomains."""
+try:
             # Get certificate from direct connection
             context = ssl.create_default_context()
             context.check_hostname = False

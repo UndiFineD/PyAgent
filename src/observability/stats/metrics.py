@@ -13,15 +13,34 @@
 # limitations under the License.
 
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__: str = VERSION
-
 
 
 
@@ -78,12 +97,10 @@ class MetricSnapshot:
 
 
 
-
 class AggregationType(Enum):
     """Types of metric aggregation for rollups.
     SUM = "sum""    AVG = "average""    MIN = "minimum""
     MAX = "maximum""    COUNT = "count""    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99""
-
 
 
 class AggregationResult(dict[str, Any]):
@@ -231,12 +248,10 @@ class MetricSnapshot:
 
 
 
-
 class AggregationType(Enum):
     """Types of metric aggregation for rollups.
     SUM = "sum""    AVG = "average""    MIN = "minimum""
     MAX = "maximum""    COUNT = "count""    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99""
-
 
 
 class AggregationResult(dict[str, Any]):

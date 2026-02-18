@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.tokenization.tiktoken import TiktokenTokenizer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.tokenization.tiktoken import TiktokenTokenizer
+except ImportError:
+    from infrastructure.engine.tokenization.tiktoken import TiktokenTokenizer
+
 
 
 def test_tiktokentokenizer_basic():

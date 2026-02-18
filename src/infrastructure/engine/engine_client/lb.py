@@ -20,15 +20,31 @@ Power of Two Choices algorithm for engine client selection.
 
 from __future__ import annotations
 
-import random
-import threading
-from typing import TYPE_CHECKING, Optional
 
-from src.infrastructure.engine.engine_client.types import WorkerState
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import TYPE_CHECKING, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Optional
+
+
+try:
+    from .infrastructure.engine.engine_client.types import WorkerState
+except ImportError:
+    from src.infrastructure.engine.engine_client.types import WorkerState
+
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import WorkerInfo
-
 
 
 

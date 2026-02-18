@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.latent_link import SynapticAdapter, LatentLinkManager, SynapticLink
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.latent_link import SynapticAdapter, LatentLinkManager, SynapticLink
+except ImportError:
+    from infrastructure.storage.kv_transfer.latent_link import SynapticAdapter, LatentLinkManager, SynapticLink
+
 
 
 def test_synapticadapter_basic():

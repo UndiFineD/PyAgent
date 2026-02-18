@@ -30,7 +30,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class RemoteNeuralSynapse:
         Manages the 'synaptic' firing of tasks and agents to remote peers.'    Implements the transport layer for Voyager Phase 1.1 using ZMQ.
     

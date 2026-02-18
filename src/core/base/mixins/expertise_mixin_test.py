@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.expertise_mixin import ExpertiseMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.expertise_mixin import ExpertiseMixin
+except ImportError:
+    from core.base.mixins.expertise_mixin import ExpertiseMixin
+
 
 
 def test_expertisemixin_basic():

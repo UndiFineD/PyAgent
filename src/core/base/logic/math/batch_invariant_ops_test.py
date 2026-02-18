@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.math.batch_invariant_ops import BatchInvariantOps, matmul_persistent, softmax_batch_invariant, log_softmax_batch_invariant, mean_batch_invariant, mm_batch_invariant, bmm_batch_invariant, addmm_batch_invariant, gelu_batch_invariant, layer_norm_batch_invariant, rms_norm_batch_invariant, attention_score_batch_invariant, attention_output_batch_invariant
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.math.batch_invariant_ops import BatchInvariantOps, matmul_persistent, softmax_batch_invariant, log_softmax_batch_invariant, mean_batch_invariant, mm_batch_invariant, bmm_batch_invariant, addmm_batch_invariant, gelu_batch_invariant, layer_norm_batch_invariant, rms_norm_batch_invariant, attention_score_batch_invariant, attention_output_batch_invariant
+except ImportError:
+    from core.base.logic.math.batch_invariant_ops import BatchInvariantOps, matmul_persistent, softmax_batch_invariant, log_softmax_batch_invariant, mean_batch_invariant, mm_batch_invariant, bmm_batch_invariant, addmm_batch_invariant, gelu_batch_invariant, layer_norm_batch_invariant, rms_norm_batch_invariant, attention_score_batch_invariant, attention_output_batch_invariant
+
 
 
 def test_batchinvariantops_basic():

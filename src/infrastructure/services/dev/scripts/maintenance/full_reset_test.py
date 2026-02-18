@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.maintenance.full_reset import full_reset
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.maintenance.full_reset import full_reset
+except ImportError:
+    from infrastructure.services.dev.scripts.maintenance.full_reset import full_reset
+
 
 
 def test_full_reset_basic():

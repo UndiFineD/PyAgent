@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.memory_arena import ArenaStats, MemoryArena, TypedArena, StackArena, SlabAllocator, get_thread_arena, temp_arena, thread_temp_alloc
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.memory_arena import ArenaStats, MemoryArena, TypedArena, StackArena, SlabAllocator, get_thread_arena, temp_arena, thread_temp_alloc
+except ImportError:
+    from core.base.logic.structures.memory_arena import ArenaStats, MemoryArena, TypedArena, StackArena, SlabAllocator, get_thread_arena, temp_arena, thread_temp_alloc
+
 
 
 def test_arenastats_basic():

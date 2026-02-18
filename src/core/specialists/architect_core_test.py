@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.specialists.architect_core import ArchitectCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.specialists.architect_core import ArchitectCore
+except ImportError:
+    from core.specialists.architect_core import ArchitectCore
+
 
 
 def test_architectcore_basic():

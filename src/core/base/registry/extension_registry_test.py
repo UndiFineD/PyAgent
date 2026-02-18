@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.registry.extension_registry import ExtensionManager, ExtensionInfo, TypedExtensionManager, MultiExtensionManager, LazyExtensionManager, GlobalRegistry, get_global_registry, create_registry, create_typed_registry, create_lazy_registry, create_multi_registry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.registry.extension_registry import ExtensionManager, ExtensionInfo, TypedExtensionManager, MultiExtensionManager, LazyExtensionManager, GlobalRegistry, get_global_registry, create_registry, create_typed_registry, create_lazy_registry, create_multi_registry
+except ImportError:
+    from core.base.registry.extension_registry import ExtensionManager, ExtensionInfo, TypedExtensionManager, MultiExtensionManager, LazyExtensionManager, GlobalRegistry, get_global_registry, create_registry, create_typed_registry, create_lazy_registry, create_multi_registry
+
 
 
 def test_extensionmanager_basic():

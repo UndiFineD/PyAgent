@@ -19,10 +19,23 @@ Utils.py module.
 
 from __future__ import annotations
 
-import math
-from typing import Sequence
 
-import numpy as np
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from typing import Sequence
+except ImportError:
+    from typing import Sequence
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 def compute_perplexity(logprobs: Sequence[float]) -> float:

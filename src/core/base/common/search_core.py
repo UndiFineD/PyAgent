@@ -15,6 +15,8 @@
 
 """Core logic for semantic and literal search across the codebase.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -29,7 +31,6 @@ except ImportError:
     rc = None
 
 logger = logging.getLogger("pyagent.search")
-
 
 
 

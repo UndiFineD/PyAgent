@@ -18,15 +18,31 @@
 Shared central memory for opportunistic agent collaboration (Blackboard Pattern).
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .blackboard_core import BlackboardCore
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .blackboard_core import BlackboardCore
+except ImportError:
+    from .blackboard_core import BlackboardCore
+
 
 __version__ = VERSION
-
 
 
 

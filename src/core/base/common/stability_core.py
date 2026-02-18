@@ -28,7 +28,7 @@ try:
 except ImportError:
     rc = None
 
-from src.core.base.base_core import BaseCore
+from .base_core import BaseCore
 
 
 @dataclass

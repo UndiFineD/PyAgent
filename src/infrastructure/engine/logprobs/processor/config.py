@@ -29,7 +29,6 @@ if TYPE_CHECKING:
 
 
 
-
 class LogprobFormat(Enum):
     """Logprobs output format.
     DICT = auto()  # Dict[token_id, logprob]
@@ -82,7 +81,6 @@ def compute_perplexity(logprobs: Sequence[float]) -> float:
         return 0.0
     mean_logprob = sum(logprobs) / len(logprobs)
     return math.exp(-mean_logprob)
-
 
 
 

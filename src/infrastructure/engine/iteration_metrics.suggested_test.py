@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.iteration_metrics.suggested import MetricType, BaseCacheStats, PrefixCacheStats, MultiModalCacheStats, KVCacheEvictionEvent, CachingMetrics, RequestStateStats, FinishedRequestStats, SchedulerStats, IterationStats, PercentileTracker, TrendAnalyzer, AnomalyDetector, MetricsCollector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.iteration_metrics.suggested import MetricType, BaseCacheStats, PrefixCacheStats, MultiModalCacheStats, KVCacheEvictionEvent, CachingMetrics, RequestStateStats, FinishedRequestStats, SchedulerStats, IterationStats, PercentileTracker, TrendAnalyzer, AnomalyDetector, MetricsCollector
+except ImportError:
+    from infrastructure.engine.iteration_metrics.suggested import MetricType, BaseCacheStats, PrefixCacheStats, MultiModalCacheStats, KVCacheEvictionEvent, CachingMetrics, RequestStateStats, FinishedRequestStats, SchedulerStats, IterationStats, PercentileTracker, TrendAnalyzer, AnomalyDetector, MetricsCollector
+
 
 
 def test_metrictype_basic():

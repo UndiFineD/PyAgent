@@ -26,7 +26,6 @@ except ImportError:
 
 
 
-
 class AnalysisCore:
     """Standardized tools regarding analyzing Python source code without execution.
     """
@@ -102,5 +101,6 @@ class AnalysisCore:
         return bool(re.search(r'if\s+__name__\s*==\s*["\']__main__["\']\s*:', source))
     @staticmethod
     def detect_library_usage(source: str, library_name: str) -> bool:
-        """Check if a library is likely used in the source."""# Simple string check for now, can be expanded to AST check
+        """Check if a library is likely used in the source."""
+# Simple string check for now, can be expanded to AST check
         return library_name in source

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.connectivity.modal_teleportation_orchestrator import ModalTeleportationOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.connectivity.modal_teleportation_orchestrator import ModalTeleportationOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.connectivity.modal_teleportation_orchestrator import ModalTeleportationOrchestrator
+
 
 
 def test_modalteleportationorchestrator_basic():

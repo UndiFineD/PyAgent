@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.execution.shell_executor import ShellExecutor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.execution.shell_executor import ShellExecutor
+except ImportError:
+    from core.base.execution.shell_executor import ShellExecutor
+
 
 
 def test_shellexecutor_basic():

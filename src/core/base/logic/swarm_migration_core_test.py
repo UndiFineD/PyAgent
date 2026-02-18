@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.swarm_migration_core import MigrationTask, MigrationTarget, MigrationBatch, MigrationResult, MigrationStrategy, SwarmMigrationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.swarm_migration_core import MigrationTask, MigrationTarget, MigrationBatch, MigrationResult, MigrationStrategy, SwarmMigrationCore
+except ImportError:
+    from core.base.logic.swarm_migration_core import MigrationTask, MigrationTarget, MigrationBatch, MigrationResult, MigrationStrategy, SwarmMigrationCore
+
 
 
 def test_migrationtask_basic():

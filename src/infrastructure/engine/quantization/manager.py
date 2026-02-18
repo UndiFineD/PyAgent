@@ -29,11 +29,9 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class QuantizationMode(Enum):
         Supported quantization modes.
         FP16 = "fp16""    FP8 = "fp8""    INT8 = "int8""    INT4 = "int4""    BITNET_158 = "bitnet_158"  # 1.58-bit ternary quantization"    AWQ = "awq"  # Activation-aware Weight Quantization"
-
 
 
 class QuantizationManager:

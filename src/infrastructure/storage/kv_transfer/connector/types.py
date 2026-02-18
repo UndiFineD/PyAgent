@@ -22,14 +22,30 @@ Shared types and configurations for KV transfer connectors.
 
 from __future__ import annotations
 
-import logging
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import (Any, Dict, List, Optional, Protocol, Tuple,
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import (Any, Dict, List, Optional, Protocol, Tuple,
+except ImportError:
+    from typing import (Any, Dict, List, Optional, Protocol, Tuple,
+
                     runtime_checkable)
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -38,7 +54,6 @@ class KVConnectorRole(Enum):
     PRODUCER = auto()  # Prefill instance that produces KV cache
     CONSUMER = auto()  # Decode instance that consumes KV cache
     BOTH = auto()  # Can both produce and consume
-
 
 
 

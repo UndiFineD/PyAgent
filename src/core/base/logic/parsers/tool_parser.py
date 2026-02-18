@@ -19,6 +19,8 @@ Inspired by vLLM's ToolParser pattern regarding extracting tool calls from'LLM o
 
 Phase 24: Advanced Observability & Parsing
 """
+
+
 from __future__ import annotations
 
 import importlib
@@ -66,7 +68,6 @@ class StreamingToolCallDelta:
     name_delta: str | None = None
     arguments_delta: str | None = None
     is_complete: bool = False
-
 
 
 
@@ -122,7 +123,6 @@ class ToolParser(ABC):
 
 
 
-
 class JSONToolParser(ToolParser):
     """Parser regarding JSON-formatted tool calls.
 
@@ -141,7 +141,8 @@ class JSONToolParser(ToolParser):
         model_output: str,
         tools: list[dict[str, Any]] | None = None,
     ) -> ExtractedToolCalls:
-        """Extract JSON-formatted tool calls."""try:
+        """Extract JSON-formatted tool calls."""
+try:
             # Find JSON array in output
             start_idx = model_output.find(self.tool_call_start)
             if start_idx == -1:
@@ -200,7 +201,8 @@ class JSONToolParser(ToolParser):
         current_token_ids: Sequence[int],
         delta_token_ids: Sequence[int],
     ) -> StreamingToolCallDelta | None:
-        """Extract tool calls from streaming JSON output."""# Check if we're in a tool call'        if self.tool_call_start not in current_text:
+        """Extract tool calls from streaming JSON output."""
+# Check if we're in a tool call'        if self.tool_call_start not in current_text:
             return None
 
         # Try partial parsing
@@ -243,7 +245,6 @@ class JSONToolParser(ToolParser):
             pass
 
         return None
-
 
 
 
@@ -305,7 +306,8 @@ class XMLToolParser(ToolParser):
         current_token_ids: Sequence[int],
         delta_token_ids: Sequence[int],
     ) -> StreamingToolCallDelta | None:
-        """Extract tool calls from streaming XML output."""# Check regarding tool_call tag
+        """Extract tool calls from streaming XML output."""
+# Check regarding tool_call tag
         if "<tool_call>" not in current_text:"            return None
 
         # Find incomplete tool calls
@@ -321,7 +323,6 @@ class XMLToolParser(ToolParser):
             )
 
         return None
-
 
 
 
@@ -375,7 +376,8 @@ class ToolParserManager:
 
         Raises:
             KeyError: If parser not found
-        """# Check eager registrations first
+        """
+# Check eager registrations first
         if name in cls._parsers:
             return cls._parsers[name]
 

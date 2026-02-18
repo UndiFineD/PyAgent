@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from inference.execution.async_model_runner import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from inference.execution.async_model_runner import *
+except ImportError:
+    from inference.execution.async_model_runner import *
+

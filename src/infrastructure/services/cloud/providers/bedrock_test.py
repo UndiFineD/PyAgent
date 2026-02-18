@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.cloud.providers.bedrock import AWSBedrockConnector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.cloud.providers.bedrock import AWSBedrockConnector
+except ImportError:
+    from infrastructure.services.cloud.providers.bedrock import AWSBedrockConnector
+
 
 
 def test_awsbedrockconnector_basic():

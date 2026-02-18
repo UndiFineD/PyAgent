@@ -15,11 +15,27 @@
 
 Decoder package.
 
-from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,  # noqa: F401
+try:
+    from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,  # noqa: F401
+except ImportError:
+    from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod, # noqa: F401
+
                      SpeculativeConfig, VerificationResult)
-from .engine import SpeculativeDecoder, create_speculative_decoder  # noqa: F401
-from .proposers import DraftProposer, NgramProposer, SuffixProposer  # noqa: F401
-from .verification import TreeSpeculator  # noqa: F401
+try:
+    from .engine import SpeculativeDecoder, create_speculative_decoder  # noqa: F401
+except ImportError:
+    from .engine import SpeculativeDecoder, create_speculative_decoder # noqa: F401
+
+try:
+    from .proposers import DraftProposer, NgramProposer, SuffixProposer  # noqa: F401
+except ImportError:
+    from .proposers import DraftProposer, NgramProposer, SuffixProposer # noqa: F401
+
+try:
+    from .verification import TreeSpeculator  # noqa: F401
+except ImportError:
+    from .verification import TreeSpeculator # noqa: F401
+
 
 __all__ = [
     "SpecMethod","    "SpeculativeConfig","    "DraftProposal","    "VerificationResult","    "SpecDecodingMetrics","    "DraftProposer","    "NgramProposer","    "SuffixProposer","    "TreeSpeculator","    "SpeculativeDecoder","    "create_speculative_decoder","]

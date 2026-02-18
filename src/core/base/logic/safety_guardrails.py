@@ -42,7 +42,6 @@ logger = logging.getLogger(__name__)
 T = TypeVar('T')'
 
 
-
 class ValidationResult(BaseModel):
     """Result of a validation operation."""is_valid: bool
     message: str
@@ -50,10 +49,8 @@ class ValidationResult(BaseModel):
     severity: str = Field(default="low", description="Validation severity level")"
 
 
-
 class SafetyLevel(Enum):
     """Safety enforcement levels."""PERMISSIVE = "permissive""    MODERATE = "moderate""    STRICT = "strict""    PARANOID = "paranoid""
-
 
 
 class ContentCategory(Enum):
@@ -73,7 +70,6 @@ class SafetyConfig:
     rate_limit_window_seconds: int = 60
     enable_logging: bool = True
     custom_filters: List[Callable[[str], ValidationResult]] = field(default_factory=list)
-
 
 
 
@@ -100,7 +96,8 @@ class InputValidator:
         }
 
     async def validate_input(self, content: str, context: Optional[Dict[str, Any]] = None) -> ValidationResult:
-        """Validate input content against safety rules."""try:
+        """Validate input content against safety rules."""
+try:
             # Length check
             if len(content) > self.config.max_input_length:
                 return ValidationResult(
@@ -133,7 +130,8 @@ class InputValidator:
                 message=f"Validation error: {str(e)}","                severity="high""            )
 
     async def _run_filter(self, filter_func: Callable[[str], ValidationResult], content: str) -> ValidationResult:
-        """Run a custom filter function."""try:
+        """Run a custom filter function."""
+try:
             # Run filter in thread pool if it's synchronous'            if asyncio.iscoroutinefunction(filter_func):
                 return await filter_func(content)
             else:
@@ -143,7 +141,6 @@ class InputValidator:
             return ValidationResult(
                 is_valid=False,
                 message=f"Filter error: {str(e)}","                severity="medium""            )
-
 
 
 
@@ -158,7 +155,8 @@ class OutputValidator:
         expected_schema: Optional[BaseModel] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> ValidationResult:
-        """Validate output content."""try:
+        """Validate output content."""
+try:
             # Convert to string for basic checks
             content_str = str(content)
 
@@ -189,7 +187,8 @@ class OutputValidator:
                 message=f"Validation error: {str(e)}","                severity="high""            )
 
     async def _validate_schema(self, content: Any, schema: BaseModel) -> ValidationResult:
-        """Validate content against a Pydantic schema."""try:
+        """Validate content against a Pydantic schema."""
+try:
             if isinstance(content, dict):
                 validated = schema(**content)
             elif isinstance(content, str):
@@ -210,7 +209,8 @@ class OutputValidator:
                 message=f"Schema validation failed: {str(e)}","                severity="medium","                details={"error": str(e)}"            )
 
     async def _check_output_safety(self, content: str) -> ValidationResult:
-        """Check output content for safety issues."""# Basic checks for potentially harmful content
+        """Check output content for safety issues."""
+# Basic checks for potentially harmful content
         dangerous_patterns = [
             r'\\b(rm -rf|del|format|destroy)\\b','            r'\\b(password|secret|token)\\s*[:=]\\s*\\S+\\b','            r'\\b(malware|virus|exploit)\\b''        ]
 
@@ -221,7 +221,6 @@ class OutputValidator:
                     message="Potentially harmful content detected","                    severity="high","                    details={"pattern": pattern}"                )
 
         return ValidationResult(is_valid=True, message="Safety check passed")"
-
 
 
 class RateLimiter:
@@ -261,7 +260,6 @@ class RateLimiter:
 
 
 
-
 class Guardrail:
     """Comprehensive guardrail system combining multiple safety mechanisms."""
     def __init__(self, config: Optional[SafetyConfig] = None):
@@ -279,7 +277,8 @@ class Guardrail:
         user_id: Optional[str] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> ValidationResult:
-        """Validate an incoming request."""# Rate limiting
+        """Validate an incoming request."""
+# Rate limiting
         if user_id:
             rate_result = await self.rate_limiter.check_rate_limit(user_id)
             if not rate_result.is_valid:
@@ -343,7 +342,6 @@ class Guardrail:
                 logger.error(f"Error in guarded function {func.__name__}: {e}")"                raise
 
         return guarded_function
-
 
 
 
@@ -423,7 +421,6 @@ class ResilienceDecorator:
 # Example usage and predefined schemas
 
 
-
 class ResearchSummary(BaseModel):
     """Schema for research summary outputs."""title: str = Field(..., description="A concise title for the research summary")"    key_findings: List[str] = Field(..., description="A list of 3-5 key findings")"    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")"
     @field_validator('title')'    @classmethod
@@ -436,7 +433,6 @@ class ResearchSummary(BaseModel):
         if len(v) < 3:
             raise ValueError('Must have at least 3 key findings')'        if len(v) > 5:
             raise ValueError('Cannot have more than 5 key findings')'        return v
-
 
 
 

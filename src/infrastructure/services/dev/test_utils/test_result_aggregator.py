@@ -15,17 +15,35 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .test_result import TestResult
-from .test_status import TestStatus
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .test_result import TestResult
+except ImportError:
+    from .test_result import TestResult
+
+try:
+    from .test_status import TestStatus
+except ImportError:
+    from .test_status import TestStatus
+
 
 __version__ = VERSION
-
 
 
 

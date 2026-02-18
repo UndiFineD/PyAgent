@@ -50,9 +50,22 @@ FILE CONTENT SUMMARY:
 
 # "Mixin for context validation capabilities."
 from __future__ import annotations
-import re
-from typing import Any
-from src.core.base.common.models import ValidationRule
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .core.base.common.models import ValidationRule
+except ImportError:
+    from src.core.base.common.models import ValidationRule
+
 
 # Default validation rules
 DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
@@ -64,7 +77,6 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
     ValidationRule(
         name="valid_code_blocks","        pattern=r"```\\w*\\n[\\\\s\\S]*?```","        message="Code blocks should have language identifier","        severity="info","    ),
 ]
-
 
 
 
@@ -101,9 +113,22 @@ class ContextValidationMixin:
 """"Check if content passes all required validations.        issues = self.validate_content(content)
         return not any(i.get("severity") == "error" for" i in issues)"
 from __future__ import annotations
-import re
-from typing import Any
-from src.core.base.common.models import ValidationRule
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .core.base.common.models import ValidationRule
+except ImportError:
+    from src.core.base.common.models import ValidationRule
+
 
 # Default validation rules
 DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
@@ -115,7 +140,6 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
     ValidationRule(
         name="valid_code_blocks","        pattern=r"```\\w*\\n[\\\\s\\S]*?```","        message="Code blocks should have language identifier","        severity="info","    ),
 ]
-
 
 
 

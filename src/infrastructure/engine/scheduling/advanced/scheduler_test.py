@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.advanced.scheduler import AdvancedRequestScheduler, create_scheduler, priority_from_string
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.advanced.scheduler import AdvancedRequestScheduler, create_scheduler, priority_from_string
+except ImportError:
+    from infrastructure.engine.scheduling.advanced.scheduler import AdvancedRequestScheduler, create_scheduler, priority_from_string
+
 
 
 def test_advancedrequestscheduler_basic():

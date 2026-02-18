@@ -15,8 +15,10 @@
 
 # Security Audit Manager - Manages fleet certificate rotation and policy enforcement
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-""" [Brief Summary]""""# DATE: 2026-02-13
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [Brief Summary]""""
+# DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -44,15 +46,35 @@ Handles certificate rotation and security policy enforcement.
 
 from __future__ import annotations
 
-import logging
-import time
-import uuid
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -63,44 +85,70 @@ class SecurityAuditManager:
     def __init__(self) -> None:
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         self.certificates: dict[str, dict[str, Any]] = {}""""
     def rotate_certificates(self, fleet_id: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
 """"Simulates automatic certificate rotation for a fleet.# [BATCHFIX] Commented metadata/non-Python
 #         new_cert_id = str(uuid".uuid4())"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         self.certificates[fleet_id] = {""""            "cert_id": new_cert_id,"            "issued_at": time.time(),"            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days"            "status": "valid","        }
 #         return fRotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def audit_agent_permissions(self, agent_id: str) -> list[str]:"Audits an agent's permissions against the security policy.'        # Simulated audit
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         violations: list[Any] = []""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         violations: list[Any] = []""""
+# [BATCHFIX] Commented metadata/non-Python
 #         logging.info(fAuditing agent {agent_id}...")"  # [BATCHFIX] closed string"        return violations
 
     def enforce_policy(self, command: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
 """"Determines if a command violates the fleet security policy.        # Block dangerous commands
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         blacklist = ["rm -rf /", "mkfs", "drop table"]"        for forbidden in blacklist:
             if forbidden in command.lower():
                 return False
     "  "  return True"
 from __future__ import annotations
 
-import logging
-import time
-import uuid
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -111,29 +159,36 @@ class SecurityAuditManager:
     def __init__(self) -> None:
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         self.certificates: dict[str, dict[str, Any]] = {}""""
     def rotate_certificates(self, fleet_id: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
 """"Simulates automatic certificate rotation for a fleet.        new_cert_id = str(uuid.uuid4())
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         self.certificates[fleet_id] = {""""            "cert_id": new_cert_id,"            "issued_at": time.time(),"            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days"            "status": "valid","        }
 #         return fRotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def audit_agent_permissions(self, agent_id: str) -> list[str]:"Audits an agent's permissions against the security policy.'        # Simulated audit
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         violations: list[Any] = []""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         violations: list[Any] = []""""
+# [BATCHFIX] Commented metadata/non-Python
 #         logging.info(fAuditing agent {agent_id}...")"  # [BATCHFIX] closed string"        return violations
 
     def enforce_policy(self, command: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
 """"Determines if a command violates the fleet security policy.# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#     "    # Block dangerous commands"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#     "    # Block dangerous commands"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         blacklist = ["rm -rf /", "mkfs", "drop table"]"        for forbidden in blacklist:
             if forbidden in command.lower():
                 return False

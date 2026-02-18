@@ -58,7 +58,6 @@ __version__ = VERSION
 
 
 
-
 class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Unified agent for database interaction, spreadsheet parsing, and statistical analysis.
 #     Consolidates legacy SqlQueryAgent, DataAgent, CsvAgent, ExcelAgent, and DataScienceAgent.
@@ -136,7 +135,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

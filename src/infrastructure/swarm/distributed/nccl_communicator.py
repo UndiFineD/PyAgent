@@ -19,7 +19,11 @@ NCCLCommunicator - Pure Python NCCL wrapper for collective operations.
 
 This module is now a facade for the modular sub-package in ./nccl/.
 
-from .nccl import (CustomAllReduce, NCCLCommunicator, NCCLConfig, NCCLStats,
+try:
+    from .nccl import (CustomAllReduce, NCCLCommunicator, NCCLConfig, NCCLStats,
+except ImportError:
+    from .nccl import (CustomAllReduce, NCCLCommunicator, NCCLConfig, NCCLStats,
+
                    ReduceOp)
 
 __all__ = [

@@ -18,7 +18,11 @@ AttentionBackendRegistry - Dynamic attention backend selection (Facade).
 
 This file is now a facade for the modularized backend package.
 
-from .backend import (AttentionBackend, AttentionBackendEnum,
+try:
+    from .backend import (AttentionBackend, AttentionBackendEnum,
+except ImportError:
+    from .backend import (AttentionBackend, AttentionBackendEnum,
+
                       AttentionBackendRegistry, AttentionCapabilities,
                       AttentionMetadata, AttentionType, FlashAttentionBackend,
                       FlashInferBackend, NaiveAttentionBackend,

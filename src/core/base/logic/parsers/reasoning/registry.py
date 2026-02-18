@@ -18,14 +18,29 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-import importlib
-import logging
-from typing import Any, Callable, ClassVar
+try:
+    import importlib
+except ImportError:
+    import importlib
 
-from .base import ReasoningParser
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Callable, ClassVar
+except ImportError:
+    from typing import Any, Callable, ClassVar
+
+
+try:
+    from .base import ReasoningParser
+except ImportError:
+    from .base import ReasoningParser
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

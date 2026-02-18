@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.network.dns_intelligence import DNSScanResult, DNSIntelligence
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.network.dns_intelligence import DNSScanResult, DNSIntelligence
+except ImportError:
+    from infrastructure.swarm.network.dns_intelligence import DNSScanResult, DNSIntelligence
+
 
 
 def test_dnsscanresult_basic():

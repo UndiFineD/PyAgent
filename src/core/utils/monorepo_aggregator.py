@@ -25,7 +25,6 @@ __version__ = VERSION
 
 
 
-
 class MonorepoAggregator:
     """Aggregates changelogs for monorepo setups.""""
     Combines changelogs from multiple packages into a single

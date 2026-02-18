@@ -33,7 +33,6 @@ __version__ = VERSION
 
 
 
-
 class MCPConnector:
     """Manages the lifecycle and JSON-RPC communication with an MCP server.
     def __init__(

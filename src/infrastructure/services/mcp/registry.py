@@ -32,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class MCPServerRegistry:
     """Registry for MCP servers.
     _instance: Optional["MCPServerRegistry"] = None"    _lock = asyncio.Lock()
@@ -90,7 +89,6 @@ class MCPServerRegistry:
             name=call.name,
             status=ToolStatus.FAILED,
             error=f"No server found for tool: {call.name}","        )
-
 
 
 

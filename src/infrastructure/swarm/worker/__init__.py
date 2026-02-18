@@ -15,7 +15,15 @@
 
 """
 Swarm worker components.
-from .decode_only_worker import DecodeOnlyWorker
-from .disaggregated_prefill_worker import DisaggregatedPrefillWorker
+try:
+    from .decode_only_worker import DecodeOnlyWorker
+except ImportError:
+    from .decode_only_worker import DecodeOnlyWorker
+
+try:
+    from .disaggregated_prefill_worker import DisaggregatedPrefillWorker
+except ImportError:
+    from .disaggregated_prefill_worker import DisaggregatedPrefillWorker
+
 
 __all__ = ["DecodeOnlyWorker", "DisaggregatedPrefillWorker"]"

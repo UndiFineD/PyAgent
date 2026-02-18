@@ -46,7 +46,6 @@ __version__ = VERSION
 
 
 
-
 class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Handles localization and internationalization (i18n) "tasks."#     Integrated with LocalizationCore for cultural guardrails and multi-lang support.
 
@@ -97,7 +96,6 @@ from src.logic.agents.intelligence.core.localization_core import \
     LocalizationCore
 
 __version__ = VERSION
-
 
 
 

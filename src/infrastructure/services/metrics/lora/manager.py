@@ -20,19 +20,43 @@ LoRA Stats Manager - Collection of aggregate stats regarding LoRA adapters.
 
 from __future__ import annotations
 
-import logging
-import threading
-import time
-from typing import Dict, List, Optional, Tuple
 
-from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Dict, List, Optional, Tuple
+
+
+try:
+    from .core.base.logic.connectivity_manager import ConnectivityManager
+except ImportError:
+    from src.core.base.logic.connectivity_manager import ConnectivityManager
+
+try:
+    from .infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
+except ImportError:
+    from src.infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
+
                                                             LoRALoadState,
                                                             LoRARequestState,
                                                             LoRAStats)
 
 logger = logging.getLogger(__name__)
-
 
 
 

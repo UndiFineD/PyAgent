@@ -37,7 +37,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class GrammarCompiler:
     """Compiles grammar specifications into grammar objects.""""
     Inspired by vLLM's structured output backends.'    
@@ -102,7 +101,6 @@ class GrammarCompiler:
             )
 
         raise ValueError(f"Unsupported option type: {option_type}")"
-
 
 
 class StructuredOutputManager:

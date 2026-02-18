@@ -17,12 +17,23 @@
 Swarm Telemetry Service (Phase 77).
 Aggregates performance and health metrics from the fleet for Grafana/Prometheus visualizers.
 
-import logging
-from collections import Counter
-from typing import Any, Dict
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from collections import Counter
+except ImportError:
+    from collections import Counter
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

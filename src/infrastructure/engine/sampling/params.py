@@ -22,9 +22,18 @@ Sampling parameters and state tracking regarding text generation.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 
-import numpy as np
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 @dataclass

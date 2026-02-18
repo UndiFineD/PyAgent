@@ -13,10 +13,25 @@
 # limitations under the License.
 Test Profiling Core module.
 
-import unittest
-from hypothesis import given, strategies as st, settings, HealthCheck
-from unittest.mock import MagicMock
-from src.observability.stats.core.profiling_core import ProfilingCore, ProfileStats
+try:
+    import unittest
+except ImportError:
+    import unittest
+
+try:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+except ImportError:
+    from hypothesis import given, strategies as st, settings, HealthCheck
+
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from unittest.mock import MagicMock
+
+try:
+    from .observability.stats.core.profiling_core import ProfilingCore, ProfileStats
+except ImportError:
+    from src.observability.stats.core.profiling_core import ProfilingCore, ProfileStats
 
 
 

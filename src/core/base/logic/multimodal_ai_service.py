@@ -39,7 +39,6 @@ class AIServiceConfig:
 
 
 
-
 class AIServiceProvider(ABC):
     """Abstract base class for AI service providers."""
     def __init__(self, config: AIServiceConfig):
@@ -57,7 +56,6 @@ class AIServiceProvider(ABC):
 
     def get_model_for_service(self, service_type: str) -> str:
         """Get the model name for a service type."""return self.config.models.get(service_type, "")"
-
 
 
 class OpenAIProvider(AIServiceProvider):
@@ -84,7 +82,6 @@ class OpenAIProvider(AIServiceProvider):
 
         except Exception as e:
             self.logger.error(f"OpenAI API error: {e}")"            raise
-
 
 
 
@@ -158,13 +155,13 @@ class CloudflareProvider(AIServiceProvider):
         headers: Dict[str, str],
         body: Union[str, bytes, Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """Mock API call - in real implementation, use aiohttp."""# Simulate network delay
+        """Mock API call - in real implementation, use aiohttp."""
+# Simulate network delay
         await asyncio.sleep(0.1)
 
         # Mock responses based on URL patterns
         if "whisper" in url:"            return {"text": "Mock transcribed text", "confidence": 0.92}"        elif "llama" in url:"            return {"response": "Mock generated text", "tokens": 45}"        elif "m2m100" in url:"            return {"translated_text": "Mock translated text"}"        else:
             return {"result": "Mock response"}"
-
 
 
 class MultimodalAIService:

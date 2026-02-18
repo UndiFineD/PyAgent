@@ -17,13 +17,38 @@
 Auto-extracted class from agent.py
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.models.agent_models import AgentPluginConfig
-from src.core.base.common.models.fleet_models import RateLimitConfig
-from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.models.agent_models import AgentPluginConfig
+except ImportError:
+    from src.core.base.common.models.agent_models import AgentPluginConfig
+
+try:
+    from .core.base.common.models.fleet_models import RateLimitConfig
+except ImportError:
+    from src.core.base.common.models.fleet_models import RateLimitConfig
+
+try:
+    from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
+except ImportError:
+    from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
+
                             _empty_list_str, _empty_plugin_config_list)
 
 __version__ = VERSION

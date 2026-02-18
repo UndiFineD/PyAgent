@@ -16,9 +16,22 @@
 # Context Agent: Maintains and improves context/description files.
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.base_utilities import create_main_function
-from src.logic.agents.cognitive.context_agent import ContextAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .logic.agents.cognitive.context_agent import ContextAgent
+except ImportError:
+    from src.logic.agents.cognitive.context_agent import ContextAgent
+
 
 __version__ = VERSION
 

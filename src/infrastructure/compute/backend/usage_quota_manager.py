@@ -18,9 +18,17 @@ Manager for usage quotas.
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.resource_core import ResourceCore, QuotaConfig
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.resource_core import ResourceCore, QuotaConfig
+except ImportError:
+    from src.core.base.common.resource_core import ResourceCore, QuotaConfig
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.skills.environment_skill import EnvironmentSkill
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.skills.environment_skill import EnvironmentSkill
+except ImportError:
+    from core.base.skills.environment_skill import EnvironmentSkill
+
 
 
 def test_environmentskill_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.healing.auto_debugger_orchestrator import AutoDebuggerOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.healing.auto_debugger_orchestrator import AutoDebuggerOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.healing.auto_debugger_orchestrator import AutoDebuggerOrchestrator
+
 
 
 def test_autodebuggerorchestrator_basic():

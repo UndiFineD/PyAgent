@@ -61,7 +61,6 @@ __version__ = VERSION
 
 
 
-
 class ImprovementsAgent(BaseAgent):
     """Updates code file improvement suggestions using AI assistance.""""
     This agent reads .improvements.md files and uses AI to suggest better,
@@ -146,6 +145,8 @@ class ImprovementsAgent(BaseAgent):
         """Parse improvements from markdown content.""""
         Supports format:
     """    - [ ] **Title** (Cat""""
+
+
 from __future__ import annotations
 
 import json
@@ -168,7 +169,6 @@ from .improvement_status import ImprovementStatus
 from .improvement_template import ImprovementTemplate
 
 __version__ = VERSION
-
 
 
 

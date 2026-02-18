@@ -17,7 +17,6 @@ from src.core.base.mixins.ssrf_detector_mixin import SSRFDetectorMixin
 
 
 
-
 class TestSSRFDetectorMixin:
     """Test cases for SSRFDetectorMixin."""
     def setup_method(self):
@@ -31,7 +30,8 @@ class TestSSRFDetectorMixin:
         assert token1 != token2
 
     def test_detector_lifecycle(self):
-        """Test starting and stopping detector."""# Start detector
+        """Test starting and stopping detector."""
+# Start detector
         success = self.mixin.start_ssrf_detector(port=0)  # Use port 0 for auto-assignment
         assert success
         assert self.mixin.is_detector_running()
@@ -44,7 +44,8 @@ class TestSSRFDetectorMixin:
         """Test callback URL generation."""url = self.mixin.get_ssrf_callback_url('example.com', 8080)'        assert 'http://example.com:8080/' in url'        assert len(self.mixin.get_ssrf_token()) == 16
 
     def test_data_collection(self):
-        """Test data collection from callbacks."""# Start detector
+        """Test data collection from callbacks."""
+# Start detector
         self.mixin.start_ssrf_detector(port=0)
 
         try:

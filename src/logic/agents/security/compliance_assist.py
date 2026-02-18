@@ -17,7 +17,10 @@ Assisting classes for TDD and zero trust security for compliance agents.
 - ComplianceCheck: Encapsulates a single compliance check for extensibility.
 - ComplianceStandard: Encapsulates a compliance standard and its checks.
 
-from typing import Any, Callable, List, Dict
+try:
+    from typing import Any, Callable, List, Dict
+except ImportError:
+    from typing import Any, Callable, List, Dict
 
 
 
@@ -30,7 +33,6 @@ class DummyRecorder:
             "provider": provider,"            "model": model,"            "prompt": prompt,"            "result": result,"        })
 
 
-
 class ComplianceCheck:
     """Encapsulates a single compliance check for extensibility and testability.    def __init__(self, name: str, check_fn: Callable[[], bool] = None, recommendation: str = ""):"        self.name = name
         self.check_fn = check_fn or (lambda: True)
@@ -39,7 +41,6 @@ class ComplianceCheck:
         passed = self.check_fn()
         return {
             "check": self.name,"            "status": "PASS" if passed else "FAIL","            "recommendation": None if passed else self.recommendation,"        }
-
 
 
 class ComplianceStandard:

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.typed_prompts import TextPrompt, TokensPrompt, EmbedsPrompt, DataPrompt, ExplicitEncoderDecoderPrompt, is_text_prompt, is_tokens_prompt, is_embeds_prompt, is_data_prompt, is_string_prompt, is_explicit_encoder_decoder_prompt, parse_prompt, get_prompt_text, get_prompt_token_ids, has_multi_modal_data, make_text_prompt, make_tokens_prompt, make_embeds_prompt, make_encoder_decoder_prompt, validate_prompt
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.typed_prompts import TextPrompt, TokensPrompt, EmbedsPrompt, DataPrompt, ExplicitEncoderDecoderPrompt, is_text_prompt, is_tokens_prompt, is_embeds_prompt, is_data_prompt, is_string_prompt, is_explicit_encoder_decoder_prompt, parse_prompt, get_prompt_text, get_prompt_token_ids, has_multi_modal_data, make_text_prompt, make_tokens_prompt, make_embeds_prompt, make_encoder_decoder_prompt, validate_prompt
+except ImportError:
+    from core.base.common.types.typed_prompts import TextPrompt, TokensPrompt, EmbedsPrompt, DataPrompt, ExplicitEncoderDecoderPrompt, is_text_prompt, is_tokens_prompt, is_embeds_prompt, is_data_prompt, is_string_prompt, is_explicit_encoder_decoder_prompt, parse_prompt, get_prompt_text, get_prompt_token_ids, has_multi_modal_data, make_text_prompt, make_tokens_prompt, make_embeds_prompt, make_encoder_decoder_prompt, validate_prompt
+
 
 
 def test_textprompt_basic():

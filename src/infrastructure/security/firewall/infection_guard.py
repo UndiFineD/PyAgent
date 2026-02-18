@@ -25,7 +25,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class InfectionGuard:
         Prevents malicious command propagation across nodes.
     Analyzes cross-node instructions for patterns of hijacking or hallucinations.

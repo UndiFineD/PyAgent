@@ -14,9 +14,17 @@
 
 # "Swarm agents package."# from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
 
-from .orchestrator_agent import OrchestratorAgent
+
+try:
+    from .orchestrator_agent import OrchestratorAgent
+except ImportError:
+    from .orchestrator_agent import OrchestratorAgent
+
 
 __version__ = VERSION
 

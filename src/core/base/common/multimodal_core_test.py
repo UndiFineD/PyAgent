@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.multimodal_core import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.multimodal_core import *
+except ImportError:
+    from core.base.common.multimodal_core import *
+

@@ -15,7 +15,11 @@
 
 Quantization engine.py module.
 
-from .engine import (AWQQuantizer, DequantizedLinear, GPTQQuantizer,
+try:
+    from .engine import (AWQQuantizer, DequantizedLinear, GPTQQuantizer,
+except ImportError:
+    from .engine import (AWQQuantizer, DequantizedLinear, GPTQQuantizer,
+
                      LinearQuantizer, QuantConfig, QuantizedTensor, Quantizer,
                      QuantScheme, QuantStrategy, compute_scales_minmax,
                      get_quantization_error, pack_int4, quantize_tensor,

@@ -17,11 +17,27 @@
 
 Tests for MediaIOEngine - unified media loading.
 
-import pytest
-import inspect
-import numpy as np
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.infrastructure.services.mediaio import (
+try:
+    import inspect
+except ImportError:
+    import inspect
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .infrastructure.services.mediaio import (
+except ImportError:
+    from src.infrastructure.services.mediaio import (
+
     MediaType,
     ImageFormat,
     VideoFormat,
@@ -42,7 +58,6 @@ from src.infrastructure.services.mediaio import (
     load_video,
     load_audio,
 )
-
 
 
 
@@ -75,7 +90,6 @@ class TestEnums:
         assert ResizeMode.PAD is not None
         assert ResizeMode.STRETCH is not None
         assert ResizeMode.SHORTEST is not None
-
 
 
 
@@ -119,7 +133,6 @@ class TestMediaMetadata:
 
 
 
-
 class TestImageData:
     """Test ImageData dataclass.
     def test_create_image_data(self):
@@ -145,7 +158,6 @@ class TestImageData:
 
         img = ImageData(data=data, metadata=meta, source="batch")"
         assert img.shape[0] == 4
-
 
 
 
@@ -180,7 +192,6 @@ class TestVideoData:
 
 
 
-
 class TestAudioData:
     """Test AudioData dataclass.
     def test_create_audio_data(self):
@@ -205,7 +216,6 @@ class TestAudioData:
 
         audio = AudioData(waveform=waveform, metadata=meta, source="stereo.wav")"
         assert audio.waveform.shape[0] == 2
-
 
 
 
@@ -239,7 +249,6 @@ class TestMediaLoadConfig:
 
 
 
-
 class TestImageLoader:
     """Test ImageLoader class.
     def test_create_loader(self):
@@ -269,7 +278,6 @@ class TestImageLoader:
         assert hasattr(loader, 'load')'
 
 
-
 class TestVideoLoader:
     """Test VideoLoader class.
     def test_create_loader(self):
@@ -284,7 +292,6 @@ class TestVideoLoader:
 
 
 
-
 class TestAudioLoader:
     """Test AudioLoader class.
     def test_create_loader(self):
@@ -296,7 +303,6 @@ class TestAudioLoader:
 
         assert loader.supports(MediaType.AUDIO) is True
         assert loader.supports(MediaType.IMAGE) is False
-
 
 
 
@@ -358,7 +364,6 @@ class TestMediaIOEngine:
 
 
 
-
 class TestFactoryFunctions:
     """Test factory functions.
     def test_create_media_engine(self):
@@ -388,7 +393,6 @@ class TestFactoryFunctions:
     @pytest.mark.asyncio
     async def test_load_audio_function(self):
         """Test load_audio convenience function.        assert inspect.iscoroutinefunction(load_audio)
-
 
 
 

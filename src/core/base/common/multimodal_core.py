@@ -16,12 +16,38 @@
 """Core logic for multimodal stream parsing and modality alignment.
 Inspired by Stream-Omni (ICTNLP).
 """
-from .multimodal_buffer import TemporalModalityBuffer
-from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
+try:
+    from .multimodal_buffer import TemporalModalityBuffer
+except ImportError:
+    from .multimodal_buffer import TemporalModalityBuffer
+
+try:
+    from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
+except ImportError:
+    from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
+
 # Re-export modules to maintain backward compatibility
-from .multimodal_logic import MultimodalCore
-from .multimodal_session import MultimodalStreamSession
-from .multimodal_state import StreamState
+try:
+    from .multimodal_logic import MultimodalCore
+except ImportError:
+    from .multimodal_logic import MultimodalCore
+
+try:
+    from .multimodal_session import MultimodalStreamSession
+except ImportError:
+    from .multimodal_session import MultimodalStreamSession
+
+try:
+    from .multimodal_state import StreamState
+except ImportError:
+    from .multimodal_state import StreamState
+
 
 __all__ = [
-    "StreamState","    "TemporalModalityBuffer","    "StreamingVisionEncoder","    "StreamingAudioProcessor","    "MultimodalCore","    "MultimodalStreamSession","]
+    "StreamState",
+    "TemporalModalityBuffer",
+    "StreamingVisionEncoder",
+    "StreamingAudioProcessor",
+    "MultimodalCore",
+    "MultimodalStreamSession",
+]

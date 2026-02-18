@@ -57,14 +57,14 @@ class LoopAnalysisConfig:
 
 
 
-
 class LoopAnalyzer:
     """Reusable analyzer for detecting loop anti-patterns."""
     def __init__(self, config: Optional[LoopAnalysisConfig] = None):
         self.config = config or LoopAnalysisConfig()
 
     def count_loops_ripgrep(self, file_path: str) -> int:
-        """Count for/while loops using ripgrep for speed."""try:
+        """Count for/while loops using ripgrep for speed."""
+try:
             # Count explicit for/while statements (not in strings/comments)
             result = subprocess.run(
                 ['rg', '-c', r'\\b(for|while)\\s+', file_path],'                capture_output=True,
@@ -79,7 +79,8 @@ class LoopAnalyzer:
             return self._count_loops_regex(file_path)
 
     def _count_loops_regex(self, file_path: str) -> int:
-        """Fallback loop counting using regex."""try:
+        """Fallback loop counting using regex."""
+try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:'                content = f.read()
 
             # Simple regex to count for/while statements
@@ -97,13 +98,15 @@ class LoopAnalyzer:
             return 0
 
     def count_lines(self, file_path: str) -> int:
-        """Count lines of code in a file."""try:
+        """Count lines of code in a file."""
+try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:'                return sum(1 for _ in f)
         except Exception:
             return 0
 
     def analyze_nesting(self, file_path: str) -> Tuple[bool, bool]:
-        """Analyze loop nesting patterns."""try:
+        """Analyze loop nesting patterns."""
+try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:'                content = f.read()
 
             # Simple nesting analysis - count indentation levels
@@ -129,7 +132,8 @@ class LoopAnalyzer:
             return False, False
 
     def analyze_loop_sizes(self, file_path: str) -> bool:
-        """Check for unusually large loops."""try:
+        """Check for unusually large loops."""
+try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:'                content = f.read()
 
             # Very basic loop size analysis
@@ -193,7 +197,8 @@ class LoopAnalyzer:
         )
 
     def should_analyze_file(self, file_path: str) -> bool:
-        """Check if a file should be analyzed based on config."""# Check exclude directories
+        """Check if a file should be analyzed based on config."""
+# Check exclude directories
         path_parts = Path(file_path).parts
         if any(excl_dir in path_parts for excl_dir in self.config.exclude_dirs):
             return False

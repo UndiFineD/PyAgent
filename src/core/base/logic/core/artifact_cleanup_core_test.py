@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.artifact_cleanup_core import ArtifactCleanupCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.artifact_cleanup_core import ArtifactCleanupCore
+except ImportError:
+    from core.base.logic.core.artifact_cleanup_core import ArtifactCleanupCore
+
 
 
 def test_artifactcleanupcore_basic():

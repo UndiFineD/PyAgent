@@ -16,32 +16,116 @@
 """Main application controller for PyAgent GUI.
 from __future__ import annotations
 
-import os
-import tkinter as tk
-from collections.abc import Callable
-from tkinter import ttk
-from typing import Any, Self
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import os
+except ImportError:
+    import os
 
-from .agent_dashboard import AgentDashboard
-from .agent_manager import AgentManager
-from .agent_runner import AgentRunner
-from .app_menu import AppMenu
-from .bmad_manager import BmadManager
-from .configuration_manager import ConfigurationManager
-from .dialog_manager import DialogManager
-from .diff_viewer import DiffViewer
-from .header_panel import HeaderPanel
-from .project_explorer import ProjectExplorer
-from .project_status_panel import ProjectStatusPanel
-from .session_manager import SessionManager
-from .status_bar import StatusBar
-from .theme_manager import ThemeManager
-from .workflow_manager import WorkflowManager
+try:
+    import tkinter
+except ImportError:
+    import tkinter
+ as tk
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections.abc import Callable
+
+try:
+    from tkinter import ttk
+except ImportError:
+    from tkinter import ttk
+
+try:
+    from typing import Any, Self
+except ImportError:
+    from typing import Any, Self
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .agent_dashboard import AgentDashboard
+except ImportError:
+    from .agent_dashboard import AgentDashboard
+
+try:
+    from .agent_manager import AgentManager
+except ImportError:
+    from .agent_manager import AgentManager
+
+try:
+    from .agent_runner import AgentRunner
+except ImportError:
+    from .agent_runner import AgentRunner
+
+try:
+    from .app_menu import AppMenu
+except ImportError:
+    from .app_menu import AppMenu
+
+try:
+    from .bmad_manager import BmadManager
+except ImportError:
+    from .bmad_manager import BmadManager
+
+try:
+    from .configuration_manager import ConfigurationManager
+except ImportError:
+    from .configuration_manager import ConfigurationManager
+
+try:
+    from .dialog_manager import DialogManager
+except ImportError:
+    from .dialog_manager import DialogManager
+
+try:
+    from .diff_viewer import DiffViewer
+except ImportError:
+    from .diff_viewer import DiffViewer
+
+try:
+    from .header_panel import HeaderPanel
+except ImportError:
+    from .header_panel import HeaderPanel
+
+try:
+    from .project_explorer import ProjectExplorer
+except ImportError:
+    from .project_explorer import ProjectExplorer
+
+try:
+    from .project_status_panel import ProjectStatusPanel
+except ImportError:
+    from .project_status_panel import ProjectStatusPanel
+
+try:
+    from .session_manager import SessionManager
+except ImportError:
+    from .session_manager import SessionManager
+
+try:
+    from .status_bar import StatusBar
+except ImportError:
+    from .status_bar import StatusBar
+
+try:
+    from .theme_manager import ThemeManager
+except ImportError:
+    from .theme_manager import ThemeManager
+
+try:
+    from .workflow_manager import WorkflowManager
+except ImportError:
+    from .workflow_manager import WorkflowManager
+
 
 __version__ = VERSION
-
 
 
 

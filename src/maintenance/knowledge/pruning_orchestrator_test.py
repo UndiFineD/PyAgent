@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from maintenance.knowledge.pruning_orchestrator import PruningOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from maintenance.knowledge.pruning_orchestrator import PruningOrchestrator
+except ImportError:
+    from maintenance.knowledge.pruning_orchestrator import PruningOrchestrator
+
 
 
 def test_pruningorchestrator_basic():

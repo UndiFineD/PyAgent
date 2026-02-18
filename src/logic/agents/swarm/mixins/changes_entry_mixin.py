@@ -61,7 +61,6 @@ from ..validation_rule import ValidationRule
 
 
 
-
 class ChangesEntryMixin:
 """"Mixin for managing changelog entries.
     # Default validation rules
@@ -140,7 +139,6 @@ from typing import List, Optional
 
 from ..changelog_entry import ChangelogEntry
 from ..validation_rule import ValidationRule
-
 
 
 

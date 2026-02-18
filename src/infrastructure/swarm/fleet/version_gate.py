@@ -31,7 +31,6 @@ __version__ = VERSION
 
 
 
-
 class VersionGate:
         Pure logic for version compatibility checks.
     Designed for future Rust porting (Core/Shell pattern).

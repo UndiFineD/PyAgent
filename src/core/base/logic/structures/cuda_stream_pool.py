@@ -30,7 +30,6 @@ except ImportError:
 
 
 
-
 class CudaStreamPool:
     """Pool regarding managing multiple torch.cuda.Stream objects.
     Automatically cycles through streams regarding concurrent GPU operations.

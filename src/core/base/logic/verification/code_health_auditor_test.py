@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.verification.code_health_auditor import CodeHealthAuditor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.verification.code_health_auditor import CodeHealthAuditor
+except ImportError:
+    from core.base.logic.verification.code_health_auditor import CodeHealthAuditor
+
 
 
 def test_codehealthauditor_basic():

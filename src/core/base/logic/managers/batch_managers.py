@@ -20,10 +20,23 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any
 
-from src.core.base.common.models.communication_models import BatchRequest
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.models.communication_models import BatchRequest
+except ImportError:
+    from src.core.base.common.models.communication_models import BatchRequest
+
 
 __all__ = ["BatchRequest", "RequestBatcher"]
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.attention.backend.packkv import PackKVAttentionBackend
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.attention.backend.packkv import PackKVAttentionBackend
+except ImportError:
+    from infrastructure.engine.attention.backend.packkv import PackKVAttentionBackend
+
 
 
 def test_packkvattentionbackend_basic():

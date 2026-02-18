@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.structured.grammar_matcher import GrammarMatcher
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.structured.grammar_matcher import GrammarMatcher
+except ImportError:
+    from infrastructure.engine.structured.grammar_matcher import GrammarMatcher
+
 
 
 def test_grammarmatcher_basic():

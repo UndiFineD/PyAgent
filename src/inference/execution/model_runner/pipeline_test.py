@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from inference.execution.model_runner.pipeline import ExecutionPipeline
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from inference.execution.model_runner.pipeline import ExecutionPipeline
+except ImportError:
+    from inference.execution.model_runner.pipeline import ExecutionPipeline
+
 
 
 def test_executionpipeline_basic():

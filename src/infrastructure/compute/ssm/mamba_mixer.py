@@ -17,12 +17,28 @@ Mamba Mixer - State Space Model Layer.
 
 Refactored to modular package structure for Phase 317.
 
-from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
+try:
+    from .infrastructure.compute.ssm.mamba.config import (MambaConfig,
+except ImportError:
+    from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
+
                                                          MambaOutput,
                                                          MambaState)
-from src.infrastructure.compute.ssm.mamba.hybrid import HybridMambaMixer
-from src.infrastructure.compute.ssm.mamba.mixer import Mamba2Mixer, MambaMixer
-from src.infrastructure.compute.ssm.mamba.ops import (CausalConv1d,
+try:
+    from .infrastructure.compute.ssm.mamba.hybrid import HybridMambaMixer
+except ImportError:
+    from src.infrastructure.compute.ssm.mamba.hybrid import HybridMambaMixer
+
+try:
+    from .infrastructure.compute.ssm.mamba.mixer import Mamba2Mixer, MambaMixer
+except ImportError:
+    from src.infrastructure.compute.ssm.mamba.mixer import Mamba2Mixer, MambaMixer
+
+try:
+    from .infrastructure.compute.ssm.mamba.ops import (CausalConv1d,
+except ImportError:
+    from src.infrastructure.compute.ssm.mamba.ops import (CausalConv1d,
+
                                                       SelectiveScan)
 
 __all__ = [

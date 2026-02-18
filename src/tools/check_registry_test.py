@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .check_registry import run_diagnostic
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .check_registry import run_diagnostic
+except ImportError:
+    from .check_registry import run_diagnostic
+
 
 
 def test_run_diagnostic_basic():

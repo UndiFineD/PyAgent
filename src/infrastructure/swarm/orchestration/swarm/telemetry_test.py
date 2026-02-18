@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.telemetry import SwarmTelemetryService
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.telemetry import SwarmTelemetryService
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.telemetry import SwarmTelemetryService
+
 
 
 def test_swarmtelemetryservice_basic():

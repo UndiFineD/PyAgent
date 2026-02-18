@@ -21,9 +21,21 @@ Platform-related data models and enums.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum, Flag, auto
-from typing import List, NamedTuple, Optional, Set
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, Flag, auto
+except ImportError:
+    from enum import Enum, Flag, auto
+
+try:
+    from typing import List, NamedTuple, Optional, Set
+except ImportError:
+    from typing import List, NamedTuple, Optional, Set
 
 
 
@@ -33,11 +45,9 @@ class PlatformType(Enum):
     CUDA = "cuda""    ROCM = "rocm""    TPU = "tpu""    XPU = "xpu""    CPU = "cpu""    OOT = "out_of_tree"  # Out-of-tree custom platforms"    UNKNOWN = "unknown""
 
 
-
 class CpuArchitecture(Enum):
     """CPU architecture types.
     X86_64 = "x86_64""    ARM64 = "arm64""    AARCH64 = "aarch64""    POWERPC = "powerpc""    S390X = "s390x""    RISCV = "riscv""
-
 
 
 class QuantizationType(Enum):
@@ -45,11 +55,9 @@ class QuantizationType(Enum):
     NONE = "none""    GPTQ = "gptq""    AWQ = "awq""    SQUEEZELLM = "squeezellm""    FP8 = "fp8""    FP8_E4M3 = "fp8_e4m3""    FP8_E5M2 = "fp8_e5m2""    INT8 = "int8""    INT4 = "int4""    NF4 = "nf4""    GGUF = "gguf""    BITSANDBYTES = "bitsandbytes""    EXLLAMA = "exllama""    EXLLAMA_V2 = "exllama_v2""    MARLIN = "marlin""
 
 
-
 class AttentionBackend(Enum):
     """Attention implementation backends.
     FLASH_ATTN = "flash_attn""    FLASH_ATTN_V2 = "flash_attn_v2""    FLASH_ATTN_V3 = "flash_attn_v3""    XFORMERS = "xformers""    TORCH_SDPA = "torch_sdpa""    FLASHINFER = "flashinfer""    PAGED_ATTENTION = "paged_attention""    TRITON = "triton""    ROCM = "rocm""    TPU = "tpu""    CPU = "cpu""    DEFAULT = "default""
-
 
 
 class DeviceFeature(Flag):
@@ -71,7 +79,6 @@ class DeviceFeature(Flag):
     INFINITY_FABRIC = auto()  # AMD
     ASYNC_COPY = auto()
     SPARSE_OPS = auto()
-
 
 
 

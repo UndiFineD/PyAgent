@@ -30,7 +30,6 @@ from src.core.base.common.types.code_language import CodeLanguage
 
 
 
-
 class CoderValidationMixin:
 """"Mixin for validating syntax and linting code.
     def validate_syntax(self, content: str) -> bool:

@@ -20,12 +20,28 @@ ARCOffloadManager: Adaptive Replacement Cache for KV Offloading
 Refactored to modular package structure for Phase 317.
 Decomposed into types, backend, base, and manager modules.
 
-from src.infrastructure.storage.kv_transfer.arc.backend import (Backend,
+try:
+    from .infrastructure.storage.kv_transfer.arc.backend import (Backend,
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.arc.backend import (Backend,
+
                                                                 SimpleBackend)
-from src.infrastructure.storage.kv_transfer.arc.base import OffloadingManager
-from src.infrastructure.storage.kv_transfer.arc.manager import (
+try:
+    from .infrastructure.storage.kv_transfer.arc.base import OffloadingManager
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.arc.base import OffloadingManager
+
+try:
+    from .infrastructure.storage.kv_transfer.arc.manager import (
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.arc.manager import (
+
     AdaptiveARCManager, ARCOffloadManager, AsyncARCManager)
-from src.infrastructure.storage.kv_transfer.arc.types import (
+try:
+    from .infrastructure.storage.kv_transfer.arc.types import (
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.arc.types import (
+
     BlockHash, BlockState, BlockStatus, LoadStoreSpec, OffloadingEvent,
     OffloadMedium, PrepareStoreOutput)
 

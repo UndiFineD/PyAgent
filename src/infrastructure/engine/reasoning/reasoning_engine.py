@@ -15,15 +15,35 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 ReasoningEngine: Wrapper for modular reasoning and tool call components.
 
-from .data_classes import (ParseResult, ReasoningToken, ThinkingBlock,
+try:
+    from .data_classes import (ParseResult, ReasoningToken, ThinkingBlock,
+except ImportError:
+    from .data_classes import (ParseResult, ReasoningToken, ThinkingBlock,
+
                            ToolCall, ToolCallResult)
-from .engine import (ReasoningEngine, create_reasoning_engine,
+try:
+    from .engine import (ReasoningEngine, create_reasoning_engine,
+except ImportError:
+    from .engine import (ReasoningEngine, create_reasoning_engine,
+
                      create_tool_parser)
-from .enums import ParseState, ReasoningFormat, ToolCallFormat
-from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
+try:
+    from .enums import ParseState, ReasoningFormat, ToolCallFormat
+except ImportError:
+    from .enums import ParseState, ReasoningFormat, ToolCallFormat
+
+try:
+    from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
+except ImportError:
+    from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
+
                               HermesToolParser, OpenAIToolParser,
                               QwenReasoningParser)
-from .parsers import ReasoningParser, ToolParser
+try:
+    from .parsers import ReasoningParser, ToolParser
+except ImportError:
+    from .parsers import ReasoningParser, ToolParser
+
 
 __all__ = [
     "ReasoningFormat","    "ToolCallFormat","    "ParseState","    "ReasoningToken","    "ThinkingBlock","    "ToolCall","    "ToolCallResult","    "ParseResult","    "ReasoningParser","    "ToolParser","    "DeepSeekReasoningParser","    "QwenReasoningParser","    "GenericReasoningParser","    "OpenAIToolParser","    "HermesToolParser","    "ReasoningEngine","    "create_reasoning_engine","    "create_tool_parser","]

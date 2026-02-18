@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.chat_templates.registry.resolver import TemplateResolver
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.chat_templates.registry.resolver import TemplateResolver
+except ImportError:
+    from infrastructure.engine.chat_templates.registry.resolver import TemplateResolver
+
 
 
 def test_templateresolver_basic():

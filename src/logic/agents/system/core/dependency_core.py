@@ -42,7 +42,6 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 
-
 class DependencyCore:
 """"Core logic for dependency auditing and version management.
     @staticmethod
@@ -89,7 +88,6 @@ import os
 import subprocess
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
-
 
 
 

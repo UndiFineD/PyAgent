@@ -14,7 +14,8 @@
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""# from rpc_registration_lookup.base_rpc_registration_scraper import (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+# from rpc_registration_lookup.base_rpc_registration_scraper import (
     BaseRpcRegistrationExtractor,
     INTERFACE_SECURITY_CALLBACK,
     INTERFACE_FLAGS,
@@ -41,7 +42,6 @@ def sym_help_dummy(pe_path: str) -> None:
 
 
 
-
 class PeRpcInterfaceScraper:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
@@ -49,7 +49,8 @@ class PeRpcInterfaceScraper:
 """     RPC_SIDE_SERVER = "server"  # [BATCHFIX] closed string"
     DCE_SYNTAX_UUID = UUID("8A885D04-1CEB-11C9-9FE8-08002B104860")"    MIDL_LOOKUP_RE = re.compile(b"\\x60\\x00\\x00\\x00.{20}" + re.escape(DCE_SYNTAX_UUID.bytes_le), re.DOTALL)"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def __init__(self, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> None:self._can_parse_symbols = platform.system() == "Windows        self._sym_helper = PESymbolMatcher() if self._can_parse_symbols else sym_help_dummy
         if disassembler:
             assert isinstance(disassembler, BaseRpcRegistrationExtractor)
@@ -62,7 +63,8 @@ class PeRpcInterfaceScraper:
             del self._sym_helper
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def scrape_executable(self, pe_path: str) -> Dict[str, Any]:""""        with open(pe_path, "rb") as f:"            pe_data = f.read()
         pe = PE(data=pe_data)
 
@@ -70,7 +72,8 @@ class PeRpcInterfaceScraper:
 
         rdata_off, rdata_size, rdata_rva = get_rdata_offset_size_rva(pe)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         rdata = pe_data[rdata_off : rdata_off + rdata_size]""""        if_offs = self._get_rpc_if_offsets(rdata)
 
         with self._sym_helper(pe_path):
@@ -78,31 +81,41 @@ class PeRpcInterfaceScraper:
             for if_rdata_offset in if_offs:
                 interface_data = self._get_interface_data(pe, if_rdata_offset + rdata_off)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 interface_data["interface_address"] = hex(if_rdata_offset + rdata_rva + pe.OPTIONAL_HEADER.ImageBase)"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 ret_dict[str(UUID(bytes_le=rdata[if_rdata_offset + 4 : if_rdata_offset + 20]))] = interface_data""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             if self.disassembler and any(interface["role"] == self.RPC_SIDE_SERVER for interface in ret_dict.values()):"                registration_info = self.disassembler.get_rpc_registration_info(pe_path)
                 for info in registration_info.values():
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                     info["global_caching_enabled"] = self._check_flags_for_global_cache(info[INTERFACE_FLAGS])"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                     info["security_callback_name"] = self._get_security_callback_name(info[INTERFACE_SECURITY_CALLBACK])"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 ret_dict["interface_registration_info"] = registration_info"
         return ret_dict
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def _get_rpc_if_offsets(self, data: bytes) -> List[int]:""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""     def _get_rpc_if_offsets(self, data: bytes) -> List[int]:""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         return [match.start() for match in self.MIDL_LOOKUP_RE.finditer(data)]""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def _get_interface_data(self, pe: PE, interface_off: int) -> Dict[str, Union[int, str]]:The RPC interface struct looks like this:#         DWORD       size;                       // 0x0
         GUID        interface_id;               // 0x4
         WORD        interface_version_major;    // 0x14
@@ -126,35 +139,43 @@ class PeRpcInterfaceScraper:
         rpc_stub_ptr = pe.get_qword_from_offset(interface_off + 0x30)
         if rpc_stub_ptr:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             res_dict["number_of_functions"] = pe.get_qword_at_rva(ptr_to_rva(rpc_stub_ptr, pe))"            role = self.RPC_SIDE_SERVER
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             rpc_func_list_ptr = pe.get_qword_at_rva(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             rpc_func_list_ptr = pe.get_qword_at_rva(
                 ptr_to_rva(pe.get_qword_from_offset(interface_off + 0x50) + 0x8, pe)
             )
             func_ptrs = [
                 pe.get_qword_at_rva(ptr_to_rva(rpc_func_list_ptr + i * 8, pe))
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 for i in range(res_dict["number_of_functions"])"            ]
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             res_dict["functions_pointers"] = [hex(addr) for addr in func_ptrs if addr]"            if self._can_parse_symbols:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """                 res_dict["function_names"] = [self._sym_helper.sym_from_addr(addr) for addr in func_ptrs if addr]"        else:
             # Only RPC Servers have function stubs.
             # For clients, the marshalling is done inline, so it's not in the struct."  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'            role = self.RPC_SIDE_CLIENT
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         res_dict["role"] = role"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         res_dict["flags"] = hex(pe.get_qword_from_offset(interface_off + 0x58))"        return res_dict
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def _check_flags_for_global_cache(flags: Union[int, str]) -> Union[bool, str]:""""        if isinstance(flags, str):
             if flags.startswith("0x"):"                flags = int(flags, 16)
             elif flags.isdecimal():

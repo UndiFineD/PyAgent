@@ -37,14 +37,30 @@ OrchestratorWorkPatternMixin: Mixin for work pattern orchestration in PyAgent.
 
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict, Optional
 
-from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.work_patterns import WorkPattern
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
+
+try:
+    from .core.base.work_patterns import WorkPattern
+except ImportError:
+    from src.core.base.work_patterns import WorkPattern
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

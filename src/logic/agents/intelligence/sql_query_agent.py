@@ -31,7 +31,10 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Sql query agent.py module.
 
-from .data_intelligence_agent import DataIntelligenceAgent
+try:
+    from .data_intelligence_agent import DataIntelligenceAgent
+except ImportError:
+    from .data_intelligence_agent import DataIntelligenceAgent
 
 
 
@@ -41,7 +44,10 @@ class SqlQueryAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestor
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the SqlQueryAgent (via DataIntelligence core)."
-from .data_intelligence_agent import DataIntelligenceAgent
+try:
+    from .data_intelligence_agent import DataIntelligenceAgent
+except ImportError:
+    from .data_intelligence_agent import DataIntelligenceAgent
 
 
 

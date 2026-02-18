@@ -17,8 +17,16 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 NCCL communication for distributed operations.
 
-from .communicator import CustomAllReduce, NCCLCommunicator  # noqa: F401
-from .models import NCCLConfig, NCCLStats, ReduceOp  # noqa: F401
+try:
+    from .communicator import CustomAllReduce, NCCLCommunicator  # noqa: F401
+except ImportError:
+    from .communicator import CustomAllReduce, NCCLCommunicator # noqa: F401
+
+try:
+    from .models import NCCLConfig, NCCLStats, ReduceOp  # noqa: F401
+except ImportError:
+    from .models import NCCLConfig, NCCLStats, ReduceOp # noqa: F401
+
 
 __all__ = [
     "NCCLConfig","    "NCCLStats","    "ReduceOp","    "NCCLCommunicator","    "CustomAllReduce","]

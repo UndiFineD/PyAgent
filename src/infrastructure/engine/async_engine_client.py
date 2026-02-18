@@ -19,15 +19,47 @@ AsyncEngineClient: Multi-process async engine client with DP load balancing.
 Refactored to modular package structure for Phase 317.
 Decomposed into types, base, and specific client implementation modules.
 
-from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
-from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
-from src.infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
-from src.infrastructure.engine.engine_client.factory import (
+try:
+    from .infrastructure.engine.engine_client.async_mp import AsyncMPClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
+
+try:
+    from .infrastructure.engine.engine_client.base import EngineCoreClientBase
+except ImportError:
+    from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
+
+try:
+    from .infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
+
+try:
+    from .infrastructure.engine.engine_client.factory import (
+except ImportError:
+    from src.infrastructure.engine.engine_client.factory import (
+
     auto_select_client_mode, create_engine_client)
-from src.infrastructure.engine.engine_client.inproc import InprocClient
-from src.infrastructure.engine.engine_client.lb import P2CLoadBalancer
-from src.infrastructure.engine.engine_client.sync_mp import SyncMPClient
-from src.infrastructure.engine.engine_client.types import (ClientMode,
+try:
+    from .infrastructure.engine.engine_client.inproc import InprocClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.inproc import InprocClient
+
+try:
+    from .infrastructure.engine.engine_client.lb import P2CLoadBalancer
+except ImportError:
+    from src.infrastructure.engine.engine_client.lb import P2CLoadBalancer
+
+try:
+    from .infrastructure.engine.engine_client.sync_mp import SyncMPClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.sync_mp import SyncMPClient
+
+try:
+    from .infrastructure.engine.engine_client.types import (ClientMode,
+except ImportError:
+    from src.infrastructure.engine.engine_client.types import (ClientMode,
+
                                                            EngineClientConfig,
                                                            EngineOutput,
                                                            SchedulerOutput,

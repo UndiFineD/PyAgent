@@ -16,14 +16,24 @@
 """Module: security_mixin
 Security mixin for BaseAgent, implementing API security patterns for agent communications.
 """
+
+
 from __future__ import annotations
 
-from typing import Any, Dict
 
-from src.core.base.logic.security.api_security_core import (
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+
+try:
+    from .core.base.logic.security.api_security_core import (
+except ImportError:
+    from src.core.base.logic.security.api_security_core import (
+
     APISecurityCore, AgentCredentials, RateLimitConfig, SecurityEvent
 )
-
 
 
 

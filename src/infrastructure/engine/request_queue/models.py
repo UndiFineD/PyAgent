@@ -18,11 +18,27 @@ Models.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-import time
-from dataclasses import dataclass, field
-from typing import Any, Optional
+try:
+    import time
+except ImportError:
+    import time
 
-from .enums import RequestStatus
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Optional
+except ImportError:
+    from typing import Any, Optional
+
+
+try:
+    from .enums import RequestStatus
+except ImportError:
+    from .enums import RequestStatus
+
 
 
 @dataclass

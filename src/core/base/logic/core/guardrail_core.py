@@ -18,13 +18,13 @@ from pydantic import BaseModel, ValidationError
 
 
 
-
 class GuardrailCore:
     """Implements output validation and logical checks for agent tasks.
     Harvested from agentic-design-patterns.
     """@staticmethod
     def validate_pydantic(output: str, model: Type[BaseModel]) -> Tuple[bool, Any, Optional[str]]:
-        """Validates that output matches a Pydantic model."""try:
+        """Validates that output matches a Pydantic model."""
+try:
             # Attempt to parse json
             data = json.loads(output)
             validated = model.model_validate(data)

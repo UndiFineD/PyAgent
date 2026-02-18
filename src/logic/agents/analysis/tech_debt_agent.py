@@ -76,7 +76,6 @@ __version__ = VERSION
 
 
 
-
 class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Analyzes the codebase for technical debt including high cyclomatic complexity,
     missing docstrings, and "large "files."
@@ -141,7 +140,6 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
     main = create_main_function(TechDebtAgent, "TechDebt Agent", "Workspace path")"    main()
 
 __version__ = VERSION
-
 
 
 

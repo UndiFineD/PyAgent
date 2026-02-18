@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.simulation.core.simulation_core import SimulationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.simulation.core.simulation_core import SimulationCore
+except ImportError:
+    from infrastructure.services.simulation.core.simulation_core import SimulationCore
+
 
 
 def test_simulationcore_basic():

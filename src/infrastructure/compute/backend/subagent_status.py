@@ -29,7 +29,6 @@ if TYPE_CHECKING:
 
 
 
-
 class SubagentStatus:
     """Delegated status/diagnostic manager for SubagentRunner.
     def __init__(self, runner: SubagentRunner) -> None:

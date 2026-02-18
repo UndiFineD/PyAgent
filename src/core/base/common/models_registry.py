@@ -19,7 +19,6 @@ from typing import Dict, List, TypedDict
 
 
 
-
 class ModelSpec(TypedDict):
     id: str
     context_window: int
@@ -27,7 +26,6 @@ class ModelSpec(TypedDict):
     output_price: float  # Per 1M tokens
     provider: str
     literals: List[str]  # Trigger keywords
-
 
 
 

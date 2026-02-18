@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-from .enums import (
+try:
+    from .enums import (
+except ImportError:
+    from .enums import (
+
     StructuredOutputType,
     ConstraintType,
     SchemaFormat,

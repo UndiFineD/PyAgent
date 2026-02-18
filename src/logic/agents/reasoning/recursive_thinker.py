@@ -13,9 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
-from typing import List, Protocol
-from dataclasses import dataclass
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    from typing import List, Protocol
+except ImportError:
+    from typing import List, Protocol
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
 
 
@@ -30,7 +41,6 @@ class RoundResult:
     alternatives: List[str]
     best_response: str
     rationale: str
-
 
 
 
@@ -66,9 +76,20 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
-from typing import List, Protocol
-from dataclasses import dataclass
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    from typing import List, Protocol
+except ImportError:
+    from typing import List, Protocol
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
 
 
@@ -83,7 +104,6 @@ class RoundResult:
     alternatives: List[str]
     best_response: str
     rationale: str
-
 
 
 

@@ -17,7 +17,11 @@
 """
 Distributed coordinator bridge.
 
-from .distributed import (
+try:
+    from .distributed import (
+except ImportError:
+    from .distributed import (
+
     BaseWorker,
     ControlMessage,
     CoordinatorMessage,

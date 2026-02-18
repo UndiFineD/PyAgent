@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .agent_cli.suggested import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .agent_cli.suggested import *
+except ImportError:
+    from .agent_cli.suggested import *
+

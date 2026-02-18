@@ -16,15 +16,39 @@
 Sampling engine.py module.
 
 # Modularized SamplingEngine Wrapper
-from .advanced_sampling_params import (SamplingEngine,
+try:
+    from .advanced_sampling_params import (SamplingEngine,
+except ImportError:
+    from .advanced_sampling_params import (SamplingEngine,
+
                                        create_sampling_engine)
-from .engine import SamplingPipeline, sample_logits
-from .base import HAS_RUST, Sampler
-from .beam_search import BeamHypothesis, BeamSearchConfig, BeamSearchSampler
-from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,
+try:
+    from .engine import SamplingPipeline, sample_logits
+except ImportError:
+    from .engine import SamplingPipeline, sample_logits
+
+try:
+    from .base import HAS_RUST, Sampler
+except ImportError:
+    from .base import HAS_RUST, Sampler
+
+try:
+    from .beam_search import BeamHypothesis, BeamSearchConfig, BeamSearchSampler
+except ImportError:
+    from .beam_search import BeamHypothesis, BeamSearchConfig, BeamSearchSampler
+
+try:
+    from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,
+except ImportError:
+    from .kernels import (GumbelSampler, PenaltySampler, RepetitionPenaltySampler,
+
                       TemperatureSampler, TopKSampler, TopKTopPSampler,
                       TopPSampler)
-from .params import SamplingParams, SamplingState
+try:
+    from .params import SamplingParams, SamplingState
+except ImportError:
+    from .params import SamplingParams, SamplingState
+
 
 __all__ = [
     "SamplingParams","    "SamplingState","    "Sampler","    "HAS_RUST","    "TemperatureSampler","    "TopKSampler","    "TopPSampler","    "TopKTopPSampler","    "GumbelSampler","    "RepetitionPenaltySampler","    "PenaltySampler","    "BeamSearchConfig","    "BeamHypothesis","    "BeamSearchSampler","    "SamplingEngine","    "SamplingPipeline","    "sample_logits","    "create_sampling_engine","]

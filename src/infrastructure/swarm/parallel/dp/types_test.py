@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.parallel.dp.types import DPRole, WorkerHealth, LoadBalanceStrategy, DPConfig, WorkerState, StepState, WaveState
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.parallel.dp.types import DPRole, WorkerHealth, LoadBalanceStrategy, DPConfig, WorkerState, StepState, WaveState
+except ImportError:
+    from infrastructure.swarm.parallel.dp.types import DPRole, WorkerHealth, LoadBalanceStrategy, DPConfig, WorkerState, StepState, WaveState
+
 
 
 def test_dprole_basic():

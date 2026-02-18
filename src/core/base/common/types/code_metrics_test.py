@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.code_metrics import CodeMetrics
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.code_metrics import CodeMetrics
+except ImportError:
+    from core.base.common.types.code_metrics import CodeMetrics
+
 
 
 def test_codemetrics_basic():

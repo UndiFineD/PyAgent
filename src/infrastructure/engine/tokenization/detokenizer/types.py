@@ -20,8 +20,17 @@ Types and protocols for incremental detokenization.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Dict, List, Optional, Protocol, Union, runtime_checkable
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Dict, List, Optional, Protocol, Union, runtime_checkable
+except ImportError:
+    from typing import Dict, List, Optional, Protocol, Union, runtime_checkable
+
 
 
 @runtime_checkable

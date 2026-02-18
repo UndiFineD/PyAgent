@@ -32,7 +32,6 @@ except ImportError:
 
 
 
-
 class StopChecker:
         Checks for stop conditions in generated text.
 

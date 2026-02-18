@@ -26,7 +26,6 @@ from typing import Any, Dict, List
 
 
 
-
 class SelfImprovementSecurityMixin:
     """Mixin for security-related analysis.
     def _analyze_security(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:

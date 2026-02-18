@@ -86,7 +86,6 @@ class ProfileStats:
 
 
 
-
 class ProfilingCore:
     """Pure logic for cProfile aggregation and bottleneck analysis.""""    Identifies slow methods and calculates optimization priority.
     

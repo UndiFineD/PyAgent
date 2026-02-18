@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.tenant_isolation_core import TenantContext, TenantIsolationCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.tenant_isolation_core import TenantContext, TenantIsolationCore
+except ImportError:
+    from core.base.logic.core.tenant_isolation_core import TenantContext, TenantIsolationCore
+
 
 
 def test_tenantcontext_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.specialists.research_core import ResearchCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.specialists.research_core import ResearchCore
+except ImportError:
+    from core.specialists.research_core import ResearchCore
+
 
 
 def test_researchcore_basic():

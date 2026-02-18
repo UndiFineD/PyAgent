@@ -19,7 +19,11 @@ Estimator.py module.
 
 from __future__ import annotations
 
-from .config import ModelInfo, QuantizationType, VRAMEstimate
+
+try:
+    from .config import ModelInfo, QuantizationType, VRAMEstimate
+except ImportError:
+    from .config import ModelInfo, QuantizationType, VRAMEstimate
 
 
 

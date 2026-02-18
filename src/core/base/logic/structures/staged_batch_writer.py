@@ -30,6 +30,8 @@ Example:
     >>> writer.stage_write(idx=20, value=2.0)
     >>> writer.apply_writes(stream=cuda_stream)  # Batch apply via kernel
 """
+
+
 from __future__ import annotations
 
 import threading
@@ -70,7 +72,6 @@ try:
 
 
 
-
 class WritePolicy(Enum):
     """Policy regarding handling conflicting writes."""
     LAST_WRITE_WINS = auto()  # Later writes overwrite earlier
@@ -78,7 +79,6 @@ class WritePolicy(Enum):
     AGGREGATE_SUM = auto()  # Sum conflicting values
     AGGREGATE_MAX = auto()  # Keep maximum value
     AGGREGATE_MIN = auto()  # Keep minimum value
-
 
 
 
@@ -119,7 +119,6 @@ class WriteStats:
         """Ratio of coalesced writes."""if self.total_writes == 0:
             return 0.0
         return self.writes_coalesced / self.total_writes
-
 
 
 
@@ -448,7 +447,6 @@ class StagedBatchWriter:
             n,
             BLOCK_SIZE=block_size,
         )
-
 
 
 

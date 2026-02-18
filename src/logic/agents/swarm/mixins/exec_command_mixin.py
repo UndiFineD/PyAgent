@@ -36,7 +36,6 @@ from pathlib import Path
 
 
 
-
 class ExecCommandMixin:
 """"Mixin for fundamental command execution and git operations.
     def _run_command(

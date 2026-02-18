@@ -16,11 +16,26 @@
 PackKV: LLM-Aware Lossy Compression for KV Cache.
 Ref: arXiv:2512.24449
 
-from typing import Any, Dict, List, Optional
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
 
-from .data_classes import CacheGroupSpec
-from .managers import SingleTypeKVCacheManager
-from .structural import BlockPool
+
+try:
+    from .data_classes import CacheGroupSpec
+except ImportError:
+    from .data_classes import CacheGroupSpec
+
+try:
+    from .managers import SingleTypeKVCacheManager
+except ImportError:
+    from .managers import SingleTypeKVCacheManager
+
+try:
+    from .structural import BlockPool
+except ImportError:
+    from .structural import BlockPool
 
 
 

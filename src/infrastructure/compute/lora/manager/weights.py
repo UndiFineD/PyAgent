@@ -19,10 +19,23 @@ Weights.py module.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List, Optional, Set
 
-import numpy as np
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import TYPE_CHECKING, Dict, List, Optional, Set
+except ImportError:
+    from typing import TYPE_CHECKING, Dict, List, Optional, Set
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 if TYPE_CHECKING:
     from .adapter import LoRAAdapter

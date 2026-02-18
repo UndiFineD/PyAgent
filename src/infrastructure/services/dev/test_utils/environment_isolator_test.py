@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.environment_isolator import EnvironmentIsolator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.environment_isolator import EnvironmentIsolator
+except ImportError:
+    from infrastructure.services.dev.test_utils.environment_isolator import EnvironmentIsolator
+
 
 
 def test_environmentisolator_basic():

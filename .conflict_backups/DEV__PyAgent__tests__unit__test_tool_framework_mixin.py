@@ -30,12 +30,10 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 
-
 class MockToolFrameworkMixin(ToolFrameworkMixin):
     """Test implementation of ToolFrameworkMixin."""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
 
 
 

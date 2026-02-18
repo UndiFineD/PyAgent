@@ -19,9 +19,18 @@ Utils.py module.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-import numpy as np
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 if TYPE_CHECKING:

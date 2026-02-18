@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent import PromptOptimizerAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent import PromptOptimizerAgent
+except ImportError:
+    from infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent import PromptOptimizerAgent
+
 
 
 def test_promptoptimizeragent_basic():

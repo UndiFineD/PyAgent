@@ -18,7 +18,6 @@ import logging
 
 
 
-
 class ContextShardMixin:
 """"Mixin for managing memory shards and persistence.
     def _ensure_shard_loaded(self, category: str) -> None:

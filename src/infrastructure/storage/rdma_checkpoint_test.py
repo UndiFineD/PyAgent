@@ -12,10 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest
-from unittest.mock import MagicMock, patch
-from src.infrastructure.storage.kv_transfer.nixl_connector import NixlConnector
-from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVTransferConfig
+try:
+    import unittest
+except ImportError:
+    import unittest
+
+try:
+    from unittest.mock import MagicMock, patch
+except ImportError:
+    from unittest.mock import MagicMock, patch
+
+try:
+    from .infrastructure.storage.kv_transfer.nixl_connector import NixlConnector
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.nixl_connector import NixlConnector
+
+try:
+    from .infrastructure.storage.kv_transfer.kv_transfer_connector import KVTransferConfig
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVTransferConfig
 
 
 

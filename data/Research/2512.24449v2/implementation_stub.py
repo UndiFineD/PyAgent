@@ -22,7 +22,6 @@ Implementation Stub for PyAgent (Quantization & Permutation Repacking)
 import torch
 
 
-
 class PackKVCompressor:
     def __init__(self, block_size: int = 64, bit_width: int = 4):
         self.block_size = block_size

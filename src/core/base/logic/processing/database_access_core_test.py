@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.processing.database_access_core import DatabaseAccessCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.processing.database_access_core import DatabaseAccessCore
+except ImportError:
+    from core.base.logic.processing.database_access_core import DatabaseAccessCore
+
 
 
 def test_databaseaccesscore_basic():

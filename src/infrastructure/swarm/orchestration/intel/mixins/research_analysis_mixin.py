@@ -30,7 +30,6 @@ if TYPE_CHECKING:
 
 
 
-
 class ResearchAnalysisMixin:
     """Mixin for research report updates and lesson harvesting in SelfImprovementAnalysis.
     def update_research_report(

@@ -15,12 +15,29 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from .error_category import ErrorCategory
-from .error_severity import ErrorSeverity
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .error_category import ErrorCategory
+except ImportError:
+    from .error_category import ErrorCategory
+
+try:
+    from .error_severity import ErrorSeverity
+except ImportError:
+    from .error_severity import ErrorSeverity
+
 
 __version__ = VERSION
 

@@ -17,12 +17,28 @@
 """"MCP-based tool registration using official mcp library.
 Provides register_tool decorator compatible with mcp.mcp_tool.
 """
-import inspect
-from typing import Any, Callable, Dict, Optional, get_type_hints
+try:
+    import inspect
+except ImportError:
+    import inspect
 
-from mcp.server import Server
+try:
+    from typing import Any, Callable, Dict, Optional, get_type_hints
+except ImportError:
+    from typing import Any, Callable, Dict, Optional, get_type_hints
+
+
+try:
+    from mcp.server import Server
+except ImportError:
+    from mcp.server import Server
+
 # TODO: did you mean: src\\core\\base\\registry
-from src.core.base.tool_registry import get_registry
+try:
+    from .core.base.tool_registry import get_registry
+except ImportError:
+    from src.core.base.tool_registry import get_registry
+
 
 
 def register_tool(

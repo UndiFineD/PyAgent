@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.evolution_engine import EvolutionEngine
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.evolution_engine import EvolutionEngine
+except ImportError:
+    from infrastructure.swarm.fleet.evolution_engine import EvolutionEngine
+
 
 
 def test_evolutionengine_basic():

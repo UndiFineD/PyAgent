@@ -20,10 +20,22 @@ Conversation turn tracking logic.
 
 from __future__ import annotations
 
-import uuid
-from typing import Any, Dict, List, Optional
 
-from .models import ContextConfig, ConversationTurn, TokenMetrics, TurnType
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .models import ContextConfig, ConversationTurn, TokenMetrics, TurnType
+except ImportError:
+    from .models import ContextConfig, ConversationTurn, TokenMetrics, TurnType
 
 
 

@@ -15,12 +15,32 @@
 
 """MAESTRO Security Analyzer for PyAgent Multi-Agent Systems
 Based on Agent-Wiz's MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome) framework'"""
-import json
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, asdict
-from pathlib import Path
+try:
+    import json
+except ImportError:
+    import json
 
-from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
+try:
+    from typing import Dict, List, Any, Optional
+except ImportError:
+    from typing import Dict, List, Any, Optional
+
+try:
+    from dataclasses import dataclass, asdict
+except ImportError:
+    from dataclasses import dataclass, asdict
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
+except ImportError:
+    from src.core.base.logic.dynamic_agent_evolution_orchestrator import AgentTier
+
 
 
 @dataclass
@@ -51,7 +71,6 @@ class ThreatAssessment:
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
-
 
 
 
@@ -225,7 +244,8 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
             "Agent Ecosystem": "Marketplace where AI agents interface with real-world applications and users","            "Security and Compliance": "Vertical layer ensuring security controls across all operations","            "Evaluation and Observability": "Tools for tracking performance and detecting anomalies","            "Deployment Infrastructure": "Runtime environment and orchestration systems","            "Agent Frameworks": "Development tools and agent construction frameworks","            "Data Operations": "Data processing, storage, and management systems","            "Foundation Models": "Core AI/ML models and capabilities""        }
         return descriptions.get(layer_name, "Unknown layer")"
     def _assess_layer_relevance(self, layer_key: str, agents: List[AgentNode]) -> str:
-        """Assess how relevant a layer is to the current agent system."""# Simple relevance assessment based on agent characteristics
+        """Assess how relevant a layer is to the current agent system."""
+# Simple relevance assessment based on agent characteristics
         if layer_key == "deployment_infrastructure":"            return "High"  # Always relevant for running agents"        elif layer_key == "agent_frameworks":"            return "High"  # Core to agent development"        elif layer_key == "evaluation_observability":"            avg_usage = sum(a.usage_count for a in agents) / len(agents) if agents else 0
             return "High" if avg_usage > 5 else "Medium""        elif layer_key == "security_compliance":"            return "High"  # Security is always important"        else:
             return "Medium""
@@ -241,7 +261,8 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
             "threat": threat,"            "description": threat_data["description"],"            "base_impact": base_impact,"            "adjusted_likelihood": adjusted_likelihood,"            "risk_level": risk_level,"            "mitigation_suggestions": threat_data["mitigations"]"        }
 
     def _adjust_threat_likelihood(self, threat: str, base_likelihood: str, agents: List[AgentNode]) -> str:
-        """Adjust threat likelihood based on agent system characteristics."""# Simple adjustment logic based on system maturity and agent diversity
+        """Adjust threat likelihood based on agent system characteristics."""
+# Simple adjustment logic based on system maturity and agent diversity
         system_maturity = self._assess_system_maturity(agents)
         agent_diversity = len(set(cap for agent in agents for cap in agent.capabilities))
 

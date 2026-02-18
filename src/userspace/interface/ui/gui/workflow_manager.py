@@ -16,13 +16,25 @@
 """Workflow management for step-by-step BMAD project execution.
 from __future__ import annotations
 
-from tkinter import messagebox
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from tkinter import messagebox
+except ImportError:
+    from tkinter import messagebox
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

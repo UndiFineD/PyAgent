@@ -17,7 +17,10 @@
 Agent bar.py module.
 # AgentBar: Real-time status and control component for Phase 51 Multimedia.
 
-from typing import Any, Dict
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
 
 
 

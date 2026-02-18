@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .timeline_event import TimelineEvent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .timeline_event import TimelineEvent
+except ImportError:
+    from .timeline_event import TimelineEvent
+
 
 
 def test_timelineevent_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.maintenance.test_fleet_readiness import test_imports
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.maintenance.test_fleet_readiness import test_imports
+except ImportError:
+    from infrastructure.services.dev.scripts.maintenance.test_fleet_readiness import test_imports
+
 
 
 def test_test_imports_basic():

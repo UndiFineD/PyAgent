@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .engine import InferenceEngine
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .engine import InferenceEngine
+except ImportError:
+    from .engine import InferenceEngine
+
 
 
 def test_inferenceengine_basic():

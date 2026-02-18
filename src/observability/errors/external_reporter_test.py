@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .external_reporter import ExternalReporter
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .external_reporter import ExternalReporter
+except ImportError:
+    from .external_reporter import ExternalReporter
+
 
 
 def test_externalreporter_basic():

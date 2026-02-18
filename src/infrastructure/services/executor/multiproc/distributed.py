@@ -21,13 +21,29 @@ Distributed.py module.
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, List, Optional
 
-from src.infrastructure.services.executor.multiproc.base import Executor
-from src.infrastructure.services.executor.multiproc.future import FutureWrapper
-from src.infrastructure.services.executor.multiproc.multiproc_logic import \
+try:
+    from typing import Any, Callable, Dict, List, Optional
+except ImportError:
+    from typing import Any, Callable, Dict, List, Optional
+
+
+try:
+    from .infrastructure.services.executor.multiproc.base import Executor
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.base import Executor
+
+try:
+    from .infrastructure.services.executor.multiproc.future import FutureWrapper
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.future import FutureWrapper
+
+try:
+    from .infrastructure.services.executor.multiproc.multiproc_logic import \
+except ImportError:
+    from src.infrastructure.services.executor.multiproc.multiproc_logic import \
+
     MultiprocExecutor
-
 
 
 

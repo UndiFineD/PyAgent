@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.lifecycle.version import is_gate_open
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.lifecycle.version import is_gate_open
+except ImportError:
+    from core.base.lifecycle.version import is_gate_open
+
 
 
 def test_is_gate_open_basic():

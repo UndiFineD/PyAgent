@@ -19,13 +19,28 @@ Implements dream-inspired memory processing:
 - Creative association discovery (REM-like).
 - Semantic clustering for memory compression.
 """
-import math
-import logging
-from typing import Any, Dict, List, Optional
-from datetime import datetime, timezone
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+try:
+    from datetime import datetime, timezone
+except ImportError:
+    from datetime import datetime, timezone
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -33,7 +48,7 @@ class MemoryConsolidationCore:
     """Core engine for consolidating agent memories.
     Inspired by biological memory patterns.
     """
-    DEFAULT_PROTECTED_TYPES = {"Decision", "Insight", "SystemPrompt"}"
+    DEFAULT_PROTECTED_TYPES = {"Decision", "Insight", "SystemPrompt"}
     def __init__(
         self,
         base_decay_rate: float = 0.1,
@@ -56,8 +71,8 @@ class MemoryConsolidationCore:
         confidence: float = 0.5,
         current_time: Optional[datetime] = None
     ) -> float:
-        """Calculate mathematical relevance of a memory based on decay and reinforcement.
-        """if current_time is None:
+        """Calculate mathematical relevance of a memory based on decay and reinforcement."""
+        if current_time is None:
             current_time = datetime.now(timezone.utc)
 
         # 1. Time decay (Exponential)
@@ -91,7 +106,8 @@ class MemoryConsolidationCore:
     ) -> List[Dict[str, Any]]:
         """Identify potential relationships (associations) between existing memories.
         Ported from automem-ai-memory.
-        """associations = []
+        """
+        associations = []
         # In a real system, this would use vector search.
         # Here we provide the logic for determining the association type.
         for i, mem1 in enumerate(memories):
@@ -100,15 +116,24 @@ class MemoryConsolidationCore:
                     continue
 
                 # Assume embeddings are provided in the dict
-                sim = self._calculate_similarity(mem1.get("embedding"), mem2.get("embedding"))"
+                sim = self._calculate_similarity(mem1.get("embedding"), mem2.get("embedding"))
                 if sim > similarity_threshold:
-                    assoc_type = "SHARES_THEME""                    if mem1.get("type") == mem2.get("type") and sim > 0.95:"                        assoc_type = "DUPLICATE_CANDIDATE""                    elif ("contradict" in mem1.get("content", "").lower() or"                          "contradict" in mem2.get("content", "").lower()):"                        assoc_type = "CONTRADICTS""
+                    assoc_type = "SHARES_THEME"
+                    if mem1.get("type") == mem2.get("type") and sim > 0.95:
+                        assoc_type = "DUPLICATE_CANDIDATE"
+                    elif ("contradict" in mem1.get("content", "").lower() or "contradict" in mem2.get("content", "").lower()):
+                        assoc_type = "CONTRADICTS"
                     associations.append({
-                        "source": mem1["id"],"                        "target": mem2["id"],"                        "type": assoc_type,"                        "similarity": sim"                    })
+                        "source": mem1["id"],
+                        "target": mem2["id"],
+                        "type": assoc_type,
+                        "similarity": sim
+                    })
         return associations
 
     def _calculate_similarity(self, vec1: Optional[List[float]], vec2: Optional[List[float]]) -> float:
-        """Simple cosine similarity for internal association discovery."""if not vec1 or not vec2 or len(vec1) != len(vec2):
+        """Simple cosine similarity for internal association discovery."""
+        if not vec1 or not vec2 or len(vec1) != len(vec2):
             return 0.0
 
         dot = sum(a * b for a, b in zip(vec1, vec2))
@@ -126,29 +151,31 @@ class MemoryConsolidationCore:
         age_days: int,
         is_manually_protected: bool = False
     ) -> bool:
-        """Determine if a memory should be protected from archival/deletion.
-        """if is_manually_protected:
+        """Determine if a memory should be protected from archival/deletion."""
+        if is_manually_protected:
             return True
-
         if importance >= self.importance_protection_threshold:
             return True
-
         if age_days < self.grace_period_days:
             return True
-
         if memory_type in self.protected_types:
             return True
-
         return False
 
     async def cluster_memories(self, memories: List[Dict[str, Any]]) -> List[List[str]]:
         """Identify semantic clusters of memories for potential compression (summarization).
-        TODO Placeholder for vector similarity measurement logic.
-        """# This would typically rely on a Vector Database or local embeddings
+        TODO: Placeholder for vector similarity measurement logic.
+        """
+        # This would typically rely on a Vector Database or local embeddings
         # For the core, we just provide the architectural slot
         return []
 
     def get_summary_prompt(self, cluster: List[Dict[str, Any]]) -> str:
-        """Generate a prompt to summarize a cluster of memories into a single high-level insight.
-        """content_block = "\\n---\\n".join([m.get("content", "") for m in cluster])"        return (
-            "Summarize the following related memories into a single, concise 'Synthetic Insight'.\\n""'            "Preserve key facts and dates, but remove redundant emotional context or duplicates.\\n\\n""            f"{content_block}\\n\\n""            "Synthetic Insight:""        )
+        """Generate a prompt to summarize a cluster of memories into a single high-level insight."""
+        content_block = "\n---\n".join([m.get("content", "") for m in cluster])
+        return (
+            "Summarize the following related memories into a single, concise 'Synthetic Insight'.\n"
+            "Preserve key facts and dates, but remove redundant emotional context or duplicates.\n\n"
+            f"{content_block}\n\n"
+            "Synthetic Insight:"
+        )

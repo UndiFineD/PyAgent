@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.workflow_state.suggested import WorkflowState
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.workflow_state.suggested import WorkflowState
+except ImportError:
+    from infrastructure.swarm.fleet.workflow_state.suggested import WorkflowState
+
 
 
 def test_workflowstate_basic():

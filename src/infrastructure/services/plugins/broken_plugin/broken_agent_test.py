@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.plugins.broken_plugin.broken_agent import BrokenAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.plugins.broken_plugin.broken_agent import BrokenAgent
+except ImportError:
+    from infrastructure.services.plugins.broken_plugin.broken_agent import BrokenAgent
+
 
 
 def test_brokenagent_basic():

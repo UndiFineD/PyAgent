@@ -48,10 +48,14 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -79,12 +83,18 @@ class AccessController:
         if role and role in self._roles:
             return level in self._roles[role]
         return""" False""""
+
+
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

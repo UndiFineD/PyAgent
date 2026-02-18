@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.base_interfaces import AgentInterface, OrchestratorInterface, CoreInterface, ContextRecorderInterface, Loadable, Saveable, Component
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.base_interfaces import AgentInterface, OrchestratorInterface, CoreInterface, ContextRecorderInterface, Loadable, Saveable, Component
+except ImportError:
+    from core.base.common.base_interfaces import AgentInterface, OrchestratorInterface, CoreInterface, ContextRecorderInterface, Loadable, Saveable, Component
+
 
 
 def test_agentinterface_basic():

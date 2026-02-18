@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .analysis_tool_type import AnalysisToolType
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .analysis_tool_type import AnalysisToolType
+except ImportError:
+    from .analysis_tool_type import AnalysisToolType
+
 
 
 def test_analysistooltype_basic():

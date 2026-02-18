@@ -30,7 +30,6 @@ __version__: str = VERSION
 
 
 
-
 class BackendHandlers:
     """Namespace for backend execution logic.
     @staticmethod
@@ -65,7 +64,8 @@ class BackendHandlers:
 
     @staticmethod
     def try_codex_cli(full_prompt: str, repo_root: Path, recorder: Any | None = None) -> str | None:
-        """Try to use Codex CLI backend for code generation.        try:
+        """
+try to use Codex CLI backend for code generation.        try:
             logging.debug("Attempting to use Codex CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
                 [
                     "codex","                    "--prompt","                    full_prompt,
@@ -93,7 +93,8 @@ class BackendHandlers:
 
     @staticmethod
     def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
-        """Try to use Copilot CLI backend for code generation.        try:
+        """
+try to use Copilot CLI backend for code generation.        try:
             logging.debug("Attempting to use local Copilot CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
                 ["copilot", "explain", full_prompt],"                capture_output=True,
                 text=True,
@@ -108,7 +109,8 @@ class BackendHandlers:
 
     @staticmethod
     def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
-        """Try to use GitHub Copilot CLI backend for code generation.        # Optimization: if not a command and not allowed, skip
+        """
+try to use GitHub Copilot CLI backend for code generation.        # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
             # Basic heuristic: if it doesn't look like a command, skip gh copilot explain'            # (This logic was partially in SubagentRunner, but we can pass a flag)
             pass
@@ -188,7 +190,8 @@ class BackendHandlers:
 
     @staticmethod
     def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
-        """Try to use OpenAI API backend for code generation.        if not requests_lib:
+        """
+try to use OpenAI API backend for code generation.        if not requests_lib:
             return None
 
         api_key: str | None = os.environ.get("OPENAI_API_KEY")"        base_url: str = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1""        model: str = os.environ.get("OPENAI_MODEL") or "gpt-4.1-mini""

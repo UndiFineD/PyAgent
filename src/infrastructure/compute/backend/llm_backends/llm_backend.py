@@ -28,7 +28,6 @@ __version__ = VERSION
 
 
 
-
 class LLMBackend(ABC):
     """Base class for LLM backends.
     def __init__(self, session: Any, connectivity_manager: Any, recorder: Any = None) -> None:

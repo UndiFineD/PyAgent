@@ -51,18 +51,34 @@ Chain of thought strategy.py module.
 
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Awaitable, Callable
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .agent_strategy import AgentStrategy, BackendFunction
+try:
+    from typing import TYPE_CHECKING, Awaitable, Callable
+except ImportError:
+    from typing import TYPE_CHECKING, Awaitable, Callable
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .agent_strategy import AgentStrategy, BackendFunction
+except ImportError:
+    from .agent_strategy import AgentStrategy, BackendFunction
+
 
 if TYPE_CHECKING:
     pass
 
 __version__ = VERSION
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+except ImportError:
+    from infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+
 
 
 def test_signalregistry_basic():

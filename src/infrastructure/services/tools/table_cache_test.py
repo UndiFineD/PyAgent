@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.tools.table_cache import TableMetadata, TableTrieNode, TableCacheManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.tools.table_cache import TableMetadata, TableTrieNode, TableCacheManager
+except ImportError:
+    from infrastructure.services.tools.table_cache import TableMetadata, TableTrieNode, TableCacheManager
+
 
 
 def test_tablemetadata_basic():

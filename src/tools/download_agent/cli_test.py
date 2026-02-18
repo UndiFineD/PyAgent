@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .cli import print_results_summary, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .cli import print_results_summary, main
+except ImportError:
+    from .cli import print_results_summary, main
+
 
 
 def test_print_results_summary_basic():

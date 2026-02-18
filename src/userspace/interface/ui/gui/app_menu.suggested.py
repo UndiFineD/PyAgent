@@ -16,15 +16,31 @@
 """Menu Bar component for the PyAgent GUI.
 from __future__ import annotations
 
-import tkinter as tk
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import tkinter
+except ImportError:
+    import tkinter
+ as tk
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from .constants import BMAD_AGENTS
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .constants import BMAD_AGENTS
+except ImportError:
+    from .constants import BMAD_AGENTS
+
 
 __version__ = VERSION
-
 
 
 

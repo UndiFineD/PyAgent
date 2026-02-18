@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.test_utils.performance_metric_type import PerformanceMetricType
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.test_utils.performance_metric_type import PerformanceMetricType
+except ImportError:
+    from infrastructure.services.dev.test_utils.performance_metric_type import PerformanceMetricType
+
 
 
 def test_performancemetrictype_basic():

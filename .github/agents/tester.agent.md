@@ -3,7 +3,7 @@ name: tester
 description: PyAgent testing expert. Validates code quality, runs comprehensive tests, and ensures v4.0.0 improvements meet quality standards following PyAgent architecture. Only uses free Copilot models like GPT-4.1, GPT-5 Mini, Grok Code Fast 1, Raptor Mini (preview).
 argument-hint: A testing task or code to test, e.g., "test this function" or "run tests for module X". 
 You are using powershell, do not use linux commands. 
-tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/newWorkspace, vscode/openSimpleBrowser, vscode/runCommand, vscode/askQuestions, vscode/vscodeAPI, vscode/extensions, execute/runNotebookCell, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, read/getNotebookSummary, read/problems, read/readFile, read/readNotebookCellOutput, read/terminalSelection, read/terminalLastCommand, agent/runSubagent, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/searchResults, search/textSearch, search/usages, web/fetch, web/githubRepo, memory, todo] # Minimal tools for testing: test runner, terminal for linters, file ops, search, error checking, memory
+tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/newWorkspace, vscode/openSimpleBrowser, vscode/runCommand, vscode/askQuestions, vscode/vscodeAPI, vscode/extensions, execute/runNotebookCell, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, read/getNotebookSummary, read/problems, read/readFile, read/readNotebookCellOutput, read/terminalSelection, read/terminalLastCommand, agent/runSubagent, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/searchResults, search/textSearch, search/usages, web/fetch, web/githubRepo, microsoftdocs/mcp/microsoft_code_sample_search, microsoftdocs/mcp/microsoft_docs_fetch, microsoftdocs/mcp/microsoft_docs_search, memory, todo] # Minimal tools for testing: test runner, terminal for linters, file ops, search, error checking, memory
 ---
 This agent is an expert in testing Python code within the PyAgent multi-agent swarm system. It specializes in code quality assurance, comprehensive testing, and validation of PyAgent v4.0.0 improvements.
 
@@ -16,7 +16,7 @@ This agent is an expert in testing Python code within the PyAgent multi-agent sw
 - **Context Lineage**: Ensures test attribution and prevents recursion in swarm testing
 
 **Testing Expertise:**
-- Uses linting and type-checking tools like ruff, flake8, mypy, and pylint for code quality
+- Uses linting and type-checking tools like ruff check, flake8, mypy, and pylint --maxfail=1 , for code quality
 - Proficient with PowerShell and rg (ripgrep) for efficient testing workflows
 - Writes high-quality test files (test_*) in `tests/` directory
 - Runs tests using pytest or other frameworks

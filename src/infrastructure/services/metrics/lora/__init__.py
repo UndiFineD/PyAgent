@@ -16,10 +16,22 @@
 # SPDX-License-Identifier: Apache-2.0
 LoRA Metrics Package - Tracking for LoRA adapter lifecycle and request stats.
 
-from src.infrastructure.services.metrics.lora.lifecycle import (
+try:
+    from .infrastructure.services.metrics.lora.lifecycle import (
+except ImportError:
+    from src.infrastructure.services.metrics.lora.lifecycle import (
+
     RequestLifecycle, RequestLifecycleManager)
-from src.infrastructure.services.metrics.lora.manager import LoRAStatsManager
-from src.infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
+try:
+    from .infrastructure.services.metrics.lora.manager import LoRAStatsManager
+except ImportError:
+    from src.infrastructure.services.metrics.lora.manager import LoRAStatsManager
+
+try:
+    from .infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
+except ImportError:
+    from src.infrastructure.services.metrics.lora.types import (LoRAAdapterInfo,
+
                                                             LoRALoadState,
                                                             LoRARequestState,
                                                             LoRAStats,

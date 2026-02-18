@@ -12,9 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Any, Dict, List
-from enum import Enum
-from dataclasses import dataclass, field
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
 
 
@@ -28,7 +39,6 @@ class SwarmMember:
     role: str
     capabilities: List[str] = field(default_factory=list)
     status: str = "idle""    metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 
 
@@ -59,10 +69,12 @@ class SwarmOrchestratorCore:
         else:
             raise ValueError(f"Unknown delegation mode: {mode}")"
     async def _route_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
-        """Chooses the single best agent for the task."""# Selection logic based on capabilities vs task requirements
+        """Chooses the single best agent for the task."""
+# Selection logic based on capabilities vs task requirements
         best_agent = self._find_best_agent(task.get("requirements", []))"        return {"action": "route", "agent_id": best_agent, "task": task}"
     async def _coordinate_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
-        """Lead-follower coordination pattern."""# Logic to decompose task (likely using DAGWorkflowCore)
+        """Lead-follower coordination pattern."""
+# Logic to decompose task (likely using DAGWorkflowCore)
         return {"action": "coordinate", "plan": "decomposed_dag", "task": task}"
     async def _collaborate_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
         """Shared-state concurrent collaboration."""return {"action": "collaborate", "shared_state": "active", "task": task}"

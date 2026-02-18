@@ -15,7 +15,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative Decoding Framework - Facade pattern for backward compatibility.
-from .decoder import (DraftProposal, DraftProposer, NgramProposer,
+try:
+    from .decoder import (DraftProposal, DraftProposer, NgramProposer,
+except ImportError:
+    from .decoder import (DraftProposal, DraftProposer, NgramProposer,
+
                       SpecDecodingMetrics, SpecMethod, SpeculativeConfig,
                       SpeculativeDecoder, SuffixProposer, TreeSpeculator,
                       VerificationResult, create_speculative_decoder)

@@ -18,7 +18,10 @@ Enums.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from enum import Enum, auto
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -30,7 +33,6 @@ class TaskPriority(Enum):
     NORMAL = 2  # Default
     LOW = 3  # Background
     IDLE = 4  # When nothing else to do
-
 
 
 

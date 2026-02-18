@@ -36,7 +36,6 @@ except ImportError:
 
 
 
-
 class HealthCore(BaseCore):
     """Authoritative engine for health checks across the swarm."""
 

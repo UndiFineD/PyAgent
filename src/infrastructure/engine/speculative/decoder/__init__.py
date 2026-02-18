@@ -15,13 +15,33 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative decoding v2 components.
-from .config import AcceptanceMethod, ProposerType  # noqa: F401
-from .engine import (SpeculativeDecoder, create_medusa_decoder,  # noqa: F401
+try:
+    from .config import AcceptanceMethod, ProposerType  # noqa: F401
+except ImportError:
+    from .config import AcceptanceMethod, ProposerType # noqa: F401
+
+try:
+    from .engine import (SpeculativeDecoder, create_medusa_decoder,  # noqa: F401
+except ImportError:
+    from .engine import (SpeculativeDecoder, create_medusa_decoder, # noqa: F401
+
                      create_ngram_decoder)
-from .proposers import (MedusaProposer, NgramProposer, ProposerStats,  # noqa: F401
+try:
+    from .proposers import (MedusaProposer, NgramProposer, ProposerStats,  # noqa: F401
+except ImportError:
+    from .proposers import (MedusaProposer, NgramProposer, ProposerStats, # noqa: F401
+
                         SpeculativeProposer)
-from .tree import SpeculativeToken, SpeculativeTree  # noqa: F401
-from .verification import SpeculativeVerifier, VerificationResult  # noqa: F401
+try:
+    from .tree import SpeculativeToken, SpeculativeTree  # noqa: F401
+except ImportError:
+    from .tree import SpeculativeToken, SpeculativeTree # noqa: F401
+
+try:
+    from .verification import SpeculativeVerifier, VerificationResult  # noqa: F401
+except ImportError:
+    from .verification import SpeculativeVerifier, VerificationResult # noqa: F401
+
 
 __all__ = [
     "ProposerType","    "AcceptanceMethod","    "SpeculativeToken","    "SpeculativeTree","    "ProposerStats","    "SpeculativeProposer","    "NgramProposer","    "MedusaProposer","    "VerificationResult","    "SpeculativeVerifier","    "SpeculativeDecoder","    "create_ngram_decoder","    "create_medusa_decoder","]

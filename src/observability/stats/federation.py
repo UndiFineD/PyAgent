@@ -60,7 +60,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class StatsFederation:
     """Aggregate stats from multiple repositories.
     def __init__(self, mode: FederationMode = FederationMode.PULL) -> None:
@@ -160,7 +159,6 @@ from .observability_core import (AggregationType, FederatedSource,
                                  FederationMode)
 
 logger = logging.getLogger(__name__)
-
 
 
 

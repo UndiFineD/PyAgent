@@ -36,8 +36,16 @@ ExecLoopMixin module.
 
 from __future__ import annotations
 
-import asyncio
-import logging
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import logging
+except ImportError:
+    import logging
 
 
 

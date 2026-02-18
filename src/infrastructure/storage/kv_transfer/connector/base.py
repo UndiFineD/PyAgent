@@ -22,10 +22,27 @@ Abstract base class for all KV transfer connectors.
 
 from __future__ import annotations
 
-import logging
-import threading
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+
 
 if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.connector.types import (
@@ -33,7 +50,6 @@ if TYPE_CHECKING:
         Request)
 
 logger = logging.getLogger(__name__)
-
 
 
 

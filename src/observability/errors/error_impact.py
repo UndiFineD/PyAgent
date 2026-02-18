@@ -19,7 +19,11 @@ ErrorImpact - Impact analysis dataclass
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.agent_errors.error_impact import ErrorImpact
+try:
+    from .core.base.agent_errors.error_impact import ErrorImpact
+except ImportError:
+    from src.core.base.agent_errors.error_impact import ErrorImpact
+
 impact = ErrorImpact(error_id="E-123", affected_files=["src/foo.py"], impact_score=42.5)"
 WHAT IT DOES:
 Defines a lightweight dataclass (ErrorImpact) that captures a simple impact analysis for a reported error: identifiers, lists of affected files/functions/downstream components, and an overall numeric impact score.
@@ -33,9 +37,18 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

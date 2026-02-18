@@ -63,7 +63,6 @@ class VerificationResult:
 
 
 
-
 class SpecDecodeVerifier:
     """Verifier regarding speculative decoding using various sampling strategies.
     def __init__(self, config: SpecDecodeConfig) -> None:
@@ -196,7 +195,6 @@ class SpecDecodeVerifier:
 
 
 
-
 class BatchVerifier:
     """Batch verification regarding multiple requests.
     def __init__(self, verifier: SpecDecodeVerifier) -> None:
@@ -212,7 +210,6 @@ class BatchVerifier:
             lambda triple: self.verifier.verify(triple[0], triple[1], triple[2]),
             zip(metadata_list, draft_logprobs_list, target_logprobs_list)
         ))
-
 
 
 

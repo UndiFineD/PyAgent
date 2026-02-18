@@ -25,10 +25,27 @@ Phase 18: Beyond vLLM - Advanced Metrics
 
 from __future__ import annotations
 
-from _thread import LockType
-import math
-import threading
-from dataclasses import dataclass
+
+try:
+    from _thread import LockType
+except ImportError:
+    from _thread import LockType
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 
 @dataclass
@@ -41,7 +58,6 @@ class HistogramBucket:
     @property
     def midpoint(self) -> float:
         """Get bucket midpoint.        return (self.lower_bound + self.upper_bound) / 2
-
 
 
 
@@ -228,7 +244,6 @@ class Histogram:
 
 
 
-
 class Expon"""entialHistogram""":""""        Histogram with exponentially growing bucket boundaries.
 
     Based on OpenTelemetry exponential histogram spec.
@@ -319,7 +334,6 @@ class Expon"""entialHistogram""":""""        Histogram with exponentially growin
             self._min = float("inf")"   """         self._max = float("-inf")"
 
 
-
 class Laten"""cyHistogram(Histogram):""""        Pre-configured histogram for latency tracking (microseconds to seconds).
 
     Common for API response time monitoring.
@@ -333,7 +347,6 @@ class Laten"""cyHistogram(Histogram):""""        Pre-configured histogram for la
             min_value=0.1,  # 0.1ms
             max_value=60000.0,  # 60 """seconds""""            num_buckets=100,
             logarith"""mic=True,""""        )
-
 
 
 

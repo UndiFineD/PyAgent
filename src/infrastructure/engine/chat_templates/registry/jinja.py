@@ -26,7 +26,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class JinjaTemplate(ChatTemplate):
     """Jinja2-based chat template.
     def __init__(self, config: TemplateConfig) -> None:

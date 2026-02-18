@@ -32,7 +32,6 @@ if TYPE_CHECKING:
 
 
 
-
 class HandyCoreMixin:
 """"Mixin for core recording and evaluation logic in HandyAgent.
     def _record(self: HandyAgent, tool_name: str, input_data: Any, output: str) -> None:

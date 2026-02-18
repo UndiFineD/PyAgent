@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.intel.intelligence_core import SwarmInsight, IntelligenceCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.intel.intelligence_core import SwarmInsight, IntelligenceCore
+except ImportError:
+    from infrastructure.swarm.orchestration.intel.intelligence_core import SwarmInsight, IntelligenceCore
+
 
 
 def test_swarminsight_basic():

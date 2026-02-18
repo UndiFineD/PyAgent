@@ -17,13 +17,25 @@
 Auto-extracted class from agent.py
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -72,7 +84,8 @@ class AgentPriorityQueue:
         """Get agents in execution order.""""
         Returns:
             List of agent names in order.
-        """# Topological sort with priority
+        """
+# Topological sort with priority
         executed: set[str] = set()
         order: list[str] = []
 

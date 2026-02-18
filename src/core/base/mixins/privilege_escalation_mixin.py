@@ -17,6 +17,8 @@
 Privilege escalation mixin for BaseAgent, implementing Windows token manipulation and privilege enabling patterns.
 Inspired by ADSyncDump-BOF token impersonation techniques.
 """
+
+
 from __future__ import annotations
 
 import ctypes
@@ -24,7 +26,6 @@ import platform
 from typing import Any, Optional
 
 from src.core.base.logic.security.privilege_escalation_core import PrivilegeEscalationCore
-
 
 
 

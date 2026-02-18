@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.platform.registry import PlatformRegistry, get_current_platform, detect_platform, get_device_count, get_device_capability, get_memory_info, is_quantization_supported, select_attention_backend
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.platform.registry import PlatformRegistry, get_current_platform, detect_platform, get_device_count, get_device_capability, get_memory_info, is_quantization_supported, select_attention_backend
+except ImportError:
+    from infrastructure.services.platform.registry import PlatformRegistry, get_current_platform, detect_platform, get_device_count, get_device_capability, get_memory_info, is_quantization_supported, select_attention_backend
+
 
 
 def test_platformregistry_basic():

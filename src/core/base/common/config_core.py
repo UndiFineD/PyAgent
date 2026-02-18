@@ -16,6 +16,8 @@
 """Unified Configuration Core for PyAgent.
 Combines loading, merging, and dot-notation access logic.
 """
+
+
 from __future__ import annotations
 
 import json
@@ -30,7 +32,6 @@ try:
     import rust_core as rc  # pylint: disable=no-member
 except ImportError:
     rc = None
-
 
 
 
@@ -56,7 +57,6 @@ class ConfigObject:  # pylint: disable=too-few-public-methods
             return reduce(getattr, key.split("."), self)
         except (AttributeError, TypeError):
             return default
-
 
 
 

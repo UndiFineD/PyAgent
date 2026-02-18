@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.refactoring.recover_indentation import fix_broken_indentation
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.refactoring.recover_indentation import fix_broken_indentation
+except ImportError:
+    from infrastructure.services.dev.scripts.refactoring.recover_indentation import fix_broken_indentation
+
 
 
 def test_fix_broken_indentation_basic():

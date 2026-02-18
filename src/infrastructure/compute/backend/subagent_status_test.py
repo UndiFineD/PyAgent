@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.subagent_status import SubagentStatus
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.subagent_status import SubagentStatus
+except ImportError:
+    from infrastructure.compute.backend.subagent_status import SubagentStatus
+
 
 
 def test_subagentstatus_basic():

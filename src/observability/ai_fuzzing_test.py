@@ -16,9 +16,20 @@
 Test suite for Brainstorm AI Fuzzing (Phase 324)
 Tests AI-powered fuzzing engine and learning-based path discovery.
 
-import pytest
-from unittest.mock import Mock, patch
-import asyncio
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import Mock, patch
+except ImportError:
+    from unittest.mock import Mock, patch
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
 
 

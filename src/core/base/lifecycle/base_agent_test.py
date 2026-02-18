@@ -12,13 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
-import logging
-import importlib
+try:
+    import time
+except ImportError:
+    import time
 
-import pytest
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    import importlib
+except ImportError:
+    import importlib
+
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 
 def test_notify_webhooks_backoff(monkeypatch):

@@ -39,7 +39,6 @@ __version__ = VERSION
 
 
 
-
 class SelfImprovementOrchestrator(BaseAgent, OrchestratorCycleMixin, OrchestratorScanMixin, OrchestratorResultsMixin):
         Orchestrates the fleet's self-improvement cycle: scanning for tech debt,'    security leaks, and quality issues, and applying autonomous fixes.
     

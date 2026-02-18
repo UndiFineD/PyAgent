@@ -15,12 +15,26 @@
 
 """Core logic for conversation history and message management.
 """
+
+
 from __future__ import annotations
 
-from typing import List
 
-from .base_core import BaseCore
-from .models import ConversationMessage, MessageRole
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .models import ConversationMessage, MessageRole
+except ImportError:
+    from .models import ConversationMessage, MessageRole
 
 
 

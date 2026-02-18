@@ -16,15 +16,37 @@
 """Module: kv_cache
 Implements Pillar 2: Near-Metal Cognitive Scaling via Paged Attention KV-Cache.
 """
+
+
 from __future__ import annotations
-import logging
-import numpy as np
-import time
-from typing import Dict, List, Set
-from src.core.rust_bridge import get_bridge
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Dict, List, Set
+except ImportError:
+    from typing import Dict, List, Set
+
+try:
+    from .core.rust_bridge import get_bridge
+except ImportError:
+    from src.core.rust_bridge import get_bridge
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -51,7 +73,6 @@ class NeuralContextPruner:
                 prunable.append(block_idx)
 
         return prunable
-
 
 
 

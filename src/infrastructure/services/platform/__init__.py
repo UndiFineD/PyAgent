@@ -17,19 +17,51 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Platform abstraction package.
 
-from .base import Platform  # noqa: F401
-from .cpu import CpuPlatform  # noqa: F401
-from .cuda import CudaPlatform  # noqa: F401
-from .models import (AttentionBackend, CpuArchitecture, DeviceCapability,  # noqa: F401
+try:
+    from .base import Platform  # noqa: F401
+except ImportError:
+    from .base import Platform # noqa: F401
+
+try:
+    from .cpu import CpuPlatform  # noqa: F401
+except ImportError:
+    from .cpu import CpuPlatform # noqa: F401
+
+try:
+    from .cuda import CudaPlatform  # noqa: F401
+except ImportError:
+    from .cuda import CudaPlatform # noqa: F401
+
+try:
+    from .models import (AttentionBackend, CpuArchitecture, DeviceCapability,  # noqa: F401
+except ImportError:
+    from .models import (AttentionBackend, CpuArchitecture, DeviceCapability, # noqa: F401
+
                      DeviceFeature, DeviceInfo, MemoryInfo, PlatformConfig,
                      PlatformType, QuantizationType)
-from .registry import (PlatformRegistry, detect_platform, get_current_platform,  # noqa: F401
+try:
+    from .registry import (PlatformRegistry, detect_platform, get_current_platform,  # noqa: F401
+except ImportError:
+    from .registry import (PlatformRegistry, detect_platform, get_current_platform, # noqa: F401
+
                        get_device_capability, get_device_count,
                        get_memory_info, is_quantization_supported,
                        select_attention_backend)
-from .rocm import RocmPlatform  # noqa: F401
-from .tpu import TpuPlatform  # noqa: F401
-from .xpu import XpuPlatform  # noqa: F401
+try:
+    from .rocm import RocmPlatform  # noqa: F401
+except ImportError:
+    from .rocm import RocmPlatform # noqa: F401
+
+try:
+    from .tpu import TpuPlatform  # noqa: F401
+except ImportError:
+    from .tpu import TpuPlatform # noqa: F401
+
+try:
+    from .xpu import XpuPlatform  # noqa: F401
+except ImportError:
+    from .xpu import XpuPlatform # noqa: F401
+
 
 __all__ = [
     "PlatformType","    "CpuArchitecture","    "QuantizationType","    "AttentionBackend","    "DeviceFeature","    "DeviceCapability","    "MemoryInfo","    "PlatformConfig","    "DeviceInfo","    "Platform","    "CudaPlatform","    "RocmPlatform","    "TpuPlatform","    "XpuPlatform","    "CpuPlatform","    "PlatformRegistry","    "get_current_platform","    "detect_platform","    "get_device_count","    "get_device_capability","    "get_memory_info","    "is_quantization_supported","    "select_attention_backend","]

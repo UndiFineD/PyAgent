@@ -17,6 +17,8 @@
 Implements deterministic, batch-invariant mathematical operations regarding tensors.
 Supports both NumPy and PyTorch backends with reproducibility.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -266,7 +268,6 @@ def attention_output_batch_invariant(
 
 
 
-
 class BatchInvariantOps:
     """Container class regarding batch-invariant operations.
     Provides a consistent interface and tracks usage statistics.
@@ -369,5 +370,6 @@ class BatchInvariantOps:
         """Get operation call counts."""return self._call_counts.copy()
 
     def reset_stats(self) -> None:
-        """Reset operation call counts regarding usage tracking."""# Reset all metrics functionally
+        """Reset operation call counts regarding usage tracking."""
+# Reset all metrics functionally
         list(map(lambda key: self._call_counts.__setitem__(key, 0), list(self._call_counts.keys())))

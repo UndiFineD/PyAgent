@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .error_category import ErrorCategory
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .error_category import ErrorCategory
+except ImportError:
+    from .error_category import ErrorCategory
+
 
 
 def test_errorcategory_basic():

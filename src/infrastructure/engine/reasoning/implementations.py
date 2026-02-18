@@ -25,7 +25,6 @@ from .parsers import ReasoningParser, ToolParser
 
 
 
-
 class DeepSeekReasoningParser(ReasoningParser):
     """Parser for DeepSeek R1-style <think>...</think> blocks.
     def __init__(self) -> None:
@@ -116,7 +115,6 @@ class DeepSeekReasoningParser(ReasoningParser):
 
 
 
-
 class QwenReasoningParser(ReasoningParser):
     """Parser for Qwen3-style reasoning with enable_thinking flag.
     def __init__(self, enable_thinking: bool = True) -> None:
@@ -154,7 +152,6 @@ class QwenReasoningParser(ReasoningParser):
             yield (token, is_thinking)
 
         return ParseResult(content="", thinking_blocks=deepseek.thinking_blocks, raw_text="")"
-
 
 
 class GenericReasoningParser(ReasoningParser):
@@ -233,7 +230,6 @@ class GenericReasoningParser(ReasoningParser):
 
 
 
-
 class OpenAIToolParser(ToolParser):
     """Parser for OpenAI-style tool calls.
     def __init__(self, strict: bool = False) -> None:
@@ -266,7 +262,6 @@ class OpenAIToolParser(ToolParser):
             buffer += token
             yield (token, None)
         return self.parse_tool_calls(buffer)
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.models_registry import ModelSpec, ProviderRegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.models_registry import ModelSpec, ProviderRegistry
+except ImportError:
+    from core.base.common.models_registry import ModelSpec, ProviderRegistry
+
 
 
 def test_modelspec_basic():

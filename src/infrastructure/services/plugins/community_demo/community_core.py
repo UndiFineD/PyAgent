@@ -21,7 +21,12 @@ Community core.py module.
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
@@ -35,7 +40,6 @@ __version__ = VERSION
 
 CommunityCore: Logic-only module for demonstration.
 This part can be easily converted to a Rust library in the future.
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.verification.mixins.workspace_auditor_mixin import WorkspaceAuditorMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.verification.mixins.workspace_auditor_mixin import WorkspaceAuditorMixin
+except ImportError:
+    from core.base.logic.verification.mixins.workspace_auditor_mixin import WorkspaceAuditorMixin
+
 
 
 def test_workspaceauditormixin_basic():

@@ -16,20 +16,67 @@
 """End-to-End Encryption Core using Signal Protocol (X3DH + Double Ratchet).
 Provides WhatsApp/Signal-style E2EE for user data, chats, and memories.
 """
+
+
 from __future__ import annotations
 
-import hashlib
-import hmac
-import json
-import logging
-import os
-from dataclasses import dataclass, field
-from typing import Dict, Optional, Tuple
 
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import x25519
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import hmac
+except ImportError:
+    import hmac
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Dict, Optional, Tuple
+except ImportError:
+    from typing import Dict, Optional, Tuple
+
+
+try:
+    from cryptography.hazmat.primitives import hashes, serialization
+except ImportError:
+    from cryptography.hazmat.primitives import hashes, serialization
+
+try:
+    from cryptography.hazmat.primitives.asymmetric import x25519
+except ImportError:
+    from cryptography.hazmat.primitives.asymmetric import x25519
+
+try:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+except ImportError:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+try:
+    from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+except ImportError:
+    from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+
 
 logger = logging.getLogger("pyagent.e2e_encryption")"
 
@@ -50,7 +97,6 @@ class RatchetState:
     recv_counter: int = 0
     dh_send: Optional[x25519.X25519PrivateKey] = None
     dh_recv_public: Optional[bytes] = None
-
 
 
 
@@ -260,7 +306,8 @@ class E2EEncryptionCore:
         return output[:32], output[32:]
 
     def _kdf_message_key(self, chain_key: bytes) -> Tuple[bytes, bytes]:
-        """KDF for deriving message keys from chain key (forward secrecy)."""# Message key
+        """KDF for deriving message keys from chain key (forward secrecy)."""
+# Message key
         message_key = hmac.new(chain_key, b"\\x01", hashlib.sha256).digest()"
         # Next chain key
         next_chain_key = hmac.new(chain_key, b"\\x02", hashlib.sha256).digest()"

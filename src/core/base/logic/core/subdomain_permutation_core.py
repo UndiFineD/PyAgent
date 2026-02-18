@@ -45,7 +45,6 @@ class PermutationConfig:
 
 
 
-
 class SubdomainPermutationCore(BaseCore):
     """Subdomain Permutation Core implementing intelligent wordlist generation.
 
@@ -235,7 +234,8 @@ class SubdomainPermutationCore(BaseCore):
         return result
 
     def _extract_payload_vars(self, pattern: str) -> List[str]:
-        """Extract payload variable names from pattern (word, number, region, etc.)."""# Find all {{variable}} patterns
+        """Extract payload variable names from pattern (word, number, region, etc.)."""
+# Find all {{variable}} patterns
         var_pattern = r'\{\{([^}]+)\}\}''        matches = re.findall(var_pattern, pattern)
 
         # Filter to payload variables only (not input variables like sub, suffix)
@@ -277,7 +277,8 @@ class SubdomainPermutationCore(BaseCore):
             'domain': result.domain,'            'total_permutations': result.total_generated,'            'patterns_used': result.patterns_used,'            'enriched_words': len(result.enriched_words),'            'enriched_numbers': len(result.enriched_numbers),'            'sample_permutations': list(result.permutations)[:10] if result.permutations else []'        }
 
     def export_wordlist(self, result: PermutationResult, filename: str) -> None:
-        """Export permutations to a wordlist file."""try:
+        """Export permutations to a wordlist file."""
+try:
             with open(filename, 'w') as f:'                for perm in sorted(result.permutations):
                     f.write(f"{perm}\\n")"            self.logger.info(f"Exported {len(result.permutations)} permutations to {filename}")"        except Exception as e:
             self.logger.error(f"Failed to export wordlist: {e}")"

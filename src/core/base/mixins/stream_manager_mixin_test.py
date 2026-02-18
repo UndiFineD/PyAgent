@@ -16,11 +16,26 @@
 """Tests for Stream Manager Mixin.
 Tests Redis-backed streaming capabilities adapted from Adorable patterns.
 """
-import pytest
-from unittest.mock import patch, AsyncMock
-import time
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin, StreamState, StreamInfo
+try:
+    from unittest.mock import patch, AsyncMock
+except ImportError:
+    from unittest.mock import patch, AsyncMock
+
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .core.base.mixins.stream_manager_mixin import StreamManagerMixin, StreamState, StreamInfo
+except ImportError:
+    from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin, StreamState, StreamInfo
 
 
 
@@ -29,7 +44,6 @@ class MockStreamManagerMixin(StreamManagerMixin):
     """Test implementation of StreamManagerMixin."""
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
 
 
 

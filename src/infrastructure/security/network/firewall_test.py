@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from unittest.mock import patch
-from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import patch
+except ImportError:
+    from unittest.mock import patch
+
+try:
+    from .infrastructure.security.network.firewall import ReverseProxyFirewall
+except ImportError:
+    from src.infrastructure.security.network.firewall import ReverseProxyFirewall
+
 
 
 @pytest.fixture

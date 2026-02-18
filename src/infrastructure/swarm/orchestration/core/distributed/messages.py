@@ -21,10 +21,27 @@ Message types for coordinator-worker communication.
 
 from __future__ import annotations
 
-import time
-import uuid
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
 
 
 @dataclass

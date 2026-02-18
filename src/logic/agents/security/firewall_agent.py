@@ -49,7 +49,6 @@ except ImportError:
 
 
 
-
 class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-return-statements
         Firewall Agent: Gatekeeper for agent actions.
     Ensures 'thought_stream' signals are analyzed and clearance is granted'    before agents act on their reasoning.

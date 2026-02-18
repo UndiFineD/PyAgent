@@ -19,9 +19,22 @@
 
 
 from __future__ import annotations
-from typing import Any, TYPE_CHECKING
-from src.core.base.lifecycle.version import VERSION as VERSION  # noqa: F401
-from src.core.lazy_loader import ModuleLazyLoader
+
+try:
+    from typing import Any, TYPE_CHECKING
+except ImportError:
+    from typing import Any, TYPE_CHECKING
+
+try:
+    from .core.base.lifecycle.version import VERSION as VERSION # noqa: F401
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION as VERSION # noqa: F401
+
+try:
+    from .core.lazy_loader import ModuleLazyLoader
+except ImportError:
+    from src.core.lazy_loader import ModuleLazyLoader
+
 
 
 # if TYPE_CHECKING:
@@ -61,5 +74,6 @@ def __getattr__(name: str) -> Any:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """ # __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())"

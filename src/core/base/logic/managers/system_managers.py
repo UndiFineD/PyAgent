@@ -16,14 +16,37 @@
 """System Managers regarding PyAgent.
 (Facade regarding src.core.base.common.*_core)
 """
+
+
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Callable
 
-from src.core.base.common.models import AgentEvent
-from src.core.base.common.models._factories import _empty_agent_event_handlers
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any, Callable
+except ImportError:
+    from typing import Any, Callable
+
+
+try:
+    from .core.base.common.models import AgentEvent
+except ImportError:
+    from src.core.base.common.models import AgentEvent
+
+try:
+    from .core.base.common.models._factories import _empty_agent_event_handlers
+except ImportError:
+    from src.core.base.common.models._factories import _empty_agent_event_handlers
+
 
 
 @dataclass
@@ -103,7 +126,8 @@ class HealthChecker:
     def run_all_checks(self) -> dict[str, Any]:
         """Run all registered health checks."""return self._core.run_all()
 
-    def record_request(self, agent_id: str = "default", success: bool = True, latency_ms: float = 0.0) -> None:"        """Record a request regarding health tracking."""# pylint: disable=unused-argument
+    def record_request(self, agent_id: str = "default", success: bool = True, latency_ms: float = 0.0) -> None:"        """Record a request regarding health tracking."""
+# pylint: disable=unused-argument
         # Some tests pass agent_id as first pos arg, some pass success as keyword
         self._core.record_request(agent_id, success)
 

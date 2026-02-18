@@ -15,14 +15,36 @@
 
 """Core logic for object serialization and format conversion.
 """
+
+
 from __future__ import annotations
 
-import base64
-import json
-import pickle
-from typing import Any
 
-from .base_core import BaseCore
+try:
+    import base64
+except ImportError:
+    import base64
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import pickle
+except ImportError:
+    import pickle
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
 
 
 

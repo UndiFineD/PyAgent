@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.reasoning.cort_core import ReasonStep, ThinkingRound, CoRTResult, CoRTReasoningCore, CoRTAgentMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.reasoning.cort_core import ReasonStep, ThinkingRound, CoRTResult, CoRTReasoningCore, CoRTAgentMixin
+except ImportError:
+    from core.reasoning.cort_core import ReasonStep, ThinkingRound, CoRTResult, CoRTReasoningCore, CoRTAgentMixin
+
 
 
 def test_reasonstep_basic():

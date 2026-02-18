@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.fleet.core.attribution_core import AttributionCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.fleet.core.attribution_core import AttributionCore
+except ImportError:
+    from infrastructure.swarm.fleet.core.attribution_core import AttributionCore
+
 
 
 def test_attributioncore_basic():

@@ -33,7 +33,6 @@ from typing import Any
 
 
 
-
 class ArchiveIntelligence:
     Refactored logic from Archive Alchemist for safe archive analysis.
 #     Focuses on detecting malicious patterns like ZipSlip or massive compression ratios.

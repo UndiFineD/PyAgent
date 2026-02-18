@@ -13,10 +13,17 @@
 # limitations under the License.
 
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] """Tests for ImageGenerationAgent.
-import pytest
-from unittest.mock import Mock, patch
-# [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # from src.logic.agents.multimodal.image_generation_agent import ImageGenerationAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
 
+try:
+    from unittest.mock import Mock, patch
+except ImportError:
+    from unittest.mock import Mock, patch
+
+# [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # from src.logic.agents.multimodal.image_generation_agent import ImageGenerationAgent
 
 
 

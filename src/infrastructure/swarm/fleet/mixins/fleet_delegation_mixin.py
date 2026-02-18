@@ -22,9 +22,22 @@ Fleet delegation mixin.py module.
 
 from __future__ import annotations
 
-import asyncio
-import logging
-from typing import TYPE_CHECKING
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -32,7 +45,6 @@ if TYPE_CHECKING:
     from src.core.manifest.manifest_repository import ManifestRepository
     from src.infrastructure.swarm.voyager.voyager_transport import VoyagerTransport
     from src.infrastructure.swarm.voyager.voyager_discovery import VoyagerDiscovery
-
 
 
 

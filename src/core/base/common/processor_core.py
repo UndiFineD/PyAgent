@@ -15,12 +15,26 @@
 
 """Core logic for multimodal processing and response post-processing.
 """
+
+
 from __future__ import annotations
 
-from typing import Callable, List
 
-from .base_core import BaseCore
-from .models import InputType, MultimodalInput
+try:
+    from typing import Callable, List
+except ImportError:
+    from typing import Callable, List
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .models import InputType, MultimodalInput
+except ImportError:
+    from .models import InputType, MultimodalInput
 
 
 

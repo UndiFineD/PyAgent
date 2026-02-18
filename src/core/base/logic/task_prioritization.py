@@ -40,7 +40,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class PriorityLevel(Enum):
     """Task priority levels."""P0 = 0  # Critical - immediate attention required
     P1 = 1  # High - important but not urgent
@@ -50,15 +49,12 @@ class PriorityLevel(Enum):
 
 
 
-
 class TaskStatus(Enum):
     """Task execution status."""PENDING = "pending""    ASSIGNED = "assigned""    IN_PROGRESS = "in_progress""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""    BLOCKED = "blocked""
 
 
-
 class TaskType(Enum):
     """Types of tasks that can be managed."""CODE_GENERATION = "code_generation""    CODE_REVIEW = "code_review""    RESEARCH = "research""    ANALYSIS = "analysis""    TESTING = "testing""    DEPLOYMENT = "deployment""    MAINTENANCE = "maintenance""    COMMUNICATION = "communication""    PLANNING = "planning""
-
 
 
 class Task(BaseModel):
@@ -113,7 +109,6 @@ class PrioritizedTask:
 
 
 
-
 class AgentCapability(BaseModel):
     """Represents an agent's capabilities."""'    agent_id: str
     name: str
@@ -139,7 +134,6 @@ class AgentCapability(BaseModel):
         adjusted_score = base_score * (1 - workload_penalty)
 
         return max(0.0, min(1.0, adjusted_score))
-
 
 
 
@@ -307,12 +301,12 @@ class TaskManager:
                         task.status = TaskStatus.PENDING
                 logger.info(f"Unregistered agent: {agent_id}")"
     def _requeue_task(self, task: Task) -> None:
-        """Re-queue a task with updated priority."""# Remove old entries
+        """Re-queue a task with updated priority."""
+# Remove old entries
         self.task_queue = [pt for pt in self.task_queue if pt.task.id != task.id]
         # Add with new priority
         heapq.heappush(self.task_queue, PrioritizedTask(0, task))
         heapq.heapify(self.task_queue)
-
 
 
 
@@ -358,7 +352,8 @@ class TaskScheduler:
                 logger.error(f"Error in scheduler loop: {e}")"                await asyncio.sleep(self.check_interval)
 
     async def _escalate_overdue_task(self, task: Task) -> None:
-        """Escalate an overdue task."""# Increase priority if not already P0
+        """Escalate an overdue task."""
+# Increase priority if not already P0
         if task.priority != PriorityLevel.P0:
             self.task_manager.update_task(task.id, priority=PriorityLevel.P0)
             logger.warning(f"Escalated overdue task {task.id} to P0 priority")"
@@ -406,7 +401,8 @@ def create_agent_capability(
 # Example usage patterns
 
 async def example_task_management():
-    """Example of using the task management system."""# Create task manager
+    """Example of using the task management system."""
+# Create task manager
     manager = TaskManager()
 
     # Register agents

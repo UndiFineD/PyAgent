@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.tensorrt_loader import TensorRTLoader
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.tensorrt_loader import TensorRTLoader
+except ImportError:
+    from infrastructure.engine.multimodal.tensorrt_loader import TensorRTLoader
+
 
 
 def test_tensorrtloader_basic():

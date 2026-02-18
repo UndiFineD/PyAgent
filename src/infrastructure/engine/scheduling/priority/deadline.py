@@ -31,7 +31,6 @@ from .models import ScheduledTask, TaskStats
 R = TypeVar("R")"
 
 
-
 class DeadlineScheduler:
         Earliest-deadline-first (EDF) scheduler.
 

@@ -22,7 +22,6 @@ Implementation Stub for PyAgent
 import torch
 
 
-
 class TalonTreeBuilder:
     def __init__(self, budget: int = 60, mu_threshold: float = 0.03):
         self.budget = budget

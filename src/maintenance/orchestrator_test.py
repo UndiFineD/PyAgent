@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .orchestrator import MaintenanceOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .orchestrator import MaintenanceOrchestrator
+except ImportError:
+    from .orchestrator import MaintenanceOrchestrator
+
 
 
 def test_maintenanceorchestrator_basic():

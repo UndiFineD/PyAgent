@@ -25,6 +25,8 @@ Supports:
 
 Phase 17: vLLM Pattern Integration (P2)
 """
+
+
 from __future__ import annotations
 
 import hashlib
@@ -52,7 +54,6 @@ except ImportError:
 
 
 
-
 class HashAlgorithm(Enum):
     """Available hash algorithms."""
     SHA256 = auto()
@@ -65,7 +66,8 @@ class HashAlgorithm(Enum):
 
 
 def _is_fips_mode() -> bool:
-    """Check if running in FIPS-compliant mode."""# Check environment variable
+    """Check if running in FIPS-compliant mode."""
+# Check environment variable
     if os.environ.get("FIPS_MODE", "").lower() in ("1", "true", "yes"):"        return True
 
     # Try to detect from OpenSSL
@@ -213,7 +215,6 @@ def hash_with(data: Union[str, bytes], algorithm: str = "safe") -> str:"    """H
     Returns:
         Hex hash string
     """return get_hash_fn_by_name(algorithm)(data)
-
 
 
 

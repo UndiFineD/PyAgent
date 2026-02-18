@@ -39,10 +39,22 @@ Helps create Next.js or React interfaces for the fleet.
 
 from __future__ import annotations
 
-import logging
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    import logging
+except ImportError:
+    import logging
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 
@@ -58,7 +70,11 @@ class DashboardAgent(BaseAgent):
     def generate_component(self, name: str, description: str) -> str:
 """"Generates a React/Next.js component based on the description.        logging.info(fGenerating UI component:" {name}")"        # Simplified boilerplate generation
 #         component = f
-import React from 'react';'__version__ = VERSION
+try:
+    import React
+except ImportError:
+    import React
+ from 'react';'__version__ = VERSION
 
 const {name} = () => {{
 
@@ -98,10 +114,22 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
 from __future__ import annotations
 
-import logging
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    import logging
+except ImportError:
+    import logging
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 
@@ -117,7 +145,11 @@ class DashboardAgent(BaseAgent):
     def generate_component(self, name: str, description: str) -> str:
 """"Generates a React/Next.js component based on the description.        logging.info(fGenerating UI component: {name}")"        # Simplified boilerplate generation
 #         component = f
-import React from 'react';'__version__ = VERSION
+try:
+    import React
+except ImportError:
+    import React
+ from 'react';'__version__ = VERSION
 
 const {name} = () => {{
 

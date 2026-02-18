@@ -51,7 +51,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class PylintFixerMixin:
     """Provides automated fixes for common Pylint warnings.
     def fix_unspecified_encoding(self, file_path: Path) -> bool:

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.utils.file_lock_manager import LockProxy, FileLockManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.utils.file_lock_manager import LockProxy, FileLockManager
+except ImportError:
+    from core.base.common.utils.file_lock_manager import LockProxy, FileLockManager
+
 
 
 def test_lockproxy_basic():

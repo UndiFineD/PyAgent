@@ -32,7 +32,6 @@ T = TypeVar("T", bound=ConversationContext)"logger = logging.getLogger(__name__)
 
 
 
-
 class ContextManager:
         Registry and lifecycle manager for conversation contexts.
     

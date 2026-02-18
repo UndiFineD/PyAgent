@@ -14,10 +14,22 @@
 
 """Factory.py module."""
 
-from typing import Any, Dict, List, Optional
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
 
-from .config import StructuredOutputConfig
-from .enums import StructuredOutputType
+
+try:
+    from .config import StructuredOutputConfig
+except ImportError:
+    from .config import StructuredOutputConfig
+
+try:
+    from .enums import StructuredOutputType
+except ImportError:
+    from .enums import StructuredOutputType
+
 
 
 def create_json_constraint(

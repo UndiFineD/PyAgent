@@ -21,7 +21,6 @@ from src.core.base.logic.core.identity_core import IdentityCore, AgentIdentity
 
 
 
-
 class TestIdentityCore(unittest.TestCase):
     def setUp(self):
         self.core = IdentityCore()

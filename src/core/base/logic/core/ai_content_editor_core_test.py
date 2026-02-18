@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.ai_content_editor_core import ContentEditRequest, ContentEditResult, ContentTemplate, AIContentEditorCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.ai_content_editor_core import ContentEditRequest, ContentEditResult, ContentTemplate, AIContentEditorCore
+except ImportError:
+    from core.base.logic.core.ai_content_editor_core import ContentEditRequest, ContentEditResult, ContentTemplate, AIContentEditorCore
+
 
 
 def test_contenteditrequest_basic():

@@ -61,7 +61,6 @@ except ImportError:
 
 
 
-
 class MorphologyCore:
     MorphologyCore handles agent splitting, merging, and DNA "encoding."    It identifies logical overlap and proposes architectural shifts.
 
@@ -101,7 +100,6 @@ try:
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
-
 
 
 

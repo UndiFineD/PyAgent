@@ -21,8 +21,16 @@ USAGE:
 - Execute as standalone script: python sync_tests.py
 - Synchronizes test files in the tests/unit directory with modules in the cleaned directory
 
-import glob
-from pathlib import Path
+try:
+    import glob
+except ImportError:
+    import glob
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 
 CLEANED_DIR = Path(r"C:\\DEV\\PyAgent\\src\\external_candidates\\cleaned")"TESTS_DIR = Path(r"C:\\DEV\\PyAgent\\tests\\unit")"
@@ -33,7 +41,11 @@ def main():
         mod_name = Path(mod_path).name
         test_path = TESTS_DIR / f"test_auto_{mod_name}""
         # Simple test content pointing to 'cleaned''        content = f'''''''import importlib.util
-from pathlib import Path
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 p = Path(r"{mod_path}")"spec = importlib.util.spec_from_file_location('mod_under_test', p)'mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)

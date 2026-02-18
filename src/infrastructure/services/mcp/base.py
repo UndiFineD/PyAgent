@@ -21,16 +21,36 @@ Base MCP tool server abstraction.
 
 from __future__ import annotations
 
-import logging
-import uuid
-from abc import ABC, abstractmethod
-from typing import AsyncIterator, Dict, List, Optional
 
-from .models import (MCPServerConfig, MCPSession, SessionState, ToolCall,
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import AsyncIterator, Dict, List, Optional
+except ImportError:
+    from typing import AsyncIterator, Dict, List, Optional
+
+
+try:
+    from .models import (MCPServerConfig, MCPSession, SessionState, ToolCall,
+except ImportError:
+    from .models import (MCPServerConfig, MCPSession, SessionState, ToolCall,
+
                      ToolResult, ToolSchema)
 
 logger = logging.getLogger(__name__)
-
 
 
 

@@ -37,7 +37,6 @@ __version__ = VERSION
 
 
 
-
 class RefactoringAdvisor:
     "Suggests refactoring based on context analysis."
     Analyzes context to suggest code refactoring opportunities.

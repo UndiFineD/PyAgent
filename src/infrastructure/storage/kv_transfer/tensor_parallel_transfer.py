@@ -24,17 +24,29 @@ that KV transfer logic correctly handles partitioned blocks.
 
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Any, List
 
-from src.core.lazy_loader import LazyLoader
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING, Any, List
+except ImportError:
+    from typing import TYPE_CHECKING, Any, List
+
+
+try:
+    from .core.lazy_loader import LazyLoader
+except ImportError:
+    from src.core.lazy_loader import LazyLoader
+
 
 if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         KVConnectorBase
 
 logger = logging.getLogger(__name__)
-
 
 
 

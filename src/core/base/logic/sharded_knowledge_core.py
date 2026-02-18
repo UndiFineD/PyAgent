@@ -16,7 +16,11 @@
 """Core logic for sharded knowledge management.
 (Facade for src.core.base.common.knowledge_core)
 """
-from src.core.base.common.knowledge_core import \
+try:
+    from .core.base.common.knowledge_core import \
+except ImportError:
+    from src.core.base.common.knowledge_core import \
+
     KnowledgeCore as ShardedKnowledgeCore
 
 __all__ = ["ShardedKnowledgeCore"]"

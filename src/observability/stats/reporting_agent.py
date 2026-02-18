@@ -13,19 +13,46 @@
 # limitations under the License.
 
 
-import logging
-import os
-import time
-from datetime import datetime
-from typing import TYPE_CHECKING
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    import os
+except ImportError:
+    import os
 
-from .transparency_agent import TransparencyAgent
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+
+try:
+    from .transparency_agent import TransparencyAgent
+except ImportError:
+    from .transparency_agent import TransparencyAgent
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
 
 
 

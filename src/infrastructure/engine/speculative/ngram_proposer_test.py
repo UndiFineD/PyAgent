@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.ngram_proposer import NgramConfig, NgramMatch, NgramProposalResult, NgramCache, NgramProposer, WeightedNgramProposer, PromptLookupProposer, HybridNgramProposer, NgramProposerFactory
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.ngram_proposer import NgramConfig, NgramMatch, NgramProposalResult, NgramCache, NgramProposer, WeightedNgramProposer, PromptLookupProposer, HybridNgramProposer, NgramProposerFactory
+except ImportError:
+    from infrastructure.engine.speculative.ngram_proposer import NgramConfig, NgramMatch, NgramProposalResult, NgramCache, NgramProposer, WeightedNgramProposer, PromptLookupProposer, HybridNgramProposer, NgramProposerFactory
+
 
 
 def test_ngramconfig_basic():

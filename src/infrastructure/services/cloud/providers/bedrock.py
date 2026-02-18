@@ -38,7 +38,6 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 
-
 class AWSBedrockConnector(CloudProviderBase):
         Connector for AWS Bedrock API.
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.decoder.tree import SpeculativeToken, SpeculativeTree
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.decoder.tree import SpeculativeToken, SpeculativeTree
+except ImportError:
+    from infrastructure.engine.speculative.decoder.tree import SpeculativeToken, SpeculativeTree
+
 
 
 def test_speculativetoken_basic():

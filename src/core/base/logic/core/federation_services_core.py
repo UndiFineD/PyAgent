@@ -41,20 +41,16 @@ import secrets
 
 
 
-
 class SAMLVersion(Enum):
     """SAML protocol versions"""SAML_1_1 = "1.1""    SAML_2_0 = "2.0""
-
 
 
 class FederationProvider(Enum):
     """Supported federation providers"""OFFICE_365 = "office365""    DROPBOX = "dropbox""    GENERIC_SAML2 = "saml2""    AZURE_AD = "azure_ad""    AWS_SAML = "aws_saml""
 
 
-
 class SignatureAlgorithm(Enum):
     """SAML signature algorithms"""RSA_SHA256 = "rsa-sha256""    RSA_SHA384 = "rsa-sha384""    RSA_SHA512 = "rsa-sha512""
-
 
 
 class DigestAlgorithm(Enum):
@@ -122,7 +118,6 @@ class TokenGenerationRequest:
 
 
 
-
 class FederationServicesCore:
     """Federation Services Core for AD FS token forgery and SAML management.
 
@@ -137,14 +132,16 @@ class FederationServicesCore:
         self.templates: Dict[str, str] = {}
 
     async def initialize(self) -> bool:
-        """Initialize the federation services core"""try:
+        """Initialize the federation services core"""
+try:
             await self.load_saml_templates()
             self.logger.info("Federation Services Core initialized successfully")"            return True
         except Exception as e:
             self.logger.error(f"Failed to initialize Federation Services Core: {e}")"            return False
 
     async def load_saml_templates(self) -> None:
-        """Load SAML token templates"""# Mock SAML templates - in real implementation would load from files
+        """Load SAML token templates"""
+# Mock SAML templates - in real implementation would load from files
         self.templates = {
             "saml1.1_office365": """<?xml version="1.0" encoding="UTF-8"?>"<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion""                AssertionID="{AssertionID}""                IssueInstant="{IssueInstant}""                Issuer="{Issuer}""                MajorVersion="1""                MinorVersion="1">"    <saml:Conditions NotBefore="{NotBefore}" NotOnOrAfter="{NotOnOrAfter}">"        <saml:AudienceRestrictionCondition>
             <saml:Audience>urn:federation:MicrosoftOnline</saml:Audience>
@@ -238,7 +235,8 @@ class FederationServicesCore:
         self,
         request: TokenGenerationRequest
     ) -> Optional[SAMLToken]:
-        """Generate a SAML security token"""try:
+        """Generate a SAML security token"""
+try:
             token_id = str(uuid.uuid4())
             now = datetime.now(timezone.utc)
             expires = now + timedelta(minutes=request.validity_minutes)
@@ -384,7 +382,8 @@ class FederationServicesCore:
 
         Returns:
             True if successful, False otherwise
-        """try:
+        """
+try:
             # Mock decryption - in real implementation would use custom cryptography
             # to decrypt the PFX blob using the DKM key
 
@@ -411,7 +410,8 @@ class FederationServicesCore:
 
         Returns:
             Tuple of (certificate_bytes, private_key_bytes)
-        """try:
+        """
+try:
             with open(pfx_path, 'rb'):'                pass
 
             # Mock loading - in real implementation would use cryptography library
@@ -439,7 +439,8 @@ class FederationServicesCore:
 
         Returns:
             Tuple of (certificate_pem, private_key_pem)
-        """try:
+        """
+try:
             # Generate private key
             private_key = rsa.generate_private_key(
                 public_exponent=65537,

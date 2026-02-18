@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.decoding.grammar.base import StructuredOutputOptions, StructuredOutputsParams, StructuredOutputGrammar
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.decoding.grammar.base import StructuredOutputOptions, StructuredOutputsParams, StructuredOutputGrammar
+except ImportError:
+    from infrastructure.engine.decoding.grammar.base import StructuredOutputOptions, StructuredOutputsParams, StructuredOutputGrammar
+
 
 
 def test_structuredoutputoptions_basic():

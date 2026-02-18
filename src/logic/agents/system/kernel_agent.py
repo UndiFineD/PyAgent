@@ -61,7 +61,6 @@ __version__ = VERSION
 
 
 
-
 class KernelAgent(BaseAgent):
 """"Interacts directly with the host OS to manage environments and perform diagnostics.
     def __init__(self, file_path: str) -> None:
@@ -137,7 +136,6 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
-
 
 
 

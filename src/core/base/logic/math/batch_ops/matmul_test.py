@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.math.batch_ops.matmul import mm_batch_invariant, bmm_batch_invariant
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.math.batch_ops.matmul import mm_batch_invariant, bmm_batch_invariant
+except ImportError:
+    from core.base.logic.math.batch_ops.matmul import mm_batch_invariant, bmm_batch_invariant
+
 
 
 def test_mm_batch_invariant_basic():

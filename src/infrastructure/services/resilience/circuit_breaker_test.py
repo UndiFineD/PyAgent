@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.resilience.circuit_breaker import CircuitState, CircuitStats, CircuitBreakerError, CircuitBreaker, CircuitBreakerRegistry, circuit_breaker, get_circuit_stats, get_all_circuit_stats
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.resilience.circuit_breaker import CircuitState, CircuitStats, CircuitBreakerError, CircuitBreaker, CircuitBreakerRegistry, circuit_breaker, get_circuit_stats, get_all_circuit_stats
+except ImportError:
+    from infrastructure.services.resilience.circuit_breaker import CircuitState, CircuitStats, CircuitBreakerError, CircuitBreaker, CircuitBreakerRegistry, circuit_breaker, get_circuit_stats, get_all_circuit_stats
+
 
 
 def test_circuitstate_basic():

@@ -16,8 +16,15 @@
 """Manager regarding conversation history.
 (Facade regarding src.core.base.common.conversation_core)
 """
+
+
 from __future__ import annotations
 
-from src.core.base.common.models import ConversationHistory
 
-__all__ = ["ConversationHistory"]"
+try:
+    from .core.base.common.models import ConversationHistory
+except ImportError:
+    from src.core.base.common.models import ConversationHistory
+
+
+__all__ = ["ConversationHistory"]

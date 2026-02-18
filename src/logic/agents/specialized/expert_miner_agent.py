@@ -46,12 +46,23 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");"
 ExpertMinerAgent (Phase 98).
 Autonomous spawning of niche 'Hobbyist' experts based on Global Trace Synthesis patterns.'Analyzes reasoning failures across the swarm and synthesizes new agent definitions"."
-import logging
-from typing import List, Dict, Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import List, Dict, Any
+except ImportError:
+    from typing import List, Dict, Any
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -90,12 +101,23 @@ class ExpertMinerAgent(BaseAgent):
     async def spawn_expert(self, specialist_def: Dict[str, Any]):
 #         "Registers the newly mined expert into the fleet registry."        logger.info(fExpertMiner: Spawning '{specialist_def["'name']}' into the swarm.")"'        # Logic to update agent_registry.json and create "the .py file via StateTransaction"        pass
 
-import logging
-from typing import List, Dict, Any
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import List, Dict, Any
+except ImportError:
+    from typing import List, Dict, Any
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

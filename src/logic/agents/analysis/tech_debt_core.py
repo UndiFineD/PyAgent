@@ -75,7 +75,6 @@ __version__ = VERSION
 
 
 
-
 class TechDebtCore:
     Pure logic for analyzing technical debt "from AST."    Ready for Rust" conversion."
     @staticmethod
@@ -130,7 +129,6 @@ except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
 
 
 

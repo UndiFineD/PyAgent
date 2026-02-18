@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .fuzzing import FuzzingTarget, FuzzingTechnique, FuzzingResult, FuzzingSession, AIFuzzingEngine, MultiCycleFuzzing
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .fuzzing import FuzzingTarget, FuzzingTechnique, FuzzingResult, FuzzingSession, AIFuzzingEngine, MultiCycleFuzzing
+except ImportError:
+    from .fuzzing import FuzzingTarget, FuzzingTechnique, FuzzingResult, FuzzingSession, AIFuzzingEngine, MultiCycleFuzzing
+
 
 
 def test_fuzzingtarget_basic():

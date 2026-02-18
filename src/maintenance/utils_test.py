@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .utils import MaintenanceUtils
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .utils import MaintenanceUtils
+except ImportError:
+    from .utils import MaintenanceUtils
+
 
 
 def test_maintenanceutils_basic():

@@ -49,7 +49,11 @@ FILE CONTENT SUMMARY:
 
 # "Mixin for RAG-based context retrieval."
 from __future__ import annotations
-import logging
+
+try:
+    import logging
+except ImportError:
+    import logging
 
 
 
@@ -63,7 +67,11 @@ class ContextRAGMixin:
         )
         logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")"'        return" selected"
 from __future__ import annotations
-import logging
+
+try:
+    import logging
+except ImportError:
+    import logging
 
 
 

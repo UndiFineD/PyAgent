@@ -54,25 +54,60 @@ Architectural design agent.py module.
 
 from __future__ import annotations
 
-import asyncio
-import contextlib
-import json
-import logging
-from enum import Enum
-from typing import Any, Dict, Optional
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
 
 
-
 class DesignPhase(Enum):
 """"Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design "Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
-
 
 
 class DesignExpertise(Enum):
@@ -116,25 +151,60 @@ class ArchitecturalDesignAgent(BaseAgent):
 
 from __future__ import annotations
 
-import asyncio
-import contextlib
-import json
-import logging
-from enum import Enum
-from typing import Any, Dict, Optional
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
 
 
-
 class DesignPhase(Enum):
 """"Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
-
 
 
 class DesignExpertise(Enum):

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.conversation.context.manager import ContextManager, get_context_manager, create_context, merge_contexts, restore_context
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.conversation.context.manager import ContextManager, get_context_manager, create_context, merge_contexts, restore_context
+except ImportError:
+    from infrastructure.engine.conversation.context.manager import ContextManager, get_context_manager, create_context, merge_contexts, restore_context
+
 
 
 def test_contextmanager_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.mixins.governance_mixin import GovernanceMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.mixins.governance_mixin import GovernanceMixin
+except ImportError:
+    from core.base.mixins.governance_mixin import GovernanceMixin
+
 
 
 def test_governancemixin_basic():

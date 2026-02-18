@@ -32,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class RocmPlatform(Platform):
     """AMD ROCm platform implementation.
     _torch = None

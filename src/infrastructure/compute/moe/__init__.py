@@ -22,7 +22,11 @@ Modules:
     ExpertRouter: Token-to-expert routing with load balancing
     MoEConfig: Configuration for MoE layers
 
-from src.infrastructure.compute.moe.expert_router import (AdaptiveRouter,
+try:
+    from .infrastructure.compute.moe.expert_router import (AdaptiveRouter,
+except ImportError:
+    from src.infrastructure.compute.moe.expert_router import (AdaptiveRouter,
+
                                                           ExpertChoiceRouter,
                                                           RouterConfig,
                                                           RouterOutput,
@@ -30,7 +34,11 @@ from src.infrastructure.compute.moe.expert_router import (AdaptiveRouter,
                                                           RoutingSimulator,
                                                           SoftMoERouter,
                                                           TopKRouter)
-from src.infrastructure.compute.moe.fused_mo_e_layer import (
+try:
+    from .infrastructure.compute.moe.fused_mo_e_layer import (
+except ImportError:
+    from src.infrastructure.compute.moe.fused_mo_e_layer import (
+
     DenseDispatcher, ExpertPlacementStrategy, FusedMoEConfig, FusedMoELayer,
     FusedMoEMethodBase, FusedMoEParallelConfig, SparseDispatcher,
     UnquantizedFusedMoEMethod)

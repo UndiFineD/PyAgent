@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
-from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .infrastructure.security.auth.webauthn_manager import WebAuthnManager
+except ImportError:
+    from src.infrastructure.security.auth.webauthn_manager import WebAuthnManager
+
+try:
+    from .infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
+except ImportError:
+    from src.infrastructure.swarm.resilience.checkpoint_manager import CheckpointManager
+
 
 @pytest.mark.asyncio
 async def test_webauthn_options_generation():

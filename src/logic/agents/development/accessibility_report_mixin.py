@@ -18,10 +18,18 @@ Accessibility report mixin.py module.
 
 from __future__ import annotations
 
-from src.core.base.common.types.accessibility_report import AccessibilityReport
-from src.core.base.common.types.accessibility_severity import \
-    AccessibilitySeverity
 
+try:
+    from .core.base.common.types.accessibility_report import AccessibilityReport
+except ImportError:
+    from src.core.base.common.types.accessibility_report import AccessibilityReport
+
+try:
+    from .core.base.common.types.accessibility_severity import \
+except ImportError:
+    from src.core.base.common.types.accessibility_severity import \
+
+    AccessibilitySeverity
 
 
 

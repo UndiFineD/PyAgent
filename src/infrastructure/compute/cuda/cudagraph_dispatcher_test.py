@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.cuda.cudagraph_dispatcher import DispatchMode, DispatchKey, DispatchStats, DispatchPolicy, DefaultDispatchPolicy, AdaptiveDispatchPolicy, GraphEntry, CudagraphDispatcher, CompositeDispatcher, StreamDispatcher, create_dispatch_key, get_padded_key
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.cuda.cudagraph_dispatcher import DispatchMode, DispatchKey, DispatchStats, DispatchPolicy, DefaultDispatchPolicy, AdaptiveDispatchPolicy, GraphEntry, CudagraphDispatcher, CompositeDispatcher, StreamDispatcher, create_dispatch_key, get_padded_key
+except ImportError:
+    from infrastructure.compute.cuda.cudagraph_dispatcher import DispatchMode, DispatchKey, DispatchStats, DispatchPolicy, DefaultDispatchPolicy, AdaptiveDispatchPolicy, GraphEntry, CudagraphDispatcher, CompositeDispatcher, StreamDispatcher, create_dispatch_key, get_padded_key
+
 
 
 def test_dispatchmode_basic():

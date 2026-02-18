@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.strip_whitespace_transformer import StripWhitespaceTransformer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.strip_whitespace_transformer import StripWhitespaceTransformer
+except ImportError:
+    from infrastructure.compute.backend.strip_whitespace_transformer import StripWhitespaceTransformer
+
 
 
 def test_stripwhitespacetransformer_basic():

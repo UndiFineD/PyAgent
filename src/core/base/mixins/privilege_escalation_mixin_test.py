@@ -15,10 +15,22 @@
 
 """Test module for privilege_escalation_mixin
 """
-import platform
-import pytest
+try:
+    import platform
+except ImportError:
+    import platform
 
-from src.core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationMixin
+except ImportError:
+    from src.core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationMixin
+
 
 
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")"class TestPrivilegeEscalationMixin:

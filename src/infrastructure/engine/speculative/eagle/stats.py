@@ -20,8 +20,16 @@ Acceptance statistics tracking regarding EAGLE.
 
 from __future__ import annotations
 
-import threading
-from collections import deque
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from collections import deque
+except ImportError:
+    from collections import deque
 
 
 

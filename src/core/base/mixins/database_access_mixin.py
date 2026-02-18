@@ -17,12 +17,26 @@
 Database access mixin for BaseAgent, implementing ODBC database operations.
 Inspired by ADSyncDump-BOF database connection patterns.
 """
+
+
 from __future__ import annotations
 
-import platform
-from typing import Any, Dict, List, Optional
 
-from src.core.base.logic.processing.database_access_core import DatabaseAccessCore
+try:
+    import platform
+except ImportError:
+    import platform
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .core.base.logic.processing.database_access_core import DatabaseAccessCore
+except ImportError:
+    from src.core.base.logic.processing.database_access_core import DatabaseAccessCore
 
 
 

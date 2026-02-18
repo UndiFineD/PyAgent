@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.outputs.logprobs_processor import TokenLogprob, TopLogprobs, LogprobsLists, LogprobsTensors, AsyncCPUTransfer, SamplerOutput, ModelRunnerOutput, StreamingLogprobsCollector, extract_top_k_logprobs_rust, batch_logprobs_to_cpu_rust
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.outputs.logprobs_processor import TokenLogprob, TopLogprobs, LogprobsLists, LogprobsTensors, AsyncCPUTransfer, SamplerOutput, ModelRunnerOutput, StreamingLogprobsCollector, extract_top_k_logprobs_rust, batch_logprobs_to_cpu_rust
+except ImportError:
+    from infrastructure.engine.outputs.logprobs_processor import TokenLogprob, TopLogprobs, LogprobsLists, LogprobsTensors, AsyncCPUTransfer, SamplerOutput, ModelRunnerOutput, StreamingLogprobsCollector, extract_top_k_logprobs_rust, batch_logprobs_to_cpu_rust
+
 
 
 def test_tokenlogprob_basic():

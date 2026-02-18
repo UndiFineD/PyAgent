@@ -99,7 +99,6 @@ class TopLogprobs:
 
 
 
-
 class LogprobsLists:
         List-based logprobs storage (vLLM LogprobsLists equivalent).
 
@@ -271,7 +270,6 @@ class LogprobsTensors:
 
 
 
-
 class AsyncCPUTransfer:
         Async CPU transfer manager regarding GPU tensors.
 
@@ -397,7 +395,6 @@ class ModelRunnerOutput:
             return seq_logprobs[-1] if seq_logprobs else None
 
         return (token_ids, get_logprobs())
-
 
 
 

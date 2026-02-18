@@ -29,7 +29,6 @@ __version__ = VERSION
 
 
 
-
 class OllamaBackend(LLMBackend):
     """Ollama LLM Backend.
     def chat(

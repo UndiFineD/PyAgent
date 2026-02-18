@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.commands.chat_decorator.suggested import cmd_human, cmd_ai, cmd_system_message, cmd_thinking, cmd_codeblock, cmd_chat, cmd_chat_theme, cmd_chat_preview
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.commands.chat_decorator.suggested import cmd_human, cmd_ai, cmd_system_message, cmd_thinking, cmd_codeblock, cmd_chat, cmd_chat_theme, cmd_chat_preview
+except ImportError:
+    from interface.slash_commands.commands.chat_decorator.suggested import cmd_human, cmd_ai, cmd_system_message, cmd_thinking, cmd_codeblock, cmd_chat, cmd_chat_theme, cmd_chat_preview
+
 
 
 def test_cmd_human_basic():

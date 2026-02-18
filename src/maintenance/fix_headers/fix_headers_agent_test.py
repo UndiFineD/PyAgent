@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from maintenance.fix_headers.fix_headers_agent import FixHeadersAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from maintenance.fix_headers.fix_headers_agent import FixHeadersAgent
+except ImportError:
+    from maintenance.fix_headers.fix_headers_agent import FixHeadersAgent
+
 
 
 def test_fixheadersagent_basic():

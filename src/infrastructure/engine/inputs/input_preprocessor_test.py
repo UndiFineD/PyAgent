@@ -17,9 +17,17 @@
 
 Tests for InputPreprocessor - unified prompt processing.
 
-import pytest
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.infrastructure.engine.inputs import (
+
+try:
+    from .infrastructure.engine.inputs import (
+except ImportError:
+    from src.infrastructure.engine.inputs import (
+
     PromptType,
     InputFormat,
     TextPrompt,
@@ -35,7 +43,6 @@ from src.infrastructure.engine.inputs import (
     parse_prompt,
     estimate_tokens,
 )
-
 
 
 
@@ -56,7 +63,6 @@ class TestEnums:
 
 
 
-
 class TestTextPrompt:
     """Test TextPrompt dataclass.
     def test_create_text_prompt(self):
@@ -66,7 +72,6 @@ class TestTextPrompt:
         """Test TextPrompt with cache_salt.        prompt = TextPrompt(
             prompt="Test prompt","            cache_salt="custom_salt","        )
         assert prompt.cache_salt == "custom_salt""
-
 
 
 class TestTokensPrompt:
@@ -81,7 +86,6 @@ class TestTokensPrompt:
     def test_tokens_prompt_length(self):
         """Test TokensPrompt length property.        prompt = TokensPrompt(prompt_token_ids=[1, 2, 3])
         assert len(prompt) == 3
-
 
 
 
@@ -102,7 +106,6 @@ class TestChatMessage:
 
 
 
-
 class TestChatPrompt:
     """Test ChatPrompt dataclass.
     def test_create_chat_prompt(self):
@@ -119,7 +122,6 @@ class TestChatPrompt:
         prompt = ChatPrompt(messages=messages)
 
         assert prompt.messages[0].role == "system""
-
 
 
 class TestPromptTemplate:
@@ -144,7 +146,6 @@ class TestPromptTemplate:
         """Test ChatML template constant.        template = PromptTemplate.CHATML
 
         assert "user" in template"        assert "assistant" in template"
-
 
 
 class TestPromptValidator:
@@ -183,7 +184,6 @@ class TestPromptValidator:
 
 
 
-
 class TestConversationLinearizer:
     """Test ConversationLinearizer class.
     def test_linearize_to_chatml(self):
@@ -212,7 +212,6 @@ class TestConversationLinearizer:
 
         result = linearizer.linearize(chat)
         assert isinstance(result, str)
-
 
 
 
@@ -265,7 +264,6 @@ class TestInputPreprocessor:
 
 
 
-
 class TestInputMetadata:
     """Test InputMetadata dataclass.
     def test_create_metadata(self):
@@ -288,7 +286,6 @@ class TestInputMetadata:
 
 
 
-
 class TestProcessedInput:
     """Test ProcessedInput dataclass.
     def test_create_processed_input(self):
@@ -300,7 +297,6 @@ class TestProcessedInput:
         )
 
         assert processed.prompt == "Hello""        assert processed.metadata is not None
-
 
 
 

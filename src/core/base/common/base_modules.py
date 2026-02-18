@@ -14,10 +14,20 @@
 
 
 """Lifecycle definitions for core modules."""
+
+
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import Any
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 

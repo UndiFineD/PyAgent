@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.legacy_support import LegacyAgentMixin, create_legacy_agent_wrapper
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.legacy_support import LegacyAgentMixin, create_legacy_agent_wrapper
+except ImportError:
+    from infrastructure.services.dev.legacy_support import LegacyAgentMixin, create_legacy_agent_wrapper
+
 
 
 def test_legacyagentmixin_basic():

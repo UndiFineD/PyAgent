@@ -20,13 +20,38 @@ Factory functions for creating engine clients.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, Optional
 
-from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
-from src.infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
-from src.infrastructure.engine.engine_client.inproc import InprocClient
-from src.infrastructure.engine.engine_client.sync_mp import SyncMPClient
-from src.infrastructure.engine.engine_client.types import (ClientMode,
+try:
+    from typing import TYPE_CHECKING, Callable, Optional
+except ImportError:
+    from typing import TYPE_CHECKING, Callable, Optional
+
+
+try:
+    from .infrastructure.engine.engine_client.async_mp import AsyncMPClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
+
+try:
+    from .infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.dp_async import DPAsyncMPClient
+
+try:
+    from .infrastructure.engine.engine_client.inproc import InprocClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.inproc import InprocClient
+
+try:
+    from .infrastructure.engine.engine_client.sync_mp import SyncMPClient
+except ImportError:
+    from src.infrastructure.engine.engine_client.sync_mp import SyncMPClient
+
+try:
+    from .infrastructure.engine.engine_client.types import (ClientMode,
+except ImportError:
+    from src.infrastructure.engine.engine_client.types import (ClientMode,
+
                                                            EngineClientConfig)
 
 if TYPE_CHECKING:

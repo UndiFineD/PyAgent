@@ -15,10 +15,22 @@
 
 """Test module for database_access_mixin
 """
-import platform
-import pytest
+try:
+    import platform
+except ImportError:
+    import platform
 
-from src.core.base.mixins.database_access_mixin import DatabaseAccessMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .core.base.mixins.database_access_mixin import DatabaseAccessMixin
+except ImportError:
+    from src.core.base.mixins.database_access_mixin import DatabaseAccessMixin
+
 
 
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")"class TestDatabaseAccessMixin:

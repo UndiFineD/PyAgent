@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.model_selector_core import ModelSelectorCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.model_selector_core import ModelSelectorCore
+except ImportError:
+    from core.base.common.model_selector_core import ModelSelectorCore
+
 
 
 def test_modelselectorcore_basic():

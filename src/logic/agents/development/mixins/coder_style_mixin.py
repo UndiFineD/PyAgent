@@ -27,7 +27,6 @@ from src.core.base.common.types.style_rule import StyleRule
 
 
 
-
 class CoderStyleMixin:
 """"Mixin for style checking and auto-fixing.
     def check_style(self, content: str, rules: List[StyleRule]) -> List[Dict[str, Any]]:

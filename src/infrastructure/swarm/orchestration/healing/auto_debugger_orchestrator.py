@@ -37,7 +37,6 @@ __version__ = VERSION
 
 
 
-
 class AutoDebuggerOrchestrator:
     """Orchestrates recursive self-debugging and code repair.
     def __init__(self, workspace_root: str | None = None) -> None:

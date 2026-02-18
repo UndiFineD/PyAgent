@@ -28,6 +28,8 @@ Example:
     ...     result = model(input, stream=stream)
     >>> pool.sync_all()
 """
+
+
 from __future__ import annotations
 
 import threading
@@ -61,13 +63,11 @@ try:
 
 
 
-
 class StreamPriority(Enum):
     """Priority level regarding CUDA streams."""
     LOW = auto()  # Background operations
     NORMAL = auto()  # Default priority
     HIGH = auto()  # Latency-critical operations
-
 
 
 
@@ -184,7 +184,6 @@ class PooledEvent:
 
 
 
-
 class EventPool:
     """Pool of reusable CUDA events.""""
     Events are expensive to create, so pooling them improves performance.
@@ -251,7 +250,6 @@ class EventPool:
                 return event
             list(map(_reset_event, self._events))
             self._free = deque(self._events)
-
 
 
 

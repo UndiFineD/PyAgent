@@ -17,7 +17,11 @@
 ScheduledImprovement - Scheduled improvement data model# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
 Create and inspect ScheduledImprovement instances as a lightweight data container for scheduling agent improvements. Example:
-from scheduled_improvement import ScheduledImprovement, ScheduleStatus
+try:
+    from scheduled_improvement import ScheduledImprovement, ScheduleStatus
+except ImportError:
+    from scheduled_improvement import ScheduledImprovement, ScheduleStatus
+
 s = ScheduledImprovement(improvement_id="IMP-123", scheduled_start="2026-03-01", scheduled_end="2026-03-07", assigned_resources=["alice","bob"], status=ScheduleStatus.SCHEDULED, sprint_id="S-12")"
 WHAT IT DOES:
 Encapsulates the minimal schema for a scheduled improvement: an identifier, planned start/end dates (strings), a list of assigned resources, a status drawn from ScheduleStatus, and an optional sprint identifier. Intended as a simple dataclass to carry scheduling metadata between components.
@@ -29,9 +33,22 @@ Use proper types for date/time (datetime with timezone) instead of plain strings
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from src.core.base.lifecycle.version import VERSION
-from .schedule_status import ScheduleStatus
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .schedule_status import ScheduleStatus
+except ImportError:
+    from .schedule_status import ScheduleStatus
+
 
 __version__ = VERSION
 

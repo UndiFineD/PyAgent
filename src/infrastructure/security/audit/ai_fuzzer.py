@@ -25,7 +25,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class BrainstormAIFuzzer:
         Orchestrates automated security audits by generating 'hallucinated' and'    'malicious' commands to test the Infection Guard and agent guardrails.'    
     def __init__(self, target_fleet: Any):

@@ -31,8 +31,16 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Changelog template.py module.
 
-from dataclasses import dataclass
-from typing import List
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
 
 
 @dataclass
@@ -42,8 +50,16 @@ class ChangelogTemplate:
     sections: List[str]
 #     header_format: str = "## [{version}] - {date}"    include_links: bool = True
     include_contributors: bool =" False"
-from dataclasses import dataclass
-from typing import List
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
 
 
 @dataclass

@@ -17,7 +17,6 @@ import torch.nn as nn
 from typing import Dict
 
 
-
 class CrossModelAdapter(nn.Module):
     """
     Transforms internal KV states into a shared latent space Z.
@@ -32,7 +31,6 @@ class CrossModelAdapter(nn.Module):
 
     def from_latent(self, latent_state: torch.Tensor) -> torch.Tensor:
         return self.decoder(latent_state)
-
 
 
 class LatentCommunicator:

@@ -59,7 +59,6 @@ __version__ = VERSION
 
 
 
-
 class MCPAgent:
 """"Enables the fleet to discover and utilize external tools via the MCP protocol.
     def __init__(self, file_path: str) -> None:
@@ -123,7 +122,6 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.fleet.mcp_connector import MCPConnector
 
 __version__ = VERSION
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.execution_engine import clear_response_cache, get_metrics, reset_metrics, validate_response_content, estimate_tokens, estimate_cost, configure_timeout_per_backend, llm_chat_via_github_models, llm_chat_via_ollama, llm_chat_via_lmstudio, llm_chat_via_copilot_cli, run_subagent, get_backend_status, describe_backends
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.execution_engine import clear_response_cache, get_metrics, reset_metrics, validate_response_content, estimate_tokens, estimate_cost, configure_timeout_per_backend, llm_chat_via_github_models, llm_chat_via_ollama, llm_chat_via_lmstudio, llm_chat_via_copilot_cli, run_subagent, get_backend_status, describe_backends
+except ImportError:
+    from infrastructure.compute.backend.execution_engine import clear_response_cache, get_metrics, reset_metrics, validate_response_content, estimate_tokens, estimate_cost, configure_timeout_per_backend, llm_chat_via_github_models, llm_chat_via_ollama, llm_chat_via_lmstudio, llm_chat_via_copilot_cli, run_subagent, get_backend_status, describe_backends
+
 
 
 def test_clear_response_cache_basic():

@@ -64,7 +64,6 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
 
 
 
-
 class CommandParser:
         Slash command parser and executor for chat prompts.
     

@@ -37,7 +37,6 @@ import numpy as np
 
 
 
-
 class BatchDescriptor(NamedTuple):
         Batch descriptor for CUDA graph dispatching.
 
@@ -306,7 +305,6 @@ def set_forward_context(
 # ============================================================================
 # Timing Utilities
 # ============================================================================
-
 
 
 

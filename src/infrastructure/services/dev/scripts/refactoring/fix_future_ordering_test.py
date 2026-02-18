@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.refactoring.fix_future_ordering import fix_future_ordering
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.refactoring.fix_future_ordering import fix_future_ordering
+except ImportError:
+    from infrastructure.services.dev.scripts.refactoring.fix_future_ordering import fix_future_ordering
+
 
 
 def test_fix_future_ordering_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.openai_api.responses.store import ResponseStore, InMemoryResponseStore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.openai_api.responses.store import ResponseStore, InMemoryResponseStore
+except ImportError:
+    from infrastructure.services.openai_api.responses.store import ResponseStore, InMemoryResponseStore
+
 
 
 def test_responsestore_basic():

@@ -13,8 +13,7 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent.py
+
 from __future__ import annotations
 
 import graphlib
@@ -24,25 +23,24 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-
-
 class DependencyGraph:
-    """Resolve agent dependencies regarding ordered execution.""""
-    Example:
-        graph=DependencyGraph()
-        graph.add_dependency("tests", "coder")  # tests depends on coder"        graph.add_dependency("docs", "tests")"
-        order=graph.resolve()  # [["coder"], ["tests"], ["docs"]]"    """
+    """Resolve agent dependencies regarding ordered execution.
+    
+    Manages a directed acyclic graph (DAG) of nodes with dependencies and resource
+    constraints, enabling topological sorting for parallel batch execution.
+    """
+
     def __init__(self) -> None:
-        """Initialize dependency graph."""self._nodes: set[str] = set()
+        """Initialize dependency graph."""
+        # Initialize dependency graph.
+        self._nodes: set[str] = set()
         self._edges: dict[str, set[str]] = {}  # node -> dependencies (must run first)
         self._resources: dict[str, set[str]] = {}  # node -> set of resource URIs
 
+
     def add_node(self, name: str, resources: list[str] | None = None) -> None:
-        """Add a node.""""
-        Args:
-            name: Node name.
-            resources: Optional list of resource URIs this node requires.
-        """self._nodes.add(name)
+        """Add a node to the dependency graph."""
+        self._nodes.add(name)
         if name not in self._edges:
             self._edges[name] = set()
         if resources:
@@ -50,24 +48,17 @@ class DependencyGraph:
                 self._resources[name] = set()
             self._resources[name].update(resources)
 
+
     def add_dependency(self, node: str, depends_on: str) -> None:
-        """Add a dependency.""""
-        Args:
-            node: Node that has the dependency.
-            depends_on: Node that must run first.
-        """self.add_node(node)
+        """Add a dependency between two nodes."""
+        self.add_node(node)
         self.add_node(depends_on)
         self._edges[node].add(depends_on)
 
+
     def resolve(self) -> list[list[str]]:
-        """Resolve execution order into parallel batches using graphlib (Phase 272).""""
-        Each inner list contains nodes that can be executed simultaneously (Execution Tiers).
-        Example: [["coder"], ["tests", "linter"], ["docs"]]"
-        Returns:
-            List of batches, where each batch is a list of node names.
-        Raises:
-            ValueError: If circular dependency detected.
-        """if not self._nodes:
+        """Resolve execution order into parallel batches using graphlib (Phase 272)."""
+        if not self._nodes:
             return []
 
         # TopologicalSorter expects {node: dependencies}
@@ -76,9 +67,11 @@ class DependencyGraph:
         try:
             ts.prepare()
         except graphlib.CycleError as e:
-            raise ValueError(f"Circular dependency detected: {e}") from e"
+            raise ValueError(f"Circular dependency detected: {e}") from e
+        
         def collect_batches() -> list[list[str]]:
-            """Recursive batch collection regarding active sorter state."""    if not ts.is_active():
+            """Recursive batch collection regarding active sorter state."""
+            if not ts.is_active():
                 return []
             ready = list(ts.get_ready())
             if not ready:
@@ -88,18 +81,20 @@ class DependencyGraph:
 
         return collect_batches()
 
+
     def _refine_batch_by_resources(self, batch: list[str]) -> list[list[str]]:
-        """Splits a batch into multiple sequential sub-batches regarding resource collisions."""from functools import reduce
+        """Refines a batch into sub-batches based on resource collisions."""
+        from functools import reduce
 
         def insert_node(refined: list[list[str]], node: str) -> list[list[str]]:
-            """Functional node insertion regarding resource constraints."""    node_resources = self._resources.get(node, set())
+            node_resources = self._resources.get(node, set())
 
             def find_non_colliding_batch(sub_batches: list[list[str]], index: int) -> bool:
                 if index >= len(sub_batches):
                     return False
 
                 sub_batch = sub_batches[index]
-                # Check regarding collision regarding any node in this sub_batch functionally
+                # Check for collision with any node in this sub_batch
                 collision = any(map(
                     lambda other: bool(node_resources.intersection(self._resources.get(other, set()))),
                     sub_batch

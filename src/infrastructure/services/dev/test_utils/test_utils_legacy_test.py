@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
-from tests.utils.agent_test_utils import agent_dir_on_path, AGENT_DIR
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    from tests.utils.agent_test_utils import agent_dir_on_path, AGENT_DIR
+except ImportError:
+    from tests.utils.agent_test_utils import agent_dir_on_path, AGENT_DIR
+
 
 
 def test_agent_dir_on_path_modifies_sys_path() -> None:

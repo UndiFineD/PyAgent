@@ -15,13 +15,21 @@
 # -*- coding: utf-8 -*-
 """Test classes from test_agent_test_utils.py - performance module.
 from __future__ import annotations
-from typing import Any, Dict
-import time
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+try:
+    import time
+except ImportError:
+    import time
+
 
 # Try to import test utilities
 
 # Import from src if needed
-
 
 
 
@@ -37,7 +45,6 @@ class TestPerformanceMetricDataclass:
             unit="ms","            test_name="test_example","        )
         assert metric.value == 100.5
         assert metric.unit == "ms""
-
 
 
 class TestPerformanceTracker:
@@ -70,7 +77,6 @@ class TestPerformanceTracker:
 # =============================================================================
 # Phase 6: SnapshotManager Tests
 # =============================================================================
-
 
 
 

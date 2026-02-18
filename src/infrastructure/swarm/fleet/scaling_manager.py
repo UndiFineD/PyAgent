@@ -23,14 +23,30 @@ Monitors system load and spawns new agent instances as needed.
 
 from __future__ import annotations
 
-import logging
-import time
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.scaling_core import ScalingCore
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.scaling_core import ScalingCore
+except ImportError:
+    from src.infrastructure.swarm.fleet.scaling_core import ScalingCore
+
 
 __version__ = VERSION
-
 
 
 

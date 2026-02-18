@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.reasoning.implementations import DeepSeekReasoningParser, QwenReasoningParser, GenericReasoningParser, OpenAIToolParser, HermesToolParser
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.reasoning.implementations import DeepSeekReasoningParser, QwenReasoningParser, GenericReasoningParser, OpenAIToolParser, HermesToolParser
+except ImportError:
+    from infrastructure.engine.reasoning.implementations import DeepSeekReasoningParser, QwenReasoningParser, GenericReasoningParser, OpenAIToolParser, HermesToolParser
+
 
 
 def test_deepseekreasoningparser_basic():

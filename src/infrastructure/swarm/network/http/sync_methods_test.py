@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.network.http.sync_methods import SyncHTTPMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.network.http.sync_methods import SyncHTTPMixin
+except ImportError:
+    from infrastructure.swarm.network.http.sync_methods import SyncHTTPMixin
+
 
 
 def test_synchttpmixin_basic():

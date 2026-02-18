@@ -15,7 +15,10 @@
 
 """
 Knowledge process mixin for content analysis.
-import re
+try:
+    import re
+except ImportError:
+    import re
 
 
 

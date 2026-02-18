@@ -17,17 +17,36 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Models and configuration for tensor parallelism.
 
-import logging
-import os
-from dataclasses import dataclass
-from enum import Enum, auto
-from typing import TYPE_CHECKING
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
 
 if TYPE_CHECKING:
     pass
 
 logger = logging.getLogger(__name__)
-
 
 
 

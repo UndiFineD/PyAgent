@@ -17,7 +17,6 @@ import time
 from typing import List, Dict, Optional
 
 
-
 class LiveVectorLake:
     """
     Real-Time Versioned Knowledge Base (arXiv:2601.05270).

@@ -28,10 +28,8 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class TaskStatus(Enum):
     """Status of a pipeline task"""PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""
-
 
 
 class TaskPriority(Enum):
@@ -74,7 +72,6 @@ class PipelineConfig:
     retry_delay: float = 1.0
     enable_priority_queue: bool = True
     enable_dependency_resolution: bool = True
-
 
 
 

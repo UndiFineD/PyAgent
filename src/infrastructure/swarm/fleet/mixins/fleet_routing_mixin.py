@@ -21,12 +21,20 @@ Fleet routing mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Any
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING, Any
+except ImportError:
+    from typing import TYPE_CHECKING, Any
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
 
 
 

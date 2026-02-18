@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.efficient_change_detector import ChangeRecord, FileMetadata, EfficientChangeDetector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.efficient_change_detector import ChangeRecord, FileMetadata, EfficientChangeDetector
+except ImportError:
+    from core.base.logic.efficient_change_detector import ChangeRecord, FileMetadata, EfficientChangeDetector
+
 
 
 def test_changerecord_basic():

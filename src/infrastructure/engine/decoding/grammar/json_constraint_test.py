@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.decoding.grammar.json_constraint import JSONSchemaGrammar
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.decoding.grammar.json_constraint import JSONSchemaGrammar
+except ImportError:
+    from infrastructure.engine.decoding.grammar.json_constraint import JSONSchemaGrammar
+
 
 
 def test_jsonschemagrammar_basic():

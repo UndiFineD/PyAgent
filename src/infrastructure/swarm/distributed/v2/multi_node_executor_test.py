@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.distributed.v2.multi_node_executor import MultiNodeExecutor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.distributed.v2.multi_node_executor import MultiNodeExecutor
+except ImportError:
+    from infrastructure.swarm.distributed.v2.multi_node_executor import MultiNodeExecutor
+
 
 
 def test_multinodeexecutor_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.processing.logits_processor import LogitsProcessor, LogitsProcessorList, TemperatureProcessor, TopKProcessor, TopPProcessor, RepetitionPenaltyProcessor, NoBadWordsProcessor, MinLengthProcessor, MaxLengthProcessor, PresencePenaltyProcessor, FrequencyPenaltyProcessor, apply_processors, create_processor_chain
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.processing.logits_processor import LogitsProcessor, LogitsProcessorList, TemperatureProcessor, TopKProcessor, TopPProcessor, RepetitionPenaltyProcessor, NoBadWordsProcessor, MinLengthProcessor, MaxLengthProcessor, PresencePenaltyProcessor, FrequencyPenaltyProcessor, apply_processors, create_processor_chain
+except ImportError:
+    from core.base.logic.processing.logits_processor import LogitsProcessor, LogitsProcessorList, TemperatureProcessor, TopKProcessor, TopPProcessor, RepetitionPenaltyProcessor, NoBadWordsProcessor, MinLengthProcessor, MaxLengthProcessor, PresencePenaltyProcessor, FrequencyPenaltyProcessor, apply_processors, create_processor_chain
+
 
 
 def test_logitsprocessor_basic():

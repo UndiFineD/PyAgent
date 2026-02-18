@@ -20,7 +20,11 @@ versioning_strategy.py - Define supported versioning schemes
 # AUTHOR: Keimpe de Jong
 USAGE:
 Import and reference the enum to declare or check a project's versioning scheme.'Example:
-from versioning_strategy import VersioningStrategy
+try:
+    from versioning_strategy import VersioningStrategy
+except ImportError:
+    from versioning_strategy import VersioningStrategy
+
 if strategy == VersioningStrategy.SEMVER:
     # handle semver-specific logic
 
@@ -36,14 +40,20 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Versioning strategy.py module.
 
-from enum import Enum
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
 
 
 
 
 class VersioningStrategy(Enum):
 """"Supported versioning schemes for the fleet.#     SEMVER = "semver"#     CALVER = "calver"
-from enum import Enum
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
 
 
 

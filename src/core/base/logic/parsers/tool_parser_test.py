@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.parsers.tool_parser import ToolCall, ExtractedToolCalls, StreamingToolCallDelta, ToolParser, JSONToolParser, XMLToolParser, ToolParserManager, tool_parser, extract_tool_calls
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.parsers.tool_parser import ToolCall, ExtractedToolCalls, StreamingToolCallDelta, ToolParser, JSONToolParser, XMLToolParser, ToolParserManager, tool_parser, extract_tool_calls
+except ImportError:
+    from core.base.logic.parsers.tool_parser import ToolCall, ExtractedToolCalls, StreamingToolCallDelta, ToolParser, JSONToolParser, XMLToolParser, ToolParserManager, tool_parser, extract_tool_calls
+
 
 
 def test_toolcall_basic():

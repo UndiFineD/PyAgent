@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.tools.parser.llama3_parser import Llama3ToolParser
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.tools.parser.llama3_parser import Llama3ToolParser
+except ImportError:
+    from infrastructure.services.tools.parser.llama3_parser import Llama3ToolParser
+
 
 
 def test_llama3toolparser_basic():

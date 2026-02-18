@@ -16,11 +16,29 @@
 """Discovery Core for PyAgent Swarm Orchestration.
 Bridges the Infrastructure Voyager nodes with semantic agent logic.
 """
+
+
 from __future__ import annotations
-import asyncio
-from typing import List, Dict, Any
-from .base_core import BaseCore
-from src.core.base.configuration.config_manager import config
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    from typing import List, Dict, Any
+except ImportError:
+    from typing import List, Dict, Any
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
+try:
+    from .core.base.configuration.config_manager import config
+except ImportError:
+    from src.core.base.configuration.config_manager import config
 
 
 

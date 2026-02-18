@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.engine_lifecycle.suggested import EngineState, EngineConfig, EngineLifecycleManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.engine_lifecycle.suggested import EngineState, EngineConfig, EngineLifecycleManager
+except ImportError:
+    from infrastructure.engine.engine_lifecycle.suggested import EngineState, EngineConfig, EngineLifecycleManager
+
 
 
 def test_enginestate_basic():

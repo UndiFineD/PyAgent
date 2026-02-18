@@ -16,9 +16,16 @@
 """Factory functions for dataclass default fields.
 Isolated from model definitions to prevent circularity during analysis.
 """
+
+
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable
+
+try:
+    from typing import TYPE_CHECKING, Any, Callable
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Callable
+
 
 if TYPE_CHECKING:
     from .base_models import ConfigProfile, ModelConfig

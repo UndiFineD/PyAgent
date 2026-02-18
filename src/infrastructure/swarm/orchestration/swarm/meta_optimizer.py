@@ -27,7 +27,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class FederatedMetaOptimizer:
         Swarm-wide autonomous hyperparameter tuner (Phase 90).
     Adjusts dynamic bit-scaling, migration thresholds, and distillation ratios

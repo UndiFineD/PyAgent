@@ -31,7 +31,6 @@ __version__ = VERSION
 
 
 
-
 class GracefulShutdown:
     """Handles graceful shutdown with state persistence.""""
     Captures SIGINT / SIGTERM and allows current operation to complete
@@ -92,7 +91,8 @@ class GracefulShutdown:
         """self.state.pending_files = [str(f) for f in files]
 
     def _save_state(self) -> None:
-        """Save shutdown state to disk."""try:
+        """Save shutdown state to disk."""
+try:
             data: dict[str, Any] = {
                 "shutdown_requested": self.state.shutdown_requested,"                "current_file": self.state.current_file,"                "completed_files": self.state.completed_files,"                "pending_files": self.state.pending_files,"                "start_time": self.state.start_time,"            }
             self.state_file.write_text(json.dumps(data, indent=2))

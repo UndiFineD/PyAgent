@@ -37,10 +37,22 @@ Template management logic for ChangesAgent.
 
 from __future__ import annotations
 
-import logging
-from typing import List
 
-from ..changelog_template import ChangelogTemplate
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
+
+try:
+    from ..changelog_template import ChangelogTemplate
+except ImportError:
+    from ..changelog_template import ChangelogTemplate
 
 
 
@@ -84,10 +96,22 @@ class ChangesTemplateMixin:
         return ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]"
 from __future__ import annotations
 
-import logging
-from typing import List
 
-from ..changelog_template import ChangelogTemplate
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
+
+try:
+    from ..changelog_template import ChangelogTemplate
+except ImportError:
+    from ..changelog_template import ChangelogTemplate
 
 
 

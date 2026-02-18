@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .main_app.suggested import PyAgentGUI
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .main_app.suggested import PyAgentGUI
+except ImportError:
+    from .main_app.suggested import PyAgentGUI
+
 
 
 def test_pyagentgui_basic():

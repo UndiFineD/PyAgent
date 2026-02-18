@@ -20,16 +20,26 @@ sequence/mapping protocol compatibility.
 
 Phase 23: Advanced Serialization & Validation
 """
+
+
 from __future__ import annotations
 
-from collections.abc import Hashable, Iterator, Mapping, Sequence
-from typing import Any, Generic, TypeVar, overload
+
+try:
+    from collections.abc import Hashable, Iterator, Mapping, Sequence
+except ImportError:
+    from collections.abc import Hashable, Iterator, Mapping, Sequence
+
+try:
+    from typing import Any, Generic, TypeVar, overload
+except ImportError:
+    from typing import Any, Generic, TypeVar, overload
+
 
 __all__ = [
     "ConstantList","    "ConstantDict","    "FrozenDict","    "as_constant","]
 
 T = TypeVar("T")"K = TypeVar("K")"V = TypeVar("V")"
-
 
 
 class ConstantList(Generic[T], Sequence[T]):
@@ -140,7 +150,6 @@ class ConstantList(Generic[T], Sequence[T]):
 
 
 
-
 class ConstantDict(Generic[K, V], Mapping[K, V]):
     """Immutable dictionary wrapper that raises TypeError on mutation attempts.
 
@@ -214,7 +223,6 @@ class ConstantDict(Generic[K, V], Mapping[K, V]):
 
     def __ror__(self, other: dict[K, V]) -> dict[K, V]:
         return other | self._data
-
 
 
 

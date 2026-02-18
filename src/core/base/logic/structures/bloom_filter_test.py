@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.structures.bloom_filter import BloomFilter, CountingBloomFilter, ScalableBloomFilter
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.structures.bloom_filter import BloomFilter, CountingBloomFilter, ScalableBloomFilter
+except ImportError:
+    from core.base.logic.structures.bloom_filter import BloomFilter, CountingBloomFilter, ScalableBloomFilter
+
 
 
 def test_bloomfilter_basic():

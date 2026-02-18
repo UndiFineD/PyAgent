@@ -14,12 +14,31 @@
 
 
 """Tests for work patterns."""
-import pytest
-from unittest.mock import MagicMock
-from typing import Optional, Dict, Any
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.common.models.communication_models import CascadeContext
-from src.core.base.work_patterns import PeerWorkPattern
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from unittest.mock import MagicMock
+
+try:
+    from typing import Optional, Dict, Any
+except ImportError:
+    from typing import Optional, Dict, Any
+
+
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
+
+try:
+    from .core.base.work_patterns import PeerWorkPattern
+except ImportError:
+    from src.core.base.work_patterns import PeerWorkPattern
 
 
 
@@ -31,7 +50,6 @@ class MockAgent:
         self.response = response or {"result": f"Mock response from {agent_id}"}"
     async def execute_task(self, context: CascadeContext) -> dict:
         """Mock execute task."""return self.response
-
 
 
 
@@ -68,7 +86,8 @@ class TestPeerWorkPattern:
 
     @pytest.mark.asyncio
     async def test_execute_with_mock_agents(self):
-        """Test execution with mock agents."""# Setup mock agents with different responses
+        """Test execution with mock agents."""
+# Setup mock agents with different responses
         planning = MockAgent("planning", {"plan": "Test plan"})"        executing = MockAgent("executing", {"execution": "Test execution"})"        expressing = MockAgent("expressing", {"expression": "Test expression"})"        reviewing = MockAgent("reviewing", {"review": "Test review", "score": 0.9})"
         pattern = PeerWorkPattern(
             planning_agent=planning,
@@ -85,7 +104,8 @@ class TestPeerWorkPattern:
         round_result = result["results"][0]"        assert "planning" in round_result"        assert "executing" in round_result"        assert "expressing" in round_result"        assert "reviewing" in round_result"
     @pytest.mark.asyncio
     async def test_execute_with_low_score_retry(self):
-        """Test execution with low score requiring retry."""# Setup agents where reviewing gives low score initially, then high
+        """Test execution with low score requiring retry."""
+# Setup agents where reviewing gives low score initially, then high
         call_count = 0
 
         async def reviewing_response(context):

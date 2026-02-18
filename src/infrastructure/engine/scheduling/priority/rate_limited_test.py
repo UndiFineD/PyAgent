@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.priority.rate_limited import RateLimitedScheduler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.priority.rate_limited import RateLimitedScheduler
+except ImportError:
+    from infrastructure.engine.scheduling.priority.rate_limited import RateLimitedScheduler
+
 
 
 def test_ratelimitedscheduler_basic():

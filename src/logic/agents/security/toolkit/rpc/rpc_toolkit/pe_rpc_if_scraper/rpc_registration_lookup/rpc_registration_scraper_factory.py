@@ -26,16 +26,27 @@
 # See the License for the specific language governing
 # permissions and limitations under the License.
 
-from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor
-from rpc_registration_lookup.ida_rpc_registration_scraper import IdaProRpcRegistrationExtractor
-from rpc_registration_lookup.radare_rpc_registration_scraper import Radare2RpcRegistrationExtractor
+try:
+    from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor
+except ImportError:
+    from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor
+
+try:
+    from rpc_registration_lookup.ida_rpc_registration_scraper import IdaProRpcRegistrationExtractor
+except ImportError:
+    from rpc_registration_lookup.ida_rpc_registration_scraper import IdaProRpcRegistrationExtractor
+
+try:
+    from rpc_registration_lookup.radare_rpc_registration_scraper import Radare2RpcRegistrationExtractor
+except ImportError:
+    from rpc_registration_lookup.radare_rpc_registration_scraper import Radare2RpcRegistrationExtractor
+
 
 # [BATCHFIX] Commented metadata/non-Python
 """ IDA = "idapro"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ RADARE = "radare"  # [BATCHFIX] closed string"
 _factory = {IDA: IdaProRpcRegistrationExtractor, RADARE: Radare2RpcRegistrationExtractor}
 disassemblers = list(_factory.keys())
-
 
 
 
@@ -48,5 +59,6 @@ def rpc_registration_scraper_factory(disassembler: str) -> BaseRpcRegistrationEx
     if disassembler not in _factory:
         raise UnsupportedDisassemblerTypeException(disassembler)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     return _factory[disassembler]""""

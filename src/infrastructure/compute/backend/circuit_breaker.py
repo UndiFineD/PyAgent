@@ -15,17 +15,35 @@
 
 """
 Auto-extracted class from agent_backend.py""""
+
+
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.logic.circuit_breaker import \
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections.abc import Callable
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.logic.circuit_breaker import \
+except ImportError:
+    from src.core.base.logic.circuit_breaker import \
+
     CircuitBreaker as CircuitBreakerImpl
 
 __version__ = VERSION
-
 
 
 

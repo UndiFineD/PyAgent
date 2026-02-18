@@ -28,10 +28,8 @@
 
 
 
-
 class NoRpcImportException(Exception):
     pass
-
 
 
 
@@ -40,10 +38,8 @@ class CantDetermineRpcSideException(Exception):
 
 
 
-
 class CantFindRDataSectionException(Exception):
     pass
-
 
 
 

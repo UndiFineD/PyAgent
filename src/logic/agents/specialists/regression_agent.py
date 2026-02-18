@@ -18,8 +18,16 @@ RegressionAgent - Predictive Trend and Relationship Specialist
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.lifecycle.version import VERSION
-from src.core.agents.regression_agent import RegressionAgent, RegressionType
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.agents.regression_agent import RegressionAgent, RegressionType
+except ImportError:
+    from src.core.agents.regression_agent import RegressionAgent, RegressionType
+
 agent = RegressionAgent(__file__)
 # async context required to call tools:
 # await agent.predict_future_state([1.0, 2.0, 3.0], steps=2, method="linear")"# await agent.analyze_correlation([1,2,3], [2,4,6])
@@ -59,17 +67,45 @@ Regression agent.py module.
 
 from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -147,8 +183,16 @@ class RegressionAgent(BaseAgent):
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.lifecycle.version import VERSION
-from src.core.agents.regression_agent import RegressionAgent, RegressionType
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.agents.regression_agent import RegressionAgent, RegressionType
+except ImportError:
+    from src.core.agents.regression_agent import RegressionAgent, RegressionType
+
 # instantiate (example)
 agent = RegressionAgent(__file__)
 # predict next 3 steps with linear regression
@@ -185,17 +229,45 @@ FILE CONTENT SUMMARY:
 
 from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -282,17 +354,45 @@ class RegressionAgent(BaseAgent):
 # RegressionAgent: Predictive "Trend and Relationship Specialist - Phase 319 Enhanced"
 from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

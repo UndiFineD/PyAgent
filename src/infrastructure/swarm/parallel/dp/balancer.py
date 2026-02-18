@@ -21,14 +21,34 @@ Load balancing strategies for Data Parallel coordination.
 
 from __future__ import annotations
 
-from _thread import LockType
-import random
-import threading
-from typing import Optional
 
-from src.infrastructure.swarm.parallel.dp.types import (WorkerHealth,
+try:
+    from _thread import LockType
+except ImportError:
+    from _thread import LockType
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Optional
+except ImportError:
+    from typing import Optional
+
+
+try:
+    from .infrastructure.swarm.parallel.dp.types import (WorkerHealth,
+except ImportError:
+    from src.infrastructure.swarm.parallel.dp.types import (WorkerHealth,
+
                                                         WorkerState)
-
 
 
 

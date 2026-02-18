@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+except ImportError:
+    from infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
+
 
 
 def test_localcontextrecorder_basic():

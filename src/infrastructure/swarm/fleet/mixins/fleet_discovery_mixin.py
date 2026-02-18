@@ -31,7 +31,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class FleetDiscoveryMixin:
         Mixin for FleetManager to support LAN-based peer discovery and synchronization.
     

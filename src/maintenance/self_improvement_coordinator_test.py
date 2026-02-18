@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .self_improvement_coordinator import SelfImprovementCoordinator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .self_improvement_coordinator import SelfImprovementCoordinator
+except ImportError:
+    from .self_improvement_coordinator import SelfImprovementCoordinator
+
 
 
 def test_selfimprovementcoordinator_basic():

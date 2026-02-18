@@ -21,20 +21,44 @@ Dream state orchestrator.py module.
 
 from __future__ import annotations
 
-import asyncio
-import json
-import logging
-import os
-from typing import TYPE_CHECKING, Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from typing import TYPE_CHECKING, Any
+except ImportError:
+    from typing import TYPE_CHECKING, Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.async_fleet_manager import \
         AsyncFleetManager
 
 __version__ = VERSION
-
 
 
 

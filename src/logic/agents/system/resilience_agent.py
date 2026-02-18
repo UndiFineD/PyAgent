@@ -58,7 +58,6 @@ __version__ = VERSION
 
 
 
-
 class ResilienceAgent(BaseAgent):
     Agent responsible for autonomous compute resource management.
 #     Monitors swarm health, handles failovers, and optimizes resource allocation.
@@ -105,7 +104,6 @@ from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
 
 __version__ = VERSION
-
 
 
 

@@ -15,16 +15,30 @@
 
 """
 Auto-extracted class from agent_backend.py""""
+
+
 from __future__ import annotations
 
-import logging
 
-from src.core.base.lifecycle.version import SDK_VERSION, VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .system_version import SystemVersion
+
+try:
+    from .core.base.lifecycle.version import SDK_VERSION, VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import SDK_VERSION, VERSION
+
+
+try:
+    from .system_version import SystemVersion
+except ImportError:
+    from .system_version import SystemVersion
+
 
 __version__ = VERSION
-
 
 
 

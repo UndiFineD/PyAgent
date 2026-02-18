@@ -16,13 +16,37 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 EAGLE speculative decoding implementation.
 
-from .base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,  # noqa: F401
+try:
+    from .base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,  # noqa: F401
+except ImportError:
+    from .base import (AttentionMetadata, CpuGpuBuffer, InputBuffer, # noqa: F401
+
                    TreeAttentionMetadata)
-from .config import AttentionBackend, EagleConfig, EagleMethod  # noqa: F401
-from .models import DraftModelWrapper, DraftOutput, SimpleDraftModel  # noqa: F401
-from .proposer import AsyncEagleProposer, EagleProposer, EagleProposerFactory  # noqa: F401
-from .stats import AcceptanceStats  # noqa: F401
-from .tree import SpeculativeTree, TreeNode  # noqa: F401
+try:
+    from .config import AttentionBackend, EagleConfig, EagleMethod  # noqa: F401
+except ImportError:
+    from .config import AttentionBackend, EagleConfig, EagleMethod # noqa: F401
+
+try:
+    from .models import DraftModelWrapper, DraftOutput, SimpleDraftModel  # noqa: F401
+except ImportError:
+    from .models import DraftModelWrapper, DraftOutput, SimpleDraftModel # noqa: F401
+
+try:
+    from .proposer import AsyncEagleProposer, EagleProposer, EagleProposerFactory  # noqa: F401
+except ImportError:
+    from .proposer import AsyncEagleProposer, EagleProposer, EagleProposerFactory # noqa: F401
+
+try:
+    from .stats import AcceptanceStats  # noqa: F401
+except ImportError:
+    from .stats import AcceptanceStats # noqa: F401
+
+try:
+    from .tree import SpeculativeTree, TreeNode  # noqa: F401
+except ImportError:
+    from .tree import SpeculativeTree, TreeNode # noqa: F401
+
 
 __all__ = [
     "EagleConfig","    "EagleMethod","    "AttentionBackend","    "DraftOutput","    "DraftModelWrapper","    "SimpleDraftModel","    "TreeNode","    "SpeculativeTree","    "AcceptanceStats","    "InputBuffer","    "CpuGpuBuffer","    "AttentionMetadata","    "TreeAttentionMetadata","    "EagleProposer","    "EagleProposerFactory","    "AsyncEagleProposer","]

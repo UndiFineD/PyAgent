@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-from typing import List, Dict, Optional
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from typing import List, Dict, Optional
+except ImportError:
+    from typing import List, Dict, Optional
 
 
 
@@ -50,5 +57,6 @@ class VideoFragmentCore:
 
     def aggregate_fragments(self, fragment_results: List[str]) -> str:
         """Aggregates reasoned outputs from multiple video fragments into a coherent summary.
-        """# Logic to merge overlapping contexts and remove redundant observations
+        """
+# Logic to merge overlapping contexts and remove redundant observations
         return "\\n".join(fragment_results)"

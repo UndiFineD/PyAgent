@@ -30,7 +30,6 @@ from .weights import LoRAWeights
 
 
 
-
 class LoRAAdapter:
     """Represents a loaded LoRA adapter.
     def __init__(self, config: LoRAConfig) -> None:

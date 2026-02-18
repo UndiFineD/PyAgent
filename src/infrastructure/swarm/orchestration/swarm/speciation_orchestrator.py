@@ -15,16 +15,28 @@
 
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Dict, List
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING, Dict, List
+except ImportError:
+    from typing import TYPE_CHECKING, Dict, List
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
-
 
 
 

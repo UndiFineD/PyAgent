@@ -33,17 +33,29 @@ Direct strategy.py module.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
 
-from .agent_strategy import AgentStrategy
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .agent_strategy import AgentStrategy
+except ImportError:
+    from .agent_strategy import AgentStrategy
+
 
 if TYPE_CHECKING:
     from .agent_strategy import BackendFunction
 
 __version__ = VERSION
-
 
 
 

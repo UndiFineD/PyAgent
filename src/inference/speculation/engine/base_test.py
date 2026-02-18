@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from inference.speculation.engine.base import DrafterBase
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from inference.speculation.engine.base import DrafterBase
+except ImportError:
+    from inference.speculation.engine.base import DrafterBase
+
 
 
 def test_drafterbase_basic():

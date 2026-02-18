@@ -30,7 +30,6 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 
 
 
-
 class XpuPlatform(Platform):
     """Intel XPU (GPU/Accelerator) platform implementation.
     @classmethod

@@ -54,7 +54,6 @@ __version__ = VERSION
 
 
 
-
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Executes unit and integration tests and analyzes failures.
     def __init__(self, file_path: str) -> None:
@@ -125,7 +124,6 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.models.core_enums import FailureClassification
 
 __version__ = VERSION
-
 
 
 

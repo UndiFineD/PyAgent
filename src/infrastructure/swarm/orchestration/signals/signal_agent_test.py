@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.signals.signal_agent import SignalAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.signals.signal_agent import SignalAgent
+except ImportError:
+    from infrastructure.swarm.orchestration.signals.signal_agent import SignalAgent
+
 
 
 def test_signalagent_basic():

@@ -77,7 +77,6 @@ class BeamHypothesis:
 
 
 
-
 class BeamSearchSampler(Sampler):
     """Beam search sampler.
     def __init__(self, config: Optional[BeamSearchConfig] = None) -> None:

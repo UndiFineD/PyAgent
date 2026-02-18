@@ -18,16 +18,40 @@
 Gateway for managing multi-tenant SaaS access, API keys, and usage quotas.
 from __future__ import annotations
 
-import logging
-import time
-import uuid
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.services.api.core.gateway_core import GatewayCore
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.services.api.core.gateway_core import GatewayCore
+except ImportError:
+    from src.infrastructure.services.api.core.gateway_core import GatewayCore
+
 
 __version__ = VERSION
-
 
 
 

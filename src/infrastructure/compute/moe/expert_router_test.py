@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.moe.expert_router import RoutingMethod, RouterConfig, RouterOutput, RouterBase, TopKRouter, GroupedTopKRouter, ExpertChoiceRouter, SoftMoERouter, AdaptiveRouter, RoutingSimulator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.moe.expert_router import RoutingMethod, RouterConfig, RouterOutput, RouterBase, TopKRouter, GroupedTopKRouter, ExpertChoiceRouter, SoftMoERouter, AdaptiveRouter, RoutingSimulator
+except ImportError:
+    from infrastructure.compute.moe.expert_router import RoutingMethod, RouterConfig, RouterOutput, RouterBase, TopKRouter, GroupedTopKRouter, ExpertChoiceRouter, SoftMoERouter, AdaptiveRouter, RoutingSimulator
+
 
 
 def test_routingmethod_basic():

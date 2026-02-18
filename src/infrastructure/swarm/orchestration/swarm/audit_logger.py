@@ -30,7 +30,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class SwarmAuditLogger:
         Centralized logger for swarm consensus and routing decisions.
     Allows for post-hoc analysis of agent fleet behavior.

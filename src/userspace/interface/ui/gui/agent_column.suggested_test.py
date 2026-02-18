@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .agent_column.suggested import AgentColumn
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .agent_column.suggested import AgentColumn
+except ImportError:
+    from .agent_column.suggested import AgentColumn
+
 
 
 def test_agentcolumn_basic():

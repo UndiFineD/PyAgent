@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.tools.parser.base import ToolParserType, ToolCallStatus, ToolParameter, ToolCall, ToolParseResult, StreamingToolState, ToolParser, extract_json_from_text
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.tools.parser.base import ToolParserType, ToolCallStatus, ToolParameter, ToolCall, ToolParseResult, StreamingToolState, ToolParser, extract_json_from_text
+except ImportError:
+    from infrastructure.services.tools.parser.base import ToolParserType, ToolCallStatus, ToolParameter, ToolCall, ToolParseResult, StreamingToolState, ToolParser, extract_json_from_text
+
 
 
 def test_toolparsertype_basic():

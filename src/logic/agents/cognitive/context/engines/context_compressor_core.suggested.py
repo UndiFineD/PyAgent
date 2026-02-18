@@ -36,7 +36,6 @@ __version__ = VERSION
 
 
 
-
 class ContextCompressorCore:
 """"Pure logic core for code and document compression.
     @staticmethod

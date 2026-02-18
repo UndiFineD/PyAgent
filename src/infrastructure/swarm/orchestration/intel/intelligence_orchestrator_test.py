@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.intel.intelligence_orchestrator import IntelligenceOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.intel.intelligence_orchestrator import IntelligenceOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.intel.intelligence_orchestrator import IntelligenceOrchestrator
+
 
 
 def test_intelligenceorchestrator_basic():

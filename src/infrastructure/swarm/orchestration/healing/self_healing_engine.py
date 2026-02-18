@@ -21,17 +21,41 @@ Engine for automated self-repair of agent tools and modules.""""Detects runtime 
 
 from __future__ import annotations
 
-import logging
-import traceback
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .self_healing_engine_core import SelfHealingEngineCore
+try:
+    import traceback
+except ImportError:
+    import traceback
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .self_healing_engine_core import SelfHealingEngineCore
+except ImportError:
+    from .self_healing_engine_core import SelfHealingEngineCore
+
 
 __version__ = VERSION
-
 
 
 

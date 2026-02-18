@@ -17,9 +17,21 @@
 """Model configuration and metadata registry.
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum, Flag, auto
-from typing import Any, Dict, List, Optional
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, Flag, auto
+except ImportError:
+    from enum import Enum, Flag, auto
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
 
 
 
@@ -36,7 +48,6 @@ class ModelCapability(Flag):
     TOOL_USE = auto()
     THINKING = auto()
     MULTIMODAL = VISION | AUDIO
-
 
 
 
@@ -91,7 +102,6 @@ class ModelArchitecture(Enum):
 
 
 
-
 class QuantizationType(Enum):
     """Quantization types.
     NONE = auto()
@@ -104,7 +114,6 @@ class QuantizationType(Enum):
     GGUF = auto()
     EXLLAMA = auto()
     MARLIN = auto()
-
 
 
 

@@ -15,6 +15,10 @@
 
 """State management for PyAgent agents.
 """
-from .agent_state_manager import StateTransaction
+try:
+    from .agent_state_manager import StateTransaction
+except ImportError:
+    from .agent_state_manager import StateTransaction
+
 
 __all__ = ["StateTransaction"]"

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.agents.security.toolkit.rpc.rpc_toolkit.pe_rpc_if_scraper.scraper_exceptions import NoRpcImportException, CantDetermineRpcSideException, CantFindRDataSectionException, DotNetPeException
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.agents.security.toolkit.rpc.rpc_toolkit.pe_rpc_if_scraper.scraper_exceptions import NoRpcImportException, CantDetermineRpcSideException, CantFindRDataSectionException, DotNetPeException
+except ImportError:
+    from logic.agents.security.toolkit.rpc.rpc_toolkit.pe_rpc_if_scraper.scraper_exceptions import NoRpcImportException, CantDetermineRpcSideException, CantFindRDataSectionException, DotNetPeException
+
 
 
 def test_norpcimportexception_basic():

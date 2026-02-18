@@ -14,8 +14,16 @@
 
 
 """Test to ensure no usage of Python builtins.eval across the codebase."""
-import re
-from pathlib import Path
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 PATTERN = re.compile(r"(?<!\\.)\\beval\\s*\(")"
 

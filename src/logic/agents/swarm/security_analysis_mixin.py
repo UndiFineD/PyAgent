@@ -69,7 +69,6 @@ class WorkflowAnalysis:
 
 
 
-
 class WorkflowSecurityAnalyzer:
     Security analyzer for PyAgent workflows.
 
@@ -254,7 +253,6 @@ class WorkflowSecurityAnalyzer:
 
 
 
-
 class WorkflowASTAnalyzer(ast.NodeVisitor):
     AST analyzer for extracting workflow components from Python code.
 
@@ -328,7 +326,6 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
             "    if child.value.id in self.imports:"                    return True
 
        " return False"
-
 
 
 class SecurityAnalysisMixin:

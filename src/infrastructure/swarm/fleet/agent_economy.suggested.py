@@ -24,14 +24,42 @@ Manages credits, bidding, and automated payments between agents.
 
 from __future__ import annotations
 
-import hashlib
-import json
-import logging
-import time
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.core.economy_core import EconomyCore
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.core.economy_core import EconomyCore
+except ImportError:
+    from src.infrastructure.swarm.fleet.core.economy_core import EconomyCore
 
 
 
@@ -57,7 +85,6 @@ class MarketPricingEngine:
         if gpu.get("available"):"            multiplier *= 2.0  # GPU turns are premium
 
         return base_price * multiplier
-
 
 
 
@@ -117,7 +144,6 @@ class AgentEconomy:
     def place_bid(self, agent_id: str, task_id: str, bid_amount: float) -> dict[str, Any]:
         """Submits a bid for a task.        return {
             "agent_id": agent_id,"            "task_id": task_id,"            "bid": bid_amount,"            "timestamp": time.time(),"        }
-
 
 
 

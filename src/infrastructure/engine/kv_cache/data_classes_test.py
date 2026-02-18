@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.kv_cache.data_classes import BlockHash, BlockHashWithGroupId, KVCacheBlock, KVCacheBlocks, CacheGroupSpec, CacheConfig
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.kv_cache.data_classes import BlockHash, BlockHashWithGroupId, KVCacheBlock, KVCacheBlocks, CacheGroupSpec, CacheConfig
+except ImportError:
+    from infrastructure.engine.kv_cache.data_classes import BlockHash, BlockHashWithGroupId, KVCacheBlock, KVCacheBlocks, CacheGroupSpec, CacheConfig
+
 
 
 def test_blockhash_basic():

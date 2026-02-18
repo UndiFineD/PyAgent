@@ -20,10 +20,26 @@ Conversation context models and enums.
 
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
 
 
 
@@ -33,11 +49,9 @@ class ContextState(Enum):
     ACTIVE = "active""    WAITING_INPUT = "waiting_input""    WAITING_TOOL = "waiting_tool""    PROCESSING = "processing""    COMPLETED = "completed""    ERROR = "error""    EXPIRED = "expired""
 
 
-
 class TurnType(Enum):
     """Conversation turn type.
     SYSTEM = "system""    USER = "user""    ASSISTANT = "assistant""    TOOL_CALL = "tool_call""    TOOL_RESULT = "tool_result""    REASONING = "reasoning""
-
 
 
 class ToolExecutionPolicy(Enum):

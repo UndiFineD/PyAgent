@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.model_manager_core import ModelManagerCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.model_manager_core import ModelManagerCore
+except ImportError:
+    from core.base.logic.core.model_manager_core import ModelManagerCore
+
 
 
 def test_modelmanagercore_basic():

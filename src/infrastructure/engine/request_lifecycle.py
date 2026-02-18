@@ -12,16 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-RequestLifecycle Facade.
+"""Request lifecycle management for PyAgent Engine."""
 
-This module provides a backward-compatible interface to the modularized
-request lifecycle management implementation.
 
-from .lifecycle import (FINISH_REASON_STRINGS, FinishReason, Request,
-                        RequestEvent, RequestEventType, RequestQueue,
-                        RequestStatus, RequestTracker, is_valid_transition)
+from .lifecycle import (
+    FINISH_REASON_STRINGS, FinishReason, Request, RequestEvent, RequestEventType, RequestQueue, RequestStatus, RequestTracker, is_valid_transition
+)
 
 __all__ = [
-    "FinishReason","    "RequestStatus","    "RequestEventType","    "is_valid_transition","    "FINISH_REASON_STRINGS","    "RequestEvent","    "Request","    "RequestQueue","    "RequestTracker","]
+    "FinishReason", "RequestStatus", "RequestEventType", "is_valid_transition", "FINISH_REASON_STRINGS", "RequestEvent", "Request", "RequestQueue", "RequestTracker"
+]

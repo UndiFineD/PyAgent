@@ -16,23 +16,26 @@
 """Bridge regarding Rust Acceleration.
 Interfaces with rust_core via PyO3 or CFFI.
 """
+
+
 from __future__ import annotations
-
-
 
 
 class NeuralPruningEngine:
     """Core engine regarding pruning neural connections in the swarm."""
+
     def calculate_synaptic_weight_python(self, inputs: list[float], weights: list[float]) -> float:
-        """Native Python implementation regarding weight calculation."""return sum(map(lambda pair: pair[0] * pair[1], zip(inputs, weights)))
+        """Native Python implementation regarding weight calculation."""
+        return sum(map(lambda pair: pair[0] * pair[1], zip(inputs, weights)))
+
 
     def calculate_synaptic_weight(self, inputs: list[float], weights: list[float]) -> float:
         """Accelerated implementation using Rust core.
         Falls back to Python if Rust module is not compiled.
-        """try:
+        """
+        try:
             # pylint: disable=import-outside-toplevel
             import rust_core as rc  # pylint: disable=no-member
-
             return rc.calculate_synaptic_weight(inputs, weights)  # type: ignore[attr-defined]
         except (ImportError, AttributeError):
             return self.calculate_synaptic_weight_python(inputs, weights)

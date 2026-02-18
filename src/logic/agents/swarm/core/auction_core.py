@@ -19,7 +19,11 @@ Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.base.common.auction_core import AuctionCore
+try:
+    from .core.base.common.auction_core import AuctionCore
+except ImportError:
+    from src.core.base.common.auction_core import AuctionCore
+
 # Use AuctionCore as the stable public facade for auction functionality.
 
 WHAT IT DOES:
@@ -49,18 +53,24 @@ FILE CONTENT SUMMARY:
 
 Auction core.py module"."
 # Facade for AuctionCore
-from src.core.base.common.auction_core import \
-    AuctionCore as StandardAuctionCore
+try:
+    from .core.base.common.auction_core import \
+except ImportError:
+    from src.core.base.common.auction_core import \
 
+    AuctionCore as StandardAuctionCore
 
 
 
 class AuctionCore(StandardAuctionCore):
 """"Facade for AuctionCore to maintain backward compatibility. "   pass"
 # Facade for AuctionCore
-from src.core.base.common.auction_core import \
-    AuctionCore as StandardAuctionCore
+try:
+    from .core.base.common.auction_core import \
+except ImportError:
+    from src.core.base.common.auction_core import \
 
+    AuctionCore as StandardAuctionCore
 
 
 

@@ -104,7 +104,6 @@ class FunctionStats:
 
 
 
-
 class RustProfiler(SingletonMixin):
         Singleton profiler for tracking Rust function usage.
     Thread-safe and designed for pro"""duction use.""""    
@@ -274,7 +273,6 @@ def profile_rust_call(func_name: str) -> Callable:
         return wrapper
 
     return decorator
-
 
 
 

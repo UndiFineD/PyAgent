@@ -60,9 +60,21 @@ FILE CONTENT SUMMARY:
 
 # "Mixin for context annotation capabilities."
 from __future__ import annotations
-import hashlib
-from datetime import datetime
-from src.logic.agents.cognitive.context.models.context_annotation import ContextAnnotation
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from .logic.agents.cognitive.context.models.context_annotation import ContextAnnotation
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_annotation import ContextAnnotation
 
 
 
@@ -98,9 +110,21 @@ class ContextAnnotationMixin:
 #                 return True
  "       return False"
 from __future__ import annotations
-import hashlib
-from datetime import datetime
-from src.logic.agents.cognitive.context.models.context_annotation import ContextAnnotation
+
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from .logic.agents.cognitive.context.models.context_annotation import ContextAnnotation
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_annotation import ContextAnnotation
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.workspace.buffer_recycler import BufferRecycler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.workspace.buffer_recycler import BufferRecycler
+except ImportError:
+    from infrastructure.engine.workspace.buffer_recycler import BufferRecycler
+
 
 
 def test_bufferrecycler_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.strategies.chain_of_thought_strategy import ChainOfThoughtStrategy
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.strategies.chain_of_thought_strategy import ChainOfThoughtStrategy
+except ImportError:
+    from logic.strategies.chain_of_thought_strategy import ChainOfThoughtStrategy
+
 
 
 def test_chainofthoughtstrategy_basic():

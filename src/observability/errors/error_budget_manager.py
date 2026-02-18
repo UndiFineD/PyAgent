@@ -38,14 +38,26 @@ and add tests for edge cases (zero budgets, negative consumes, missing budgets).
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime, timedelta
+except ImportError:
+    from datetime import datetime, timedelta
 
-from .error_budget import ErrorBudget
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .error_budget import ErrorBudget
+except ImportError:
+    from .error_budget import ErrorBudget
+
 
 __version__ = VERSION
-
 
 
 

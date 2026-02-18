@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.connectivity.mcp_tool_registry import McpToolRegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.connectivity.mcp_tool_registry import McpToolRegistry
+except ImportError:
+    from infrastructure.swarm.orchestration.connectivity.mcp_tool_registry import McpToolRegistry
+
 
 
 def test_mcptoolregistry_basic():

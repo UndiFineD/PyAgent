@@ -15,9 +15,18 @@
 """Script to clean up and deduplicate entries in the IMPROVEMENT_RESEARCH.md document.
 from __future__ import annotations
 
-import os
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import os
+except ImportError:
+    import os
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

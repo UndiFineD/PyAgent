@@ -32,7 +32,6 @@ __version__ = VERSION
 
 
 
-
 class KnowledgeEngine:
     """Central engine for managing multi-modal knowledge storage.
     Delegates to MemoryCore for infrastructure and utility scoring.

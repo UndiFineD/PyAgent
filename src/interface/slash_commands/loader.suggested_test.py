@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.loader.suggested import get_commands_dir, discover_command_modules, load_module, unload_module, load_commands, reload_commands, is_loaded, get_loaded_modules
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.loader.suggested import get_commands_dir, discover_command_modules, load_module, unload_module, load_commands, reload_commands, is_loaded, get_loaded_modules
+except ImportError:
+    from interface.slash_commands.loader.suggested import get_commands_dir, discover_command_modules, load_module, unload_module, load_commands, reload_commands, is_loaded, get_loaded_modules
+
 
 
 def test_get_commands_dir_basic():

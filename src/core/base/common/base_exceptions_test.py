@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.base_exceptions import PyAgentException, InfrastructureError, LogicError, SecurityError, ModelError, ConfigurationError, CycleInterrupt
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.base_exceptions import PyAgentException, InfrastructureError, LogicError, SecurityError, ModelError, ConfigurationError, CycleInterrupt
+except ImportError:
+    from core.base.common.base_exceptions import PyAgentException, InfrastructureError, LogicError, SecurityError, ModelError, ConfigurationError, CycleInterrupt
+
 
 
 def test_pyagentexception_basic():

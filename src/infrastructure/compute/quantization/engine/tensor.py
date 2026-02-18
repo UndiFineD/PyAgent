@@ -19,15 +19,27 @@ Tensor.py module.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
-import numpy as np
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
 
-from .config import QuantConfig
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import QuantConfig
+except ImportError:
+    from .config import QuantConfig
+
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
-
 
 
 

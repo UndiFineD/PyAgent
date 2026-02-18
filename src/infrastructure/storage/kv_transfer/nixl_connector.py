@@ -51,7 +51,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class NixlMemoryRegionStatus(IntEnum):
     """Status of an RDMA memory region.
     UNREGISTERED = 0
@@ -69,7 +68,6 @@ class NixlMemoryRegion:
     rkey: int
     status: NixlMemoryRegionStatus = NixlMemoryRegionStatus.UNREGISTERED
     device_id: int = 0
-
 
 
 

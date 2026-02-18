@@ -27,7 +27,6 @@ from typing import Any, Dict, List
 
 
 
-
 class SelfImprovementQualityMixin:
     """Mixin for quality, complexity, and robustness analysis.
     def _analyze_complexity(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:

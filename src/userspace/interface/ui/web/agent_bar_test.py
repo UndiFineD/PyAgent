@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .agent_bar import AgentBar
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .agent_bar import AgentBar
+except ImportError:
+    from .agent_bar import AgentBar
+
 
 
 def test_agentbar_basic():

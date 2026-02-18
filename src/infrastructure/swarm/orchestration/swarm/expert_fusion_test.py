@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.expert_fusion import FusionResult, WeightedExpertFusion
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.expert_fusion import FusionResult, WeightedExpertFusion
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.expert_fusion import FusionResult, WeightedExpertFusion
+
 
 
 def test_fusionresult_basic():

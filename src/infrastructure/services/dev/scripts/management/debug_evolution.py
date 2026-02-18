@@ -16,13 +16,38 @@
 """Validation script for Phase 14: Autonomous Evolution & Self-Repair.
 from __future__ import annotations
 
-import logging
-import os
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.logic.agents.infrastructure.infrastructure_repair_agent import \
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
+except ImportError:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+try:
+    from .logic.agents.infrastructure.infrastructure_repair_agent import \
+except ImportError:
+    from src.logic.agents.infrastructure.infrastructure_repair_agent import \
+
     InfrastructureRepairAgent
 
 __version__ = VERSION

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.api.core.gateway_core import GatewayCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.api.core.gateway_core import GatewayCore
+except ImportError:
+    from infrastructure.services.api.core.gateway_core import GatewayCore
+
 
 
 def test_gatewaycore_basic():

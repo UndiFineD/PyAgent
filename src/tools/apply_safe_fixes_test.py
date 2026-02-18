@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .apply_safe_fixes import find_py_files, transform_text, remove_top_level_asserts, write_patch, apply_fixes, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .apply_safe_fixes import find_py_files, transform_text, remove_top_level_asserts, write_patch, apply_fixes, main
+except ImportError:
+    from .apply_safe_fixes import find_py_files, transform_text, remove_top_level_asserts, write_patch, apply_fixes, main
+
 
 
 def test_find_py_files_basic():

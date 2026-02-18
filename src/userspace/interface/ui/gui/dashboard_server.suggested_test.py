@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .dashboard_server.suggested import ConnectionManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .dashboard_server.suggested import ConnectionManager
+except ImportError:
+    from .dashboard_server.suggested import ConnectionManager
+
 
 
 def test_connectionmanager_basic():

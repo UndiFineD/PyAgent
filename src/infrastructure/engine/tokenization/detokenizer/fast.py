@@ -39,7 +39,6 @@ except ImportError:
 
 
 
-
 class FastIncrementalDetokenizer(IncrementalDetokenizer):
         Fast incremental detokenizer for HuggingFace fast tokenizers.
     

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.encoder_cache_manager import CacheTier, EvictionPolicy, CacheConfig, CacheEntry, CacheStats, EncoderCacheManager, MultiTierEncoderCache, create_encoder_cache
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.encoder_cache_manager import CacheTier, EvictionPolicy, CacheConfig, CacheEntry, CacheStats, EncoderCacheManager, MultiTierEncoderCache, create_encoder_cache
+except ImportError:
+    from infrastructure.engine.multimodal.encoder_cache_manager import CacheTier, EvictionPolicy, CacheConfig, CacheEntry, CacheStats, EncoderCacheManager, MultiTierEncoderCache, create_encoder_cache
+
 
 
 def test_cachetier_basic():

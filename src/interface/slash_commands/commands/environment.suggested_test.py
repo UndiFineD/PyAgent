@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.slash_commands.commands.environment.suggested import cmd_version, cmd_env, cmd_python, cmd_cwd, cmd_hostname, cmd_user, cmd_venv
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.slash_commands.commands.environment.suggested import cmd_version, cmd_env, cmd_python, cmd_cwd, cmd_hostname, cmd_user, cmd_venv
+except ImportError:
+    from interface.slash_commands.commands.environment.suggested import cmd_version, cmd_env, cmd_python, cmd_cwd, cmd_hostname, cmd_user, cmd_venv
+
 
 
 def test_cmd_version_basic():

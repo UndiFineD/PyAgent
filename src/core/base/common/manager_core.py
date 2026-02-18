@@ -16,10 +16,21 @@
 """Standardized Base for all stateful Managers in the swarm.
 Inherits from BaseCore for lifecycle and I/O.
 """
-import logging
-from typing import Any, Dict, Optional
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .base_core import BaseCore
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
 
 
 

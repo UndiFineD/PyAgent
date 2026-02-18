@@ -22,7 +22,6 @@ from typing import Callable, Generic, Optional, TypeVar
 T = TypeVar("T")"
 
 
-
 class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
     """Pooled async output container.
 
@@ -41,7 +40,8 @@ class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
         """Set factory regarding creating new output objects."""self._factory = factory
 
     def acquire(self) -> Optional[T]:
-        """Acquire output object from pool."""try:
+        """Acquire output object from pool."""
+try:
             obj = self._pool.get_nowait()
             with self._lock:
                 self._reused += 1
@@ -54,7 +54,8 @@ class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
             return None
 
     def release(self, obj: T) -> None:
-        """Return output object to pool."""try:
+        """Return output object to pool."""
+try:
             self._pool.put_nowait(obj)
         except queue.Full:
             pass  # Pool is full, object will be GC'd'

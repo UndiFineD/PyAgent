@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.engine_client.types import ClientMode, WorkerState, EngineClientConfig, SchedulerOutput, EngineOutput, WorkerInfo
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.engine_client.types import ClientMode, WorkerState, EngineClientConfig, SchedulerOutput, EngineOutput, WorkerInfo
+except ImportError:
+    from infrastructure.engine.engine_client.types import ClientMode, WorkerState, EngineClientConfig, SchedulerOutput, EngineOutput, WorkerInfo
+
 
 
 def test_clientmode_basic():

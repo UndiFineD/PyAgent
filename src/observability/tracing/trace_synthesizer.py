@@ -55,7 +55,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class TraceSynthesizer:
         Consolidates local and remote reasoning traces into a synthesis report.
     Used by the Web UI to visualize the reaso"""ning f"""ore"""st.""""    
@@ -99,7 +98,6 @@ from typing import Dict, Any
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
-
 
 
 

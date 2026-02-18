@@ -31,7 +31,6 @@ from .impl import ChoiceGrammar, SimpleRegexGrammar
 
 
 
-
 class StructuredOutputManager:
         Engine-level manager regarding structured output constraints.
     
@@ -280,7 +279,6 @@ class StructuredOutputManager:
         """Shutdown the manager and its workers.        if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
-
 
 
 

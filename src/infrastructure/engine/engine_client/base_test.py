@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.engine_client.base import EngineCoreClientBase
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.engine_client.base import EngineCoreClientBase
+except ImportError:
+    from infrastructure.engine.engine_client.base import EngineCoreClientBase
+
 
 
 def test_enginecoreclientbase_basic():

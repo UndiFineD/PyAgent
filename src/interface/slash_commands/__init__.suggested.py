@@ -27,8 +27,16 @@ Example command module (commands/greet.py):
 Phase 24: Advanced Observability & Parsing
 
 # Convenience functions
-from src.interface.slash_commands.api import execute_command, get_slash_commands, process_prompt
-from src.interface.slash_commands.core import (
+try:
+    from .interface.slash_commands.api import execute_command, get_slash_commands, process_prompt
+except ImportError:
+    from src.interface.slash_commands.api import execute_command, get_slash_commands, process_prompt
+
+try:
+    from .interface.slash_commands.core import (
+except ImportError:
+    from src.interface.slash_commands.core import (
+
     CommandContext,
     CommandDefinition,
     CommandRegistry,
@@ -38,8 +46,16 @@ from src.interface.slash_commands.core import (
     SlashCommands,
     parse_commands,
 )
-from src.interface.slash_commands.loader import discover_command_modules, load_commands, reload_commands
-from src.interface.slash_commands.registry import command, get_global_registry, register, register_command
+try:
+    from .interface.slash_commands.loader import discover_command_modules, load_commands, reload_commands
+except ImportError:
+    from src.interface.slash_commands.loader import discover_command_modules, load_commands, reload_commands
+
+try:
+    from .interface.slash_commands.registry import command, get_global_registry, register, register_command
+except ImportError:
+    from src.interface.slash_commands.registry import command, get_global_registry, register, register_command
+
 
 __all__ = [
     # Core classes

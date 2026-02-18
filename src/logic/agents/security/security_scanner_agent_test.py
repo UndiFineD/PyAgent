@@ -13,9 +13,20 @@
 # limitations under the License.
 
 
-import pytest
-from unittest.mock import patch
-from src.core.agents.security_scanner_agent import SecurityScannerAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import patch
+except ImportError:
+    from unittest.mock import patch
+
+try:
+    from .core.agents.security_scanner_agent import SecurityScannerAgent
+except ImportError:
+    from src.core.agents.security_scanner_agent import SecurityScannerAgent
 
 
 

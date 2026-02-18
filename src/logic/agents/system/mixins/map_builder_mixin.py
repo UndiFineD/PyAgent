@@ -62,7 +62,6 @@ if TYPE_CHECKING:
 
 
 
-
 class MapBuilderMixin:
 """"Mixin for mapping and parsing code entities in TopologicalNavigator.
     def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""""Generates a unique ID for a code entity.        rel_path = file_path.relative_to(self.root_dir)
@@ -132,7 +131,6 @@ from src.core.base.common.base_utilities import as_tool
 if TYPE_CHECKING:
     from src.logic.agents.system.topological_navigator import \
         TopologicalNavigator
-
 
 
 

@@ -51,7 +51,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 
-
 class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Phase 286: Legal Audit "Agent."    Verifies that all source files and third-party code comply with the project's'#     license requirements (Apache 2.0 or MIT).
 
@@ -119,7 +118,6 @@ from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
-
 
 
 

@@ -21,12 +21,28 @@ Data models for batch orchestration.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, List, Optional, Tuple
 
-import numpy as np
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, List, Optional, Tuple
+except ImportError:
+    from typing import Any, List, Optional, Tuple
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 

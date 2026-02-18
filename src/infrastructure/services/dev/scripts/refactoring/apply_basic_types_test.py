@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.refactoring.apply_basic_types import apply_basic_types
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.refactoring.apply_basic_types import apply_basic_types
+except ImportError:
+    from infrastructure.services.dev.scripts.refactoring.apply_basic_types import apply_basic_types
+
 
 
 def test_apply_basic_types_basic():

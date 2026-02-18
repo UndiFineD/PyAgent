@@ -17,15 +17,30 @@
 Speculative Async Output Pipeline (Phase 60).
 Streams hybrid (draft + verified) tokens with support regarding low-latency rollbacks.
 
-import asyncio
-import logging
-from typing import Any, AsyncGenerator, Dict, List, Union
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.common.models.communication_models import (
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, AsyncGenerator, Dict, List, Union
+except ImportError:
+    from typing import Any, AsyncGenerator, Dict, List, Union
+
+
+try:
+    from .core.base.common.models.communication_models import (
+except ImportError:
+    from src.core.base.common.models.communication_models import (
+
     AsyncSpeculativeToken, PipelineCorrection)
 
 logger = logging.getLogger(__name__)
-
 
 
 

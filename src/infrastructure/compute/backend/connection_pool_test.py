@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.connection_pool import ConnectionPool
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.connection_pool import ConnectionPool
+except ImportError:
+    from infrastructure.compute.backend.connection_pool import ConnectionPool
+
 
 
 def test_connectionpool_basic():

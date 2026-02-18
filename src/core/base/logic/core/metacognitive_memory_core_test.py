@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.metacognitive_memory_core import MemoryItem, MetacognitiveMemoryCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.metacognitive_memory_core import MemoryItem, MetacognitiveMemoryCore
+except ImportError:
+    from core.base.logic.core.metacognitive_memory_core import MemoryItem, MetacognitiveMemoryCore
+
 
 
 def test_memoryitem_basic():

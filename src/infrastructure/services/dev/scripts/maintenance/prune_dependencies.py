@@ -21,7 +21,12 @@ Uses curate_dependencies logic to comment out unused requirements.
 
 from __future__ import annotations
 
-from pathlib import Path
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
 
 # Unused dependencies extracted from curate_dependencies.py output
 UNUSED = {

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .extract_candidates import safe_module, sanitize_filename, write_extracted, make_test, extract_candidates, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .extract_candidates import safe_module, sanitize_filename, write_extracted, make_test, extract_candidates, main
+except ImportError:
+    from .extract_candidates import safe_module, sanitize_filename, write_extracted, make_test, extract_candidates, main
+
 
 
 def test_safe_module_basic():

@@ -19,8 +19,15 @@ Provides a robust interface for managing micro-batch execution, supporting conte
 batch state, and nested batch scopes. Useful for distributed and pipelined GPU workloads.
 """
 
-import threading
-from typing import Any, Dict, Optional
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
 
 
 

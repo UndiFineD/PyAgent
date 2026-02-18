@@ -15,13 +15,24 @@
 
 # "Models the mental states and knowledge domains of other agents."# from __future__ import annotations
 
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from .core.theory_of_mind_core import TheoryOfMindCore
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.theory_of_mind_core import TheoryOfMindCore
+except ImportError:
+    from .core.theory_of_mind_core import TheoryOfMindCore
+
 
 __version__ = VERSION
-
 
 
 

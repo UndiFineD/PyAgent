@@ -51,7 +51,6 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 
-
 class ThresholdAlertManager:
     """Manages threshold checking and alert emission.
     def __init__(self) -> None:
@@ -114,7 +113,6 @@ class ThresholdAlertManager:
             severity=t.severity or AlertSeverity.MEDIUM,
             message=t.message or f"Threshold breach for {metric_name}","            timestamp=datetime.now().isoformat(),
         )
-
 
 
 

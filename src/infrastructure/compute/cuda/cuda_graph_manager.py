@@ -36,7 +36,6 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")"
 
 
-
 class CUDAGraphMode(IntEnum):
     """CUDA graph execution modes.
     NONE = 0  # No CUDA graphs, pure eager mode
@@ -116,7 +115,6 @@ class CUDAGraphStats:
 
 
 
-
 class MockCUDAGraph:
     """Mock CUDA graph for non-GPU environments.
     def __init__(self):
@@ -132,7 +130,6 @@ class MockCUDAGraph:
     def replay(self) -> None:
         """Replay captured graph.        if self._replay_fn is not None:
             self._replay_fn()
-
 
 
 
@@ -321,7 +318,6 @@ class CUDAGraphWrapper:
 
     def get_stats(self) -> CUDAGraphStats:
         """Get current statistics.        return self.stats
-
 
 
 

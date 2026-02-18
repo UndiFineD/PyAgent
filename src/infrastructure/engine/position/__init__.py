@@ -18,7 +18,11 @@ Position embedding module for PyAgent.
 
 Provides rotary position embedding implementations for transformer models.
 
-from .rotary_embedding_engine import (GptJRotaryEmbedding, MRotaryEmbedding,  # noqa: F401
+try:
+    from .rotary_embedding_engine import (GptJRotaryEmbedding, MRotaryEmbedding,  # noqa: F401
+except ImportError:
+    from .rotary_embedding_engine import (GptJRotaryEmbedding, MRotaryEmbedding, # noqa: F401
+
                                       NeoxRotaryEmbedding, RoPEConfig,
                                       RoPEScalingType, RoPEVariant,
                                       RotaryEmbeddingBase,

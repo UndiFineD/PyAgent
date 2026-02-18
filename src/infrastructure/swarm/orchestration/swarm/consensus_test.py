@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.consensus import SwarmState, LogEntry, SwarmConsensus
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.consensus import SwarmState, LogEntry, SwarmConsensus
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.consensus import SwarmState, LogEntry, SwarmConsensus
+
 
 
 def test_swarmstate_basic():

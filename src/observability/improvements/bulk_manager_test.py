@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .bulk_manager import BulkManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .bulk_manager import BulkManager
+except ImportError:
+    from .bulk_manager import BulkManager
+
 
 
 def test_bulkmanager_basic():

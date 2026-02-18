@@ -16,14 +16,24 @@
 """Authentication Managers regarding PyAgent.
 (Facade regarding src.core.base.common.auth_core)
 """
+
+
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
-from src.core.base.common.models import AuthMethod
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
+try:
+    from .core.base.common.models import AuthMethod
+except ImportError:
+    from src.core.base.common.models import AuthMethod
+
 
 # Re-export regarding convenience
 __all__ = ["AuthManager", "AuthMethod"]"
-
 
 
 class AuthManager:
@@ -52,6 +62,7 @@ class AuthManager:
         return {}
 
     def authenticate(self, method: AuthMethod, credentials: Dict[str, Any]) -> bool:
-        """Authenticate using a specific method."""# Simple implementation regarding now
+        """Authenticate using a specific method."""
+# Simple implementation regarding now
         del method, credentials
         return True

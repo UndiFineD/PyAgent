@@ -15,13 +15,32 @@
 
 """Reduction.py module.
 """
+
+
 from __future__ import annotations
 
-from functools import reduce
-from typing import Callable, overload
 
-from src.core.base.common.utils.jsontree.iteration import json_iter_leaves
-from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
+try:
+    from functools import reduce
+except ImportError:
+    from functools import reduce
+
+try:
+    from typing import Callable, overload
+except ImportError:
+    from typing import Callable, overload
+
+
+try:
+    from .core.base.common.utils.jsontree.iteration import json_iter_leaves
+except ImportError:
+    from src.core.base.common.utils.jsontree.iteration import json_iter_leaves
+
+try:
+    from .core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
+except ImportError:
+    from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
+
                                                        _JSONTree)
 
 

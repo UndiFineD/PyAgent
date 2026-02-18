@@ -29,7 +29,6 @@ __version__ = VERSION
 
 
 
-
 class VllmBackend(LLMBackend):
     """vLLM (OpenAI-compatible) LLM Backend.
     def chat(

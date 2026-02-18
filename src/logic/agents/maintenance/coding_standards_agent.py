@@ -39,14 +39,30 @@ Agent for enforcing coding standards, fixing headers, and correcting syntax issu
 
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.maintenance.workspace_maintenance import WorkspaceMaintenance
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .maintenance.workspace_maintenance import WorkspaceMaintenance
+except ImportError:
+    from src.maintenance.workspace_maintenance import WorkspaceMaintenance
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -77,14 +93,30 @@ class CodingStandardsAgent(BaseAgent):
         return ["code_cleanup", "header_enforcement", "syntax_correction"]"
 from __future__ import annotations
 
-import logging
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.maintenance.workspace_maintenance import WorkspaceMaintenance
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .maintenance.workspace_maintenance import WorkspaceMaintenance
+except ImportError:
+    from src.maintenance.workspace_maintenance import WorkspaceMaintenance
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

@@ -14,9 +14,16 @@
 
 
 """Unified Error Mapping core."""
-from typing import Dict, Optional
+try:
+    from typing import Dict, Optional
+except ImportError:
+    from typing import Dict, Optional
 
-from .base_core import BaseCore
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
 
 
 

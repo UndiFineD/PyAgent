@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.core.messaging import EngineCoreProc
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.core.messaging import EngineCoreProc
+except ImportError:
+    from infrastructure.engine.core.messaging import EngineCoreProc
+
 
 
 def test_enginecoreproc_basic():

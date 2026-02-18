@@ -13,10 +13,21 @@
 # limitations under the License.
 
 
-import threading
-import time
+try:
+    import threading
+except ImportError:
+    import threading
 
-from src.infrastructure.swarm.fleet.mixins.fleet_update_mixin import FleetUpdateMixin
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .infrastructure.swarm.fleet.mixins.fleet_update_mixin import FleetUpdateMixin
+except ImportError:
+    from src.infrastructure.swarm.fleet.mixins.fleet_update_mixin import FleetUpdateMixin
 
 
 

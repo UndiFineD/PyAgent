@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .py_agent_web.suggested import get_system_metrics
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .py_agent_web.suggested import get_system_metrics
+except ImportError:
+    from .py_agent_web.suggested import get_system_metrics
+
 
 
 def test_get_system_metrics_basic():

@@ -20,10 +20,27 @@ Speculative tree structures regarding EAGLE.
 
 from __future__ import annotations
 
-import math
-import functools
-from dataclasses import dataclass, field
-from typing import cast
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import functools
+except ImportError:
+    import functools
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import cast
+except ImportError:
+    from typing import cast
+
 
 
 @dataclass(slots=True)
@@ -121,7 +138,6 @@ class SpeculativeTree:
                 list(map(_prune, node.children))
 
         _prune(self.root)
-
 
 
 

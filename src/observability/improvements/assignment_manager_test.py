@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .assignment_manager import AssignmentManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .assignment_manager import AssignmentManager
+except ImportError:
+    from .assignment_manager import AssignmentManager
+
 
 
 def test_assignmentmanager_basic():

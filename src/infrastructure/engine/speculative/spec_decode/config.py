@@ -20,8 +20,16 @@ Configuration regarding speculative decoding verification.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum, auto
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
 
 
 
@@ -32,7 +40,6 @@ class VerificationStrategy(Enum):
     TYPICAL_ACCEPTANCE = auto()  # Typical acceptance sampling
     TOP_K_SAMPLING = auto()  # Top-k based acceptance
     SPECULATIVE_STREAMING = auto()  # Streaming verification
-
 
 
 

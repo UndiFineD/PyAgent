@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
-import time
+try:
+    from typing import Dict, Any, List, Optional
+except ImportError:
+    from typing import Dict, Any, List, Optional
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    import time
+except ImportError:
+    import time
+
 
 
 @dataclass
@@ -25,7 +37,6 @@ class AgentMetadata:
     last_used: float = field(default_factory=time.time)
     tier: str = "specialized"  # specialized, integrated, elite"    parent_agents: List[str] = field(default_factory=list)
     sop_name: Optional[str] = None
-
 
 
 

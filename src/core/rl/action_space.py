@@ -14,15 +14,33 @@
 
 
 """Action space.py module.
-"""# Reinforcement Learning Action Space Definition - Phase 319 Enhanced
+"""
+# Reinforcement Learning Action Space Definition - Phase 319 Enhanced
 
 from __future__ import annotations
 
-import random
-from dataclasses import dataclass
-from typing import Any, Dict, List, Tuple, Union
 
-import numpy as np
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Any, Dict, List, Tuple, Union
+except ImportError:
+    from typing import Any, Dict, List, Tuple, Union
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 @dataclass
@@ -32,7 +50,6 @@ class ActionMetadata:
     description: str = """    cost: float = 0.0  # Resource cost of taking this action
     cooldown: float = 0.0  # Time before action can be repeated
     prerequisites: List[str] = None
-
 
 
 
@@ -76,7 +93,6 @@ class ActionSpace:
 
 
 
-
 class DiscreteActionSpace(ActionSpace):
     """Discrete action space (fixed set of choices)."""
     def __init__(self, n: int, action_names: List[str] = None) -> None:
@@ -92,7 +108,6 @@ class DiscreteActionSpace(ActionSpace):
 
     def index_to_action(self, index: int) -> str:
         """Converts index to action name."""return self.actions[index] if 0 <= index < len(self.actions) else """
-
 
 
 class BoxActionSpace:
@@ -120,7 +135,6 @@ class BoxActionSpace:
 
 
 
-
 class MultiDiscreteActionSpace:
     """Multiple discrete action spaces (e.g., for multi-headed agents)."""
     def __init__(self, nvec: List[int]) -> None:
@@ -132,7 +146,6 @@ class MultiDiscreteActionSpace:
 
     def contains(self, action: np.ndarray) -> bool:
         """Checks if action indices are valid."""return all(0 <= a < n for a, n in zip(action, self.nvec))
-
 
 
 

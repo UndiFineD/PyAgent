@@ -27,7 +27,6 @@ except ImportError:
 
 
 
-
 class AuctionCore(BaseCore):
     """Authoritative engine for VCG-based resource auctions."""
     @staticmethod

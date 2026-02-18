@@ -12,10 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import uuid
-from enum import Enum
-from typing import Dict, Any, Optional
-from dataclasses import dataclass, field
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Dict, Any, Optional
+except ImportError:
+    from typing import Dict, Any, Optional
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
 
 
 
@@ -30,7 +45,6 @@ class AgentJob:
     payload: Dict[str, Any] = field(default_factory=dict)
     result: Optional[Any] = None
     error: Optional[str] = None
-
 
 
 

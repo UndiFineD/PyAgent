@@ -41,10 +41,22 @@ Graph relational agent.py module.
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 
@@ -75,10 +87,22 @@ class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         "Query and improve content using graph correlations."  "      _ = target_file"#         return fGraph-enriched view for: {prompt}. Found {len(self."entities)} entities."
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 

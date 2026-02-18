@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .core.base.mixins.orchestration_mixin import OrchestrationMixin
+except ImportError:
+    from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
+
 
 
 def test_prepare_delegation_context_handles_exceptions(monkeypatch):

@@ -18,13 +18,34 @@ Config.py module.
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-from typing import TYPE_CHECKING
 
-import numpy as np
+try:
+    import math
+except ImportError:
+    import math
 
-from .enums import KVCacheDtype
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import TYPE_CHECKING
+except ImportError:
+    from typing import TYPE_CHECKING
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .enums import KVCacheDtype
+except ImportError:
+    from .enums import KVCacheDtype
+
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

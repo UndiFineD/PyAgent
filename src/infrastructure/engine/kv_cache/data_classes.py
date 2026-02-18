@@ -16,11 +16,27 @@
 Data classes.py module.
 
 # SPDX-License-Identifier: Apache-2.0
-import time
-from dataclasses import dataclass, field
-from typing import List, Optional, Sequence, Tuple
+try:
+    import time
+except ImportError:
+    import time
 
-from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import List, Optional, Sequence, Tuple
+except ImportError:
+    from typing import List, Optional, Sequence, Tuple
+
+
+try:
+    from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy
+except ImportError:
+    from .enums import AllocationStrategy, CacheGroupType, EvictionPolicy
+
 
 
 @dataclass(frozen=True)

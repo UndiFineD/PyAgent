@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.scheduling.priority.base import PriorityScheduler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.scheduling.priority.base import PriorityScheduler
+except ImportError:
+    from infrastructure.engine.scheduling.priority.base import PriorityScheduler
+
 
 
 def test_priorityscheduler_basic():

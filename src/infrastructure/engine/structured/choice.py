@@ -20,11 +20,27 @@ Choice-based grammar engine.
 
 from __future__ import annotations
 
-import json
-from typing import Dict, List
 
-from .base import GrammarEngine
-from .models import FSMTransitionTable
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from typing import Dict, List
+except ImportError:
+    from typing import Dict, List
+
+
+try:
+    from .base import GrammarEngine
+except ImportError:
+    from .base import GrammarEngine
+
+try:
+    from .models import FSMTransitionTable
+except ImportError:
+    from .models import FSMTransitionTable
 
 
 

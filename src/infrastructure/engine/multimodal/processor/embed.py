@@ -13,19 +13,16 @@
 # limitations under the License.
 
 
-Embed.py module.
+# Embed.py module.
+
 
 from typing import Any, Dict, Tuple
-
 import numpy as np
-
 from .base import BaseMultiModalProcessor, ModalityType
 
 
-
-
 class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
-    """Processor for pre-computed text embeddings.
+    """Processor for pre-computed text embeddings."""
     modality = ModalityType.EMBEDS
 
     def process(
@@ -33,15 +30,20 @@ class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
         data: np.ndarray,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        """Process pre-computed text embeddings. Expects a 1D or 2D numpy array where rows correspond to token embeddings."""
         if data.ndim == 1:
             data = data.reshape(1, -1)
 
         metadata = {
-            "num_tokens": data.shape[0],"            "embed_dim": data.shape[1],"        }
+            "num_tokens": data.shape[0],
+            "embed_dim": data.shape[1],
+        }
 
         return data.astype(np.float32), metadata
 
-    def get_TODO Placeholder_count(self, data: np.ndarray, **kwargs: Any) -> int:
+
+    def get_token_count(self, data: np.ndarray, **kwargs: Any) -> int:
+        """Estimate the number of "tokens" based on the shape of the embedding array."""
         if data.ndim == 1:
             return 1
         return data.shape[0]

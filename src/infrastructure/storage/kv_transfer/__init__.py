@@ -19,7 +19,11 @@ KV Transfer module for disaggregated prefill-decode inference.
 
 Provides connectors for transferring KV cache between prefill and decode instances.
 Inspired by vLLM's distributed/kv_transfer/ architecture.'
-from .kv_transfer_connector import (DecodeBenchConnector, KVCacheBlocks,  # noqa: F401
+try:
+    from .kv_transfer_connector import (DecodeBenchConnector, KVCacheBlocks,  # noqa: F401
+except ImportError:
+    from .kv_transfer_connector import (DecodeBenchConnector, KVCacheBlocks, # noqa: F401
+
                                     KVConnectorBase, KVConnectorMetadata,
                                     KVConnectorRole, KVTransferConfig,
                                     get_kv_connector, list_kv_connectors,

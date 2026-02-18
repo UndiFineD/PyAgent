@@ -15,10 +15,10 @@
 
 """Logic Package - Core implementation of agent reasoning and utilities.
 """
+
 from .acceleration_manager import NeuralPruningEngine  # noqa: F401
 from .agent_plugin_base import AgentPluginBase  # noqa: F401
-from .agent_verification import (AgentVerifier, CodeHealthAuditor,  # noqa: F401
-                                 CodeIntegrityVerifier)
+from .agent_verification import AgentVerifier, CodeHealthAuditor, CodeIntegrityVerifier  # noqa: F401
 from .circuit_breaker import CircuitBreaker  # noqa: F401
 from .connectivity_manager import ConnectivityManager  # noqa: F401
 from .dependency_graph import DependencyGraph  # noqa: F401
@@ -26,5 +26,17 @@ from .incremental_processor import IncrementalProcessor  # noqa: F401
 from .logging_config import setup_logging  # noqa: F401
 from .sandbox_manager import SandboxManager  # noqa: F401
 
+
 __all__ = [
-    "NeuralPruningEngine","    "AgentPluginBase","    "AgentVerifier","    "CodeHealthAuditor","    "CodeIntegrityVerifier","    "CircuitBreaker","    "ConnectivityManager","    "DependencyGraph","    "IncrementalProcessor","    "setup_logging","    "SandboxManager","]
+    "NeuralPruningEngine",
+    "AgentPluginBase",
+    "AgentVerifier",
+    "CodeHealthAuditor",
+    "CodeIntegrityVerifier",
+    "CircuitBreaker",
+    "ConnectivityManager",
+    "DependencyGraph",
+    "IncrementalProcessor",
+    "setup_logging",
+    "SandboxManager",
+]

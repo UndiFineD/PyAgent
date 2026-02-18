@@ -14,33 +14,99 @@
 
 
 # "Auto-extracted class from agent_coder.py"""" pylint: disable=too-many-ancestors""""
+
+
 from __future__ import annotations
 
-import logging
-from pathlib import Path
-from typing import Any
 
-from src.core.base.common.types.code_language import CodeLanguage
-from src.core.base.common.types.code_metrics import CodeMetrics
-from src.core.base.common.types.code_smell import CodeSmell
-from src.core.base.common.types.quality_score import QualityScore
-from src.core.base.common.types.refactoring_pattern import RefactoringPattern
-from src.core.base.common.types.style_rule import StyleRule
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_core import (
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.types.code_language import CodeLanguage
+except ImportError:
+    from src.core.base.common.types.code_language import CodeLanguage
+
+try:
+    from .core.base.common.types.code_metrics import CodeMetrics
+except ImportError:
+    from src.core.base.common.types.code_metrics import CodeMetrics
+
+try:
+    from .core.base.common.types.code_smell import CodeSmell
+except ImportError:
+    from src.core.base.common.types.code_smell import CodeSmell
+
+try:
+    from .core.base.common.types.quality_score import QualityScore
+except ImportError:
+    from src.core.base.common.types.quality_score import QualityScore
+
+try:
+    from .core.base.common.types.refactoring_pattern import RefactoringPattern
+except ImportError:
+    from src.core.base.common.types.refactoring_pattern import RefactoringPattern
+
+try:
+    from .core.base.common.types.style_rule import StyleRule
+except ImportError:
+    from src.core.base.common.types.style_rule import StyleRule
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.development.coder_core import (
+except ImportError:
+    from src.logic.agents.development.coder_core import (
+
     DEFAULT_PYTHON_STYLE_RULES, CoderCore)
-from src.logic.agents.development.mixins.agent.agent_language_mixin import \
+try:
+    from .logic.agents.development.mixins.agent.agent_language_mixin import \
+except ImportError:
+    from src.logic.agents.development.mixins.agent.agent_language_mixin import \
+
     AgentLanguageMixin
-from src.logic.agents.development.mixins.agent.agent_metrics_mixin import \
+try:
+    from .logic.agents.development.mixins.agent.agent_metrics_mixin import \
+except ImportError:
+    from src.logic.agents.development.mixins.agent.agent_metrics_mixin import \
+
     AgentMetricsMixin
-from src.logic.agents.development.mixins.agent.agent_refactor_mixin import \
+try:
+    from .logic.agents.development.mixins.agent.agent_refactor_mixin import \
+except ImportError:
+    from src.logic.agents.development.mixins.agent.agent_refactor_mixin import \
+
     AgentRefactorMixin
-from src.logic.agents.development.mixins.agent.agent_style_mixin import \
+try:
+    from .logic.agents.development.mixins.agent.agent_style_mixin import \
+except ImportError:
+    from src.logic.agents.development.mixins.agent.agent_style_mixin import \
+
     AgentStyleMixin
 
 __version__ = VERSION
-
 
 
 

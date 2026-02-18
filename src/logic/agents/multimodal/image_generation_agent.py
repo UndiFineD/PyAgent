@@ -64,7 +64,6 @@ from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
 
-
 class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
     Agent for generating images using diffusion models.
 #     Supports async processing with memory management.

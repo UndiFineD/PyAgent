@@ -19,13 +19,34 @@ Storage.py module.
 
 from __future__ import annotations
 
-import contextlib
-from dataclasses import dataclass, field
-from typing import Any, List, Optional, Sequence
 
-import numpy as np
+try:
+    import contextlib
+except ImportError:
+    import contextlib
 
-from .config import LogprobEntry, TopLogprob
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, List, Optional, Sequence
+except ImportError:
+    from typing import Any, List, Optional, Sequence
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import LogprobEntry, TopLogprob
+except ImportError:
+    from .config import LogprobEntry, TopLogprob
+
 
 
 @dataclass

@@ -18,13 +18,33 @@
 Weighted Expert Fusion (Phase 62).
 Provides consensus mechanisms to merge outputs from multiple experts in an MoE swarm.
 
-import logging
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+try:
+    import logging
+except ImportError:
+    import logging
 
-import numpy as np
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+except ImportError:
+    from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +56,6 @@ class FusionResult:
     consensus_score: float
     contributing_experts: List[str]
     metadata: Dict[str, Any]
-
 
 
 

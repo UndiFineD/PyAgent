@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.rl.mdp import Transition, ExperienceReplayBuffer, MDP
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.rl.mdp import Transition, ExperienceReplayBuffer, MDP
+except ImportError:
+    from core.rl.mdp import Transition, ExperienceReplayBuffer, MDP
+
 
 
 def test_transition_basic():

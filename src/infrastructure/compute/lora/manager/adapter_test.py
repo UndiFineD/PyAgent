@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.lora.manager.adapter import LoRAAdapter, load_lora_adapter, get_lora_info
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.lora.manager.adapter import LoRAAdapter, load_lora_adapter, get_lora_info
+except ImportError:
+    from infrastructure.compute.lora.manager.adapter import LoRAAdapter, load_lora_adapter, get_lora_info
+
 
 
 def test_loraadapter_basic():

@@ -37,16 +37,45 @@ Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
 
 from __future__ import annotations
 
-from pathlib import Path
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.compute.backend.local_context_recorder import \
+except ImportError:
+    from src.infrastructure.compute.backend.local_context_recorder import \
+
     LocalContextRecorder
-from src.logic.agents.specialists.mixins.handy_core_mixin import HandyCoreMixin
-from src.logic.agents.specialists.mixins.handy_file_system_mixin import \
+try:
+    from .logic.agents.specialists.mixins.handy_core_mixin import HandyCoreMixin
+except ImportError:
+    from src.logic.agents.specialists.mixins.handy_core_mixin import HandyCoreMixin
+
+try:
+    from .logic.agents.specialists.mixins.handy_file_system_mixin import \
+except ImportError:
+    from src.logic.agents.specialists.mixins.handy_file_system_mixin import \
+
     HandyFileSystemMixin
-from src.logic.agents.specialists.mixins.handy_terminal_mixin import \
+try:
+    from .logic.agents.specialists.mixins.handy_terminal_mixin import \
+except ImportError:
+    from src.logic.agents.specialists.mixins.handy_terminal_mixin import \
+
     HandyTerminalMixin
 
 __version__ = VERSION
@@ -66,16 +95,45 @@ class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreM
     # Methods delegated to "mixins"
 from __future__ import annotations
 
-from pathlib import Path
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.compute.backend.local_context_recorder import \
+except ImportError:
+    from src.infrastructure.compute.backend.local_context_recorder import \
+
     LocalContextRecorder
-from src.logic.agents.specialists.mixins.handy_core_mixin import HandyCoreMixin
-from src.logic.agents.specialists.mixins.handy_file_system_mixin import \
+try:
+    from .logic.agents.specialists.mixins.handy_core_mixin import HandyCoreMixin
+except ImportError:
+    from src.logic.agents.specialists.mixins.handy_core_mixin import HandyCoreMixin
+
+try:
+    from .logic.agents.specialists.mixins.handy_file_system_mixin import \
+except ImportError:
+    from src.logic.agents.specialists.mixins.handy_file_system_mixin import \
+
     HandyFileSystemMixin
-from src.logic.agents.specialists.mixins.handy_terminal_mixin import \
+try:
+    from .logic.agents.specialists.mixins.handy_terminal_mixin import \
+except ImportError:
+    from src.logic.agents.specialists.mixins.handy_terminal_mixin import \
+
     HandyTerminalMixin
 
 __version__ = VERSION

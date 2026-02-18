@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.serialization.fast_serializer import SerializationFormat, SerializerStats, Serializer, JSONSerializer, PickleSerializer, MsgPackSerializer, CBORSerializer, BinarySerializer, SerializerRegistry, get_serializer_registry, fast_serialize, fast_deserialize, to_json, from_json, to_msgpack, from_msgpack
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.serialization.fast_serializer import SerializationFormat, SerializerStats, Serializer, JSONSerializer, PickleSerializer, MsgPackSerializer, CBORSerializer, BinarySerializer, SerializerRegistry, get_serializer_registry, fast_serialize, fast_deserialize, to_json, from_json, to_msgpack, from_msgpack
+except ImportError:
+    from infrastructure.storage.serialization.fast_serializer import SerializationFormat, SerializerStats, Serializer, JSONSerializer, PickleSerializer, MsgPackSerializer, CBORSerializer, BinarySerializer, SerializerRegistry, get_serializer_registry, fast_serialize, fast_deserialize, to_json, from_json, to_msgpack, from_msgpack
+
 
 
 def test_serializationformat_basic():

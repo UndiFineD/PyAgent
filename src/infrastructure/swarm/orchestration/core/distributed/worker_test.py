@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.core.distributed.worker import BaseWorker, WorkerProcess
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.core.distributed.worker import BaseWorker, WorkerProcess
+except ImportError:
+    from infrastructure.swarm.orchestration.core.distributed.worker import BaseWorker, WorkerProcess
+
 
 
 def test_baseworker_basic():

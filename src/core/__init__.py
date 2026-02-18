@@ -19,9 +19,16 @@
 """
 Core package.
 """
+
+
 from __future__ import annotations
 
-from .base.lifecycle.version import VERSION
+
+try:
+    from .base.lifecycle.version import VERSION
+except ImportError:
+    from .base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

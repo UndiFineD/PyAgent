@@ -16,9 +16,12 @@
 """Core logic regarding Error Mapping.
 (Facade regarding src.core.base.common.error_mapping_core)
 """
-from src.core.base.common.error_mapping_core import \
-    ErrorMappingCore as StandardErrorMappingCore
+try:
+    from .core.base.common.error_mapping_core import \
+except ImportError:
+    from src.core.base.common.error_mapping_core import \
 
+    ErrorMappingCore as StandardErrorMappingCore
 
 
 

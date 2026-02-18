@@ -26,7 +26,6 @@ from .registry import ChatTemplateRegistry
 
 
 
-
 class TemplateResolver:
     """Advanced template resolution with caching.
     def __init__(self, registry: Optional[ChatTemplateRegistry] = None) -> None:

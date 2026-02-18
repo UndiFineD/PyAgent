@@ -17,66 +17,303 @@
 
 from __future__ import annotations
 
-from src.core.base.lifecycle.version import VERSION
 
-from .agent_assertions import AgentAssertions  # noqa: F401
-from .assertion_helpers import AssertionHelpers  # noqa: F401
-from .baseline_manager import BaselineManager  # noqa: F401
-from .benchmarker import Benchmarker  # noqa: F401
-from .cleanup_manager import CleanupManager  # noqa: F401
-from .cleanup_strategy import CleanupStrategy  # noqa: F401
-from .coverage_tracker import CoverageTracker  # noqa: F401
-from .cross_platform_helper import CrossPlatformHelper  # noqa: F401
-from .dependency_container import DependencyContainer  # noqa: F401
-from .dependency_resolver import DependencyResolver  # noqa: F401
-from .environment_detector import EnvironmentDetector  # noqa: F401
-from .environment_isolator import EnvironmentIsolator  # noqa: F401
-from .file_system_isolator import FileSystemIsolator  # noqa: F401
-from .fixture_factory import FixtureFactory  # noqa: F401
-from .fixture_generator import FixtureGenerator  # noqa: F401
-from .flakiness_detector import FlakinessDetector  # noqa: F401
-from .flakiness_report import FlakinessReport  # noqa: F401
-from .isolation_level import IsolationLevel  # noqa: F401
-from .log_capturer import LogCapturer  # noqa: F401
-from .mock_ai_backend import MockAIBackend  # noqa: F401
-from .mock_response import MockResponse  # noqa: F401
-from .mock_response_type import MockResponseType  # noqa: F401
-from .module_loader import ModuleLoader  # noqa: F401
-from .parallel_test_result import ParallelTestResult  # noqa: F401
-from .parallel_test_runner import ParallelTestRunner  # noqa: F401
-from .parameterized_test_case import ParameterizedTestCase  # noqa: F401
-from .parameterized_test_generator import ParameterizedTestGenerator  # noqa: F401
-from .performance_metric import PerformanceMetric  # noqa: F401
-from .performance_metric_type import PerformanceMetricType  # noqa: F401
-from .performance_tracker import PerformanceTracker  # noqa: F401
-from .recorded_interaction import RecordedInteraction  # noqa: F401
-from .resource_handle import ResourceHandle  # noqa: F401
-from .resource_pool import ResourcePool  # noqa: F401
-from .retry_helper import RetryHelper  # noqa: F401
-from .snapshot_comparison_result import SnapshotComparisonResult  # noqa: F401
-from .snapshot_manager import SnapshotManager  # noqa: F401
-from .test_assertion import TestAssertion  # noqa: F401
-from .test_baseline import TestBaseline  # noqa: F401
-from .test_config_loader import TestConfigLoader  # noqa: F401
-from .test_data_cleaner import TestDataCleaner  # noqa: F401
-from .test_data_factory import TestDataFactory  # noqa: F401
-from .test_data_generator import TestDataGenerator  # noqa: F401
-from .test_data_seeder import TestDataSeeder  # noqa: F401
-from .test_data_type import TestDataType  # noqa: F401
-from .test_environment import TestEnvironment  # noqa: F401
-from .test_fixture import TestFixture  # noqa: F401
-from .test_log_entry import TestLogEntry  # noqa: F401
-from .test_logger import TestLogger  # noqa: F401
-from .test_output_formatter import TestOutputFormatter  # noqa: F401
-from .test_profile import TestProfile  # noqa: F401
-from .test_profile_manager import TestProfileManager  # noqa: F401
-from .test_recorder import TestRecorder  # noqa: F401
-from .test_report_generator import TestReportGenerator  # noqa: F401
-from .test_result import TestResult  # noqa: F401
-from .test_result_aggregator import TestResultAggregator  # noqa: F401
-from .test_snapshot import TestSnapshot  # noqa: F401
-from .test_status import TestStatus  # noqa: F401
-from .test_timer import TestTimer  # noqa: F401
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .agent_assertions import AgentAssertions  # noqa: F401
+except ImportError:
+    from .agent_assertions import AgentAssertions # noqa: F401
+
+try:
+    from .assertion_helpers import AssertionHelpers  # noqa: F401
+except ImportError:
+    from .assertion_helpers import AssertionHelpers # noqa: F401
+
+try:
+    from .baseline_manager import BaselineManager  # noqa: F401
+except ImportError:
+    from .baseline_manager import BaselineManager # noqa: F401
+
+try:
+    from .benchmarker import Benchmarker  # noqa: F401
+except ImportError:
+    from .benchmarker import Benchmarker # noqa: F401
+
+try:
+    from .cleanup_manager import CleanupManager  # noqa: F401
+except ImportError:
+    from .cleanup_manager import CleanupManager # noqa: F401
+
+try:
+    from .cleanup_strategy import CleanupStrategy  # noqa: F401
+except ImportError:
+    from .cleanup_strategy import CleanupStrategy # noqa: F401
+
+try:
+    from .coverage_tracker import CoverageTracker  # noqa: F401
+except ImportError:
+    from .coverage_tracker import CoverageTracker # noqa: F401
+
+try:
+    from .cross_platform_helper import CrossPlatformHelper  # noqa: F401
+except ImportError:
+    from .cross_platform_helper import CrossPlatformHelper # noqa: F401
+
+try:
+    from .dependency_container import DependencyContainer  # noqa: F401
+except ImportError:
+    from .dependency_container import DependencyContainer # noqa: F401
+
+try:
+    from .dependency_resolver import DependencyResolver  # noqa: F401
+except ImportError:
+    from .dependency_resolver import DependencyResolver # noqa: F401
+
+try:
+    from .environment_detector import EnvironmentDetector  # noqa: F401
+except ImportError:
+    from .environment_detector import EnvironmentDetector # noqa: F401
+
+try:
+    from .environment_isolator import EnvironmentIsolator  # noqa: F401
+except ImportError:
+    from .environment_isolator import EnvironmentIsolator # noqa: F401
+
+try:
+    from .file_system_isolator import FileSystemIsolator  # noqa: F401
+except ImportError:
+    from .file_system_isolator import FileSystemIsolator # noqa: F401
+
+try:
+    from .fixture_factory import FixtureFactory  # noqa: F401
+except ImportError:
+    from .fixture_factory import FixtureFactory # noqa: F401
+
+try:
+    from .fixture_generator import FixtureGenerator  # noqa: F401
+except ImportError:
+    from .fixture_generator import FixtureGenerator # noqa: F401
+
+try:
+    from .flakiness_detector import FlakinessDetector  # noqa: F401
+except ImportError:
+    from .flakiness_detector import FlakinessDetector # noqa: F401
+
+try:
+    from .flakiness_report import FlakinessReport  # noqa: F401
+except ImportError:
+    from .flakiness_report import FlakinessReport # noqa: F401
+
+try:
+    from .isolation_level import IsolationLevel  # noqa: F401
+except ImportError:
+    from .isolation_level import IsolationLevel # noqa: F401
+
+try:
+    from .log_capturer import LogCapturer  # noqa: F401
+except ImportError:
+    from .log_capturer import LogCapturer # noqa: F401
+
+try:
+    from .mock_ai_backend import MockAIBackend  # noqa: F401
+except ImportError:
+    from .mock_ai_backend import MockAIBackend # noqa: F401
+
+try:
+    from .mock_response import MockResponse  # noqa: F401
+except ImportError:
+    from .mock_response import MockResponse # noqa: F401
+
+try:
+    from .mock_response_type import MockResponseType  # noqa: F401
+except ImportError:
+    from .mock_response_type import MockResponseType # noqa: F401
+
+try:
+    from .module_loader import ModuleLoader  # noqa: F401
+except ImportError:
+    from .module_loader import ModuleLoader # noqa: F401
+
+try:
+    from .parallel_test_result import ParallelTestResult  # noqa: F401
+except ImportError:
+    from .parallel_test_result import ParallelTestResult # noqa: F401
+
+try:
+    from .parallel_test_runner import ParallelTestRunner  # noqa: F401
+except ImportError:
+    from .parallel_test_runner import ParallelTestRunner # noqa: F401
+
+try:
+    from .parameterized_test_case import ParameterizedTestCase  # noqa: F401
+except ImportError:
+    from .parameterized_test_case import ParameterizedTestCase # noqa: F401
+
+try:
+    from .parameterized_test_generator import ParameterizedTestGenerator  # noqa: F401
+except ImportError:
+    from .parameterized_test_generator import ParameterizedTestGenerator # noqa: F401
+
+try:
+    from .performance_metric import PerformanceMetric  # noqa: F401
+except ImportError:
+    from .performance_metric import PerformanceMetric # noqa: F401
+
+try:
+    from .performance_metric_type import PerformanceMetricType  # noqa: F401
+except ImportError:
+    from .performance_metric_type import PerformanceMetricType # noqa: F401
+
+try:
+    from .performance_tracker import PerformanceTracker  # noqa: F401
+except ImportError:
+    from .performance_tracker import PerformanceTracker # noqa: F401
+
+try:
+    from .recorded_interaction import RecordedInteraction  # noqa: F401
+except ImportError:
+    from .recorded_interaction import RecordedInteraction # noqa: F401
+
+try:
+    from .resource_handle import ResourceHandle  # noqa: F401
+except ImportError:
+    from .resource_handle import ResourceHandle # noqa: F401
+
+try:
+    from .resource_pool import ResourcePool  # noqa: F401
+except ImportError:
+    from .resource_pool import ResourcePool # noqa: F401
+
+try:
+    from .retry_helper import RetryHelper  # noqa: F401
+except ImportError:
+    from .retry_helper import RetryHelper # noqa: F401
+
+try:
+    from .snapshot_comparison_result import SnapshotComparisonResult  # noqa: F401
+except ImportError:
+    from .snapshot_comparison_result import SnapshotComparisonResult # noqa: F401
+
+try:
+    from .snapshot_manager import SnapshotManager  # noqa: F401
+except ImportError:
+    from .snapshot_manager import SnapshotManager # noqa: F401
+
+try:
+    from .test_assertion import TestAssertion  # noqa: F401
+except ImportError:
+    from .test_assertion import TestAssertion # noqa: F401
+
+try:
+    from .test_baseline import TestBaseline  # noqa: F401
+except ImportError:
+    from .test_baseline import TestBaseline # noqa: F401
+
+try:
+    from .test_config_loader import TestConfigLoader  # noqa: F401
+except ImportError:
+    from .test_config_loader import TestConfigLoader # noqa: F401
+
+try:
+    from .test_data_cleaner import TestDataCleaner  # noqa: F401
+except ImportError:
+    from .test_data_cleaner import TestDataCleaner # noqa: F401
+
+try:
+    from .test_data_factory import TestDataFactory  # noqa: F401
+except ImportError:
+    from .test_data_factory import TestDataFactory # noqa: F401
+
+try:
+    from .test_data_generator import TestDataGenerator  # noqa: F401
+except ImportError:
+    from .test_data_generator import TestDataGenerator # noqa: F401
+
+try:
+    from .test_data_seeder import TestDataSeeder  # noqa: F401
+except ImportError:
+    from .test_data_seeder import TestDataSeeder # noqa: F401
+
+try:
+    from .test_data_type import TestDataType  # noqa: F401
+except ImportError:
+    from .test_data_type import TestDataType # noqa: F401
+
+try:
+    from .test_environment import TestEnvironment  # noqa: F401
+except ImportError:
+    from .test_environment import TestEnvironment # noqa: F401
+
+try:
+    from .test_fixture import TestFixture  # noqa: F401
+except ImportError:
+    from .test_fixture import TestFixture # noqa: F401
+
+try:
+    from .test_log_entry import TestLogEntry  # noqa: F401
+except ImportError:
+    from .test_log_entry import TestLogEntry # noqa: F401
+
+try:
+    from .test_logger import TestLogger  # noqa: F401
+except ImportError:
+    from .test_logger import TestLogger # noqa: F401
+
+try:
+    from .test_output_formatter import TestOutputFormatter  # noqa: F401
+except ImportError:
+    from .test_output_formatter import TestOutputFormatter # noqa: F401
+
+try:
+    from .test_profile import TestProfile  # noqa: F401
+except ImportError:
+    from .test_profile import TestProfile # noqa: F401
+
+try:
+    from .test_profile_manager import TestProfileManager  # noqa: F401
+except ImportError:
+    from .test_profile_manager import TestProfileManager # noqa: F401
+
+try:
+    from .test_recorder import TestRecorder  # noqa: F401
+except ImportError:
+    from .test_recorder import TestRecorder # noqa: F401
+
+try:
+    from .test_report_generator import TestReportGenerator  # noqa: F401
+except ImportError:
+    from .test_report_generator import TestReportGenerator # noqa: F401
+
+try:
+    from .test_result import TestResult  # noqa: F401
+except ImportError:
+    from .test_result import TestResult # noqa: F401
+
+try:
+    from .test_result_aggregator import TestResultAggregator  # noqa: F401
+except ImportError:
+    from .test_result_aggregator import TestResultAggregator # noqa: F401
+
+try:
+    from .test_snapshot import TestSnapshot  # noqa: F401
+except ImportError:
+    from .test_snapshot import TestSnapshot # noqa: F401
+
+try:
+    from .test_status import TestStatus  # noqa: F401
+except ImportError:
+    from .test_status import TestStatus # noqa: F401
+
+try:
+    from .test_timer import TestTimer  # noqa: F401
+except ImportError:
+    from .test_timer import TestTimer # noqa: F401
+
 
 __version__ = VERSION
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.stem_scaling import STEMScalingLayer, STEMManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.stem_scaling import STEMScalingLayer, STEMManager
+except ImportError:
+    from infrastructure.engine.stem_scaling import STEMScalingLayer, STEMManager
+
 
 
 def test_stemscalinglayer_basic():

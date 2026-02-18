@@ -19,10 +19,23 @@ Tokenizer information regarding structured output engine.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any
 
-from .enums import VocabType
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .enums import VocabType
+except ImportError:
+    from .enums import VocabType
+
 
 
 @dataclass(frozen=True)

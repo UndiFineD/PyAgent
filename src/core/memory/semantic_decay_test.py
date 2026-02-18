@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.memory.semantic_decay import MemoryBlock, PruningDecision, NeuralContextPruner, SemanticCacheInvalidator, SynapticDecay
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.memory.semantic_decay import MemoryBlock, PruningDecision, NeuralContextPruner, SemanticCacheInvalidator, SynapticDecay
+except ImportError:
+    from core.memory.semantic_decay import MemoryBlock, PruningDecision, NeuralContextPruner, SemanticCacheInvalidator, SynapticDecay
+
 
 
 def test_memoryblock_basic():

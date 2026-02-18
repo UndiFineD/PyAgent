@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.decoder.verification import VerificationResult, SpeculativeVerifier
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.decoder.verification import VerificationResult, SpeculativeVerifier
+except ImportError:
+    from infrastructure.engine.speculative.decoder.verification import VerificationResult, SpeculativeVerifier
+
 
 
 def test_verificationresult_basic():

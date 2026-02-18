@@ -13,9 +13,20 @@
 # limitations under the License.
 
 
-import pytest
-from src.infrastructure.engine.structured.params.validator import StructuredOutputValidator
-from src.infrastructure.engine.structured.params.config import StructuredOutputConfig, ValidationResult
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .infrastructure.engine.structured.params.validator import StructuredOutputValidator
+except ImportError:
+    from src.infrastructure.engine.structured.params.validator import StructuredOutputValidator
+
+try:
+    from .infrastructure.engine.structured.params.config import StructuredOutputConfig, ValidationResult
+except ImportError:
+    from src.infrastructure.engine.structured.params.config import StructuredOutputConfig, ValidationResult
 
 
 

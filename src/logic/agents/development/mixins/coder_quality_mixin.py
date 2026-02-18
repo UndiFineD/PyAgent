@@ -19,11 +19,27 @@ Quality scoring and refactoring suggestion logic for CoderCore.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
 
-from src.core.base.common.types.code_metrics import CodeMetrics
-from src.core.base.common.types.code_smell import CodeSmell
-from src.core.base.common.types.quality_score import QualityScore
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+try:
+    from .core.base.common.types.code_metrics import CodeMetrics
+except ImportError:
+    from src.core.base.common.types.code_metrics import CodeMetrics
+
+try:
+    from .core.base.common.types.code_smell import CodeSmell
+except ImportError:
+    from src.core.base.common.types.code_smell import CodeSmell
+
+try:
+    from .core.base.common.types.quality_score import QualityScore
+except ImportError:
+    from src.core.base.common.types.quality_score import QualityScore
 
 
 

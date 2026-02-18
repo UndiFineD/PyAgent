@@ -12,16 +12,56 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import sys
-import argparse
-import markdown
-from termcolor import colored
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from config import api_keys, Models, instruction
-from models.genai_model import scan_code
-from utils.html_helpers import generate_index_html
-from utils.extract_apk_helpers import extract_apk_with_jadx
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import sys
+except ImportError:
+    import sys
+
+try:
+    import argparse
+except ImportError:
+    import argparse
+
+try:
+    import markdown
+except ImportError:
+    import markdown
+
+try:
+    from termcolor import colored
+except ImportError:
+    from termcolor import colored
+
+try:
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+except ImportError:
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+try:
+    from config import api_keys, Models, instruction
+except ImportError:
+    from config import api_keys, Models, instruction
+
+try:
+    from models.genai_model import scan_code
+except ImportError:
+    from models.genai_model import scan_code
+
+try:
+    from utils.html_helpers import generate_index_html
+except ImportError:
+    from utils.html_helpers import generate_index_html
+
+try:
+    from utils.extract_apk_helpers import extract_apk_with_jadx
+except ImportError:
+    from utils.extract_apk_helpers import extract_apk_with_jadx
+
 
 
 def get_available_models():
@@ -30,10 +70,12 @@ def get_available_models():
 def process_file(file_path, code_content, model_key, model_variant, input_dir, output_dir):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     print(colored(f"[+] Scanning {file_path} with model {model_key}...", "cyan"))"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     result = scan_code(api_keys[model_key], model_variant, instruction, code_content)""""
     html_result = markdown.markdown(result)
 
@@ -53,24 +95,28 @@ def process_file(file_path, code_content, model_key, model_variant, input_dir, o
     with open(html_path, "w", encoding="utf-8") as html_file:"        html_file.write(html_result)
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     print(colored(f"[✓] Report saved to {markdown_path} and {html_path}", "green"))"    return file_path, markdown_path, html_path
 
 
 def process_and_generate_reports(all_pathes, model_key, model_variant, input_dir, output_dir, num_threads):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     files_to_process = []""""    for path in all_pathes:
         if os.path.exists(path):
             with open(path, encoding="utf-8") as f:"                files_to_process.append((path, f.read()))
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         futures = []""""        for file_path, code_content in files_to_process:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#             futures.append(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#             futures.append(
                 executor.submit(process_file, file_path, code_content, model_key, model_variant, input_dir, output_dir)
             )
 
@@ -79,16 +125,19 @@ def process_and_generate_reports(all_pathes, model_key, model_variant, input_dir
 
     generate_index_html(output_dir)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     print(colored(f"[✓] Index file created at {os.path.join(output_dir, 'index.html')}", "green"))"'
 
 def main():
     parser = argparse.ArgumentParser(description="AI Code Scanner")"    parser.add_argument("--apk-path", required=True, help="Path to the APK file")"    parser.add_argument("--out-dir", required=True, help="Directory to save the decompiled files")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     parser.add_argument(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     parser.add_argument(
 # [BATCHFIX] Commented metadata/non-Python
 """         "--target-package", required=True, help="Target package name to find classes (e.g., 'jakhar.aseem.diva')"  # [BATCHFIX] closed string"'    )
     parser.add_argument("--model-name", required=True, help="Model key (e.g., GENEAI, OPENAI).")"    parser.add_argument("--report", required=True, help="Directory to save the reports.")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     parser.add_argument(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     parser.add_argument(
         "--threads","        type=int,
         default=1,
         choices=range(1, 11),
@@ -103,22 +152,27 @@ def main():
 
     if model_key not in api_keys or model_key not in Models:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         print(colored(f"[!] Invalid model key: {model_key}", "red"))"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         print(colored(f"[!] Available model keys are: {get_available_models()}", "yellow"))"        sys.exit(1)
 
     os.makedirs(output_dir, exist_ok=True)
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     model_variant = list(Models[model_key].values())[0]""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#     manifest_path, strings_path, target_classes = extract_apk_with_jadx(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#     manifest_path, strings_path, target_classes = extract_apk_with_jadx(
         args.apk_path, args.out_dir, args.target_package
     )
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     all_pathes = []""""    all_pathes.append(manifest_path)
     all_pathes.append(strings_path)
     for target_class in target_classes:
@@ -127,4 +181,5 @@ def main():
 
 
 if __name__ == "__main__":"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""#     main()
+""" [BATCHFIX] Commented metadata/non-Python""""
+#     main()

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.async_pipeline import SpeculativeAsyncPipeline
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.async_pipeline import SpeculativeAsyncPipeline
+except ImportError:
+    from infrastructure.engine.speculative.async_pipeline import SpeculativeAsyncPipeline
+
 
 
 def test_speculativeasyncpipeline_basic():

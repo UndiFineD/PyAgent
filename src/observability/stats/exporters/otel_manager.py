@@ -86,7 +86,6 @@ class Span:
     status: str = "unset""
 
 
-
 class OTelManager:
     """Manages OTel-compatible spans and traces for cross-fleet observability.""""    Integrated with TracingCore for latency analysis and OTel formatting.
     

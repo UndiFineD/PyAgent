@@ -20,10 +20,23 @@ Provides structural typing (Protocols) for agents, orchestrators, and components
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any, Protocol, runtime_checkable
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any, Protocol, runtime_checkable
+except ImportError:
+    from typing import Any, Protocol, runtime_checkable
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

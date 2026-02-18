@@ -20,17 +20,42 @@ Factory for incremental detokenizers.
 
 from __future__ import annotations
 
-from typing import List, Optional, Set, Tuple
 
-from src.infrastructure.engine.tokenization.detokenizer.base import \
+try:
+    from typing import List, Optional, Set, Tuple
+except ImportError:
+    from typing import List, Optional, Set, Tuple
+
+
+try:
+    from .infrastructure.engine.tokenization.detokenizer.base import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.base import \
+
     IncrementalDetokenizer
-from src.infrastructure.engine.tokenization.detokenizer.fast import \
+try:
+    from .infrastructure.engine.tokenization.detokenizer.fast import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.fast import \
+
     FastIncrementalDetokenizer
-from src.infrastructure.engine.tokenization.detokenizer.slow import \
+try:
+    from .infrastructure.engine.tokenization.detokenizer.slow import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.slow import \
+
     SlowIncrementalDetokenizer
-from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
+try:
+    from .infrastructure.engine.tokenization.detokenizer.stop_checker import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
+
     StopChecker
-from src.infrastructure.engine.tokenization.detokenizer.types import \
+try:
+    from .infrastructure.engine.tokenization.detokenizer.types import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.types import \
+
     TokenizerLike
 
 

@@ -22,15 +22,44 @@ Delegates to modularized sub-packages in src/infrastructure/mcp_tools/.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
 
-from .adapter import SchemaAdapter
-from .base import MCPToolServer as MCPToolServerBase
-from .local import LocalMCPServer
-from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .adapter import SchemaAdapter
+except ImportError:
+    from .adapter import SchemaAdapter
+
+try:
+    from .base import MCPToolServer as MCPToolServerBase
+except ImportError:
+    from .base import MCPToolServer as MCPToolServerBase
+
+try:
+    from .local import LocalMCPServer
+except ImportError:
+    from .local import LocalMCPServer
+
+try:
+    from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,
+except ImportError:
+    from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,
+
                      ToolCall, ToolResult, ToolSchema, ToolStatus)
-from .registry import MCPServerRegistry, SessionManager
-from .sse import SSEMCPServer
+try:
+    from .registry import MCPServerRegistry, SessionManager
+except ImportError:
+    from .registry import MCPServerRegistry, SessionManager
+
+try:
+    from .sse import SSEMCPServer
+except ImportError:
+    from .sse import SSEMCPServer
+
 
 # For backward compatibility mapping
 MCPToolServer = MCPToolServerBase

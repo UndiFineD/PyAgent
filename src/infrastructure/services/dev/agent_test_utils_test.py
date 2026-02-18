@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.agent_test_utils import agent_dir_on_path, agent_sys_path, load_agent_module
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.agent_test_utils import agent_dir_on_path, agent_sys_path, load_agent_module
+except ImportError:
+    from infrastructure.services.dev.agent_test_utils import agent_dir_on_path, agent_sys_path, load_agent_module
+
 
 
 def test_agent_dir_on_path_basic():

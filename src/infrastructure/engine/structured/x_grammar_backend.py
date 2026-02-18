@@ -47,7 +47,6 @@ from .tokenizer_info import TokenizerInfo
 
 
 
-
 class XGrammarBackend:
         XGrammar-based structured output backend.
 
@@ -159,7 +158,6 @@ class XGrammarBackend:
         """Clean up resources.        self.compiler.clear_cache()
         with self._pool_lock:
             self._bitmask_pool.clear()
-
 
 
 

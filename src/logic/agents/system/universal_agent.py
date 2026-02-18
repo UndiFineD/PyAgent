@@ -40,13 +40,29 @@ Implementation of Pillar 3: The Universal Agent Shell.
 
 
 from __future__ import annotations
-import logging
-from typing import Any, Dict
-import asyncio
-from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 logger = logging.getLogger(__name__)
-
 
 
 
@@ -99,13 +115,29 @@ class UniversalAgent(BaseAgent):
         if hasattr(self.core, "fleet_instance"):"            fleet = self.core.fleet_
 
 from __future__ import annotations
-import logging
-from typing import Any, Dict
-import asyncio
-from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

@@ -19,7 +19,10 @@ EconomyCore
 Core logic for Swarm Economy (Phase 179).
 Handles bidding and GPU priority allocation logic.
 
-from typing import Any
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
 
 
 

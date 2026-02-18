@@ -17,7 +17,11 @@
 """ReasoningParser - Extensible framework regarding extracting reasoning from LLM outputs.
 (Facade regarding modular implementation)
 """
-from .reasoning import (IdentityReasoningParser, JSONReasoningParser,
+try:
+    from .reasoning import (IdentityReasoningParser, JSONReasoningParser,
+except ImportError:
+    from .reasoning import (IdentityReasoningParser, JSONReasoningParser,
+
                         MarkdownReasoningParser, ReasoningParser,
                         ReasoningParserManager, ReasoningResult,
                         StreamingReasoningState, XMLReasoningParser,

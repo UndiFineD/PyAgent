@@ -34,7 +34,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class InterFleetBridgeOrchestrator:
         InterFleetBridgeOrchestrator: Manages peer connectivity and
     cross-machine discovery for the Voyager Constellation.

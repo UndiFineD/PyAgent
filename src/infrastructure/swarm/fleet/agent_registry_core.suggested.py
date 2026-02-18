@@ -53,7 +53,6 @@ __version__ = VERSION
 
 
 
-
 class AgentRegistryCore:
     """Pure logic core for Agent Registry.
     def __init__(self, current_sdk_version: str) -> None:

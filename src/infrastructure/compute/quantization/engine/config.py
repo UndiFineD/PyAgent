@@ -15,8 +15,15 @@
 
 Config.py module.
 
-from dataclasses import dataclass
-from enum import Enum
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
 
 
 
@@ -24,7 +31,6 @@ from enum import Enum
 class QuantScheme(Enum):
     """Quantization scheme types.
     INT4 = "int4""    INT8 = "int8""    FP8 = "fp8""    NF4 = "nf4"  # NormalFloat4 (QLoRA)"    AWQ = "awq"  # Activation-aware Weight Quantization"    GPTQ = "gptq"  # GPTQ quantization"
-
 
 
 class QuantStrategy(Enum):

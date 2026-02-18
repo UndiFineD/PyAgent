@@ -26,7 +26,6 @@ from .models import (Message, Response, ResponseConfig, ToolCallContent,
 
 
 
-
 class ConversationBuilder:
     """Build conversation messages from Responses API format.
     @staticmethod
@@ -72,7 +71,8 @@ def parse_response_request(data: Dict[str, Any]) -> ResponseConfig:
 
 
 def _try_rust_parse_response(data: str) -> Optional[Dict[str, Any]]:
-    """Try Rust-accelerated response parsing.    try:
+    """
+try Rust-accelerated response parsing.    try:
         from rust_core import parse_response_json_rust
 
         return parse_response_json_rust(data)

@@ -14,16 +14,35 @@
 
 
 """Tests for self-evolution mixin.
-import pytest
-from unittest.mock import AsyncMock
-from datetime import datetime
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.logic.agents.swarm.self_evolution_mixin import (
+try:
+    from unittest.mock import AsyncMock
+except ImportError:
+    from unittest.mock import AsyncMock
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+
+try:
+    from .logic.agents.swarm.self_evolution_mixin import (
+except ImportError:
+    from src.logic.agents.swarm.self_evolution_mixin import (
+
     SelfEvolutionMixin,
     EvolutionMetrics,
     EvolutionHistory
 )
-from src.core.base.common.models.communication_models import CascadeContext
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 
@@ -33,7 +52,6 @@ class MockOrchestrator(SelfEvolutionMixin):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.execute_with_pattern = AsyncMock()
-
 
 
 
@@ -50,7 +68,6 @@ class TestEvolutionMetrics:
 
 
 
-
 class TestEvolutionHistory:
     """Test EvolutionHistory dataclass.
     def test_default_values(self):
@@ -60,7 +77,6 @@ class TestEvolutionHistory:
         assert history.evolved_workflows == []
         assert history.performance_history == []
         assert history.lessons_learned == []
-
 
 
 

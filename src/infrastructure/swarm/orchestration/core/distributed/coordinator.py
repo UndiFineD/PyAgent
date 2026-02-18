@@ -21,18 +21,42 @@ Data-parallel coordination logic.
 
 from __future__ import annotations
 
-import logging
-import threading
-from typing import Dict, Optional
 
-import numpy as np
+try:
+    import logging
+except ImportError:
+    import logging
 
-from .config import (EngineIdentity, EngineState, LoadBalancingStrategy,
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    from typing import Dict, Optional
+except ImportError:
+    from typing import Dict, Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import (EngineIdentity, EngineState, LoadBalancingStrategy,
+except ImportError:
+    from .config import (EngineIdentity, EngineState, LoadBalancingStrategy,
+
                      ParallelConfig)
-from .messages import MetricsMessage
+try:
+    from .messages import MetricsMessage
+except ImportError:
+    from .messages import MetricsMessage
+
 
 logger = logging.getLogger(__name__)
-
 
 
 

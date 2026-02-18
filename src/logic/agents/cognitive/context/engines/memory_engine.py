@@ -33,7 +33,6 @@ except ImportError:
 __version__ = VERSION
 
 
-
 class
 class MemoryEngine(MemoryStorageMixin, MemoryEpisodeMixin, MemorySearchMixin):
     """Stores and retrieves historical agent contexts and lessons learned."""

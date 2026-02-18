@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.models.model_registry import register_model, get_model_info, detect_architecture, estimate_vram
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.models.model_registry import register_model, get_model_info, detect_architecture, estimate_vram
+except ImportError:
+    from infrastructure.engine.models.model_registry import register_model, get_model_info, detect_architecture, estimate_vram
+
 
 
 def test_register_model_basic():

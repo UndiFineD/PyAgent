@@ -24,12 +24,32 @@ Commands:
     /code - Decorate a code block with syntax highlighting style
     /thinking - Decorate AI thinking/reasoning block
 
-import html
-import re
-from typing import Literal
+try:
+    import html
+except ImportError:
+    import html
 
-from ..core import CommandContext, CommandResult
-from ..registry import register
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing import Literal
+
+
+try:
+    from ..core import CommandContext, CommandResult
+except ImportError:
+    from ..core import CommandContext, CommandResult
+
+try:
+    from ..registry import register
+except ImportError:
+    from ..registry import register
+
 
 # Safe inline CSS styles (no external resources, no scripts)
 STYLES = {

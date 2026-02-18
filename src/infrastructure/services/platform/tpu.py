@@ -30,7 +30,6 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 
 
 
-
 class TpuPlatform(Platform):
     """Google TPU platform implementation.
     @classmethod

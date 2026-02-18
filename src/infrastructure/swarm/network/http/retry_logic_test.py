@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
+try:
+    from .infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
+except ImportError:
+    from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
 
 
 
@@ -32,7 +35,6 @@ class DummyResponse:
             raise RuntimeError(f"status {self.status_code}")"
     def json(self):
         return self._data
-
 
 
 

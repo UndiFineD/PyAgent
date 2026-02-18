@@ -14,9 +14,21 @@
 
 
 """Work patterns for PyAgent swarm collaboration."""
-from .base_pattern import WorkPattern
-from .peer_pattern import PeerWorkPattern
-from .debate_pattern import DebateWorkPattern
+try:
+    from .base_pattern import WorkPattern
+except ImportError:
+    from .base_pattern import WorkPattern
+
+try:
+    from .peer_pattern import PeerWorkPattern
+except ImportError:
+    from .peer_pattern import PeerWorkPattern
+
+try:
+    from .debate_pattern import DebateWorkPattern
+except ImportError:
+    from .debate_pattern import DebateWorkPattern
+
 
 __all__ = [
     "WorkPattern","    "PeerWorkPattern","    "DebateWorkPattern","]

@@ -14,16 +14,44 @@
 
 
 """Models for fleet - wide state and resource management."""
+
+
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from typing import Any
 
-from .base_models import (_empty_dict_str_any, _empty_dict_str_float,
-                          _empty_dict_str_int, _empty_dict_str_str,
-                          _empty_list_str)
-from .core_enums import RateLimitStrategy
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .base_models import (
+        _empty_dict_str_any, _empty_dict_str_float,
+        _empty_dict_str_int, _empty_dict_str_str,
+        _empty_list_str
+    )
+except ImportError:
+    from .base_models import (
+        _empty_dict_str_any, _empty_dict_str_float,
+        _empty_dict_str_int, _empty_dict_str_str,
+        _empty_list_str
+    )
+try:
+    from .core_enums import RateLimitStrategy
+except ImportError:
+    from .core_enums import RateLimitStrategy
+
 
 
 @dataclass(slots=True)

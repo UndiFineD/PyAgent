@@ -40,6 +40,8 @@ WHAT IT SHOULD DO BETTER:
 - Improve error handling: return typed exceptions or result objects instead of None/empty values to aid upstream handling and testing.
 - Add extensive unit tests for fallbacks, and optimize fallback implementations (e.g., use thread-safe caches, deterministic hashing) and better typing for returned structures.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -58,7 +60,6 @@ logger = logging.getLogger(__name__)
 
 def get_bridge() -> RustBridge:
     """Singleton-like accessor for the Rust bridge."""return RustBridge()
-
 
 
 

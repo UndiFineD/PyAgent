@@ -30,7 +30,11 @@
 USAGE:
 Import the agent and run periodic profiles against known agent IDs to collect snapshots and analyze bottlenecks.
 Example:
-from src.tools.performance_profiling_agent import PerformanceProfilingAgent
+try:
+    from .tools.performance_profiling_agent import PerformanceProfilingAgent
+except ImportError:
+    from src.tools.performance_profiling_agent import PerformanceProfilingAgent
+
 p = PerformanceProfilingAgent(workspace_path=".")"snapshot = p.profile_fleet_usage(["agent-a","agent-b"])"bottlenecks = p.analyze_bottlenecks()
 
 WHAT IT DOES:
@@ -77,15 +81,35 @@ Enables performance diagnostics, benchmarking, and optimization recommendations"
 
 from __future__ import annotations
 
-import random
-import time
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 
@@ -129,15 +153,35 @@ class PerformanceProfilingAgent(BaseAgent):
 
 from __future__ import annotations
 
-import random
-import time
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

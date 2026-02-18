@@ -16,16 +16,36 @@
 """Header Panel component for the PyAgent GUI.
 from __future__ import annotations
 
-import tkinter as tk
-from tkinter import ttk
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import tkinter
+except ImportError:
+    import tkinter
+ as tk
+try:
+    from tkinter import ttk
+except ImportError:
+    from tkinter import ttk
 
-from .template_manager import TemplateManager
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .template_manager import TemplateManager
+except ImportError:
+    from .template_manager import TemplateManager
+
 
 __version__ = VERSION
-
 
 
 

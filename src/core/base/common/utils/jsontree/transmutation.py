@@ -15,12 +15,27 @@
 
 """Transmutation.py module.
 """
+
+
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.common.utils.jsontree.path import _parse_path
-from src.core.base.common.utils.jsontree.types import _T, JSONTree
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.utils.jsontree.path import _parse_path
+except ImportError:
+    from src.core.base.common.utils.jsontree.path import _parse_path
+
+try:
+    from .core.base.common.utils.jsontree.types import _T, JSONTree
+except ImportError:
+    from src.core.base.common.utils.jsontree.types import _T, JSONTree
+
 
 
 def json_flatten(

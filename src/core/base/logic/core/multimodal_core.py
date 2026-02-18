@@ -12,16 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Any, Optional, Union
-from dataclasses import dataclass, field
-import base64
+try:
+    from typing import List, Dict, Any, Optional, Union
+except ImportError:
+    from typing import List, Dict, Any, Optional, Union
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    import base64
+except ImportError:
+    import base64
+
 
 
 @dataclass
 class MultimodalChunk:
     """Represents a piece of interleaved data (text, audio, image)."""type: str  # "text", "audio_token", "image_patch""    content: Union[str, bytes]
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 
 
@@ -59,11 +70,13 @@ class MultimodalCore:
     async def sync_streams(self, audio_receiver: Any, video_receiver: Any):
         """Orchestrates real-time synchronization between incoming RTP audio and
         video fragments. (Skeleton for future implementation)
-        """# Logic to match timestamps between audio chunks and video frames
+        """
+# Logic to match timestamps between audio chunks and video frames
         pass
 
     def get_token_count(self) -> int:
-        """Estimates the total token count of the interleaved sequence."""# Simplified estimation
+        """Estimates the total token count of the interleaved sequence."""
+# Simplified estimation
         count = 0
         for chunk in self.context_sequence:
             if chunk.type == "text":"                count += len(str(chunk.content)) // 4

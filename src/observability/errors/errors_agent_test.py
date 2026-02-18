@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .errors_agent import ErrorsAgent
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .errors_agent import ErrorsAgent
+except ImportError:
+    from .errors_agent import ErrorsAgent
+
 
 
 def test_errorsagent_basic():

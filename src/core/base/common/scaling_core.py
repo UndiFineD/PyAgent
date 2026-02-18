@@ -32,7 +32,6 @@ except ImportError:
 
 
 
-
 class ScalingCore(BaseCore):
     """Core implementation for computing scaling decisions.
     Optimized for high-frequency resource monitoring.

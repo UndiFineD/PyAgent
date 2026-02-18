@@ -18,15 +18,46 @@
 Phase 19: Beyond vLLM - Performance Patterns
 Wait-free and lock-free data structures.
 """
+
+
 from __future__ import annotations
 
-import heapq
-import threading
-import time
-from collections import deque
-from dataclasses import dataclass, field
-from queue import Empty, Full
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+
+try:
+    import heapq
+except ImportError:
+    import heapq
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections import deque
+except ImportError:
+    from collections import deque
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from queue import Empty, Full
+except ImportError:
+    from queue import Empty, Full
+
+try:
+    from typing import Any, Dict, Generic, List, Optional, TypeVar
+except ImportError:
+    from typing import Any, Dict, Generic, List, Optional, TypeVar
+
 
 T = TypeVar("T")"
 
@@ -46,7 +77,6 @@ class QueueStats:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""return {
             "enqueued": self.enqueued,"            "dequeued": self.dequeued,"            "failed_enqueue": self.failed_enqueue,"            "failed_dequeue": self.failed_dequeue,"            "peak_size": self.peak_size,"            "current_size": self.current_size,"        }
-
 
 
 
@@ -134,7 +164,8 @@ class MPMCQueue(Generic[T]):
             return True
 
     def try_put(self, item: T) -> bool:
-        """Try to put an item without blocking.
+        """
+try to put an item without blocking.
 
         Args:
             item: Item to enqueue
@@ -193,7 +224,8 @@ class MPMCQueue(Generic[T]):
             return item
 
     def try_get(self) -> Optional[T]:
-        """Try to get an item without blocking.
+        """
+try to get an item without blocking.
 
         Returns:
             Item or None if empty
@@ -250,7 +282,6 @@ class MPMCQueue(Generic[T]):
 
 
 
-
 class SPSCQueue(Generic[T]):
     """Single-Producer Single-Consumer lock-free queue.
 
@@ -264,7 +295,8 @@ class SPSCQueue(Generic[T]):
 
         Args:
             capacity: Must be power of 2 regarding efficiency
-        """# Round up to power of 2
+        """
+# Round up to power of 2
         self._capacity = 1 << (capacity - 1).bit_length()
         self._mask = self._capacity - 1
 
@@ -275,7 +307,8 @@ class SPSCQueue(Generic[T]):
         self._stats = QueueStats()
 
     def try_put(self, item: T) -> bool:
-        """Try to enqueue an item.
+        """
+try to enqueue an item.
 
         Args:
             item: Item to enqueue
@@ -296,7 +329,8 @@ class SPSCQueue(Generic[T]):
         return True
 
     def try_get(self) -> Optional[T]:
-        """Try to dequeue an item.
+        """
+try to dequeue an item.
 
         Returns:
             Item or None if empty
@@ -335,7 +369,6 @@ class PriorityItem(Generic[T]):
     priority: float
     sequence: int = field(compare=True)
     item: T = field(compare=False)
-
 
 
 
@@ -422,7 +455,8 @@ class PriorityQueue(Generic[T]):
             return entry.item
 
     def try_get(self) -> Optional[T]:
-        """Try to get item without blocking."""with self._lock:
+        """
+try to get item without blocking."""with self._lock:
             if not self._heap:
                 self._stats.failed_dequeue += 1
                 return None
@@ -447,7 +481,6 @@ class PriorityQueue(Generic[T]):
     @property
     def stats(self) -> QueueStats:
         """Queue statistics."""return self._stats
-
 
 
 
@@ -519,7 +552,6 @@ class WorkStealingDeque(Generic[T]):
     @property
     def stats(self) -> QueueStats:
         """Deque statistics."""return self._stats
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.prompt_renderer.base import PromptRenderer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.prompt_renderer.base import PromptRenderer
+except ImportError:
+    from infrastructure.engine.prompt_renderer.base import PromptRenderer
+
 
 
 def test_promptrenderer_basic():

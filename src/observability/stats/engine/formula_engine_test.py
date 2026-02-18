@@ -13,11 +13,23 @@
 # limitations under the License.
 Test Formula Engine Core module.
 
-import math
-from hypothesis import given, strategies as st, settings
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    from hypothesis import given, strategies as st, settings
+except ImportError:
+    from hypothesis import given, strategies as st, settings
+
 
 # Try importing the official location
-from src.observability.stats.formula_engine import FormulaEngineCore
+try:
+    from .observability.stats.formula_engine import FormulaEngineCore
+except ImportError:
+    from src.observability.stats.formula_engine import FormulaEngineCore
+
 
 
 @given(

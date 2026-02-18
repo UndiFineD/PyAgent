@@ -30,7 +30,6 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 
 
 
-
 class CpuPlatform(Platform):
     """CPU-only platform implementation.
     @classmethod

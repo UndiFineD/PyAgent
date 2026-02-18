@@ -38,17 +38,41 @@ Auto-extracted class from agent_improvements.py
 
 from __future__ import annotations
 
-from datetime import datetime
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
 
-from .improvement import Improvement
-from .improvement_status import ImprovementStatus
-from .progress_report import ProgressReport
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .improvement_status import ImprovementStatus
+except ImportError:
+    from .improvement_status import ImprovementStatus
+
+try:
+    from .progress_report import ProgressReport
+except ImportError:
+    from .progress_report import ProgressReport
+
 
 __version__ = VERSION
-
 
 
 
@@ -132,17 +156,41 @@ class ProgressDashboard:
             "## 🗺️ Strategic """Development Grid (BMAD Pattern)","
 from __future__ import annotations
 
-from datetime import datetime
-from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
 
-from .improvement import Improvement
-from .improvement_status import ImprovementStatus
-from .progress_report import ProgressReport
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .improvement import Improvement
+except ImportError:
+    from .improvement import Improvement
+
+try:
+    from .improvement_status import ImprovementStatus
+except ImportError:
+    from .improvement_status import ImprovementStatus
+
+try:
+    from .progress_report import ProgressReport
+except ImportError:
+    from .progress_report import ProgressReport
+
 
 __version__ = VERSION
-
 
 
 

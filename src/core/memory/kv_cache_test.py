@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.memory.kv_cache import NeuralContextPruner, KVCacheManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.memory.kv_cache import NeuralContextPruner, KVCacheManager
+except ImportError:
+    from core.memory.kv_cache import NeuralContextPruner, KVCacheManager
+
 
 
 def test_neuralcontextpruner_basic():

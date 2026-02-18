@@ -16,10 +16,26 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 LM Studio backend for LLM inference.
 
-from .backend import LMStudioBackend  # noqa: F401
-from .cache import ModelCache  # noqa: F401
-from .models import CachedModel, LMStudioConfig  # noqa: F401
-from .utils import lmstudio_chat, lmstudio_chat_async, lmstudio_stream  # noqa: F401
+try:
+    from .backend import LMStudioBackend  # noqa: F401
+except ImportError:
+    from .backend import LMStudioBackend # noqa: F401
+
+try:
+    from .cache import ModelCache  # noqa: F401
+except ImportError:
+    from .cache import ModelCache # noqa: F401
+
+try:
+    from .models import CachedModel, LMStudioConfig  # noqa: F401
+except ImportError:
+    from .models import CachedModel, LMStudioConfig # noqa: F401
+
+try:
+    from .utils import lmstudio_chat, lmstudio_chat_async, lmstudio_stream  # noqa: F401
+except ImportError:
+    from .utils import lmstudio_chat, lmstudio_chat_async, lmstudio_stream # noqa: F401
+
 
 __all__ = [
     "LMStudioConfig","    "CachedModel","    "ModelCache","    "LMStudioBackend","    "lmstudio_chat","    "lmstudio_stream","    "lmstudio_chat_async","]

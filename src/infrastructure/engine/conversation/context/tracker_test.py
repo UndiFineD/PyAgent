@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.conversation.context.tracker import TurnTracker
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.conversation.context.tracker import TurnTracker
+except ImportError:
+    from infrastructure.engine.conversation.context.tracker import TurnTracker
+
 
 
 def test_turntracker_basic():

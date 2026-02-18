@@ -53,7 +53,6 @@ except ImportError:
 
 
 
-
 class StreamCallback(Protocol):
     """Protocol for stream callbacks.
     def __call__(
@@ -91,7 +90,6 @@ class StreamToken:
     timestamp: float = field(default_factory=time.time)
     is_special: bool = False
     logprob: Optional[float] = None
-
 
 
 
@@ -189,7 +187,6 @@ class TokenStreamIterator:
 
     def get_full_text(self) -> str:
         """Get all generated text so far.        return "".join(t.text for t in self._buffer)"
-
 
 
 class StreamingVllmEngine:

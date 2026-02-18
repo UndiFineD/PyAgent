@@ -34,7 +34,6 @@ if TYPE_CHECKING:
 
 
 
-
 class ToolRegistry:
     """Central registry for managing and invoking PyAgent tools across all specialists.
     def __init__(self, fleet: FleetManager | None = None) -> None:

@@ -15,12 +15,32 @@
 
 """Tests for the Reflection Loop System.
 """
-import asyncio
-import pytest
-from datetime import datetime
-from unittest.mock import Mock, AsyncMock
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.logic.reflection_loop import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from unittest.mock import Mock, AsyncMock
+except ImportError:
+    from unittest.mock import Mock, AsyncMock
+
+
+try:
+    from .core.base.logic.reflection_loop import (
+except ImportError:
+    from src.core.base.logic.reflection_loop import (
+
     ReflectionLoopOrchestrator,
     ReflectionContext,
     ReflectionResult,
@@ -30,7 +50,6 @@ from src.core.base.logic.reflection_loop import (
     reflect_on_code,
     reflect_on_content
 )
-
 
 
 
@@ -50,7 +69,6 @@ class TestReflectionLoopConfig:
         assert config.max_iterations == 5
         assert config.early_stopping is False
         assert config.timeout_seconds == 10.0
-
 
 
 
@@ -81,7 +99,6 @@ class TestLLMReflectionAgent:
 
 
 
-
 class TestCodeReflectionAgent:
     """Test CodeReflectionAgent functionality."""
     def test_code_generation(self):
@@ -96,7 +113,6 @@ class TestCodeReflectionAgent:
 
         context = ReflectionContext(task_description="Write factorial function")"
         result = asyncio.run(agent.critique(context, "def factorial(n): return n * factorial(n-1) if n > 0 else 1"))"        assert result == "CODE_IS_PERFECT""
-
 
 
 class TestReflectionLoopOrchestrator:
@@ -155,7 +171,6 @@ class TestReflectionLoopOrchestrator:
         assert summary["task_description"] == "Test task""        assert summary["total_iterations"] == 1"        assert summary["final_content"] == "Content 1""        assert summary["is_satisfactory"] is True"
 
 
-
 class TestConvenienceFunctions:
     """Test convenience functions."""
     def test_reflect_on_code(self):
@@ -187,7 +202,6 @@ class TestConvenienceFunctions:
         assert result["total_iterations"] == 1"        assert "summary" in result["final_content"]"
 
 
-
 class TestReflectionResult:
     """Test ReflectionResult model."""
     def test_result_creation(self):
@@ -199,7 +213,6 @@ class TestReflectionResult:
         assert result.iteration == 1
         assert result.content == "Test content""        assert result.critique == "Good work""        assert result.is_satisfactory is True
         assert isinstance(result.timestamp, datetime)
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.platform.cuda import CudaPlatform
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.platform.cuda import CudaPlatform
+except ImportError:
+    from infrastructure.services.platform.cuda import CudaPlatform
+
 
 
 def test_cudaplatform_basic():

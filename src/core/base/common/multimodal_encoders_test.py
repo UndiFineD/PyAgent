@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.multimodal_encoders import StreamingVisionEncoder, StreamingAudioProcessor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.multimodal_encoders import StreamingVisionEncoder, StreamingAudioProcessor
+except ImportError:
+    from core.base.common.multimodal_encoders import StreamingVisionEncoder, StreamingAudioProcessor
+
 
 
 def test_streamingvisionencoder_basic():

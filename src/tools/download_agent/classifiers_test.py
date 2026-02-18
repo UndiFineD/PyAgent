@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .classifiers import URLClassifier
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .classifiers import URLClassifier
+except ImportError:
+    from .classifiers import URLClassifier
+
 
 
 def test_urlclassifier_basic():

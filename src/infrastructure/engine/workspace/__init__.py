@@ -15,10 +15,26 @@
 
 Workspace package.
 
-from .buffer_recycler import BufferRecycler  # noqa: F401
-from .memory_profiler import MemoryProfiler  # noqa: F401
-from .ubatching_utils import UBatchingUtils  # noqa: F401
-from .workspace_manager import WorkspaceManager  # noqa: F401
+try:
+    from .buffer_recycler import BufferRecycler  # noqa: F401
+except ImportError:
+    from .buffer_recycler import BufferRecycler # noqa: F401
+
+try:
+    from .memory_profiler import MemoryProfiler  # noqa: F401
+except ImportError:
+    from .memory_profiler import MemoryProfiler # noqa: F401
+
+try:
+    from .ubatching_utils import UBatchingUtils  # noqa: F401
+except ImportError:
+    from .ubatching_utils import UBatchingUtils # noqa: F401
+
+try:
+    from .workspace_manager import WorkspaceManager  # noqa: F401
+except ImportError:
+    from .workspace_manager import WorkspaceManager # noqa: F401
+
 
 __all__ = [
     "WorkspaceManager","    "UBatchingUtils","    "MemoryProfiler","    "BufferRecycler","]

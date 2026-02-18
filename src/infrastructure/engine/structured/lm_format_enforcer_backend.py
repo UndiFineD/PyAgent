@@ -50,7 +50,6 @@ HAS_RUST = False
 
 
 
-
 class DFAStateType(Enum):
     """Types of DFA states.
     INITIAL = auto()
@@ -90,7 +89,6 @@ class DFATransition:
             return bool(re.match(f"^{pattern}$", char))"
         # Literal match
         return char == self.char_class
-
 
 
 
@@ -148,7 +146,6 @@ class CompiledDFA:
 
     def partial_match(self, text: str) -> bool:
         """Check if text could be prefix of valid match.        return bool(self._compiled_regex.match(text))
-
 
 
 
@@ -230,7 +227,6 @@ class RegexMatchState:
 
 
 
-
 class CompiledEnforcer:
         Compiled format enforcer.
 
@@ -289,7 +285,6 @@ class CompiledEnforcer:
         bitmask.fill(0)
         # Phase 401: Functional bitmask update
         list(map(lambda tid: bitmask.__setitem__(tid, 1), filter(lambda tid: tid < len(bitmask), allowed)))
-
 
 
 
@@ -384,7 +379,6 @@ class LMFormatEnforcerBackend:
             self._stats["cache_hits"] = 0"            self._stats["cache_misses"] = 0"
 
 
-
 class AsyncLMFormatEnforcerBackend(LMFormatEnforcerBackend):
         Async-enabled LM Format Enforcer backend.
 
@@ -405,7 +399,6 @@ class AsyncLMFormatEnforcerBackend(LMFormatEnforcerBackend):
             self.compile_json_schema,
             schema,
         )
-
 
 
 
@@ -438,7 +431,6 @@ class FormatEnforcerGrammar:
 
     def reset(self) -> None:
         """Reset grammar state.        self.state.reset()
-
 
 
 

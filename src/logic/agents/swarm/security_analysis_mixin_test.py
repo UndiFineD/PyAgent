@@ -14,13 +14,16 @@
 
 
 """Tests for security analysis mixin.
-from src.logic.agents.swarm.security_analysis_mixin import (
+try:
+    from .logic.agents.swarm.security_analysis_mixin import (
+except ImportError:
+    from src.logic.agents.swarm.security_analysis_mixin import (
+
     WorkflowSecurityAnalyzer,
     SecurityAnalysisMixin,
     SecurityVulnerability,
     WorkflowAnalysis
 )
-
 
 
 
@@ -91,12 +94,10 @@ class TestWorkflowSecurityAnalyzer:
 
 
 
-
 class MockOrchestrator(SecurityAnalysisMixin):
     """Mock orchestrator for testing the mixin.
     def __init__(self):
         super().__init__()
-
 
 
 

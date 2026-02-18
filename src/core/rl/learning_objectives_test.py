@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.rl.learning_objectives import ObjectiveStatus, ObjectiveType, LearningObjective, ObjectiveConstraint, ObjectiveTracker
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.rl.learning_objectives import ObjectiveStatus, ObjectiveType, LearningObjective, ObjectiveConstraint, ObjectiveTracker
+except ImportError:
+    from core.rl.learning_objectives import ObjectiveStatus, ObjectiveType, LearningObjective, ObjectiveConstraint, ObjectiveTracker
+
 
 
 def test_objectivestatus_basic():

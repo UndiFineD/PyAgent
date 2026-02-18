@@ -20,7 +20,11 @@ AsyncioThreadingCoderAgent - High-concurrency orchestration for coding tasks
 # AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate within a PyAgent workspace and call async methods from an asyncio event loop; intended to run alongside other agents in a fleet. Example usage:
-from src.agents.asyncio_threading_coder_agent import AsyncioThreadingCoderAgent
+try:
+    from .agents.asyncio_threading_coder_agent import AsyncioThreadingCoderAgent
+except ImportError:
+    from src.agents.asyncio_threading_coder_agent import AsyncioThreadingCoderAgent
+
 agent = AsyncioThreadingCoderAgent(rC:\\\\path\\to\\workspace")"result = await agent.think("refactor module X", fleet_state=some_state)"new_defs = await agent.run_speciation(fleet_state)
 improved = await agent.improve_content("optimize I/O-heavy routine", "module.py")"
 WHAT IT DOES:
@@ -45,10 +49,22 @@ Asyncio threading coder agent.py module.
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
 
 
 
@@ -75,10 +91,22 @@ class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancesto
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
 
 
 

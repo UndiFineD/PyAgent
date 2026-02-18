@@ -18,7 +18,6 @@ from typing import Dict, List, Set, Any
 
 
 
-
 class AnalystCore:
     """Core logic for logs, performance profiling, and dependency graphing.
     Separated from the Agent class to allow for future Rust-based optimizations.
@@ -41,7 +40,8 @@ class AnalystCore:
         analysis_report["external_dependencies"] = list(analysis_report["external_dependencies"])"        return analysis_report
 
     def _extract_dependencies(self, file_path: Path, report: Dict[str, Any]):
-        """Helper to parse AST and find external vs internal imports."""try:
+        """Helper to parse AST and find external vs internal imports."""
+try:
             with open(file_path, "r", encoding="utf-8") as f:"                tree = ast.parse(f.read())
 
             for node in ast.walk(tree):

@@ -14,11 +14,18 @@
 
 
 # "Auto-extracted class from agent_context.py"from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.generated_code import GeneratedCode
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.cognitive.context.models.generated_code import GeneratedCode
+except ImportError:
+    from src.logic.agents.cognitive.context.models.generated_code import GeneratedCode
+
 
 __version__ = VERSION
-
 
 
 

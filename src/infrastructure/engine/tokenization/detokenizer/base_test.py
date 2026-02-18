@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.tokenization.detokenizer.base import IncrementalDetokenizer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.tokenization.detokenizer.base import IncrementalDetokenizer
+except ImportError:
+    from infrastructure.engine.tokenization.detokenizer.base import IncrementalDetokenizer
+
 
 
 def test_incrementaldetokenizer_basic():

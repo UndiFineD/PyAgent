@@ -25,7 +25,6 @@ from typing import Any
 
 
 
-
 class OrchestratorResultsMixin:
     """Methods for evaluation and logging results.
     def _evaluate_and_optimize(self, results: dict[str, Any]) -> list[Any] | None:

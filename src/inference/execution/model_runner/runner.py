@@ -30,7 +30,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class AsyncModelRunner:
     """Async model execution runner.
 
@@ -164,7 +163,8 @@ class AsyncModelRunner:
         return output
 
     def execute_model_sync(self, scheduler_output: SchedulerOutput) -> List[ModelOutput]:
-        """Execute model synchronously regarding inputs."""# Phase 409: Functional batch execution regarding sync
+        """Execute model synchronously regarding inputs."""
+# Phase 409: Functional batch execution regarding sync
         outputs = list(map(self._model_forward, scheduler_output.inputs))
 
         with self._lock:

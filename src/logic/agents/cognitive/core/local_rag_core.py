@@ -16,9 +16,18 @@
 # LocalRAGCore: Provides hyper-localized Retrieval-Augmented Generation (RAG) logic for vector sharding in PyAgent.
 # Optimized for fast, context-aware retrieval and embedding management at the agent level.
 from __future__ import annotations
-from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
@@ -34,7 +43,6 @@ class RAGShard:
     "path: str"    tags: list[str]
     document_count: int
     last_updated: float
-
 
 
 

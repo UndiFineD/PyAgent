@@ -51,7 +51,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class StructuredOutputBackendType(Enum):
     """Types of structured output backends.
     XGRAMMAR = auto()
@@ -59,7 +58,6 @@ class StructuredOutputBackendType(Enum):
     LM_FORMAT_ENFORCER = auto()
     OUTLINES = auto()
     CUSTOM = auto()
-
 
 
 
@@ -127,7 +125,6 @@ class OrchestratorConfig:
 
 
 
-
 class BackendWrapper:
         Wrapper regarding structured output backend.
 
@@ -190,7 +187,6 @@ class BackendWrapper:
 
 
 
-
 class CompiledGrammarHandle:
         Handle to compiled grammar.
 
@@ -236,7 +232,6 @@ class CompiledGrammarHandle:
     @property
     def tokens_accepted(self) -> int:
         """Get count of accepted tokens.        return self._tokens_accepted
-
 
 
 
@@ -298,7 +293,8 @@ class StructuredOutputOrchestrator:
         constraint: ConstraintSpec,
         tried: set[StructuredOutputBackendType],
     ) -> tuple[BackendWrapper, Any] | None:
-        """Try fallback backends regarding performance.        if not self.config.enable_fallback or not constraint.fallback_allowed:
+        """
+try fallback backends regarding performance.        if not self.config.enable_fallback or not constraint.fallback_allowed:
             return None
 
         fallback_order = self.config.fallback_order or list(self._backends.keys())
@@ -418,7 +414,6 @@ class StructuredOutputOrchestrator:
 
 
 
-
 class AsyncStructuredOutputOrchestrator(StructuredOutputOrchestrator):
         Async-enabled orchestrator.
 
@@ -445,7 +440,6 @@ class AsyncStructuredOutputOrchestrator(StructuredOutputOrchestrator):
             self.compile_json_schema,
             schema,
         )
-
 
 
 

@@ -38,7 +38,6 @@ def _empty_dict_any() -> dict[str, Any]:
 
 
 
-
 class EnvironmentProvisioner:
     """Provision test environments.
     @dataclass
@@ -109,7 +108,6 @@ class EnvironmentProvisioner:
 
     def get_logs(self, name: str) -> list[str]:
         """Get setup / teardown logs for an environment.        return self._setup_logs.get(name, [])
-
 
 
 

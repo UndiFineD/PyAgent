@@ -26,18 +26,42 @@ Provides:
 
 from __future__ import annotations
 
-import re
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple, Union
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple, Union
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 # =============================================================================
 # Enums
 # =============================================================================
-
 
 
 
@@ -49,7 +73,6 @@ class PromptType(Enum):
     ENCODER_DECODER = auto()  # Separate encoder/decoder prompts
     CHAT = auto()  # Multi-turn conversation
     HYBRID = auto()  # Mixed text and tokens
-
 
 
 
@@ -201,7 +224,6 @@ class ProcessedInput:
 
 
 
-
 class PromptTemplate:
     """Template for formatting prompts.
     # Common templates
@@ -230,7 +252,6 @@ class PromptTemplate:
 # =============================================================================
 # Prompt Validator
 # =============================================================================
-
 
 
 
@@ -302,7 +323,6 @@ class PromptValidator:
 
 
 
-
 class ConversationLinearizer:
         Linearizes multi-turn conversations to single prompt.
 
@@ -348,7 +368,6 @@ class ConversationLinearizer:
 # =============================================================================
 # Main Input Preprocessor
 # =============================================================================
-
 
 
 

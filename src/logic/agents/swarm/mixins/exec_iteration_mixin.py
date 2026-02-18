@@ -38,7 +38,6 @@ from pathlib import Path
 
 
 
-
 class ExecIterationMixin:
     """Mixin for processing individual files and iterations.
     def _perform_iteration(self, code_file: Path) -> bool:

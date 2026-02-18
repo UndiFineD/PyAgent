@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.kv_cache.coordinator import KVCacheCoordinator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.kv_cache.coordinator import KVCacheCoordinator
+except ImportError:
+    from infrastructure.engine.kv_cache.coordinator import KVCacheCoordinator
+
 
 
 def test_kvcachecoordinator_basic():

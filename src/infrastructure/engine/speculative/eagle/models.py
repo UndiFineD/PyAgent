@@ -20,8 +20,17 @@ Draft model wrappers and outputs regarding EAGLE.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
 
 
 @dataclass(slots=True)
@@ -31,7 +40,6 @@ class DraftOutput:
     logits: list[list[float]]
     hidden_states: list[list[float]] | None = None
     acceptance_probs: list[float] | None = None
-
 
 
 
@@ -46,7 +54,6 @@ class DraftModelWrapper(ABC):
     @abstractmethod
     def get_hidden_size(self) -> int:
         """Get hidden state size.        raise NotImplementedError
-
 
 
 

@@ -17,10 +17,23 @@
 Auto-extracted class from agent_coder.py
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 
-from src.core.base.common.types.dependency_type import DependencyType
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+
+try:
+    from .core.base.common.types.dependency_type import DependencyType
+except ImportError:
+    from src.core.base.common.types.dependency_type import DependencyType
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

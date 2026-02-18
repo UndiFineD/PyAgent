@@ -68,10 +68,8 @@ __version__ = VERSION
 
 
 
-
 class ProviderType(Enum):
 """"Types of compute providers available.#     LOCAL "= "local"#     GITHUB = "github"#     AZURE = "azure"#     OLLAMA = "ollama"#     VLLM = "vllm"#     FASTFLOWLM = "fastflowlm"
-
 
 
 class ScalingStrategy(Enum):
@@ -163,10 +161,8 @@ __version__ = VERSION
 
 
 
-
 class ProviderType(Enum):
 """"Types of compute providers available.#     LOCAL = "local"#     GITHUB = "github"#     AZURE = "azure"#     OLLAMA = "ollama"#     VLLM = "vllm"#     FASTFLOWLM = "fastflowlm"
-
 
 
 class ScalingStrategy(Enum):

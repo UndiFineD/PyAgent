@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.kv_transfer.mooncake_connector import MooncakeTransferStatus, MooncakeRemoteTarget, MooncakeConnector
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.kv_transfer.mooncake_connector import MooncakeTransferStatus, MooncakeRemoteTarget, MooncakeConnector
+except ImportError:
+    from infrastructure.storage.kv_transfer.mooncake_connector import MooncakeTransferStatus, MooncakeRemoteTarget, MooncakeConnector
+
 
 
 def test_mooncaketransferstatus_basic():

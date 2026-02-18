@@ -16,13 +16,31 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 """Base reasoning parser interface."""
+
+
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from functools import cached_property
-from typing import Any, ClassVar, Sequence
 
-from .models import ReasoningResult, StreamingReasoningState
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from functools import cached_property
+except ImportError:
+    from functools import cached_property
+
+try:
+    from typing import Any, ClassVar, Sequence
+except ImportError:
+    from typing import Any, ClassVar, Sequence
+
+
+try:
+    from .models import ReasoningResult, StreamingReasoningState
+except ImportError:
+    from .models import ReasoningResult, StreamingReasoningState
 
 
 

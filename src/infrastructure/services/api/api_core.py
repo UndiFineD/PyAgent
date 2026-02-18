@@ -36,7 +36,6 @@ except ImportError:
 
 
 
-
 class APICore:
     """Logic for API-related operations, including OpenAPI schema generation.
     def __init__(self, version: str = SDK_VERSION) -> None:

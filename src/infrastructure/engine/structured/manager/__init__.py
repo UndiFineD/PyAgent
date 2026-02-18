@@ -15,11 +15,27 @@
 
 Manager package.
 
-from .base import StructuredOutputBackend, StructuredOutputGrammar  # noqa: F401
-from .config import (BackendStats, CompilationResult, CompilationStatus,  # noqa: F401
+try:
+    from .base import StructuredOutputBackend, StructuredOutputGrammar  # noqa: F401
+except ImportError:
+    from .base import StructuredOutputBackend, StructuredOutputGrammar # noqa: F401
+
+try:
+    from .config import (BackendStats, CompilationResult, CompilationStatus,  # noqa: F401
+except ImportError:
+    from .config import (BackendStats, CompilationResult, CompilationStatus, # noqa: F401
+
                      GrammarSpec, GrammarType, ValidationResult)
-from .engine import SimpleBackend, StructuredOutputManager  # noqa: F401
-from .impl import ChoiceGrammar, SimpleRegexGrammar  # noqa: F401
+try:
+    from .engine import SimpleBackend, StructuredOutputManager  # noqa: F401
+except ImportError:
+    from .engine import SimpleBackend, StructuredOutputManager # noqa: F401
+
+try:
+    from .impl import ChoiceGrammar, SimpleRegexGrammar  # noqa: F401
+except ImportError:
+    from .impl import ChoiceGrammar, SimpleRegexGrammar # noqa: F401
+
 
 __all__ = [
     "GrammarType","    "CompilationStatus","    "GrammarSpec","    "CompilationResult","    "ValidationResult","    "BackendStats","    "StructuredOutputGrammar","    "StructuredOutputBackend","    "SimpleRegexGrammar","    "ChoiceGrammar","    "StructuredOutputManager","    "SimpleBackend","]

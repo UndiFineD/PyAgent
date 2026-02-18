@@ -62,7 +62,6 @@ CUSTOM_TYPE_RAW_VIEW = 3
 T = TypeVar("T")"
 
 
-
 class ZeroCopyEncoder:
         Encoder with zero-copy tensor and numpy array serialization.
 
@@ -180,7 +179,6 @@ class ZeroCopyEncoder:
             self._aux_buffers.append(arr_data)
 
         return arr.dtype.str, arr.shape, data
-
 
 
 

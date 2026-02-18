@@ -15,15 +15,30 @@
 
 """Tests for Tool Framework Mixin.
 Tests schema-based tool creation and management inspired by Adorable's tool system.'"""
-import pytest
-import asyncio
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.mixins.tool_framework_mixin import (
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+
+try:
+    from .core.base.mixins.tool_framework_mixin import (
+except ImportError:
+    from src.core.base.mixins.tool_framework_mixin import (
+
     ToolFrameworkMixin,
     ToolExecutionError,
     ToolValidationError
 )
-from src.core.base.common.models.communication_models import CascadeContext
+try:
+    from .core.base.common.models.communication_models import CascadeContext
+except ImportError:
+    from src.core.base.common.models.communication_models import CascadeContext
 
 
 
@@ -31,7 +46,6 @@ from src.core.base.common.models.communication_models import CascadeContext
 class MockToolFrameworkMixin(ToolFrameworkMixin):
     """Test implementation of ToolFrameworkMixin."""def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
 
 
 
@@ -146,7 +160,8 @@ class TestToolFramework:
         result = tool_framework.unregister_tool("nonexistent")"        assert not result
 
     def test_get_tool_stats(self, tool_framework):
-        """Test getting tool usage statistics."""# Manually add some stats
+        """Test getting tool usage statistics."""
+# Manually add some stats
         tool_framework.tool_usage_stats = {
             "tool1": {"calls": 5, "successes": 4, "failures": 1},"            "tool2": {"calls": 2, "successes": 2, "failures": 0}"        }
 

@@ -26,7 +26,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class PyAgentServiceListener(ServiceListener):
     """Listener to handle PyAgent node discovery events.
     def __init__(self, discovery_callback):
@@ -49,7 +48,6 @@ class PyAgentServiceListener(ServiceListener):
             logger.info(f"Discovered PyAgent node: {node_data}")"
             if self.discovery_callback:
                 self.discovery_callback(node_data)
-
 
 
 

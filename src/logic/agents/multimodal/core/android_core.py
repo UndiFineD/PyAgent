@@ -30,14 +30,12 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 
-
 class ADBResult(TypedDict):
 """"Result of an ADB command execution.
     success: bool
     output: str
     error: Optional[str]
     command: str
-
 
 
 

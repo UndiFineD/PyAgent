@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.parsers.reasoning.base import ReasoningParser
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.parsers.reasoning.base import ReasoningParser
+except ImportError:
+    from core.base.logic.parsers.reasoning.base import ReasoningParser
+
 
 
 def test_reasoningparser_basic():

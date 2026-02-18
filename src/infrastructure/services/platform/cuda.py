@@ -32,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class CudaPlatform(Platform):
     """NVIDIA CUDA platform implementation.
     _torch = None

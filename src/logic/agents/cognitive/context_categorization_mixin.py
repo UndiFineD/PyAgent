@@ -46,11 +46,31 @@ FILE CONTENT SUMMARY:
 
 # "Mixin for context categorization capabilities."
 from __future__ import annotations
-import re
-import json
-from typing import Any
-from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
-from src.logic.agents.cognitive.context.models.file_category import FileCategory
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .logic.agents.cognitive.context.models.context_priority import ContextPriority
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
+
+try:
+    from .logic.agents.cognitive.context.models.file_category import FileCategory
+except ImportError:
+    from src.logic.agents.cognitive.context.models.file_category import FileCategory
 
 
 
@@ -122,11 +142,31 @@ class ContextCategorizationMixin:
     def export_metadata(self) -> str:
 """"Export metadata as JSON.        priority = getattr(self, "_priority", ContextPriority.MEDIUM)"        category = getattr(self, "_category", FileCategory.OTHER)"        tags = getattr(self, "_tags", {})"        versions = getattr(self, "_versions", [])"        annotations" =" getattr(self, "_annotations", [])"
 from __future__ import annotations
-import re
-import json
-from typing import Any
-from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
-from src.logic.agents.cognitive.context.models.file_category import FileCategory
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .logic.agents.cognitive.context.models.context_priority import ContextPriority
+except ImportError:
+    from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
+
+try:
+    from .logic.agents.cognitive.context.models.file_category import FileCategory
+except ImportError:
+    from src.logic.agents.cognitive.context.models.file_category import FileCategory
 
 
 

@@ -13,20 +13,18 @@
 # limitations under the License.
 
 
-Video.py module.
 
 from typing import Any, Dict, Optional, Tuple
-
 import numpy as np
-
 from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
-from .image import ImageProcessor
-
-
+from .image import ImageProcessor  # Replace with concrete implementation if abstract
 
 
 class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]]):
-    """Processor for video inputs.
+    """Processor for video inputs.  
+    Processes a video as a sequence of frames, applies image processing to each frame, 
+    and returns a tensor of shape (num_frames, channels, height, width) 
+    along with metadata."""  
     modality = ModalityType.VIDEO
 
     def __init__(
@@ -40,19 +38,23 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
         self.num_frames = num_frames
         self.target_size = target_size
         self.patch_size = patch_size
-        self.image_processor = ImageProcessor(
-            config=config,
-            target_size=target_size,
-            patch_size=patch_size,
-        )
+        # TODO: Replace ImageProcessor with concrete implementation
+        # self.image_processor = ImageProcessor(
+        #     config=config,
+        #     target_size=target_size,
+        #     patch_size=patch_size,
+        # )
 
     def process(
         self,
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
+        """Process raw video data into a tensor of frame features. 
+        Expects a tuple of (frames, metadata), where frames is a numpy array of shape 
+        (total_frames, height, width, channels) and metadata is a dict containing video info like fps."""
         frames, meta = data
-        num_frames = kwargs.get("num_frames", self.num_frames)"
+        num_frames = kwargs.get("num_frames", self.num_frames)
         total_frames = len(frames)
         if total_frames > num_frames:
             indices = np.linspace(0, total_frames - 1, num_frames, dtype=int)
@@ -74,15 +76,25 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
         tokens_per_frame = num_patches_h * num_patches_w
 
         metadata = {
-            "original_frames": total_frames,"            "sampled_frames": num_frames,"            "frame_size": (h, w),"            "grid_thw": (num_frames, num_patches_h, num_patches_w),"            "tokens_per_frame": tokens_per_frame,"            "total_tokens": num_frames * tokens_per_frame,"            "fps": meta.get("fps", 30),"        }
+            "original_frames": total_frames,
+            "sampled_frames": num_frames,
+            "frame_size": (h, w),
+            "grid_thw": (num_frames, num_patches_h, num_patches_w),
+            "tokens_per_frame": tokens_per_frame,
+            "total_tokens": num_frames * tokens_per_frame,
+            "fps": meta.get("fps", 30),
+        }
 
         return processed_array, metadata
 
-    def get_TODO Placeholder_count(
+
+    def get_frames_count(
         self,
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,
     ) -> int:
-        num_frames = kwargs.get("num_frames", self.num_frames)"        h, w = self.target_size
+        """Calculate the number of placeholder tokens needed for a video input based on the number of frames and patching."""
+        num_frames = kwargs.get("num_frames", self.num_frames)
+        h, w = self.target_size
         tokens_per_frame = (h // self.patch_size) * (w // self.patch_size)
         return num_frames * tokens_per_frame

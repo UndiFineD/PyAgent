@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .dialog_manager.suggested import DialogManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .dialog_manager.suggested import DialogManager
+except ImportError:
+    from .dialog_manager.suggested import DialogManager
+
 
 
 def test_dialogmanager_basic():

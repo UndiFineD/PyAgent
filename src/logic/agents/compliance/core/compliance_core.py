@@ -31,7 +31,6 @@ class ComplianceIssue:
 
 
 
-
 class ComplianceCore:
     "Pure logic for continuous compliance auditing and regulatory "scanning."    Identifies licensing conflicts, PII leaks, and dependency "risks."
     FORBIDDEN_KEYWORDS = [

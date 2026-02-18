@@ -26,22 +26,38 @@ Beyond vLLM:
 - Predictive pre-warming
 - Multi-stream dispatch
 
-from .cuda_graph_manager import (AdaptiveCUDAGraphWrapper, BatchDescriptor,  # noqa: F401
+try:
+    from .cuda_graph_manager import (AdaptiveCUDAGraphWrapper, BatchDescriptor,  # noqa: F401
+except ImportError:
+    from .cuda_graph_manager import (AdaptiveCUDAGraphWrapper, BatchDescriptor, # noqa: F401
+
                                  CUDAGraphEntry, CUDAGraphMode,
                                  CUDAGraphOptions, CUDAGraphStats,
                                  CUDAGraphWrapper, MockCUDAGraph,
                                  cudagraph_context, get_cudagraph_sizes)
-from .cudagraph_dispatcher import (AdaptiveDispatchPolicy, CompositeDispatcher,  # noqa: F401
+try:
+    from .cudagraph_dispatcher import (AdaptiveDispatchPolicy, CompositeDispatcher,  # noqa: F401
+except ImportError:
+    from .cudagraph_dispatcher import (AdaptiveDispatchPolicy, CompositeDispatcher, # noqa: F401
+
                                    CudagraphDispatcher, DefaultDispatchPolicy,
                                    DispatchKey, DispatchMode, DispatchPolicy,
                                    DispatchStats, GraphEntry, StreamDispatcher,
                                    create_dispatch_key, get_padded_key)
-from .input_buffer_manager import (BufferEntry, BufferPool, BufferSpec,  # noqa: F401
+try:
+    from .input_buffer_manager import (BufferEntry, BufferPool, BufferSpec,  # noqa: F401
+except ImportError:
+    from .input_buffer_manager import (BufferEntry, BufferPool, BufferSpec, # noqa: F401
+
                                    BufferState, HierarchicalBufferPool,
                                    InputBufferManager, InputSlot,
                                    PredictiveBufferManager, SimpleBufferPool,
                                    create_input_buffer_manager)
-from .u_batch_processor import (DynamicUBatchWrapper, UBatchBarrier,  # noqa: F401
+try:
+    from .u_batch_processor import (DynamicUBatchWrapper, UBatchBarrier,  # noqa: F401
+except ImportError:
+    from .u_batch_processor import (DynamicUBatchWrapper, UBatchBarrier, # noqa: F401
+
                                 UBatchConfig, UBatchContext, UbatchMetadata,
                                 UBatchSlice, UBatchState, UBatchWrapper,
                                 make_ubatch_contexts)

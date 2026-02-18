@@ -46,7 +46,6 @@ __version__ = VERSION
 
 
 
-
 class RewardModelAgent(BaseAgent):
 """"Evaluates and ranks multiple proposals to provide a scalar reward signal.
     def __init__(self, file_path: str) -> None:
@@ -114,7 +113,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

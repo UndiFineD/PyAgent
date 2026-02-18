@@ -15,15 +15,35 @@
 
 from __future__ import annotations
 
-import json
-from typing import Any
 
-from src.core.base.common.types.changelog_entry import ChangelogEntry
-from src.core.base.common.types.feed_format import FeedFormat
-from src.core.base.lifecycle.version import VERSION
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.types.changelog_entry import ChangelogEntry
+except ImportError:
+    from src.core.base.common.types.changelog_entry import ChangelogEntry
+
+try:
+    from .core.base.common.types.feed_format import FeedFormat
+except ImportError:
+    from src.core.base.common.types.feed_format import FeedFormat
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

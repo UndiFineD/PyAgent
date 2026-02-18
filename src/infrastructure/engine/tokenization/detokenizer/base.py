@@ -20,14 +20,30 @@ Base class for incremental detokenization.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import List, Optional, Tuple, Union
 
-from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import List, Optional, Tuple, Union
+except ImportError:
+    from typing import List, Optional, Tuple, Union
+
+
+try:
+    from .infrastructure.engine.tokenization.detokenizer.stop_checker import \
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
+
     StopChecker
-from src.infrastructure.engine.tokenization.detokenizer.types import (
-    DetokenizeResult, TokenizerLike)
+try:
+    from .infrastructure.engine.tokenization.detokenizer.types import (
+except ImportError:
+    from src.infrastructure.engine.tokenization.detokenizer.types import (
 
+    DetokenizeResult, TokenizerLike)
 
 
 

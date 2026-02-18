@@ -15,8 +15,15 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration for LoRA adapters.
-from dataclasses import dataclass, field
-from enum import Enum
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
 
 
 
@@ -45,7 +52,6 @@ class LoRAConfig:
     @property
     def scaling(self) -> float:
         """LoRA scaling factor (alpha / rank).        return self.alpha / self.rank
-
 
 
 

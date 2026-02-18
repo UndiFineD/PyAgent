@@ -16,6 +16,8 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -25,7 +27,6 @@ from src.core.base.lifecycle.version import VERSION
 from .flakiness_report import FlakinessReport
 
 __version__ = VERSION
-
 
 
 

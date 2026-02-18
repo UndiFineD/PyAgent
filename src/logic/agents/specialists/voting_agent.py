@@ -53,27 +53,70 @@ Voting agent.py module.
 
 from __future__ import annotations
 
-import contextlib
-import json
-import logging
-import re
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
 
 
-
 class VotingMethod(Enum):
 """"Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
-
 
 
 class VoteStatus(Enum):
@@ -154,27 +197,70 @@ class VotingAgent(BaseAgent):
 
 from __future__ import annotations
 
-import contextlib
-import json
-import logging
-import re
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import json
+except ImportError:
+    import json
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 
 
 
-
 class VotingMethod(Enum):
 """"Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
-
 
 
 class VoteStatus(Enum):

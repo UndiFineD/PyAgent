@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.eagle.proposer import EagleProposer, EagleProposerFactory, AsyncEagleProposer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.eagle.proposer import EagleProposer, EagleProposerFactory, AsyncEagleProposer
+except ImportError:
+    from infrastructure.engine.speculative.eagle.proposer import EagleProposer, EagleProposerFactory, AsyncEagleProposer
+
 
 
 def test_eagleproposer_basic():

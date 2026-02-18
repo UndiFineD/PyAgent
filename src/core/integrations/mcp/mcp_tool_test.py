@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.integrations.mcp.mcp_tool import register_tool, create_mcp_server
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.integrations.mcp.mcp_tool import register_tool, create_mcp_server
+except ImportError:
+    from core.integrations.mcp.mcp_tool import register_tool, create_mcp_server
+
 
 
 def test_register_tool_basic():

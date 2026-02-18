@@ -12,11 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import asyncio
-import pytest
-from unittest.mock import AsyncMock, MagicMock
-from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
-from src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackupMixin
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from unittest.mock import AsyncMock, MagicMock
+except ImportError:
+    from unittest.mock import AsyncMock, MagicMock
+
+try:
+    from .infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+except ImportError:
+    from src.infrastructure.swarm.resilience.distributed_backup import DistributedBackup
+
+try:
+    from .infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackupMixin
+except ImportError:
+    from src.infrastructure.swarm.fleet.mixins.fleet_backup_mixin import FleetBackupMixin
 
 
 

@@ -16,7 +16,10 @@
 """Module: filesystem_skill
 Alias for environment_skill to maintain manifest compatibility.
 """
-from .environment_skill import EnvironmentSkill
+try:
+    from .environment_skill import EnvironmentSkill
+except ImportError:
+    from .environment_skill import EnvironmentSkill
 
 
 

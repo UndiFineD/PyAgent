@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .prepare_refactor_patches import sanitize_name, load_bandit, aggregate, make_report, create_patch_proposal, suggest_replacement, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .prepare_refactor_patches import sanitize_name, load_bandit, aggregate, make_report, create_patch_proposal, suggest_replacement, main
+except ImportError:
+    from .prepare_refactor_patches import sanitize_name, load_bandit, aggregate, make_report, create_patch_proposal, suggest_replacement, main
+
 
 
 def test_sanitize_name_basic():

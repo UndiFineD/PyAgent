@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.voyager.transport_layer import VoyagerTransport
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.voyager.transport_layer import VoyagerTransport
+except ImportError:
+    from infrastructure.swarm.voyager.transport_layer import VoyagerTransport
+
 
 
 def test_voyagertransport_basic():

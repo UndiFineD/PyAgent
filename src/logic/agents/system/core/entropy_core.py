@@ -61,7 +61,6 @@ except ImportError:
 
 
 
-
 class EntropyCore:
 """"Core logic for calculating code complexity and entropy.
     @staticmethod
@@ -134,7 +133,6 @@ try:
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
-
 
 
 

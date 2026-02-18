@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.swarm.orchestration.swarm.fractal_knowledge_orchestrator import FractalKnowledgeOrchestrator
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.swarm.orchestration.swarm.fractal_knowledge_orchestrator import FractalKnowledgeOrchestrator
+except ImportError:
+    from infrastructure.swarm.orchestration.swarm.fractal_knowledge_orchestrator import FractalKnowledgeOrchestrator
+
 
 
 def test_fractalknowledgeorchestrator_basic():

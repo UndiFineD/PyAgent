@@ -57,7 +57,6 @@ __version__ = VERSION
 
 
 
-
 class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Detects and mitigates security threats and prompt injections across the swarm.
     def __init__(self, path: str) -> None:
@@ -66,9 +65,12 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """         self.name = "ImmuneSystem"  # [BATCHFIX] closed string"        self.injection_patterns = [
             r"(?i)ignore previous instructions","            r"(?i)system prompt","            r"(?i)dan mode","            r"(?i)jailbreak","            r"(?i)do anything now","            r"(?i)you are now a...","            r"(?i)<script>","            r"(?i)SELECT .* FROM .* WHERE",  # Simple SQL injection"            r"(?i)rm -rf /","        ]
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         self.quarantined_nodes: list[str] = []""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         self._system_prompt = (
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         self.quarantined_nodes: list[str] = []""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
 """             "You are the Immune System Agent. Your specialty is Biological Resilience."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """             "You monitor all incoming prompts and multi-agent communications for"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -91,15 +93,20 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         return fSelf-healing complete for {node_id}. Integrity Level: 100%. \\n" + "\\n".join(steps)"  # [BATCHFIX] closed string"
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_for_injections(self, input_text: str) -> dict[str, Any]:""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         "Scans a prompt or message for known injection patterns."  # [BATCHFIX] closed string"        Args:
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""     def scan_for_injections(self, input_text: str) -> dict[str, Any]:""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#         "Scans a prompt or message for known injection patterns."  # [BATCHFIX] closed string"        Args:
             input_text: The text to scan.
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#    "     findings = []"  # [BATCHFIX] closed string"
+""" [BATCHFIX] Commented unterminated string""""
+#    "     findings = []"  # [BATCHFIX] closed string"
         try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             from rust_core import scan_injections_rust  # type: ignore[attr-defined]""""
             rust_findings = scan_injections_rust(input_text)
             for idx, _ in rust_findings:
@@ -116,7 +123,8 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             logging.warning(fImmuneSystem: Detected potential injection: {findings}")"  # [BATCHFIX] closed string"
         # Phase 108: Intelligence Recording
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         self._record(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         self._record(
             input_text,
             status,
             provider="ImmuneSystem","            model="InjectionScanner","            meta={"findings": findings},"        )
@@ -126,9 +134,11 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def monitor_swarm_behavior(self, agent_logs: list[dict[str, Any]]) -> str:"Analyzes agent logs for anomalous behavior (e.g. infinite loops, hallucination spikes).# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#  "       anomalies = []"  # [BATCHFIX] closed string"        for log in agent_logs:
+""" [BATCHFIX] Commented unterminated string""""
+#  "       anomalies = []"  # [BATCHFIX] closed string"        for log in agent_logs:
             agent_id = log.get("agent_id")"# [BATCHFIX] Commented metadata/non-Python
 #             activity = log.get("activity", ")"  # [BATCHFIX] closed string"
             # Simple anomaly: repeating the same activity too many times
@@ -148,7 +158,6 @@ __version__ = VERSION
 
 
 
-
 class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Detects and mitigates security threats and prompt injections across the swarm.
     def __init__(self, path: str) -> None:
@@ -157,9 +166,12 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """         self.name = "ImmuneSystem"  # [BATCHFIX] closed string"        self.injection_patterns = [
             r"(?i)ignore previous instructions","            r"(?i)system prompt","            r"(?i)dan mode","            r"(?i)jailbreak","            r"(?i)do anything now","            r"(?i)you are now a...","            r"(?i)<script>","            r"(?i)SELECT .* FROM .* WHERE",  # Simple SQL injection"            r"(?i)rm -rf /","        ]
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""         self.quarantined_nodes: list[str] = []""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         self._system_prompt = (
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
+"""         self.quarantined_nodes: list[str] = []""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
 """             "You are the Immune System Agent. Your specialty is Biological Resilience."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """             "You monitor all incoming prompts and multi-agent communications for"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -181,16 +193,22 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         return fSelf-healing complete for {node_id}. Integrity Level: 100%. \\n" + "\\n".join(steps)"  # [BATCHFIX] closed string"
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
-"""     def scan_for_injections(self, input_text: str) -> dict[str, Any]:""""# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#         "Scans a prompt or message for known injection patterns."  # [BATCHFIX] closed string"        Args:
+""" [BATCHFIX] Commented metadata/non-Python""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""#   "          input_text: The text "to "scan."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+"""     def scan_for_injections(self, input_text: str) -> dict[str, Any]:""""
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#         "Scans a prompt or message for known injection patterns."  # [BATCHFIX] closed string"        Args:
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string""""
+#   "          input_text: The text "to "scan."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         findings = []""""
         try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             from rust_core import scan_injections_rust  # type: ignore[attr-defined]""""
             rust_findings = scan_injections_rust(input_text)
             for idx, _ in rust_findings:
@@ -207,7 +225,8 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             logging.warning(fImmuneSystem: Detected potential injection: {findings}")"  # [BATCHFIX] closed string"
         # Phase 108: Intelligence Recording
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         self._record(
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         self._record(
             input_text,
             status,
             provider="ImmuneSystem","            model="InjectionScanner","            meta={"findings": findings},"        )
@@ -217,9 +236,11 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """     def monitor_swarm_behavior(self, agent_logs: list[dict[str, Any]]) -> str:"Analyzes agent logs for anomalous behavior (e.g. infinite loops, hallucination spikes).# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """         anomalies = []""""        for log in agent_logs:
             agent_id = log.get("agent_id")"# [BATCHFIX] Commented metadata/non-Python
 #             activity = log.get("activity", ")"  # [BATCHFIX] closed string"
@@ -244,7 +265,8 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Removes common dangerous characters or patterns from" an" input string.        sanitized = input_text
         for pattern in self.injection_patterns:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python""""
+# [BATCHFIX] Commented metadata/non-Python
 """             sanitized = re.sub(pattern, "[CLEANSED]", sanitized)"        return sanitized
 
     async def propose_autonomous_patch(self, vulnerability: str, insecure_code: str) -> str:
@@ -253,7 +275,8 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""#         prompt = (
+""" [BATCHFIX] Commented unmatched parenthesis""""
+#         prompt = (
 #             fVulnerability: {vulnerability}\\n
 #             fInsecure Code:\\n{insecure_code}\\n\\n
 # [BATCHFIX] Commented metadata/non-Python
@@ -271,4 +294,5 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""#     main()
+""" [BATCHFIX] Commented metadata/non-Python""""
+#     main()

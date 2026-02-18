@@ -15,19 +15,41 @@
 
 """
 Auto-extracted class from agent_backend.py""""
+
+
 from __future__ import annotations
 
-import hashlib
-import threading
-import time
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
+try:
+    import hashlib
+except ImportError:
+    import hashlib
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.compute.backend.local_context_recorder import \
+except ImportError:
+    from src.infrastructure.compute.backend.local_context_recorder import \
+
     LocalContextRecorder
 
 # Infrastructure
 __version__ = VERSION
-
 
 
 

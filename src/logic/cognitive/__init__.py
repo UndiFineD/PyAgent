@@ -17,6 +17,10 @@
 Provides cognitive frameworks for agent reasoning, planning, and knowledge
 representation across the PyAgent ecosystem.
 
-from .prompt_templates import (  # noqa: F401
+try:
+    from .prompt_templates import (  # noqa: F401
+except ImportError:
+    from .prompt_templates import ( # noqa: F401
+
     VIBE_CODING_2025_TRACKS as VIBE_CODING_2025_TRACKS
 )

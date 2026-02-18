@@ -17,16 +17,36 @@
 
 from __future__ import annotations
 
-import hashlib
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import hashlib
+except ImportError:
+    import hashlib
 
-from .storage_base import KnowledgeStore
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .storage_base import KnowledgeStore
+except ImportError:
+    from .storage_base import KnowledgeStore
+
 
 __version__ = VERSION
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.speculative.eagle.tree import TreeNode, SpeculativeTree, TalonTreeBuilder
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.speculative.eagle.tree import TreeNode, SpeculativeTree, TalonTreeBuilder
+except ImportError:
+    from infrastructure.engine.speculative.eagle.tree import TreeNode, SpeculativeTree, TalonTreeBuilder
+
 
 
 def test_treenode_basic():

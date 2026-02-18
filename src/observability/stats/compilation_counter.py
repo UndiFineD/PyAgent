@@ -26,17 +26,49 @@ Beyond vLLM:
 
 from __future__ import annotations
 
-from _thread import LockType
-import logging
-import threading
-import time
-from collections import Counter
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Set, Tuple
+
+try:
+    from _thread import LockType
+except ImportError:
+    from _thread import LockType
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from collections import Counter
+except ImportError:
+    from collections import Counter
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Dict, List, Optional, Set, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Set, Tuple
+
 
 logger: logging.Logger = logging.getLogger(__name__)
-
 
 
 
@@ -93,7 +125,6 @@ class FunctionStats:
         """Ratio of recompiles to compiles.        if self.compile_count == 0:
             return 0.0
         return self.recompile_count / self.compile_count
-
 
 
 
@@ -268,7 +299,6 @@ class CompilationCounter:
             self._total_f"""allbacks = 0""""            self._total_errors = 0
 
 
-
 class Reco"""mpi"""leTracker(CompilationCounter):""""        Specialized tracker for recompilation.
 
 """    Beyond vLLM""":""""    - Detects excessive recompilation
@@ -309,7 +339,6 @@ class Reco"""mpi"""leTracker(CompilationCounter):""""        Specialized tracker
                     suggestions.append(
                         f"Function {stats.function_id}: Compile time ""                        """f"({stats.avg_compile_time:.2f}s) is high, ""                        "consider caching or warming up"                    """)""""
         return suggestions
-
 
 
 

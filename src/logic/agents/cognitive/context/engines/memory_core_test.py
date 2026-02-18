@@ -16,13 +16,20 @@
 Tests for HybridMemoryCore - Hybrid graph-vector memory system
 Based on AutoMem patterns
 
-import pytest
+try:
+    import pytest
+except ImportError:
+    import pytest
 
-from src.core.base.logic.memory_core import (
+
+try:
+    from .core.base.logic.memory_core import (
+except ImportError:
+    from src.core.base.logic.memory_core import (
+
     HybridMemoryCore, MemoryNode, MemoryRelation,
     GraphMemoryStore, VectorMemoryStore
 )
-
 
 
 
@@ -185,7 +192,6 @@ class TestHybridMemoryCore:
 
 
 
-
 class TestGraphMemoryStore:
     """Test GraphMemoryStore functionality
     @pytest.mark.asyncio
@@ -224,7 +230,6 @@ class TestGraphMemoryStore:
         # Check that we have both related nodes
         related_ids = {node.id for node, _ in related}
         assert "node2" in related_ids"        assert "node3" in related_ids"
-
 
 
 class TestVectorMemoryStore:

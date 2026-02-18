@@ -27,17 +27,29 @@ destination (prefill -> decode) group.
 
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Any, Dict
 
-from src.core.lazy_loader import LazyLoader
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import TYPE_CHECKING, Any, Dict
+except ImportError:
+    from typing import TYPE_CHECKING, Any, Dict
+
+
+try:
+    from .core.lazy_loader import LazyLoader
+except ImportError:
+    from src.core.lazy_loader import LazyLoader
+
 
 if TYPE_CHECKING:
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         KVConnectorBase
 
 logger = logging.getLogger(__name__)
-
 
 
 

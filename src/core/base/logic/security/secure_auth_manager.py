@@ -15,6 +15,8 @@
 
 """Secure Authentication Manager combining OAuth 2.0 with E2EE.
 Implements zero-knowledge authentication where the server never sees user's encryption keys.'"""
+
+
 from __future__ import annotations
 
 import hashlib
@@ -45,7 +47,6 @@ class UserSession:
     created_at: float
     expires_at: float
     e2e_enabled: bool = True
-
 
 
 
@@ -174,7 +175,8 @@ class SecureAuthManager:
         3. Get user info from OAuth provider
         4. Generate E2EE keys for user (client-side in production)
         5. Create encrypted session
-        """# Verify state
+        """
+# Verify state
         if state not in self.oauth_states:
             logger.warning("Invalid OAuth state token")"            return None
 

@@ -16,8 +16,15 @@
 """Property-based tests for ErrorMappingCore.""""
 Tests the error code mapping system before Rust conversion.
 """
-from hypothesis import given, strategies as st
-from src.core.base.logic.core.error_mapping_core import ErrorMappingCore
+try:
+    from hypothesis import given, strategies as st
+except ImportError:
+    from hypothesis import given, strategies as st
+
+try:
+    from .core.base.logic.core.error_mapping_core import ErrorMappingCore
+except ImportError:
+    from src.core.base.logic.core.error_mapping_core import ErrorMappingCore
 
 
 
@@ -34,7 +41,6 @@ class TestErrorMappingCoreBasics:
         """Test error description for known code."""desc = ErrorMappingCore.describe_error("PA-1001")"        assert "FileSystemError" in desc"        assert "workspace" in desc.lower()"
     def test_describe_error_unknown(self) -> None:
         """Test error description for unknown code."""desc = ErrorMappingCore.describe_error("PA-9999")"        assert "Unknown" in desc"
-
 
 
 class TestErrorMappingCoreCategories:
@@ -81,7 +87,6 @@ class TestErrorMappingCoreCategories:
 
 
 
-
 class TestErrorMappingCorePropertyBased:
     """Property-based tests for error mapping consistency."""
     @given(st.sampled_from(list(ErrorMappingCore.ERROR_CODES.keys())))
@@ -117,13 +122,13 @@ class TestErrorMappingCorePropertyBased:
 
 
 
-
 class TestErrorMappingCoreEdgeCases:
     """Test edge cases and boundary conditions."""
     def test_empty_string_exception(self) -> None:
         """Test with empty string exception name."""code = ErrorMappingCore.get_code("")"        assert code == "PA-0000""
     def test_case_sensitive_matching(self) -> None:
-        """Test that error code matching is case-sensitive."""# Exact match
+        """Test that error code matching is case-sensitive."""
+# Exact match
         assert ErrorMappingCore.get_code("FileSystemError") == "PA-1001""        # Case mismatch should return default
         assert ErrorMappingCore.get_code("filesystemerror") == "PA-0000""        assert ErrorMappingCore.get_code("FILESYSTEMERROR") == "PA-0000""
     def test_whitespace_handling(self) -> None:

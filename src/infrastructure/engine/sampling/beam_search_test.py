@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.sampling.beam_search import BeamSearchConfig, BeamHypothesis, BeamSearchSampler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.sampling.beam_search import BeamSearchConfig, BeamHypothesis, BeamSearchSampler
+except ImportError:
+    from infrastructure.engine.sampling.beam_search import BeamSearchConfig, BeamHypothesis, BeamSearchSampler
+
 
 
 def test_beamsearchconfig_basic():

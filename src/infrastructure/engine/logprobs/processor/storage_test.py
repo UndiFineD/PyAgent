@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.logprobs.processor.storage import FlatLogprobs
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.logprobs.processor.storage import FlatLogprobs
+except ImportError:
+    from infrastructure.engine.logprobs.processor.storage import FlatLogprobs
+
 
 
 def test_flatlogprobs_basic():

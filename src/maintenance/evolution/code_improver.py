@@ -73,7 +73,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class EvolutionLoop:
         Background process that proactively improves the PyAgent core.
     Follows Pillar 8: Self-Improving Intelligence.

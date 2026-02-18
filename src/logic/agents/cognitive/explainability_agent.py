@@ -30,14 +30,42 @@ Replace synthetic SAE mocks with pluggable, auditable interpretability models (o
 FILE CONTENT SUMMARY:
 Explainability Agent: Provides autonomous tracing and justification.
 
-import json
-import os
-import random
-from typing import Any
+try:
+    import json
+except ImportError:
+    import json
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.logic.agents.cognitive.core.interpretable_core import InterpretableCore
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .logic.agents.cognitive.core.interpretable_core import InterpretableCore
+except ImportError:
+    from src.logic.agents.cognitive.core.interpretable_core import InterpretableCore
+
 
 __version__ = VERSION
 
@@ -115,14 +143,42 @@ class ExplainabilityAgent(BaseAgent):
         justifications = {
             "PrivacyGuard": ("#                 "PII scrubbing is required before cross-fleet data sharing"#                 "to maintain GDPR compliance."            ),
             "SecurityAudit": "Scanning for secrets prevents catastrophic leaks in public repositories.","            "CodeQuality": "Formatting consistency red"
-import json
-import os
-import random
-from typing import Any
+try:
+    import json
+except ImportError:
+    import json
 
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.logic.agents.cognitive.core.interpretable_core import InterpretableCore
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .logic.agents.cognitive.core.interpretable_core import InterpretableCore
+except ImportError:
+    from src.logic.agents.cognitive.core.interpretable_core import InterpretableCore
+
 
 __version__ = VERSION
 

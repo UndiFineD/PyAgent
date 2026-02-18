@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.debug_phase_20_21 import test_visualization_and_memory, test_observability, test_gui_backend
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.debug_phase_20_21 import test_visualization_and_memory, test_observability, test_gui_backend
+except ImportError:
+    from infrastructure.services.dev.scripts.management.debug_phase_20_21 import test_visualization_and_memory, test_observability, test_gui_backend
+
 
 
 def test_test_visualization_and_memory_basic():

@@ -16,17 +16,37 @@
 
 from __future__ import annotations
 
-import logging
-import random
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .observability.structured_logger import StructuredLogger
+except ImportError:
+    from src.observability.structured_logger import StructuredLogger
+
 
 __version__ = VERSION
 
 logger = StructuredLogger(__name__)
-
 
 
 

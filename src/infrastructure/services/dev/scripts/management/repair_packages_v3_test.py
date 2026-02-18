@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.repair_packages_v3 import create_inits, fix_content, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.repair_packages_v3 import create_inits, fix_content, main
+except ImportError:
+    from infrastructure.services.dev.scripts.management.repair_packages_v3 import create_inits, fix_content, main
+
 
 
 def test_create_inits_basic():

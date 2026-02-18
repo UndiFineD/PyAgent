@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.structured.bad_words_processor_v2 import BadWordsPenaltyMode, TrieNode, BadWordsProcessorV2, BadPhrasesProcessor, apply_bad_words, apply_bad_words_with_drafts
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.structured.bad_words_processor_v2 import BadWordsPenaltyMode, TrieNode, BadWordsProcessorV2, BadPhrasesProcessor, apply_bad_words, apply_bad_words_with_drafts
+except ImportError:
+    from infrastructure.engine.structured.bad_words_processor_v2 import BadWordsPenaltyMode, TrieNode, BadWordsProcessorV2, BadPhrasesProcessor, apply_bad_words, apply_bad_words_with_drafts
+
 
 
 def test_badwordspenaltymode_basic():

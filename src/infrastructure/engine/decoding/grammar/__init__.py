@@ -16,12 +16,32 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Grammar-constrained decoding package.
 
-from .base import (StructuredOutputGrammar, StructuredOutputOptions,  # noqa: F401
+try:
+    from .base import (StructuredOutputGrammar, StructuredOutputOptions,  # noqa: F401
+except ImportError:
+    from .base import (StructuredOutputGrammar, StructuredOutputOptions, # noqa: F401
+
                    StructuredOutputsParams)
-from .ebnf_grammar import EBNFGrammar, GrammarRule  # noqa: F401
-from .json_constraint import JSONSchemaGrammar  # noqa: F401
-from .regex_constraint import ChoiceGrammar, RegexGrammar  # noqa: F401
-from .registry import (GrammarCompiler, StructuredOutputManager,  # noqa: F401
+try:
+    from .ebnf_grammar import EBNFGrammar, GrammarRule  # noqa: F401
+except ImportError:
+    from .ebnf_grammar import EBNFGrammar, GrammarRule # noqa: F401
+
+try:
+    from .json_constraint import JSONSchemaGrammar  # noqa: F401
+except ImportError:
+    from .json_constraint import JSONSchemaGrammar # noqa: F401
+
+try:
+    from .regex_constraint import ChoiceGrammar, RegexGrammar  # noqa: F401
+except ImportError:
+    from .regex_constraint import ChoiceGrammar, RegexGrammar # noqa: F401
+
+try:
+    from .registry import (GrammarCompiler, StructuredOutputManager,  # noqa: F401
+except ImportError:
+    from .registry import (GrammarCompiler, StructuredOutputManager, # noqa: F401
+
                        compile_grammar, validate_structured_output_params)
 
 __all__ = [

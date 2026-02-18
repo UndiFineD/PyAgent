@@ -39,14 +39,30 @@ Research synthesis agent.py module.
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .observability.structured_logger import StructuredLogger
+except ImportError:
+    from src.observability.structured_logger import StructuredLogger
+
 
 __version__ = VERSION
-
 
 
 
@@ -92,14 +108,30 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 from __future__ import annotations
 
-from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .observability.structured_logger import StructuredLogger
+except ImportError:
+    from src.observability.structured_logger import StructuredLogger
+
 
 __version__ = VERSION
-
 
 
 

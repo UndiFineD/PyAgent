@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import uuid
-from typing import Dict, Any
+try:
+    import uuid
+except ImportError:
+    import uuid
+
+try:
+    from typing import Dict, Any
+except ImportError:
+    from typing import Dict, Any
 
 
 

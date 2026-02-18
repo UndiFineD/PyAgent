@@ -15,6 +15,8 @@
 
 """Task Management Mixin for BaseAgent.
 Provides structured task tracking and management, inspired by Adorable's todo tool.'"""
+
+
 from __future__ import annotations
 
 import json
@@ -51,7 +53,6 @@ class TaskItem:
     def reset(self) -> None:
         """Reset the task to incomplete."""self.completed = False
         self.completed_at = None
-
 
 
 
@@ -101,7 +102,8 @@ class TaskManagerMixin:
         cascade_context: Optional[CascadeContext] = None
     ) -> Dict[str, Any]:
         """Update the task list with new items.
-        Inspired by Adorable's todo tool interface.'        """try:
+        Inspired by Adorable's todo tool interface.'        """
+try:
             # Clear existing tasks if this is a complete reset
             if not items:
                 self.tasks.clear()

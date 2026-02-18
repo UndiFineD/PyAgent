@@ -15,16 +15,30 @@
 
 """
 Auto-extracted class from agent_backend.py""""
+
+
 from __future__ import annotations
 
-import re
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import re
+except ImportError:
+    import re
 
-from .response_transformer_base import ResponseTransformerBase
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .response_transformer_base import ResponseTransformerBase
+except ImportError:
+    from .response_transformer_base import ResponseTransformerBase
+
 
 __version__ = VERSION
-
 
 
 

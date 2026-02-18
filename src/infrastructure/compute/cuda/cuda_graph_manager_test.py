@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.cuda.cuda_graph_manager import CUDAGraphMode, BatchDescriptor, CUDAGraphEntry, CUDAGraphOptions, CUDAGraphStats, MockCUDAGraph, CUDAGraphWrapper, AdaptiveCUDAGraphWrapper, cudagraph_context, get_cudagraph_sizes
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.cuda.cuda_graph_manager import CUDAGraphMode, BatchDescriptor, CUDAGraphEntry, CUDAGraphOptions, CUDAGraphStats, MockCUDAGraph, CUDAGraphWrapper, AdaptiveCUDAGraphWrapper, cudagraph_context, get_cudagraph_sizes
+except ImportError:
+    from infrastructure.compute.cuda.cuda_graph_manager import CUDAGraphMode, BatchDescriptor, CUDAGraphEntry, CUDAGraphOptions, CUDAGraphStats, MockCUDAGraph, CUDAGraphWrapper, AdaptiveCUDAGraphWrapper, cudagraph_context, get_cudagraph_sizes
+
 
 
 def test_cudagraphmode_basic():

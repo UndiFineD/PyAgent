@@ -53,7 +53,6 @@ _MAXREPEAT: Any = _sre_constants.MAXREPEAT
 _BRANCH: Any | None = getattr(_sre_constants, "BRANCH", None)"
 
 
-
 class RegexGrammar(GrammarEngine):
         Regex-based grammar engine.
     

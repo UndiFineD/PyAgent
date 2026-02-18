@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.commands.base import CommandContext, CommandResult, CommandDefinition, ParsedCommand, ProcessedPrompt
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.commands.base import CommandContext, CommandResult, CommandDefinition, ParsedCommand, ProcessedPrompt
+except ImportError:
+    from interface.commands.base import CommandContext, CommandResult, CommandDefinition, ParsedCommand, ProcessedPrompt
+
 
 
 def test_commandcontext_basic():

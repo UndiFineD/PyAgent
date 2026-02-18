@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.core.base import Scheduler, Executor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.core.base import Scheduler, Executor
+except ImportError:
+    from infrastructure.engine.core.base import Scheduler, Executor
+
 
 
 def test_scheduler_basic():

@@ -57,7 +57,6 @@ __version__ = VERSION
 
 
 
-
 class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     "Manages the lifecycle of high-utility context features for the "fleet."#     Integrated with SynthesisCore for feature vectorization and insight merging.
 
@@ -124,7 +123,6 @@ from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
 
 __version__ = VERSION
-
 
 
 

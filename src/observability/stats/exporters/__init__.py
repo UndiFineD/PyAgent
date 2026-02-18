@@ -17,11 +17,31 @@
 Metrics exporters for various monitoring and observability platforms.Provides exporters for Prometheus, CloudWatch, OpenTelemetry, and other
 monitoring systems.
 
-from .cloud_exporter import CloudExporter  # noqa: F401
-from .metrics_exporter import MetricsExporter  # noqa: F401
-from .otel_manager import OTelManager, Span  # noqa: F401
-from .prometheus_exporter import PrometheusExporter  # noqa: F401
-from .stats_exporter import StatsExporter  # noqa: F401
+try:
+    from .cloud_exporter import CloudExporter  # noqa: F401
+except ImportError:
+    from .cloud_exporter import CloudExporter # noqa: F401
+
+try:
+    from .metrics_exporter import MetricsExporter  # noqa: F401
+except ImportError:
+    from .metrics_exporter import MetricsExporter # noqa: F401
+
+try:
+    from .otel_manager import OTelManager, Span  # noqa: F401
+except ImportError:
+    from .otel_manager import OTelManager, Span # noqa: F401
+
+try:
+    from .prometheus_exporter import PrometheusExporter  # noqa: F401
+except ImportError:
+    from .prometheus_exporter import PrometheusExporter # noqa: F401
+
+try:
+    from .stats_exporter import StatsExporter  # noqa: F401
+except ImportError:
+    from .stats_exporter import StatsExporter # noqa: F401
+
 
 __all__ = [
     "MetricsExporter","    "StatsExporter","    "PrometheusExporter","    "CloudExporter","    "OTelManager","    "Span","]

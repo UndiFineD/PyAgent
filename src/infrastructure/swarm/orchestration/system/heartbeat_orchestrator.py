@@ -27,17 +27,33 @@ No commands will be executed.
 
 from __future__ import annotations
 
-import logging
-import time
-from typing import TYPE_CHECKING, Dict
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import TYPE_CHECKING, Dict
+except ImportError:
+    from typing import TYPE_CHECKING, Dict
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
-
 
 
 

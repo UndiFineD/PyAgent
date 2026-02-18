@@ -18,20 +18,47 @@
 MoE Gatekeeper (Phase 61).
 Routes tasks to specialized agents (experts) based on semantic similarity.
 
-import asyncio
-import logging
-from typing import Any, Coroutine, Dict, List, Optional
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-import numpy as np
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.common.models.communication_models import (
+try:
+    from typing import Any, Coroutine, Dict, List, Optional
+except ImportError:
+    from typing import Any, Coroutine, Dict, List, Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .core.base.common.models.communication_models import (
+except ImportError:
+    from src.core.base.common.models.communication_models import (
+
     ExpertProfile, MoERoutingDecision)
-from src.infrastructure.engine.models.similarity import \
+try:
+    from .infrastructure.engine.models.similarity import \
+except ImportError:
+    from src.infrastructure.engine.models.similarity import \
+
     EmbeddingSimilarityService
-from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+try:
+    from .infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+except ImportError:
+    from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
+
 
 logger: logging.Logger = logging.getLogger(__name__)
-
 
 
 

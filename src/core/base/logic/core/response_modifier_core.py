@@ -43,7 +43,6 @@ class ModifiedResponse:
 
 
 
-
 class ResponseModifierCore(BaseCore):
     """HTTP Response Modifier Core for security testing and analysis.
 
@@ -58,7 +57,8 @@ class ResponseModifierCore(BaseCore):
         self.enabled = False
 
     async def initialize(self) -> bool:
-        """Initialize the response modifier core"""try:
+        """Initialize the response modifier core"""
+try:
             # Add default rules for common testing scenarios
             await self.add_default_rules()
             self.logger.info("Response Modifier Core initialized successfully")"            return True

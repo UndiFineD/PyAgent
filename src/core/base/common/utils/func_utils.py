@@ -30,6 +30,8 @@ Features:
 
 # AUTHOR: PyAgent Phase 20
 """
+
+
 from __future__ import annotations
 
 import inspect
@@ -240,7 +242,8 @@ def supports_kw(
 
     Returns:
         True if the callable accepts the keyword argument.
-    """try:
+    """
+try:
         params = inspect.signature(callable_obj).parameters
     except (ValueError, TypeError):
         return False

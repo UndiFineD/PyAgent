@@ -56,7 +56,6 @@ __version__ = VERSION
 
 
 
-
 class QuantumMemoryAgent(BaseAgent):
 """"Manages massive context windows through compression and quantization.
     def __init__(self, file_path: str) -> None:

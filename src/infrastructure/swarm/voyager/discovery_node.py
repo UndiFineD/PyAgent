@@ -36,7 +36,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class VoyagerPeerListener(ServiceListener):
     """Listens for other PyAgent Voyager peers on the local network.
     def __init__(self, node: DiscoveryNode, loop: asyncio.AbstractEventLoop) -> None:
@@ -61,7 +60,6 @@ class VoyagerPeerListener(ServiceListener):
 
     def remove_service(self, zc: Any, type_: str, name: str) -> None:
         """Called by Zeroconf when a service is removed from the network.        logger.info(f"Voyager: Peer {name} removed from network.")"        self.node._peer_removed(name)
-
 
 
 

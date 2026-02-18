@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .download_web.suggested import load_history, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .download_web.suggested import load_history, main
+except ImportError:
+    from .download_web.suggested import load_history, main
+
 
 
 def test_load_history_basic():

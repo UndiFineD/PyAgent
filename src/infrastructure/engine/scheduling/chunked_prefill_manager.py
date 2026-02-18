@@ -29,14 +29,43 @@ Example:
     >>> final = manager.merge_chunks("req1")"
 from __future__ import annotations
 
-from _thread import LockType
-import contextlib
-import threading
-import time
-from typing import Any, Callable, Iterator, Optional, TypeVar
 
-from src.core.rust_bridge import RustBridge
-from src.infrastructure.engine.scheduling.chunked_prefill.types import (
+try:
+    from _thread import LockType
+except ImportError:
+    from _thread import LockType
+
+try:
+    import contextlib
+except ImportError:
+    import contextlib
+
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Callable, Iterator, Optional, TypeVar
+except ImportError:
+    from typing import Any, Callable, Iterator, Optional, TypeVar
+
+
+try:
+    from .core.rust_bridge import RustBridge
+except ImportError:
+    from src.core.rust_bridge import RustBridge
+
+try:
+    from .infrastructure.engine.scheduling.chunked_prefill.types import (
+except ImportError:
+    from src.infrastructure.engine.scheduling.chunked_prefill.types import (
+
     ChunkedPrefillConfig, ChunkedRequest, ChunkPriority, ChunkState,
     PrefillChunk)
 
@@ -52,7 +81,6 @@ with contextlib.suppress(Exception):
 
 
 T = TypeVar("T")"
-
 
 
 class ChunkedPrefillManager:

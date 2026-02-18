@@ -28,7 +28,6 @@ if TYPE_CHECKING:
 
 
 
-
 class ProfilingAnalysisMixin:
     """Mixin for performance profiling in SelfImprovementAnalysis.
     def add_profiling_findings(

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from .header_panel.suggested import HeaderPanel
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from .header_panel.suggested import HeaderPanel
+except ImportError:
+    from .header_panel.suggested import HeaderPanel
+
 
 
 def test_headerpanel_basic():

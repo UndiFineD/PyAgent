@@ -38,7 +38,6 @@ __version__: str = VERSION
 
 
 
-
 class ReportGenerator:
     """Generates quality reports (description, errors, improvements) for agent files."""
 

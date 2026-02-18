@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.serialization.zero_copy_serializer import ZeroCopyEncoder, ZeroCopyDecoder, encode_with_buffers, decode_with_buffers
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.serialization.zero_copy_serializer import ZeroCopyEncoder, ZeroCopyDecoder, encode_with_buffers, decode_with_buffers
+except ImportError:
+    from infrastructure.storage.serialization.zero_copy_serializer import ZeroCopyEncoder, ZeroCopyDecoder, encode_with_buffers, decode_with_buffers
+
 
 
 def test_zerocopyencoder_basic():

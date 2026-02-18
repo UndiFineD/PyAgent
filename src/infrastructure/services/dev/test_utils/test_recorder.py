@@ -15,6 +15,8 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
 import json
@@ -28,7 +30,6 @@ from src.core.base.lifecycle.version import VERSION
 from .recorded_interaction import RecordedInteraction
 
 __version__ = VERSION
-
 
 
 

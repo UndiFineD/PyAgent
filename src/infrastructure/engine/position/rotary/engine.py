@@ -15,14 +15,41 @@
 
 Engine.py module.
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+try:
+    from typing import Any, Dict, List, Optional, Tuple, Union
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple, Union
 
-from .base import RotaryEmbeddingBase
-from .config import RoPEConfig, RoPEScalingType, RoPEVariant
-from .dynamic import XDRotaryEmbedding
-from .gptj import GptJRotaryEmbedding
-from .multimodal import MRotaryEmbedding
-from .neox import NeoxRotaryEmbedding
+
+try:
+    from .base import RotaryEmbeddingBase
+except ImportError:
+    from .base import RotaryEmbeddingBase
+
+try:
+    from .config import RoPEConfig, RoPEScalingType, RoPEVariant
+except ImportError:
+    from .config import RoPEConfig, RoPEScalingType, RoPEVariant
+
+try:
+    from .dynamic import XDRotaryEmbedding
+except ImportError:
+    from .dynamic import XDRotaryEmbedding
+
+try:
+    from .gptj import GptJRotaryEmbedding
+except ImportError:
+    from .gptj import GptJRotaryEmbedding
+
+try:
+    from .multimodal import MRotaryEmbedding
+except ImportError:
+    from .multimodal import MRotaryEmbedding
+
+try:
+    from .neox import NeoxRotaryEmbedding
+except ImportError:
+    from .neox import NeoxRotaryEmbedding
 
 
 

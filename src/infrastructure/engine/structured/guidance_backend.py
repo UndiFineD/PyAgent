@@ -49,7 +49,6 @@ HAS_RUST = False
 
 
 
-
 class GuidanceTemplateType(Enum):
     """Types of Guidance templates.
     TEXT = auto()
@@ -138,7 +137,6 @@ class GuidanceTemplate:
 
 
 
-
 class GuidanceState:
         State regarding Guidance template execution.
 
@@ -200,7 +198,6 @@ class GuidanceState:
         self._current_var_buffer = """
 
 
-
 class CompiledGuidanceProgram:
         Compiled Guidance program.
 
@@ -227,7 +224,6 @@ class CompiledGuidanceProgram:
 
     def is_terminated(self, state: GuidanceState) -> bool:
         """Check if execution is complete.        return state.is_complete
-
 
 
 
@@ -273,7 +269,6 @@ class GuidanceGrammar:
 
     def create_state(self) -> GuidanceState:
         """Create a new state regarding this grammar.        return self.program.create_state()
-
 
 
 
@@ -372,7 +367,6 @@ class GuidanceBackend:
     def clear_cache(self) -> None:
         """Clear template cache.        with self._cache_lock:
             self._cache.clear()
-
 
 
 

@@ -17,11 +17,28 @@
 Auto-extracted class from agent.py
 from __future__ import annotations
 
-from dataclasses import dataclass
-from pathlib import Path
 
-from src.core.base.common.models import LockType
-from src.core.base.lifecycle.version import VERSION
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.common.models import LockType
+except ImportError:
+    from src.core.base.common.models import LockType
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

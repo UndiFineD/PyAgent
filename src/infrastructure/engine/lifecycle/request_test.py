@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.lifecycle.request import Request
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.lifecycle.request import Request
+except ImportError:
+    from infrastructure.engine.lifecycle.request import Request
+
 
 
 def test_request_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.backend.request_throttler import RequestThrottler
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.backend.request_throttler import RequestThrottler
+except ImportError:
+    from infrastructure.compute.backend.request_throttler import RequestThrottler
+
 
 
 def test_requestthrottler_basic():

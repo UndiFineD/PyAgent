@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.refactoring.sanitize_imports import sanitize_file
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.refactoring.sanitize_imports import sanitize_file
+except ImportError:
+    from infrastructure.services.dev.scripts.refactoring.sanitize_imports import sanitize_file
+
 
 
 def test_sanitize_file_basic():

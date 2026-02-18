@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.refactoring.import_refactorer import ImportRefactorer, main
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.refactoring.import_refactorer import ImportRefactorer, main
+except ImportError:
+    from infrastructure.services.dev.scripts.refactoring.import_refactorer import ImportRefactorer, main
+
 
 
 def test_importrefactorer_basic():

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.logic.core.video_analyzer_core import VideoAnalyzerCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.logic.core.video_analyzer_core import VideoAnalyzerCore
+except ImportError:
+    from core.base.logic.core.video_analyzer_core import VideoAnalyzerCore
+
 
 
 def test_videoanalyzercore_basic():

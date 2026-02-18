@@ -14,10 +14,21 @@
 
 
 """Standard default configurations and templates for BaseAgent."""
+
+
 from __future__ import annotations
 
-from src.core.base.common.models import PromptTemplate
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.models import PromptTemplate
+except ImportError:
+    from src.core.base.common.models import PromptTemplate
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

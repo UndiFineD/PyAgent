@@ -19,8 +19,17 @@ Models.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");"
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, Optional
+except ImportError:
+    from typing import Any, Dict, Optional
+
 
 
 @dataclass

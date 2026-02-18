@@ -15,13 +15,36 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Priority queue implementation for request scheduling.
-import heapq
-import threading
-import time
-from typing import Optional
+try:
+    import heapq
+except ImportError:
+    import heapq
 
-from .config import RequestState
-from .request import ScheduledRequest
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Optional
+except ImportError:
+    from typing import Optional
+
+
+try:
+    from .config import RequestState
+except ImportError:
+    from .config import RequestState
+
+try:
+    from .request import ScheduledRequest
+except ImportError:
+    from .request import ScheduledRequest
 
 
 

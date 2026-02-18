@@ -16,14 +16,38 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 EagleProposer: Wrapper regarding modular EAGLE-style speculative decoding components.
 
-from .eagle.base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,
+try:
+    from .eagle.base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,
+except ImportError:
+    from .eagle.base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,
+
                          TreeAttentionMetadata)
-from .eagle.config import AttentionBackend, EagleConfig, EagleMethod
-from .eagle.models import DraftModelWrapper, DraftOutput, SimpleDraftModel
-from .eagle.proposer import (AsyncEagleProposer, EagleProposer,
+try:
+    from .eagle.config import AttentionBackend, EagleConfig, EagleMethod
+except ImportError:
+    from .eagle.config import AttentionBackend, EagleConfig, EagleMethod
+
+try:
+    from .eagle.models import DraftModelWrapper, DraftOutput, SimpleDraftModel
+except ImportError:
+    from .eagle.models import DraftModelWrapper, DraftOutput, SimpleDraftModel
+
+try:
+    from .eagle.proposer import (AsyncEagleProposer, EagleProposer,
+except ImportError:
+    from .eagle.proposer import (AsyncEagleProposer, EagleProposer,
+
                              EagleProposerFactory)
-from .eagle.stats import AcceptanceStats
-from .eagle.tree import SpeculativeTree, TreeNode
+try:
+    from .eagle.stats import AcceptanceStats
+except ImportError:
+    from .eagle.stats import AcceptanceStats
+
+try:
+    from .eagle.tree import SpeculativeTree, TreeNode
+except ImportError:
+    from .eagle.tree import SpeculativeTree, TreeNode
+
 
 __all__ = [
     "EagleConfig","    "EagleMethod","    "AttentionBackend","    "DraftOutput","    "DraftModelWrapper","    "SimpleDraftModel","    "TreeNode","    "SpeculativeTree","    "TreeAttentionMetadata","    "AcceptanceStats","    "AttentionMetadata","    "InputBuffer","    "CpuGpuBuffer","    "EagleProposer","    "EagleProposerFactory","    "AsyncEagleProposer","]

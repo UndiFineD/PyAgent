@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.api.public_api_engine import PublicAPIEngine
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.api.public_api_engine import PublicAPIEngine
+except ImportError:
+    from infrastructure.services.api.public_api_engine import PublicAPIEngine
+
 
 
 def test_publicapiengine_basic():

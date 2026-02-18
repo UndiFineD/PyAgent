@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.storage.cache.prefix_cache_optimizer import CacheTier, PrefixCacheConfig, PrefixEntry, CacheHitResult, RadixTreeNode, PrefixTree, PrefixCacheOptimizer
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.storage.cache.prefix_cache_optimizer import CacheTier, PrefixCacheConfig, PrefixEntry, CacheHitResult, RadixTreeNode, PrefixTree, PrefixCacheOptimizer
+except ImportError:
+    from infrastructure.storage.cache.prefix_cache_optimizer import CacheTier, PrefixCacheConfig, PrefixEntry, CacheHitResult, RadixTreeNode, PrefixTree, PrefixCacheOptimizer
+
 
 
 def test_cachetier_basic():

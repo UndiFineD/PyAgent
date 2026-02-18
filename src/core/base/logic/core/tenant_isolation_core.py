@@ -12,9 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
-from typing import Dict, Any, Optional
-from pydantic import BaseModel, Field
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Dict, Any, Optional
+except ImportError:
+    from typing import Dict, Any, Optional
+
+try:
+    from pydantic import BaseModel, Field
+except ImportError:
+    from pydantic import BaseModel, Field
 
 
 
@@ -24,7 +35,6 @@ class TenantContext(BaseModel):
     user_id: Optional[str] = None
     role: str = "viewer""    scopes: list[str] = Field(default_factory=list)
     exp: int = 0
-
 
 
 

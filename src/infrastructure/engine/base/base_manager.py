@@ -19,13 +19,25 @@ Base manager.py module.
 
 from __future__ import annotations
 
-import logging
-from abc import ABC
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from abc import ABC
+except ImportError:
+    from abc import ABC
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

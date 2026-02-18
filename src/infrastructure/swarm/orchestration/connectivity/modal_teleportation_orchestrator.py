@@ -33,7 +33,6 @@ if TYPE_CHECKING:
 
 
 
-
 class ModalTeleportationOrchestrator:
         Implements Cross-Modal Teleportation (Phase 33).
     Converts task state between different modalities (e.g., GUI -> Code, Voice -> SQL).

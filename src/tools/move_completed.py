@@ -45,11 +45,28 @@ Idempotent: will not duplicate entries already present in completed.md.
 It treats table rows where the second column (status) contains
 case-insensitive 'completed'|'done'|'finished' as completed.'
 from __future__ import annotations
-from pathlib import Path
-import datetime
-import logging
 
-from src.core.base.agent_state_manager import StateTransaction  # type: ignore
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    import datetime
+except ImportError:
+    import datetime
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+
+try:
+    from .core.base.agent_state_manager import StateTransaction # type: ignore
+except ImportError:
+    from src.core.base.agent_state_manager import StateTransaction # type: ignore
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

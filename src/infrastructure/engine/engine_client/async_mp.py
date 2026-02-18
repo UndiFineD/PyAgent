@@ -35,7 +35,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"        Async multi-process engine client with queue handlers.
 
     Non-blocking request submission with async output retrieval.

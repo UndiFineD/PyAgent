@@ -16,6 +16,10 @@
 
 """
 Swarm infrastructure components.
-from . import fleet, orchestration, worker
+try:
+    from . import fleet, orchestration, worker
+except ImportError:
+    from . import fleet, orchestration, worker
+
 
 __all__ = ["fleet", "orchestration", "worker"]"

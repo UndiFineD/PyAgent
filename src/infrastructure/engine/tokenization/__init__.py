@@ -23,7 +23,11 @@ This package provides:
 - LRU caching for tokenizer reuse
 - Async tokenization support
 
-from .tokenizer_registry import (  # Enums; Protocols; Data classes; Core classes; Utilities  # noqa: F401
+try:
+    from .tokenizer_registry import (  # Enums; Protocols; Data classes; Core classes; Utilities  # noqa: F401
+except ImportError:
+    from .tokenizer_registry import ( # Enums; Protocols; Data classes; Core classes; Utilities # noqa: F401
+
     BaseTokenizer, HuggingFaceTokenizer, MistralTokenizer,
     SpecialTokenHandling, TiktokenTokenizer, TokenizerBackend, TokenizerConfig,
     TokenizeResult, TokenizerInfo, TokenizerPool, TokenizerProtocol,

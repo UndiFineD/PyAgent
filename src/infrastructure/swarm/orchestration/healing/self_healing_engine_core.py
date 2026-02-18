@@ -35,10 +35,8 @@ __version__ = VERSION
 
 
 
-
 class FailureType:
     """Enumeration of swarm failure types.    SYNTAX_ERROR = "fix_syntax""    DEPENDENCY_ERROR = "install_dependency""    CONFIG_ERROR = "check_config""    API_MISMATCH = "verify_api_compatibility""    STATE_CORRUPTION = "fix_state_corruption""    CONTEXT_LOSS = "restore_context""    UNKNOWN = "manual_review""
-
 
 
 class SelfHealingEngineCore:

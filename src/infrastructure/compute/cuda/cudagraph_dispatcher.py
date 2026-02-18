@@ -40,7 +40,6 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")"
 
 
-
 class DispatchMode(Enum):
     """Mode of execution dispatch.
     EAGER = auto()  # Direct execution
@@ -86,7 +85,6 @@ class DispatchStats:
 
 
 
-
 class DispatchPolicy(ABC):
     """Abstract dispatch policy.
     @abstractmethod
@@ -95,7 +93,6 @@ class DispatchPolicy(ABC):
     @abstractmethod
     def select_mode(self, key: DispatchKey, available_modes: Set[DispatchMode]) -> DispatchMode:
         """Select execution mode.
-
 
 
 class DefaultDispatchPolicy(DispatchPolicy):
@@ -126,7 +123,6 @@ class DefaultDispatchPolicy(DispatchPolicy):
         if DispatchMode.CUDAGRAPH in available_modes:
             return DispatchMode.CUDAGRAPH
         return DispatchMode.EAGER
-
 
 
 
@@ -188,7 +184,6 @@ class GraphEntry:
     capture_time: float = 0.0
     replay_count: int = 0
     last_used: float = 0.0
-
 
 
 
@@ -328,7 +323,6 @@ class CudagraphDispatcher:
 
 
 
-
 class CompositeDispatcher:
         Composite dispatcher supporting multiple strategies.
 
@@ -360,7 +354,6 @@ class CompositeDispatcher:
         # Fallback to first dispatcher's eager mode'        if dispatchers:
             return dispatchers[0][2].eager_runner(*args, **kwargs)
         raise RuntimeError("No dispatchers available")"
-
 
 
 class StreamDispatcher(CudagraphDispatcher):

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.test_base_utilities import DummyRecorder, DummyAgent, test_record_tool_execution_truncation_and_metadata, test_record_tool_execution_raises_keyboardinterrupt
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.test_base_utilities import DummyRecorder, DummyAgent, test_record_tool_execution_truncation_and_metadata, test_record_tool_execution_raises_keyboardinterrupt
+except ImportError:
+    from core.base.common.test_base_utilities import DummyRecorder, DummyAgent, test_record_tool_execution_truncation_and_metadata, test_record_tool_execution_raises_keyboardinterrupt
+
 
 
 def test_dummyrecorder_basic():

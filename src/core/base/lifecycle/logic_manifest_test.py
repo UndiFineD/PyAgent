@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.lifecycle.logic_manifest import LogicManifest
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.lifecycle.logic_manifest import LogicManifest
+except ImportError:
+    from core.base.lifecycle.logic_manifest import LogicManifest
+
 
 
 def test_logicmanifest_basic():

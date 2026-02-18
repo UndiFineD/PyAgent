@@ -20,7 +20,6 @@ Implementation of the 7-Phase Designing Framework
 """
 
 
-
 class ArchitecturalDesignAgent:
     def __init__(self):
         # The 7 phases defined in the ASEJ research

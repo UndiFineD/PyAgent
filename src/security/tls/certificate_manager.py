@@ -44,7 +44,6 @@ logger = StructuredLogger(__name__)
 
 
 
-
 class CertificateManager:
         Automatic TLS certificate management for PyAgent swarm communication.
 

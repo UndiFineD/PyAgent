@@ -42,7 +42,6 @@ from src.infrastructure.compute.ssm.mamba.ops import (CausalConv1d,
 
 
 
-
 class MambaMixer:
         Mamba-1 Mixer layer.
     
@@ -183,7 +182,6 @@ class MambaMixer:
             output=output,
             state=MambaState(conv_state=new_conv_state, ssm_state=new_ssm_state),
         )
-
 
 
 

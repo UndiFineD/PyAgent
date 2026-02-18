@@ -18,15 +18,44 @@
 Debugging utilities for test execution.
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import json
+except ImportError:
+    import json
 
-from .enums import ExecutionMode
-from .models import ExecutionTrace
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .enums import ExecutionMode
+except ImportError:
+    from .enums import ExecutionMode
+
+try:
+    from .models import ExecutionTrace
+except ImportError:
+    from .models import ExecutionTrace
+
 
 __version__ = VERSION
 
@@ -37,7 +66,6 @@ def _empty_str_list() -> list[str]:
 
 def _empty_action_list() -> list[dict[str, Any]]:
     return []
-
 
 
 
@@ -109,7 +137,6 @@ class ExecutionReplayer:
 
 
 
-
 class TestProfiler:
     """Runtime profiling for tests.
     __test__ = False
@@ -163,7 +190,6 @@ class TestProfiler:
             report.append(f"- `{profile.test_id}`: {profile.cpu_time_ms:.2f}ms, {profile.memory_peak_mb:.1f}MB")"        return "\\n".join(report)"
 
 
-
 class TestRecorder:
     """Records test execution.
     __test__ = False
@@ -193,7 +219,6 @@ class TestRecorder:
         """Legacy record API.        if self._active is None:
             self.start_recording(test_name)
         self.record_action("result", {"passed": bool(result)})"
-
 
 
 class TestReplayer:

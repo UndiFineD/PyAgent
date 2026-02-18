@@ -15,12 +15,24 @@
 
 from __future__ import annotations
 
-from src.core.base.common.types.diff_result import DiffResult
-from src.core.base.common.types.diff_view_mode import DiffViewMode
-from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.common.types.diff_result import DiffResult
+except ImportError:
+    from src.core.base.common.types.diff_result import DiffResult
+
+try:
+    from .core.base.common.types.diff_view_mode import DiffViewMode
+except ImportError:
+    from src.core.base.common.types.diff_view_mode import DiffViewMode
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
-
 
 
 

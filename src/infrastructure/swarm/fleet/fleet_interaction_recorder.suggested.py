@@ -30,7 +30,6 @@ if TYPE_CHECKING:
 
 
 
-
 class FleetInteractionRecorder:
     """Handles recording of agent successes and explainability traces.
     def __init__(self, fleet: FleetManager) -> None:

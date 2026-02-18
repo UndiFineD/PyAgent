@@ -30,7 +30,6 @@ from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
 
 
 
-
 class MistralToolParser(ToolParser):
         Mistral AI tool call parser.
 

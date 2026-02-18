@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.health_core import HealthCore
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.health_core import HealthCore
+except ImportError:
+    from core.base.common.health_core import HealthCore
+
 
 
 def test_healthcore_basic():

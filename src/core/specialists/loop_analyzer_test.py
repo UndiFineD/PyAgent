@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.specialists.loop_analyzer import LoopAnalysisResult, LoopAnalysisConfig, LoopAnalyzer, print_analysis_report
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.specialists.loop_analyzer import LoopAnalysisResult, LoopAnalysisConfig, LoopAnalyzer, print_analysis_report
+except ImportError:
+    from core.specialists.loop_analyzer import LoopAnalysisResult, LoopAnalysisConfig, LoopAnalyzer, print_analysis_report
+
 
 
 def test_loopanalysisresult_basic():

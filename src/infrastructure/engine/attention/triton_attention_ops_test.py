@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.attention.triton_attention_ops import AttentionBackend, PrecisionMode, AttentionConfig, AttentionMetadata, AttentionKernel, TritonPagedAttention, NaiveAttention, SlidingWindowAttention, KVSplitConfig, TritonAttentionOps, create_attention_ops
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.attention.triton_attention_ops import AttentionBackend, PrecisionMode, AttentionConfig, AttentionMetadata, AttentionKernel, TritonPagedAttention, NaiveAttention, SlidingWindowAttention, KVSplitConfig, TritonAttentionOps, create_attention_ops
+except ImportError:
+    from infrastructure.engine.attention.triton_attention_ops import AttentionBackend, PrecisionMode, AttentionConfig, AttentionMetadata, AttentionKernel, TritonPagedAttention, NaiveAttention, SlidingWindowAttention, KVSplitConfig, TritonAttentionOps, create_attention_ops
+
 
 
 def test_attentionbackend_basic():

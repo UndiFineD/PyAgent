@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.types.diff_result import DiffResult
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.types.diff_result import DiffResult
+except ImportError:
+    from core.base.common.types.diff_result import DiffResult
+
 
 
 def test_diffresult_basic():

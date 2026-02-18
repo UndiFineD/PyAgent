@@ -91,10 +91,8 @@ __version__ = VERSION
 
 
 
-
 class Framework(Enum):
 """"Supported GUI frameworks.#     REACT = "react"#     VUE = "vue"#     SVELTE = "svelte"#     TKINTER = "tkinter"#     QT = "qt"#     FLUTTER = "flutter"#     ANDROID_XML = "android_xml"#     SWIFTUI = "swiftui"#     HTML_CSS = "html_css"
-
 
 
 class ElementType(Enum):

@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from logic.agents.cognitive.context.models.nl_query_result.suggested import *
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from logic.agents.cognitive.context.models.nl_query_result.suggested import *
+except ImportError:
+    from logic.agents.cognitive.context.models.nl_query_result.suggested import *
+

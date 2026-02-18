@@ -23,7 +23,6 @@ from .runner import AsyncModelRunner
 
 
 
-
 class BatchedAsyncRunner:
         Batched async runner with automatic batching.
 

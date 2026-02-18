@@ -38,11 +38,28 @@ WHAT IT SHOULD DO BETTER:
 
 from __future__ import annotations
 
-import re
 
-from src.core.base.lifecycle.version import VERSION
-from .error_entry import ErrorEntry
-from .regression_info import RegressionInfo
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .error_entry import ErrorEntry
+except ImportError:
+    from .error_entry import ErrorEntry
+
+try:
+    from .regression_info import RegressionInfo
+except ImportError:
+    from .regression_info import RegressionInfo
+
 
 __version__ = VERSION
 

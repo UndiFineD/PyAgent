@@ -40,7 +40,6 @@ if TYPE_CHECKING:
 
 
 
-
 class DiscoveryOrchestrator:
     """Handles peer-to-peer discovery of fleet nodes using mDNS/Zeroconf.
     SERVICE_TYPE = "_pyagent._tcp.local.""
@@ -124,7 +123,6 @@ class DiscoveryOrchestrator:
     def shutdown(self) -> None:
         """Gracefully shuts down discovery.        if hasattr(self, "zeroconf"):"            self.zeroconf.unregister_all_services()
             self.zeroconf.close()
-
 
 
 

@@ -16,20 +16,50 @@
 
 """
 Auto-extracted class from agent_test_utils.py""""
+
+
 from __future__ import annotations
 
-import os
-import shutil
-import tempfile
-from pathlib import Path
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    import os
+except ImportError:
+    import os
 
-from .isolation_level import IsolationLevel
+try:
+    import shutil
+except ImportError:
+    import shutil
+
+try:
+    import tempfile
+except ImportError:
+    import tempfile
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .isolation_level import IsolationLevel
+except ImportError:
+    from .isolation_level import IsolationLevel
+
 
 __version__ = VERSION
-
 
 
 

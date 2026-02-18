@@ -16,15 +16,47 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Attention backend module.
 
-from .base import AttentionBackend  # noqa: F401
-from .flash import FlashAttentionBackend  # noqa: F401
-from .flashinfer import FlashInferBackend  # noqa: F401
-from .models import (AttentionBackendEnum, AttentionCapabilities,  # noqa: F401
+try:
+    from .base import AttentionBackend  # noqa: F401
+except ImportError:
+    from .base import AttentionBackend # noqa: F401
+
+try:
+    from .flash import FlashAttentionBackend  # noqa: F401
+except ImportError:
+    from .flash import FlashAttentionBackend # noqa: F401
+
+try:
+    from .flashinfer import FlashInferBackend  # noqa: F401
+except ImportError:
+    from .flashinfer import FlashInferBackend # noqa: F401
+
+try:
+    from .models import (AttentionBackendEnum, AttentionCapabilities,  # noqa: F401
+except ImportError:
+    from .models import (AttentionBackendEnum, AttentionCapabilities, # noqa: F401
+
                      AttentionMetadata, AttentionType)
-from .naive import NaiveAttentionBackend  # noqa: F401
-from .packkv import PackKVAttentionBackend  # noqa: F401
-from .registry import AttentionBackendRegistry, get_attention_registry  # noqa: F401
-from .sdpa import TorchSDPABackend  # noqa: F401
+try:
+    from .naive import NaiveAttentionBackend  # noqa: F401
+except ImportError:
+    from .naive import NaiveAttentionBackend # noqa: F401
+
+try:
+    from .packkv import PackKVAttentionBackend  # noqa: F401
+except ImportError:
+    from .packkv import PackKVAttentionBackend # noqa: F401
+
+try:
+    from .registry import AttentionBackendRegistry, get_attention_registry  # noqa: F401
+except ImportError:
+    from .registry import AttentionBackendRegistry, get_attention_registry # noqa: F401
+
+try:
+    from .sdpa import TorchSDPABackend  # noqa: F401
+except ImportError:
+    from .sdpa import TorchSDPABackend # noqa: F401
+
 
 __all__ = [
     "AttentionBackend","    "AttentionBackendEnum","    "AttentionBackendRegistry","    "AttentionCapabilities","    "AttentionMetadata","    "AttentionType","    "FlashAttentionBackend","    "FlashInferBackend","    "NaiveAttentionBackend","    "PackKVAttentionBackend","    "TorchSDPABackend","    "get_attention_registry","]

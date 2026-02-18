@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.knowledge.knowledge_engine import KnowledgeEngine
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.knowledge.knowledge_engine import KnowledgeEngine
+except ImportError:
+    from core.knowledge.knowledge_engine import KnowledgeEngine
+
 
 
 def test_knowledgeengine_basic():

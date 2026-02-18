@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from src.logic.agents.development.coder_core import CoderCore
-from src.core.base.common.types.code_language import CodeLanguage
+try:
+    from .logic.agents.development.coder_core import CoderCore
+except ImportError:
+    from src.logic.agents.development.coder_core import CoderCore
+
+try:
+    from .core.base.common.types.code_language import CodeLanguage
+except ImportError:
+    from src.core.base.common.types.code_language import CodeLanguage
+
 
 
 def test_coder_core_rust_metrics():

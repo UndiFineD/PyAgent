@@ -32,13 +32,11 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class SyncState(Enum):
     READY = 0
     WAVE_RUNNING = 1
     WAVE_COMPLETE = 2
     PAUSED = 3
-
 
 
 

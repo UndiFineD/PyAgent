@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.models.core_enums import AgentState, ResponseQuality, FailureClassification, OptimizationMetric, EventType, AuthMethod, SerializationFormat, FilePriority, InputType, AgentType, MessageRole, AgentEvent, AgentExecutionState, AgentPriority, ConfigFormat, DiffOutputFormat, HealthStatus, LockType, RateLimitStrategy, EnvironmentStatus, EnvironmentIsolation
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.models.core_enums import AgentState, ResponseQuality, FailureClassification, OptimizationMetric, EventType, AuthMethod, SerializationFormat, FilePriority, InputType, AgentType, MessageRole, AgentEvent, AgentExecutionState, AgentPriority, ConfigFormat, DiffOutputFormat, HealthStatus, LockType, RateLimitStrategy, EnvironmentStatus, EnvironmentIsolation
+except ImportError:
+    from core.base.common.models.core_enums import AgentState, ResponseQuality, FailureClassification, OptimizationMetric, EventType, AuthMethod, SerializationFormat, FilePriority, InputType, AgentType, MessageRole, AgentEvent, AgentExecutionState, AgentPriority, ConfigFormat, DiffOutputFormat, HealthStatus, LockType, RateLimitStrategy, EnvironmentStatus, EnvironmentIsolation
+
 
 
 def test_agentstate_basic():

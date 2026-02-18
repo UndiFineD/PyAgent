@@ -36,13 +36,29 @@ Auto-extracted class from agent_coder.py
 
 from __future__ import annotations
 
-from src.core.base.common.types.dependency_node import DependencyNode
-from src.core.base.common.types.dependency_type import DependencyType
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.analysis.dependency_core import DependencyCore
+
+try:
+    from .core.base.common.types.dependency_node import DependencyNode
+except ImportError:
+    from src.core.base.common.types.dependency_node import DependencyNode
+
+try:
+    from .core.base.common.types.dependency_type import DependencyType
+except ImportError:
+    from src.core.base.common.types.dependency_type import DependencyType
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.analysis.dependency_core import DependencyCore
+except ImportError:
+    from src.logic.agents.analysis.dependency_core import DependencyCore
+
 
 __version__ = VERSION
-
 
 
 
@@ -73,13 +89,29 @@ class DependencyAgent:
   "  "    return external"
 from __future__ import annotations
 
-from src.core.base.common.types.dependency_node import DependencyNode
-from src.core.base.common.types.dependency_type import DependencyType
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.analysis.dependency_core import DependencyCore
+
+try:
+    from .core.base.common.types.dependency_node import DependencyNode
+except ImportError:
+    from src.core.base.common.types.dependency_node import DependencyNode
+
+try:
+    from .core.base.common.types.dependency_type import DependencyType
+except ImportError:
+    from src.core.base.common.types.dependency_type import DependencyType
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .logic.agents.analysis.dependency_core import DependencyCore
+except ImportError:
+    from src.logic.agents.analysis.dependency_core import DependencyCore
+
 
 __version__ = VERSION
-
 
 
 

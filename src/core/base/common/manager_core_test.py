@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.common.manager_core import BaseManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.common.manager_core import BaseManager
+except ImportError:
+    from core.base.common.manager_core import BaseManager
+
 
 
 def test_basemanager_basic():

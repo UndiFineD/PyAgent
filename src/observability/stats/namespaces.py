@@ -20,7 +20,11 @@ A small manager class to create, delete, and organize MetricNamespace objects an
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-from src.core.metrics.namespaces import MetricNamespaceManager
+try:
+    from .core.metrics.namespaces import MetricNamespaceManager
+except ImportError:
+    from src.core.metrics.namespaces import MetricNamespaceManager
+
 mgr = MetricNamespaceManager()
 mgr.create_namespace("infrastructure", "Infra metrics")"mgr.create_namespace("database", "DB metrics", parent="infrastructure")"mgr.assign_metric("db.connections", "database")"print(mgr.get_full_path("database"))  # "infrastructure / database""
 WHAT IT DOES:
@@ -41,9 +45,17 @@ Namespaces.py module.
 
 from __future__ import annotations
 
-from typing import Any
 
-from .metrics import MetricNamespace
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .metrics import MetricNamespace
+except ImportError:
+    from .metrics import MetricNamespace
 
 
 
@@ -93,9 +105,17 @@ class MetricNamespaceManager:
 
 from __future__ import annotations
 
-from typing import Any
 
-from .metrics import MetricNamespace
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .metrics import MetricNamespace
+except ImportError:
+    from .metrics import MetricNamespace
 
 
 

@@ -43,11 +43,9 @@ logger = logging.getLogger(__name__)
 F = TypeVar("F", bound=Callable[..., Any])"
 
 
-
 class CompileMode(Enum):
     """Compilation mode selection.
     DEFAULT = "default"  # Standard optimization"    REDUCE_OVERHEAD = "reduce-overhead"  # Minimize CPU overhead"    MAX_AUTOTUNE = "max-autotune"  # Maximum tuning"    MAX_AUTOTUNE_NO_CUDAGRAPH = "max-autotune-no-cudagraphs""
-
 
 
 class CompileBackend(Enum):
@@ -88,7 +86,6 @@ class CompileStats:
 
 
 
-
 class CompilerInterface(ABC):
         Abstract interface for compilation backends.
 
@@ -102,7 +99,6 @@ class CompilerInterface(ABC):
     @abstractmethod
     def invalidate(self, fn: Callable[..., Any]) -> None:
         """Invalidate compilation cache for function.
-
 
 
 class TorchCompiler(CompilerInterface):
@@ -180,7 +176,6 @@ class TorchCompiler(CompilerInterface):
 
 
 
-
 class CompilationCounter:
         Counter for triggering recompilation.
 
@@ -235,7 +230,6 @@ class CompilationCounter:
 
 
 
-
 class IncrementalCompiler(CompilerInterface):
         Incremental compilation strategy.
 
@@ -275,7 +269,6 @@ class IncrementalCompiler(CompilerInterface):
             if fn_id in self._call_counts:
                 del self._call_counts[fn_id]
         self._base.invalidate(fn)
-
 
 
 

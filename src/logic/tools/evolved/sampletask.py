@@ -51,10 +51,23 @@ A sample automated GUI task.
 
 from __future__ import annotations
 
-import pyautogui
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.version import VERSION
+try:
+    import pyautogui
+except ImportError:
+    import pyautogui
+
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION
 

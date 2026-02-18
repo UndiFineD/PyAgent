@@ -14,6 +14,8 @@
 
 
 """Standard exception types for the PyAgent base framework."""
+
+
 from __future__ import annotations
 
 
@@ -28,30 +30,24 @@ class PyAgentException(Exception):
 
 
 
-
 class InfrastructureError(PyAgentException):
     """Errors related to system infrastructure (I/O, Network)."""
-
 
 
 class LogicError(PyAgentException):
     """Errors related to agent logic or reasoning failure."""
 
 
-
 class SecurityError(PyAgentException):
     """Errors related to unauthorized access or safety violations."""
-
 
 
 class ModelError(PyAgentException):
     """Errors related to LLM connectivity or output parsing."""
 
 
-
 class ConfigurationError(PyAgentException):
     """Errors in settings or manifest validation."""
-
 
 
 class CycleInterrupt(PyAgentException):

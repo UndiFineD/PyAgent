@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.mcp.mcp_tool_server import adapt_tool_schema, discover_mcp_servers
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.mcp.mcp_tool_server import adapt_tool_schema, discover_mcp_servers
+except ImportError:
+    from infrastructure.services.mcp.mcp_tool_server import adapt_tool_schema, discover_mcp_servers
+
 
 
 def test_adapt_tool_schema_basic():

@@ -22,14 +22,30 @@ Data structures and enums for ARC offloading.
 
 from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Union
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Union
+except ImportError:
+    from typing import Union
+
 
 # Type for block hash
 BlockHash = Union[bytes, str, int]
-
 
 
 
@@ -39,7 +55,6 @@ class OffloadMedium(Enum):
     CPU = auto()
     DISK = auto()
     REMOTE = auto()
-
 
 
 

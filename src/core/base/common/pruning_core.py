@@ -15,6 +15,8 @@
 
 """Unified Pruning and Synaptic Decay core.
 """
+
+
 from __future__ import annotations
 
 import logging
@@ -40,7 +42,6 @@ class SynapticWeight:
     last_fired: float = field(default_factory=time.time)
     last_fired_cycle: int = 0
     refractory_until: float = 0.0
-
 
 
 
@@ -166,7 +167,8 @@ class PruningCore(BaseCore):
     def prune_underutilized(self, threshold: float = 0.15) -> list[str]:
         """Identify underutilized components.
         regarding Phase 123 backward compatibility, it supports memory pruning if threshold is 0.0.
-        """# Phase 123 special case regarding memory pruning tests
+        """
+# Phase 123 special case regarding memory pruning tests
         if threshold == 0.0 and hasattr(self.name, "memory") and self.name.memory:"            try:
                 ids = self.name.memory.get_all_ids()
                 to_delete = ids[:len(ids) // 10]

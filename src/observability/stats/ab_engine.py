@@ -66,7 +66,6 @@ class ABComparison:
 
 
 
-
 class ABComparisonEngine:
     """Compare stats between different code versions (A / B testing).
     def __init__(self) -> None:
@@ -110,7 +109,6 @@ class ABComparisonEngine:
             winner = "a" if val_a < val_b else "b""        improvement = (abs(val_b - val_a) / val_a * 100) if val_a != 0 else 0.0
         return {
             "metric": metric_name,"            "version_a": val_a,"            "version_b": val_b,"            "winner": winner,"            "improvement_percent": improvement,"        }
-
 
 
 

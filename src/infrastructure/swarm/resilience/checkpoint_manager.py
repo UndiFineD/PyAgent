@@ -40,7 +40,6 @@ class CheckpointMetadata:
 
 
 
-
 class CheckpointManager:
     """Manages high-speed state checkpoints using RDMA teleportation.
     def __init__(self, rank: int, world_size: int):

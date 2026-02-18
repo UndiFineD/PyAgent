@@ -19,20 +19,42 @@ Implements goal-driven iterative improvement patterns for self-correcting agents
 Based on agentic design patterns with goal evaluation, iterative refinement, and
 self-correction reasoning techniques.
 """
-import logging
-from typing import List, Dict, Any, Optional, Callable
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
+try:
+    import logging
+except ImportError:
+    import logging
 
-from src.core.base.common.base_core import BaseCore
+try:
+    from typing import List, Dict, Any, Optional, Callable
+except ImportError:
+    from typing import List, Dict, Any, Optional, Callable
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from datetime import datetime
+except ImportError:
+    from datetime import datetime
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+
+try:
+    from .core.base.common.base_core import BaseCore
+except ImportError:
+    from src.core.base.common.base_core import BaseCore
 
 
 
 
 class GoalStatus(str, Enum):
     """Goal achievement status enumeration."""PENDING = "pending""    IN_PROGRESS = "in_progress""    ACHIEVED = "achieved""    FAILED = "failed""    MAX_ITERATIONS_REACHED = "max_iterations_reached""
-
 
 
 class GoalPriority(str, Enum):
@@ -68,7 +90,6 @@ class IterationResult:
     feedback: str
     goals_met: bool
     timestamp: datetime = field(default_factory=datetime.now)
-
 
 
 

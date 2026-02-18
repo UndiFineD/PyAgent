@@ -22,7 +22,11 @@ Contains pure logic for tallying votes, handling ties, and selecting winners.
 
 from __future__ import annotations
 
-from src.core.base.common import ConsensusCore
+
+try:
+    from .core.base.common import ConsensusCore
+except ImportError:
+    from src.core.base.common import ConsensusCore
 
 
 

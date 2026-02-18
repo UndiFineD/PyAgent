@@ -36,7 +36,6 @@ class KnowledgeMixin:
         try:
             # pylint: disable=import-outside-toplevel
             from src.core.knowledge.knowledge_engine import KnowledgeEngine
-
             self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=workspace_root / "data/agents")
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
@@ -123,9 +122,7 @@ class KnowledgeMixin:
         if self._local_global_context is None:
             try:
                 # pylint: disable=import-outside-toplevel
-                from src.logic.agents.cognitive.context.engines.global_context_engine import \
-                    GlobalContextEngine
-
+                from src.logic.agents.cognitive.context.engines.global_context_engine import GlobalContextEngine
                 self._local_global_context = GlobalContextEngine(self._workspace_root)
             except (ImportError, ValueError):
                 pass

@@ -55,7 +55,6 @@ __version__ = VERSION
 
 
 
-
 class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """"Manages the lifecycle of fleet nodes, including containerization and deployment.
     def __init__(self, file_path: str) -> None:
@@ -161,7 +160,6 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 
 

@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from core.base.lifecycle.skill_manager import SkillManager
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from core.base.lifecycle.skill_manager import SkillManager
+except ImportError:
+    from core.base.lifecycle.skill_manager import SkillManager
+
 
 
 def test_skillmanager_basic():

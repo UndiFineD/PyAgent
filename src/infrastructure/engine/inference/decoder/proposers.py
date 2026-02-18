@@ -19,11 +19,23 @@ Proposers.py module.
 
 from __future__ import annotations
 
-from typing import Protocol, Sequence
 
-import numpy as np
+try:
+    from typing import Protocol, Sequence
+except ImportError:
+    from typing import Protocol, Sequence
 
-from .config import DraftProposal
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+
+try:
+    from .config import DraftProposal
+except ImportError:
+    from .config import DraftProposal
 
 
 
@@ -44,7 +56,6 @@ class DraftProposer(Protocol):
         new_token_ids: list[int],
     ) -> None:
         """Update proposer state with new tokens.        ...
-
 
 
 
@@ -136,7 +147,6 @@ class NgramProposer:
 
 
 
-
 class SuffixNode:
     """Node in a suffix tree.
     __slots__ = ("children", "count", "continuations")"
@@ -144,7 +154,6 @@ class SuffixNode:
         self.children: dict[int, SuffixNode] = {}
         self.count: int = 0
         self.continuations: dict[int, int] = {}  # token -> frequency
-
 
 
 

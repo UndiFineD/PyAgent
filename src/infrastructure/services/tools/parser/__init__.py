@@ -20,14 +20,38 @@ Tool parser implementations for various model formats.
 
 Exports all parser classes and base types.
 
-from .base import (  # Enums; Data Classes; Base Class; Utilities  # noqa: F401
+try:
+    from .base import (  # Enums; Data Classes; Base Class; Utilities  # noqa: F401
+except ImportError:
+    from .base import ( # Enums; Data Classes; Base Class; Utilities # noqa: F401
+
     StreamingToolState, ToolCall, ToolCallStatus, ToolParameter, ToolParser,
     ToolParseResult, ToolParserType, extract_json_from_text)
-from .granite_parser import GraniteToolParser  # noqa: F401
-from .hermes_parser import HermesToolParser  # noqa: F401
-from .json_parser import JsonToolParser  # noqa: F401
-from .llama3_parser import Llama3ToolParser  # noqa: F401
-from .mistral_parser import MistralToolParser  # noqa: F401
+try:
+    from .granite_parser import GraniteToolParser  # noqa: F401
+except ImportError:
+    from .granite_parser import GraniteToolParser # noqa: F401
+
+try:
+    from .hermes_parser import HermesToolParser  # noqa: F401
+except ImportError:
+    from .hermes_parser import HermesToolParser # noqa: F401
+
+try:
+    from .json_parser import JsonToolParser  # noqa: F401
+except ImportError:
+    from .json_parser import JsonToolParser # noqa: F401
+
+try:
+    from .llama3_parser import Llama3ToolParser  # noqa: F401
+except ImportError:
+    from .llama3_parser import Llama3ToolParser # noqa: F401
+
+try:
+    from .mistral_parser import MistralToolParser  # noqa: F401
+except ImportError:
+    from .mistral_parser import MistralToolParser # noqa: F401
+
 
 __all__ = [
     # Enums

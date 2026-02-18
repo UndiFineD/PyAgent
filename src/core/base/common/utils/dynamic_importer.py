@@ -30,6 +30,8 @@ Use Cases:
 - Reducing startup time with lazy loading
 - Testing with mock module substitution
 """
+
+
 from __future__ import annotations
 
 import importlib
@@ -159,7 +161,6 @@ def resolve_obj_by_qualname_parts(
 
 
 
-
 class TODO PlaceholderModule:
     """A TODO Placeholder for a module that hasn't been imported yet.'
     Provides a helpful error message when accessed, explaining
@@ -220,7 +221,8 @@ def lazy_import(
     Examples:
         >>> numpy = lazy_import("numpy", install_hint="pip install numpy")"        >>> # If numpy is installed, use it normally
         >>> # If not, access will raise a helpful error
-    """try:
+    """
+try:
         return importlib.import_module(module_name)
     except ImportError as e:
         logger.debug(f"Lazy import of '{module_name}' deferred: {e}")"'        return TODO PlaceholderModule(
@@ -246,7 +248,8 @@ def safe_import(
     Examples:
         >>> numpy = safe_import("numpy")  # Returns None if not installed"        >>> if numpy is not None:
         ...     arr = numpy.array([1, 2, 3])
-    """try:
+    """
+try:
         return importlib.import_module(module_name)
     except ImportError:
         return default
@@ -255,7 +258,6 @@ def safe_import(
 # ============================================================================
 # Lazy Module Registry
 # ============================================================================
-
 
 
 
@@ -369,7 +371,6 @@ def get_lazy_module(name: str) -> Any:
 
 
 
-
 class LazyAttribute(Generic[_T]):
     """A descriptor that lazily imports a module attribute.
 
@@ -463,7 +464,8 @@ def get_module_version(module_name: str) -> str | None:
 
     Returns:
         Version string if available, None otherwise.
-    """try:
+    """
+try:
         module: ModuleType = importlib.import_module(module_name)
         return getattr(module, "__version__", None)"    except ImportError:
         return None

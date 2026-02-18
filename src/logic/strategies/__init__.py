@@ -17,16 +17,41 @@
 Auto-generated module exports.
 from __future__ import annotations
 
-from collections.abc import Callable
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections.abc import Callable
 
-from .agent_strategy import AgentStrategy  # noqa: F401
-from .chain_of_thought_strategy import (  # noqa: F401
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .agent_strategy import AgentStrategy  # noqa: F401
+except ImportError:
+    from .agent_strategy import AgentStrategy # noqa: F401
+
+try:
+    from .chain_of_thought_strategy import (  # noqa: F401
+except ImportError:
+    from .chain_of_thought_strategy import ( # noqa: F401
+
     ChainOfThoughtStrategy
 )
-from .direct_strategy import DirectStrategy  # noqa: F401
-from .reflexion_strategy import ReflexionStrategy  # noqa: F401
+try:
+    from .direct_strategy import DirectStrategy  # noqa: F401
+except ImportError:
+    from .direct_strategy import DirectStrategy # noqa: F401
+
+try:
+    from .reflexion_strategy import ReflexionStrategy  # noqa: F401
+except ImportError:
+    from .reflexion_strategy import ReflexionStrategy # noqa: F401
+
 
 # Type alias for the backend function signature
 # (prompt, system_prompt, history) -> response

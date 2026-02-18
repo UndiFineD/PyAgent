@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from interface.commands.registry.suggested import CommandRegistry
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from interface.commands.registry.suggested import CommandRegistry
+except ImportError:
+    from interface.commands.registry.suggested import CommandRegistry
+
 
 
 def test_commandregistry_basic():

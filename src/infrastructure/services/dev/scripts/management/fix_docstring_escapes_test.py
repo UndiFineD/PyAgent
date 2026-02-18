@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.services.dev.scripts.management.fix_docstring_escapes import fix_escapes
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.services.dev.scripts.management.fix_docstring_escapes import fix_escapes
+except ImportError:
+    from infrastructure.services.dev.scripts.management.fix_docstring_escapes import fix_escapes
+
 
 
 def test_fix_escapes_basic():

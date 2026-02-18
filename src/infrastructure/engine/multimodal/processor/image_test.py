@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.engine.multimodal.processor.image import ImageProcessor
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.engine.multimodal.processor.image import ImageProcessor
+except ImportError:
+    from infrastructure.engine.multimodal.processor.image import ImageProcessor
+
 
 
 def test_imageprocessor_basic():

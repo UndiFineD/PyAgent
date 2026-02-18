@@ -61,7 +61,6 @@ logger = logging.getLogger(__name__)
 
 
 
-
 class GuidedDecoder:
         Guided decoding engine for structured output generation.
     

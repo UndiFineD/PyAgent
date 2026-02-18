@@ -16,13 +16,28 @@
 Builder.py module.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
-from typing import Any, Dict, List, Optional
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
 
-from .config import StructuredOutputConfig
-from .constraints import OutputConstraint
-from .enums import (GuidedDecodingBackend, StructuredOutputType,
+
+try:
+    from .config import StructuredOutputConfig
+except ImportError:
+    from .config import StructuredOutputConfig
+
+try:
+    from .constraints import OutputConstraint
+except ImportError:
+    from .constraints import OutputConstraint
+
+try:
+    from .enums import (GuidedDecodingBackend, StructuredOutputType,
+except ImportError:
+    from .enums import (GuidedDecodingBackend, StructuredOutputType,
+
                     WhitespacePattern)
-
 
 
 

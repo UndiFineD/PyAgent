@@ -15,19 +15,33 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Enums and configuration for tensorizer.
-from dataclasses import dataclass
-from enum import Enum
-from typing import Optional
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
 
-import numpy as np
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
 
+try:
+    from typing import Optional
+except ImportError:
+    from typing import Optional
+
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
 
 
 
 class TensorDtype(Enum):
     """Supported tensor data types.
     FLOAT32 = "float32""    FLOAT16 = "float16""    BFLOAT16 = "bfloat16""    INT8 = "int8""    UINT8 = "uint8""    INT32 = "int32""    INT64 = "int64""
-
 
 
 class CompressionType(Enum):

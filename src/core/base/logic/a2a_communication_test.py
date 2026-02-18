@@ -15,12 +15,32 @@
 
 """Tests for the A2A Communication System.
 """
-import asyncio
-import pytest
-import pytest_asyncio
-from unittest.mock import Mock, AsyncMock
+try:
+    import asyncio
+except ImportError:
+    import asyncio
 
-from src.core.base.logic.a2a_communication import (
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    import pytest_asyncio
+except ImportError:
+    import pytest_asyncio
+
+try:
+    from unittest.mock import Mock, AsyncMock
+except ImportError:
+    from unittest.mock import Mock, AsyncMock
+
+
+try:
+    from .core.base.logic.a2a_communication import (
+except ImportError:
+    from src.core.base.logic.a2a_communication import (
+
     MessageRouter,
     A2ACommunicationMixin,
     AgentCard,
@@ -32,7 +52,6 @@ from src.core.base.logic.a2a_communication import (
     SimpleA2AAgent,
     create_a2a_network
 )
-
 
 
 
@@ -49,7 +68,6 @@ class TestAgentCard:
         """Test invalid URL validation."""with pytest.raises(ValueError):
             AgentCard(
                 name="test_agent","                description="A test agent","                url="invalid-url""            )
-
 
 
 
@@ -70,7 +88,6 @@ class TestA2AMessage:
             from_agent="response_agent","            correlation_id="corr-123","            payload={"result": "success"}"        )
 
         assert message.correlation_id == "corr-123""
-
 
 
 class TestMessageRouter:
@@ -110,7 +127,8 @@ class TestMessageRouter:
         assert response.status == "error""        assert "Agent not found" in response.error"
     @pytest.mark.asyncio
     async def test_broadcast_message(self, router):
-        """Test broadcasting messages."""# Register two agents
+        """Test broadcasting messages."""
+# Register two agents
         agent1 = Mock()
         agent1.agent_card = AgentCard(name="agent1", description="Test", url="http://localhost:8001")"        agent1.handle_message = AsyncMock(return_value=A2AResponse(
             message_id="test", status="success", result="response1""        ))
@@ -130,7 +148,6 @@ class TestMessageRouter:
         response = await router.route_message(message)
 
         assert response.status == "success""        assert "broadcast_responses" in response.result"        assert len(response.result["broadcast_responses"]) == 2"
-
 
 
 class TestA2ACommunicationMixin:
@@ -161,7 +178,6 @@ class TestA2ACommunicationMixin:
     def test_broadcast_without_router(self, agent):
         """Test broadcasting without router."""with pytest.raises(RuntimeError):
             asyncio.run(agent.broadcast_message({"test": "data"}))"
-
 
 
 class TestSimpleA2AAgent:
@@ -210,7 +226,6 @@ class TestSimpleA2AAgent:
         assert response.status == "success""        assert response.result == "Message acknowledged""
 
 
-
 class TestA2ANetwork:
     """Test A2A network creation and management."""
     @pytest.mark.asyncio
@@ -231,7 +246,6 @@ class TestA2ANetwork:
         response = await agent1.send_request("agent2", {"action": "greet", "name": "Agent1"})"
         assert response.status == "success""        assert "Hello, Agent1!" in response.result"
         await router.stop_routing()
-
 
 
 

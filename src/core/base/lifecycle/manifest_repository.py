@@ -16,6 +16,8 @@
 """Module: manifest_repository
 Manages the storage and retrieval of Logic Manifests for the swarm.
 """
+
+
 from __future__ import annotations
 import json
 import logging
@@ -25,7 +27,6 @@ from typing import Dict
 from src.core.base.lifecycle.logic_manifest import LogicManifest
 
 logger = logging.getLogger(__name__)
-
 
 
 

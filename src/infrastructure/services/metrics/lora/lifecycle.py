@@ -20,11 +20,27 @@ LoRA Request Lifecycle - Detailed tracking of per-request events and timing.
 
 from __future__ import annotations
 
-import threading
-import time
-from typing import Any, Dict, List, Optional, Tuple
 
-from src.infrastructure.services.metrics.lora.types import RequestStatus
+try:
+    import threading
+except ImportError:
+    import threading
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple
+
+
+try:
+    from .infrastructure.services.metrics.lora.types import RequestStatus
+except ImportError:
+    from src.infrastructure.services.metrics.lora.types import RequestStatus
 
 
 
@@ -160,7 +176,6 @@ class RequestLifecycle:
                 result["time_to_first_token"] = self._first_token_time - self._created_time"            if self._finish_time:
                 result["total_latency"] = self._finish_time - self._created_time"
             return result
-
 
 
 

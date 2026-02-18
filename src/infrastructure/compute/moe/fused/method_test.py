@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
-from infrastructure.compute.moe.fused.method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+try:
+    from infrastructure.compute.moe.fused.method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
+except ImportError:
+    from infrastructure.compute.moe.fused.method import FusedMoEMethodBase, UnquantizedFusedMoEMethod
+
 
 
 def test_fusedmoemethodbase_basic():

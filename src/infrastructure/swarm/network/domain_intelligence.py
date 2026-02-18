@@ -36,7 +36,6 @@ class BugBountyProgram:
 
 
 
-
 class DomainIntelligence:
         Asynchronous Domain Intelligence gathering.
     Integrates with ProjectDiscovery Chaos dataset.
