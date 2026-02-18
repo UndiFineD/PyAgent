@@ -48,15 +48,15 @@ class AgentFileManager:
 
 
     def find_code_files(self, max_files: Optional[int] = None) -> List[Path]:
-        """Finds all code files relevant to the current agent context."""
+        """Finds all code files relevant to the current agent context."""       
 found: List[Path] = []
 
         # Walk through the repository
         if not self.repo_root.exists():
             return []
 
-        for path in self.repo_root.rglob("*"):"            
-        if path.is_dir():
+        for path in self.repo_root.rglob("*"):
+            if path.is_dir():
                 continue
 
             # Check extension
@@ -70,13 +70,14 @@ found: List[Path] = []
                 # Path is not under repo_root (can happen in some test setups)
                 rel_path = path
 
-            rel_str = str(rel_path).replace("\\", "/")"
+            rel_str = str(rel_path).replace("\\", "/")
             should_ignore = False
             for pat in self.ignored_patterns:
                 # Basic glob matching for patterns
                 if fnmatch.fnmatch(rel_str, pat) or \
                    fnmatch.fnmatch(path.name, pat) or \
-                   any(fnmatch.fnmatch(str(p).replace("\\", "/"), pat) for p in rel_path.parents):"                    should_ignore = True
+                   any(fnmatch.fnmatch(str(p).replace("\\", "/"), pat) for p in rel_path.parents):
+                    should_ignore = True
                     break
 
             if should_ignore:
@@ -84,9 +85,12 @@ found: List[Path] = []
 
             # If agents_only is set, apply additional filters
             if self.agents_only:
-                # Heuristic: exclude typical non-agent files if they don't seem related'                # This matches the unit test expectations
-                if path.name.startswith("test_") and "agent" not in path.name.lower():"                    continue
-                if "random_helper" in path.name:"                    continue
+                # Heuristic: exclude typical non-agent files if they don't seem related
+                # This matches the unit test expectations
+                if path.name.startswith("test_") and "agent" not in path.name.lower():
+                    continue
+                if "random_helper" in path.name:
+                    continue
 
             found.append(path)
 

@@ -16,10 +16,10 @@
 
 """
 Swarm infrastructure components.
+"""
 try:
     from . import fleet, orchestration, worker
 except ImportError:
     from . import fleet, orchestration, worker
 
-
-__all__ = ["fleet", "orchestration", "worker"]"
+__all__ = ["fleet", "orchestration", "worker"]

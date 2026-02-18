@@ -28,7 +28,7 @@ except ImportError:
 
 
 class MemoryStorageMixin:
-""""Methods for storage and DB initialization.
+    """Methods for storage and DB initialization."""
     def _init_db(self) -> Any:
         if not HAS_CHROMA:
             return None
@@ -36,19 +36,30 @@ class MemoryStorageMixin:
             return self._collection
         try:
             client = chromadb.PersistentClient(path=str(self.db_path))
-            self._collection = client.get_or_create_collection(name="agent_memory")"            return self._collection
+            self._collection = client.get_or_create_collection(name="agent_memory")
+            return self._collection
+
         except (ImportError, RuntimeError, ValueError) as e:
-            logging.error(fMemory DB init error: {e}")"            return None
+            logging.error(f"Memory DB init error: {e}")
+            return None
 
     def save(self) -> None:
-""""Persist memory to disk.   "   "  try:"            self.memory_file.write_text(json.dumps(self.episodes, indent=2), encoding="utf-8")"        except (IOError, OSError) as e:
-            logging.error(fFailed to save memory: {e}")"
+        """Persist memory to disk."""
+        try:
+            self.memory_file.write_text(json.dumps(self.episodes, indent=2), encoding="utf-8")
+        except (IOError, OSError) as e:
+            logging.error(f"Failed to save memory: {e}")
     def load(self) -> None:
-""""Load memory from disk.        if self.memory_file."exists():"            try:
-                self.episodes = json.loads(self.memory_file.read_text(encoding="utf-8"))"            except (json.JSONDecodeError, IOError, OSError) as e:
-                logging.error(fFailed to load memory: {e}")"                self.episodes = []
+        """Load memory from disk."""
+        if self.memory_file.exists():
+            try:
+                self.episodes = json.loads(self.memory_file.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, IOError, OSError) as e:
+                logging.error(f"Failed to load memory: {e}")
+                self.episodes = []
 
     def clear(self) -> None:
-""""Wipe memory.        self.episodes = []
+        """Wipe memory."""
+        self.episodes = []
         if self.memory_file.exists():
             self.memory_file.unlink()

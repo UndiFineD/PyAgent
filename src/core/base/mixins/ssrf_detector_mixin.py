@@ -52,7 +52,7 @@ class SSRFDetectorMixin:
             super().__init__(*args, **kwargs)
 
 
-        def log_message(self, format, *args):
+        def log_message(self, fmt, *args):
             """Override to suppress default logging."""
             # Suppress default logging
             return
@@ -89,8 +89,8 @@ class SSRFDetectorMixin:
                 self.send_response(200)
                 self.end_headers()
 
-            except Exception:
-                self.send_response(200)
+            except (ValueError, KeyError):
+                self.send_response(400)
                 self.end_headers()
 
 

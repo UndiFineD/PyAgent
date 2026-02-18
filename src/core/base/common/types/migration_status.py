@@ -30,7 +30,6 @@ except ImportError:
 __version__ = VERSION
 
 
-class
 class MigrationStatus(Enum):
     """Status of a code migration operation.
     """

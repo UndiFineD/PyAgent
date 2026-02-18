@@ -32,15 +32,20 @@ __version__ = VERSION
 
 
 class VersionGate:
-        Pure logic for version compatibility checks.
+    """
+    Pure logic for version compatibility checks.
     Designed for future Rust porting (Core/Shell pattern).
-    
+    """
+
     @staticmethod
     def is_compatible(current: str, required: str) -> bool:
-                Checks if the current version meets the requirement using semantic logic.
+        """
+        Checks if the current version meets the requirement using semantic logic.
         Major version must match or current must be higher (if backward compatible).
-                try:
-            curr_parts = [int(x) for x in current.split(".")]"            req_parts = [int(x) for x in required.split(".")]"
+        """
+        try:
+            curr_parts = [int(x) for x in current.split(".")]
+            req_parts = [int(x) for x in required.split(".")]
             # Pad to 3 parts (major, minor, patch)
             curr_parts += [0] * (3 - len(curr_parts))
             req_parts += [0] * (3 - len(req_parts))
@@ -62,8 +67,13 @@ class VersionGate:
             # Patch check
             return curr_parts[2] >= req_parts[2]
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.debug(f"VersionGate: Failed to parse version '{current}' or '{required}': {e}")"'            # Fail safe: if we can't parse, assume it's legacy (compatible)'            return True
+            logging.debug(f"VersionGate: Failed to parse version '{current}' or '{required}': {e}")
+            # Fail safe: if we can't parse, assume it's legacy (compatible)
+            return True
 
     @staticmethod
     def filter_by_capability(available: list[str], required: list[str]) -> list[str]:
-        """Filters a list of providers by required capabilities.        return [p for p in available if all(cap in p for cap in required)]
+        """
+        Filters a list of providers by required capabilities.
+        """
+        return [p for p in available if all(cap in p for cap in required)]

@@ -43,10 +43,12 @@ class PromptTemplateManager:
         self._core = PromptCore()
 
     def register_template(self, template: PromptTemplate) -> None:
-        """Register a new template."""self._core.register_template(template)
+        """Register a new template."""
+        self._core.register_template(template)
 
     def render_template(self, name: str, **kwargs: Any) -> str:
-        """Render a template."""return self._core.render_template(name, **kwargs)
+        """Render a template."""
+        return self._core.render_template(name, **kwargs)
 
 
 
@@ -58,4 +60,5 @@ class PromptVersionManager:
         self._core = PromptCore()
 
     def register_version(self, version: PromptVersion) -> None:
-        """Register a new version."""self._core.register_version(version)
+        """Register a new version."""
+        self._core.register_version(version)

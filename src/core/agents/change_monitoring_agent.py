@@ -37,7 +37,6 @@ from src.core.base.mixins.data_processing_mixin import DataProcessingMixin
 __version__ = "1.0.0"
 
 
-class
 class ChangeDataSource(ABC):
     """Abstract base class for data sources that support change monitoring."""
     @abstractmethod
@@ -57,7 +56,10 @@ class ChangeDataSource(ABC):
         """Get initial full dump of data (expensive operation)."""
 
 
-class
+
+# Missing class name, likely intended as a class definition. Assuming 'ChangeMonitorAgent' as placeholder.
+class ChangeMonitorAgent:
+    pass
 
 class FileSystemDataSource(ChangeDataSource):
     """Example data source for file system monitoring."""
@@ -105,9 +107,8 @@ class FileSystemDataSource(ChangeDataSource):
                         'attribute_value': stat.st_size,
                         'last_orig_change_time': stat.st_mtime,
                         'usn': stat.st_mtime
-
-
-class
+                    })
+        return files
 
 
 class HistoryManager:
@@ -150,9 +151,9 @@ class HistoryManager:
         try:
             if Path(filepath).exists():
                 with open(filepath, 'r', encoding='utf-8') as f:
-
-
-class       logging.warning(f"Failed to load history from {filepath}: {e}")
+                    self.history = json.load(f)
+        except Exception as e:
+            logging.warning(f"Failed to load history from {filepath}: {e}")
 
 
 class ChangeMonitoringAgent(BaseAgent, DataProcessingMixin):

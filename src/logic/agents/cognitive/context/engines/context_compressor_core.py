@@ -31,11 +31,10 @@ except ImportError:
 __version__ = VERSION
 
 
-class
+class DummyCompressor:
+    pass
 class ContextCompressorCore:
-    """
-    Pure logic core for code and document compression.
-    """
+    """Pure logic core for code and document compression."""
     @staticmethod
     def compress_python(content: str) -> str:
         """
@@ -44,10 +43,6 @@ class ContextCompressorCore:
         try:
             tree = ast.parse(content)
             compressed_lines: list[str] = []
-
-            # Use a visitor pattern for cleaner separation if needed,
-            # but for simple signature extraction, a walk is acceptable
-            # as long as we maintain some structure.
 
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef):
@@ -65,10 +60,7 @@ class ContextCompressorCore:
                     except (AttributeError, ValueError, TypeError):
                         args_str = "..."
                     prefix = "async " if isinstance(node, ast.AsyncFunctionDef) else ""
-                    # Note: Detecting indentation level in a walk is hard.
-                    # We'll just list them as signatures for now.
                     compressed_lines.append(f"{prefix}def {node.name}({args_str}): ...")
-            # Deduplicate and sort to provide a stable signature
             unique_signatures = sorted(list(set(compressed_lines)))
             return "\n".join(unique_signatures)
         except (SyntaxError, ValueError, AttributeError):

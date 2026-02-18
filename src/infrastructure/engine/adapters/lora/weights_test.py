@@ -19,12 +19,11 @@ except ImportError:
     import pytest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
-    import numpy
- as np
+    import numpy as np
 try:
-    from .infrastructure.engine.adapters.lora.weights import LoRALayerWeights
+    from .weights import LoRALayerWeights
 except ImportError:
     from src.infrastructure.engine.adapters.lora.weights import LoRALayerWeights
 
@@ -39,14 +38,12 @@ def lora_weights():
 
 def test_properties(lora_weights):
     """Test that LoRALayerWeights properties return the correct values."""
-    lora_weights = lora_weights
     assert lora_weights.rank == 2
     assert lora_weights.in_features == 3
     assert lora_weights.out_features == 4
 
 def test_forward_shape(lora_weights):
     """Test that LoRALayerWeights.forward() returns the correct output shape."""
-    lora_weights = lora_weights
     x = np.ones((5, 3), dtype=np.float32)
     out = lora_weights.forward(x)
     assert out.shape == (5, 4)
@@ -60,7 +57,6 @@ def test_merge_into_base(lora_weights):
     This test ensures that merging LoRA weights into a base weight matrix produces an output
     with the expected shape, confirming correct integration of LoRA parameters.
     """
-    lora_weights = lora_weights
     base_weight = np.ones((4, 3), dtype=np.float32)
     merged = lora_weights.merge_into_base(base_weight)
     assert merged.shape == (4, 3)

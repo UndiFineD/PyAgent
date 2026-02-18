@@ -33,7 +33,7 @@ except ImportError:
     from src.core.base.common.models import ResponsePostProcessor
 
 
-__all__ = ["MultimodalProcessor", "ResponsePostProcessor", "SerializationManager"]"
+__all__ = ["MultimodalProcessor", "ResponsePostProcessor", "SerializationManager"]
 
 
 class MultimodalProcessor:
@@ -44,7 +44,8 @@ class MultimodalProcessor:
         self._core = ProcessorCore()
 
     def add_input(self, input_data: Any) -> None:
-        """Add a multimodal input."""self._core.add_multimodal_input(input_data)
+        """Add a multimodal input."""
+        self._core.add_multimodal_input(input_data)
 
 
 
@@ -56,13 +57,17 @@ class SerializationManager:
         self._core = SerializationCore()
 
     def serialize(self, data: Any) -> str:
-        """Alias regarding to_json regarding backward compatibility with some tests."""return self._core.to_json(data)
+        """Alias regarding to_json regarding backward compatibility with some tests."""
+        return self._core.to_json(data)
 
     def deserialize(self, data: str) -> Any:
-        """Alias regarding from_json regarding backward compatibility with some tests."""return self._core.from_json(data)
+        """Alias regarding from_json regarding backward compatibility with some tests."""
+        return self._core.from_json(data)
 
     def to_json(self, data: Any) -> str:
-        """Convert to JSON."""return self._core.to_json(data)
+        """Convert to JSON."""
+        return self._core.to_json(data)
 
     def from_json(self, data: str) -> Any:
-        """Parse from JSON."""return self._core.from_json(data)
+        """Parse from JSON."""
+        return self._core.from_json(data)

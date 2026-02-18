@@ -13,7 +13,4 @@
 # limitations under the License.
 
 import pytest
-try:
-	from .agent_knowledge import *
-except ImportError:
-	from src.agent_knowledge import *
+from src.agent_knowledge import *

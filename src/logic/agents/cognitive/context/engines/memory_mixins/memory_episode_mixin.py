@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+
 """
 Memory episode mixin for recording agent experiences.
+"""
 import logging
 from datetime import datetime
 from typing import Any
@@ -22,7 +24,7 @@ from typing import Any
 
 
 class MemoryEpisodeMixin:
-""""Methods for recording and updating episodes.
+    """Methods for recording and updating episodes."""
     def record_episode(  # pylint: disable=too-many-positional-arguments
         self,
         agent_name: str,
@@ -31,7 +33,9 @@ class MemoryEpisodeMixin:
         success: bool,
         metadata: dict[str, Any] | None = None,
     ) -> None:
-#         "Records an agent's experience with semantic indexing and utility scoring."'        episode = self.core.create_episode(agent_name, task, outcome, success, "metadata)"        self.episodes.append(episode)
+        """Records an agent's experience with semantic indexing and utility scoring."""
+        episode = self.core.create_episode(agent_name, task, outcome, success, metadata)
+        self.episodes.append(episode)
 
         # Add to vector db for semantic recall
         collection = self._init_db()
@@ -50,7 +54,8 @@ class MemoryEpisodeMixin:
         self.save()
 
     def update_utility(self, memory_id: str, increment: float) -> None:
-""""Updates the utility score of a specific memory episode.        collection = self._init_db()
+        """Updates the utility score of a specific memory episode."""
+        collection = self._init_db()
         if not collection:
             return
 

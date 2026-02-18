@@ -30,7 +30,6 @@ except ImportError:
 __version__ = VERSION
 
 
-class
 class StyleRuleSeverity(Enum):
     """Severity levels for style rules.
     """

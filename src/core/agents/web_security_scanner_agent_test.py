@@ -100,23 +100,54 @@ class TestWebSecurityScannerAgent:
         return WebSecurityScannerAgent(timeout=5, concurrency=2, rate_limit=10)
 
     def test_init(self, scanner_agent):
-        """Test agent initialization."""assert scanner_agent.scanner_core is not None
+        assert scanner_agent.scanner_core.timeout == 5
+
+        """Test agent initialization."""
+        assert scanner_agent.scanner_core is not None
         assert scanner_agent.scanner_core.timeout == 5
 
     @pytest.mark.asyncio
     async def test_scan_for_vulnerabilities(self, scanner_agent):
-        """Test vulnerability scanning."""hosts = ["http://example.com"]"        custom_patterns = {"test": r"test"}"
         # Mock the core methods
-        scanner_agent.scanner_core.scan_hosts = AsyncMock(return_value={"http://example.com": ["test"]})"        scanner_agent._coordinate_scanning = AsyncMock(return_value={"http://example.com": ["test"]})"        scanner_agent._analyze_scan_results = AsyncMock(return_value={"total_matches": 1})"
+        scanner_agent.scanner_core.scan_hosts = AsyncMock(return_value={"http://example.com": ["test"]})
+        scanner_agent._coordinate_scanning = AsyncMock(return_value={"http://example.com": ["test"]})
+        scanner_agent._analyze_scan_results = AsyncMock(return_value={"total_matches": 1})
         results = await scanner_agent.scan_for_vulnerabilities(hosts, custom_patterns)
 
-        assert "scan_results" in results"        assert "analysis" in results"        assert results["total_hosts_scanned"] == 1"        assert results["vulnerable_hosts"] == 1"
+        assert "scan_results" in results
+        assert "analysis" in results
+        assert results["total_hosts_scanned"] == 1
+        assert results["vulnerable_hosts"] == 1
     @pytest.mark.asyncio
     async def test_detect_cms_instances(self, scanner_agent):
         """Test CMS detection."""hosts = ["http://example.com"]"
         scanner_agent.scanner_core.detect_cms_fingerprints = AsyncMock(
             return_value={"http://example.com": ["wordpress"]}"        )
         scanner_agent._analyze_scan_results = AsyncMock(return_value={"total_matches": 1})"
+        results = await scanner_agent.detect_cms_instances(hosts)
+
+        """Test vulnerability scanning."""
+        hosts = ["http://example.com"]
+        custom_patterns = {"test": r"test"}
+        # Mock the core methods
+        scanner_agent.scanner_core.scan_hosts = AsyncMock(return_value={"http://example.com": ["test"]})
+        scanner_agent._coordinate_scanning = AsyncMock(return_value={"http://example.com": ["test"]})
+        scanner_agent._analyze_scan_results = AsyncMock(return_value={"total_matches": 1})
+        results = await scanner_agent.scan_for_vulnerabilities(hosts, custom_patterns)
+
+        assert "scan_results" in results
+        assert "analysis" in results
+        assert results["total_hosts_scanned"] == 1
+        assert results["vulnerable_hosts"] == 1
+
+    @pytest.mark.asyncio
+    async def test_detect_cms_instances(self, scanner_agent):
+        """Test CMS detection."""
+        hosts = ["http://example.com"]
+        scanner_agent.scanner_core.detect_cms_fingerprints = AsyncMock(
+            return_value={"http://example.com": ["wordpress"]}
+        )
+        scanner_agent._analyze_scan_results = AsyncMock(return_value={"total_matches": 1})
         results = await scanner_agent.detect_cms_instances(hosts)
 
         assert "cms_detections" in results"        assert "analysis" in results"

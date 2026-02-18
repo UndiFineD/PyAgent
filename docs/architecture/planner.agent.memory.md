@@ -1,31 +1,5 @@
 ---
 
-## Test File Error Prioritization and Action Plan for @tester/@coding (2026-02-16)
-
-### 1. Critical: Core and Base Logic
-- src/core/base/common/test_base_utilities_test.py
-- src/core/base/common/types/test_gap_test.py
-- src/core/base/common/utils/test_runner_test.py
-- src/core/base/logic/test_task_prioritization_test.py
-
-### 2. High: Infrastructure and Agent Test Utilities
-- src/infrastructure/services/dev/agent_tests/test_generation_test.py
-- src/infrastructure/services/dev/agent_tests/test_management_test.py
-- src/infrastructure/services/dev/agent_tests/test_runner_test.py
-- src/infrastructure/services/dev/scripts/maintenance/test_copilot_backend_test.py
-- src/infrastructure/services/dev/test_utils/test_utils_legacy_test.py
-
-### 3. High: Analysis Agents
-- src/logic/agents/analysis/test_agent.py
-- src/logic/agents/analysis/test_agent_test.py
-- src/logic/agents/analysis/test_gap_agent.py
-- src/logic/agents/analysis/test_gap_agent_test.py
-
-### 4. Medium: Tools and Network
-- src/tools/test_network_ip_test.py
-
----
-
 ### Action Plan for @tester/@coding
 
 - Step 1: Investigate and resolve errors in the critical/core files first, as failures here can block or invalidate other tests.
@@ -36,18 +10,32 @@
 For each file, ensure that all dependencies, imports, and test fixtures are correct after the move. Update or regenerate tests as needed to match the current codebase. Document fixes and rationale in docs/architecture/tester.agent.memory.md for traceability.
 ---
 
-## Next-Phase Testing Plan for @tester (2026-02-16)
+## Plan Update: Sequential Pytest Fix Workflow
 
-- All legacy test files have been moved into src/ as *_test.py.
-- @tester is now responsible for:
-  - Generating or improving new pytest unit test files for every module in src/.
-  - Ensuring every public class and function in *.py files has corresponding, meaningful tests in *_test.py.
-  - Using pytest conventions and fixtures for maintainability and coverage.
-  - Reporting coverage gaps and prioritizing critical/core modules first.
-  - Storing rationale, coverage maps, and progress in docs/architecture/tester.agent.memory.md for traceability.
+1. Test & Fix All Files Sequentially
+  - For each `*.py` file in the codebase, run: pytest --maxfail=1
+  - Fix the first error encountered in each file, then rerun until the file passes or all errors are resolved.
+  - This approach ensures robust error isolation and prevents error masking.
 
-**Handoff:**
-@planner recommends @tester begin automated and manual test generation, aiming for near-complete coverage and robust validation of all agent, core, and utility logic.
+2. Action Steps for Each File
+  - Ensure all dependencies, imports, and fixtures are correct after the move.
+  - Update or regenerate tests as needed to match the current codebase.
+  - After each fix, rerun pytest --maxfail=1 to confirm resolution and catch the next error.
+  - Document all fixes and rationale in docs/architecture/tester.agent.memory.md for traceability.
+
+3. Agent Handoff & Memory
+  - The plan is documented for @tester and @coding, supporting seamless agent handoff.
+  - All rationale and mappings are stored in planner.agent.memory.md for continuity and auditability.
+
+4. Alignment with PyAgent Architecture
+  - The plan follows PyAgent’s agent handoff pattern and memory persistence requirements.
+  - It supports the v4.0.0 roadmap for robust, comprehensive test coverage and CI/CD automation.
+
+5. Next Steps
+  - @tester/@coding should proceed to test and fix all files using pytest --maxfail=1, working sequentially through the prioritized list.
+  - All changes and rationale should be documented in tester.agent.memory.md.
+
+Summary: This updated plan enforces a sequential, error-isolating workflow using pytest --maxfail=1 for each file, ensuring thorough remediation and traceability. The next step is for @tester/@coding to execute this plan as documented.
 # 🚀 PyAgent v4.0.0: Swarm Singularity Implementation Plan
 
 ## 🌟 High-Level Implementation Plan for PyAgent v4.0.0 Improvements

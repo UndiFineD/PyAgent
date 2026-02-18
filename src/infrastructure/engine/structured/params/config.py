@@ -29,18 +29,10 @@ except ImportError:
 
 
 try:
-    from .constraints import (ChoiceConstraint, GrammarConstraint,
+    from .constraints import ChoiceConstraint, GrammarConstraint, JsonSchemaConstraint, OutputConstraint, RegexConstraint
 except ImportError:
-    from .constraints import (ChoiceConstraint, GrammarConstraint,
-
-                          JsonSchemaConstraint, OutputConstraint,
-                          RegexConstraint)
-try:
-    from .enums import (GuidedDecodingBackend, StructuredOutputType,
-except ImportError:
-    from .enums import (GuidedDecodingBackend, StructuredOutputType,
-
-                    WhitespacePattern)
+    from .constraints import ChoiceConstraint, GrammarConstraint, JsonSchemaConstraint, OutputConstraint, RegexConstraint
+from .enums import GuidedDecodingBackend, StructuredOutputType, WhitespacePattern
 
 
 @dataclass

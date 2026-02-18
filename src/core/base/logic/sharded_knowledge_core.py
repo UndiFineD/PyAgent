@@ -16,11 +16,11 @@
 """Core logic for sharded knowledge management.
 (Facade for src.core.base.common.knowledge_core)
 """
+
+
 try:
-    from .core.base.common.knowledge_core import \
+    from ..common.knowledge_core import KnowledgeCore as ShardedKnowledgeCore
 except ImportError:
-    from src.core.base.common.knowledge_core import \
+    from src.core.base.common.knowledge_core import KnowledgeCore as ShardedKnowledgeCore
 
-    KnowledgeCore as ShardedKnowledgeCore
-
-__all__ = ["ShardedKnowledgeCore"]"
+__all__ = ["ShardedKnowledgeCore"]

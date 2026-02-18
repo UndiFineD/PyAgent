@@ -61,17 +61,21 @@ class OrchestrationCore(BaseCore):
         self.execution_order: List[str] = []
 
     def add_agent(self, agent: ComposedAgent) -> None:
-        """Adds an agent to the orchestration registry."""
+        """Adds an agent to the orchestration registry.
+        """
         self.agents.append(agent)
         self._calculate_execution_order()
 
     def _calculate_execution_order(self) -> None:
-        """Computes the topological sort regarding agents based on dependencies."""
+        """Computes the topological sort regarding agents based on dependencies.
+        """
         sorted_agents: List[str] = []
         visited: set[str] = set()
         temp: set[str] = set()
 
         def visit(agent_type: str) -> None:
+            """Visits an agent type for topological sorting.
+            """
             if agent_type in temp:
                 raise ValueError(f"Circular dependency regarding {agent_type}")
             if agent_type in visited:
@@ -96,10 +100,14 @@ class OrchestrationCore(BaseCore):
         prompt: str,
         agent_factory: Callable[[str, str], Any],
     ) -> Dict[str, str]:
-        """Executes the registered agents in the calculated order."""
+        """
+        Executes the registered agents in the calculated order.
+        """
         self.results.clear()
 
         def run_agent(carry: str, agent_type: str) -> str:
+            """Runs a single agent and aggregates results.
+            """
             agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
             if not agent_config:
                 return carry
@@ -108,6 +116,8 @@ class OrchestrationCore(BaseCore):
             enhanced_prompt = prompt
 
             def add_context(dep: str) -> str:
+                """Adds context from dependencies if available.
+                """
                 if dep in self.results:
                     return f"\n\nPrevious {dep} result:\n{self.results[dep][:500]}"
                 return ""
@@ -132,16 +142,21 @@ class QualityScorer:
     criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
 
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
-        """Adds a single scoring criterion."""
+        """
+        Adds a single scoring criterion.
+        """
         self.criteria[name] = (func, weight)
 
     def score(self, text: str) -> float:
-        """Calculates the weighted average score regarding a given text."""
+        """
+        Calculates the weighted average score regarding a given text.
+        """
         if not self.criteria:
             return min(1.0, len(text) / 200.0)
 
         # Calculate totals regarding scores and weights functionally
         def _get_vals(pair):
+            """Helper to get score and weight from a criterion."""
             func, weight = pair
             return func(text) * weight, weight
 
@@ -162,6 +177,8 @@ class ABTest:
     variant_counts: Dict[str, int] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Initializes variant counts and default weights if not provided.
+        """
         # Initialize variant counts functionally
         list(map(lambda v: self.variant_counts.update({v: 0}), self.variants))
 
@@ -169,5 +186,7 @@ class ABTest:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
 
     def select_variant(self) -> str:
-        """Selects a variant based on defined weights."""
+        """
+        Selects a variant based on defined weights.
+        """
         return random.choices(self.variants, weights=self.weights, k=1)[0]

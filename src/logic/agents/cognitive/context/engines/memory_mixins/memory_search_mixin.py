@@ -21,10 +21,13 @@ from typing import Any
 
 
 class MemorySearchMixin:
-""""Methods for searching memories.
+    """Methods for searching memories."""
     def get_lessons_learned(
-        self, query: str = ", limit: int = 5, min_utility: float = 0.0"    ) -> list[dict[str, Any]]:
-#         "Retrieves past episodes relevant to the query, filtered by high utility."        if not "query:"            # Return recent high utility episodes
+        self, query: str = "", limit: int = 5, min_utility: float = 0.0
+    ) -> list[dict[str, Any]]:
+        """Retrieves past episodes relevant to the query, filtered by high utility."""
+        if not query:
+            # Return recent high utility episodes
             candidates = [
                 ep
                 for ep in self.episodes
@@ -62,14 +65,21 @@ class MemorySearchMixin:
                 break
         return relevant
 
+
     def search_memories(self, query: str, limit: int = 5) -> list[dict[str, Any]]:
-""""Public interface for semantic search across episodic memories.        collection = self._init_db()
+        """Public interface for semantic search across episodic memories."""
+        collection = self._init_db()
         if not collection:
             # Fallback to simple matching if Chroma is not available
             return [
                 {
-                    "content": ep["outcome"],"                    "metadata": {"                        "file_path": ep.get("metadata", {}).get("file_path", "unknown"),"                        "agent": ep["agent"],"                    },
-                    "score": 0.5,"                }
+                    "content": ep["outcome"],
+                    "metadata": {
+                        "file_path": ep.get("metadata", {}).get("file_path", "unknown"),
+                        "agent": ep["agent"],
+                    },
+                    "score": 0.5,
+                }
                 for ep in self.get_lessons_learned(query, limit)
             ]
 

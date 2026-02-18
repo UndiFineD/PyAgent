@@ -33,7 +33,8 @@ except ImportError:
 __version__ = VERSION
 
 
-class
+class DummyMemory:
+    pass
 class MemoryEngine(MemoryStorageMixin, MemoryEpisodeMixin, MemorySearchMixin):
     """Stores and retrieves historical agent contexts and lessons learned."""
     def __init__(self, workspace_root: str) -> None:

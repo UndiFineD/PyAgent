@@ -18,14 +18,13 @@ except ImportError:
     import pytest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
-    import numpy
- as np
+    import numpy as np
 try:
     from .models import FSMState, FSMTransitionTable, TokenMask
 except ImportError:
-    from .models import FSMState, FSMTransitionTable, TokenMask
+    from src.infrastructure.engine.structured.models import FSMState, FSMTransitionTable, TokenMask
 
 
 

@@ -14,15 +14,9 @@
 
 
 try:
-    from .factory import (
+    from .factory import create_json_constraint, create_regex_constraint, create_choice_constraint, combine_constraints
 except ImportError:
-    from .factory import (
-
-    create_json_constraint,
-    create_regex_constraint,
-    create_choice_constraint,
-    combine_constraints
-)
+    from src.infrastructure.engine.structured.params.factory import create_json_constraint, create_regex_constraint, create_choice_constraint, combine_constraints
 try:
     from .config import StructuredOutputConfig
 except ImportError:

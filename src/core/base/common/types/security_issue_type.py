@@ -36,7 +36,6 @@ except ImportError:
 __version__ = VERSION
 
 
-class
 class SecurityIssueType(Enum):
     """Types of security vulnerabilities.
     """

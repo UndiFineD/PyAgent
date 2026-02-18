@@ -15,10 +15,10 @@
 
 """
 System orchestration components.
+"""
 try:
     from .lock_manager import LockManager
 except ImportError:
     from .lock_manager import LockManager
 
-
-__all__ = ["LockManager"]"
+__all__ = ["LockManager"]

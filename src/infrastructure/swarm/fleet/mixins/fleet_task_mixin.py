@@ -18,7 +18,9 @@
 FleetTaskMixin 
 - Mixin for task execution, preemption, and consensus management in FleetManager.
 Fleet task mixin.py module.
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
+"""
+
 from __future__ import annotations
 
 
@@ -45,35 +47,63 @@ if TYPE_CHECKING:
 
 
 class FleetTaskMixin:
-    """Mixin for task execution, preemption, and consensus management in FleetManager.
-    def preempt_lower_priority_tasks(self: FleetManager, new_priority: AgentPriority) -> None:
-        """Suspends all tasks with lower priority than the new high-priority task.        for _tid, data in self.active_tasks.items():
-            if data["priority"].value > new_priority.value:"                logging.info(f"Preempting lower-priority task {_tid} ({data['priority'].name})")"'                for agent in data.get("agents", []):"                    if hasattr(agent, "suspend"):"                        agent.suspend()
+    """
+    Mixin for task execution, preemption, and consensus management in FleetManager.
+    """
 
-    def resume_tasks(self: FleetManager) -> None:
-        """Resumes all suspended tasks if no critical tasks are running.        # Check if any Critical/High tasks are still active
-        critical_active = any(d["priority"].value < AgentPriority.NORMAL.value for d in self.active_tasks.values())"        if not critical_active:
+    def preempt_lower_priority_tasks(self: 'FleetManager', new_priority: 'AgentPriority') -> None:
+        """
+        Suspends all tasks with lower priority than the new high-priority task.
+        """
+        for _tid, data in self.active_tasks.items():
+            if data["priority"].value > new_priority.value:
+                logging.info(f"Preempting lower-priority task {_tid} ({data['priority'].name})")
+                for agent in data.get("agents", []):
+                    if hasattr(agent, "suspend"):
+                        agent.suspend()
+
+
+    def resume_tasks(self: 'FleetManager') -> None:
+        """
+        Resumes all suspended tasks if no critical tasks are running.
+        # Check if any Critical/High tasks are still active
+        """
+        critical_active = any(d["priority"].value < AgentPriority.NORMAL.value for d in self.active_tasks.values())
+        if not critical_active:
             for _tid, data in self.active_tasks.items():
-                for agent in data.get("agents", []):"                    if hasattr(agent, "resume"):"                        agent.resume()
+                for agent in data.get("agents", []):
+                    if hasattr(agent, "resume"):
+                        agent.resume()
+
 
     async def execute_reliable_task(
         self: FleetManager, task: str, priority: AgentPriority = AgentPriority.NORMAL
     ) -> str:
-        """Executes a task using the 7-phase inner loop and linguistic articulation.        return await self.execution_core.execute_reliable_task(task, priority=priority)
+        """Executes a task using the 7-phase inner loop and linguistic articulation."""
+        return await self.execution_core.execute_reliable_task(task, priority=priority)
+
 
     async def record_success(self: FleetManager, res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
-        """Records the success of a workflow step (Delegated).        await self.interaction_recorder.record_success(res_or_prompt, *args, **kwargs)
+        """Records the success of a workflow step (Delegated)."""
+        await self.interaction_recorder.record_success(res_or_prompt, *args, **kwargs)
+
 
     async def record_failure(self: FleetManager, prompt: str, error: str, model: str) -> None:
-        """Records errors, failures, and mistakes (Delegated).        await self.interaction_recorder.record_failure(prompt, error, model)
+        """Records errors, failures, and mistakes (Delegated)."""
+        await self.interaction_recorder.record_failure(prompt, error, model)
+
 
     async def execute_workflow(
-        self: FleetManager,
+        self: 'FleetManager',
         task: str,
         workflow_steps: list[dict[str, Any]],
         priority: AgentPriority = AgentPriority.NORMAL,
     ) -> str:
-        """Runs a sequence of agent actions with shared state and signals.        return await self.execution_core.execute_workflow(task, workflow_steps, priority=priority)
+        """
+        Runs a sequence of agent actions with shared state and signals.
+        """
+        return await self.execution_core.execute_workflow(task, workflow_steps, priority=priority)
+
 
     async def execute_with_consensus(
         self: FleetManager,
@@ -81,5 +111,5 @@ class FleetTaskMixin:
         primary_agent: str | None = None,
         secondary_agents: list[str] | None = None,
     ) -> dict[str, Any]:
-                Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
-                return await self.consensus_manager.execute_with_consensus(task, primary_agent, secondary_agents)
+        """Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner."""
+        return await self.consensus_manager.execute_with_consensus(task, primary_agent, secondary_agents)

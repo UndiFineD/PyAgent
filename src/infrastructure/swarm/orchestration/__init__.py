@@ -28,7 +28,7 @@ except ImportError:
     from . import system
 
 
-__version__ = VERSION
-__all__ = ["VERSION", "system"]"
 
-"""Package initialization.
+__version__ = VERSION
+__all__ = ["VERSION", "system"]
+

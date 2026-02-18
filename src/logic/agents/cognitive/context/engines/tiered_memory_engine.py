@@ -32,8 +32,25 @@ except ImportError:
     from typing import Any, List, Dict, Optional
 
 
+class TieredMemoryEngine:
+    """Manages the 6 memory tiers: Core, Episodic, Semantic, Procedural, Resource, and Knowledge."""
 
-class
+    def __init__(self, db_path: str) -> None:
+        """
+        Initialize the tiered memory engine.
+        Args:
+            db_path: Path to the ChromaDB database.
+        """
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, List, Dict, Optional
+except ImportError:
+    from typing import Any, List, Dict, Optional
+
+
 class TieredMemoryEngine:
     """Manages the 6 memory tiers: Core, Episodic, Semantic, Procedural, Resource, and Knowledge."""
 

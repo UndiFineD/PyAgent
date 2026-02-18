@@ -30,14 +30,9 @@ except ImportError:
     from typing import Union
 
 try:
-    from .infrastructure.services.dev.test_utils import (
+    from .test_utils import FileSystemIsolator, MockAIBackend, ModuleLoader, SnapshotManager
 except ImportError:
-    from src.infrastructure.services.dev.test_utils import (
-
-    FileSystemIsolator,
-    MockAIBackend,
-    ModuleLoader,
-    SnapshotManager,
+    from src.infrastructure.services.dev.test_utils import FileSystemIsolator, MockAIBackend, ModuleLoader, SnapshotManager
     MockResponse,
     TestDataFactory,
     TestEnvironment,

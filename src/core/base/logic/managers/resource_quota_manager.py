@@ -50,43 +50,48 @@ class LocalTokenBucket:
         Args:
             capacity: Maximum number of tokens in bucket
             refill_rate: Number of tokens added per second
-        """self._capacity = capacity
+        """
+        self._capacity = capacity
         self._refill_rate = refill_rate
         self._tokens = float(capacity)
         self._last_refill = time.monotonic()
         self._lock = asyncio.Lock()
 
-    async def acquire(self, tokens: int = 1) -> bool:
-        """
-try to acquire tokens from bucket.
+async def acquire(self, tokens: int = 1) -> bool:
+    """Try to acquire tokens from bucket.
 
-        Args:
-            tokens: Number of tokens to acquire
+    Args:
+        tokens: Number of tokens to acquire
 
-        Returns:
-            True if tokens acquired, False otherwise
-        """async with self._lock:
-            self._refill()
-            if self._tokens >= tokens:
-                self._tokens -= tokens
-                return True
-            return False
+    Returns:
+        True if tokens acquired, False otherwise
+    """
+    async with self._lock:
+        self._refill()
+        if self._tokens >= tokens:
+            self._tokens -= tokens
+            return True
+        return False
 
     async def try_acquire(self, tokens: int = 1) -> bool:
-        """Alias for acquire for API compatibility."""return await self.acquire(tokens)
+        """Alias for acquire for API compatibility."""
+        return await self.acquire(tokens)
 
     async def get_available_tokens(self) -> int:
-        """Get number of available tokens."""async with self._lock:
+        """Get number of available tokens."""
+        async with self._lock:
             self._refill()
             return int(self._tokens)
 
     async def reset_bucket(self) -> None:
-        """Reset bucket to full capacity."""async with self._lock:
+        """Reset bucket to full capacity."""
+        async with self._lock:
             self._tokens = float(self._capacity)
             self._last_refill = time.monotonic()
 
     def _refill(self) -> None:
-        """Refill tokens based on elapsed time."""now = time.monotonic()
+        """Refill tokens based on elapsed time."""
+        now = time.monotonic()
         elapsed = now - self._last_refill
         tokens_to_add = elapsed * self._refill_rate
         self._tokens = min(self._capacity, self._tokens + tokens_to_add)
@@ -101,7 +106,8 @@ local tokens_requested = tonumber(ARGV[3])
 local now = tonumber(ARGV[4])
 
 -- Get current state
-local state = redis.call('HMGET', key, 'tokens', 'last_refill')'local tokens = tonumber(state[1]) or capacity
+local state = redis.call('HMGET', key, 'tokens', 'last_refill')
+local tokens = tonumber(state[1]) or capacity
 local last_refill = tonumber(state[2]) or now
 
 -- Refill tokens based on elapsed time
@@ -112,9 +118,13 @@ tokens = math.min(capacity, tokens + tokens_to_add)
 -- Try to acquire tokens
 if tokens >= tokens_requested then
     tokens = tokens - tokens_requested
-    redis.call('HMSET', key, 'tokens', tokens, 'last_refill', now)'    redis.call('EXPIRE', key, 3600)  -- 1 hour TTL'    return 1
+    redis.call('HMSET', key, 'tokens', tokens, 'last_refill', now)
+    redis.call('EXPIRE', key, 3600)  -- 1 hour TTL
+    return 1
 else
-    redis.call('HMSET', key, 'tokens', tokens, 'last_refill', now)'    redis.call('EXPIRE', key, 3600)'    return 0
+    redis.call('HMSET', key, 'tokens', tokens, 'last_refill', now)
+    redis.call('EXPIRE', key, 3600)
+    return 0
 end
 """
 
@@ -139,7 +149,9 @@ class DistributedTokenBucket:
             capacity: Maximum number of tokens in bucket
             refill_rate: Number of tokens added per second
             circuit_breaker: Optional circuit breaker for Redis protection
-        """self._redis_url = redis_url or os.getenv("REDIS_URL")"        self._capacity = capacity
+        """
+        self._redis_url = redis_url or os.getenv("REDIS_URL")
+        self._capacity = capacity
         self._refill_rate = refill_rate
         self._redis_client: Optional[aioredis.Redis] = None
         self._acquire_script_sha: Optional[str] = None
@@ -148,7 +160,8 @@ class DistributedTokenBucket:
         self._redis_connected = False
 
     async def _ensure_redis_connection(self) -> bool:
-        """Ensure Redis connection is established."""if not REDIS_AVAILABLE or not self._redis_url:
+        """Ensure Redis connection is established."""
+        if not REDIS_AVAILABLE or not self._redis_url:
             return False
 
         if self._redis_client and self._redis_connected:
@@ -158,7 +171,8 @@ class DistributedTokenBucket:
             if self._redis_client is None:
                 self._redis_client = aioredis.from_url(
                     self._redis_url,
-                    encoding="utf-8","                    decode_responses=True,
+                    encoding="utf-8",
+                    decode_responses=True,
                     socket_connect_timeout=1.0,
                     socket_timeout=1.0,
                 )
@@ -187,7 +201,7 @@ class DistributedTokenBucket:
         Returns:
             True if tokens acquired, False otherwise
         """
-# Try Redis first with circuit breaker
+        # Try Redis first with circuit breaker
         if await self._ensure_redis_connection():
             try:
                 if self._circuit_breaker and CIRCUIT_BREAKER_AVAILABLE:
@@ -206,10 +220,12 @@ class DistributedTokenBucket:
         return await self._local_bucket.acquire(tokens)
 
     async def _acquire_from_redis(self, agent_id: str, tokens: int) -> bool:
-        """Acquire tokens from Redis using Lua script."""if not self._redis_client or not self._acquire_script_sha:
+        """Acquire tokens from Redis using Lua script."""
+        if not self._redis_client or not self._acquire_script_sha:
             return False
 
-        key = f"quota:{agent_id}:tokens""        now = time.time()
+        key = f"quota:{agent_id}:tokens"
+        now = time.time()
 
         result = await asyncio.wait_for(
             self._redis_client.evalsha(
@@ -227,8 +243,7 @@ class DistributedTokenBucket:
         return bool(result)
 
     async def try_acquire(self, agent_id: str, tokens: int = 1) -> bool:
-        """
-try to acquire tokens (non-blocking).
+        """try to acquire tokens (non-blocking).
 
         Args:
             agent_id: Agent identifier for quota tracking
@@ -236,7 +251,8 @@ try to acquire tokens (non-blocking).
 
         Returns:
             True if tokens acquired, False otherwise
-        """return await self.acquire(agent_id, tokens)
+        """
+        return await self.acquire(agent_id, tokens)
 
     async def get_available_tokens(self, agent_id: str) -> int:
         """Get available tokens for agent.
@@ -246,10 +262,13 @@ try to acquire tokens (non-blocking).
 
         Returns:
             Number of available tokens
-        """if await self._ensure_redis_connection() and self._redis_client:
+        """
+        if await self._ensure_redis_connection() and self._redis_client:
             try:
-                key = f"quota:{agent_id}:tokens""                state = await asyncio.wait_for(
-                    self._redis_client.hmget(key, "tokens", "last_refill"),"                    timeout=1.0,
+                key = f"quota:{agent_id}:tokens"
+                state = await asyncio.wait_for(
+                    self._redis_client.hmget(key, "tokens", "last_refill"),
+                    timeout=1.0,
                 )
                 if state[0]:
                     return int(float(state[0]))
@@ -263,13 +282,16 @@ try to acquire tokens (non-blocking).
 
         Args:
             agent_id: Agent identifier
-        """if await self._ensure_redis_connection() and self._redis_client:
+        """
+        if await self._ensure_redis_connection() and self._redis_client:
             try:
-                key = f"quota:{agent_id}:tokens""                now = time.time()
+                key = f"quota:{agent_id}:tokens"
+                now = time.time()
                 await asyncio.wait_for(
                     self._redis_client.hmset(
                         key,
-                        {"tokens": str(self._capacity), "last_refill": str(now)},"                    ),
+                        {"tokens": str(self._capacity), "last_refill": str(now)},
+                        ),
                     timeout=1.0,
                 )
                 await self._redis_client.expire(key, 3600)
@@ -279,7 +301,8 @@ try to acquire tokens (non-blocking).
         await self._local_bucket.reset_bucket()
 
     async def close(self) -> None:
-        """Close Redis connection."""if self._redis_client:
+        """Close Redis connection."""
+        if self._redis_client:
             await self._redis_client.aclose()
             self._redis_client = None
             self._redis_connected = False
@@ -291,20 +314,25 @@ class ResourceQuotaManager(StandardResourceQuotaManager):
     Resource enforcement logic is now centralized in the Infrastructure/Common tier.
     """
     def __init__(self, config: Optional[QuotaConfig] = None):
-        """Initialize with optional distributed rate limiting."""super().__init__(config)
+        """Initialize with optional distributed rate limiting."""
+        super().__init__(config)
         self._token_bucket: Optional[DistributedTokenBucket] = None
         self._init_token_bucket()
 
     def _init_token_bucket(self) -> None:
-        """Initialize distributed token bucket if configured."""redis_url = os.getenv("REDIS_URL")"        if not redis_url:
+        """Initialize distributed token bucket if configured."""
+        redis_url = os.getenv("REDIS_URL")
+        if not redis_url:
             return
 
-        capacity = int(os.getenv("TOKEN_BUCKET_SIZE", "1000"))"        refill_rate = float(os.getenv("TOKEN_REFILL_RATE", "10.0"))"
+        capacity = int(os.getenv("TOKEN_BUCKET_SIZE", "1000"))
+        refill_rate = float(os.getenv("TOKEN_REFILL_RATE", "10.0"))
         # Initialize circuit breaker for Redis
         circuit_breaker = None
         if CIRCUIT_BREAKER_AVAILABLE:
             circuit_breaker = CircuitBreaker(
-                name="redis_quota","                failure_threshold=3,
+                name="redis_quota",
+                failure_threshold=3,
                 recovery_timeout=30.0,
             )
 
@@ -324,13 +352,15 @@ class ResourceQuotaManager(StandardResourceQuotaManager):
 
         Returns:
             True if tokens consumed successfully, False if quota exceeded
-        """if self._token_bucket:
+        """
+        if self._token_bucket:
             return await self._token_bucket.acquire(agent_id, tokens)
         return True  # No rate limiting if token bucket not configured
 
     async def cleanup(self) -> None:
-        """Cleanup resources."""if self._token_bucket:
+        """Cleanup resources."""
+        if self._token_bucket:
             await self._token_bucket.close()
 
 
-__all__ = ["QuotaConfig", "ResourceQuotaManager", "DistributedTokenBucket", "LocalTokenBucket"]"
+__all__ = ["QuotaConfig", "ResourceQuotaManager", "DistributedTokenBucket", "LocalTokenBucket"]

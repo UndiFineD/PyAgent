@@ -42,13 +42,19 @@ class KnowledgeCore(BaseCore):
         self.shard_count = shard_count
         self.base_path = base_path
 
-    def get_shard_id(self, entity_key: str) -> int:
-        """Determines the shard index for a given entity key."""if rc and hasattr(rc, "get_adler32_shard"):  # pylint: disable=no-member"            return rc.get_adler32_shard(entity_key, self.shard_count)  # pylint: disable=no-member
 
+    def get_shard_id(self, entity_key: str) -> int:
+        """Determines the shard index for a given entity key."""
+        if rc and hasattr(rc, "get_adler32_shard"):  # pylint: disable=no-member
+            return rc.get_adler32_shard(entity_key, self.shard_count)  # pylint: disable=no-member
         hash_val = int(hashlib.md5(entity_key.encode()).hexdigest(), 16)
         return hash_val % self.shard_count
 
+
     def index_entity(self, entity: Dict[str, Any]) -> bool:
-        """Maintains the global knowledge index footprint."""key = entity.get("id") or entity.get("name", "unknown")"        # Determine shard placement but don't store yet'        self.get_shard_id(key)
+        """Maintains the global knowledge index footprint."""
+        key = entity.get("id") or entity.get("name", "unknown")
+        # Determine shard placement but don't store yet
+        self.get_shard_id(key)
         # Logic for writing to shard storage
         return True

@@ -32,28 +32,37 @@ logger = logging.getLogger(__name__)
 
 class ManifestRepository:
     """Repository for managing cognitive shards (Logic Manifests)."""
-    def __init__(self, storage_path: str = "data/manifests") -> None:"        self.storage_path = Path(storage_path)
+    def __init__(self, storage_path: str = "data/manifests") -> None:
+        self.storage_path = Path(storage_path)
         self.storage_path.mkdir(parents=True, exist_ok=True)
         self._cache: Dict[str, LogicManifest] = {}
 
     def save_manifest(self, role: str, manifest: LogicManifest) -> None:
-        """Save a manifest to disk."""file_path = self.storage_path / f"{role}.json""        with open(file_path, "w", encoding="utf-8") as f:"            json.dump(manifest.__dict__, f, indent=4)
+        """Save a manifest to disk."""
+        file_path = self.storage_path / f"{role}.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(manifest.__dict__, f, indent=4)
         self._cache[role] = manifest
 
     def get_manifest(self, role: str) -> LogicManifest | None:
-        """Retrieve a manifest by role name."""if role in self._cache:
+        """Retrieve a manifest by role name."""
+        if role in self._cache:
             return self._cache[role]
 
-        file_path = self.storage_path / f"{role}.json""        if not file_path.exists():
+        file_path = self.storage_path / f"{role}.json"
+        if not file_path.exists():
             return None
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:"                data = json.load(f)
+            with open(file_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
                 manifest = LogicManifest.from_dict(data)
                 self._cache[role] = manifest
                 return manifest
         except (json.JSONDecodeError, IOError) as e:
-            logger.error("Error loading manifest %s: %s", role, e)"            return None
+            logger.error("Error loading manifest %s: %s", role, e)
+            return None
 
     def list_roles(self) -> list[str]:
-        """List all available roles in the repository."""return [p.stem for p in self.storage_path.glob("*.json")]"
+        """List all available roles in the repository."""
+        return [p.stem for p in self.storage_path.glob("*.json")]

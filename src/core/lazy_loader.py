@@ -35,7 +35,9 @@ Example usage:
 
     # Using ModuleLazyLoader for __getattr__ pattern
     _lazy_modules = ModuleLazyLoader({
-        "HeavyClass": ("some.heavy.module", "HeavyClass"),"        "AnotherClass": ("another.module", "AnotherClass"),"    })
+        "HeavyClass": ("some.heavy.module", "HeavyClass"),
+        "AnotherClass": ("another.module", "AnotherClass"),
+    })
 
     def __getattr__(name: str):
         return _lazy_modules.load(name)
@@ -186,10 +188,19 @@ class ModuleLazyLoader:
         _cache: A dictionary caching loaded attributes.
 
     Example:
-        # In your module's __init__.py:'        from src.core.lazy_loader import ModuleLazyLoader
+        # In your module's __init__.py:
+        #     from src.core.lazy_loader import ModuleLazyLoader
 
         _lazy = ModuleLazyLoader({
-            "EagleProposer": ("src.infrastructure.engine.speculative.eagle_proposer", "EagleProposer"),"            "ARCOffloadManager": ("src.infrastructure.storage.kv_transfer.arc_offload_manager", "ARCOffloadManager"),"        })
+            "EagleProposer": (
+                "src.infrastructure.engine.speculative.eagle_proposer",
+                "EagleProposer"
+            ),
+            "ARCOffloadManager": (
+                "src.infrastructure.storage.kv_transfer.arc_offload_manager",
+                "ARCOffloadManager"
+            ),
+        })
 
         def __getattr__(name: str):
             return _lazy.load(name)

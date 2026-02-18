@@ -14,16 +14,9 @@
 
 
 try:
-    from .enums import (
+    from .enums import StructuredOutputType, ConstraintType
 except ImportError:
-    from .enums import (
-
-    StructuredOutputType,
-    ConstraintType,
-    SchemaFormat,
-    GuidedDecodingBackend,
-    WhitespacePattern
-)
+    from src.infrastructure.engine.structured.params.enums import StructuredOutputType, ConstraintType
 
 
 def test_structured_output_type_enum():

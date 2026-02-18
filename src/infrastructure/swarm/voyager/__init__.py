@@ -16,6 +16,8 @@
 
 """
 Voyager package.
+"""
+
 try:
     from .discovery_node import DiscoveryNode  # noqa: F401
 except ImportError:
@@ -32,4 +34,4 @@ except ImportError:
     from .teleportation_engine import TeleportationEngine # noqa: F401
 
 
-__all__ = ["DiscoveryNode", "TeleportationEngine", "RemoteNeuralSynapse"]"
+__all__ = ["DiscoveryNode", "TeleportationEngine", "RemoteNeuralSynapse"]

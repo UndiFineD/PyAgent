@@ -16,16 +16,16 @@
 """Engine regarding neural synaptic pruning.
 (Facade regarding src.core.base.common.pruning_core)
 """
-try:
-    from .core.base.common.pruning_core import \
-except ImportError:
-    from src.core.base.common.pruning_core import \
 
-    PruningCore as NeuralPruningEngine
 try:
-    from .core.base.common.pruning_core import SynapticWeight
+    from src.core.base.common.pruning_core import PruningCore as NeuralPruningEngine
 except ImportError:
+    from .core.base.common.pruning_core import PruningCore as NeuralPruningEngine
+
+try:
     from src.core.base.common.pruning_core import SynapticWeight
+except ImportError:
+    from .core.base.common.pruning_core import SynapticWeight
 
 
-__all__ = ["NeuralPruningEngine", "SynapticWeight"]"
+__all__ = ["NeuralPruningEngine", "SynapticWeight"]

@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+
+"""
 Constraints.py module.
+"""
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 import json
@@ -26,20 +29,24 @@ from .enums import ConstraintType, SchemaFormat
 
 @dataclass
 class OutputConstraint:
-    """Base output constraint.
+    """Base output constraint."""
     constraint_type: ConstraintType = ConstraintType.INCLUDE
     priority: int = 0
 
     def validate(self, _text: str) -> bool:
-        """Validate text against constraint.        return True
+        """Validate text against constraint."""
+        return True
 
     def to_dict(self) -> Dict[str, Any]:
-                Convert to dictionary.
+        """Convert to dictionary.
 
         Returns:
             Dictionary with constraint type and priority.
-                return {
-            "constraint_type": self.constraint_type.name,"            "priority": self.priority,"        }
+        """
+        return {
+            "constraint_type": self.constraint_type.name,
+            "priority": self.priority,
+        }
 
 
 @dataclass
@@ -51,28 +58,32 @@ class JsonSchemaConstraint(OutputConstraint):
     allow_partial: bool = False
 
     def validate(self, text: str) -> bool:
-        """Validate text as JSON against schema.        try:
+        """Validate text as JSON against schema."""
+        try:
             data = json.loads(text)
             return self._validate_schema(data)
         except json.JSONDecodeError:
             return self.allow_partial
 
     def _validate_schema(self, data: Any) -> bool:
-        """Basic schema validation regarding simplified logic.        if not self.schema:
+        """Basic schema validation regarding simplified logic."""
+        if not self.schema:
             return True
 
-        schema_type = self.schema.get("type")"
-        if schema_type == "object":"            if not isinstance(data, dict):
+        schema_type = self.schema.get("type")
+        if schema_type == "object":
+            if not isinstance(data, dict):
                 return False
 
             # Check required properties regarding functional validation
             # Phase 386: Functional required property check
-            required = self.schema.get("required", [])"            if not all(map(lambda req: req in data, required)):
+            required = self.schema.get("required", [])
+            if not all(map(lambda req: req in data, required)):
                 return False
 
             # Check properties regarding functional validation
             # Phase 387: Functional property check
-            properties = self.schema.get("properties", {})"
+            properties = self.schema.get("properties", {})
             def check_prop(item: tuple[str, dict]) -> bool:
                 key, prop_schema = item
                 if key in data:
@@ -84,25 +95,32 @@ class JsonSchemaConstraint(OutputConstraint):
 
             return True
 
-        if schema_type == "array":"            if not isinstance(data, list):
+        if schema_type == "array":
+            if not isinstance(data, list):
                 return False
 
-            items_schema = self.schema.get("items")"            if items_schema:
+            items_schema = self.schema.get("items")
+            if items_schema:
                 # Phase 388: Functional array item check
                 if not all(map(lambda item: self._validate_property(item, items_schema), data)):
                     return False
 
             return True
 
-        if schema_type == "string":"            return isinstance(data, str)
+        if schema_type == "string":
+            return isinstance(data, str)
 
-        if schema_type == "number":"            return isinstance(data, (int, float))
+        if schema_type == "number":
+            return isinstance(data, (int, float))
 
-        if schema_type == "integer":"            return isinstance(data, int)
+        if schema_type == "integer":
+            return isinstance(data, int)
 
-        if schema_type == "boolean":"            return isinstance(data, bool)
+        if schema_type == "boolean":
+            return isinstance(data, bool)
 
-        if schema_type == "null":"            return data is None
+        if schema_type == "null":
+            return data is None
 
         return True
 
@@ -111,35 +129,46 @@ class JsonSchemaConstraint(OutputConstraint):
         value: Any,
         prop_schema: Dict[str, Any],
     ) -> bool:
-        """Validate a property against its schema.        prop_type = prop_schema.get("type")"
-        if prop_type == "string":"            if not isinstance(value, str):
+        """Validate a property against its schema."""
+        prop_type = prop_schema.get("type")
+        if prop_type == "string":
+            if not isinstance(value, str):
                 return False
 
-            pattern = prop_schema.get("pattern")"            if pattern and not re.match(pattern, value):
+            pattern = prop_schema.get("pattern")
+            if pattern and not re.match(pattern, value):
                 return False
 
-            enum = prop_schema.get("enum")"            if enum and value not in enum:
+            enum = prop_schema.get("enum")
+            if enum and value not in enum:
                 return False
 
-        elif prop_type == "number":"            if not isinstance(value, (int, float)):
+        elif prop_type == "number":
+            if not isinstance(value, (int, float)):
                 return False
 
-            minimum = prop_schema.get("minimum")"            if minimum is not None and value < minimum:
+            minimum = prop_schema.get("minimum")
+            if minimum is not None and value < minimum:
                 return False
 
-            maximum = prop_schema.get("maximum")"            if maximum is not None and value > maximum:
+            maximum = prop_schema.get("maximum")
+            if maximum is not None and value > maximum:
                 return False
 
-        elif prop_type == "integer":"            if not isinstance(value, int):
+        elif prop_type == "integer":
+            if not isinstance(value, int):
                 return False
 
-        elif prop_type == "boolean":"            if not isinstance(value, bool):
+        elif prop_type == "boolean":
+            if not isinstance(value, bool):
                 return False
 
-        elif prop_type == "array":"            if not isinstance(value, list):
+        elif prop_type == "array":
+            if not isinstance(value, list):
                 return False
 
-        elif prop_type == "object":"            if not isinstance(value, dict):
+        elif prop_type == "object":
+            if not isinstance(value, dict):
                 return False
 
         return True
@@ -152,8 +181,9 @@ class JsonSchemaConstraint(OutputConstraint):
 
 @dataclass
 class RegexConstraint(OutputConstraint):
-    """Regex pattern constraint.
-    pattern: str = """    flags: int = 0
+    """Regex pattern constraint."""
+    pattern: str = ""
+    flags: int = 0
     _compiled: Optional[Pattern] = field(default=None, repr=False)
 
     def __post_init__(self) -> None:

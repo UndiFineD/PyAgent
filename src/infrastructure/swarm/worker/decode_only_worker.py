@@ -16,6 +16,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
 Decode-Only Worker.
 
 This module implements a specialized worker for the decode stage of disaggregated inference.
@@ -28,7 +29,8 @@ Optimized for:
 - Minimal memory footprint (swapping unused KV blocks to remote storage)
 - High concurrency for many concurrent sequences
 
-Inspired by vLLM's specialized worker architectures and disaggregated prefill-decode patterns.'
+Inspired by vLLM's specialized worker architectures and disaggregated prefill-decode patterns.
+"""
 from __future__ import annotations
 
 
@@ -48,12 +50,11 @@ try:
 except ImportError:
     from src.core.lazy_loader import LazyLoader
 
-try:
-    from .infrastructure.storage.kv_transfer.kv_transfer_connector import (
-except ImportError:
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
 
-    KVConnectorRole, KVTransferConfig)
+try:
+    from .infrastructure.storage.kv_transfer.kv_transfer_connector import KVConnectorRole, KVTransferConfig
+except ImportError:
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVConnectorRole, KVTransferConfig
 
 if TYPE_CHECKING:
     from src.infrastructure.storage.cache.kv_cache_manager import \
@@ -66,12 +67,13 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class DecodeOnlyWorker:
-        Worker specialized in the decode stage.
+    """
+    Worker specialized in the decode stage.
 
     This worker assumes the prefill (initial prompt processing) has been done elsewhere.
     It pulls the necessary KV cache blocks on-demand or ahead-of-time from the
     distributed pool (e.g., Mooncake) and proceeds with generation.
-    
+    """
     def __init__(
         self,
         worker_id: str,
@@ -101,19 +103,21 @@ class DecodeOnlyWorker:
         self.cache_hits_remote = 0
         self.cache_misses_remote = 0
 
-        logger.info("DecodeOnlyWorker %s initialized.", worker_id)"
+        logger.info("DecodeOnlyWorker %s initialized.", worker_id)
     def initialize(self) -> None:
-        """Initialize components for decoding.        # Setup...
+        """Initialize components for decoding.
+        # Setup...
         self._is_active = True
         logger.info("DecodeOnlyWorker %s started.", self.worker_id)"
     def execute_step(self, active_requests: List[Any]) -> None:
-                Perform one decoding step for a batch of requests.
+        """Perform one decoding step for a batch of requests.
 
         1. Coordinate with KV connector to ensure blocks are loaded
         2. Execute model forward pass (single token)
         3. Sample next tokens
         4. Update local KV cache
-                if not active_requests:
+        """
+        if not active_requests:
             return
 
         # Ahead-of-time loading coordination
@@ -128,19 +132,28 @@ class DecodeOnlyWorker:
         self.tokens_generated += len(active_requests)
 
     def _schedule_kv_prefetch_rust(self, seq_metadata: Any) -> List[int]:
-        """Rust-accelerated heuristic for prefetching KV blocks from remote.        _ = seq_metadata
+        """Rust-accelerated heuristic for prefetching KV blocks from remote.
+        _ = seq_metadata
         # return RustBridge.schedule_kv_prefetch_rust(seq_metadata)
         return []
 
     def get_status(self) -> Dict[str, Any]:
-        """Return worker health and performance stats.        return {
-            "worker_id": self.worker_id,"            "role": "decode","            "active_sequences": len(self._active_sequences),"            "tokens_generated": self.tokens_generated,"            "cache_hits_remote": self.cache_hits_remote,"            "cache_misses_remote": self.cache_misses_remote,"        }
+        """Return worker health and performance stats."""
+        return {
+            "worker_id": self.worker_id,
+            "role": "decode",
+            "active_sequences": len(self._active_sequences),
+            "tokens_generated": self.tokens_generated,
+            "cache_hits_remote": self.cache_hits_remote,
+            "cache_misses_remote": self.cache_misses_remote,
+        }
 
     def shutdown(self) -> None:
-        """Gracefully shut down the decode worker.        self._is_active = False
+        """Gracefully shut down the decode worker."""
+        self._is_active = False
         if self.kv_connector:
             self.kv_connector.close()
-        logger.info("DecodeOnlyWorker %s shut down.", self.worker_id)"
+        logger.info("DecodeOnlyWorker %s shut down.", self.worker_id)
 
 # Lazy loading registration
-_worker = LazyLoader("src.infrastructure.swarm.worker.decode_only_worker", "DecodeOnlyWorker")"
+_worker = LazyLoader("src.infrastructure.swarm.worker.decode_only_worker", "DecodeOnlyWorker")

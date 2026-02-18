@@ -30,15 +30,15 @@ __version__ = VERSION
 
 @dataclass
 class EntryTemplate:
-    """Template for changelog entries with TODO Placeholders.
+    """Template for changelog entries with TODO: Placeholders.
 
     Attributes:
         name: Template name.
-        template_text: Template with TODO Placeholders.
-        TODO Placeholders: List of TODO Placeholder names.
+        template_text: Template with TODO: Placeholders.
+        TODO: Placeholders: List of TODO: Placeholder names.
         description: Description of the template.
     """
     name: str
     template_text: str
-    TODO Placeholders: list[str] = field(default_factory=lambda: [])
+    todo_placeholders: list[str] = field(default_factory=lambda: [])
     description: str = ""

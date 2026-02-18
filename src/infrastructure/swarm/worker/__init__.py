@@ -15,6 +15,7 @@
 
 """
 Swarm worker components.
+"""
 try:
     from .decode_only_worker import DecodeOnlyWorker
 except ImportError:
@@ -25,5 +26,4 @@ try:
 except ImportError:
     from .disaggregated_prefill_worker import DisaggregatedPrefillWorker
 
-
-__all__ = ["DecodeOnlyWorker", "DisaggregatedPrefillWorker"]"
+__all__ = ["DecodeOnlyWorker", "DisaggregatedPrefillWorker"]

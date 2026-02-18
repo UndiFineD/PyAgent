@@ -15,7 +15,7 @@
 
 # KnowledgeCore logic for specialized workspace analysis.
 # Contains pure regex and indexing logic for fast symbol discovery.
-This file is optimized for Rust migration (Phase 114).
+# This file is optimized for Rust migration (Phase 114).
 
 try:
     from typing import Any
@@ -24,9 +24,9 @@ except ImportError:
 
 
 try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
+except ImportError:
+    VERSION = None
 
 try:
     from .knowledge_mixins.knowledge_symbol_mixin import KnowledgeSymbolMixin
@@ -47,10 +47,10 @@ except ImportError:
 __version__ = VERSION
 
 
-class
 class KnowledgeCore(KnowledgeSymbolMixin, KnowledgeSearchMixin, KnowledgeProcessMixin):
-    KnowledgeCore performs pure computational analysis of workspace symbols.
+#    KnowledgeCore performs pure computational analysis of workspace symbols.
 #     No I/O or database operations are allowed here to ensure Rust portability.
+
 
     def __init__(self, fleet: Any | None = None) -> None:
         self.fleet = fleet
