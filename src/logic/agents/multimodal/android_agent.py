@@ -78,7 +78,7 @@ class AndroidAgent(BaseAgent):
         work_root = getattr(self, "_workspace_root", None)"        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _record_android_action(self, action: str, details: str) -> None:
-""""
+"""
 Record mobile automation logic for the collective intelligence pool.        if self.recorder:
             try:
                 meta = {
@@ -87,7 +87,7 @@ Record mobile automation logic for the collective intelligence pool.        if s
                 logging.error(fAndroidAgent: Recording error: {e}")"
     @as_tool
     def dump_accessibility_tree(self) -> dict[str, Any]:
-""""
+"""
 Dumps and parses the current Android screen's accessibility tree (XML -> JSON).'        logging.info("Dumping Android accessibility tree via ADB...")"        # In a real environment, this would run: adb shell uiautomator dump /sdcard/view.xml
         # Then pull and parse the XML. Here we return a simulated structured state.
         return {
@@ -98,7 +98,7 @@ Dumps and parses the current Android screen's accessibility tree (XML -> JSON).'
 
     @as_tool
     def execute_mobile_action(self, action_type: str, params: dict[str, Any]) -> str:
-""""
+"""
 Executes a mobile action (tap, type, swipe, home) using ADB.        logging.info(fExecuting mobile action: {action_type} with {params}")"
         # Mapping actions to ADB commands
         if action_type == "tap":"            x, y = params.get("coords", [0, 0])"#             cmd = fadb shell input tap {x} {y}
@@ -111,7 +111,7 @@ elif action_type == "key":"            key_code = params.get("code", 3)  # Defau
 
     @as_tool
     def run_mobile_workflow(self, goal: str) -> str:
-""""
+"""
 Executes a high-level mobile goal using the Perception-Reasoning-Action loop.        logging.info(fStarting mobile workflow for goal: {goal}")"        self._record("workflow_start", fGoal: {goal}")"        # Phase 1: Perception
         state = self.dump_accessibility_tree()
 
@@ -149,7 +149,7 @@ class AndroidAgent(BaseAgent):
         work_root = getattr(self, "_workspace_root", None)"        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _record_android_action(self, action: str, details: str) -> None:
-""""
+"""
 Record mobile automation logic for the collective intelligence pool.        if self.recorder:
             try:
                 meta = {
@@ -158,7 +158,7 @@ Record mobile automation logic for the collective intelligence pool.        if s
                 logging.error(fAndroidAgent: Recording error: {e}")"
     @as_tool
     def dump_accessibility_tree(self) -> dict[str, Any]:
-""""
+"""
 Dumps and parses the current Android screen's accessibility tree (XML -> JSON).'        logging.info("Dumping "Android accessibility tree via ADB...")"        # In a real environment, this would run: adb shell uiautomator dump /sdcard/view.xml
         # Then pull and parse the XML. Here we return a simulated structured state.
         return {
@@ -169,7 +169,7 @@ Dumps and parses the current Android screen's accessibility tree (XML -> JSON).'
 
     @as_tool
     def execute_mobile_action(self, action_type: str, params: dict[str, Any]) -> str:
-""""
+"""
 Executes a mobile action (tap, type, swipe, home) using ADB.        logging.info(fExecuting mobile action: {action_type} with {params}")"
         # Mapping actions to ADB commands
         if action_type == "tap":"            x, y = params.get("coords", [0, 0])"#             cmd = fadb shell input tap {x} {y}
@@ -182,7 +182,7 @@ elif action_type == "key":"            key_code = params.get("code", 3)  # Defau
 
     @as_tool
     def run_mobile_workflow(self, goal: str) -> str:
-""""
+"""
 Executes a high-level mobile goal using the Perception-Reasoning-Action loop.        logging.info("fS"tarting mobile workflow for goal: {goal}")"        self._record("workflow_start", fGoal: {goal}")"        # Phase 1: Perception
         state = self.dump_accessibility_tree()
 

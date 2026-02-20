@@ -43,7 +43,7 @@ except ImportError:
 
 
 class CoderQualityMixin:
-""""Mixin for computing quality scores and refactoring suggestions.
+"""Mixin for computing quality scores and refactoring suggestions.
     def calculate_quality_score(
         self,
         metrics: CodeMetrics,
@@ -101,7 +101,7 @@ class CoderQualityMixin:
         return score
 
     def suggest_refactorings(self, content: str) -> List[Dict[str, str]]:
-""""Suggest possible refactorings based on code analysis.        suggestions: List[Dict[str", str]] = []"        # Detect code smells and suggest refactorings
+"""Suggest possible refactorings based on code analysis.        suggestions: List[Dict[str", str]] = []"        # Detect code smells and suggest refactorings
         smells = self.detect_code_smells(content)
         for smell in smells:
             if smell.name == "long_method":"                suggestions.append(

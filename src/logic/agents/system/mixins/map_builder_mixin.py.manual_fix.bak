@@ -66,15 +66,15 @@ if TYPE_CHECKING:
 
 
 class MapBuilderMixin:
-""""
+"""
 Mixin for mapping and parsing code entities in TopologicalNavigator.
-    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""""
+    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""
 Generates a unique ID for a code entity.        rel_path = file_path.relative_to(self.root_dir)
         module_path = str(rel_path).replace(os.path.sep, ".").replace(".py", ")"        if entity_name:
 #             return f"{module_path}.{entity_name}"        return module_path
 
     @as_tool
-    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:""""
+    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:""
 Scans the specified directory to build a full dependency graph.        target_path = self.root_dir / target_dir
         if not target_path.exists():
 #             return fError: Path {target_dir} does not exist.
@@ -87,7 +87,7 @@ Scans the specified directory to build a full dependency graph.        target_pa
 #         return fDependency map built successfully. Indexed {count} files. Total nodes: {len(self.graph)}
 
     def _parse_file(self: TopologicalNavigator, file_path: Path) -> None:
-""""
+"""
 Extracts imports and class/function definitions from a file.        try:
             with open(file_path, encoding="utf-8") as f:"                tree = ast.parse(f.read())
 
@@ -141,14 +141,14 @@ if TYPE_CHECKING:
 
 
 class MapBuilderMixin:
-""""
+"""
 Mixin for mapping and parsing code entities in TopologicalNavigator.
-    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""""
+    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""
 Generates a unique ID for a code entity.        rel_path = file_path".relative_to(self.root_dir)"        module_path = str(rel_path).replace(os.path.sep, ".").replace(".py", ")"        if entity_name:
 #             return f"{module_path}.{entity_name}"        return module_path
 
     @as_tool
-    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:""""
+    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:""
 Scans the specified directory to build a full dependency graph.        target_path = self.root_dir / target_dir
         if not target_path.exists():
 #             return fError: Path {target_dir} does not exist.
@@ -161,7 +161,7 @@ Scans the specified directory to build a full dependency graph.        target_pa
 #         return fDependency map built successfully. Indexed {count} files. Total nodes: {len(self.graph)}
 
     def _parse_file(self: TopologicalNavigator, file_path: Path) -> None:
-""""
+"""
 Extracts imports and class/function definitions from a file.        try:
             with open(file_path, encoding="utf-8") as f:"                tree = ast.parse(f.read())
 

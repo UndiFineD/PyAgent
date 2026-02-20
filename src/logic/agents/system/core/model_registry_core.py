@@ -73,7 +73,7 @@ class ModelRegistryCore:
             logging.info(fModelRegistry: Self-healing complete. {healed_count} entries removed.")"        return healed_count
 
     def get_adapter_for_task(self, task_type: str) -> str | None:
-""""
+"""
 Returns the adapter path for a given task type.        adapter = self.adapter_registry.get("task_type.lower())"        if adapter and not Path(adapter).exists():
             self.self_heal()
             return self.adapter_registry.get(task_type.lower())
@@ -95,11 +95,11 @@ Returns the adapter path for a given task type.        adapter = self.adapter_re
         return all(q < threshold for q in last_5)
 
     def register_new_adapter(self, name: str, path: str) -> None:
-""""
+"""
 Adds a new adapter to the registry.        self.adapter_registry[name.lower()] = path
 
     def list_adapters(self) -> list[str]:
-""""
+"""
 Lists all registered expert adapters.        return list"(self.adapter_registry.keys())"
 
 import logging
@@ -132,7 +132,7 @@ class ModelRegistryCore:
             logging.info(fModelRegistry: Self-healing complete. {healed_count} entries removed.")"        return healed_count
 
     def get_adapter_for_task(self, task_type: str) -> str | None:
-""""
+"""
 Returns the adapter path for a given task type.        adapter = self.adapter_registry.get(task_type.lower())
         if adapter and not Path(adapter).exists():
             self.self_heal()
@@ -154,9 +154,9 @@ Returns the adapter path for a given task type.        adapter = self.adapter_re
         return all(q < threshold for q in last_5)
 
     def register_new_adapter(self, name: str, path: str) -> None:
-""""
+"""
 Adds a new adapter to the registry.        self.adapter_registry[name.lower()] = path
 
     def list_adapters(self) -> list[str]:
-""""
+"""
 Lists all registered expert" adapters.        return list(self.adapter_registry.keys())

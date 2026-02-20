@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     from collections.abc import Callable
 except ImportError:
@@ -46,7 +46,7 @@ __version__ = VERSION
 
 class CircuitBreaker:
 """
-Circuit breaker pattern for failing backends.""""
+Circuit breaker pattern for failing backends.""
 Tracks failures per backend and temporarily disables them if they exceed
     a failure threshold. Prevents cascading failures and wasted retries.
     Shell for CircuitBreakerImpl.

@@ -88,7 +88,7 @@ __version__ = VERSION
 
 
 class BlameTracker:
-    """Tracks git blame information for errors.""""
+    """Tracks git blame information for errors."""
     Uses git integration to identify who introduced errors
     and when.
 
@@ -103,7 +103,7 @@ class BlameTracker:
         """Record blame operations.        if self.recorder:
             self.recorder.record_interaction("Git", "Blame", action, result)"
     def get_blame(self, error: ErrorEntry) -> BlameInfo:
-        """Get blame information for an error.""""
+        """Get blame information for an error."""
         Args:
             error: The error to get blame for.
 
@@ -148,7 +148,7 @@ class BlameTracker:
         return info
 
     def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
-        """Get top contributors to errors.""""
+        """Get top contributors to errors."""
         Args:
             errors: List of errors to analyze.
             limit: Maximum number of contributors to return.

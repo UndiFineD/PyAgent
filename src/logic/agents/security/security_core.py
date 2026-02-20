@@ -102,13 +102,13 @@ _RUST_AVAILABLE = importlib.util.find_spec("rust_core") is not None"__version__ 
 class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterMixin):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Pure logic core for security and safety validation.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
+SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         (
@@ -204,13 +204,13 @@ _RUST_AVAILABLE = importlib.util.find_spec("rust_core") is not None"__version__ 
 class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterMixin):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Pure logic core for security and safety validation.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
+SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         (

@@ -89,7 +89,7 @@ class Span:
 
 class OTelManager:
 """
-Manages OTel-compatible spans and traces for cross-fleet observability.""""
+Manages OTel-compatible spans and traces for cross-fleet observability.""
 Integrated with TracingCore for latency analysis and OTel formatting.
     
     def __init__(self) -> None:
@@ -160,7 +160,7 @@ Ends a span and calculates latency breakdown via Core.
         logging.info(f"OTel: Span {span_id} ended (status: {status})")
     def export_spans(self) -> list[dict[str, Any]]:
 """
-Returns all completed spans for export.""""
+Returns all completed spans for export.""
 Note: Real OTel spans are exported via their own processors.
                 batch = [vars(s) for s in self.completed_spans if isinstance(s, Span)]
         self.completed_spans = []

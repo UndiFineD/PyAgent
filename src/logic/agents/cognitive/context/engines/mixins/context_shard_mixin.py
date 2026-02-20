@@ -22,13 +22,13 @@ import logging
 
 
 class ContextShardMixin:
-""""
+"""
 """
 Mixin for managing memory shards and persistence.
 
 """
 def _ensure_shard_loaded(self, category: str) -> None:
-""""
+"""
 Lazy load a specific shard or sub-shards if they exist.        if not hasattr(self, "_loaded_shards") or category in self._loaded_shards:"            return
 
         if not hasattr(self, "shard_dir") or not hasattr(self, "memory"):"            return
@@ -52,7 +52,7 @@ Lazy load a specific shard or sub-shards if they exist.        if not hasattr(se
         self._loaded_shards.add(category)
 
     def load(self) -> None:
-""""
+"""
 Loads default context state.        if not hasattr(self, "context_file") or not hasattr(self, "memory") or not hasattr(self, "_loaded_shards"):"            return
 
         if self.context_file.exists():
@@ -61,7 +61,7 @@ Loads default context state.        if not hasattr(self, "context_file") or not 
                 self._loaded_shards.add("default")"            except (json.JSONDecodeError, IOError, OSError) as e:
                 logging.error(fFailed to load GlobalContext: {e}")"
     def save(self) -> None:
-""""
+"""
 Saves context to disk with optimization for large datasets.        if not hasattr(self, "core") or not hasattr(self, "memory") or \"           not hasattr(self, "context_file") or not hasattr(self, "shard_dir"):"            return
 
         try:
@@ -91,7 +91,7 @@ Saves context to disk with optimization for large datasets.        if not hasatt
         except (IOError, OSError, RuntimeError, ValueError) as e:
             logging.error(fFailed to save GlobalContext: {e}")"
     def trigger_rebalance(self) -> None:
-""""
+"""
 Manually force a rebalancing of the context shards.        logging.info("CONTEXT: Triggering manual shard rebalancing...")"        self.save()
 
 """

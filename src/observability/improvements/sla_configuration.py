@@ -59,7 +59,7 @@ __version__ = VERSION
 @dataclass
 class SLAConfiguration:
 """
-SLA configuration for improvements.""""
+SLA configuration for improvements.""
 Attributes:
         level: SLA priority level.
         max_hours: Maximum hours to resolution.
@@ -93,4 +93,4 @@ Attributes:
 
 """
 
-"""
+""

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import hashlib
 except ImportError:
@@ -52,7 +52,7 @@ __version__ = VERSION
 
 class RequestDeduplicator:
 """
-Deduplicates concurrent requests with identical prompts.""""
+Deduplicates concurrent requests with identical prompts.""
 Prevents redundant API calls when multiple threads / processes
     send the same request simultaneously.
 
@@ -62,7 +62,7 @@ Prevents redundant API calls when multiple threads / processes
             result=call_api("prompt")"            dedup.store_result("prompt", result)"    
     def __init__(self, ttl_seconds: float = 60.0, recorder: LocalContextRecorder | None = None) -> None:
 """
-Initialize deduplicator.""""
+Initialize deduplicator.""
 Args:
             ttl_seconds: Time - to - live for pending requests.
             recorder: Interaction recorder for logic harvesting.
@@ -79,7 +79,7 @@ Generate deduplication key for prompt.        return hashlib.sha256(prompt.encod
 
     def is_duplicate(self, prompt: str) -> bool:
 """
-Check if request is a duplicate of a pending request.""""
+Check if request is a duplicate of a pending request.""
 Args:
             prompt: Request prompt.
 
@@ -107,7 +107,7 @@ Args:
 
     def wait_for_result(self, prompt: str, timeout: float = 60.0) -> str | None:
 """
-Wait for result of duplicate request.""""
+Wait for result of duplicate request.""
 Args:
             prompt: Request prompt.
             timeout: Maximum wait time.
@@ -127,7 +127,7 @@ Args:
 
     def store_result(self, prompt: str, result: str) -> None:
 """
-Store result and notify waiters.""""
+Store result and notify waiters.""
 Args:
             prompt: Request prompt.
             result: Request result.

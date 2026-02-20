@@ -241,7 +241,7 @@ Fuzz using a specific technique.        results = []
 Generate new payloads using AI.        try:
             # Create prompt for AI payload generation
             prompt = f""
-Generate 5 new {technique.value} payloads for fuzzing.""""
+Generate 5 new {technique.value} payloads for fuzzing.""
 Existing payloads:
 {chr(10).join(base_payloads[:3])}
 
@@ -614,6 +614,6 @@ class MultiCycleFuzzing:
 
 """
 
-        ""
+"""
 
 """

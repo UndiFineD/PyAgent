@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import json
 except ImportError:
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 class TestDataGenerator:
 """
-Generates realistic test data for agent testing.""""
+Generates realistic test data for agent testing.""
 Example:
         gen=TestDataGenerator()
         code=gen.generate_python_code(with_errors=False)
@@ -54,7 +54,7 @@ Example:
 
     def __init__(self, seed: int | None = None) -> None:
 """
-Initialize data generator.""""
+Initialize data generator.""
 Args:
             seed: Random seed for reproducibility.
                 self.seed = seed
@@ -70,7 +70,7 @@ Args:
         num_functions: int = 3,
     ) -> str:
 """
-Generate sample Python code.""""
+Generate sample Python code.""
 Args:
             with_errors: Include syntax errors.
             with_docstrings: Include docstrings.
@@ -83,7 +83,7 @@ Generated test module."""', "", "import os", ""]"'
         for i in range(num_functions):
             lines.append(f"def function_{i}(arg1, arg2):")"            if with_docstrings:
                 lines.append(f'    ""
-Function {i} docstring."""')""""'
+Function {i} docstring."""')"""'
 if with_errors and i == 0:
                 lines.append("    return arg1 +")  # Syntax error"            else:
                 lines.append(f"    return arg1 + arg2 + {i}")"            lines.append("")"
@@ -95,7 +95,7 @@ if with_errors and i == 0:
         num_sections: int = 3,
     ) -> str:
 """
-Generate sample markdown content.""""
+Generate sample markdown content.""
 Args:
             with_headers: Include headers.
             with_code_blocks: Include code blocks.
@@ -115,7 +115,7 @@ Args:
         nested: bool = True,
     ) -> str:
 """
-Generate sample JSON content.""""
+Generate sample JSON content.""
 Args:
             num_items: Number of items.
             nested: Include nested structures.
@@ -133,6 +133,10 @@ Args:
             data["metadata"] = {"                "generated": datetime.now().isoformat(),"                "count": num_items,"            }
 
         return json.dumps(data, indent=2)
+
+"""
+
+"""
 
 """
 

@@ -34,7 +34,7 @@ Facade for CacheCore.
 
     def __init__(self, cache_dir: Path, ttl_seconds: float | None = None) -> None:
 """
-Initialize disk cache.""""
+Initialize disk cache.""
 Args:
             cache_dir: Directory where cache files will be stored.
             ttl_seconds: Optional time-to-live for cache entries.
@@ -53,7 +53,7 @@ Ensure the cache directory exists.        try:
 Generate a file path for a cache key.        return self.cache_dir / f"{key}.json"
     def set(self, key: str, value: str) -> None:
 """
-Set a cache entry.""""
+Set a cache entry.""
 Args:
             key: Cache key (should be a hash).
             value: Value to cache.
@@ -63,7 +63,7 @@ Args:
             logging.warning(f"Failed to write cache file {file_path}: {e}")
     def get(self, key: str) -> str | None:
 """
-Get a cache entry.""""
+Get a cache entry.""
 Args:
             key: Cache key.
 
@@ -110,6 +110,8 @@ Clear all cache entries.        try:
 
 """
 
-""
+"""
 
 """
+
+""

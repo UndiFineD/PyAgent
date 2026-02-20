@@ -48,7 +48,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class FileAnalysisResult:
-""""
+"""
 Result of analyzing a file, including hashes, detected type/extension, suspicious strings, and embedded files.    path: str
     size_bytes: int
     md5: str
@@ -70,12 +70,12 @@ class FileClassifier:
 #         "cmd", "powershell", "wmi", "http", "shell", "hta", "mshta", "dos", "program", "invoke", "base64"    ]
     IGNORED_DOMAINS = ['schemas.openxmlformats.org', 'schemas.microsoft.com', 'purl.org', 'w3.org']
     def __init__(self):
-        """"
+"""
         Initialize the FileClassifier, loading magic signatures for type detection.        self.magic_signatures = []
         self._load_signatures()
         self.url_pattern = re.compile(r'https?://\\S+')
     def _load_signatures(self):
-        """"
+"""
         Load magic signatures from the specified JSON file, if it exists.        if self.MAGIC_DB_PATH.exists():
         try:
         with open(self.MAGIC_DB_PATH, "r", encoding="utf-8") as f:"                    data = json.load(f)
@@ -172,7 +172,7 @@ class FileClassifier:
         return list(urls)
 
     def _extract_and_scan_sync(self, path: Path) -> List[str]:
-""""
+"""
 Synchronous helper to extract and scan archives for URLs, used "in executor.        found_urls = []
         with tempfile.TemporaryDirectory() as temp_dir:
             try:

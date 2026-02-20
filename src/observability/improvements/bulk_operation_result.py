@@ -53,7 +53,7 @@ __version__ = VERSION
 @dataclass
 class BulkOperationResult:
     success_count: ""
-int""""
+int""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -95,6 +95,6 @@ class BulkOperationResult:
 
 """
 
-""
+"""
 
 """

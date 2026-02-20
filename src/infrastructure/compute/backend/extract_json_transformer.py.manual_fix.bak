@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 import json
 import re
 
@@ -33,7 +33,7 @@ class ExtractJsonTransformer(ResponseTransformerBase):
 Transformer that extracts JSON from response.
     def transform(self, response: str) -> str:
 """
-Extract JSON from response.""""
+Extract JSON from response.""
 Args:
             response: Response possibly containing JSON.
 

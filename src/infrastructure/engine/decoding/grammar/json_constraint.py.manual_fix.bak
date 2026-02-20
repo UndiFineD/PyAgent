@@ -35,7 +35,7 @@ from .base import StructuredOutputGrammar
 @dataclass
 class JSONSchemaGrammar(StructuredOutputGrammar):
 """
-Grammar that constrains output to match a JSON schema.""""
+Grammar that constrains output to match a JSON schema.""
 Converts JSON schema to a regex pattern for validation.
     Inspired by vLLM's xgrammar and outlines backends.'    
     schema: Dict[str, Any]
@@ -52,7 +52,7 @@ Compile JSON schema to regex pattern.        self._pattern = self._schema_to_reg
 
     def _schema_to_regex(self, schema: Dict[str, Any]) -> str:
 """
-Convert JSON schema to regex pattern.""""
+Convert JSON schema to regex pattern.""
 Simplified implementation - real version would use outlines_core.
                 schema_type = schema.get("type", "object")
         if schema_type == "string":"            if "enum" in schema:"                choices = [re.escape(f'"{c}"') for c in schema["enum"]]"'                return f"({'|'.join(choices)})""'

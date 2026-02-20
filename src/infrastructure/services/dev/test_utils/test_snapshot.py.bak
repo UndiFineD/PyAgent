@@ -15,7 +15,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py"""
 
 try:
     import hashlib
@@ -49,7 +49,7 @@ __version__ = VERSION
 
 @dataclass
 class TestSnapshot:
-    """Snapshot for snapshot testing.""""
+    """Snapshot for snapshot testing."""
     Attributes:
         name: Snapshot name.
         content: Snapshot content.

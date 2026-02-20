@@ -69,7 +69,7 @@ __version__ = VERSION
 
 
 class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent for autonomous financial research and analysis (Dexter Pattern").
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -79,7 +79,7 @@ Agent for autonomous financial research and analysis (Dexter Pattern").
 
     @as_tool
     def plan_research(self, query: str) -> str:
-""""
+"""
 Breaks down a query into specific financial research tasks.        # In a real impl, this would call LLM to generate the "JSON list"        self.research_plan = [
             {"task": "Fetch income statement", "status": "pending"},"            {"task": "Calculate operating margin", "status": "pending"},"            {"task": "Compare with sector average", "status": "pending"},"        ]
 
@@ -87,14 +87,14 @@ Breaks down a query into specific financial research tasks.        # In a real i
 
     @as_tool
     def validate_sufficiency(self, data: dict[str, Any]) -> str:
-""""
+"""
 Self-reflects on whether gathered data is enough to answer the query.        missing = [k for k, v in data.items() if v is None]
         if missing:
 #             return fValidation failed. Missing data: {missing}. Executing refinement loop.
 #         return "Validation passed. Proceeding to synthesis."
     @as_tool
     def analyze_market_trend(self, tickers: list[str]) -> str:
-""""
+"""
 Executes a trend analysis across multiple financial tickers.        logging.info(fFinancialAgent: Analyzing trends "for {tickers}")
 #         return fTrend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy.
 
@@ -136,7 +136,7 @@ __version__ = VERSION
 
 
 class FinancialAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent for autonomous financial research and analysis "(Dexter Pattern).
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -146,7 +146,7 @@ Agent for autonomous financial research and analysis "(Dexter Pattern).
 
     @as_tool
     def plan_research(self, query: str) -> str:
-""""
+"""
 Breaks down a query into specific financial research tasks.        # In a real impl, this would call LLM to generate the JSON list
         self.research_plan = [
             {"task": "Fetch income statement", "status": "pending"},"            {"task": "Calculate operating margin", "status": "pending"},"            {"task": "Compare with sector average", "status": "pending"},"        ]
@@ -155,13 +155,13 @@ Breaks down a query into specific financial research tasks.        # In a real i
 
     @as_tool
     def validate_sufficiency(self, data: dict[str, Any]) -> str:
-""""
+"""
 Self-reflects on whether gathered data is enough to answer the query.        missing = [k for k, v in" data.items() if v is None]"        if missing:
 #             return fValidation failed. Missing data: {missing}. Executing refinement loop.
 #         return "Validation passed. Proceeding to synthesis."
     @as_tool
     def analyze_market_trend(self, tickers: list[str]) -> str:
-""""
+"""
 Executes a trend analysis across multiple financial tickers.        logging.info(fFinancialAgent: Analyzing trends for {tickers}")"
 #         return fTrend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy.
 

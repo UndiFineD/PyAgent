@@ -70,7 +70,7 @@ class ConsistencyAgent:
         >>> checker=ConsistencyAgent()
 #         >>> issues=checker.check(["file1.py", "file2.py"], {})
     def __init__(self) -> None:
-""""
+"""
 Initialize the consistency checker.        self.issues: list[ConsistencyIssue] = []
 
 

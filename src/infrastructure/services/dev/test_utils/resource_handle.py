@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -62,4 +62,4 @@ A handle representing an acquired resource from ResourcePool.
 
 """
 
-"""
+""

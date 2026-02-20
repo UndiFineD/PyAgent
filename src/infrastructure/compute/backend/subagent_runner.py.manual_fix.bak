@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Implementation of subagent running logic.""""
+Implementation of subagent running logic.""
 Phase 15 Rust Optimizations:
 - estimate_tokens_rust: Fast BPE-approximated token counting
 - validate_response_rust: Vectorized content validation
@@ -174,7 +174,7 @@ Validate that AI response contains expected content types.        if not respons
 
     def estimate_tokens(self, text: str) -> int:
 """
-Estimate token count for text.""""
+Estimate token count for text.""
 Uses Rust-accelerated BPE approximation when available.
                 if not text:
             return 0

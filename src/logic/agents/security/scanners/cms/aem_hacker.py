@@ -90,13 +90,13 @@ class Detector(BaseHTTPRequestHandler):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        self.d[key].append(value)""""
+        self.d[key].append(value)""
         else:
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        self.d[key] = [""""
+        self.d[key] = [""
         value,
         ]
 
@@ -110,7 +110,7 @@ def register(name):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        registered[name] = func""""
+        registered[name] = func""
         return func
 
         return decorator
@@ -128,7 +128,7 @@ if base_url[-1] == "/" and (path[0] == "/" or path[0] == "\\"):"# [BATCHFIX] Com
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-url = base_url[:-1] + path""""
+url = base_url[:-1] + path""
 else:
         url = base_url + path
 
@@ -249,7 +249,7 @@ def preflight(url, proxy=None, debug=False):
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in SETPREFERENCES:
         url = normalize_url(base_url, path)
 
@@ -287,7 +287,7 @@ for path in SETPREFERENCES:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in MERGEMETADATA:
         url = normalize_url(base_url, path)
 
@@ -334,7 +334,7 @@ json.loads(resp.content.decode())["assetPaths"]"                except Exception
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in GETSERVLET:
         url = normalize_url(base_url, path)
 
@@ -384,7 +384,7 @@ for path in GETSERVLET:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 found_json = False
     found_feed = False
     for path in QUERYBUILDER:
@@ -451,7 +451,7 @@ json.loads(resp.content.decode())["hits"]"                except Exception:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in GQLSERVLET:
         url = normalize_url(base_url, path)
         try:
@@ -501,7 +501,7 @@ json.loads(resp.content.decode())["hits"]"                except Exception:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in GuideInternalSubmitServlet:
         url = normalize_url(base_url, path)
         try:
@@ -539,7 +539,7 @@ for path in GuideInternalSubmitServlet:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in POSTSERVLET:
         url = normalize_url(base_url, path)
         try:
@@ -587,7 +587,7 @@ data = ":operation=nop"  # [BATCHFIX] closed string"            headers = {"Cont
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in POSTSERVLET1:
         url = normalize_url(base_url, path)
         try:
@@ -654,7 +654,7 @@ if "<td>Parent Location</td>" in str(resp.content) and resp.status_code in [200,
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path, creds in itertools.product(POSTSERVLET, creds_list):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -701,7 +701,7 @@ if "<td>Parent Location</td>" in str(resp.content) and resp.status_code in [200,
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in LOGINSTATUS:
         url = normalize_url(base_url, path)
         try:
@@ -748,7 +748,7 @@ for path in LOGINSTATUS:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in CURRENTUSER:
         url = normalize_url(base_url, path)
         try:
@@ -796,7 +796,7 @@ for path in CURRENTUSER:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in USERINFO:
         url = normalize_url(base_url, path)
         try:
@@ -846,7 +846,7 @@ for path in USERINFO:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in FELIXCONSOLE:
         url = normalize_url(base_url, path)
         headers = {"Authorization": "Basic YWRtaW46YWRtaW4="}"        try:
@@ -883,7 +883,7 @@ for path in FELIXCONSOLE:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in WCMDEBUG:
         url = normalize_url(base_url, path)
         try:
@@ -920,7 +920,7 @@ for path in WCMDEBUG:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in WCMSUGGESTIONS:
         url = normalize_url(base_url, path)
         try:
@@ -977,7 +977,7 @@ for path in WCMSUGGESTIONS:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in itertools.chain(CRXDELITE, CRX, CRXSEARCH, CRXNAMESPACE, PACKMGR):
         url = normalize_url(base_url, path)
         try:
@@ -1008,7 +1008,7 @@ for path in itertools.chain(CRXDELITE, CRX, CRXSEARCH, CRXNAMESPACE, PACKMGR):
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in DISKUSAGE:
         url = normalize_url(base_url, path)
         try:
@@ -1029,7 +1029,7 @@ for path in DISKUSAGE:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     SALESFORCESERVLET1 = itertools.product(
@@ -1045,7 +1045,7 @@ results = []""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-SALESFORCESERVLET1 = list(pair[0].format(pair[1]) for pair in SALESFORCESERVLET1)""""
+SALESFORCESERVLET1 = list(pair[0].format(pair[1]) for pair in SALESFORCESERVLET1)""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     SALESFORCESERVLET2 = itertools.product(
@@ -1066,7 +1066,7 @@ SALESFORCESERVLET1 = list(pair[0].format(pair[1]) for pair in SALESFORCESERVLET1
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-SALESFORCESERVLET2 = list(pair[0].format(pair[1].format(cache_buster)) for pair in SALESFORCESERVLET2)""""
+SALESFORCESERVLET2 = list(pair[0].format(pair[1].format(cache_buster)) for pair in SALESFORCESERVLET2)""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     SALESFORCESERVLET3 = itertools.product(
@@ -1083,7 +1083,7 @@ SALESFORCESERVLET2 = list(pair[0].format(pair[1].format(cache_buster)) for pair 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-SALESFORCESERVLET3 = list(pair[0].format(pair[1].format(cache_buster)) for pair in SALESFORCESERVLET3)""""
+SALESFORCESERVLET3 = list(pair[0].format(pair[1].format(cache_buster)) for pair in SALESFORCESERVLET3)""
 for path in itertools.chain(SALESFORCESERVLET1, SALESFORCESERVLET2, SALESFORCESERVLET3):
         url = normalize_url(base_url, path)
         encoded_orig_url = (base64.b16encode(url.encode())).decode()
@@ -1118,7 +1118,7 @@ u = base64.b16decode(d.get("salesforcesecret")[0]).decode()"# [BATCHFIX] Comment
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     REPOSTINGSERVICESSERVLET1 = (
@@ -1203,7 +1203,7 @@ u = base64.b16decode(d.get("reportingservices")[0]).decode()"# [BATCHFIX] Commen
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     SITECATALYST1 = (
@@ -1320,7 +1320,7 @@ u = base64.b16decode(d.get("sitecatalyst")[0]).decode()"# [BATCHFIX] Commented m
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     AUTOPROVISIONING1 = itertools.product(
@@ -1393,7 +1393,7 @@ u = base64.b16decode(d.get("autoprovisioning")[0]).decode()"# [BATCHFIX] Comment
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     OPENSOCIAL1 = itertools.product(
@@ -1407,7 +1407,7 @@ results = []""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-OPENSOCIAL1 = list(pair[0].format(pair[1]) for pair in OPENSOCIAL1)""""
+OPENSOCIAL1 = list(pair[0].format(pair[1]) for pair in OPENSOCIAL1)""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     OPENSOCIAL2 = itertools.product(
@@ -1425,7 +1425,7 @@ OPENSOCIAL1 = list(pair[0].format(pair[1]) for pair in OPENSOCIAL1)""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-OPENSOCIAL2 = list(pair[0].format(pair[1].format(cache_buster)) for pair in OPENSOCIAL2)""""
+OPENSOCIAL2 = list(pair[0].format(pair[1].format(cache_buster)) for pair in OPENSOCIAL2)""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     OPENSOCIAL3 = itertools.product(
@@ -1439,7 +1439,7 @@ OPENSOCIAL2 = list(pair[0].format(pair[1].format(cache_buster)) for pair in OPEN
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-OPENSOCIAL3 = list(pair[0].format(pair[1].format(cache_buster)) for pair in OPENSOCIAL3)""""
+OPENSOCIAL3 = list(pair[0].format(pair[1].format(cache_buster)) for pair in OPENSOCIAL3)""
 for path in itertools.chain(OPENSOCIAL1, OPENSOCIAL2, OPENSOCIAL3):
         url = normalize_url(base_url, path)
         encoded_orig_url = (base64.b16encode(url.encode())).decode()
@@ -1474,7 +1474,7 @@ u = base64.b16decode(d.get("opensocial")[0]).decode()"# [BATCHFIX] Commented met
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     MAKEREQUEST1 = itertools.product(
@@ -1484,7 +1484,7 @@ results = []""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-MAKEREQUEST1 = list(pair[0].format(pair[1]) for pair in MAKEREQUEST1)""""
+MAKEREQUEST1 = list(pair[0].format(pair[1]) for pair in MAKEREQUEST1)""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     MAKEREQUEST2 = itertools.product(
@@ -1498,7 +1498,7 @@ MAKEREQUEST1 = list(pair[0].format(pair[1]) for pair in MAKEREQUEST1)""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-MAKEREQUEST2 = list(pair[0].format(pair[1].format(cache_buster)) for pair in MAKEREQUEST2)""""
+MAKEREQUEST2 = list(pair[0].format(pair[1].format(cache_buster)) for pair in MAKEREQUEST2)""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     MAKEREQUEST3 = itertools.product(
@@ -1508,7 +1508,7 @@ MAKEREQUEST2 = list(pair[0].format(pair[1].format(cache_buster)) for pair in MAK
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-MAKEREQUEST3 = list(pair[0].format(pair[1].format(cache_buster)) for pair in MAKEREQUEST3)""""
+MAKEREQUEST3 = list(pair[0].format(pair[1].format(cache_buster)) for pair in MAKEREQUEST3)""
 for path in itertools.chain(MAKEREQUEST1, MAKEREQUEST2, MAKEREQUEST3):
         url = normalize_url(base_url, path)
         encoded_orig_url = (base64.b16encode(url.encode())).decode()
@@ -1572,7 +1572,7 @@ u = base64.b16decode(d.get("opensocialmakerequest")[0]).decode()"# [BATCHFIX] Co
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in SWFS:
         url = normalize_url(base_url, path)
         try:
@@ -1612,7 +1612,7 @@ for path in SWFS:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in EXTERNALJOBSERVLET:
         url = normalize_url(base_url, path)
 # [BATCHFIX] Commented metadata/non-Python
@@ -1652,7 +1652,7 @@ for path in EXTERNALJOBSERVLET:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in WEBDAV:
         try:
             url = normalize_url(base_url, path)
@@ -1724,7 +1724,7 @@ for path in WEBDAV:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in itertools.chain(GROOVYSCRIPT1, GROOVYSCRIPT2):
         url = normalize_url(base_url, path)
         data = "script={}".format(script_content)"        headers = {"Content-Type": "application/x-www-form-urlencoded", "Referer": base_url}"        try:
@@ -1811,7 +1811,7 @@ json.loads(resp.content.decode())["data"]"                except Exception:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for path in FIDDLE:
         url = normalize_url(base_url, path)
         headers = {
@@ -1867,7 +1867,7 @@ def parse_args():
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return parser.parse_args(sys.argv[1:])""""
+return parser.parse_args(sys.argv[1:])""
 def run_detector(port):  # Run SSRF detector in separate thread
     def handler_factory(*args):
         return Detector(token, d, *args)
@@ -1904,7 +1904,7 @@ print("[*] Available handlers: {0}".format(list(registered.keys())))"        sys
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-extra_headers[header_data[0].strip()] = header_data[1].strip()""""
+extra_headers[header_data[0].strip()] = header_data[1].strip()""
 else:
         extra_headers = {}
 
@@ -1925,7 +1925,7 @@ else:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-handlers_to_run = []""""
+handlers_to_run = []""
 for name in args.handler:
             handler_func = registered.get(name)
             if handler_func:
@@ -1936,7 +1936,7 @@ for name in args.handler:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-futures = []""""
+futures = []""
 for check in handlers_to_run:
             my_host = "{0}:{1}".format(args.host, args.port)"            futures.append(tpe.submit(check, args.url, my_host, args.debug, proxy))
 
@@ -1953,3 +1953,7 @@ print("[+] New Finding!!!")"                print("\\tName: {}".format(finding.n
 if __name__ == "__main__":"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 #     main()
+
+""
+
+"""

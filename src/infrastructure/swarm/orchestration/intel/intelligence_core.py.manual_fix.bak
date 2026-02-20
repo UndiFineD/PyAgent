@@ -71,7 +71,7 @@ Logic-only core for swarm intelligence synthesis.
 
     def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
 """
-Filters relevant insights from the pool.""""
+Filters relevant insights from the pool.""
 Args:
             pool: list of insight dictionaries.
             limit: maximum number of insights to return.
@@ -95,7 +95,7 @@ Args:
 
     def generate_synthesis_prompt(self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]) -> str:
 """
-Constructs a prompt for AI synthesis from collected insights.""""
+Constructs a prompt for AI synthesis from collected insights.""
 Args:
             insights: List of SwarmInsight objects.
             sql_lessons: List of SQL lesson dictionaries.
@@ -111,7 +111,7 @@ f"Insights:\\n{pool_text}""        )
 
     def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[dict[str, Any]]:
 """
-Filters raw AI output and converts to structured dictionaries.""""
+Filters raw AI output and converts to structured dictionaries.""
 Args:
             raw_patterns: List of raw pattern strings from the AI.
 
@@ -199,6 +199,8 @@ Args:
 
 """
 
-""
+"""
 
 """
+
+""

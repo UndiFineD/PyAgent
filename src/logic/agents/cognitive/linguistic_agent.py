@@ -29,7 +29,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class LinguisticAgent(BaseAgent):
-""""
+"""
 The linguistic surface layer of the PyAgent OS.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -39,7 +39,7 @@ The linguistic surface layer of the PyAgent OS.
             "whatsapp": " *Update*: {message}\\n\\n_Status_: {status}","            "telegram": " <b>System Notification</b>\\n\\n{message}\\n\\n<code>Target: {target}</code>","            "slack": ":robot_face: *PyAgent Notification*\\n> {message}","        }
 
     def format_notification(self, platform: str, message: str, **kwargs) -> str:
-""""
+"""
 Formats a message for a specific mobile/edge platform (Phase 125).        template = self.notification_templates.get(platform.lower(), "{message}")"        kwargs["message"] = message"        try:
             return template.format(**kwargs)
         except KeyError as e:

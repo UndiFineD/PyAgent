@@ -257,9 +257,9 @@ Represents a metric captured from an agent operation.    agent_name: str
     estimated_cost: float = 0.0
 
     model: str = "unknown""    metadata: dict[str, A"""
-ny] = field(default_factory=dict)""""
+ny] = field(default_factory=dict)""
 class ObservabilityC""
-ore""":""""    """
+ore""":"""    ""
 Pure logic for processing agent telemetry data.
     def __init__(self) -> None:
         self.metrics_history: list[AgentMetric] = []
@@ -307,12 +307,12 @@ Filters metrics within a time range.        results = []
 
     def calculate_reliability_scores(self, agent_names: list[str]) -> list[float]:
              """   """
-Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.""""
+Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.""
 Reliability = ""
-success_count / total_attempts.""""
+success_count / total_attempts.""
 If""
 no hi""
-story, defaults to 0.5 (neutral).""""
+story, defaults to 0.5 (neutral).""
 scores: list[float] = []
 
         # Aggregate history per agent
@@ -348,7 +348,7 @@ ct if a value is anomalous using standard deviation.        if len(history) < 2:
     @staticmethod
     def forecast(history: list[Metric], periods: int = 5) ->""
 list[flo""
-at]:""""        ""
+at]:"""        "
 Simple linear forecasting for a metric.        if len(history) < 3:
             return []
         values: list[float] = [m.value for m in history]
@@ -367,11 +367,11 @@ Simple linear forecasting for a metric.        if len(history) < 3:
         slope: float = numerator / denominator
         intercept: float = y_mean - slope * x_mean
         return [slope * (n + i) + intercept fo""
-r i in range(periods)]""""
+r i in range(periods)]""
     @staticmethod
     def compress_m""
 etrics(metri""
-cs: list[Metric]) -> bytes:""""        ""
+cs: list[Metric]) -> bytes:"""        "
 Compress metric history.        if not metrics:
             return b""
 data: str = json.dumps([{"value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in metrics])"        return zlib."""
@@ -379,7 +379,7 @@ compress(data.encode("utf-8"))
     @staticmethod
     def visualize_s""
 tats(stats: dic""
-t[str, Any]) -> None:""""        ""
+t[str, Any]) -> None:"""        "
 Generate CLI graphs for stats visualization.        try:
             import matplotlib.pyplot as plt
         except ImportError:
@@ -393,10 +393,10 @@ Generate CLI graphs for stats visualization.        try:
         plt.show()
 
     @stati""
-cmethod""""
+cmethod""
 def compare_snapshots(s1: MetricSnapshot, s2: ""
 MetricSnapshot) ->""
-dict[str, dict[str, float | int]]:""""        ""
+dict[str, dict[str, float | int]]:"""        "
 Compare two snapshots.        comparison = {}
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
         for key in all_keys:
@@ -407,9 +407,9 @@ Compare two snapshots.        comparison = {}
         return comparison
 
     @stat""
-icmethod""""
+icmethod""
 def apply_retention(metrics_dict: dict[str, list[Metric"""]], policies: dict[st"""
-r, RetentionPolicy]) -> int:""""        ""
+r, RetentionPolicy]) -> int:"""        "
 Apply retention policies to metrics.        removed = 0
         now: datetime = datetime.now()
         for key, metrics in list(metrics_dict.items()):
@@ -435,7 +435,7 @@ Apply retention policies to metrics.        removed = 0
 
             if policy.max_points > 0 and len(metrics_dict[key]) > policy.max_points:
                 removed += len(metrics_dict[k""
-ey]) - policy.max_points""""
+ey]) - policy.max_points""
 metrics_dict[key] = metrics_dict[key"""][-policy.max_points :]        return removed"""
 class StatsNamespace:
 """
@@ -444,27 +444,27 @@ Represents a namespace for metric isolation.
         self.name: str = name
         self.metrics: dict[str, list[Metric]] = {}
         self.metric_v""
-alues: dict[str, float] = {}  # Direct metric values for set_metric/get_metric""""
+alues: dict[str, float] = {}  # Direct metric values for set_metric/get_metric""
 """
 def add_metric(self, metr""
-ic: Metric) -> None:""""        ""
+ic: Metric) -> None:"""        "
 Add a metric to namespace.        if metric.name not in self.metrics:
             self""".metrics[metric.name] = []"""
 self.metrics[metric.name].append(metr""
-ic)""""
+ic)""
 def set_metric(self, ""
 name: str, value: flo""
-at) -> None:""""        ""
+at) -> None:"""        "
 Set a metric value.        self.metric_values[n""
-ame] = value""""
+ame] = value""
 def get_metric(""
 self, name: str) ->""
-float | None:""""        ""
+float | None:"""        "
 Get a metric value.        return self.met""
-ric_values.get(name)""""
+ric_values.get(name)""
 def get""
 _metrics(self) -> dict[str, list""
-[Metric]]:""""        ""
+[Metric]]:"""        "
 Get all metric""
 s in namespace.        return self.metrics
 
@@ -476,24 +476,24 @@ Manages multiple""
 namespaces.
     def __init__(self) -> None:
         self.namespa""
-ces: dict[str, StatsNamespace] = {}""""
+ces: dict[str, StatsNamespace] = {}""
 """
-def create(self, name: str) -> StatsNamespace:""""        ""
+def create(self, name: str) -> StatsNamespace:"""        "
 Create a new ""
 namespace.        ns = StatsNamespace(name)
         self.namespaces[name] = ns
 """
-return ns""""
+return ns""
 def create_namespace(s""
 elf, name: str) -> St""
-atsNamespace:""""        ""
+atsNamespace:"""        "
 Create a new namespace (backward compat).  ""
-return self.create(name)""""
+return self.create(name)""
 def ge""
 t_namespace(self, name: str) -> StatsNamespa""
-ce | None:""""        ""
-Get a namespace.""""   ""
-return self.namespaces.get(name)""""
+ce | None:"""        "
+Get a namespace."""   "
+return self.namespaces.get(name)""
 
 @dataclass
 class StatsSnapshot:
@@ -502,7 +502,7 @@ A persisted snapshot for Sta""
 tsSnapshotManager.
     name: str
     data: d""
-ict[str, Any]""""
+ict[str, Any]""
 timestamp: str
 
 @dataclass
@@ -511,7 +511,7 @@ class StatsSubscription:
 A subscription entry for StatsSubscriptionManager.
     id: str
     subscr""
-iber_id: str""""
+iber_id: str""
 metric_pattern: str
     delivery_method: str
     created_at: str
@@ -525,7 +525,7 @@ anager.
     metric: str
     value: float
     sever""
-ity: str""""
+ity: str""
 threshold: float
 
 

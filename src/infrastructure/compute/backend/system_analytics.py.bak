@@ -15,7 +15,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py"""
 
 try:
     import threading
@@ -50,7 +50,7 @@ __version__ = VERSION
 
 
 class SystemAnalytics:
-    """Collects and reports backend usage analytics.""""
+    """Collects and reports backend usage analytics."""
     Tracks usage patterns, performance metrics, and costs.
 
     Example:
@@ -59,7 +59,7 @@ class SystemAnalytics:
         report=analytics.generate_report()
         print(report["total_tokens"])"    
     def __init__(self, retention_hours: int = 24) -> None:
-        """Initialize backend analytics.""""
+        """Initialize backend analytics."""
         Args:
             retention_hours: Hours to retain records.
                 self.retention_hours = retention_hours
@@ -74,7 +74,7 @@ class SystemAnalytics:
         success: bool = True,
         cost_estimate: float = 0.0,
     ) -> UsageRecord:
-        """Record a usage event.""""
+        """Record a usage event."""
         Args:
             backend: Backend used.
             tokens: Tokens consumed.
@@ -104,7 +104,7 @@ class SystemAnalytics:
         self._records = [r for r in self._records if r.timestamp >= cutoff]
 
     def generate_report(self, backend: str | None = None) -> dict[str, Any]:
-        """Generate usage report.""""
+        """Generate usage report."""
         Args:
             backend: Filter by backend (optional).
 

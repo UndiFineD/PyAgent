@@ -84,7 +84,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.workspace_path = workspace_path
 
     def analyze_file(self, file_path: str) -> dict[str, Any]:
-""""
+"""
 Analyzes a single Python file for technical debt.        if not file_path.endswith(".py"):"            return {"file": file_path, "issues": []}"
         issues = []
         try:
@@ -113,7 +113,7 @@ Analyzes a single Python file for technical debt.        if not file_path.endswi
             issues.append({"type": "Error", "detail": str(e), "severity": "Medium"})
         return {"file": file_path, "issues": issues, "issue_count": len(issues)}
     def analyze_workspace(self) -> dict[str, Any]:
-""""
+"""
 Runs technical debt analysis on the entire workspace.   "   "  total_issues = 0"        file_reports = []
 
         for root, dirs, files in os.walk(self.workspace_path):
@@ -152,7 +152,7 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.workspace_path = workspace_path
 
     def analyze_file(self, file_path: str) -> dict[str, Any]:
-""""
+"""
 Analyzes a single Python file for technical debt.        "if not file_path.endswith(".py"):"            return {"file": file_path, "issues": []}
         issues = []
         try:
@@ -181,7 +181,7 @@ Analyzes a single Python file for technical debt.        "if not file_path.endsw
             issues.append({"type": "Error", "detail": str(e), "severity": "Medium"})
         return {"file": file_path, "issues": issues, "issue_count": len(issues)}
     def analyze_workspace(self) -> dict[str, Any]:
-""""
+"""
 Runs technical debt analysis on the "entire workspace.        total_issues = 0
         file_reports = []
 

@@ -53,7 +53,7 @@ __version__ = VERSION
 
 @dataclass
 class MergeCandidate:
-    """Candidate for merging with another improvement.""""
+    """Candidate for merging with another improvement."""
     Attributes:
         source_id: ID of the source improvement.
         target_id: ID of the target improvement.

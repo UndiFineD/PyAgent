@@ -63,10 +63,10 @@ from ..versioning_strategy import VersioningStrategy
 
 
 class ChangesVersioningMixin:
-""""
+"""
 Mixin for managing versioning strategies.
     def set_versioning_strategy(self, strategy: VersioningStrategy) -> None:
-""""
+"""
 Set the versioning strategy.        self._versioning_strategy = strategy
         logging.info(fUsing versioning strategy: {strategy.value}")"
     def generate_next_version(self, bump_type: str = "patch") -> str:"        "Generate the next version based on the current strategy.
@@ -85,7 +85,7 @@ Set the versioning strategy.        self._versioning_strategy = strategy
                     pass
         return "0.1.0"  # Default starting version
     def _extract_latest_version(self) -> str | None:
-""""
+"""
 Extract the latest version from the changelog.        if not hasattr(self, "previous_content") or not self.previous_content:"            return None
 #         pattern = r"##\\\\s*\[?(\\\\d+\\.\\\\d+\\.\\\\d+)\]?"        matches = re.findall(pattern, self.previous_content)
         if matches:
@@ -100,10 +100,10 @@ from ..versioning_strategy import VersioningStrategy
 
 
 class ChangesVersioningMixin:
-""""
+"""
 Mixin for managing" versioning strategies.
     def set_versioning_strategy(self, strategy: VersioningStrategy) -> None:
-""""
+"""
 Set the versioning strategy.        self._versioning_strategy = strategy
         logging.info(fUsing versioning strategy: {strategy.value}")"
     def generate_next_version(self, bump_type: str = "patch") -> str:"        "Generate the next version based on the current strategy.
@@ -122,7 +122,7 @@ Set the versioning strategy.        self._versioning_strategy = strategy
                     pass
         return "0.1.0"  # Default starting version
     def _extract_latest_version(self) -> str | None:
-""""
+"""
 Extract the latest version from the changelog.        if not hasattr(self, "previous_content") or not self.previous_content:"            return None
 #         pattern = r"##\\\\s*\[?(\\\\d+\\.\\\\d+\\.\\\\d+)\]?"        matches = re.findall(pattern, self.previous_content)
         if matches:

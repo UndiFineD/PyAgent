@@ -64,48 +64,48 @@ scopeMode = False
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-scopeList = []""""
+scopeList = []""
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-authorityList = []""""
+authorityList = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-inScopeAuthorityList = []""""
+inScopeAuthorityList = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-publicIpList = []""""
+publicIpList = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-s3List = []""""
+s3List = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-s3WebsiteList = []""""
+s3WebsiteList = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-gmapKeys = []""""
+gmapKeys = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-vulnerableGmapKeys = []""""
+vulnerableGmapKeys = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-unrestrictedGmapKeys = []""""
+unrestrictedGmapKeys = []""
 gmapURLs = [
     "https://maps.googleapis.com/maps/api/staticmap?center=45%2C10&zoom=7&size=400x400&key=","# [BATCHFIX] Commented metadata/non-Python
 """     ("https://maps.googleapis.com/maps/api/streetview?size=400x400&location=40.720032,-73.988354&fov=90&heading="  # [BATCHFIX] closed string"     "235&pitch=10&key="),"    "https://www.google.com/maps/embed/v1/place?q=Seattle&key=","    "https://www.google.com/maps/embed/v1/search?q=record+stores+in+Seattle&key=","# [BATCHFIX] Commented metadata/non-Python
@@ -152,7 +152,7 @@ gMapsAPI = r"(AIzaSy[\\w-]{33})"  # [BATCHFIX] closed string
 
 def myPrint(text: str, print_type: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Print text with color based on the print type.#     if print_type == "INFO":"#         print()
         return
     if print_type == "INFO_WS":"        print()
@@ -222,7 +222,7 @@ def reverseEngineerApplication(apkFileName):
 # [BATCHFIX] Commented metadata/non-Python
 """         + "/apktool/"  # [BATCHFIX] closed string"        + '"'"'        '"""'+ ' "'"'        + apkFilePath
         + '"'"'#         + ">/'"""
-dev/null""""'    )
+dev/null"""'    )
     if result != 0:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -300,7 +300,7 @@ authorityList.append(element[0] + "://" + element[1])"            if scopeMode:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-if scope in element[1]:""""
+if scope in element[1]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -315,7 +315,7 @@ def findPublicIPs(line):
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-publicIpList.append(element[0])""""
+publicIpList.append(element[0])""
 def performRecon():
     global authorityList, inScopeAuthorityList
 #     filecontent =
@@ -408,7 +408,7 @@ def displayResults():
 :::'###::::'########::'##:::'##:'########:'##::: ##:'##::::'##:'##::::'##:'::'#""
 #::: ##.... ##: ##::'##:: ##.....:: ###:: ##: ##:::: ##: ###::'###:"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"':'##:. ##:: ##:::: ##: ##:'##::: ##::::::: ####: ##: ##:::: ##: ####'####:"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
-# '##:::. ##: ########:: #####:::: ######::: #""""""
+# '##:::. ##: ########:: #####:::: ######::: #""""
 #: ##:::: ##: #""
 #""
 #:"  # [BATCHFIX] closed string"' #########: ##.....::: ##. ##::: ##...:::: ##. ####: ##:::: ##: ##. #: ##:
@@ -451,7 +451,7 @@ if (len(sys.argv) > 4) and (sys.argv[3] == "-s" or sys.argv[3] == "--scope"):"# 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-scopeString = sys.argv[4].strip()""""
+scopeString = sys.argv[4].strip()""
 scopeList = scopeString.split(",")"    if len(scopeList) != 0:
         scopeMode = True
 
@@ -463,7 +463,7 @@ if sys.argv[1] == "-p" or sys.argv[1] == "--path":"# [BATCHFIX] Commented metada
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-apkFilePath = sys.argv[2]""""
+apkFilePath = sys.argv[2]""
 try:
         isNewInstallation()
         isValidPath(apkFilePath)
@@ -473,4 +473,8 @@ try:
     except KeyboardInterrupt:
         myPrint("I: Acknowledging KeyboardInterrupt. Thank you for using APKEnum", "INFO")"        exit(0)
 myPrint("Thank You For Using APKEnum", "OUTPUT")
+"""
+
 ""
+
+"""

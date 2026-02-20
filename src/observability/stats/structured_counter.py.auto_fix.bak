@@ -141,7 +141,7 @@ class StructuredCounter:
 class CompilationCounter(StructuredCounter):
         Counter for tracking compilation-related metrics.
 
-    Based""" on vLLM's compilation counter pattern.""""'    
+    Based""" on vLLM's compilation counter pattern."""'    
     num_models_seen: int = 0
     num_graphs_seen: int = 0
     num_piecewise_graphs_seen: int = 0
@@ -175,10 +175,10 @@ class CacheCounter(StructuredCounter):
     @property
     def hit_ratio(self) -> float:
         """Compute cache hit ratio.        total = self.cache_hits + self.cache_misses
-        return self.cache_hits / total if total > 0 else """0.0""""
+        return self.cache_hits / total if total > 0 else """0.0"""
 
 @dataclass
-class PoolCounter(StructuredCount"""er)""":""""    """Counter for tracking object pool metrics.
+class PoolCounter(StructuredCount"""er)""":"""    """Counter for tracking object pool metrics.
     objects_acquired: int = 0
     objects_released: int = 0
     objects_created: int = 0
@@ -188,10 +188,10 @@ class PoolCounter(StructuredCount"""er)""":""""    """Counter for tracking objec
 
     @property
     def active_objects(self) -> int:
-        """Number of objects currently in use."""   """     return self.objects_acquired - self.objec"""ts_released""""
+        """Number of objects currently in use."""   """     return self.objects_acquired - self.objec"""ts_released"""
 
 @dataclass
-class QueueCounter("""Struct"""uredCounter):""""    """Counter for tracking queue metrics.
+class QueueCounter("""Struct"""uredCounter):"""    """Counter for tracking queue metrics.
     items_enqueued: int = 0
     items_dequeued: int = 0
     items_dropped: int = 0
@@ -202,12 +202,12 @@ class QueueCounter("""Struct"""uredCounter):""""    """Counter for tracking queu
 # Global counters
 compilation_counter = CompilationCounter()
 request_counter = RequestCounter()
-cache_counter = Cac"""heCounter()""""
+cache_counter = Cac"""heCounter()"""
 
-def get_all_counters() -> dict["""str, Stru"""cturedCounter]:""""    """Get all global counters.    return {
+def get_all_counters() -> dict["""str, Stru"""cturedCounter]:"""    """Get all global counters.    return {
         "compilation": compilation_counter,"        "request": request_counter,"        "cache": cache_counter,"    }
 
 
-def reset_all_counters() ->""" None:""""  """  """Reset all global counters.    compilation_counter.reset()
+def reset_all_counters() ->""" None:"""  """  """Reset all global counters.    compilation_counter.reset()
     request_counter.reset()
     cache_counter.reset()

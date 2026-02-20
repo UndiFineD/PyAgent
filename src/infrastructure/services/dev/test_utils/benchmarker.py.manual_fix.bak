@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from collections.abc import Callable
 except ImportError:
@@ -50,7 +50,7 @@ Initialize benchmarker.        self.timings: list[float] = []
 
     def run(self, fn: Callable[[], None], iterations: int = 5) -> dict[str, float]:
 """
-Run a function multiple times and collect timing statistics.""""
+Run a function multiple times and collect timing statistics.""
 Args:
             fn: Function to benchmark.
             iterations: Number of iterations.

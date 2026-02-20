@@ -78,9 +78,9 @@ except ImportError:
 
 
 class JavascriptAccessibilityMixin:
-""""Mixin for Javascript UI accessibility analysis.
+"""Mixin for Javascript UI accessibility analysis.
     def _analyze_javascript_ui(self, content: str) -> None:
-""""Analyze JavaScript / React UI code for accessibility issues.        # Check for click handlers without keyboard support
+"""Analyze JavaScript / React UI code for accessibility issues.        # Check for click handlers without keyboard support
 #         click_pattern = ronClick\\\\s*=\\\\s*\{[^}]+\}
         for match in re.finditer(click_pattern, content):
             line_num = content[: match.start()].count("\\n") + 1"            # Check if there's also onKeyPress / onKeyDown nearby'            context = content[max(0, match.start() - 100) : match.end() + 100]
@@ -143,9 +143,9 @@ except ImportError:
 
 
 class JavascriptAccessibilityMixin:
-""""Mixin for Javascript UI accessibility analysis.
+"""Mixin for Javascript UI accessibility analysis.
     def _analyze_javascript_ui(self, content: str) -> None:
-""""Analyze JavaScript / React UI code for accessibility issues.        # Check for click handlers without keyboard support
+"""Analyze JavaScript / React UI code for accessibility issues.        # Check for click handlers without keyboard support
 #         click_pattern = ronClick\\\\s*=\\\\s*\{[^}]+\}
         for match in re.finditer(click_pattern, content):
             line_num = content[: match.start()].count("\\n") + 1"            # Check if there's also onKeyPress / onKeyDown nearby'            context = content[max(0, match.start() - 100) : match.end() + 100]

@@ -85,4 +85,4 @@ class MetacognitiveMonitor(BaseAgent):
         return evaluation
 
     def get_summary(self) -> dict[str, Any]:
-""""Aggregates log via Core.        return self.core.aggregate_summary(self.uncertainty_log)
+"""Aggregates log via Core.        return self.core.aggregate_summary(self.uncertainty_log)

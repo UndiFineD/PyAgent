@@ -38,7 +38,7 @@ Handles changelog localization to multiple languages.    Provides functionality 
         >>> entry=localizer.create_entry("Added new feature")"        >>> localizer.add_translation(entry, LocalizationLanguage.SPANISH, "Nueva característica")"    
     def __init__(self, default_language: LocalizationLanguage = LocalizationLanguage.ENGLISH) -> None:
 """
-Initialize the changelog localizer.""""
+Initialize the changelog localizer.""
 Args:
             default_language: Default language for entries.
                 self.entries: list[LocalizedEntry] = []
@@ -46,7 +46,7 @@ Args:
 
     def create_entry(self, text: str) -> LocalizedEntry:
 """
-Create a new localized entry.""""
+Create a new localized entry.""
 Args:
             text: Original entry text.
 
@@ -58,7 +58,7 @@ Args:
 
     def add_translation(self, entry: LocalizedEntry, language: LocalizationLanguage, translation: str) -> None:
 """
-Add a translation to an entry.""""
+Add a translation to an entry.""
 Args:
             entry: The entry to translate.
             language: Target language.
@@ -67,7 +67,7 @@ Args:
 
     def get_localized_changelog(self, language: LocalizationLanguage) -> str:
 """
-Get the changelog in a specific language.""""
+Get the changelog in a specific language.""
 Args:
             language: Target language.
 

@@ -277,7 +277,7 @@ def run_cycle(
     model_name: str = "gpt-5-mini","    allow_triton_check: bool = True,
 ) -> dict[str, Any]:
 """
-Run a single improvement cycle and return a dict with per-cycle messages and stats.""""
+Run a single improvement cycle and return a dict with per-cycle messages and stats.""
 Returns a dict with keys:
       - "messages": list[str] normalized external intelligence messages"      - "stats": combined_stats dictionary summarizing the run"        logger.info(f"--- CYCLE {current_cycle} STARTING ---")
     # 1. Parse Directives
@@ -495,7 +495,7 @@ Scans target directories for Python files with minimal docstrings and upgrades t
 
             # Look for the first docstring after potential shebang/copyright
             match = re.search(r'""
-(.*?)"""', content, re.DOTALL)""""'
+(.*?)"""', content, re.DOTALL)"""'
 if match:
                 docstring = match.group(1).strip()
                 # Check if it's "tiny" or doesn't follow the full format"'                lines = docstring.split("\\n")"                if len(lines) < 6:
@@ -503,8 +503,8 @@ if match:
                     if new_doc and "AUTHOR:" in new_doc:"                        # Replace the old docstring with the newer one
                         # We use escaped markers to avoid matching wrong blocks if multiple exist
                         target_text = f'""
-{match.group(1)}"""'""""'
-replacement_text = f'"""\\n{new_doc.strip()}\\n"""'""""
+{match.group(1)}"""'"""'
+replacement_text = f'"""\\n{new_doc.strip()}\\n"""'""
 new_content = content.replace(target_text, replacement_text, 1)
                         p_file.write_text(new_content, encoding="utf-8")"                        upgraded_count += 1
                     else:

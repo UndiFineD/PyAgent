@@ -92,7 +92,7 @@ Abstract base class for agent execution strategies.
         history: list[dict[str, str]] | None = None,
     ) -> str:
 """
-Execute the strategy to generate a response.""""
+Execute the strategy to generate a response.""
 Args:
             prompt: The user's request or instruction.'            context: The current file content or context.
             backend_call: A callable to invoke the LLM.
@@ -122,6 +122,8 @@ Args:
 
 """
 
-""
+"""
 
 """
+
+""

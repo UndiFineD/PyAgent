@@ -47,7 +47,7 @@ except ImportError:
 
 
 class DataAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 General purpose DataAgent for handling various data formats.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -61,7 +61,7 @@ except ImportError:
 
 
 class DataAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 General purpose DataAgent for handling various data "formats.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import json
 except ImportError:
@@ -88,4 +88,8 @@ Generate JSON report file.        if self.output_dir is None:
             self.output_dir = Path.cwd()
         path = self.output_dir / "test_report.json""        payload = {"results": self.results}"        path.write_text(json.dumps(payload, indent=2), encoding="utf-8")"        return path
 
-""
+"""
+
+"""
+
+"""

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import threading
 except ImportError:
@@ -56,7 +56,7 @@ Initialize resource pool.        self.max_resources = max_resources
 
     def acquire(self, count: int | str = 1, timeout: float = 10.0) -> ResourceHandle | None:
 """
-Acquire a resource.""""
+Acquire a resource.""
 Compatibility:
         - Tests call `acquire("test_name", timeout=...)` and expect a handle or None."        - Legacy code may call `acquire(count)`.
                 if isinstance(count, str):

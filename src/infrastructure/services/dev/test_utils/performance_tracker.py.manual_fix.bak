@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 import time
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -33,7 +33,7 @@ __version__ = VERSION
 
 class PerformanceTracker:
 """
-Tracks test execution performance.""""
+Tracks test execution performance.""
 Example:
         tracker=PerformanceTracker()
         with tracker.track("test_function"):"            run_test()
@@ -47,7 +47,7 @@ Initialize performance tracker.        self._metrics: list[PerformanceMetric] = 
     @contextmanager
     def track(self, test_name: str) -> Iterator[None]:
 """
-Track execution time for a test.""""
+Track execution time for a test.""
 Args:
             test_name: Name of the test.
                 start = time.time()
@@ -72,7 +72,7 @@ Args:
         unit: str,
     ) -> None:
 """
-Record a performance metric.""""
+Record a performance metric.""
 Args:
             test_name: Test name.
             metric_type: Type of metric.

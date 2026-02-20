@@ -43,7 +43,7 @@ if HAS_NUMPY:
 
 class NeoxRotaryEmbedding(RotaryEmbeddingBase):
 """
-NeoX style rotary position embedding.""""
+NeoX style rotary position embedding.""
 Rotates pairs of dimensions (0, d/2), (1, d/2+1), etc.
     This is the standard implementation used in Llama, Mistral, and others.
     
@@ -165,4 +165,4 @@ NumPy implementation of NeoX RoPE.        seq_len = int(positions.max()) + 1
 
 """
 
-"""
+""

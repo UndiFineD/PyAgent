@@ -37,7 +37,7 @@ self.resolver.nameservers = ["1.1.1.1", "8.8.8.8"]
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def get_subdomains_from_crt(self, domain: str, session: aiohttp.ClientSession) -> List[str]:""""
+async def get_subdomains_from_crt(self, domain: str, session: aiohttp.ClientSession) -> List[str]:""
 #         url = fhttps://crt.sh/?q=%.{domain}&output=json
         try:
             async with session.get(url, timeout=20) as resp:
@@ -53,12 +53,12 @@ return list({entry["name_value"].lower().strip() for entry in data})"        exc
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def check_ip_origin(self, domain: str, ip: str, session: aiohttp.ClientSession) -> Dict[str, Any]:""""
+async def check_ip_origin(self, domain: str, ip: str, session: aiohttp.ClientSession) -> Dict[str, Any]:""
 Compares the Target Domain (CDN) with the direct IP response.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -130,6 +130,8 @@ async def find_origin(domain: str):
 
 """
 
-""
+"""
 
 """
+
+""

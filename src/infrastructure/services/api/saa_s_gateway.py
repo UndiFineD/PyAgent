@@ -60,7 +60,7 @@ __version__ = VERSION
 
 class SaaSGateway:
 """
-Provides usage control and authentication for the fleet as a service.""""
+Provides usage control and authentication for the fleet as a service.""
 Integrated with GatewayCore for external SaaS orchestration.
 
     
@@ -133,4 +133,4 @@ Returns the current quota status for a key.        return self.api_keys.get(api_
 
 """
 
-"""
+""

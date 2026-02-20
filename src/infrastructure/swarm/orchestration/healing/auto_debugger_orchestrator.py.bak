@@ -15,7 +15,7 @@
 
 
 """
-AutoDebuggerOrchestrator for PyAgent.""""Coordinates between ImmuneSystemAgent and CoderAgent to self-heal source code changes.
+AutoDebuggerOrchestrator for PyAgent."""Coordinates between ImmuneSystemAgent and CoderAgent to self-heal source code changes.
 Implemented as part of Phase 40: Recursive Self-Debugging.
 """
 
@@ -50,7 +50,7 @@ class AutoDebuggerOrchestrator:
 
     @as_tool
     async def validate_and_repair(self, file_path: str) -> dict[str, Any]:
-        """Validates a file and attempts automatic repair if it fails syntax check.""""
+        """Validates a file and attempts automatic repair if it fails syntax check."""
         Args:
             file_path: The absolute path to the file to check.
                 if not os.path.exists(file_path):

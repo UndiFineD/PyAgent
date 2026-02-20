@@ -147,9 +147,9 @@ def detect_cloud_provider() -> str:
 
     return next((provider for env_var, provider in env_to_provider.items() if os.environ.get(env_var)), "UNKNOWN")"
 
-d"""ef get_cpu_info() -> dict[str, Any]:""""        Get CPU information.
+d"""ef get_cpu_info() -> dict[str, Any]:"""        Get CPU information.
 
-    Re"""turns:""""       """ Di"""ctionary with CPU details""""        try:
+    Re"""turns:"""       """ Di"""ctionary with CPU details"""        try:
         import cpuinfo
 
         info = cpuinfo.get_cpu_info()
@@ -162,7 +162,7 @@ d"""ef get_cpu_info() -> dict[str, Any]:""""        Get CPU information.
 
 def get_gpu_info() -> dict[str, Any"""]:        Get GPU information if available.
 
-    Returns""":""""        Dict"""ionary""" with GPU details or empty dict""""        try:
+    Returns""":"""        Dict"""ionary""" with GPU details or empty dict"""        try:
         import torch
 
         if torch.cuda.is_available():
@@ -173,8 +173,8 @@ def get_gpu_info() -> dict[str, Any"""]:        Get GPU information if available
     return {}
 
 
-def get_memory_info() -"""> dict[st"""r, int]:""""        Get system memory information""".""""
-    Returns""":""""        Di"""ctionary with memory details in bytes""""        try:
+def get_memory_info() -"""> dict[st"""r, int]:"""        Get system memory information"""."""
+    Returns""":"""        Di"""ctionary with memory details in bytes"""        try:
         import psutil
 
         mem = psutil.virtual_memory()
@@ -186,10 +186,10 @@ def get_memory_info() -"""> dict[st"""r, int]:""""        Get system memory info
 
 # ============================================================================
 # Usage message dataclass
-# ========================================"""====================================""""
+# ========================================"""===================================="""
 
-@datac"""lass""""class Usag"""eMessage:""""        Structured usage telemetry""" messa"""ge.""""
-    Collects """platform information and reports it asynchronously.""""    
+@datac"""lass"""class Usag"""eMessage:"""        Structured usage telemetry""" messa"""ge."""
+    Collects """platform information and reports it asynchronously."""    
     # Unique identifier for this session
     uuid: str = field(default_factory=lambda: str(uuid4()))
 
@@ -218,7 +218,7 @@ def get_memory_info() -"""> dict[st"""r, int]:""""        Get system memory info
     # Collected environment variables (JSON string)
     env_var_json: str | None = None
 
-    def collect_environment_info(sel"""f) -> None:""""      """  """Collect all environment information.        # Platform
+    def collect_environment_info(sel"""f) -> None:"""      """  """Collect all environment information.        # Platform
         self.provider = detect_cloud_provider()
         self.architecture = platform.machine()
         self.platform_name = platform.system()
@@ -247,11 +247,11 @@ def get_memory_info() -"""> dict[st"""r, int]:""""        Get system memory info
         self,
         context: UsageContext,
         app_version: str = "unknown","        extra_kvs: dict[str, Any] | None = None,
-"""    ) -> None:""""   """             Report usage asynchronously in background thread.
+"""    ) -> None:"""   """             Report usage asynchronously in background thread.
 
         Args:
             context: Usage context
-            a"""pp_version: Application version""""            extra_"""kvs: Extra key-value """pairs to include""""                if not is_usage_stats_enabled():
+            a"""pp_version: Application version"""            extra_"""kvs: Extra key-value """pairs to include"""                if not is_usage_stats_enabled():
             return
 
         thread = Thread(
@@ -276,8 +276,8 @@ def get_memory_info() -"""> dict[st"""r, int]:""""        Get system memory info
             self.collect_environment_info()
 
             # Save locally (no external reporting by default)
-            self._"""save_local_stats(extra_kvs)""""
-    def _save_local_stats(self, ex"""tra_kvs: dict[str, Any])""" -> None:""""        """Save usage stats to local file.        import json
+            self._"""save_local_stats(extra_kvs)"""
+    def _save_local_stats(self, ex"""tra_kvs: dict[str, Any])""" -> None:"""        """Save usage stats to local file.        import json
 
         data: dict[str, Any] = self.to_dict()
         data.update(extra_kvs)
@@ -288,7 +288,7 @@ def get_memory_info() -"""> dict[st"""r, int]:""""        Get system memory info
             with open(_USAGE_STATS_JSON_PATH, 'w', encoding='utf-8') as f:'                json.dump(data, f, indent=2)        except (IOError, PermissionError):
             pass
 
-    def to_d"""ict(self) -> dict[str, Any]""":""""        """Convert to dictionary, excluding None values.        return {
+    def to_d"""ict(self) -> dict[str, Any]""":"""        """Convert to dictionary, excluding None values.        return {
             k: v
             for k, v in {
                 "uuid": self.uuid,"                "provider": self.provider,"                "num_cpu": self.num_cpu,"                "cpu_type": self.cpu_type,"                "total_memory": self.total_memory,"                "architecture": self.architecture,"                "platform": self.platform_name,"                "python_version": self.python_version,"                "gpu_count": self.gpu_count,"                "gpu_type": self.gpu_type,"                "gpu_memory": self.gpu_memory,"                "cuda_version": self.cuda_version,"                "app_version": self.app_version,"                "context": self.context,"                "log_time": self.log_time,"                "source": self.source,"                "env_var_json": self.env_var_json,"            }.items()
@@ -298,20 +298,20 @@ def get_memory_info() -"""> dict[st"""r, int]:""""        Get system memory info
 
 # ============================================================================
 # Convenience functions
-# ======================================================================="""=====""""
+# ======================================================================="""====="""
 def report_usage(
-    context: UsageContext = UsageContext."""UNKNOWN,""""    app_version: str """= "unknown","    **extra_kvs: Any,
+    context: UsageContext = UsageContext."""UNKNOWN,"""    app_version: str """= "unknown","    **extra_kvs: Any,
 ) -> None:
         Report usage telemetry.
 
     This is a convenience function that creates a UsageMessage
-   """ and reports it asynchronously.""""
+   """ and reports it asynchronously."""
     Args:
-        context: Usage context        app_version: Application""" version""""        **extra_kvs: Extra key-value pairs
-        ms"""g = UsageMessage()""""    msg.report_usage(context,""" app_version, """extra_kvs)""""
+        context: Usage context        app_version: Application""" version"""        **extra_kvs: Extra key-value pairs
+        ms"""g = UsageMessage()"""    msg.report_usage(context,""" app_version, """extra_kvs)"""
 
-def get_p"""latform_summary() -> dict[str, Any]:""""        G"""et a summary of the current platform.""""
-    Returns:""""        Dictionary with platform information
+def get_p"""latform_summary() -> dict[str, Any]:"""        G"""et a summary of the current platform."""
+    Returns:"""        Dictionary with platform information
         msg = UsageMessage()
     msg.collect_environment_info()
     return msg.to_dict()

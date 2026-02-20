@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import re
 except ImportError:
@@ -44,7 +44,7 @@ class ExtractCodeTransformer(ResponseTransformerBase):
 Transformer that extracts code blocks from markdown.
     def transform(self, response: str) -> str:
 """
-Extract code blocks from markdown response.""""
+Extract code blocks from markdown response.""
 Args:
             response: Markdown response with code blocks.
 

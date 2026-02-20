@@ -31,7 +31,7 @@ def __init__(self):
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.session: Optional[aiohttp.ClientSession] = None""""
+self.session: Optional[aiohttp.ClientSession] = None""
 async def get_session(self):
         if self.session is None or self.session.closed:
             self.session = aiohttp.ClientSession(headers={"User-Agent": "PyAgent DevOpsAudit/1.0"})"        return self.session
@@ -40,7 +40,7 @@ async def get_session(self):
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_scm_recon_endpoints(self, base_url: str, provider: str = "github") -> List[str]:""""
+def get_scm_recon_endpoints(self, base_url: str, provider: str = "github") -> List[str]:""
 Returns API endpoints for repository and user recon.        if provider == "github":"            return [
                 f"{base_url}/api/v3/users","                f"{base_url}/api/v3/repositories","                f"{base_url}/api/v3/search/code?q=filename:.env","                f"{base_url}/api/v3/search/code?q=filename:id_rsa","            ]
         elif provider == "gitlab":"# [BATCHFIX] Commented metadata/non-Python
@@ -51,7 +51,7 @@ return [f"{base_url}/api/v4/projects", f"{base_url}/api/v4/users", f"{base_url}/
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -112,7 +112,7 @@ def get_github_runner_attack_vectors(self) -> List[Dict[str, Any]]:"Attack vecto
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def scan_sccm_dp(self, target: str) -> Dict[str, Any]:""""
+async def scan_sccm_dp(self, target: str) -> Dict[str, Any]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Lightweight check for SCCM DP exposure."  # [BATCHFIX] closed string"        session = await self.get_session()
 #         base_url = fhttp://{target}

@@ -78,7 +78,7 @@ def scan_file(self, file_path: str) -> list[dict[str, Any]]:"Scans a single file
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""
+findings = []""
 try:
             with open(file_path, encoding="utf-8", errors="ignore") as f:"                content = f.read()
 
@@ -88,7 +88,7 @@ try:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import (  # type: ignore[attr-defined]""""
+from rust_core import (  # type: ignore[attr-defined]""
 scan_hardcoded_secrets_rust,
                     scan_insecure_patterns_rust,
                 )
@@ -130,12 +130,12 @@ scan_hardcoded_secrets_rust,
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-flags = pattern[:flag_end]""""
+flags = pattern[:flag_end]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-actual_pattern = pattern[flag_end:]""""
+actual_pattern = pattern[flag_end:]""
 #                         full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'                    else:
 #                         full_pattern = f"\\b{pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
                     matches = re.finditer(full_pattern, content)
@@ -199,7 +199,7 @@ def scan_file(self, file_path: str) -> list[dict[str, Any]]:"Scans a single file
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""
+findings = []""
 try:
             with open(file_path, encoding="utf-8", errors="ignore") as f:"                content = f.read()
 
@@ -209,7 +209,7 @@ try:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import (  # type: ignore[attr-defined]""""
+from rust_core import (  # type: ignore[attr-defined]""
 scan_hardcoded_secrets_rust,
                     scan_insecure_patterns_rust,
                 )
@@ -251,12 +251,12 @@ scan_hardcoded_secrets_rust,
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-flags = pattern[:flag_end]""""
+flags = pattern[:flag_end]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-actual_pattern = pattern[flag_end:]""""
+actual_pattern = pattern[flag_end:]""
 #                         full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'                    else:
 #                         full_pattern = f"\\b{pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
                     matches = re.finditer(full_pattern, content)
@@ -328,7 +328,7 @@ def audit_workspace(self) -> dict[str, Any]:"Performs a comprehensive security a
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-dirs[:] = [""""
+dirs[:] = [""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -361,6 +361,8 @@ d for d in dirs if not d.startswith(".") and d not in ["node_modules", "__pycach
 
 """
 
-""
+"""
 
 """
+
+""

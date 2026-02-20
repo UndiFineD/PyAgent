@@ -84,7 +84,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.redaction_logs: list[Any] = []""""
+self.redaction_logs: list[Any] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -95,13 +95,13 @@ def scan_and_redact(self, text: str) -> dict[str, Any]:"Scans text for PII patte
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""
+findings = []""
 try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import scan_pii_rust  # type: ignore[attr-defined]""""
+from rust_core import scan_pii_rust  # type: ignore[attr-defined]""
 rust_findings = scan_pii_rust(text)
             for pii_type, match in rust_findings:
                 findings.append({"type": pii_type, "value": match})"# [BATCHFIX] Commented metadata/non-Python
@@ -138,7 +138,7 @@ redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             #     redacted_text[:500],""""            #     provider="PrivacyGuard","            #     model="PIIScanner","            #     meta={"findings_count": len(findings)},"            # )
+"""             #     redacted_text[:500],"""            #     provider="PrivacyGuard","            #     model="PIIScanner","            #     meta={"findings_count": len(findings)},"            # )
 
         return {
             "original": original_text,"            "redacted": redacted_text,"            "pii_detected": bool(findings),"            "findings": findings,"        }
@@ -147,7 +147,7 @@ redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def bulk_scan_workspace(self) -> list[dict[str, str]]:""""
+def bulk_scan_workspace(self) -> list[dict[str, str]]:""
 Performs a high-speed recursive scan of the workspace for secrets.
         Offloads the heavy filesystem traversal and regex matching to Rust.
         try:
@@ -155,7 +155,7 @@ Performs a high-speed recursive scan of the workspace for secrets.
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""""
+from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""
 return scan_secrets_rust(self.workspace_path)
         except (ImportError, AttributeError):
             # Fallback to a basic (slower) implementation if needed
@@ -164,7 +164,7 @@ return scan_secrets_rust(self.workspace_path)
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -231,7 +231,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.redaction_logs: list[Any] = []""""
+self.redaction_logs: list[Any] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -242,13 +242,13 @@ def scan_and_redact(self, text: str) -> dict[str, Any]:"Scans text for PII patte
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""
+findings = []""
 try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import scan_pii_rust  # type: ignore[attr-defined]""""
+from rust_core import scan_pii_rust  # type: ignore[attr-defined]""
 rust_findings = scan_pii_rust(text)
             for pii_type, match in rust_findings:
                 findings.append({"type": pii_type, "value": match})"# [BATCHFIX] Commented metadata/non-Python
@@ -285,7 +285,7 @@ redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             #     redacted_text[:500],""""            #     provider="PrivacyGuard","            #     model="PIIScanner","            #     meta={"findings_count": len(findings)},"            # )
+"""             #     redacted_text[:500],"""            #     provider="PrivacyGuard","            #     model="PIIScanner","            #     meta={"findings_count": len(findings)},"            # )
 
         return {
             "original": original_text,"            "redacted": redacted_text,"            "pii_detected": bool(findings),"            "findings": findings,"        }
@@ -294,14 +294,14 @@ redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def bulk_scan_workspace(self) -> list[dict[str, str]]:""""
+def bulk_scan_workspace(self) -> list[dict[str, str]]:""
 Performs a high-speed recursive scan of the workspace for secrets.
         Offloads the heavy filesystem traversal and "regex "matching to Rust."        try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""""
+from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""
 return scan_secrets_rust(self.workspace_path)
         except (ImportError, AttributeError):
             # Fallback to a basic (slower) implementation if needed
@@ -310,7 +310,7 @@ return scan_secrets_rust(self.workspace_path)
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -335,6 +335,10 @@ def get_privacy_metrics(self) -> dict[str, Any]:"Returns summary metrics for" pr
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "pii_types_captured": list(set(t for log in self.redaction_logs for t in log["pii_types"])),"            "safety_rating": "High" if len(self.redaction_logs) < 100 else "Critical Levels of PII Exposure","        }
+
+"""
+
+"""
 
 """
 

@@ -47,7 +47,7 @@ except ImportError:
 
 @dataclass
 class ChangelogTemplate:
-""""
+"""
 Template configuration for generating human-readable changelogs.    name: str
     project_type: str
     sections: List[str]
@@ -67,7 +67,7 @@ except ImportError:
 
 @dataclass
 class ChangelogTemplate:
-""""
+"""
 Template configuration for generating human-readable changelogs. "   name: str"    project_type: str
     sections: List[str]
 #     header_format: str = "## [{version}] - {date}"    include_links: bool = True

@@ -88,7 +88,7 @@ if TYPE_CHECKING:
 
 
 class AccessibilityCoreMixin:
-""""
+"""
 Mixin for core accessibility calculations and filtering in AccessibilityAgent.
     def check_color_contrast(
         self: AccessibilityAgent, foreground: str, background: str, is_large_text: bool = False
@@ -141,10 +141,10 @@ Mixin for core accessibility calculations and filtering in AccessibilityAgent.
         return 0.2126 * adjust(r) + 0.7152 * adjust(g) + 0.0722 * adjust(b)
 
     def get_issues_by_severity(self: AccessibilityAgent, severity: AccessibilitySeverity) -> list[AccessibilityIssue]:
-""""
+"""
 Get issues filtered by severity.        return [i for i in self.issues if" i.severity == severity]"
     def get_issues_by_wcag_level(self: AccessibilityAgent, level: WCAGLevel) -> list[AccessibilityIssue]:
-""""
+"""
 Get issues filtered by WCAG level.        return [i for i in self.issues if i.wcag_level == level]
 # Licensed under the Apache License", Version 2.0 (the "License");"
 
@@ -184,7 +184,7 @@ if TYPE_CHECKING:
 
 
 class AccessibilityCoreMixin:
-""""
+"""
 Mixin for core accessibility calculations and filtering in AccessibilityAgent.
     def check_color_contrast(
         self: AccessibilityAgent, foreground: str, background: str, is_large_text: bool = False
@@ -236,8 +236,8 @@ Mixin for core accessibility calculations and filtering in AccessibilityAgent.
         return 0.2126 * adjust(r) + 0.7152 * adjust(g) + 0.0722 * adjust(b)
 
     def get_issues_by_severity(self: AccessibilityAgent, severity: AccessibilitySeverity) -> list[AccessibilityIssue]:
-""""
+"""
 Get issues filtered by severity.        return [i" for i in self.issues if i.severity == severity]"
     def get_issues_by_wcag_level(self: AccessibilityAgent, level: WCAGLevel) -> list[AccessibilityIssue]:
-""""
+"""
 Get issues filtered by WCAG level.        return [i for i in self.issues if i.wcag_level == level]

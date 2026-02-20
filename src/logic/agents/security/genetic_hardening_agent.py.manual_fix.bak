@@ -66,7 +66,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""
+def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""
 Analyzes a code snippet for structural fragility.
         logging.info("GeneticHardeningAgent: Analyzing code for fragility.")
         # simulated analysis
@@ -74,7 +74,7 @@ Analyzes a code snippet for structural fragility.
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-vulnerabilities = []""""
+vulnerabilities = []""
 if "try:" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #             vulnerabilities.append(
@@ -95,7 +95,7 @@ if "try:" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""""
+async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""
 # [BATCHFIX] Commented metadata/non-Python
 #         Applies hardening rules to the code to 'evolve' it into a more "resilient version."  # [BATCHFIX] closed string"'        logging.info(fGeneticHardeningAgent: Applying {len(hardening_rules")} hardening rules.")"
 # [BATCHFIX] Commented metadata/non-Python
@@ -149,7 +149,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""
+def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""
 # [BATCHFIX] Commented metadata/non-Python
 #         Analyzes a code "snippet for structural fragility."  # [BATCHFIX] closed string"        logging.info("GeneticHardeningAgent: Analyzing code for fragility.")"
         # simulated analysis
@@ -157,7 +157,7 @@ def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-vulnerabilities = []""""
+vulnerabilities = []""
 if "try:" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #             vulnerabilities.append(
@@ -178,7 +178,7 @@ if "try:" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""""
+async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""
 # [BATCHFIX] Commented metadata/non-Python
 #         Applies hardening rules to the code to "'evolve' it into a more resilient version."  # [BATCHFIX] closed string"'        logging.info(fGeneticHardeningAgent: Applying" {len(hardening_rules)} hardening rules.")"
 # [BATCHFIX] Commented metadata/non-Python

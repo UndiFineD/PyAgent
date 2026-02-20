@@ -77,7 +77,11 @@ def get_telegram_nearby_params(self) -> Dict[str, Any]:"Parameters for Telegram 
 
     def audit_bot_token(self, token: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Generates a command to verify a Telegram bot token.#         return fcurl -s https://api.telegram.org/bot{token}/getMe
+
+"""
+
+"""
 
 """

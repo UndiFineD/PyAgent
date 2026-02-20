@@ -64,7 +64,7 @@ __version__ = VERSION
 
 @dataclass(order=True)
 class ImprovementDiff:
-    """Difference in a single improvement between branches.""""
+    """Difference in a single improvement between branches."""
     Attributes:
         improvement_id: Unique improvement identifier.
         diff_type: Type of difference.

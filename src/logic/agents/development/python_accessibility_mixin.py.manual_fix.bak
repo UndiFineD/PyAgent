@@ -85,10 +85,10 @@ except ImportError:
 
 
 class PythonAccessibilityMixin:
-""""
+"""
 Mixin for Python UI accessibility analysis.
     def _analyze_python_ui(self, content: str) -> None:
-""""
+"""
 Analyze Python UI code (tkinter, PyQt, etc.) for accessibility issues.        # Check for tkinter widgets without accessibility properties
         widget_patterns = [
             (rButton\\\\s*\([^)]*\)", "Button"),"            (rLabel\\\\s*\([^)]*\)", "Label"),"            (rEntry\\\\s*\([^)]*\)", "Entry"),"            (rCanvas\\\\s*\([^)]*\)", "Canvas"),"        ]
@@ -141,10 +141,10 @@ except ImportError:
 
 
 class PythonAccessibilityMixin:
-""""
+"""
 Mixin for Python UI accessibility analysis.
     def _analyze_python_ui(self, content: str) -> None:
-""""
+"""
 Analyze Python UI code (tkinter, PyQt, etc.) for accessibility issues.        # Check for tkinter widgets without accessibility properties
         widget_patterns = [
             (rButton\\\\s*\([^)]*\)", "Button"),"            (rLabel\\\\s*\([^)]*\)", "Label"),"            (rEntry\\\\s*\([^)]*\)", "Entry"),"            (rCanvas\\\\s*\([^)]*\)", "Canvas"),"        ]

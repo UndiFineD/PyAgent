@@ -15,7 +15,7 @@ from __future__ import annotations
 
 
 """
-Strategic swarm orchestration and build coordination.""""
+Strategic swarm orchestration and build coordination.""
 Orchestrates the deployment and coordination of agent swarms for system-wide
 optimization and strategic execution of complex workflows.
 """
@@ -125,4 +125,4 @@ if __name__ == "__main__":"    main()
 
 """
 
-"""
+""

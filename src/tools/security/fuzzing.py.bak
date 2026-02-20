@@ -229,7 +229,7 @@ class AIFuzzingEngine:
     ) -> List[str]:
         """Generate new payloads using AI.        try:
             # Create prompt for AI payload generation
-            prompt = f"""Generate 5 new {technique.value} payloads for fuzzing.""""
+            prompt = f"""Generate 5 new {technique.value} payloads for fuzzing."""
 Existing payloads:
 {chr(10).join(base_payloads[:3])}
 

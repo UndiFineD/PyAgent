@@ -51,7 +51,7 @@ if TYPE_CHECKING:
 
 
 class FederationMixin:
-""""
+"""
 Mixin for multi-project federation in TopologicalNavigator.
 
     @as_tool
@@ -82,7 +82,7 @@ if TYPE_CHECKING:
 
 
 class FederationMixin:
-""""
+"""
 Mixin for multi-project federation in TopologicalNavigator.
     @as_tool
     def federate_with_external_project(self: TopologicalNavigator, external_root: str) -> str:

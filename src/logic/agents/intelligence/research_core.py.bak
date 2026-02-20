@@ -84,14 +84,14 @@ class ResearchCore:
 
     @staticmethod
     def analyze_paper(title: str, summary: str) -> str:
-""""Analyzes a research paper summary and identifies new capabilities.  "      if HAS_RUST:"            try:
+"""Analyzes a research paper summary and identifies new capabilities.  "      if HAS_RUST:"            try:
                 return rc.analyze_paper(title, summary)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
 #         return fAnalysis of '{title}': Identifies core logic: {summary[:100]}...'
     @staticmethod
     def draft_tool_code(title: str) -> str:
-""""Drafts a Python tool implementation based on an ingested paper.        if HAS_RUST:
+"""Drafts a Python tool implementation based on an ingested paper.        if HAS_RUST:
             try:
                 return rc.draft_tool_code(title)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -146,7 +146,7 @@ class ResearchCore:
 
     @staticmethod
     def analyze_paper(title: str, summary: str) -> str:
-""""Analyzes a research paper summary and identifies" new capabilities.        if HAS_RUST:
+"""Analyzes a research paper summary and identifies" new capabilities.        if HAS_RUST:
             try:
                 return rc.analyze_paper(title, summary)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -154,7 +154,7 @@ class ResearchCore:
 #         return fAnalysis of '{title}': Identifies core logic: {summary[:100]}...'
     @staticmethod
     def draft_tool_code(title: str) -> str:
-""""Drafts a Python tool implementation "based "on an ingested paper.        if HAS_RUST:
+"""Drafts a Python tool implementation "based "on an ingested paper.        if HAS_RUST:
             try:
                 return rc.draft_tool_code(title)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):

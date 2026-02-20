@@ -72,7 +72,7 @@ except ImportError:
 
 class OrchestratorExecutionMixin(ExecCommandMixin, ExecIterationMixin, ExecLoopMixin):
 """
-Command execution, git operations, and processing loop methods for OrchestratorAgent.""""
+Command execution, git operations, and processing loop methods for OrchestratorAgent.""
 Methods:
         async def run_command(command: str, *, cwd: str | None = None) -> str
         async def iterate_tasks(tasks: list[Any], retries: int = 3) -> None
@@ -99,6 +99,8 @@ Methods:
 
 """
 
-""
+"""
 
 """
+
+""

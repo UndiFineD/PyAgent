@@ -33,7 +33,7 @@ Scans for Microsoft Exchange vulnerabilities like ProxyNotShell.#     Ported fro
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def check_proxynotshell(target: str, session: aiohttp.ClientSession) -> Dict[str, Any]:""""
+async def check_proxynotshell(target: str, session: aiohttp.ClientSession) -> Dict[str, Any]:""
 #         random_domain = ".join(random.choices(string.ascii_lowercase, k=10)) + ".com"# [BATCHFIX] Commented metadata/non-Python
 """
 path = f"/autodiscover/autodiscover.json@Powershell.{random_domain}/owa/"  # [BATCHFIX] closed string"#         url = fhttps://{target}{path}
@@ -76,4 +76,4 @@ if __name__ == "__main__":"    pass
 
 """
 
-"""
+""

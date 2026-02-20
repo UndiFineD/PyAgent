@@ -98,7 +98,7 @@ Generate pytest fixture code for a dependency.        dep = self.dependencies.ge
 scope = self._scopes.get(name, "function")"        return (
             f"@pytest.fixture(scope='{scope}')\\n"
 f"def {name}() -> {dep.dependency_type}:\\n""            f'    """
-{name} fixture."""\\n'""""'
+{name} fixture."""\\n'"""'
 f"    {dep.implementation or 'pass'}\\n""'        )
 
     def get_all_fixtures(self) -> str:
@@ -107,6 +107,10 @@ Generate all fixture code.        fixtures: list[str] = []
         for name in self.dependencies:
             fixtures.append(self.get_fixture_code(name))
         return "\\n".join(fixtures)
+"""
+
+"""
+
 """
 
 """

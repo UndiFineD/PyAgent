@@ -56,7 +56,7 @@ __version__ = VERSION
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Executes unit and integration tests and analyzes failures.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -86,7 +86,7 @@ Executes unit and integration tests and analyzes failures.
             return True
 
     @as_tool
-    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:""""
+    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:""
 Executes pytest on the specified" directory.
         # Merge force and bypass flags
         should_bypass = force or bypass_shard_validation
@@ -130,7 +130,7 @@ __version__ = VERSION
 
 
 class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Executes unit and integration tests and analyzes failures.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -160,7 +160,7 @@ Executes unit and integration tests and analyzes failures.
             return True
 
     @as_tool
-    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:""""
+    def run_tests(self, path: str = "tests", force: bool = False, bypass_shard_validation: bool = False) -> str:""
 Executes pytest on the specified directory.
         # Merge force and bypass flags
         should_bypass = force or bypass_shard_validation
@@ -249,7 +249,7 @@ Executes pytest on the specified directory.
         return "\\n".join(report)
     @as_tool
     def run_file_tests(self, file_path: str) -> str:
-""""
+"""
 Runs tests for a single file. "       return self.run_tests(file_path)"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Runs tests based on user prompt."        path = target_file if target_file else (prompt if prompt else "tests")"        return self.run_tests(path)
@@ -272,6 +272,8 @@ Runs tests for a single file. "       return self.run_tests(file_path)"
 
 """
 
-""
+"""
+
+"""
 
 """

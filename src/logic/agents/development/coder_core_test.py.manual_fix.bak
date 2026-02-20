@@ -30,7 +30,7 @@ except ImportError:
 def test_coder_core_rust_metrics():
     core = CoderCore(CodeLanguage.PYTHON)
     content = ""
-def hello():""""    # This is a comment
+def hello():"""    # This is a comment
     if True:
         print('hi')'    import os
         metrics = core.calculate_metrics(content)
@@ -56,7 +56,7 @@ def test_coder_core_rust_smells():
 def test_coder_core_quality_score():
     core = CoderCore(CodeLanguage.PYTHON)
     content = ""
-def hello():""""    # TODO: implement this
+def hello():"""    # TODO: implement this
     pass
         metrics = core.calculate_metrics(content)
     smells = core.detect_code_smells(content)

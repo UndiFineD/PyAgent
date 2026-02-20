@@ -162,7 +162,7 @@ prompt = (
 """
 Provide code-specific critique.""
 prompt = f""
-You are a senior software engineer specializing in {self.language} code review.""""
+You are a senior software engineer specializing in {self.language} code review.""
 Critically evaluate this {self.language} code based on:
 - Correctness and functionality
 - Code style and best practices
@@ -332,6 +332,6 @@ agent = LLMReflectionAgent(llm_callable)
 
 """
 
-""
+"""
 
 """

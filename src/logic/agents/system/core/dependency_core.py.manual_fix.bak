@@ -46,7 +46,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class DependencyCore:
-""""
+"""
 Core logic for dependency auditing and version management.
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
@@ -96,7 +96,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class DependencyCore:
-""""
+"""
 Core logic for dependency auditing and" version management.
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:

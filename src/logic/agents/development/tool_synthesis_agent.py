@@ -60,8 +60,8 @@ class ToolSynthesisAgent(BaseAgent):
         logging.info("ToolSynthesisAgent initialized (TODO Placeholder).")
     async def synthesize_tool(self, tool_name: str, tool_description: str, target_language: str = "python") -> dict:"#         "Synthesizes a new tool from a description (Phase 74)."        logging.info(fSynthesizing tool: {tool_description} in {target_language}")"        return {"status": "synthesized", "tool_name": tool_name, "code": "# Generated tool code"}"
     def get_available_tools(self) -> list:
-""""
+"""
 Returns list of available synthesized tools (Phase 74).        return ["generated_tool"]
     def analyze_feedback(self, tool_name: str, feedback: str) -> dict:
-""""
+"""
 Analyzes feedback for a synthesized tool (Phase 74).   "     _ = tool_name"        return {"status": "feedback_logged", "feedback": feedback}

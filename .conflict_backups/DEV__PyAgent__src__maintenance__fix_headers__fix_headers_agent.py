@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 class FixHeadersAgent:
-    """"Agent for fixing and standardizing license headers in Python files."""
+    """Agent for fixing and standardizing license headers in Python files."""
 
     HEADER_TEMPLATE = """
 #!/usr/bin/env python3
@@ -40,7 +40,7 @@ class FixHeadersAgent:
         )
 
     def clean_existing_headers(self, content: str) -> str:
-        """"Safely strip shebang/license headers while preserving encoding comments.
+        """Safely strip shebang/license headers while preserving encoding comments.
 
         - Preserves an encoding comment on line 1 or 2 (PEP-263)
         - Handles optional UTF-8 BOM at start

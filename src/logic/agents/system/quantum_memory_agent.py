@@ -58,7 +58,7 @@ __version__ = VERSION
 
 
 class QuantumMemoryAgent(BaseAgent):
-""""
+"""
 Manages massive context windows through compression and quantization.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -101,7 +101,7 @@ Manages massive context windows through compression and quantization.
 
     @as_tool
     def export_context_knowledge_graph(self) -> str:
-""""
+"""
 Exports the current compressed context as a JSON" Knowledge Graph.
 #         filepath = self.context_cache_dir / "knowledge_graph.json"        with open(filepath, 'w', encoding='utf-8') as f:'            json.dump(self.active_context_blocks, f, indent=2)
 

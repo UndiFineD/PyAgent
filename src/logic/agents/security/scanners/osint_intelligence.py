@@ -65,7 +65,7 @@ def generate_dorks(domain: str) -> Dict[str, List[str]]:"Generates domain-specif
     @staticmethod
     def get_cxsecurity_dork_url(page: int = 1) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Returns the URL for fetching dorks from CXSecurity.#         return fhttps://cxsecurity.com/dorks/{page}
 
 """

@@ -72,7 +72,7 @@ __version__ = VERSION
 
 @dataclass(init=False)
 class ImprovementTemplate:
-    """Template for creating improvements.""""
+    """Template for creating improvements."""
     Compatibility notes:
     - Tests construct templates without `id`/`category`.
     - Tests sometimes pass `description_pattern` instead of `description_template`.
@@ -108,7 +108,7 @@ class ImprovementTemplate:
 
     def instantiate(self, variables: dict[str, str]) -> dict[str, str]:
         """Instantiate the template with variables.        return {
-            "title": self.title_pattern.format(**variables),"            "description": self.description_template.format(**variables"""),""""        }
+            "title": self.title_pattern.format(**variables),"            "description": self.description_template.format(**variables"""),"""        }
 
 try:
     from dataclasses import dataclass
@@ -148,11 +148,11 @@ __version__ = VERSION
 
 @dataclass(init=False)
 class ImprovementTemplate:
-    """Template for creating improvements.""""
+    """Template for creating improvements."""
     Compatibility notes:
     - Tests construct templates without `id`/`category`.
     - Tests sometimes pass `description_pattern` instead of `description_template`.
-    - `instantiate()` returns a dict with `titl"""e` and""" `d"""escription`.""""    
+    - `instantiate()` returns a dict with `titl"""e` and""" `d"""escription`."""    
     id: str
     name: str
     category: ImprovementCategory

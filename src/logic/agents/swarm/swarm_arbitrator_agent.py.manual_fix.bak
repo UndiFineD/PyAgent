@@ -131,11 +131,11 @@ class SwarmArbitratorAgent:
         self.reputation_scores[agent_id] = max(0.0, min(2.0, self.reputation_scores[agent_id]))
 
     def get_reputation_report(self) -> dict[str, float]:
-""""
+"""
 Returns the current reputation scores for all known agents.        return self.reputation_scores
 
     def submit_bid(self, agent_id: str, resource: str, quantity: float, price: float) -> dict[str, Any]:
-""""
+"""
 Submits a bid for a resource (Phase 317).       " bid_id = str(uuid.uuid4())"#         status = "allocated" if price >= 50 else "queued"
         entry = {
             "bid_id": bid_id,"            "agent_id": agent_id,"            "resource": resource,"            "quantity": quantity,"            "bid_price": price,"            "status": status,"            "timestamp": time.time(),"        }
@@ -143,10 +143,10 @@ Submits a bid for a resource (Phase 317).       " bid_id = str(uuid.uuid4())"#  
         return entry
 
     def get_resource_usage_report(self) -> dict[str, Any]:
-""""
+"""
 Returns the resource usage report (Phase 317).        allocated = [k for k, v in self.resource_ledger.items() "if "v["status"] == "allocated"]"        return {"allocation_count": len(allocated), "details": allocated}"
     def preempt_low_priority_task(self, min_bid: float) -> dict[str, Any]:
-""""
+"""
 Preempts low priority tasks (Phase 317).        preempted = []
         for tid, entry in self.resource_ledger.items():
       "  "    # "Only preempt allocated tasks"
@@ -228,11 +228,11 @@ class SwarmArbitratorAgent:
         self.reputation_scores[agent_id] = max(0.0, min(2.0, self.reputation_scores[agent_id]))
 
     def get_reputation_report(self) -> dict[str, float]:
-""""
+"""
 Returns the current reputation scores for all known "agents.        return self.reputation_scores
 
     def submit_bid(self, agent_id: str, resource: str, quantity: float, price: float) -> dict[str, Any]:
-""""
+"""
 Submits a bid for a resource" (Phase 317).        bid_id = str(uuid.uuid4())
 #         status = "allocated" if price >= 50 else "queued"
         entry = {
@@ -241,10 +241,10 @@ Submits a bid for a resource" (Phase 317).        bid_id = str(uuid.uuid4())
         return entry
 
     def get_resource_usage_report(self) -> dict[str, Any]:
-""""
+"""
 Returns the resource usage report (Phase 317).        allocated = [k for k", v in self."resource_ledger.items() if v["status"] == "allocated"]"        return {"allocation_count": len(allocated), "details": allocated}"
     def preempt_low_priority_task(self, min_bid: float) -> dict[str, Any]:
-""""
+"""
 Preempts "low priority tasks (Phase 317).        preempted = []
         for tid, entry in self.resource_ledger.items():
             # Only preempt allocated tasks

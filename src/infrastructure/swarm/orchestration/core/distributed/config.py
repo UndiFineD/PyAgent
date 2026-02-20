@@ -78,7 +78,7 @@ Load balancing strategies for data parallel.
 @dataclass
 class ParallelConfig:
 """
-Configuration for parallelism.""""
+Configuration for parallelism.""
 Inspired by vLLM's ParallelConfig.'
     Attributes:
         data_parallel_size: Number of data parallel replicas.
@@ -109,7 +109,7 @@ Check if running in distributed mode.        return self.world_size > 1
 @dataclass
 class EngineIdentity:
 """
-Identity of a distributed engine instance.""""
+Identity of a distributed engine instance.""
 Inspired by vLLM's coordinator identity management.'
     Attributes:
         dp_rank: Data parallel rank.

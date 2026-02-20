@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import hashlib
 except ImportError:
@@ -40,14 +40,14 @@ __version__ = VERSION
 
 class RequestSigner:
 """
-Signs and verifies requests for integrity and authenticity.""""
+Signs and verifies requests for integrity and authenticity.""
 Uses HMAC - SHA256 to sign request payloads, enabling verification
     that requests haven't been tampered with.'
     Example:
         signer=RequestSigner(secret_key="my-secret")"        signature=signer.sign("prompt data")"        assert signer.verify("prompt data", signature)"    
     def __init__(self, secret_key: str | None = None) -> None:
 """
-Initialize request signer.""""
+Initialize request signer.""
 Args:
             secret_key: Secret key for signing. If None, uses environment variable.
                 import hmac
@@ -57,7 +57,7 @@ Args:
 
     def sign(self, data: str, request_id: str | None = None) -> str:
 """
-Sign data and return signature.""""
+Sign data and return signature.""
 Args:
             data: Data to sign.
             request_id: Optional request ID for tracking.
@@ -73,7 +73,7 @@ Args:
 
     def verify(self, data: str, signature: str) -> bool:
 """
-Verify signature for data.""""
+Verify signature for data.""
 Args:
             data: Original data.
             signature: Signature to verify.
@@ -108,6 +108,8 @@ Get stored signature by request ID.        return self._signatures.get(request_i
 
 """
 
-""
+"""
 
 """
+
+""

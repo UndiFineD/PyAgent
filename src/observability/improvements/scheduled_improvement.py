@@ -56,7 +56,7 @@ __version__ = VERSION
 @dataclass
 class ScheduledImprovement:
 """
-A scheduled improvement with resource allocation.""""
+A scheduled improvement with resource allocation.""
 Attributes:
         improvement_id: ID of the scheduled improvement.
         scheduled_start: Planned start date.
@@ -93,6 +93,6 @@ assigned_resources: list[str] = field(default_factory=list)  # type: ignore[assi
 
 """
 
-""
+"""
 
 """

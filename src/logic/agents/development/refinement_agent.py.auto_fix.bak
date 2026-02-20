@@ -73,7 +73,7 @@ __version__ = VERSION
 
 
 class RefinementAgent(BaseAgent):
-""""Refines the swarm's core logic and instructions through performance feedback.'
+"""Refines the swarm's core logic and instructions through performance feedback.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.refinement_logs = self._workspace_root / "data" / "logs" / "self_refinement"        self.refinement_logs.mkdir(parents=True, exist_ok=True)
@@ -83,7 +83,7 @@ class RefinementAgent(BaseAgent):
 
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
-""""Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
+"""Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")"        # Simulated analysis
         analysis = (
 #             "### Refinement Analysis\\n"#             "1. Found recurrent 'hallucination' when searching with BrowsingAgent.\\n"'#             "2. Tool 'execute_sql' in SQLAgent has ambiguous param descriptions.\\n"'#             "3. System prompt for LinguisticAgent is too verbose."        )
@@ -161,7 +161,7 @@ __version__ = VERSION
 
 
 class RefinementAgent(BaseAgent):
-""""Refines the swarm's core logic and instructions "through performance feedback.'
+"""Refines the swarm's core logic and instructions "through performance feedback.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.refinement_logs = self._workspace_root / "data" / "logs" / "self_refinement"        self.refinement_logs.mkdir(parents=True, exist_ok=True)
@@ -171,7 +171,7 @@ class RefinementAgent(BaseAgent):
 
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
-""""Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
+"""Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")"        # Simulated analysis
         analysis = (
 #             "### Refinement Analysis\\n"#             "1. Found recurrent 'hallucination' when searching with BrowsingAgent.\\n"'#             "2. Tool 'execute_sql' in SQLAgent has ambiguous param descriptions.\\n"'#             "3. System prompt for LinguisticAgent is too verbose."        )

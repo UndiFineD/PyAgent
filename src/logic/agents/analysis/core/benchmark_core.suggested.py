@@ -35,7 +35,7 @@ class BenchmarkCore:
     "Pure logic for agent performance benchmarking and regression gating."#     Calculates baselines and validates performance constraints.
 
     def calculate_baseline(self, results: list[BenchmarkResult]) -> float:
-""""
+"""
 Calculates the mean duration from a set of benchmark results.  "   "   if rc:"            try:
 
                 # Convert results to list of dicts for Rust
@@ -52,7 +52,7 @@ Calculates the mean duration from a set of benchmark results.  "   "   if rc:"  
         return sum(r.duration for r in results) / len(results)
 
     def check_regression(self, current_duration: float, baseline: float, threshold: float = 0.1) -> dict[str, Any]:
-""""
+"""
 Checks if current duration exceeds the baseline by the given threshold.  "      if rc:"            try:
                 return rc.check_regression(current_duration, baseline, threshold)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -64,7 +64,7 @@ Checks if current duration exceeds the baseline by the given threshold.  "      
             "regression": delta > threshold,"            "delta_percentage": delta * 100,"            "limit": threshold * 100,"        }
 
     def score_efficiency(self, result: BenchmarkResult) -> float:
-""""
+"""
 Scores efficiency based on duration per token.        if rc:
             try:
                 r_dict = {

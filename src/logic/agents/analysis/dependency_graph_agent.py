@@ -131,7 +131,7 @@ class DependencyGraphAgent(BaseAgent):
         return dependents
 
     def generate_graph_stats(self) -> dict[str, Any]:
-""""
+"""
 Returns complexity metrics for the dependency graph.        total_links = sum(len(imps) for imps in" self.dependency_map.values())"        return {
             "node_count": len(self.dependency_map),"            "edge_count": total_links,"            "density": total_links / (len(self.dependency_map) ** 2) if self.dependency_map else 0,"        }
 
@@ -206,7 +206,7 @@ class DependencyGraphAgent(BaseAgent):
         return dependents
 
     def generate_graph_stats(self) -> dict[str, Any]:
-""""
+"""
 Returns complexity metrics for the dependency graph.        total_links = sum(len(imps) for imps in self.dependency_map.values())
         return {
             "node_count": len(self.dependency_map),"            "edge_count": total_links,"            "density": total_links / (len(self.dependency_map) ** 2) if self.dependency_map else 0,"        }

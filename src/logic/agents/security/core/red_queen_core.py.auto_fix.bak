@@ -38,7 +38,7 @@ class AttackVector:
 
 
 class RedQueenCore:
-    """Pure logic for the 'Digital Red Queen' adversarial evolution.""""'    Generates and mutates prompts to test security guardrails.
+    """Pure logic for the 'Digital Red Queen' adversarial evolution."""'    Generates and mutates prompts to test security guardrails.
     
     MUTATION_STRATEGIES = [
         "prefix_injection","        "role_play","        "distraction_task","        "encoding_bypass","    ]

@@ -61,7 +61,7 @@ __version__ = VERSION
 @dataclass
 class ToolSuggestion:
 """
-Suggestion from a code analysis tool.""""
+Suggestion from a code analysis tool.""
 Attributes:
         tool_type: Type of analysis tool.
         tool_name: Name of the specific tool.
@@ -101,7 +101,7 @@ __version__ = VERSION
 @dataclass
 class ToolSuggestion:
 """
-Suggestion from a code analysis tool.""""
+Suggestion from a code analysis tool.""
 Attributes:
         tool_type: Type of analysis tool.
         tool_name: Name of the specific tool.
@@ -111,7 +111,7 @@ Attributes:
         suggested_fix: ""
 Option""
 al ""
-code fix.""""
+code fix.""
 tool_type: AnalysisToolType
     tool_name: str
     file_path: str
@@ -140,4 +140,4 @@ tool_type: AnalysisToolType
 
 """
 
-"""
+""

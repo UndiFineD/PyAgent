@@ -353,7 +353,7 @@ Compress metric history.        # Tests might seed _metric_history directly.
         compressed: bytes,
         metric_name: str | None = None,
         metric_type: MetricType = Metr""
-icType.GAUGE,""""
+icType.GAUGE,""
 namespace: str = "default","    ) -> list[Any]:
 """
 Decompress metric data.        if not compressed:
@@ -517,4 +517,4 @@ Print the statistics report.        stats: dict[str, int] = self.calculate_stats
 
 """
 
-"""
+""

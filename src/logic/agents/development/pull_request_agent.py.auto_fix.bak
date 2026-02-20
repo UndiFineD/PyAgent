@@ -54,7 +54,7 @@ __version__ = VERSION
 
 
 class PullRequestAgent(BaseAgent):
-""""Analyzes differences in the codebase and generates summaries or review comments.
+"""Analyzes differences in the codebase and generates summaries or review comments.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -64,13 +64,13 @@ class PullRequestAgent(BaseAgent):
         work_root = getattr(self, "_workspace_root", None)"        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _record_pr_event(self, action: str, details: Any, result: str) -> None:
-""""Archiving git/PR interactions for fleet intelligence.        _ "= details"        if self.recorder:
+"""Archiving git/PR interactions for fleet intelligence.        _ "= details"        if self.recorder:
             try:
                 meta = {"phase": 108, "type": "git_pr", "timestamp": time.time()}"                self.recorder.record_interaction("pra", "git", action, result, meta=meta)"            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
     @as_tool
-    def get_diff_summary(self, branch: str = "main") -> str:"""""Generates a summary of changes between the current state and a branch."        try:"            # Get the diff
+    def get_diff_summary(self, branch: str = "main") -> str:""""Generates a summary of changes between the current state and a branch."        try:"            # Get the diff
             summary = subprocess.check_output(["git", "diff", branch, "--stat"], text=True, encoding="utf-8")"
             # Get actual file changes for content analysis (limited)
             files = subprocess.check_output(
@@ -89,7 +89,7 @@ class PullRequestAgent(BaseAgent):
 
     @as_tool
     def analyze_commit_history(self, limit: int = 5) -> str:
-""""Summarizes recent activity in the repository.        try:
+"""Summarizes recent activity in the repository.        try:
             # Use argument list for git log to avoid shell injection
             cmd = ["git", "log", "-n", str(limit), "--pretty=format:%h - %an: %s (%cr)"]"            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
             if result.returncode != 0:
@@ -120,12 +120,12 @@ class PullRequestAgent(BaseAgent):
 
     @as_tool
     def stage_all_and_commit(self, message: str) -> str:
-""""Stages all changes and creates a" commit.        try:
+"""Stages all changes and creates a" commit.        try:
             subprocess.check_output(["git", "add", "."], text=True)"            subprocess.check_output(["git", "commit", "-m", message], text=True)"            return fChanges staged and committed with message: '{message}'""'        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
 #             return fError committing changes: {e}
 
     @as_tool
-    def generate_pr_description(self, branch: str = "main") -> str:"""""PR-Agent Pattern: Generates a full Markdown description for a Pull Request.        try:
+    def generate_pr_description(self, branch: str = "main") -> str:""""PR-Agent Pattern: Generates a full Markdown description for a Pull Request.        try:
             diff = subprocess.check_output(["git", "diff", branch], text=True, encoding="utf-8")"            # In a real scenario, we'd pass this diff to an LLM.'            # Here we structure the template.
             description = [
                 "# 🚀 Pull Request: Automated Improvements","                "## 📝 Overview","                "This PR was generated automatically by the PyAgent PR-Agent track.","                ","                "## 🔍 Changes Impact","                "- **Modules modified**: [Extracted from diff analysis]","                "- **New Features**: [Identify new classes/methods]","                "- **Potential Risks**: [Breaking changes / Dependency updates]","                ","                "## ✅ Checklists","                "- [x] Code follows project conventions","                "- [x] Pre-validation tests generated","                "- [x] Documentation updated","                ","                "### Detailed Diff Analysis (Preview)","                "```diff","                f"{diff[:1000]}...","                "```","            ]
@@ -136,7 +136,7 @@ class PullRequestAgent(BaseAgent):
 
     @as_tool
     def review_changes(self) -> str:
-""""Self-Review: Analyzes staged changes for security, style, and" logic issues.        try:
+"""Self-Review: Analyzes staged changes for security, style, and" logic issues.        try:
             staged_diff = subprocess.check_output(["git", "diff", "--cached"], text=True)"            if not staged_diff:
 #                 return "No staged changes to review."
             # Simulated review logic

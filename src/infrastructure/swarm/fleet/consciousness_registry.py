@@ -33,7 +33,7 @@ from src.infrastructure.swarm.orchestration.signals.signal_registry import \
 
 class ConsciousnessRegistry:
 """
-Phase 240: Fleet Consciousness Registry.""""
+Phase 240: Fleet Consciousness Registry.""
 Indexes and summarizes the 'Thought Streams' of all agents for global awareness.'    Allows any agent to 'know' what the rest of the fleet is doing.'    
     _instance = None
     thought_index: dict[str, list[dict[str, Any]]]
@@ -109,4 +109,4 @@ Generates a text summary of the fleet's collective thought stream.'        aware
 
 """
 
-"""
+""

@@ -53,7 +53,7 @@ __version__ = VERSION
 @dataclass
 class BlameInfo:
 """
-Git blame information for an error.""""
+Git blame information for an error.""
 Attributes:
         error_id: ID of the error.
         commit_hash: Commit that introduced the error.
@@ -90,4 +90,4 @@ commit_message: str = ""
 
 """
 
-"""
+""

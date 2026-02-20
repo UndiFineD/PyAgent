@@ -264,7 +264,7 @@ def run_cycle(
     current_cycle: int = 1,
     model_name: str = "gpt-5-mini","    allow_triton_check: bool = True,
 ) -> dict[str, Any]:
-    """Run a single improvement cycle and return a dict with per-cycle messages and stats.""""
+    """Run a single improvement cycle and return a dict with per-cycle messages and stats."""
     Returns a dict with keys:
       - "messages": list[str] normalized external intelligence messages"      - "stats": combined_stats dictionary summarizing the run"        logger.info(f"--- CYCLE {current_cycle} STARTING ---")"
     # 1. Parse Directives
@@ -466,13 +466,13 @@ def _apply_docstring_upgrades(root: str, target_dirs: list[str], model_name: str
             if "AUTHOR: Keimpe de Jong" in content:"                continue
 
             # Look for the first docstring after potential shebang/copyright
-            match = re.search(r'"""(.*?)"""', content, re.DOTALL)""""'            if match:
+            match = re.search(r'"""(.*?)"""', content, re.DOTALL)"""'            if match:
                 docstring = match.group(1).strip()
                 # Check if it's "tiny" or doesn't follow the full format"'                lines = docstring.split("\\n")"                if len(lines) < 6:
                     print(f" - Upgrading docstring for {p_file.name}...")"                    new_doc = _generate_enhanced_docstring(p_file, content, model_name)
                     if new_doc and "AUTHOR:" in new_doc:"                        # Replace the old docstring with the newer one
                         # We use escaped markers to avoid matching wrong blocks if multiple exist
-                        target_text = f'"""{match.group(1)}"""'""""'                        replacement_text = f'"""\\n{new_doc.strip()}\\n"""'""""'                        new_content = content.replace(target_text, replacement_text, 1)
+                        target_text = f'"""{match.group(1)}"""'"""'                        replacement_text = f'"""\\n{new_doc.strip()}\\n"""'"""'                        new_content = content.replace(target_text, replacement_text, 1)
                         p_file.write_text(new_content, encoding="utf-8")"                        upgraded_count += 1
                     else:
                         logging.debug(f"Skipping empty or malformed docstring generation for {p_file.name}")"        except Exception as e:

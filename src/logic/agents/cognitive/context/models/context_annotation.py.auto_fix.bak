@@ -30,7 +30,7 @@ __version__ = VERSION
 
 @dataclass
 class ContextAnnotation:
-""""An annotation / comment on context.
+"""An annotation / comment on context.
     id: str
     line_number: int
     content: str

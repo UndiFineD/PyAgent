@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Minimal testing framework helpers for agent scenarios.""""
+Minimal testing framework helpers for agent scenarios.""
 This module provides small utilities used by higher-level scenario
 testing engines. It is intentionally lightweight and dependency-free.
 """
@@ -574,4 +574,4 @@ Create a Jupyter notebook for test result analysis.""
 
 """
 
-"""
+""

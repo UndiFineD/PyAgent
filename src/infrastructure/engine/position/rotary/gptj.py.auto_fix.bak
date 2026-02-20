@@ -40,7 +40,7 @@ if HAS_NUMPY:
 
 
 class GptJRotaryEmbedding(RotaryEmbeddingBase):
-    """GPT-J style rotary position embedding.""""
+    """GPT-J style rotary position embedding."""
     Interleaved rotation pattern where pairs of dimensions
     are rotated together.
     

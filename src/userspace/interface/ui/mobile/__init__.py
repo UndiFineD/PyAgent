@@ -5,15 +5,9 @@ Minimal safe package init to restore importability during repository repair.
 """
 from __future__ import annotations
 
-
-
-
 try:
-    from .core.base.lifecycle.version import VERSION
+    from src.core.base.lifecycle.version import VERSION
 except Exception:
-    try:
-        from src.core.base.lifecycle.version import VERSION
-    except Exception:
-        VERSION = "0.0.0"
+    VERSION = "0.0.0"
 
 __all__ = []

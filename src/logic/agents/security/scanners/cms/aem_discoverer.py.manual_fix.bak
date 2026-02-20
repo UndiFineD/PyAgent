@@ -32,7 +32,7 @@ requests.packages.urllib3.disable_warnings()
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-registered = []""""
+registered = []""
 lock = Lock()
 semaphore = None
 
@@ -65,7 +65,7 @@ if base_url[-1] == "/" and (path[0] == "/" or path[0] == "\\"):"# [BATCHFIX] Com
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-url = base_url[:-1] + path""""
+url = base_url[:-1] + path""
 else:
         url = base_url + path
 
@@ -485,7 +485,7 @@ def parse_args():
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return parser.parse_args(sys.argv[1:])""""
+return parser.parse_args(sys.argv[1:])""
 def main():
     global semaphore
 
@@ -542,6 +542,8 @@ if __name__ == "__main__":"# [BATCHFIX] Commented metadata/non-Python
 
 """
 
-""
+"""
 
 """
+
+""

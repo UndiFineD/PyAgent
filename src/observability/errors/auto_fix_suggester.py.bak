@@ -70,7 +70,7 @@ __version__ = VERSION
 
 
 class AutoFixSuggester:
-    """Generates automated fix suggestions for errors.""""
+    """Generates automated fix suggestions for errors."""
     Uses pattern matching and common fixes to suggest
     resolutions for errors.
 
@@ -83,14 +83,14 @@ class AutoFixSuggester:
             r"IndexError: list index out of range": "Check list bounds before accessing index","            r"KeyError: '(\\w+)'": "Use .get('{0}', default) or check key existence","'        }
 
     def add_pattern(self, pattern: str, fix_template: str) -> None:
-        """Add a fix pattern.""""
+        """Add a fix pattern."""
         Args:
             pattern: Regex pattern to match errors.
             fix_template: Template for the fix suggestion.
                 self.fix_patterns[pattern] = fix_template
 
     def suggest(self, error: ErrorEntry) -> FixSuggestion | None:
-        """Generate a fix suggestion for an error.""""
+        """Generate a fix suggestion for an error."""
         Args:
             error: The error to fix.
 

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 class TestLogger:
 """
-Logger for test debugging.""""
+Logger for test debugging.""
 Captures logs during test execution for debugging.
 
     Example:
@@ -74,7 +74,7 @@ Log error message.        self._log("ERROR", message, **extra)
     @contextmanager
     def capture(self, test_name: str) -> Iterator[TestLogger]:
 """
-Context manager to capture logs for a test.""""
+Context manager to capture logs for a test.""
 Args:
             test_name: Name of the test.
 
@@ -119,6 +119,8 @@ Clear all logs.        self._logs.clear()
 
 """
 
-""
+"""
 
 """
+
+""

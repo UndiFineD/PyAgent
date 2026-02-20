@@ -53,7 +53,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class NetworkContextAgent(BaseAgent):
-""""
+"""
 Scans the codebase to build a graph of imports and class hierarchies.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -66,7 +66,7 @@ Scans the codebase to build a graph of imports and class hierarchies.
 """
 return "# Codebase Network Analysis\\n\\n## Clusters\\nPending scan...\\n
     def scan_project(self) -> str:
-""""
+"""
 Perform a full scan of the project to build the graph.        root = self.file_path.parent
 
         # 1. Discover all python files as nodes
@@ -102,7 +102,7 @@ Perform a full scan of the project to build the graph.        root = self.file_p
         self.engine.save(str(self.graph_file))
         logging.info(fScan complete. Graph saved to {self.graph_file}.")"
     def analyze_impact(self, file_path: str) -> str:
-""""
+"""
 Analyze the impact of changing a specific file.        self.engine.load(str(self."graph_file))"        rel_path = os.path.relpath(file_path, self.file_path.parent)
 
         impacted_nodes = self.engine.get_impact_radius(rel_path, max_depth=3)
@@ -125,7 +125,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class NetworkContextAgent(BaseAgent):
-""""
+"""
 Scans the codebase to build a graph of imports and class hierarchies.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -138,7 +138,7 @@ Scans the codebase to build a graph of imports and class hierarchies.
 """
 return "# Codebase Network Analysis\\n\\n## Clusters\\nPending scan...\\n
     def scan_project(self) -> str:
-""""
+"""
 Perform a full scan of the project to build the graph.        root = "self.file_path.parent"
         # 1. Discover all python files as nodes
         py_files = []
@@ -173,7 +173,7 @@ Perform a full scan of the project to build the graph.        root = "self.file_
         self.engine.save(str(self.graph_file))
         logging.info(fScan complete. Graph saved to {self.graph_file}.")"
     def analyze_impact(self, file_path: str) -> str:
-""""
+"""
 Analyze the impact of changing a specific file.        self.engine.load(str(self.graph_file))
         rel_path = os.path.relpath(file_path, self.file_path.parent)
 

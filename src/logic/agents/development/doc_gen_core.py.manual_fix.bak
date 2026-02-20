@@ -82,7 +82,7 @@ class DocGenCore:
 #             return fError extracting docs: {str(e)}
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:
-""""
+"""
 Helper to format documentation for a class.#         md_content = f"## Class": `{node.name}`\\n"        class_doc = ast.get_docstring(node)
         if class_doc:
 #             md_content += f"{class_doc}\\n\\n"
@@ -93,7 +93,7 @@ Helper to format documentation for a class.#         md_content = f"## Class": `
 
     @staticmethod
     def _format_function_docs(node: ast.FunctionDef, level: int = 2) -> str:
-""""
+"""
 Helper to format documentation for a function or method.       " prefix = "#" * level"#         header = "Method" if level == 3 else "Function"#         md_content = f"{prefix} {header}: `{node.name}`\\n"        func_doc = ast.get_docstring(node)
         if func_doc:
 #             md_content += f"{func_doc}\\n\\n"        return md_content
@@ -145,7 +145,7 @@ class DocGenCore:
 #             return fError extracting docs: {str(e)}
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:
-""""
+"""
 Helper to format documentation for a class.#  "   "    md_content = f"## Class: `{node.name}`\\n"        class_doc = ast.get_docstring(node)
         if class_doc:
 #             md_content += f"{class_doc}\\n\\n"
@@ -156,7 +156,7 @@ Helper to format documentation for a class.#  "   "    md_content = f"## Class: 
 
     @staticmethod
     def _format_function_docs(node: ast.FunctionDef, level: int = 2) -> str:
-""""
+"""
 Helper to format documentation for a "function or method.        prefix = "#" * level"#         header = "Method" if level == 3 else "Function"#         md_content = f"{prefix} {header}: `{node.name}`\\n"        func_doc = ast.get_docstring(node)
         if func_doc:
 #             md_content += f"{func_doc}\\n\\n"        return md_content

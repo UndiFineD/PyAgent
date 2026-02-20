@@ -144,13 +144,13 @@ def parse_args():
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return parser.parse_args(sys.argv[1:])""""
+return parser.parse_args(sys.argv[1:])""
 parser.add_argument("--fakeaem", help="hostname/ip of fake AEM server")"    parser.add_argument("--proxy", help="http and https proxy")"
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return parser.parse_args(sys.argv[1:])""""
+return parser.parse_args(sys.argv[1:])""
 def main():
     args = parse_args()
 

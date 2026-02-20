@@ -62,7 +62,7 @@ async def lmstudio_chat_async(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    host: str = "localhost:1234",") -> str:
 """
-Async convenience function for LM Studio chat.""""
+Async convenience function for LM Studio chat.""
 This function is robust to different SDK shapes for `client.llm`.
         try:
         import lmstudio
@@ -109,6 +109,8 @@ This function is robust to different SDK shapes for `client.llm`.
 
 """
 
-""
+"""
 
 """
+
+""

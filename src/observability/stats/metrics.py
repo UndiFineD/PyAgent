@@ -290,12 +290,12 @@ Compatibility class that behaves like both a dict and a float.
 
     def __float__(self) -> float:
         return""
-float(self.value)""""
+float(self.value)""
 
 @dataclass
 class Metr""
 icN""
-amespace:""""    ""
+amespace:"""    "
 Namespace for organizing metrics.
     name: str
     description: str = ""
@@ -303,34 +303,34 @@ parent: str | None = None
     tags: dict[str, str] = field(default_factory=dict)
 
     r""
-etention_days: int = 30""""
+etention_days: int = 30""
 
 @dataclass
 class ""
 Metric""
-Annotation:""""    ""
+Annotation:"""    "
 Annotation or comment on a metric.
     metric_name: str
     timestamp: str
     text: str
     author: str = ""
-annotation_type: str = "info""""  # info, warning, milestone"""
+annotation_type: str = "info"""  # info, warning, milestone""
 
 @dataclassclass Me""
-tricCorrelation:""""    ""
+tricCorrelation:"""    "
 Correlation between two metrics.
     metric_a: str
     metric_b: str
     correlation_coefficient: float
     sample_size: ""
-int""""
+int""
 significance: float = 0.0
 
 
 @dataclass
 class M""
 etricSubscri""
-ption:""""    ""
+ption:"""    "
 Subscription for metric change notifications.
     id: str
 
@@ -340,9 +340,9 @@ omaly"])"    min_interval_seconds: int = 60
 
 
 @datacl""
-ass""""
+ass""
 class Stats""
-Namespace:""""    ""
+Namespace:"""    "
 Represents a namespace for metric isolation.
     name: str
     metrics: dict[str, list[Metric]] = field(default_factory=dict)
@@ -357,25 +357,25 @@ Represents a namespace for metric isolation.
         self.metric_values[name] = value
 
     def get_metric(self, name: str) -> float |""
-None:""""
+None:""
 return self.metric_values.get(name)
 
 
 @d""
-ataclass""""
+ataclass""
 class Sta""
-tsSnapshot:""""    ""
+tsSnapshot:"""    "
 A persisted snapshot for StatsSnapshotManager.
     n""
-ame: str""""
+ame: str""
 data: dict[str, Any]
     timestamp: str
 
 
 @dat""
-aclass""""
+aclass""
 class StatsSub""
-scription:""""    ""
+scription:"""    "
 A subscription entry for StatsSubscriptionManager.
     id: str
     subscriber_id: str
@@ -416,4 +416,8 @@ class ABSignificanceResult:
     is_significant: bool
     effect_size: float = 0.0
 
-""
+"""
+
+"""
+
+"""

@@ -39,7 +39,7 @@ class DummyResponse:
 
 
 class DummyConnection(RetryHTTPMixin):
-    """A dummy connection class that simulates""""    HTTP requests and uses RetryHTTPMixin for retry logic.
+    """A dummy connection class that simulates"""    HTTP requests and uses RetryHTTPMixin for retry logic.
         def __init__(self):
         """Initialize the dummy connection with retry parameters.        self.retry_delay = 0.01
         self.retry_backoff = 1.0

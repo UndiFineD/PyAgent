@@ -150,7 +150,7 @@ Initialize test prioritizer.        self.tests: dict[str, dict[str, Any]] = {}
         changed_recently: bool | None = None,
     ) -> None:
 """
-Add a test for prioritization.""""
+Add a test for prioritization.""
 Compatibility:
             Supports both ``recent_changes`` and boolean ``changed_recently``.
                 if changed_recently is not None and recent_changes == 0:
@@ -387,4 +387,4 @@ Group tests by module.        result: dict[str, list[dict[str, Any]]] = {}
 
 """
 
-"""
+""

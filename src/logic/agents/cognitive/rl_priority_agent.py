@@ -38,7 +38,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class RLPriorityAgent(BaseAgent):
-""""
+"""
 Reinforcement Learning based priority and resource allocation agent.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

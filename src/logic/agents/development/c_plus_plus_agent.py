@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 # "Agent specializing in C++ programming."""
-pylint: disable=too-many-ancestors""""
+pylint: disable=too-many-ancestors""
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -40,7 +40,7 @@ __version__ = VERSION
 
 
 class CPlusPlusAgent(CoderAgent):
-""""
+"""
 Agent for C++ code improvement and auditing.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -75,5 +75,9 @@ if __name__ == "__main__":"    main = create_main_function(CPlusPlusAgent, "C++ 
 """
 
 """
+
+"""
+
+""
 
 """

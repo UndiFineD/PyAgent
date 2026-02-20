@@ -51,7 +51,7 @@ result =    count = 1
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-tools = [types.Tool(google_search=types.GoogleSearch())]""""
+tools = [types.Tool(google_search=types.GoogleSearch())]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     generate_content_config = types.GenerateContentConfig(
@@ -96,4 +96,4 @@ tools = [types.Tool(google_search=types.GoogleSearch())]""""
 
 """
 
-"""
+""

@@ -69,7 +69,7 @@ REPORT_DEFAULT = ROOT / '.external' / 'refactor_report.json''TMP_DIR = ROOT / '.
 
 def chunk_files(report: dict, chunk_size: int) -> list[list[dict]]:
 """
-Split report files into chunks of specified size.""""
+Split report files into chunks of specified size.""
 Args:
         report: The refactor report dictionary containing directories and files.
         chunk_size: Maximum number of files per chunk.
@@ -85,7 +85,7 @@ Args:
 
 def make_chunk_report(chunk: list[dict[str, Any]], idx: int) -> Path:
 """
-Create a chunk report JSON file from a subset of files.""""
+Create a chunk report JSON file from a subset of files.""
 Args:
         chunk: A list of file entries to include in the chunk report.
         idx: The chunk index used to name the output file.
@@ -101,7 +101,7 @@ Args:
 
 async def run_chunk(report_path: Path, args_extra: list[str]) -> int:
 """
-Execute the extractor on a single chunk report.""""
+Execute the extractor on a single chunk report.""
 Args:
         report_path: Path to the chunk report JSON file.
         args_extra: Additional command-line arguments to pass to the extractor.
@@ -123,7 +123,7 @@ Args:
 
 def main() -> int:
 """
-Execute batch extraction of candidates from a chunked refactor report.""""
+Execute batch extraction of candidates from a chunked refactor report.""
 Parses command-line arguments, splits the refactor report into chunks,
     creates temporary chunk reports, and runs the extractor in parallel.
     

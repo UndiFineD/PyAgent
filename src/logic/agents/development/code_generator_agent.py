@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 # "Agent specializing in code generation, refactoring, and style enforcement."""
-pylint: disable=too-many-ancestors""""
+pylint: disable=too-many-ancestors""
 try:
     import sys
 except ImportError:
@@ -56,7 +56,7 @@ __version__ = VERSION
 
 
 class CodeGeneratorAgent(CoderAgent):
-""""
+"""
 Agent specializing in code generation.
 
 # Create main function using the helper
@@ -88,5 +88,9 @@ if __name__ == "__main__":"    main()
 """
 
 """
+
+"""
+
+""
 
 """

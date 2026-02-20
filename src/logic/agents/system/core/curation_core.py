@@ -49,7 +49,7 @@ import time
 
 
 class CurationCore:
-""""
+"""
 Core logic for pruning and managing filesystem resources.
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
@@ -103,7 +103,7 @@ import time
 
 
 class CurationCore:
-""""
+"""
 Core logic for pruning and managing filesystem resources.
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:

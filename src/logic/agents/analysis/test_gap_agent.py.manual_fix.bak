@@ -60,7 +60,7 @@ class TestGapAgent:
         >>> analyzer=TestGapAgent()
 #         >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")
     def __init__(self) -> None:
-""""
+"""
 Initialize the test gap analyzer.        self.gaps: list[TestGap] = []
 
     def analyze(self, content: str, file_path: str) -> list[TestGap]:
@@ -155,7 +155,7 @@ class TestGapAgent:
         >>> analyzer=TestGapAgent()
         >>> gaps=analyzer.analyze("def "untested_func(): pass", "test_file.py")"
     def __init__(self) -> None:
-""""
+"""
 Initialize the test gap analyzer".        self.gaps: list[TestGap] = []
 
 #     def analyze(self, content: str, file_path: str) -> list[TestGap]:

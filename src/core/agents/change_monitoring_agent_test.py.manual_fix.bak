@@ -36,14 +36,14 @@ from src.core.agents.change_monitoring_agent import (  # noqa: E402
     HistoryManager
 )
 
-"""
-Tests for ChangeMonitoringAgent.""
+# Tests for ChangeMonitoringAgent.
 class TestHistoryManager(unittest.TestCase):
 """
 Test cases for HistoryManager.""
 def test_add_and_get_previous_value(self):
 """
-Test adding changes and retrieving previous values.""
+Test adding changes and retrieving previous values.
+"""
 manager = HistoryManager()
         # Add some changes
         manager.add_change({
@@ -59,7 +59,8 @@ manager = HistoryManager()
 
     def test_save_and_load_history(self):
 """
-        Test saving and loading history to/from file.""
+        Test saving and loading history to/from file.
+"""
         manager = HistoryManager()
         manager.add_change({
         'object': 'test_obj',
@@ -78,7 +79,6 @@ manager = HistoryManager()
         self.assertEqual(new_manager.history[0]['object'], 'test_obj')
         finally:
         Path(temp_file).unlink()
-
 
 
 class TestFileSystemDataSource(unittest.TestCase):
@@ -131,7 +131,6 @@ self.temp_dir = tempfile.mkdtemp()
         self.assertTrue(len(changes) > 0)
 
 
-
 class TestChangeMonitoringAgent(unittest.TestCase):
 """
 Test cases for ChangeMonitoringAgent.""
@@ -148,6 +147,7 @@ self.automem_patcher = patch('src.core.base.lifecycle.base_agent.AutoMemCore')
         Clean up test fixtures.""
         if hasattr(self, 'automem_patcher'):
         self.automem_patcher.stop()
+
 
 
     def test_add_data_source(self):
@@ -184,17 +184,15 @@ self.automem_patcher = patch('src.core.base.lifecycle.base_agent.AutoMemCore')
 
 
     def test_format_output_integration(self):
-"""
+        ""
         Test that agent can format output using mixin.""
-        changes = [
-        {
+        changes = [{
         'object': 'CN=TestUser',
         'attribute_name': 'userAccountControl',
         'attribute_value': '512',
         'last_orig_change_time': '2023-01-01',
         'explanation': 'NORMAL_ACCOUNT'
-        }
-        ]
+        }]
 
         # Agent inherits format_change_output from mixin
         output = self.agent.format_change_output(changes, 'table')

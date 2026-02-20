@@ -104,12 +104,12 @@ class CoderCore(
             self._rust_core = None
 
     def get_dependencies(self, content: str) -> List[str]:
-""""
+"""
 Extract code dependencies using high-speed scanning.        from src.core.rust_bridge import RustBridge
         return RustBridge.get_imports(content)
 
     def calculate_metrics(self, content: str) -> CodeMetrics:
-""""
+"""
 Analyze code structure and compute metrics.        from src.core.rust_bridge import RustBridge
 
         raw_metrics = RustBridge.calculate_metrics(content)
@@ -142,7 +142,7 @@ Analyze code structure and compute metrics.        from src.core.rust_bridge imp
         return metrics
 
     def _calculate_cyclomatic_complexity(self, node: ast.AST) -> int:
-""""
+"""
 Calculate cyclomatic complexity for a function node.        cc = 1
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):

@@ -44,15 +44,15 @@ class BranchComparer:
         self._last_comparison: BranchComparison | None = None
 
     def set_branches(self, branch_a: str, branch_b: str) -> None:
-""""Sets the branches to compare.        self.branch_a =" branch_a"        self.branch_b = branch_b
+"""Sets the branches to compare.        self.branch_a =" branch_a"        self.branch_b = branch_b
 
     def get_modified_files(self) -> list[str]:
-""""Returns the list of modified files from the last comparison.        if not self._last_comparison:
+"""Returns the list of modified files from the last comparison.        if not self._last_comparison:
             return []
         return list(self._last_comparison.modified_files)
 
     def summarize(self, comparison: BranchComparison) -> str:
-""""Return a string summary of the comparison. "       return ("#             fCompare {comparison.branch_a} -> {comparison.branch_b}:
+"""Return a string summary of the comparison. "       return ("#             fCompare {comparison.branch_a} -> {comparison.branch_b}:
 #             fonly_in_a={len(comparison.files_only_in_a)},
 #             fonly_in_b={len(comparison.files_only_in_b)},
 #             fmodified={len(comparison.modified_files)}

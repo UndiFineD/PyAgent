@@ -100,7 +100,7 @@ Total time from creation to completion.        if self.completed_at > 0:
 @dataclass
 class PrefillChunk:
 """
-A single chunk of prefill tokens.""""
+A single chunk of prefill tokens.""
 Attributes:
         chunk_id: Unique identifier for this chunk
         request_id: Parent request identifier
@@ -150,7 +150,7 @@ Whether chunk has been processed.        return self.state == ChunkState.COMPLET
 @dataclass
 class ChunkedRequest:
 """
-A request split into multiple chunks.""""
+A request split into multiple chunks.""
 Attributes:
         request_id: Unique request identifier
         total_tokens: Total prompt tokens

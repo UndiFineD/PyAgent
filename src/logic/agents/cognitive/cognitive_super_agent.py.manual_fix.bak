@@ -65,7 +65,7 @@ class CognitiveSuperAgent(BaseAgent):
 
     @as_tool
     def accelerated_think(self, prompt: str) -> str:
-""""
+"""
 Combines reasoning and reflection into a single step.        # Simulated" fused logic"#         reasoning = fReasoning about: {prompt}
 #         reflection = fReflecting on reasoning: {reasoning}
 #         return fFinal cognitive output: {reflection}
@@ -103,7 +103,7 @@ class CognitiveSuperAgent(BaseAgent):
 
     @as_tool
     def accelerated_think(self, prompt: str) -> str:
-""""
+"""
 Combines reasoning and reflection into a single step. "   "    # Simulated fused logic"#         reasoning = fReasoning about: {prompt}
 #         reflection = fReflecting on reasoning: {reasoning}
 #         return fFinal cognitive output: {reflection}

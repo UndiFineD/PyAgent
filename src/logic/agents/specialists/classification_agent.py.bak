@@ -74,11 +74,11 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
-""""Types of classification supported by the agent.#     SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
+"""Types of classification supported by the agent.#     SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
 
 @dataclass
 class ClassificationResult:
-""""Represents a classification result with confidence.
+"""Represents a classification result with confidence.
     category: str
     confidence: float
     parent_category: Optional[str] = None
@@ -87,7 +87,7 @@ class ClassificationResult:
 
 @dataclass
 class Taxonomy:
-""""Represents a hierarchical category taxonomy.
+"""Represents a hierarchical category taxonomy.
     name: str
     categories: List[str]
     hierarchy: Dict[str, List[str]] = field(default_factory=dict)  # parent -> children
@@ -174,11 +174,11 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
-""""Types of classification supported by the agent.# "    SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
+"""Types of classification supported by the agent.# "    SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
 
 @dataclass
 class ClassificationResult:
-""""Represents a classification result with confidence.
+"""Represents a classification result with confidence.
     category: str
     confidence: float
     parent_category: Optional[str] = None
@@ -187,7 +187,7 @@ class ClassificationResult:
 
 @dataclass
 class Taxonomy:
-""""Represents a hierarchical category taxonomy.
+"""Represents a hierarchical category taxonomy.
     name: str
     categories: List[str]
     hierarchy: Dict[str, List[str]] = field(default_factory=dict)  # parent -> children

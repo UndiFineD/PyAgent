@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import logging
 except ImportError:
@@ -97,4 +97,4 @@ Get captured log messages.        if level is None:
 
 """
 
-"""
+""

@@ -48,7 +48,7 @@ __version__ = VERSION
 
 @dataclass
 class BulkOperationResult:
-    success_count: """int""""
+    success_count: """int"""
 
 try:
     from dataclasses import dataclass

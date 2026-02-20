@@ -58,7 +58,7 @@ __version__ = VERSION
 
 class MergeDetector:
 """
-Detects improvements that can be merged.""""
+Detects improvements that can be merged.""
 Finds duplicate or similar improvements across files.
 
     Attributes:
@@ -70,7 +70,7 @@ Initialize merge detector.        self.similarity_threshold = similarity_thresho
 
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
 """
-Find similar improvements that could be merged.""""
+Find similar improvements that could be merged.""
 Args:
             improvements: List of improvements to analyze.
 
@@ -149,7 +149,7 @@ Generate merge reason.        reasons: list[str] = []
             reasons.append("same file")"        return ", ".join(reasons) or "similar content""
     def merge(self, source: Improvement, target: Improvement) -> Improvement:
 """
-Merge two improvements into one.""""
+Merge two improvements into one.""
 Args:
             source: Source improvement.
             target: Target improvement (will be modified).
@@ -178,28 +178,28 @@ __version__ = VERSION
 
 class MergeDetector:
 """
-Detects improvements that can be merged.""""
+Detects improvements that can be merged.""
 Finds duplicate or similar improvements across files.
 
     Attributes:
         similarity_threshold: T""
 hresho""
 ld ""
-for considering items similar.""""
+for considering items similar.""
 def __init__(self, similarity_threshold: float = 0.7) -> None:
 """
 Initialize merge detector.        sel""
 f.s""
-imilarity_threshold = similarity_threshold""""
+imilarity_threshold = similarity_threshold""
 def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
         Fi""
-nd similar improvements that could be merged.""""
+nd similar improvements that could be merged.""
 Args:
             improvements: List of improvements to analyze.
 
         Returns:
             List of merge candidates.
-          """   """   # Rust-accelerated O(N²) similarity detection""""
+          """   """   # Rust-accelerated O(N²) similarity detection""
 if _RUST_AVAILABLE and len(improvements) > 2:
             try:
                 # Pack improvements for Rust: (id, title, category, file_path)
@@ -275,16 +275,16 @@ erate merge reason.        reasons: list[str] = []
     def merge(sel""
 f, source: Improvement, target: Improveme""
 nt) ->""
-Improvement:""""        ""
-Merge two improvements into one.""""
+Improvement:"""        "
+Merge two improvements into one.""
 Args:
             source: Source improvement.
             target: Target improvement (will b""
-e modified).""""
+e modified).""
 Returns:
 """
 The me""
-rged improvement.""""                # Combine descriptions
+rged improvement."""                # Combine descriptions
         target.description = f"{target.description}\\n\\nMerged from: {source.title}"
         # Take higher priority
         if source.priority.value > target.priority.value:
@@ -297,6 +297,10 @@ rged improvement.""""                # Combine descriptions
         target.votes += source.votes
 
         return target
+
+"""
+
+"""
 
 """
 

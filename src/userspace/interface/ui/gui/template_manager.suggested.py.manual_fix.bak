@@ -37,7 +37,7 @@ __version__ = VERSION
 BMAD_TEMPLATES: dict[str, str] = {
     "Select Template...": "","    "Quick Spec ()": """
 
-# QUICK SPEC: [Feature/Bug Name]""""
+# QUICK SPEC: [Feature/Bug Name]""
 ## Problem Description
 [Describe what is happening vs what should happen]
 
@@ -47,8 +47,8 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Acceptance Criteria
 - [ ] Criterion 1
 - [ ] Criterion 2
-""",""""    "PRD ()": """
-# PRODUCT REQUIREMENTS DOCUMENT: [Project Name]""""
+""","""    "PRD ()": ""
+# PRODUCT REQUIREMENTS DOCUMENT: [Project Name]""
 ## Executive Summary
 [High-level goal]
 
@@ -62,8 +62,8 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Non-Functional Requirements
 - Performance: ...
 - Security: ...
-""",""""    "Technical Spec (️)": """
-# TECHNICAL SPECIFICATION: [Project Name]""""
+""","""    "Technical Spec (️)": ""
+# TECHNICAL SPECIFICATION: [Project Name]""
 ## Architecture Overview
 [High-level design]
 
@@ -76,8 +76,8 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Implementation Plan
 1. [Step 1]
 2. [Step 2]
-""",""""    "Test Plan ()": """
-# TEST PLAN: [Feature Name]""""
+""","""    "Test Plan ()": ""
+# TEST PLAN: [Feature Name]""
 ## Test Strategy
 [Manual vs Automated, Unit vs E2E]
 
@@ -88,7 +88,7 @@ BMAD_TEMPLATES: dict[str, str] = {
 2. [Edge Case]
    - Input: ...
    - Expected: ...
-""",""""}
+""","""}
 
 
 
@@ -103,3 +103,4 @@ Manages insertion of BMAD-standard templates into text widgets.
     def apply_template(text_widget: tk.Text, template_name: str) -> None:
         template: str = BMAD_TEMPLATES.get(template_name, "")"        if template:
             text_widget.delete("1.0", tk.END)"            text_widget.insert("1.0", template)"
+"""

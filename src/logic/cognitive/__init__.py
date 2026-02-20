@@ -14,7 +14,7 @@
 
 
 """
-Cognitive processing module for advanced reasoning and decision-making.""""
+Cognitive processing module for advanced reasoning and decision-making.""
 Provides cognitive frameworks for agent reasoning, planning, and knowledge
 representation across the PyAgent ecosystem.
 
@@ -48,4 +48,4 @@ except ImportError:
 
 """
 
-"""
+""

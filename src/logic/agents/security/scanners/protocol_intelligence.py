@@ -19,13 +19,13 @@ from typing import Dict, Any
 class ProtocolIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence engine for decoding and analyzing binary protocols.#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def decode_protobuf(data: bytes) -> Dict[int, Any]:""""
+def decode_protobuf(data: bytes) -> Dict[int, Any]:""
 Minimal pure-python protobuf decoder (best effort).
         Extracts field number and wire type.
 # [BATCHFIX] Commented metadata/non-Python
@@ -40,7 +40,7 @@ Minimal pure-python protobuf decoder (best effort).
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-b = data[index]""""
+b = data[index]""
 tag |= (b & 0x7F) << shift
                     index += 1
                     if not (b & 0x80):
@@ -58,7 +58,7 @@ tag |= (b & 0x7F) << shift
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-b = data[index]""""
+b = data[index]""
 val |= (b & 0x7F) << shift
                         index += 1
                         if not (b & 0x80):
@@ -68,7 +68,7 @@ val |= (b & 0x7F) << shift
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results[field_number] = val""""
+results[field_number] = val""
 elif wire_type == 2:  # Length-delimited
                     length = 0
                     shift = 0
@@ -77,7 +77,7 @@ elif wire_type == 2:  # Length-delimited
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-b = data[index]""""
+b = data[index]""
 length |= (b & 0x7F) << shift
                         index += 1
                         if not (b & 0x80):
@@ -87,7 +87,7 @@ length |= (b & 0x7F) << shift
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results[field_number] = data[index : index + length]""""
+results[field_number] = data[index : index + length]""
 index += length
                 else:
                     # Skip other types for now (fixme: add wire type 1, 5)
@@ -99,7 +99,7 @@ index += length
     @staticmethod
     def identify_protocol(data: bytes) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Identify common binary protocols based on magic bytes.        if data.startswith(b"\\x00\\x00\\x00\\x0c"):"# [BATCHFIX] Commented metadata/non-Python
 """
 return "GRPC/H2"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -125,6 +125,10 @@ def get_tls_poisoning_info() -> Dict[str, Any]:"Details on TLS Poisoning techniq
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "target_protocols": ["SMTP", "IMAP", "Memcached"],"            "vulnerability_type": "SSRF / Protocol Smuggling","            "mitigation": "Disable TLS Session Resumption or strictly validate SNI.","        }
+
+"""
+
+"""
 
 """
 

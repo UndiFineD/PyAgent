@@ -65,12 +65,12 @@ class CodeQualityCore:
             self._rust_core = None
 
     def calculate_score(self, issues_count: int) -> int:
-""""
+"""
 Calculates a quality score based on the number of issues.        if self"._rust_core:"            return self._rust_core.calculate_score(issues_count)
         return max(0, 100 - (issues_count * 5))
 
     def check_python_source_quality(self, source: str) -> list[dict[str, Any]]:
-""""
+"""
 Analyzes Python source code for style issues (e.g., long lines).        if self._rust_core:
             try:
                 # Rust returns dicts directly compatible
@@ -92,7 +92,7 @@ Analyzes Python source code for style issues (e.g., long lines).        if self.
         return issues
 
     def analyze_rust_source(self, source: str) -> list[dict[str, Any]]:
-""""
+"""
 Analyzes Rust source for common patterns/issues.        if self._rust_core:
             try:
                 return self._rust_core.analyze_rust_source(source)
@@ -118,7 +118,7 @@ Analyzes Rust source for common patterns/issues.        if self._rust_core:
         return issues
 
     def analyze_js_source(self, source: str) -> list[dict[str, Any]]:
-""""
+"""
 Analyzes JavaScript source for common patterns/issues.      "  if self._rust_core:"            try:
                 return self._rust_core.analyze_js_source(source)
             except RuntimeError:

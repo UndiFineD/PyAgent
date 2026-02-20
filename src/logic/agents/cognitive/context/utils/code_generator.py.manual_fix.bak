@@ -46,13 +46,13 @@ class CodeGenerator:
 self.language: str = "python        self.contexts: dict[str, str] = {}
 
     def set_language(self, language: str) -> None:
-""""
+"""
 Set the default target language for generated code.        self.language =" language"
     def add_context(self, name: str, content: str) -> None:
-""""
+"""
 Add a named context document that can be referenced later.        self.contexts["name] = content"
     def get_supported_languages(self) -> list[str]:
-""""
+"""
 Return supported target languages. "       return ["            "python","            "javascript","            "typescript","            "java","            "csharp","            "go","            "rust","        ]
 
     def generate(
@@ -112,6 +112,8 @@ Return supported target languages. "       return ["            "python","      
 
 """
 
-""
+"""
+
+"""
 
 """

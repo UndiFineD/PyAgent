@@ -60,12 +60,12 @@ r2: r2pipe.open = None
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def find_rpc_server_registration_funcs() -> List[Tuple[str, int]]:""""
+def find_rpc_server_registration_funcs() -> List[Tuple[str, int]]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-rpc_reg_imports = []""""
+rpc_reg_imports = []""
 imports = r2.cmdj("iij")"    if not imports:
         return rpc_reg_imports
 
@@ -83,12 +83,12 @@ rpc_reg_imports.append((imp["name"], imp["plt"]))
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def find_all_func_xrefs(func_ea: int) -> List[int]:""""
+def find_all_func_xrefs(func_ea: int) -> List[int]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-xref_eas = []""""
+xref_eas = []""
 # [BATCHFIX] Commented metadata/non-Python
 #     for xref in r2.cmdj(faxtj @{func_ea}"):"  # [BATCHFIX] closed string"        if "from" not in xref:"            continue
 # [BATCHFIX] Commented metadata/non-Python
@@ -107,7 +107,7 @@ def get_func_start(ins_ea: int) -> int:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_reg_value(arg_ea: int, reg_name: str):  # -> Union[str, int]""""
+def get_reg_value(arg_ea: int, reg_name: str):  # -> Union[str, int]""
 func_start_ea = get_func_start(arg_ea)
 # [BATCHFIX] Commented metadata/non-Python
 #     for opcode_dism in reversed(r2.cmdj(fpDj{arg_ea - func_start_ea} @{func_start_ea}")):"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -142,7 +142,7 @@ def is_reg(reg: str) -> bool:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def parse_argument(arg_ea: int):  # -> Union[str, int]""""
+def parse_argument(arg_ea: int):  # -> Union[str, int]""
 if arg_ea != BADADDR:
 # [BATCHFIX] Commented metadata/non-Python
 #         opcode_dism = r2.cmdj(fpdj1 @{arg_ea}")[0]["disasm"]"  # [BATCHFIX] closed string"        mnem, vals = opcode_dism.split(" ", 1)"        dest_arg, source_arg = vals.split(",")"# [BATCHFIX] Commented metadata/non-Python
@@ -163,7 +163,7 @@ source_arg = source_arg.replace("[", ").replace("]", ").strip()"        if mnem 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_func_call_args(func_ea: int, arg_count: int):  # -> Union[str, int]""""
+def get_func_call_args(func_ea: int, arg_count: int):  # -> Union[str, int]""
 xref_args = {}
     for xref_ea in find_all_func_xrefs(func_ea):
         args_addrs = get_call_args_manually(xref_ea, max_args=arg_count)
@@ -171,12 +171,12 @@ xref_args = {}
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-args_addrs += [BADADDR] * (arg_count - len(args_addrs))""""
+args_addrs += [BADADDR] * (arg_count - len(args_addrs))""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-xref_args[hex(xref_ea)] = [parse_argument(arg_ea) for arg_ea in args_addrs] if args_addrs else []""""
+xref_args[hex(xref_ea)] = [parse_argument(arg_ea) for arg_ea in args_addrs] if args_addrs else []""
 return xref_args
 
 
@@ -184,7 +184,7 @@ return xref_args
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_call_args_manually(call_ea: int, max_look_behind: int = 20, max_args: int = 8) -> List[int]:""""
+def get_call_args_manually(call_ea: int, max_look_behind: int = 20, max_args: int = 8) -> List[int]:""
 func_start_ea = get_func_start(call_ea)
     stack_params = {}
     rcx = rdx = r8 = r9 = None
@@ -240,20 +240,20 @@ r9 = opcode_dism["offset"]"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-args = [val if val else PARSING_ERROR for val in (rcx, rdx, r8, r9)]""""
+args = [val if val else PARSING_ERROR for val in (rcx, rdx, r8, r9)]""
 if len(args) < 4 or len(args) >= max_args:
         return args
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return args + [stack_params[off] for off in sorted(stack_params, key=stack_params.get, reverse=True)]""""
+return args + [stack_params[off] for off in sorted(stack_params, key=stack_params.get, reverse=True)]""
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_rpc_server_registration_info() -> Dict[str, List[Dict[int, Tuple]]]:""""
+def get_rpc_server_registration_info() -> Dict[str, List[Dict[int, Tuple]]]:""
 return {
         func_name: get_func_call_args(func_ea, get_arg_count_for_function_name(func_name))
         for func_name, func_ea in find_rpc_server_registration_funcs()
@@ -273,5 +273,9 @@ if __name__ == "__main__":"    r2 = r2pipe.open()
     r2.cmdj("aa;aac")"    reg_info = get_rpc_server_registration_info()
     with open(TEMP_OUTPUT_FILE, "wt", newline="\\n") as f:"        json.dump(reg_info, f)
     r2.quit()
+
+"""
+
+""
 
 """

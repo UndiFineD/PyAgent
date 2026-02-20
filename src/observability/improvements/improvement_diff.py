@@ -69,7 +69,7 @@ __version__ = VERSION
 @dataclass(order=True)
 class ImprovementDiff:
 """
-Difference in a single improvement between branches.""""
+Difference in a single improvement between branches.""
 Attributes:
         improvement_id: Unique improvement identifier.
         diff_type: Type of difference.
@@ -111,4 +111,8 @@ Deserialize from a dictionary.        diff_type = ImprovementDiffType[d["diff_ty
         # Deterministic comparison: by improvement_id, then diff_type name
         return (self.improvement_id, str(self.diff_type)) < (other.improvement_id, str(other.diff_type))
 
-        ""
+"""
+
+"""
+
+"""

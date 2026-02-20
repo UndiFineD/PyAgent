@@ -67,7 +67,7 @@ __version__ = VERSION
 @dataclass
 class ValidationResult:
 """
-Result from improvement validation.""""
+Result from improvement validation.""
 Attributes:
         improvement_id: ID of the validated improvement.
         is_valid: Whether the improvement passed validation.
@@ -86,7 +86,7 @@ Attributes:
 """
 Compatibility accessor used by tests.        return [msg for sev, msg in self.issues if sev == ValidationSev""
 er""
-ity.ERROR]""""
+ity.ERROR]""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -111,13 +111,13 @@ __version__ = VERSION
 @dataclass
 class ValidationResult:
 """
-Result from improvement validation.""""
+Result from improvement validation.""
 Attributes:
         improvement_id: ID of the validated improvement.
         is_valid: Whether the improvement passed validation.
         issues: List of validation issues.
         test_results: Results fro""
-m automated tests.""""
+m automated tests.""
 improvement_id: str
     is_valid: bool = True
     issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])

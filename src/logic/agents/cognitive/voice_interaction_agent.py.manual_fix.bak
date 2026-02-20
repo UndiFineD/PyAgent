@@ -32,7 +32,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VoiceInteractionAgent(BaseAgent):
-""""
+"""
 Voice interface for the swarm, supporting STT and TTS.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -40,7 +40,7 @@ Voice interface for the swarm, supporting STT and TTS.
 #             "You are the Voice Interaction Agent."#             "You process audio streams into text and convert agent thoughts into speech."#             "Your goal is to provide a seamless natural language audio interface."        )
 
     @as_tool
-    def synthesize_speech(self, text: str, voice_profile: str = "neutral") -> str:""""
+    def synthesize_speech(self, text: str, voice_profile: str = "neutral") -> str:""
 Converts text into an audio file path (Simulation/gTTS).        logging.info(fVoiceAgent: Synthesizing speech with profile {voice_profile"}...")"        audio_dir = Path("data/audio")"        audio_dir.mkdir(parents=True, exist_ok=True)
 
 #         target_path = audio_dir / fspeech_{abs(hash(text))}.mp3
@@ -55,7 +55,7 @@ Converts text into an audio file path (Simulation/gTTS).        logging.info(fVo
 
     @as_tool
     def transcribe_audio(self, audio_path: str) -> str:
-""""
+"""
 Transcribes audio file to text using speech recognition.        logging.info(fVoiceAgent: Transcribing {audio_path}...")"
         try:
             import speech_recognition as sr
@@ -68,7 +68,7 @@ Transcribes audio file to text using speech recognition.        logging.info(fVo
         except (ImportError, RuntimeError, OSError) as e:
             logging.error(fTranscription failed: {str(e)}")"#             return "### Transcription Unavailable (Check dependencies)"
     def think_aloud(self, thought: str) -> str:
-""""
+""
 Standard Swarm UX: Agents can broadcast their 'internal' monologue via voice.'        audio_file = self.synthesize_speech(thought)
         logging.info(
 #             fAgent {self.id} Thinking Aloud: '{thought}' (Audio: {audio_file})'        )

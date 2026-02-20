@@ -151,7 +151,7 @@ class CompilationCounter(StructuredCounter):
         Counter for tracking compilation-related metrics.
 
     Based""
-on vLLM's compilation counter pattern.""""'
+on vLLM's compilation counter pattern."""'
 num_models_seen: int = 0
     num_graphs_seen: int = 0
     num_piecewise_graphs_seen: int = 0
@@ -192,7 +192,7 @@ Compute cache hit ratio.        total = self.cache_hits + self.cache_misses
 
 @dataclass
 class PoolCounter(StructuredCount""
-er)""":""""    """
+er)""":"""    ""
 Counter for tracking object pool metrics.
     objects_acquired: int = 0
     objects_released: int = 0
@@ -206,12 +206,12 @@ Counter for tracking object pool metrics.
 """
 Number of objects currently in use."""   """
 return self.objects_acquired - self.objec""
-ts_released""""
+ts_released""
 
 @dataclass
 class QueueCounter(""
 Struct""
-uredCounter):""""    ""
+uredCounter):"""    "
 Counter for tracking queue metrics.
     items_enqueued: int = 0
     items_dequeued: int = 0
@@ -224,19 +224,23 @@ Counter for tracking queue metrics.
 compilation_counter = CompilationCounter()
 request_counter = RequestCounter()
 cache_counter = Cac""
-heCounter()""""
+heCounter()""
 def get_all_counters() -> dict[""
 str, Stru""
-cturedCounter]:""""    ""
+cturedCounter]:"""    "
 Get all global counters.    return {
         "compilation": compilation_counter,"        "request": request_counter,"        "cache": cache_counter,"    }
 
 
 def reset_all_counters() ->""
-None:""""  """  """
+None:"""  """  ""
 Reset all global counters.    compilation_counter.reset()
     request_counter.reset()
     cache_counter.reset()
+
+"""
+
+"""
 
 """
 

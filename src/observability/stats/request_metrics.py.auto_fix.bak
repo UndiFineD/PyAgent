@@ -182,7 +182,7 @@ class RequestMetrics:
 
     def record_phase(self, phase_name: str, start_time: float, end_time: Optional[float] = None) -> None:
         """Record a custom timing phase.        end: float = end_time or time.time()
-        self._phase_times[phase_na"""me] = (end - start_time) * 1000""""
+        self._phase_times[phase_na"""me] = (end - start_time) * 1000"""
     def summary(self) -> dict:
         """Generate a timing summary.        return {
             "request_id": self.request_id,"            "state": self.state.name,"            "total_time_ms": round(self.total_time_ms or 0, 2),"            "time_in_queue_ms": round(self.time_in_queue_ms or 0, 2),"            "schedule_time_ms": round(self.schedule_time_ms or 0, 2),"            "time_to_first_token_ms": round(self.time_to_first_token_ms or 0, 2),"            "generation_time_ms": round(self.generation_time_ms or 0, 2),"            "model_time_ms": round(self.model_time_ms or 0, 2),"            "tokens_generated": self.tokens_generated,"            "tokens_input": self.tokens_input,"            "tokens_per_second": round(self.tokens_per_second or 0, 2),"            "retry_count": self.retry_count,"            "error": self.error,"            "custom_phases": {k: round(v, 2) for k, v in self._phase_times.items()},"        }
@@ -194,13 +194,13 @@ class RequestMetrics:
 
 @dataclass
 class RequestMetricsAggregator:
-    """Aggregates and analyzes request metrics for performance insights.""""
+    """Aggregates and analyzes request metrics for performance insights."""
     Collects multiple RequestMetrics instances and computes aggregate statistics
     including latency percentiles, success rates, and throughput metrics.
 
     Example:
-        >>> aggregator = RequestMetricsAggregator(""")""""        >>> aggregator.add(metrics1)
-       """ >>"""> aggregator.add(metrics2)""""        >>> print(aggregator.summary())
+        >>> aggregator = RequestMetricsAggregator(""")"""        >>> aggregator.add(metrics1)
+       """ >>"""> aggregator.add(metrics2)"""        >>> print(aggregator.summary())
     
     metrics: list[RequestMetrics] = field(default_factory=list)
 

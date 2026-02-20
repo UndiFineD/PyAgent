@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Move top-level external_candidates into src/external_candidates.""""
+Move top-level external_candidates into src/external_candidates.""
 [Brief Summary]
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -139,6 +139,10 @@ if len(moved) == 0:
 
 ''
 
-"""
+""
+
+''
+
+''
 
 '''

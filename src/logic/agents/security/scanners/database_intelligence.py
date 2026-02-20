@@ -26,7 +26,7 @@ from typing import List, Dict, Any
 class DatabaseIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence engine for database enumeration and exploitation (SQL Server, MySQL, etc.).#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""

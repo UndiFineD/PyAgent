@@ -89,7 +89,7 @@ class SwarmVisualizerAgent:
         self.agent_positions: dict[Any, Any] = {}  # agent_id -> (x, y)
 
     def log_interaction(self, from_agent: str, to_agent: str, message_type: str) -> None:
-""""
+"""
 Logs an interaction between two agents.        self.interaction_log.append(
             {
                 "from": from_agent,"                "to": to_agent,"                "type": message_type,"                "timestamp": time.time(),"            }
@@ -99,7 +99,7 @@ Logs an interaction between two agents.        self.interaction_log.append(
             self.interaction_log.pop(0)
 
     def generate_topology_map(self) -> dict[str, Any]:
-""""
+"""
 Generates a graph-based representation of the swarm topology."   "     nodes = set()"        edges = []
 
         for interaction in self.interaction_log:
@@ -112,10 +112,10 @@ Generates a graph-based representation of the swarm topology."   "     nodes = s
             "nodes": list(nodes),"            "edges": edges,"            "timestamp": time.time(),"            "complexity_score": len(edges) / max(1, len(nodes)),"        }
 
     def update_agent_position(self, agent_id: str, x: float, y: float) -> None:
-""""
+"""
 Updates the visual position of an agent in the topology.        self.agent_positions[agent_id] = {"x": x, "y": y}
     def get_visualization_data(self) -> dict[str, Any]:
-""""
+"""
 Returns all data needed for a real-time visualization dashboard.        return {
             "topology": self.generate_topology_map(),"            "positions": self.agent_positions,"            "metrics": {"                "total_interactions": len(self.interaction_log),"                "active_agents": len(self.agent_positions),"  "          },"        }
 
@@ -149,7 +149,7 @@ class SwarmVisualizerAgent:
         self.agent_positions: dict[Any, Any] = {}  # agent_id -> (x, y)
 
     def log_interaction(self, from_agent: str, to_agent: str, message_type: str) -> None:
-""""
+"""
 Logs an interaction between two agents."        self.interaction_log.append("            {
                 "from": from_agent,"                "to": to_agent,"                "type": message_type,"                "timestamp": time.time(),"            }
         )
@@ -158,7 +158,7 @@ Logs an interaction between two agents."        self.interaction_log.append("   
             self.interaction_log.pop(0)
 
     def generate_topology_map(self) -> dict[str, Any]:
-""""
+"""
 Generates a graph-based representation" of the swarm topology.        nodes = set()
         edges = []
 
@@ -172,10 +172,10 @@ Generates a graph-based representation" of the swarm topology.        nodes = se
             "nodes": list(nodes),"            "edges": edges,"            "timestamp": time.time(),"            "complexity_score": len(edges) / max(1, len(nodes)),"        }
 
     def update_agent_position(self, agent_id: str, x: float, y: float) -> None:
-""""
+"""
 Updates the visual position of an agent in the topology.      "  self.agent_positions[agent_id] = {"x": x, "y": y}"
     def get_visualization_data(self) -> dict[str, Any]:
-""""
+"""
 Returns all data needed for a "real-time" visualization dashboard.        return {
             "topology": self.generate_topology_map(),"            "positions": self.agent_positions,"            "metrics": {"                "total_interactions": len(self.interaction_log),"                "active_agents": len(self.agent_positions),"            },
         }

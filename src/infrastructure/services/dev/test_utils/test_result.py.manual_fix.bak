@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import time
 except ImportError:
@@ -46,7 +46,7 @@ __version__ = VERSION
 @dataclass
 class TestResult:
 """
-Result of a test execution.""""
+Result of a test execution.""
 Attributes:
         test_name: Name of the test.
         status: Test status.

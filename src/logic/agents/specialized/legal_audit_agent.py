@@ -60,7 +60,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "Apache License, Version 2.0","            "MIT License","            "Apache-2.0","            "MIT","        ]
         self.header_pattern = re.compile(rLicensed under the Apache License, Version 2.0")"
     def scan_licensing(self, content: str) -> dict[str, Any]:
-""""
+"""
 Identifies licenses and flags copyleft risks (Phase 59).        license_patterns = {
             "GPL": rGPL|General Public License","            "AGPL": rAGPL|Affero General Public License","            "MIT": rMIT License","            "Apache": rApache License 2\\.0","        }
         detected = []
@@ -96,7 +96,7 @@ Identifies licenses and flags copyleft risks (Phase 59).        license_patterns
             return await asyncio.to_thread(walk_and_check)
 
     def verify_smart_contract(self, contract_code: str) -> dict[str, Any]:
-""""
+"""
 Verifies a smart contract for legal commonalities and risks (Phase 59).       " _ = contract_code"        return {"risk_level": "low", "findings": ["Standard ERC20 implementation detected."], "compliant": True}
     async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
 #         "Provides improvements for files missing license headers."        target = context.get("target_dir", ".")"        audit = await self.run_audit(target)
@@ -129,7 +129,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "Apache License, Version 2.0","            "MIT License","            "Apache-2.0","            "MIT","        ]
         self.header_pattern = re.compile(rLicensed under the Apache License, Version 2.0")"
     def scan_licensing(self, content: str) -> dict[str, Any]:
-""""
+"""
 Identifies licenses and flags copyleft risks (Phase "59).        license_patterns = {
             "GPL": rGPL|General Public License","            "AGPL": rAGPL|Affero General Public License","            "MIT": rMIT License","            "Apache": rApache License 2\\.0","        }
         detected = []
@@ -165,7 +165,7 @@ Identifies licenses and flags copyleft risks (Phase "59).        license_pattern
             return await asyncio.to_thread(walk_and_check)
 
     def verify_smart_contract(self, contract_code: str) -> dict[str, Any]:
-""""
+"""
 Verifies a smart contract for legal commonalities and risks (Phase 59).        _ = contract_code
         return {"risk_level": "low", "findings": ["Standard ERC20 implementation detected."], "compliant": True}
     async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:

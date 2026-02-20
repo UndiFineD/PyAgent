@@ -40,7 +40,7 @@ except ImportError:
 @dataclass
 class RegexGrammar(StructuredOutputGrammar):
 """
-Grammar that constrains output to match a regex pattern.""""
+Grammar that constrains output to match a regex pattern.""
 Uses DFA-based matching for efficient token validation.
     Inspired by vLLM's outlines backend.'
     Phase 39: Rust-accelerated bitmasking for full-vocab validation.
@@ -180,7 +180,7 @@ Set valid tokens in bitmask.        valid_tokens = self.get_valid_tokens()
 
     def get_valid_tokens(self) -> Set[int]:
 """
-Get tokens that produce valid prefixes.""""
+Get tokens that produce valid prefixes.""
 Uses Rust-accelerated bitmasking for full-vocab coverage if available.
                 if self._has_fsm:
             try:
@@ -222,7 +222,7 @@ self._token_history = []
 @dataclass
 class ChoiceGrammar(StructuredOutputGrammar):
 """
-Grammar that constrains output to one of several choices.""""
+Grammar that constrains output to one of several choices.""
 Efficient matching by tracking which choices remain possible.
     
     choices: List[str]
@@ -376,4 +376,4 @@ self._token_history = []
 
 """
 
-"""
+""

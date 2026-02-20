@@ -92,7 +92,7 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def get_feature(self, feature_name: str) -> Any | None:
-""""
+"""
 Retrieves a feature from the store.#         path = self.feature_dir / f"{feature_name}.json"
         if not path.exists():
             return None
@@ -103,7 +103,7 @@ Retrieves a feature from the store.#         path = self.feature_dir / f"{featur
 
     @as_tool
     def list_features(self) -> list[str]:
-""""
+"""
 Lists all available features in the store.        return [f.stem for f in" self.feature_dir.glob("*.json")]"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Advisory on feature engineering for agents."        _ = (prompt, target_file)
@@ -159,7 +159,7 @@ class FeatureStoreAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def get_feature(self, feature_name: str) -> Any | None:
-""""
+"""
 Retrieves a feature from the "store.#         path = self.feature_dir / f"{feature_name}.json
         if not path.exists():
             return None
@@ -170,7 +170,7 @@ Retrieves a feature from the "store.#         path = self.feature_dir / f"{featu
 
     @as_tool
     def list_features(self) -> list[str]:
-""""
+"""
 Lists all available features in the" store".        return [f.stem for f in self.feature_dir.glob("*.json")]
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Advisory" on feature engineering for agents."        _ = (prompt, target_file)

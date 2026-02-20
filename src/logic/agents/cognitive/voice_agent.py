@@ -47,7 +47,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VoiceAgent(BaseAgent):
-""""
+"""
 Handles voice interactions and audio processing with paralinguistic support.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -75,7 +75,7 @@ Handles voice interactions and audio processing with paralinguistic support.
 
     @as_tool
     def inject_speaker_embedding(self, reference_audio_path: str) -> str:
-""""
+"""
 Injects a zero-shot speaker embedding from a reference audio file (Toucan Pattern).        logging.info(fInjecting speaker embedding from: {reference_audio_path}")"#         return "Zero-shot speaker profile injected successfully."
     @as_tool
     def manage_cosyvoice_lifecycle(self, action: str) -> str:
@@ -97,12 +97,12 @@ self, audio_file_path: str, strategy: str = "whisper-gpu    ) -> str:
         return fSimulated transcription using {strategy}: 'Hello fleet, please check the system status.'""
     @as_tool
     def apply_voice_activity_detection(self, audio_file_path: str) -> str:
-""""
+"""
 Filters silence and background noise using VAD (Silero pattern).        logging.info(fApplying VAD to {audio_file_path}. Filtering noise gaps.")"#         return fCleaned audio buffer ready: {audio_file_path}.cleaned
 
     @as_tool
     def generate_speech(self, text: str, output_path: str) -> str:
-""""
+"""
 Converts text to speech and saves to a file. (SKELETON)        logging".info(fSynthesizing: {text}")
 #         return fAudio saved to {output_path} (Simulated)
 

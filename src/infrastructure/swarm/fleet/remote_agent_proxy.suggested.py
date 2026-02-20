@@ -40,7 +40,7 @@ __version__ = VERSION
 
 class RemoteAgentProxy(BaseAgent):
 """
-Encapsulates a remote agent accessible via HTTP/JSON-RPC.""""
+Encapsulates a remote agent accessible via HTTP/JSON-RPC.""
 Resilience (Phase 108): Implements a 15-minute TTL status cache for remote nodes.
     Intelligence (Phase 108): Records remote interactions to local shards.
     
@@ -137,4 +137,4 @@ Proxies the improvement request to the remote agent.        return self.call_rem
 
 """
 
-"""
+""

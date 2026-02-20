@@ -47,7 +47,7 @@ except ImportError:
 
 
 class BrowsingAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in web browsing and high-level information retrieval.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -61,7 +61,7 @@ except ImportError:
 
 
 class BrowsingAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in web browsing and high-level information retrieval.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

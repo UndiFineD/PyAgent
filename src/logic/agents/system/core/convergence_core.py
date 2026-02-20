@@ -55,7 +55,7 @@ except ImportError:
 
 
 class ConvergenceCore:
-""""
+"""
 Core logic for workspace cleanup and state convergence.
     @staticmethod
     def clean_sweep(root_dir: str) -> dict:
@@ -99,7 +99,7 @@ except ImportError:
 
 
 class ConvergenceCore:
-""""
+"""
 Core logic for workspace cleanup and state convergence.
     @staticmethod
     def clean_sweep(root_dir: str) -> dict:

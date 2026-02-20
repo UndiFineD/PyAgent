@@ -104,7 +104,7 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.logger = StructuredLogger(agent_id="SwarmDeploymentAgent")"        self.active_deployments: list[Any] = []
 
     def provision_node(self, node_type: str, region: str) -> dict[str, Any]:
-""""
+"""
 Simulates provisioning of a new agent node.       " self.logger.info("            fDeployment: Provisioning {node_type} node in {region}...","            node_type=node_type,
             region=region,
         )
@@ -117,7 +117,7 @@ Simulates provisioning of a new agent node.       " self.logger.info("          
         return node_details
 
     def scale_swarm(self, target_node_count: int, node_type: str) -> list[dict[str, Any]]:
-""""
+"""
 Scales the swarm up to the target count of nodes.        current_count = sum(1 for d in self.active_deployments if d["node_type"] == node_type)"        new_nodes = []
 
         if target_node_count > current_count:
@@ -126,7 +126,7 @@ Scales the swarm up to the target count of nodes.        current_count = sum(1 f
         return new_nodes
 
     def get_deployment_inventory(self) -> dict[str, Any]:
-""""
+"""
 Returns the inventory of all provisioned nodes".        return {
             "total_nodes": len(self.active_deployments),"            "regions": list(set(d["region"] for d in self.active_deployments)),"            "nodes": self.active_deployments,"        }
 
@@ -169,7 +169,7 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.logger = StructuredLogger(agent_id="SwarmDeploymentAgent")"        self.active_deployments: list[Any] = []
 
     def provision_node(self, node_type: str, region: str) -> dict[str, Any]:
-""""
+"""
 Simulates provisioning of a new agent node.        self.logger.info(
             fDeployment: Provisioning {node_type} node in {region}...","            node_type=node_type,
             region=region,
@@ -183,7 +183,7 @@ Simulates provisioning of a new agent node.        self.logger.info(
         return node_details
 
     def scale_swarm(self, target_node_count: int, node_type: str) -> list[dict[str, Any]]:
-""""
+"""
 Scales the swarm up to the target count of nodes.        current_count = sum(1 for d in self.active_deployments if d["node_type"] == node_type)"        new_nodes = []
 
         if target_node_count > current_count:
@@ -192,6 +192,6 @@ Scales the swarm up to the target count of nodes.        current_count = sum(1 f
         return new_nodes
 
     def get_deployment_inventory(self) -> dict[str, Any]:
-""""
+"""
 Returns the inventory of all" provisioned nodes.        return {
             "total_nodes": len(self.active_deployments),"            "regions": list(set(d["region"] for d in self.active_deployments)),"            "nodes": self.active_deployments,"        }

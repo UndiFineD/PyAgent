@@ -377,13 +377,13 @@ Generate detailed description for the agent.""
 if sheet.tier == AgentTier.SPECIALIZED:
             caps = ", ".join(sheet.capabilities)"            domain = task_analysis.domain
             return f""
-This specialized agent was created to handle {domain} tasks requiring {caps} capabilities.""""
+This specialized agent was created to handle {domain} tasks requiring {caps} capabilities.""
 It was born from the need to address {task_analysis.complexity} complexity tasks in the {domain} domain.""
 else:
             parent_names = [s.name for s in parent_sheets] if parent_sheets else []
             parents = ", ".join(parent_names)"            domain = task_analysis.domain
             return f""
-This integrated agent combines the expertise of {parents} to provide \""""
+This integrated agent combines the expertise of {parents} to provide \""
 comprehensive coverage for {domain} tasks.
 
 Created through agent integration to achieve synergy between specialized capabilities.""
@@ -500,6 +500,10 @@ if __name__ == "__main__":"    # Example usage
         # Get stats
         stats = orchestrator.get_agent_pool_stats()
         print(f"Agent Pool Stats: {stats}")
+
+"""
+
+"""
 
 """
 

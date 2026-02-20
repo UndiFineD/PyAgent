@@ -58,21 +58,21 @@ STYLES = {
         padding: 16px;
         background: #f8f9fa;
         border-radius: 12px;
-    """,""""    "human":         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    ""","""    "human":         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: #ffffff;
         padding: 12px 16px;
         border-radius: 18px 18px 4px 18px;
         margin: 8px 0 8px 40px;
         box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         position: relative;
-    """,""""    "ai":         background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    ""","""    "ai":         background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         color: #ffffff;
         padding: 12px 16px;
         border-radius: 18px 18px 18px 4px;
         margin: 8px 40px 8px 0;
         box-shadow: 0 2px 8px rgba(17, 153, 142, 0.3);
         position: relative;
-    """,""""    "system":         background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
+    ""","""    "system":         background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
         color: #ffffff;
         padding: 10px 14px;
         border-radius: 8px;
@@ -80,7 +80,7 @@ STYLES = {
         font-size: 0.9em;
         text-align: center;
         box-shadow: 0 2px 6px rgba(252, 74, 26, 0.25);
-    """,""""    "thinking":         background: #2d3748;
+    ""","""    "thinking":         background: #2d3748;
         color: #a0aec0;
         padding: 12px 16px;
         border-radius: 8px;
@@ -88,7 +88,7 @@ STYLES = {
         border-left: 4px solid #4a5568;
         font-style: italic;
         font-size: 0.95em;
-    """,""""    "code":         background: #1e1e1e;
+    ""","""    "code":         background: #1e1e1e;
         color: #d4d4d4;
         padding: 16px;
         border-radius: 8px;
@@ -97,20 +97,20 @@ STYLES = {
         overflow-x: auto;
         white-space: pre-wrap;
         word-break: break-word;
-    """,""""    "label_human":         font-size: 0.75em;
+    ""","""    "label_human":         font-size: 0.75em;
         opacity: 0.8;
         margin-bottom: 4px;
         display: block;
-    """,""""    "label_ai":         font-size: 0.75em;
+    ""","""    "label_ai":         font-size: 0.75em;
         opacity: 0.8;
         margin-bottom: 4px;
         display: block;
-    """,""""    "timestamp":         font-size: 0.7em;
+    ""","""    "timestamp":         font-size: 0.7em;
         opacity: 0.6;
         margin-top: 6px;
         display: block;
         text-align: right;
-    """,""""    "avatar_human":         width: 32px;
+    ""","""    "avatar_human":         width: 32px;
         height: 32px;
         border-radius: 50%;
         background: #764ba2;
@@ -120,7 +120,7 @@ STYLES = {
         font-size: 14px;
         margin-right: 8px;
         vertical-align: middle;
-    """,""""    "avatar_ai":         width: 32px;
+    ""","""    "avatar_ai":         width: 32px;
         height: 32px;
         border-radius: 50%;
         background: #11998e;
@@ -130,7 +130,7 @@ STYLES = {
         font-size: 14px;
         margin-right: 8px;
         vertical-align: middle;
-    """,""""}
+    ""","""}
 
 # Minimal dark theme variant
 STYLES_DARK = {
@@ -139,33 +139,33 @@ STYLES_DARK = {
         padding: 16px;
         background: #1a1a2e;
         border-radius: 12px;
-    """,""""    "human":         background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
+    ""","""    "human":         background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
         color: #ffffff;
         padding: 12px 16px;
         border-radius: 18px 18px 4px 18px;
         margin: 8px 0 8px 40px;
         box-shadow: 0 2px 12px rgba(74, 0, 224, 0.4);
-    """,""""    "ai":         background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+    ""","""    "ai":         background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
         color: #ffffff;
         padding: 12px 16px;
         border-radius: 18px 18px 18px 4px;
         margin: 8px 40px 8px 0;
         box-shadow: 0 2px 12px rgba(0, 176, 155, 0.4);
-    """,""""    "system":         background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+    ""","""    "system":         background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
         color: #ffffff;
         padding: 10px 14px;
         border-radius: 8px;
         margin: 8px 60px;
         font-size: 0.9em;
         text-align: center;
-    """,""""    "thinking":         background: #16213e;
+    ""","""    "thinking":         background: #16213e;
         color: #7f8c8d;
         padding: 12px 16px;
         border-radius: 8px;
         margin: 8px 20px;
         border-left: 4px solid #0f3460;
         font-style: italic;
-    """,""""    "code":         background: #0d0d0d;
+    ""","""    "code":         background: #0d0d0d;
         color: #00ff00;
         padding: 16px;
         border-radius: 8px;
@@ -173,7 +173,7 @@ STYLES_DARK = {
         font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;'        font-size: 0.9em;
         overflow-x: auto;
         white-space: pre-wrap;
-    """,""""}
+    ""","""}
 
 
 def _clean_style(style: str) -> str:

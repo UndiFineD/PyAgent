@@ -59,7 +59,7 @@ class SqlMetadataHandler:
                     task_type TEXT,
                     success INTEGER
                 )
-            """)""""            # Table for technical debt tracking (Phase 107)
+            """)"""            # Table for technical debt tracking (Phase 107)
             cursor.execute(                CREATE TABLE IF NOT EXISTS technical_debt (
                     file_path TEXT,
                     issue_type TEXT,
@@ -67,14 +67,14 @@ class SqlMetadataHandler:
                     fixed INTEGER,
                     timestamp REAL
                 )
-            """)""""
+            """)"""
             # Table for interaction tags (Phase 106)
             cursor.execute(                CREATE TABLE IF NOT EXISTS metadata_tags (
                     id TEXT,
                     tag TEXT,
                     PRIMARY KEY (id, tag)
                 )
-            """)""""
+            """)"""
             # Table for AI Lessons / Extracted Intelligence (Phase 108)
             cursor.execute(                CREATE TABLE IF NOT EXISTS intelligence_lessons (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -83,21 +83,21 @@ class SqlMetadataHandler:
                     category TEXT,
                     timestamp REAL
                 )
-            """)""""
+            """)"""
             # Phase 108: Full-Text Search for Trillion-Parameter Scale Intelligence Search
             try:
                 cursor.execute(                    CREATE VIRTUAL TABLE IF NOT EXISTS intelligence_search USING fts5(
                         lesson_text,
                         category,
                         content='intelligence_lessons','                        content_rowid='id''                    )
-                """)""""                # Trigger to keep FTS in sync
+                """)"""                # Trigger to keep FTS in sync
                 cursor.execute(                    CREATE TRIGGER IF NOT EXISTS ai_intelligence_ai
                     AFTER INSERT ON intelligence_lessons
                     BEGIN
                         INSERT INTO intelligence_search(rowid, lesson_text, category)
                         VALUES (new.id, new.lesson_text, new.category);
                     END
-                """)""""            except sqlite3.OperationalError:
+                """)"""            except sqlite3.OperationalError:
                 logging.warning("FTS5 not supported in this SQLite build. Logic falling back to standard LIKE.")"
             # Phase 107/108 Optimized Indexes for Meta-Scale Data
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_agent_name ON interactions (agent_name)")"            cursor.execute("CREATE INDEX IF NOT EXISTS idx_task_type ON interactions (task_type)")"            cursor.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON interactions (timestamp)")"            cursor.execute("CREATE INDEX IF NOT EXISTS idx_tags ON metadata_tags (tag)")"            cursor.execute("CREATE INDEX IF NOT EXISTS idx_lessons_cat ON intelligence_lessons (category)")"
@@ -119,7 +119,7 @@ class SqlMetadataHandler:
             conn.execute(
                                 INSERT INTO intelligence_lessons (source_interaction_id, lesson_text, category, timestamp)
                 VALUES (?, ?, ?, ?)
-            """,""""                (interaction_id, text, category, time.time()),
+            ""","""                (interaction_id, text, category, time.time()),
             )
             conn.commit()
 
@@ -168,7 +168,7 @@ class SqlMetadataHandler:
                         INSERT OR REPLACE INTO interactions
             (id, shard_id, timestamp, agent_name, task_type, success)
             VALUES (?, ?, ?, ?, ?, ?)
-        """,""""            (
+        ""","""            (
                 i_id,
                 shard_num,
                 data.get("timestamp", 0),"                meta.get("agent", "unknown"),"                meta.get("type", "generic"),"                1 if meta.get("status") == "success" else 0,"            ),
@@ -214,7 +214,7 @@ class SqlMetadataHandler:
             conn.execute(
                                 INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
-            """,""""                (file_path, issue_type, message, 1 if fixed else 0, time.time()),
+            ""","""                (file_path, issue_type, message, 1 if fixed else 0, time.time()),
             )
             conn.commit()
 
@@ -235,7 +235,7 @@ class SqlMetadataHandler:
             cursor.executemany(
                                 INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
-            """,""""                self._debt_buffer,
+            ""","""                self._debt_buffer,
             )
             conn.commit()
             count = len(self._debt_buffer)
@@ -252,7 +252,7 @@ class SqlMetadataHandler:
             cursor.executemany(
                                 INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
-            """,""""                debt_records,
+            ""","""                debt_records,
             )
             conn.commit()
             return cursor.rowcount
@@ -264,7 +264,7 @@ class SqlMetadataHandler:
             cursor.executemany(
                                 INSERT OR REPLACE INTO interactions (id, shard_id, timestamp, agent_name, task_type, success)
                 VALUES (?, ?, ?, ?, ?, ?)
-            """,""""                interaction_data,
+            ""","""                interaction_data,
             )
             conn.commit()
             return cursor.rowcount

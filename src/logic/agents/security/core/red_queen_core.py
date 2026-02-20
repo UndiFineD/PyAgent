@@ -43,7 +43,7 @@ Represents a simulated adversarial pattern for stress-testing guardrails.
 
 class RedQueenCore:
 """
-Pure logic for the 'Digital Red Queen' adversarial evolution.""""
+Pure logic for the 'Digital Red Queen' adversarial evolution.""
 Generates and mutates prompts to test security guardrails.
     
     MUTATION_STRATEGIES = [
@@ -94,4 +94,4 @@ Selects the most successful attack vectors for the next generation.        sorte
 
 """
 
-"""
+""

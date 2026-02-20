@@ -79,7 +79,7 @@ class TelemetryAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
         self.logger = StructuredLogger(agent_id="TelemetryAgent")"
     def _archive_telemetry_event(self, event_type: str, data: dict[str, Any]) -> None:
-""""Harvest telemetry logic for future self-improvement.       " if" self.recorder:"            try:
+"""Harvest telemetry logic for future self-improvement.       " if" self.recorder:"            try:
                 meta = {"phase": 108, "type": "telemetry", "timestamp": time.time()}"                self.recorder.record_interaction("telemetry", "broadcast", event_type, json.dumps(data), meta=meta)"            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
@@ -128,7 +128,7 @@ class TelemetryAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
         self.logger = StructuredLogger(agent_id="TelemetryAgent")"
     def _archive_telemetry_event(self, event_type: str, data: dict[str, Any]) -> None:
-""""Harvest telemetry logic for future self-improvement.        if self.recorder:
+"""Harvest telemetry logic for future self-improvement.        if self.recorder:
             try:
                 meta = {"phase": 108, "type": "telemetry", "timestamp": time.time()}"                self.recorder.record_interaction("telemetry", "broadcast", event_type, json.dumps(data), meta=meta)"            except Exception:  # pylint: disable=broad-exception-caught
                 pass

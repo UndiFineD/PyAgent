@@ -134,9 +134,9 @@ Convert markdown content to a full HTML document.    try:
         import markdown  # type: ignore[import-untyped]
     except ImportError:
         return f"<pre>{content}</pre>"
-    html_body: str = markdown""".markdown(content, extensions"""=[""""
+    html_body: str = markdown""".markdown(content, extensions"""=[""
 extra", "codehilite"])"
-    return f"""<!DOCTYPE html>""""<html lang="en">"<head>
+    return f"""<!DOCTYPE html>"""<html lang="en">"<head>
     <meta charset="UTF-8">"    <meta name="viewport" content="width=device-width, initial-scale=1.0">"    <title>{title}</title>
     <style>
         body {{
@@ -158,7 +158,7 @@ extra", "codehilite"])"
         th, td {{ border: 1px solid #ddd; padding: 0.5rem; text-align: left; }}
         th {{ background-color: #f8f9fa; }}
         blockquote {{ border-left: 4px solid #ddd; padd""
-ing-left: 1rem; margin-left: 0; color: #666;""" }}""""  """  </style>""""</head>
+ing-left: 1rem; margin-left: 0; color: #666;""" }}"""  """  </style>"""</head>
 <body>
 {html_body}
 </body>
@@ -194,3 +194,7 @@ via lightweight static analysis.    issues: list[str] = []
             if missing_arg_type or missing_return_type:
                 issues.append(f"Function `{node.name}` is missing type annotations.")"    # 4. TODOs
     if "TODO" in source or "FIXME" in source:"        issues.append("Contains TODO or FIXME comments.")"    return issues
+
+""
+
+"""

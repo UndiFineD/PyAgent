@@ -35,7 +35,7 @@ __version__ = VERSION
 
 @dataclass
 class ContextTag:
-""""
+"""
 A tag for categorizing context.
     name: str
 #     description: str =

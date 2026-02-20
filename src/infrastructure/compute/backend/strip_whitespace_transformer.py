@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -67,4 +67,4 @@ Get transformer name.        return "strip_whitespace"
 
 """
 
-"""
+""

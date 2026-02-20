@@ -39,7 +39,7 @@ Handles discovery of vulnerabilities in mobile applications (Android/iOS).#     
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-ANDROID_VULN_PATTERNS: Dict[str, Union[str, Dict[str, str]]] = {""""
+ANDROID_VULN_PATTERNS: Dict[str, Union[str, Dict[str, str]]] = {""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #         "firebase_url": rhttps://.*\\.firebaseio\\.com","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -68,7 +68,7 @@ ANDROID_VULN_PATTERNS: Dict[str, Union[str, Dict[str, str]]] = {""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-IOS_VULN_PATTERNS: Dict[str, str] = {""""
+IOS_VULN_PATTERNS: Dict[str, str] = {""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         "allow_arbitrary_loads": ("# [BATCHFIX] Commented metadata/non-Python
@@ -233,7 +233,7 @@ def audit_strings(self, content: str) -> List[Dict[str, str]]:"Scans strings for
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""        # Check for Firebase
+findings = []"""        # Check for Firebase
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python

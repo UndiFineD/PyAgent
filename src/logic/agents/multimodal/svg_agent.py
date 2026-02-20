@@ -56,7 +56,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class SvgAgent(CoderAgent):
-""""
+"""
 Agent for generating and optimizing 2D SVG vector graphics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -92,7 +92,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class SvgAgent(CoderAgent):
-""""
+"""
 Agent for generating and optimizing 2D SVG vector graphics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -96,7 +96,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool(priority=1)
     def run_sgi_benchmark(self, agent_name: str, scientific_task: str) -> dict[str, Any]:
-""""
+"""
 Runs an SGI-Bench scientific inquiry evaluation on an agent.        logging.info(fBENCHMARK: Running SGI inquiry for {agent_name}")"
         # In a real system, we'd inspect the agent's internal DCAP metadata'        scores = {
             "deliberation_score": 0.85,  # Mock"            "conception_score": 0.92,"            "action_score": 0.78,"            "perception_score": 0.88,"            "sgi_index": 0.86,"        }
@@ -117,14 +117,14 @@ Runs an SGI-Bench scientific inquiry evaluation on an agent.        logging.info
 
     @as_tool(priority=3)
     def evaluate_model_on_benchmark(self, model_name: str, benchmark_suite: str) -> dict[str, Any]:
-""""
+"""
 Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model.        logging.info(fBENCHMARK: Evaluating {model_name} on {benchmark_suite}")"        # Standard score ranges
         return {
             "model": model_name,"            "suite": benchmark_suite,"            "accuracy": "78.4%","            "reasoning_depth": "Advanced","            "fail_cases": ["Multi-turn logic decay", "Mathematical precision at scale"],"        }
 
     @as_tool(priority=4)
     def run_benchmark(self, agent_name: str, task: str, expected_output: str | None = None) -> str:
-""""
+"""
 Runs a task against an agent and measures performance.        # Note: In a real system, this would call the FleetManager
         start_time = time.time()
 
@@ -159,7 +159,7 @@ Runs a task against an agent and measures performance.        # Note: In a real 
 
     @as_tool(priority=5)
     def check_for_performance_regression(self, agent_id: str, current_duration: float) -> str:
-""""
+"""
 Checks if an agent's current performance has regressed vs the fleet baseline.'        baseline = self.core.calculate_baseline(self.benchmark_results)
         regression = self.core.check_regression(current_duration, baseline)
 
@@ -170,7 +170,7 @@ Checks if an agent's current performance has regressed vs the fleet baseline.'  
 
     @as_tool(priority=6)
     def generate_report(self) -> str:
-""""
+"""
 Generates a summary report of all benchmark runs.        if not self.results:
 #             return "No benchmark data available."
         report = ["## Benchmark Summary Report"]

@@ -14,7 +14,7 @@
 
 
 """
-""""
+"""
 """
 MCP-based tool registration using official mcp library.
 Provides register_tool decorator compatible with mcp.mcp_tool.
@@ -126,4 +126,6 @@ registry = get_registry()
 
     return server
 
-""
+"""
+
+"""

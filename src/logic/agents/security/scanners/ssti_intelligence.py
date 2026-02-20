@@ -21,7 +21,7 @@ from typing import Dict, List, Any, cast
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-SSTI_ENGINE_SIGNATURES: Dict[str, Dict[str, Any]] = {""""    "jinja2": {"# [BATCHFIX] Commented metadata/non-Python
+SSTI_ENGINE_SIGNATURES: Dict[str, Dict[str, Any]] = {"""    "jinja2": {"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """         "detection_payloads": ["{{7*7}}", "{{7*'7'}}"],"'# [BATCHFIX] Commented metadata/non-Python
@@ -86,7 +86,7 @@ SSTI_ENGINE_SIGNATURES: Dict[str, Dict[str, Any]] = {""""    "jinja2": {"# [BATC
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def detect_ssti(url: str, parameter: str, session: aiohttp.ClientSession) -> List[Dict[str, Any]]:""""
+async def detect_ssti(url: str, parameter: str, session: aiohttp.ClientSession) -> List[Dict[str, Any]]:""
 #     Detects Server Side Template Injection in a specific URL parameter.
 # [BATCHFIX] Commented metadata/non-Python
 """
@@ -147,5 +147,9 @@ second_payload = data["detection_payloads"][1]"                            async
 
 if __name__ == "__main__":"    # Example usage logic
     pass
+
+"""
+
+""
 
 """

@@ -39,7 +39,7 @@ __version__ = VERSION
 
 class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
 """
-Executes agent workflows in parallel using native asyncio.""""
+Executes agent workflows in parallel using native asyncio.""
 Supports dependency-aware batching for optimized execution (Phase 232).
     
     def __init__(self, workspace_root: str, max_workers: int = 4) -> None:
@@ -237,6 +237,8 @@ Executes a test workflow.        report = await afleet.execute_workflow_async("P
 
 """
 
-""
+"""
 
 """
+
+""

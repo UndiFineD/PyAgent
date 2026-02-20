@@ -20,6 +20,6 @@ except ImportError:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """ __all__ = ["rpc_registration_scraper_factory", "disassemblers"]"

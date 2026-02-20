@@ -17,7 +17,7 @@ from __future__ import annotations
 
 
 """
-""""Rust Bridge - Safe Rust FFI Bridge.
+"""Rust Bridge - Safe Rust FFI Bridge.
 Safe FFI Bridge for Rust Acceleration (rust_core.pyd).
 Provides centralized hub for all Rust FFI calls with graceful fallbacks.
 

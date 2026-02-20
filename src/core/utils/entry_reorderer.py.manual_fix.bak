@@ -43,7 +43,7 @@ __version__ = VERSION
 
 class EntryReorderer:
 """
-Reorders and groups changelog entries.""""
+Reorders and groups changelog entries.""
 Provides functionality to reorder entries by various criteria.
 
     Example:
@@ -52,7 +52,7 @@ Provides functionality to reorder entries by various criteria.
 """
 def reorder(self, entries: list[ChangelogEntry], strategy: GroupingStrategy) -> list[ChangelogEntry]:
 """
-Reorder entries based on strategy.""""
+Reorder entries based on strategy.""
 Args:
             entries: Entries to reorder.
             strategy: Grouping / sorting strategy.
@@ -72,7 +72,7 @@ if strategy == GroupingStrategy.BY_DATE:
 
     def group_by_category(self, entries: list[ChangelogEntry]) -> dict[str, list[ChangelogEntry]]:
 """
-Group entries by category.""""
+Group entries by category.""
 Args:
             entries: Entries to group.
 
@@ -104,6 +104,8 @@ result: dict[str, list[ChangelogEntry]] = {}
 
 """
 
-""
+"""
 
 """
+
+""

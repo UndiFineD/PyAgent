@@ -18,7 +18,7 @@ from __future__ import annotations
 """
 Privacy scanner mixin.py module.
 """
-Copyright 2026 PyAgent Authors""""
+Copyright 2026 PyAgent Authors""
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 class PrivacyScannerMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Mixin for PII scanning and masking in ComplianceAgent.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -51,7 +51,7 @@ def scan_shard(self: ComplianceAgent, shard_data: str) -> dict[str, Any]:"Scans 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""
+findings = []""
 for label, pattern in self.pii_patterns.items():
             matches = re.findall(pattern, shard_data)
             if matches:
@@ -68,7 +68,7 @@ if res["pii_detected"]:"            self._record("pii_detected", findings)"
 
     def mask_pii(self: ComplianceAgent, shard_data: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Masks detected PII patterns in the data.# [BATCHFIX] Commented metadata/non-Python
 #         masked_data "= shard_data"  # [BATCHFIX] closed string"        for label, pattern in self.pii_patterns.items():
 # [BATCHFIX] Commented metadata/non-Python

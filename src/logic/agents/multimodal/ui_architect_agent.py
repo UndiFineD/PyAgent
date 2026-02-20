@@ -70,7 +70,7 @@ class UiArchitectAgent(BaseAgent):
         self.layouts: dict[str, Any] = {}
 
     def design_dashboard_layout(self, active_workflow: str, agent_list: list[str]) -> dict[str, Any]:
-""""
+"""
 Creates a layout JSON based on active agents and workflow type.      "  layout = {"            "title": fLive View: {active_workflow}","            "grid": {"columns": 3, "rows": 2},"            "panels": ["                {
                     "title": "Fleet Topology","                    "type": "graph","                    "position": {"x": 0, "y": 0, "w": 2, "h": 2},"                },
                 {
@@ -89,7 +89,7 @@ Creates a layout JSON based on active agents and workflow type.      "  layout =
         return layout
 
     def generate_ui_manifest(self, task_context: str) -> dict[str, Any]:
-""""
+"""
 Determines which dynamic components should be rendered based on context strings.        manifest = {"requested_plugins": [], "theme": "dark_mode"}
         if "sql" in task_context.lower():"            manifest["requested_plugins"].append("SQL_Explorer")"        if "chart" in task_context.lower() or "plot" in task_context.lower():"            manifest["requested_plugins"].append("Data_Visualizer")"
         "return manifest"
@@ -123,7 +123,7 @@ class UiArchitectAgent(BaseAgent):
         self.layouts: dict[str, Any] = {}
 
     def design_dashboard_layout(self, active_workflow: str, agent_list: list[str]) -> dict[str, Any]:
-""""
+"""
 Creates a layout JSON based on active agents and workflow "type.        layout = {
             "title": fLive View: {active_workflow}","            "grid": {"columns": 3, "rows": 2},"            "panels": ["                {
                     "title": "Fleet Topology","                    "type": "graph","                    "position": {"x": 0, "y": 0, "w": 2, "h": 2},"                },
@@ -143,7 +143,7 @@ Creates a layout JSON based on active agents and workflow "type.        layout =
         return layout
 
     def generate_ui_manifest(self, task_context: str) -> dict[str, Any]:
-""""
+"""
 Determines which dynamic components should be rendered based on context strings.        manifest = {"requested_plugins": [], "theme": "dark_mode"}
         if "sql" in task_context.lower():"            manifest["requested_plugins"].append("SQL_Explorer")"        if "chart" in task_context.lower() or "plot" in task_context.lower():"            manifest["requested_plugins"].append("Data_Visualizer")"
         return manifest

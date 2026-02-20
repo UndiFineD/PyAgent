@@ -60,13 +60,13 @@ BYPASS_SUFFIXES = ["%20", "%0a", "%00", "%0d%0a", "/", ".\\", ".", "....", ".", 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def get_extension_variants(base_extension: str) -> List[str]:""""
+async def get_extension_variants(base_extension: str) -> List[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Generates common bypass variants for a core extension (e.g. .php)."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-variants = []""""
+variants = []""
 if "php" in base_extension.lower():"            variants.extend(FileUploadIntelligence.PHP_EXTENSIONS)
         elif "asp" in base_extension.lower():"            variants.extend(FileUploadIntelligence.ASP_EXTENSIONS)
         elif "jsp" in base_extension.lower():"            variants.extend(FileUploadIntelligence.JSP_EXTENSIONS)
@@ -80,13 +80,13 @@ if "php" in base_extension.lower():"            variants.extend(FileUploadIntell
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def get_obfuscated_filenames(filename: str, allowed_ext: str) -> List[str]:""""
+async def get_obfuscated_filenames(filename: str, allowed_ext: str) -> List[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Generates filenames with null bytes or multiple extensions."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -106,7 +106,7 @@ ext_part = "." + filename.split(".")[-1]
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def get_magic_bytes_headers() -> Dict[str, bytes]:""""
+async def get_magic_bytes_headers() -> Dict[str, bytes]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Returns magic bytes for common image types to prepend to payloads."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -119,7 +119,7 @@ async def get_magic_bytes_headers() -> Dict[str, bytes]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def get_upload_attack_vectors() -> List[Dict[str, Any]]:""""
+async def get_upload_attack_vectors() -> List[Dict[str, Any]]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Returns a list of high-level attack strategies for file uploads."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""

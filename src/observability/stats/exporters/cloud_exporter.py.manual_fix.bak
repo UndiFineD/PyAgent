@@ -85,7 +85,7 @@ __version__ = VERSION
 
 class CloudExporter:
 """
-Export stats to cloud monitoring services.""""
+Export stats to cloud monitoring services.""
 Supports exporting metrics to Datadog, Prometheus, Grafana,
     and other cloud monitoring platforms.
 
@@ -95,7 +95,7 @@ Supports exporting metrics to Datadog, Prometheus, Grafana,
         export_queue: Queued metrics for export.
     
     def __init__(self, destination: ExportDestination, api_key: str = "", endpoint: str = "") -> None:"        """
-Initialize cloud exporter.""""
+Initialize cloud exporter.""
 Args:
             destination: The target cloud platform.
             api_key: API key for authentication.
@@ -109,7 +109,7 @@ Args:
 
     def _get_default_endpoint(self) -> str:
 """
-Get default endpoint for destination.""""
+Get default endpoint for destination.""
 Returns:
             Default endpoint URL.
                 defaults = {
@@ -117,14 +117,14 @@ Returns:
         return defaults.get(self.destination, "")
     def queue_metric(self, metric: Metric) -> None:
 """
-Add metric to export queue.""""
+Add metric to export queue.""
 Args:
             metric: The metric to queue.
                 self.export_queue.append(metric)
 
     def export(self) -> int:
 """
-Export all queued metrics.""""
+Export all queued metrics.""
 Returns:
             Number of metrics exported.
                 if not self.export_queue:
@@ -175,10 +175,12 @@ Generic export format.        data: list[dict[str, Any]] = [
             {"name": m.name, "value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in self.export_queue"        ]
         logging.debug(f"Generic export: {json.dumps(data)}")
     def""
-get_export_stats(self) -> dict[str, Any]:""""        ""
-Get export statistics.""""
+get_export_stats(self) -> dict[str, Any]:"""        "
+Get export statistics.""
 Returns:
         """   """
-Export statistics.""""
+Export statistics.""
 return {
             "destination": self.destination.value,"            "total_exported": self._export_count,"            "last_export": self._last_export.isoformat() if self._last_export else None,"            "queue_size": len(self.export_queue),"        }
+
+"""

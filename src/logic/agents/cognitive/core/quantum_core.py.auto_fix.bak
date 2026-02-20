@@ -26,7 +26,7 @@ __version__ = VERSION
 
 
 class QuantumCore:
-""""Logic for quantum-inspired probability modeling.
+"""Logic for quantum-inspired probability modeling.
     @staticmethod
     def calculate_superposition_weights(
         prompts: list[str], constraints: dict[str, float] | None = None

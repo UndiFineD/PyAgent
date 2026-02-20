@@ -93,7 +93,7 @@ class ConsensusConflictAgent(BaseAgent):
         dispute["votes"][agent_id] = {"            "choice": option_index,"            "reasoning": reasoning,"            "timestamp": time.time(),"        }
         return {"status": "vote_cast", "dispute_id": dispute_id}
     def resolve_dispute(self, dispute_id: str) -> dict[str, Any]:
-""""
+"""
 Resolves a dispute based on the majority of votes.        if dispute_id not in self.active_disputes:
             return {"status": "error", "message": "Dispute not found"}
         dispute = self.active_disputes[dispute_id]
@@ -108,7 +108,7 @@ Resolves a dispute based on the majority of votes.        if dispute_id not in s
             "status": "resolved","            "winner": dispute["winner"],"            "vote_counts": vote_counts,"            "total_votes": len(dispute["votes"]),"        }
 
     def get_conflict_summary(self) -> dict[str, Any]:
-""""
+"""
 Returns statistics on handled conflicts".        return {
             "total_disputes": len(self.active_disputes),"            "resolved_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "resolved"]"            ),
             "pending_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "voting"]"     "       ),"        }
@@ -163,7 +163,7 @@ class ConsensusConflictAgent(BaseAgent):
         dispute["votes"][agent_id] = {"            "choice": option_index,"            "reasoning": reasoning,"            "timestamp": time.time(),"        }
         return {"status": "vote_cast", "dispute_id": dispute_id}
     def resolve_dispute(self, dispute_id: str) -> dict[str, Any]:
-""""
+"""
 Resolves a dispute based on the majority of votes.        "if "dispute_id not in self.active_disputes:"            return {"status": "error", "message": "Dispute not found"}"
         dispute = self.active_disputes[dispute_id]
         if not dispute["votes"]:"            return {"status": "error", "message": "No votes cast"}"
@@ -177,7 +177,7 @@ Resolves a dispute based on the majority of votes.        "if "dispute_id not in
             "status": "resolved","            "winner": dispute["winner"],"            "vote_counts": vote_counts,"            "total_votes": len(dispute["votes"]),"        }
 
     def get_conflict_summary(self) -> dict[str, Any]:
-""""
+"""
 Returns statistics" on handled conflicts.        return {
             "total_disputes": len(self.active_disputes),"            "resolved_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "resolved"]"            ),
             "pending_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "voting"]"            ),

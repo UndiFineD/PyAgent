@@ -61,7 +61,7 @@ __version__ = VERSION
 @dataclass
 class ErrorBudget:
 """
-Error budget tracking for SLO management.""""
+Error budget tracking for SLO management.""
 Attributes:
         budget_name: Name of the error budget.
         total_budget: Total allowed error budget.
@@ -96,4 +96,4 @@ period_end: str = ""
 
 """
 
-"""
+""

@@ -14,7 +14,7 @@
 
 
 """
-""""MCP-based tool registration using official mcp library.
+"""MCP-based tool registration using official mcp library.
 Provides register_tool decorator compatible with mcp.mcp_tool.
 """
 try:

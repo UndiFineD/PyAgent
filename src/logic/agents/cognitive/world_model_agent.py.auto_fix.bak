@@ -38,7 +38,7 @@ class WorldModelAgent(BaseAgent):
 #             "You are the Swarm World Model."#             "Your purpose is to maintain a mental map of the project structure,"#             "dependencies, and the current state of the environment."#             "When asked to simulate an action, you must predict the side effects,"#             "potential errors, and outcome state as if it were executed."        )
 
     def analyze_ast_impact(self, file_path: str, proposed_change: str) -> list[str]:
-""""Performs AST-based dependency mapping to predict impact of a change.        _ = proposed_change
+"""Performs AST-based dependency mapping to predict impact of a change.        _ = proposed_change
         impacted_symbols = []
         if not os.path.exists(file_path):
             return ["File non-existent"]"

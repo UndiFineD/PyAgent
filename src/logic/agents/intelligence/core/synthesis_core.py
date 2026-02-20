@@ -48,7 +48,7 @@ class SynthesisCore:
             "def {name}(*args, **kwargs): return args[0] if args else kwargs.get('default')","'            "async with {context} as c: yield await c.exec(f'{{a}} + {{b}}')","'            "lambda x: [i for i in x if i is not None and not isinstance(i, (int, float))]","            "class {name}(metaclass=Singleton): pass","        ]
 
     def _get_transformer(self) -> Any:
-""""
+"""
 Lazily initializes and caches the Rust transformer.        if not HAS_RUST or SynthesisCore._rust_failed:
             return None
 
@@ -68,7 +68,7 @@ Lazily initializes and caches the Rust transformer.        if not HAS_RUST or Sy
         return SynthesisCore._transformer_cache
 
     def generate_python_edge_cases(self, count: int) -> list[str]:
-""""
+"""
 Generates synthetic Python snippets based on templates.     "   if HAS_RUST:"            try:
                 res, stats = rust_core.generate_synthetic_snippets_with_stats(count)
                 print(
@@ -124,7 +124,7 @@ Generates synthetic Python snippets based on templates.     "   if HAS_RUST:"   
         return [random.uniform(-1, 1) for _ in range(128)]
 
     def merge_feature_vectors(self, vectors: list[list[float]]) -> list[float]:
-""""
+"""
 Averages multiple feature vectors into a single swarm insight.        if HAS_RUST:
             try:
                 return rust_core.average_feature_vectors(vectors)  # type: ignore[attr-defined]

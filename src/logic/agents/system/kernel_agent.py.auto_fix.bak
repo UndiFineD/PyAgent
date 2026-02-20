@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class KernelAgent(BaseAgent):
-""""Interacts directly with the host OS to manage environments and perform diagnostics.
+"""Interacts directly with the host OS to manage environments and perform diagnostics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.security_guard = SecurityGuardAgent(file_path + ".audit")"        self._system_prompt = (
@@ -136,7 +136,7 @@ __version__ = VERSION
 
 
 class KernelAgent(BaseAgent):
-""""Interacts directly with the host OS to manage environments and "perform diagnostics.
+"""Interacts directly with the host OS to manage environments and "perform diagnostics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.security_guard = SecurityGuardAgent(file_path + ".audit")"        self._system_prompt = (

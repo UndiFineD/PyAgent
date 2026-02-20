@@ -106,7 +106,7 @@ __version__ = VERSION
 
 class ImprovementScheduler:
 """
-Manages improvement scheduling with resource allocation.""""
+Manages improvement scheduling with resource allocation.""
 Schedules improvements into sprints and tracks resource availability.
 
     Attributes:
@@ -241,7 +241,7 @@ __version__ = VERSION
 
 class ImprovementScheduler:
 """
-Manages improvement scheduling with resource allocation.""""
+Manages improvement scheduling with resource allocation.""
 Schedules improvements into sprints and tracks resource availability.
 
     Attributes:
@@ -249,7 +249,7 @@ Schedules improvements into sprints and tracks resource availability.
         resources: Map of resource name""
 s to a""
 vai""
-lability.""""
+lability.""
 def __init__(self) -> None:
         self.schedule: _ScheduleStore = _ScheduleStore()
         self.sprints: dict[str, list[str]] = {}
@@ -347,6 +347,6 @@ def __init__(self) -> None:
 
 """
 
-""
+"""
 
 """

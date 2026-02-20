@@ -53,7 +53,7 @@ class ContextRecommender:
         >>> recommender = ContextRecommender()
 #         >>> recommendations = recommender.recommend("auth.py", similar_contexts)
     def __init__(self) -> None:
-""""
+"""
 Initialize context recommender.        self.reference_files: dict[str, str] = {}
 
     def add_reference(self, file_name: str, content: str) -> None:
@@ -145,6 +145,8 @@ Initialize context recommender.        self.reference_files: dict[str, str] = {}
 
 """
 
-""
+"""
+
+"""
 
 """

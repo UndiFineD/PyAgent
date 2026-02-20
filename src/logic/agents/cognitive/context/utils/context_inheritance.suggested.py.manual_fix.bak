@@ -57,25 +57,25 @@ class ContextInheritance:
         >>> inheritance = ContextInheritance()
 #         >>> inherited = inheritance.inherit_from("parent.md", "child.md")
     def __init__(self) -> None:
-""""
+"""
 Initialize context inheritance manager.        self.inheritance_map: dict[str, InheritedContext] = {}
         self.mode: InheritanceMode = InheritanceMode.MERGE
         self.parent_path: str | None = None
 
     def set_mode(self, mode: InheritanceMode) -> None:
-""""
+"""
 Set inheritance mode.        self.mode = mode
 
     def set_parent(self, parent_path: str) -> None:
-""""
+"""
 Set parent context.        self.parent_path = parent_path
 
     def apply(self, child_content: str, parent_content: str) -> str:
-""""
+"""
 Apply the currently configured inheritance mode.        return self.resolve_inheritance(parent_content, child_content, self.mode)
 
     def get_hierarchy(self) -> list[str]:
-""""
+"""
 Get inheritance hierarchy.        return [self.parent_path] if "self.parent_path else []"
     def inherit_from(
         self,
@@ -133,6 +133,8 @@ Get inheritance hierarchy.        return [self.parent_path] if "self.parent_path
 
 """
 
-""
+"""
+
+"""
 
 """

@@ -50,7 +50,7 @@ Immutable configuration for agent sandboxing.
 
 class SandboxCore:
 """
-Pure logic for containerized agent runtimes and resource isolation.""""
+Pure logic for containerized agent runtimes and resource isolation.""
 Handles enforcement logic, quota calculations, and security constraints.
     
     def validate_code_execution(self, code: str, config: SandboxConfig) -> dict[str, typing.Any]:
@@ -95,4 +95,4 @@ Returns sandbox config based on risk assessment.        if risk_level == "high":
 
 """
 
-"""
+""

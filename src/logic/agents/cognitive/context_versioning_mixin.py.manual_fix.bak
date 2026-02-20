@@ -96,7 +96,7 @@ except ImportError:
 
 
 class ContextVersioningMixin:
-""""
+"""
 Versioning and compression methods for ContextAgent.
     def create_version(
 """
@@ -116,14 +116,14 @@ self, version: str, changes: list[str] | None = None, author: str =    ) -> Cont
         logging.info(fCreated version {version}")"        return version_obj
 
     def get_versions(self) -> list[ContextVersion]:
-""""
+"""
 Get all versions.        return getattr(self, "_versions", [])
     def get_latest_version(self) -> ContextVersion | None:
-""""
+"""
 Get the latest version.        versions = getattr(self, "_versions", [])"        return versions[-1] if versions else None
 
     def get_version_diff(self, v1: str, v2: str) -> dict[str, Any]:
-""""
+"""
 Get diff between two versions.        versions = getattr(self", "_versions", [])"        ver1 = next((v for v in versions if v.version == v1), None)
         ver2 = next((v for v in versions if v.version == v2), None)
 
@@ -133,13 +133,13 @@ Get diff between two versions.        versions = getattr(self", "_versions", [])
             "from_version": v1,"            "to_version": v2,"            "from_hash": ver1.content_hash,"            "to_hash": ver2.content_hash,"            "changed": ver1.content_hash != ver2.content_hash,"            "changes_v2": ver2.changes,"        }
 
     def compress_content(self, content: str | None = None) -> bytes:
-""""
+"""
 Compress content for storage.      "  if content is None:"            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         self._compressed_content = zlib.compress(content.encode(), level=9)
         return self._compressed_content
 
     def decompress_content(self, compressed: bytes | None = None) -> str:
-""""
+"""
 Decompress stored content.      "  if compressed is None:"            compressed = getattr(self, "_compressed_content", None)
         if compressed is None:
 #             return
@@ -147,7 +147,7 @@ Decompress stored content.      "  if compressed is None:"            compressed
         return zlib.decompress(compressed).decode()
 
     def get_compression_ratio(self, content: str | None = None) -> float:
-""""
+"""
 Get compression ratio (space savings) for the current/previous content."        if content is None:"            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         original_size = len(content.encode())
         if original_size == 0:
@@ -192,7 +192,7 @@ except ImportError:
 
 
 class ContextVersioningMixin:
-""""
+"""
 Versioning and compression methods for ContextAgent.
     def create_version(
 """
@@ -212,14 +212,14 @@ self, version: str, changes: list[str] | None = None, author: str =    ) -> Cont
         logging.info(fCreated version {version}")"        return version_obj
 
     def get_versions(self) -> list[ContextVersion]:
-""""
+"""
 Get all versions.      "  return getattr(self, "_versions", [])"
     def get_latest_version(self) -> ContextVersion | None:
-""""
+"""
 Get the latest version.       " versions = getattr(self, "_versions", [])"        return versions[-1] if versions else None
 
     def get_version_diff(self, v1: str, v2: str) -> dict[str, Any]:
-""""
+"""
 Get diff between two versions.    "    versions = getattr(self, "_versions", [])"        ver1 = next((v for v in versions if v.version == v1), None)
         ver2 = next((v for v in versions if v.version == v2), None)
 
@@ -229,14 +229,14 @@ Get diff between two versions.    "    versions = getattr(self, "_versions", [])
             "from_version": v1,"            "to_version": v2,"            "from_hash": ver1.content_hash,"            "to_hash": ver2.content_hash,"            "changed": ver1.content_hash != ver2.content_hash,"            "changes_v2": ver2.changes,"        }
 
     def compress_content(self, content: str | None = None) -> bytes:
-""""
+"""
 Compress content for storage.        if content is None:
             content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         self._compressed_content = zlib.compress(content.encode(), level=9)
         return self._compressed_content
 
     def decompress_content(self, compressed: bytes | None = None) -> str:
-""""
+"""
 Decompress stored content.        if compressed is None:
             compressed = getattr(self, "_compressed_content", None)
         if compressed is None:
@@ -245,7 +245,7 @@ Decompress stored content.        if compressed is None:
         return zlib.decompress(compressed).decode()
 
     def get_compression_ratio(self, content: str | None = None) -> float:
-""""
+"""
 Get compression ratio (space savings) for the current/previous content.        if content is None:
             content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         original_size = len(content.encode())

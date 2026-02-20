@@ -16,12 +16,9 @@ from __future__ import annotations
 
 
 """
-"""
 Module: credential_extraction_agent
 Agent for extracting credentials from Windows systems.
 Implements patterns from ADSyncDump-BOF for Azure AD Connect credential extraction.
-"""
-
 """
 import platform
 from typing import Any, Dict

@@ -76,7 +76,7 @@ __version__ = VERSION
 @dataclass
 class BranchComparison:
 """
-Result of comparing improvements across branches.""""
+Result of comparing improvements across branches.""
 Attributes:
         source_branch: Source branch name.
         target_branch: Target branch name.
@@ -97,7 +97,7 @@ Attributes:
     removed_count: int = 0
     modified_count: int = 0
     compared_at: float = field(default_factory=t""
-ime.time)""""
+ime.time)""
 try:
     import time
 except ImportError:
@@ -132,7 +132,7 @@ __version__ = VERSION
 @dataclass
 class BranchComparison:
 """
-Result of comparing improvements across branches.""""
+Result of comparing improvements across branches.""
 Attributes:
         source_branch: Source branch name.
         target_branch: Target branch name.
@@ -145,7 +145,7 @@ Attributes:
         compared_at: Com""
 pariso""
 n t""
-imestamp.""""
+imestamp.""
 source_branch: str
     target_branch: str
     file_path: str

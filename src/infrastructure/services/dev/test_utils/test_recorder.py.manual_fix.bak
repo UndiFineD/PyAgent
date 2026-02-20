@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 import json
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -33,7 +33,7 @@ __version__ = VERSION
 
 class TestRecorder:
 """
-Records and replays test interactions.""""
+Records and replays test interactions.""
 Useful for recording external calls and replaying in tests.
 
     Example:
@@ -61,7 +61,7 @@ Initialize recorder.        self._recordings: list[RecordedInteraction] = []
         result: Any,
     ) -> None:
 """
-Record an interaction.""""
+Record an interaction.""
 Args:
             call_type: Type of call.
             call_name: Name of the call.
@@ -83,7 +83,7 @@ Args:
         call_name: str,
     ) -> Any | None:
 """
-Get replayed result for a call.""""
+Get replayed result for a call.""
 Args:
             call_type: Type of call.
             call_name: Name of the call.

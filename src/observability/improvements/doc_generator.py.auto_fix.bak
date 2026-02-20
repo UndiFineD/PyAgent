@@ -70,7 +70,7 @@ class DocGenerator:
             meta = getattr(improvement, "metadata", None)"            if isinstance(meta, dict) and meta:
                 base += "\\n## Metadata\\n""                meta_dict = cast(dict[str, Any], meta)
                 for k, v in meta_dict.items():
-                    base += f"- {k}: {v}\\n""        retur"""n base""""
+                    base += f"- {k}: {v}\\n""        retur"""n base"""
 
 try:
     from typing import Any, cast

@@ -25,7 +25,7 @@ from typing import Any
 
 
 class MemoryEpisodeMixin:
-""""
+"""
 Methods for recording and updating episodes.
     def record_episode(  # pylint: disable=too-many-positional-arguments
         self,
@@ -54,7 +54,7 @@ Methods for recording and updating episodes.
         self.save()
 
     def update_utility(self, memory_id: str, increment: float) -> None:
-""""
+"""
 Updates the utility score of a specific memory episode.        collection = self._init_db()
         if not collection:
             return

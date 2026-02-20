@@ -55,7 +55,7 @@ from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 
 class ArxivCore:
-""""
+"""
 Core logic for interacting with Arxiv research papers.
     def __init__(self, download_dir: str = "data/research") -> None:"        self._workspace_root = os.getcwd()
         self.download_dir = Path(self._workspace_root) / download_dir
@@ -63,7 +63,7 @@ Core logic for interacting with Arxiv research papers.
         self.client = arxiv.Client()
 
     def search(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
-""""
+"""
 Search Arxiv for papers matching the query.        search = arxiv.Search(query=query, max_results=max_results, sort_by=arxiv.SortCriterion.Relevance)
 
         results = []
@@ -78,7 +78,7 @@ Search Arxiv for papers matching the query.        search = arxiv.Search(query=q
         return results
 
     def download_paper(self, pdf_url: str, filename: str) -> Optional[Path]:
-""""
+"""
 Download a paper PDF from Arxiv.        firewall = ReverseProxyFirewall()
         try:
             if not filename.endswith(".pdf"):"#                 filename += ".pdf
@@ -92,7 +92,7 @@ Download a paper PDF from Arxiv.        firewall = ReverseProxyFirewall()
             logging.error(fFailed to download Arxiv paper: {e}")"            return None
 
     def extract_text(self, pdf_path: Path) -> str:
-""""
+"""
 Extract text content from a PDF file.        if not pdf_path.exists():
 #             return "File not found."
         try:
@@ -106,7 +106,7 @@ Extract text content from a PDF file.        if not pdf_path.exists():
             logging.error(fText extraction failed: {e}")"#             return fExtraction failed: {e}
 
     def summarize_results(self, results: List[Dict[str, Any]]) -> str:
-""""
+"""
 Format search results into a readable summary block.     "   if not results:"#             return "No papers found."
 #         block = "### Arxiv Research Results\\n\\n"        for i, res in enumerate(results, 1):
 #             block += f"{i}. **{res['title']}** ({res['published'][:10]})\\n"'#             block += f"   - Authors: {', '.join(res['authors'][:3])}...\\n"'#             block += f"   - PDF: {res['pdf_url']}\\n"'#             block += f"   - Summary: {res['summary'][:200]}...\\n\\n"'  "  "    return block
@@ -123,7 +123,7 @@ from src.infrastructure.security.network.firewall import ReverseProxyFirewall
 
 
 class ArxivCore:
-""""
+"""
 Core logic for interacting with Arxiv research papers.
     def __init__(self, download_dir: str = "data/research") -> None:"        self._workspace_root = os.getcwd()
         self.download_dir = Path(self._workspace_root) / download_dir
@@ -131,7 +131,7 @@ Core logic for interacting with Arxiv research papers.
         self.client = arxiv.Client()
 
     def search(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
-""""
+"""
 Search Arxiv for papers matching the query.        search = arxiv.Search(query=query, max_results=max_results, sort_by=arxiv.SortCriterion.Relevance)
 
         results = []
@@ -146,7 +146,7 @@ Search Arxiv for papers matching the query.        search = arxiv.Search(query=q
         return results
 
     def download_paper(self, pdf_url: str, filename: str) -> Optional[Path]:
-""""
+"""
 Download a paper PDF from Arxiv.        firewall = ReverseProxyFirewall()
         try:
             if not filename.endswith(".pdf"):"#                 filename += ".pdf
@@ -160,7 +160,7 @@ Download a paper PDF from Arxiv.        firewall = ReverseProxyFirewall()
             logging.error(fFailed to download Arxiv paper: {e}")"            return None
 
     def extract_text(self, pdf_path: Path) -> str:
-""""
+"""
 Extract text content from a PDF file."        if not pdf_path.exists():"#             return "File not found."
         try:
             doc = fitz.open(str(pdf_path))
@@ -173,7 +173,7 @@ Extract text content from a PDF file."        if not pdf_path.exists():"#       
             logging.error(fText extraction failed: {e}")"#             return fExtraction failed: {e}
 
     def summarize_results(self, results: List[Dict[str, Any]]) -> str:
-""""
+"""
 Format search results into a readable summary block.        if not results:
 #             return "No papers found."
 #         block = "### Arxiv Research Results\\n\\n"        for i, res in enumerate(results, 1):

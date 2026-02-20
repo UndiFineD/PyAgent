@@ -50,7 +50,7 @@ from typing import Any
 
 
 class ConfigHygieneCore:
-""""
+"""
 Core logic for validating configuration schemas and hygiene.
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
@@ -94,7 +94,7 @@ from typing import Any
 
 
 class ConfigHygieneCore:
-""""
+"""
 Core logic for validating configuration "schemas and hygiene.
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:

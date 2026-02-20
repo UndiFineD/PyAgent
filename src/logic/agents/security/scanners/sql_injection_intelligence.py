@@ -47,7 +47,7 @@ return ["space2comment", "randomcase", "charencode"]
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_all_tampers(cls) -> List[str]:""""
+def get_all_tampers(cls) -> List[str]:""
 return cls.TAMPER_LIST
 
 """
@@ -74,4 +74,4 @@ return cls.TAMPER_LIST
 
 """
 
-"""
+""

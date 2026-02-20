@@ -54,7 +54,7 @@ __version__ = VERSION
 
 
 class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages the lifecycle of fleet nodes, including containerization and deployment.
+"""Manages the lifecycle of fleet nodes, including containerization and deployment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.deploy_dir = Path("deploy")"        self.deploy_dir.mkdir(parents=True, exist_ok=True)
@@ -161,7 +161,7 @@ __version__ = VERSION
 
 
 class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages the lifecycle of fleet nodes, including "containerization and deployment.
+"""Manages the lifecycle of fleet nodes, including "containerization and deployment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.deploy_dir = Path("deploy")"        self.deploy_dir.mkdir(parents=True, exist_ok=True)

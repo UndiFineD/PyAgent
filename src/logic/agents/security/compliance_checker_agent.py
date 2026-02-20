@@ -71,7 +71,7 @@ __version__ = VERSION
 
 class ComplianceChecker:
 """
-Checks changelog compliance with various requirements.""""
+Checks changelog compliance with various requirements.""
 Verifies changelog entries meet security, legal, and
     other compliance requirements.
 
@@ -106,7 +106,7 @@ Verifies changelog entries meet security, legal, and
 
     def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
 """
-Check security compliance.""""
+Check security compliance.""
 Args:
             entries: Changelog entries to check.
 
@@ -125,7 +125,7 @@ Args:
 
     def check_legal_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
 """
-Check legal compliance.""""
+Check legal compliance.""
 Args:
             entries: Changelog entries to check.
 
@@ -143,7 +143,7 @@ Args:
 
     def check_all(self, entries: list[ChangelogEntry]) -> list[ComplianceResult]:
 """
-Run all compliance checks.""""
+Run all compliance checks.""
 Args:
             entries: Changelog entries to check.
 

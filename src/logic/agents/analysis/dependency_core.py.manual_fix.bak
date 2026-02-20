@@ -63,7 +63,7 @@ class DependencyCore:
     
     @staticmethod
     def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:"        """
-Parse imports and class inheritance from Python code content.""""
+Parse imports and class inheritance from Python code content.""
 Args:
             content: The Python source code as a string.
             file_path: Optional file path for tracking dependencies.
@@ -100,7 +100,7 @@ Args:
         file_path: str,
     ) -> None:
 """
-Add a dependency to the nodes dictionary, or update its depended_by list.""""
+Add a dependency to the nodes dictionary, or update its depended_by list.""
 Args:
             nodes: The dictionary of dependency nodes.
             name: The dependency name.
@@ -115,7 +115,7 @@ Args:
     @staticmethod
     def filter_external_deps(nodes: dict[str, DependencyNode], stdlib_list: set[str]) -> list[str]:
 """
-Filter nodes to return only non-standard library dependencies.""""
+Filter nodes to return only non-standard library dependencies.""
 Args:
             nodes: Dictionary of dependency nodes.
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]             stdlib_list: Set of standard library module names.
@@ -199,6 +199,8 @@ Filters nodes to return only non-standard library dependencies.        return [n
 
 """
 
-""
+"""
 
 """
+
+""

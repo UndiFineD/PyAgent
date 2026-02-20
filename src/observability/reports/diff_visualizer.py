@@ -50,7 +50,7 @@ Visualizes changelog differences with multiple view modes.    Provides side-by-s
     
     def compare(self, old_content: str, new_content: str) -> DiffResult:
 """
-Compare two changelog versions.""""
+Compare two changelog versions.""
 Args:
             old_content: Original changelog content.
             new_content: New changelog content.
@@ -74,7 +74,7 @@ Args:
 
     def render_html(self, result: DiffResult, mode: DiffViewMode) -> str:
 """
-Render diff result as HTML.""""
+Render diff result as HTML.""
 Args:
             result: DiffResult to render.
             mode: Visualization mode.

@@ -25,4 +25,4 @@ __version__ = VERSION
 
 # TODO Placeholder class
 class TODO Placeholder:
-    """TODO Placeholder class.  """  p"""ass""""
+    """TODO Placeholder class.  """  p"""ass"""

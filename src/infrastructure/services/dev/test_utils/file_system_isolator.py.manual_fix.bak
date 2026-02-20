@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import os
 except ImportError:
@@ -63,7 +63,7 @@ __version__ = VERSION
 
 class FileSystemIsolator:
 """
-Isolates file system operations for testing.""""
+Isolates file system operations for testing.""
 Example:
         with FileSystemIsolator() as fs:
             fs.write_file("test.txt", "content")"            content=fs.read_file("test.txt")"    
@@ -72,7 +72,7 @@ Example:
         isolation_level: IsolationLevel = IsolationLevel.TEMP_DIR,
     ) -> None:
 """
-Initialize file system isolator.""""
+Initialize file system isolator.""
 Args:
             isolation_level: Level of isolation.
                 self.isolation_level = isolation_level
@@ -98,7 +98,7 @@ Exit context and clean up.        if self._original_cwd:
 
     def write_file(self, path: str, content: str) -> Path:
 """
-Write a file in isolated environment.""""
+Write a file in isolated environment.""
 Args:
             path: File path.
             content: File content.
@@ -115,7 +115,7 @@ Args:
 
     def read_file(self, path: str) -> str:
 """
-Read a file from isolated environment.""""
+Read a file from isolated environment.""
 Args:
             path: File path.
 
@@ -149,6 +149,8 @@ Get the temporary directory.        return self._temp_dir
 
 """
 
-""
+"""
 
 """
+
+""

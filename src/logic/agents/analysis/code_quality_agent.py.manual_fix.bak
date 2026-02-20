@@ -64,7 +64,7 @@ class CodeQualityAgent(BaseAgent):
         self.quality_reports: list[Any] = []
 
     def analyze_file_quality(self, file_path: str) -> dict[str, Any]:
-""""
+"""
 Analyzes code quality for a specific file based on its extension.        print(fCode Quality: Analyzing {"file_path}")
         issues = []
         if file_path.endswith(".py"):"            issues = self._check_python_quality(file_path)
@@ -82,7 +82,7 @@ Analyzes code quality for a specific file based on its extension.        print(f
         return report
 
     def _check_python_quality(self, path: str) -> list[dict[str, Any]]:
-""""
+"""
 Run quality analysis for Python.    "    issues = []"
         # 1. Manual baseline checks (always run)
         try:
@@ -129,7 +129,7 @@ Run quality analysis for Python.    "    issues = []"
         return issues
 
     def _check_rust_quality(self, _path: str) -> list[dict[str, Any]]:
-""""
+"""
 Run cargo clippy for Rust quality analysis. "       issues = []"        try:
             # Use message-format=json to get structured output
             cwd = self.workspace_path
@@ -159,13 +159,13 @@ Run cargo clippy for Rust quality analysis. "       issues = []"        try:
         return issues
 
     def _check_js_quality(self, path: str) -> list[dict[str, Any]]:
-""""
+"""
 Run eslint for JavaScript/TypeScript quality analysis.        try:
             subprocess.run(["npx", "eslint", path, "--format", "json"], capture_output=True, check=False)"            return []
         except FileNotFoundError:
             return [{"type": "Info", "message": "NPM/Eslint not found, skipping JS check."}]
     def get_aggregate_score(self) -> float:
-""""
+"""
 Returns the average quality score across all analyzed files.        if not self.quality_reports:
             return 100.0
         return sum(r["score"] for r in self.quality_reports) / len(self.quality_reports)
@@ -196,6 +196,8 @@ Returns the average quality score across all analyzed files.        if not self.
 
 """
 
-""
+"""
+
+"""
 
 """

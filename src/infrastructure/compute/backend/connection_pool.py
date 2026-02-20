@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 import json
 import logging
 import threading
@@ -110,7 +110,7 @@ Acquire a connection, respecting the status cache (Phase 108).        if not sel
 
     def release(self, backend: str, connection: Any) -> None:
 """
-Release connection back to pool.""""
+Release connection back to pool.""
 Args:
             backend: Backend identifier.
             connection: Connection to release.
@@ -121,7 +121,7 @@ Args:
 
     def _create_connection(self, backend: str) -> dict[str, Any]:
 """
-Create a new connection.""""
+Create a new connection.""
 Args:
             backend: Backend identifier.
 
@@ -132,7 +132,7 @@ Args:
 
     def get_stats(self) -> dict[str, dict[str, int]]:
 """
-Get pool statistics.""""
+Get pool statistics.""
 Returns:
             Dict: Pool stats by backend.
                 with self._lock:
@@ -144,7 +144,7 @@ Returns:
 
     def close_all(self) -> int:
 """
-Close all connections.""""
+Close all connections.""
 Returns:
             int: Number of connections closed.
                 with self._lock:
@@ -175,4 +175,4 @@ Returns:
 
 """
 
-"""
+""

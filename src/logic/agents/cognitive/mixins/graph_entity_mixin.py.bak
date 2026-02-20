@@ -44,7 +44,7 @@ __version__ = VERSION
 
 
 class GraphEntityMixin:
-""""Mixin for entity and relationship management.
+"""Mixin for entity and relationship management.
     @as_tool
     def add_entity(
         self, name: str, properties: dict[str, Any], entity_type: str | None = None

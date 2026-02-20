@@ -97,7 +97,7 @@ class PESymbolMatcher(object):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        self._dbghelp.SymInitializeW.argtypes = [wintypes.HANDLE, wintypes.LPWSTR, wintypes.BOOL]""""
+        self._dbghelp.SymInitializeW.argtypes = [wintypes.HANDLE, wintypes.LPWSTR, wintypes.BOOL]""
         self._dbghelp.SymInitializeW.restype = wintypes.BOOL
         self._dbghelp.SymLoadModuleExW.argtypes = [
         wintypes.HANDLE,
@@ -121,18 +121,18 @@ class PESymbolMatcher(object):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        self._dbghelp.SymUnloadModule64.argtypes = [wintypes.HANDLE, DWORD64]""""
+        self._dbghelp.SymUnloadModule64.argtypes = [wintypes.HANDLE, DWORD64]""
         self._dbghelp.SymUnloadModule64.restype = wintypes.BOOL
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]""""
+        self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]""
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        self._dbghelp.SymGetModuleInfo.argtypes = [wintypes.HANDLE, DWORD64, ctypes.POINTER(MODULE_INFO)]""""
+        self._dbghelp.SymGetModuleInfo.argtypes = [wintypes.HANDLE, DWORD64, ctypes.POINTER(MODULE_INFO)]""
         ctypes.windll.kernel32.GetCurrentProcess.restype = wintypes.HANDLE
 
     def load_pe(self, pe_path: str) -> None:

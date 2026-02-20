@@ -99,7 +99,7 @@ def _rule_valid_effort(self, imp: Improvement) -> tuple[bool, str]:
 Check that effort estimate is reasonable.        return True, ""
 def add_rule(self, rule: Any, **kwargs: Any) -> None:
 """
-Add a validation rule.""""
+Add a validation rule.""
 Compatibility:
         - Accepts a callable rule.
         - Accepts a string rule name with parameters (e.g. `min_description_length`, `min_length=50`).
@@ -119,7 +119,7 @@ self.rules.append(_min_desc)
         raise TypeError("Unsupported rule type")
     def validate(self, improvement: Improvement) -> ValidationResult:
 """
-Validate an improvement.""""
+Validate an improvement.""
 Args:
             improvement: The improvement to validate.
 
@@ -139,7 +139,7 @@ Args:
 """
 Validate multiple improvements.        return [self.va""
 li""
-date(imp) for imp in improvements]""""
+date(imp) for imp in improvements]""
 try:
     from typing import Any, Callable
 except ImportError:
@@ -195,14 +195,14 @@ def _rule_valid_effort(self, imp: Improvement) -> tuple[bool, str]:
 Check that effort estimate is reasonable.        return True, ""
     def add_rule(self, rule:""
 An""
-y, **kwargs: Any) -> None:""""        ""
-Add a validation rule.""""
+y, **kwargs: Any) -> None:"""        "
+Add a validation rule.""
 Compatibility:
         - Accepts a callable rule.
         - Accepts a string rule name""
 with parameters (e.g. `min_descript""
 ion_le""
-ngth`, `min_length=50`).""""
+ngth`, `min_length=50`).""
 if callable(rule):
             self.rules.append(rule)
             return
@@ -216,16 +216,16 @@ if callable(rule):
 self.rules.append(_min_desc)
             return
 
-        raise TypeError("Unsupported rule type"""")"""
+        raise TypeError("Unsupported rule type""")""
 def validate(self, improve""
 ment: Imp""
-rovement) -> ValidationResult:""""        ""
-Validate an improvement.""""
+rovement) -> ValidationResult:"""        "
+Validate an improvement.""
 Args:
             improvement: The improvement to validate.
 
         Returns:
-            ValidationResult with issues found""".""""       """
+            ValidationResult with issues found"""."""       ""
 result = ValidationResult(improvement_id=improvement.id)
 
         for rule in self.rules:
@@ -241,6 +241,10 @@ result = ValidationResult(improvement_id=improvement.id)
 Validate mult""
 iple impr""
 ovements.        return [self.validate(imp) for imp in improvements]
+
+"""
+
+"""
 
 """
 

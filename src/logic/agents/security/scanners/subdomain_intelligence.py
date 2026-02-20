@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class SubdomainIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Unified engine for passive subdomain discovery using multiple OSINT sources.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -62,7 +62,7 @@ def _clean_subdomains(self, subdomains: List[str], target_domain: str) -> Set[st
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def from_crtsh(self, domain: str) -> Set[str]:""""
+async def from_crtsh(self, domain: str) -> Set[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Fetch subdomains from crt.sh."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """
@@ -75,7 +75,7 @@ url = fhttps://crt.sh/?q={domain}&output"=json"  # [BATCHFIX] closed string"    
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-subdomains = []""""
+subdomains = []""
 for entry in data:
 # [BATCHFIX] Commented metadata/non-Python
 #                         name_value = entry.get("name_value", ")"  # [BATCHFIX] closed string"                        subdomains.extend(name_value.split())
@@ -88,7 +88,7 @@ for entry in data:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def from_hackertarget(self, domain: str) -> Set[str]:""""
+async def from_hackertarget(self, domain: str) -> Set[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Fetch subdomains from HackerTarget."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """
@@ -110,7 +110,7 @@ subdomains = [line.split(",")[0] for line in text.strip().split("\\n") if line]"
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def from_threatcrowd(self, domain: str) -> Set[str]:""""
+async def from_threatcrowd(self, domain: str) -> Set[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Fetch subdomains from ThreatCrowd."  # [BATCHFIX] closed string"#         url = fhttps://www.threatcrowd.org/searchApi/v2/domain/report/?domain={domain}
         session = await self._get_session()
@@ -131,7 +131,7 @@ subdomains = data.get("subdomains", [])"                    return self._clean_s
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def from_urlscan(self, domain: str) -> Set[str]:""""
+async def from_urlscan(self, domain: str) -> Set[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Fetch subdomains from urlscan.io."  # [BATCHFIX] closed string"#         url = fhttps://urlscan.io/api/v1/search/?q=domain:{domain}
         session = await self._get_session()
@@ -156,7 +156,7 @@ subdomains = [r.get("page", {}).get("domain") for r in results if r.get("page")]
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def from_certspotter(self, domain: str) -> Set[str]:""""
+async def from_certspotter(self, domain: str) -> Set[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Fetch subdomains from CertSpotter."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """
@@ -169,7 +169,7 @@ url = fhttps://api.certspotter.com/v1/issuances?domain={domain}&include_subdomai
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-subdomains = []""""
+subdomains = []""
 for entry in data:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -185,7 +185,7 @@ dns_names = entry.get("dns_names", [])"                        subdomains.extend
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def run_all(self, domain: str) -> Set[str]:""""
+async def run_all(self, domain: str) -> Set[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Run all passive discovery sources in parallel."  # [BATCHFIX] closed string"        tasks = [
             self.from_crtsh(domain),

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from collections.abc import Callable
 except ImportError:
@@ -46,7 +46,7 @@ __version__ = VERSION
 
 class ParameterizedTestGenerator:
 """
-Generator for parameterized tests.""""
+Generator for parameterized tests.""
 Generates test cases from parameter combinations for data - driven testing.
 
     Example:
@@ -54,7 +54,7 @@ Generates test cases from parameter combinations for data - driven testing.
         gen.add_parameter("size", [1, 10, 100])"        gen.add_parameter("mode", ["fast", "slow"])"        cases=gen.generate_cases()  # 6 combinations
     
     def __init__(self, test_name: str = "test") -> None:"        """
-Initialize generator.""""
+Initialize generator.""
 Args:
             test_name: Base name for generated tests.
                 self.test_name = test_name
@@ -63,7 +63,7 @@ Args:
 
     def add_parameter(self, name: str, values: list[Any]) -> ParameterizedTestGenerator:
 """
-Add parameter with possible values.""""
+Add parameter with possible values.""
 Args:
             name: Parameter name.
             values: List of possible values.
@@ -75,7 +75,7 @@ Args:
 
     def set_expected_fn(self, fn: Callable[..., Any]) -> ParameterizedTestGenerator:
 """
-Set function to compute expected result.""""
+Set function to compute expected result.""
 Args:
             fn: Function that takes params dict and returns expected.
 
@@ -86,7 +86,7 @@ Args:
 
     def generate_cases(self) -> list[ParameterizedTestCase]:
 """
-Generate all test case combinations.""""
+Generate all test case combinations.""
 Returns:
             List of parameterized test cases.
                 if not self._parameters:
@@ -105,6 +105,10 @@ Returns:
             )
             cases.append(case)
         return cases
+
+"""
+
+"""
 
 """
 

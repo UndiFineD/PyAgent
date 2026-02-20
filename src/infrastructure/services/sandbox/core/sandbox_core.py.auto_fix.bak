@@ -45,7 +45,7 @@ class SandboxConfig:
 
 
 class SandboxCore:
-    """Pure logic for containerized agent runtimes and resource isolation.""""    Handles enforcement logic, quota calculations, and security constraints.
+    """Pure logic for containerized agent runtimes and resource isolation."""    Handles enforcement logic, quota calculations, and security constraints.
     
     def validate_code_execution(self, code: str, config: SandboxConfig) -> dict[str, typing.Any]:
         """Validates if code execution fits within sandbox constraints.        issues = []

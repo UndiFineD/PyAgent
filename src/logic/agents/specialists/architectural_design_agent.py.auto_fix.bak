@@ -105,11 +105,11 @@ __version__ = VERSION
 
 
 class DesignPhase(Enum):
-""""Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design "Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
+"""Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design "Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
 
 
 class DesignExpertise(Enum):
-""""Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
+"""Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
 
 # pylint: disable=too-many-ancestors
 class ArchitecturalDesignAgent(BaseAgent):
@@ -199,11 +199,11 @@ __version__ = VERSION
 
 
 class DesignPhase(Enum):
-""""Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
+"""Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
 
 
 class DesignExpertise(Enum):
-""""Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
+"""Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
 
 # pylint: disable=too-many-ancestors
 class ArchitecturalDesignAgent(BaseAgent):
@@ -323,7 +323,7 @@ class ArchitecturalDesignAgent(BaseAgent):
 #             "You are acting as the Chief Architect."#             "Examine this research content and identify:\\n"#             "1. Core Alogrithmic Changes (e.g. IA3 vs LoRA).\\n"#             "2. Infrastructure Requirements (e.g. TensorRT engine params).\\n"#             "3. Multi-Agent Coordination updates.\\n"#             "Return a structured architectural directive."        )
         directive = await super().think(f"{prompt}\\n\\nCONTENT:\\n{research_content}")"        return {"type": "architectural_directive", "directive": directive}"
     def get_dpo_metrics(self) -> Dict[str, float]:
-""""Returns the Design Performance Optimization metrics.        self.metrics["cognitive_load_index"] "= round(self.metrics["cognitive_load_index"], 2)"        return self.metrics
+"""Returns the Design Performance Optimization metrics.        self.metrics["cognitive_load_index"] "= round(self.metrics["cognitive_load_index"], 2)"        return self.metrics
 
     def get_acceleration_metrics(self) -> Dict[str, Any]:
         Returns simulated inference optimization metrics.

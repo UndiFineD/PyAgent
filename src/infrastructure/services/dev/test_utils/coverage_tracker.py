@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -75,4 +75,4 @@ Lightweight coverage hit tracker used by tests.
 
 """
 
-"""
+""

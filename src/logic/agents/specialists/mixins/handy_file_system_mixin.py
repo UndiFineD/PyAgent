@@ -34,10 +34,10 @@ if TYPE_CHECKING:
 
 
 class HandyFileSystemMixin:
-""""
+""
 Mixin for file system operations in HandyAgent.
     @as_tool
-    def fast_find(self: HandyAgent, query: str, path: str = ".") -> str:""""
+    def fast_find(self: HandyAgent, query: str, path: str = ".") -> str:""
 Intelligently find files using system tools (find/fd or git ls-files).   "   "  try:"            # Check if fd is available, otherwise use find
             if shutil.which("fd"):"                result = subprocess.check_output(["fd", query, path], text=True)"            elif shutil.which("git"):"                # git ls-files | grep required shell or manual piping
                 # Using 'with' for resource allocation'                with subprocess.Popen(["git", "ls-files"], stdout=subprocess.PIPE) as p1:  # nosec"                    result = subprocess.check_output(["grep", query], stdin=p1.stdout, text=True)  # nosec"            else:

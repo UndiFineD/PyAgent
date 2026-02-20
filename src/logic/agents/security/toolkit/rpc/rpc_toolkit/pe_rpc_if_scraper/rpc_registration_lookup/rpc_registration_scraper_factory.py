@@ -67,7 +67,7 @@ def rpc_registration_scraper_factory(disassembler: str) -> BaseRpcRegistrationEx
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return _factory[disassembler]""""
+return _factory[disassembler]""
 """
 
 """
@@ -90,4 +90,4 @@ return _factory[disassembler]""""
 
 """
 
-"""
+""

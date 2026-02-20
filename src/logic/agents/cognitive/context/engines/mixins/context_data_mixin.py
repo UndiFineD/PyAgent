@@ -28,10 +28,10 @@ from typing import Any
 
 
 class ContextDataMixin:
-""""
+"""
 Mixin for fundamental context data operations.
     def get(self, category: str, key: str | None = None) -> Any:
-""""
+"""
 Retrieves data with lazy shard loading.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded(category)
 
         if not hasattr(self, "memory"):"            return None
@@ -64,14 +64,14 @@ self, category: str, key: str, value: Any, strategy: str = "latest    ) -> None:
         if hasattr(self, "save"):"            self.save()
 
     def add_fact(self, key: str, value: Any) -> None:
-""""
+"""
 Adds or updates a project fact.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded("facts")"
         if not hasattr(self, "memory") or not hasattr(self, "core"):"            return
 
         self.memory["facts"][key] = self.core.prepare_fact(key, value)"        if hasattr(self, "save"):"            self.save()
 
     def add_insight(self, insight: str, source_agent: str) -> None:
-""""
+"""
 Adds a high-level insight learned from tasks.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded("insights")"
         if not hasattr(self, "memory") or not hasattr(self, "core"):"            return
 
@@ -80,7 +80,7 @@ Adds a high-level insight learned from tasks.        if hasattr(self, "_ensure_s
         if not any(i["text"] == insight for i in self.memory["insights"]):"            self.memory["insights"].append(entry)"            if hasattr(self, "save"):"                self.save()
 
     def add_constraint(self, constraint: str) -> None:
-""""
+"""
 Adds a project constraint.        if not hasattr(self, "memory"):"            return
 
         if constraint not in self.memory["constraints"]:"            self.memory["constraints"].append(constraint)"            if hasattr(self, "save"):"                self.save()

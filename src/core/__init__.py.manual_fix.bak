@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,15 +16,12 @@ from __future__ import annotations
 
 
 """
-"""
 Core package.
 """
 try:
-
-"""
-from .base.lifecycle.version import VERSION
-except ImportError:
     from .base.lifecycle.version import VERSION
+except ImportError:
+    from src.base.lifecycle.version import VERSION
 
 
 __version__ = VERSION

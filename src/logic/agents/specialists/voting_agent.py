@@ -119,17 +119,17 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
-""""
+"""
 Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
 
 
 class VoteStatus(Enum):
-""""
+"""
 Current state of a voting session.#     PENDING" = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE = "inconclusive
 
 @dataclass
 class Vote:
-""""
+"""
 Represents a single vote.
     voter_id: str
     choice: str
@@ -141,7 +141,7 @@ Represents a single vote.
 
 @dataclass
 class VotingSession:
-""""
+"""
 Represents a voting session.
     session_id: str
     question: str
@@ -264,12 +264,12 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
-""""
+"""
 Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
 
 
 class VoteStatus(Enum):
-""""
+"""
 Current state of a voting session.#     PENDING = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE" = "inconclusive
 
 @dataclass
@@ -284,7 +284,7 @@ class "Vote:"#     "Represents a single vote."
 
 @dataclass
 class VotingSession:
-""""
+"""
 Represents a voting session.
     session_id: str
     question: str
@@ -431,7 +431,7 @@ class VotingAgent(BaseAgent):
 
         return {"raw": res}
     def _tally_majority(self, session: VotingSession) -> Dict[str, Any]:
-""""
+"""
 Simple "majority voting.        counts = {opt: 0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in counts:
@@ -444,7 +444,7 @@ Simple "majority voting.        counts = {opt: 0 for opt in session.options}
             "counts": counts,"            "winner": winners[0] if len(winners) == 1 else None,"            "tied": winners if len(winners) > 1 else None,"            "majority_threshold": len(session.votes) // 2 + 1,"            "has_majority": max_votes > len(session.votes) // 2,"        }
 
     def _tally_weighted(self, session: VotingSession) -> Dict[str, Any]:
-""""       "Weighted voting.        scores = {opt: 0.0 for opt in session.options}
+"""       "Weighted voting.        scores = {opt: 0.0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in scores:
                 scores[vote.choice] += vote.weight
@@ -454,7 +454,7 @@ Simple "majority voting.        counts = {opt: 0 for opt in session.options}
 
         return {"scores": scores, "winner": winner, "total_weight": sum(v.weight for v in session.votes)}
     def _tally_ranked_choice(self, session: VotingSession) -> Dict[str, Any]:
-""""    "Instant-runoff ranked choice voting.        remaining = set(session.options)
+"""    "Instant-runoff ranked choice voting.        remaining = set(session.options)
         rounds = []
 
         while len(remaining) > 1:
@@ -481,7 +481,7 @@ Simple "majority voting.        counts = {opt: 0 for opt in session.options}
 
         return {"winner": list(remaining)[0] if remaining else None, "rounds": rounds, "method": "elimination"}
     def _tally_borda(self, session: VotingSession) -> Dict[str, Any]:
-""""
+"""
 Borda count voting.        n = len(session.options)
         scores = {opt: 0 for opt in session.options}
 
@@ -495,7 +495,7 @@ Borda count voting.        n = len(session.options)
 
         return {"scores": scores, "winner": winner, "max_possible": n * len(session.votes)}
     def _tally_approval(self, session: VotingSession) -> Dict[str, Any]:
-""""
+"""
 Approval" voting (rankings treated as approvals).        counts = {opt: 0 for opt in session.options}
 
         for vote in session.votes:
@@ -507,7 +507,7 @@ Approval" voting (rankings treated as approvals).        counts = {opt: 0 for op
         winner = max(counts, key=counts.get) if counts else None
 
         return {"counts": counts, "winner": winner}
-    def _tally_quadratic(self, session: VotingSession) -> Dict["str, Any]:"""""
+    def _tally_quadratic(self, session: VotingSession) -> Dict["str, Any]:"""
 Quadratic voting (weight = sqrt of votes).        import math
 
         scores = {opt: 0.0 for opt in session.options}
@@ -519,6 +519,10 @@ Quadratic voting (weight = sqrt of votes).        import math
         winner = max(scores, key=scores.get) if scores else None
 
         return {"scores": {k: round(v, 3) for k, v in scores.items()}, "winner": winner}
+"""
+
+"""
+
 """
 
 """

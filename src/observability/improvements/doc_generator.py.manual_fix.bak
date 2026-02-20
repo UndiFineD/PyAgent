@@ -76,7 +76,7 @@ Generates simple documentation text for improvements.
                 base += "\\n## Metadata\\n""                meta_dict = cast(dict[str, Any], meta)
                 for k, v in meta_dict.items():
                     base += f"- {k}: {v}\\n""        retur"""
-n base""""
+n base""
 try:
     from typing import Any, cast
 except ImportError:
@@ -112,5 +112,7 @@ Generates simple documentation text for improvements.
                 base += "\\n## Metadata\\n""                meta_dict = cast(dict[str, Any], meta)
                 for k, v in meta_dict.items():
                     base += f"- {k}: {v}\\n""        return base
+
+"""
 
 """

@@ -47,7 +47,7 @@ Automates the generation of infrastructure-as-code and container manifests for t
 
     def generate_docker_manifest(self, component: str = "fleet") -> str:"        """
 Generates a Dockerfile for the fleet or a specific agent.        dockerfile_content = f""
-FROM python:3.13-slim""""
+FROM python:3.13-slim""
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -59,7 +59,7 @@ CMD ["python", "src\\agent_remote.py"]"        file_path = self.deployment_dir /
     def generate_compose_orchestration(self, num_replicas: int = 3) -> str:
 """
 Generates a docker-compose.yaml for multi-node fleet scaling.        compose_content = ""
-version: '3.8'""""
+version: '3.8'""
 services:
   fleet_master:
     build:
@@ -85,6 +85,10 @@ services:
     def get_deployment_status(self) -> str:
 """
 Returns status of generated assets.        manifests = list(self.deployment_dir.glob("*"))"        return f"Deployment Manager: Generated {len(manifests)} orchestration assets in {self.deployment_dir}""
+"""
+
+"""
+
 """
 
 """

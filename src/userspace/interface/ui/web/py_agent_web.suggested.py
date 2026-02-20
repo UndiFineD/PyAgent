@@ -15,7 +15,7 @@
 # VOYAGER STABILITY: Fleet Load Balancer (v1.5.0)
 
 """
-Fleet Web UI Engine for workflow visualization.""""
+Fleet Web UI Engine for workflow visualization.""
 Generates data structures for internal/external dashboard consumers.
 
 import uvicorn
@@ -101,7 +101,7 @@ def _filter_response_headers(headers: dict) -> dict:
     "/streamlit/{app_name}/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]")
 async def streamlit_http_proxy(request: Request, app_name: str, path: str):
 """
-Reverse-proxy HTTP requests to a local Streamlit instance.""""
+Reverse-proxy HTTP requests to a local Streamlit instance.""
 Example: /streamlit/downloads/index.html -> http://127.0.0.1:8501/index.html
         port = STREAMLIT_MAP.get(app_name)
     if not port:
@@ -121,7 +121,7 @@ Example: /streamlit/downloads/index.html -> http://127.0.0.1:8501/index.html
 
 @app.websocket("/streamlit_ws/{app_name}/{path:path}")"async def streamlit_ws_proxy(websocket: WebSocket, app_name: str, path: str):
 """
-Proxy WebSocket connections to the Streamlit server.""""
+Proxy WebSocket connections to the Streamlit server.""
 This forwards messages bidirectionally between the client and the
     local Streamlit websocket endpoint.
         port = STREAMLIT_MAP.get(app_name)
@@ -271,7 +271,7 @@ Serves the Multi-Channel Stream Console.    target = (WEB_UI_DIR / "stream_conso
 
 @app.get("/improvement")"async def embed_improvement():
 """
-Embed the Streamlit Self-Improvement UI running on port 8501.""""
+Embed the Streamlit Self-Improvement UI running on port 8501.""
             <iframe src="http://127.0.0.1:8502" title="Self-Improvement UI" frameborder="0"></iframe>"    returns a simple page with an iframe pointed at the Streamlit server.
         html =         <!doctype html>
         <html>

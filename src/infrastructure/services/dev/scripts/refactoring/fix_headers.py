@@ -24,7 +24,7 @@ import os
 import re
 
 COPYRIGHT_BLOCK = ""
-# Copyright 2026 PyAgent Authors""""
+# Copyright 2026 PyAgent Authors""
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -137,4 +137,8 @@ if __name__ == "__main__":"    base_path = r"c:\\DEV\\PyAgent\\src""    process_
                 with open(filepath, "w", encoding="utf-8") as file_handle:"                    file_handle.writelines(new_lines)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             print(f"Error processing {filepath}: {e}")
-""
+"""
+
+"""
+
+"""

@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Public API Engine for PyAgent.""""
+Public API Engine for PyAgent.""
 Generates OpenAPI/Swagger specs and handles external tool integration.
 
 """
@@ -96,4 +96,4 @@ Registers a tool from an external OpenAPI definition.        if not self.core.va
 
 """
 
-"""
+""

@@ -64,7 +64,7 @@ __version__ = VERSION
 
 
 class SandboxAgent(BaseAgent):
-""""Executes untrusted code in a controlled environment.
+"""Executes untrusted code in a controlled environment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -82,7 +82,7 @@ class SandboxAgent(BaseAgent):
 #         return "Execution Output: Success\\n(Simulated Output)"
     @as_tool
     def dry_run_prediction(self, code: str) -> str:
-""""Simulates the outcome of code execution without actually running it.        logging.info("Performing dry-run "prediction...")"
+"""Simulates the outcome of code execution without actually running it.        logging.info("Performing dry-run "prediction...")"
         # Mental model logic: Analyze imports and side effects
         if "os.remove" in code or "shutil.rmtree" in code:"#             return "Prediction: DANGER. Code attempts to delete files."#         return "Prediction: SAFE. Code appears to be computational."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
@@ -119,7 +119,7 @@ __version__ = VERSION
 
 
 class SandboxAgent(BaseAgent):
-""""Executes untrusted code in a controlled environment.
+"""Executes untrusted code in a controlled environment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -137,7 +137,7 @@ class SandboxAgent(BaseAgent):
 #         return "Execution Output: Success\\n(Simulated Output)"
     @as_tool
     def dry_run_prediction(self, code: str) -> str:
-""""Simulates the outcome of code execution without actually running it.        logging.info("Performing dry-run prediction...")"
+"""Simulates the outcome of code execution without actually running it.        logging.info("Performing dry-run prediction...")"
         # Mental model logic: Analyze imports and side effects
         if "os.remove" in code or "shutil.rmtree" in code:"#             return "Prediction: DANGER. Code attempts to delete files."#         return "Prediction: SAFE. Code appears to be computational."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

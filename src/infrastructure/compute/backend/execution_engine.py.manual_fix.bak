@@ -137,7 +137,7 @@ def llm_chat_via_lmstudio(
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    **kwargs,
 ) -> str | None:
 """
-Call LM Studio local inference server.""""
+Call LM Studio local inference server.""
 This is a compatibility wrapper that uses the LLMClient implementation.
     This prevents AttributeError when modules expect a module-level function named
     `llm_chat_via_lmstudio` on the execution engine.
@@ -167,5 +167,7 @@ Return diagnostic snapshot.    return _runner.get_backend_status()
 def describe_backends() -> str:
 """
 Return human-readable diagnostics.    return _runner.describe_backends()
+
+"""
 
 """

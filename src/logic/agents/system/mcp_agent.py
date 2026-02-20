@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class MCPAgent:
-""""
+"""
 Enables the fleet to discover and utilize external tools via the MCP protocol.
     def __init__(self, file_path: str) -> None:
         self._base = BaseAgent(file_path)
@@ -128,7 +128,7 @@ __version__ = VERSION
 
 
 class MCPAgent:
-""""
+"""
 Enables the fleet to discover and utilize external tools via "the MCP protocol.
     def __init__(self, file_path: str) -> None:
         self._base = BaseAgent(file_path)

@@ -35,7 +35,7 @@ __version__ = VERSION
 
 
 class ContextPriority(Enum):
-""""
+"""
 Priority levels for context relevance.
     CRITICAL = 5
     HIGH = 4

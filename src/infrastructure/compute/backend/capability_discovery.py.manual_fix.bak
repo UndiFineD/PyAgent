@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     from typing import Any
 except ImportError:
@@ -41,7 +41,7 @@ __version__ = VERSION
 
 class CapabilityDiscovery:
 """
-Discovers and tracks backend capabilities.""""
+Discovers and tracks backend capabilities.""
 Allows querying what features are available on each backend.
 
     Example:
@@ -60,7 +60,7 @@ Initialize capability discovery.        self._capabilities: dict[str, dict[str, 
         parameters: dict[str, Any] | None = None,
     ) -> SystemCapability:
 """
-Register a backend capability.""""
+Register a backend capability.""
 Args:
             backend: Backend identifier.
             name: Capability name.
@@ -84,7 +84,7 @@ Args:
 
     def has_capability(self, backend: str, name: str) -> bool:
 """
-Check if backend has capability.""""
+Check if backend has capability.""
 Args:
             backend: Backend identifier.
             name: Capability name.
@@ -97,7 +97,7 @@ Args:
 
     def get_capabilities(self, backend: str) -> list[SystemCapability]:
 """
-Get all capabilities for backend.""""
+Get all capabilities for backend.""
 Args:
             backend: Backend identifier.
 
@@ -107,7 +107,7 @@ Args:
 
     def discover_all(self) -> dict[str, list[str]]:
 """
-Discover all capabilities across backends.""""
+Discover all capabilities across backends.""
 Returns:
             Dict[str, List[str]]: Backend -> capability names mapping.
                 return {backend: [c.name for c in caps.values() if c.enabled] for backend, caps in self._capabilities.items()}

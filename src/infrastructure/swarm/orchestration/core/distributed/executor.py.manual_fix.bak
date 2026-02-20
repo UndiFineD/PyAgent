@@ -72,7 +72,7 @@ logger = logging.getLogger(__name__)
 
 class DistributedExecutor(ABC):
 """
-Abstract interface for distributed execution.""""
+Abstract interface for distributed execution.""
 Inspired by vLLM's ExecutorBase.'    
     @abstractmethod
     async def start(self) -> None:
@@ -87,7 +87,7 @@ Stop the executor.        ...
     @abstractmethod
     async def execute(self, request: RequestMessage) -> ResponseMessage:
 """
-Execute a request.""""
+Execute a request.""
 Args:
             request: Request to execute.
 
@@ -104,7 +104,7 @@ Check if executor is ready.        ...
 
 class MultiProcessExecutor(DistributedExecutor):
 """
-Multi-process distributed executor.""""
+Multi-process distributed executor.""
 Implements distributed execution using multiprocessing.
     
     def __init__(
@@ -153,7 +153,7 @@ def create_distributed_executor(
     load_balancing: LoadBalancingStrategy = LoadBalancingStrategy.ROUND_ROBIN,
 ) -> DistributedExecutor:
 """
-Create a distributed executor.""""
+Create a distributed executor.""
 Args:
         worker_factory: Factory function for creating workers.
         parallel_config: Parallel configuration.

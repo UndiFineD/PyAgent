@@ -197,7 +197,7 @@ Initialize the Linter Agent.
         return "\\n".join(report)
     @as_tool
     def get_issues_json(self, file_path: str) -> str:
-""""
+""
 Lints a file and returns the issues in raw JSON format.        Useful for programmatic processing by other agents"."        if not Path(file_path).exists():
             return json.dumps({"error": "File not found"})
         result = self.core.lint_file(file_path)
@@ -205,3 +205,5 @@ Lints a file and returns the issues in raw JSON format.        Useful for progra
 
 
 if __name__ == "__main__":"    main = create_main_function(LinterAgent, "Linter Agent", "Path to python file")"    main()
+
+"""

@@ -40,11 +40,11 @@ __version__ = VERSION
 
 
 class ContextCompressorCore:
-""""
+"""
 Pure logic core for code and document compression.
     @staticmethod
     def compress_python(content: str) -> str:
-""""
+"""
 Removes function bodies and keeps only class/function signatures using AST.   "     try:"            tree = ast.parse(content)
             compressed_lines: list[str] = []
 
@@ -75,7 +75,7 @@ Removes function bodies and keeps only class/function signatures using AST.   " 
 
     @staticmethod
     def regex_fallback_compress(content: str) -> str:
-""""
+"""
 Simple regex-based signature extraction for Python.        "if HAS_RUST:"            try:
                 return rust_core.regex_compress_python(content)  # type: ignore[attr-defined]
             except (RuntimeError, AttributeError):
@@ -87,7 +87,7 @@ Simple regex-based signature extraction for Python.        "if HAS_RUST:"       
         return "\\n".join([s.strip() for s in signatures])
     @staticmethod
     def summarize_markdown(content: str) -> str:
-""""
+"""
 Keeps only headers from markdown files.     "   if HAS_RUST:"            try:
                 return rust_core.summarize_markdown(content)  # type: ignore[attr-defined]
             except (RuntimeError, AttributeError):
@@ -95,10 +95,10 @@ Keeps only headers from markdown files.     "   if HAS_RUST:"            try:
         headers = re.findall(r"^(#+ .*)$", content, re.MULTILINE)"        return "\\n".join(headers)"
     @staticmethod
     def get_summary_header(filename: str, mode: str) -> str:
-""""
+"""
 Logic for formatting summary headers.#         return f"### {filename} ({mode})\\n"
     @staticmethod
     def decide_compression_mode(filename: str) -> str:
-""""
+"""
 Determines logic mode based on file extension.        if filename.endswith(".py"):"#             return "python"        if filename.endswith(".md"):"#             return "markdown"#         return "head"
 """

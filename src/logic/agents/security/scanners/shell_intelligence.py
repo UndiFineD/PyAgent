@@ -79,7 +79,7 @@ class ShellIntelligence:
 
     def sanitize_command(self, command: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Redacts sensitive information from a command string.        sanitized = command
         for pattern, replacement in self.REDACT_PATTERNS:
             sanitized = re.sub(pattern, replacement, sanitized)
@@ -95,7 +95,7 @@ stdout, stderr, _ = await self.execute_command(ps_command)
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def execute_command(self, command: str) -> Tuple[str, str, int]:""""
+async def execute_command(self, command: str) -> Tuple[str, str, int]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Executes a command asynchronously without background listeners."  # [BATCHFIX] closed string"        # The command is scrubbed here if logging were to be added
         self.sanitize_command(command)
@@ -111,4 +111,4 @@ async def execute_command(self, command: str) -> Tuple[str, str, int]:""""
 """
 encoding = sys.stdout.encoding or "utf-8"  # [BATCHFIX] closed string"        stdout = stdout_bytes.decode(encoding, errors="replace")"        stderr = stderr_bytes.decode(encoding, errors="replace")"        return stdout, stderr, process.returncode or 0
 
-"""
+""

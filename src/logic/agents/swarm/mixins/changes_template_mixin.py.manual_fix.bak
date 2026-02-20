@@ -58,7 +58,7 @@ except ImportError:
 
 
 class ChangesTemplateMixin:
-""""
+"""
 Mixin for managing changelog templates.
     # Default templates for different project types
     DEFAULT_TEMPLATES: dict[str, ChangelogTemplate] = {
@@ -69,7 +69,7 @@ Mixin for managing changelog templates.
     }
 
     def set_template(self, template_name: str) -> None:
-""""
+"""
 Set the changelog template by name.        if template_name in self.DEFAULT_TEMPLATES:
             self._template = self.DEFAULT_TEMPLATES[template_name]
             logging.info(fUsing template: {self._template.name}")"        else:
@@ -94,7 +94,7 @@ Set the changelog template by name.        if template_name in self.DEFAULT_TEMP
         return template
 
     def get_template_sections(self) -> List[str]:
-""""
+"""
 Get the sections for the current template.        if hasattr(self, "_template") and "self._template:"            return self._template.sections
         return ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
 
@@ -118,7 +118,7 @@ except ImportError:
 
 
 class ChangesTemplateMixin:
-""""
+"""
 Mixin for managing changelog templates.
     # Default templates for different project types
     DEFAULT_TEMPLATES: dict[str, ChangelogTemplate] = {
@@ -129,7 +129,7 @@ Mixin for managing changelog templates.
     }
 
     def set_template(self, template_name: str) -> None:
-""""
+"""
 Set the changelog template by name.        if template_name in" self.DEFAULT_TEMPLATES:"            self._template = self.DEFAULT_TEMPLATES[template_name]
             logging.info(fUsing template: {self._template.name}")"        else:
             logging.warning(fUnknown template '{template_name}', using generic")"'            self._template = self.DEFAULT_TEMPLATES["generic"]
@@ -153,6 +153,6 @@ Set the changelog template by name.        if template_name in" self.DEFAULT_TEM
         return template
 
     def get_template_sections(self) -> List[str]:
-""""
+"""
 Get the sections for the current template.        if hasattr(self, "_template") and self._template:"            return self._template.sections
         return ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]

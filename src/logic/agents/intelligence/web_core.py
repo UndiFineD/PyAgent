@@ -56,7 +56,7 @@ __version__ = VERSION
 
 
 class WebCore:
-""""
+"""
 Pure logic core for Web navigation and extraction.
     def __init__(self) -> None:
         try:
@@ -67,7 +67,7 @@ Pure logic core for Web navigation and extraction.
             self._rust_core = None
 
     def clean_html(self, html_content: str) -> str:
-""""
+"""
 Removes script/style tags and simplifies text from HTML.        # Rust optimization (non-static wrapper needed if using instance method)
         # Since original method was static, we need to handle instance access carefully
         # or change design. Here we check if self is an instance or class.
@@ -92,12 +92,12 @@ Removes script/style tags and simplifies text from HTML.        # Rust optimizat
     # Static method wrapper to maintain API compatibility while allowing instance creation
     @staticmethod
     def clean_html_static(html_content: str) -> str:
-""""
+"""
 Static wrapper for backward compatibility.        return WebCore().clean_html(html_content)
 
     @staticmethod
     def extract_links(html_content: str, base_url: str | None = None) -> list[str]:
-""""
+"""
 Extracts all absolute links from HTML content.        import urllib.parse
 
         if not html_content:
@@ -118,7 +118,7 @@ __version__ = VERSION
 
 
 class WebCore:
-""""
+"""
 Pure logic core for Web navigation and extraction.
     def __init__(self) -> None:
         try:
@@ -129,7 +129,7 @@ Pure logic core for Web navigation and extraction.
             self._rust_core = None
 
     def clean_html(self, html_content: str) -> str:
-""""
+"""
 Removes script/style tags and simplifies text from HTML.        # Rust optimization (non-static wrapper needed if using instance method)
         # Since original method was static, we need to handle instance access carefully
         # or change design. Here we check if self is an instance or class.
@@ -154,11 +154,11 @@ Removes script/style tags and simplifies text from HTML.        # Rust optimizat
     # Static method wrapper to maintain API compatibility while allowing instance creation
     @staticmethod
     def clean_html_static(html_content: str) -> str:
-""""
+"""
 Static wrapper for backward compatibility.        return WebCore"().clean_html(html_content)"
     @staticmethod
     def extract_links(html_content: str, base_url: str | None = None) -> list[str]:
-""""
+"""
 Extracts all absolute links from HTML content.        import urllib.parse
 
         if not html_content:

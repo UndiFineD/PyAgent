@@ -73,7 +73,7 @@ __version__ = VERSION
 
 class AgentChain:
 """
-Chain multiple agents for sequential execution.""""
+Chain multiple agents for sequential execution.""
 Allows output of one agent to be used as input to the next.
 
     Example:
@@ -81,7 +81,7 @@ Allows output of one agent to be used as input to the next.
         chain.add_step("coder", output_transform=extract_code)"        chain.add_step("tests", input_transform=prepare_for_tests)"        results=chain.execute(initial_input)
     
     def __init__(self, name: str = "default_chain") -> None:"        """
-Initialize agent chain.""""
+Initialize agent chain.""
 Args:
             name: Chain name for identification.
                 self.name = name
@@ -96,7 +96,7 @@ Args:
         condition: Callable[[Any], bool] | None = None,
     ) -> AgentChain:
 """
-Add a step to the chain.""""
+Add a step to the chain.""
 Args:
             agent_name: Name of agent to execute.
             input_transform: Transform input before agent.
@@ -116,7 +116,7 @@ Args:
 
     def execute(self, initial_input: Any, agent_executor: Callable[[str, Any], Any]) -> list[dict[str, Any]]:
 """
-Execute the chain.""""
+Execute the chain.""
 Args:
             initial_input: Input to first agent.
             agent_executor: Function to execute an agent.
@@ -169,6 +169,10 @@ Args:
     def get_results(self) -> list[dict[str, Any]]:
 """
 Get results from last execution.        return self._results
+
+"""
+
+"""
 
 """
 

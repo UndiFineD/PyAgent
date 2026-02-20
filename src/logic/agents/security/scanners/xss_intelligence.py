@@ -42,7 +42,7 @@ DEFAULT_PAYLOADS = [
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def verify_reflection(cls, url: str, payloads: Optional[List[str]] = None) -> List[str]:""""
+async def verify_reflection(cls, url: str, payloads: Optional[List[str]] = None) -> List[str]:""
 Injects payloads into URL parameters and checks if they are reflected in the response.
         Inspired by AutoRecon-XSS and qsreplace workflows.
 # [BATCHFIX] Commented metadata/non-Python
@@ -56,12 +56,12 @@ Injects payloads into URL parameters and checks if they are reflected in the res
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-found = []""""
+found = []""
 timeout = aiohttp.ClientTimeout(total=10)
         async with aiohttp.ClientSession(timeout=timeout) as session:
             for param_name in params:
@@ -72,7 +72,7 @@ timeout = aiohttp.ClientTimeout(total=10)
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-new_params[param_name] = [payload]""""
+new_params[param_name] = [payload]""
 test_query = urlencode(new_params, doseq=True)
                     test_url = urlunparse(parsed._replace(query=test_query))
 
@@ -93,7 +93,7 @@ test_query = urlencode(new_params, doseq=True)
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def scan_dom_xss(cls, url: str) -> List[str]:""""
+async def scan_dom_xss(cls, url: str) -> List[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 #         Heuristic scan for DOM-based XSS by looking for dangerous "sinks in JS."  # [BATCHFIX] closed string"        Logic adapted from various DOM XSS scripts.
         # Patterns for dangerous sinks and sources
@@ -102,7 +102,7 @@ async def scan_dom_xss(cls, url: str) -> List[str]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""
+findings = []""
 timeout = aiohttp.ClientTimeout(total=10)
         async with aiohttp.ClientSession(timeout=timeout) as session:
             try:

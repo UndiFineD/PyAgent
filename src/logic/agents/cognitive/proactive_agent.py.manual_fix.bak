@@ -51,7 +51,7 @@ class ProactiveAgent(BaseAgent):
         except (ImportError, AttributeError):
             return {"status": "UNAVAILABLE", "cpu_usage_pct": 0, "disk_free_gb": 100}
     def schedule_task(self, task: str, cron_or_delay: str) -> str:
-""""
+"""
 Schedules a task for future execution.       " task_entry = {"            "id": ftask_{int(time.time())}","            "task": task,"            "trigger": cron_or_delay,"            "status": "scheduled","        }
         self.scheduled_tasks.append(task_entry)
         logging.info(
@@ -116,6 +116,8 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
 """
 
-""
+"""
+
+"""
 
 """

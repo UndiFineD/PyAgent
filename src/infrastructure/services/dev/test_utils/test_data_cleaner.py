@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 import logging
 import shutil
 from collections.abc import Callable
@@ -33,7 +33,7 @@ __version__ = VERSION
 
 class TestDataCleaner:
 """
-Utilities for cleaning up test data.""""
+Utilities for cleaning up test data.""
 Manages cleanup of test artifacts with configurable strategies.
 
     Example:
@@ -46,7 +46,7 @@ Manages cleanup of test artifacts with configurable strategies.
 
     def __init__(self, strategy: CleanupStrategy = CleanupStrategy.IMMEDIATE) -> None:
 """
-Initialize cleaner.""""
+Initialize cleaner.""
 Args:
             strategy: Default cleanup strategy.
                 self.strategy = strategy
@@ -57,7 +57,7 @@ Args:
 
     def register_path(self, path: Path, recursive: bool = True) -> None:
 """
-Register directory for cleanup.""""
+Register directory for cleanup.""
 Args:
             path: Directory path.
             recursive: Whether to remove recursively.
@@ -65,21 +65,21 @@ Args:
 
     def register_file(self, path: Path) -> None:
 """
-Register file for cleanup.""""
+Register file for cleanup.""
 Args:
             path: File path.
                 self._files.append(path)
 
     def register_callback(self, callback: Callable[[], None]) -> None:
 """
-Register cleanup callback.""""
+Register cleanup callback.""
 Args:
             callback: Function to call during cleanup.
                 self._callbacks.append(callback)
 
     def cleanup_all(self, force: bool = False) -> int:
 """
-Clean up all registered resources.""""
+Clean up all registered resources.""
 Args:
             force: Force cleanup regardless of strategy.
 
@@ -150,4 +150,4 @@ Context manager exit - perform cleanup.        if self.strategy == CleanupStrate
 
 """
 
-"""
+""

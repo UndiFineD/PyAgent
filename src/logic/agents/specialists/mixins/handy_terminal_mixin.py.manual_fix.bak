@@ -50,12 +50,12 @@ if TYPE_CHECKING:
 
 
 class HandyTerminalMixin:
-""""
+"""
 Mixin for terminal execution and slash command handling in HandyAgent.
 
     @as_tool
     def terminal_slash_command(self: HandyAgent, command: str, args: list[str]) -> str:
-""""
+"""
 Handles agentic slash commands like /fix, /test, /summarize directly from a CLI.#        " res ="        if command == "/fix":"#             res = f"###  Triggered /fix for {args}\\nAnalyzing errors and proposing patches..."        elif command == "/test":"#             res = f"###  Triggered /test for {args}\\nRunning pytest and coverage analysis..."        elif command == "/summarize":"#             res = f"###  Triggered /summarize for {args}\\nGenerating high-level architectural overview..."        else:
 #             res = fUnknown slash command: {command}. Available: /fix, /test, /summarize
 
@@ -101,11 +101,11 @@ if TYPE_CHECKING:
 
 
 class HandyTerminalMixin:
-""""
+"""
 Mixin for terminal execution and slash command handling in HandyAgent.
     @as_tool
     def terminal_slash_command(self: HandyAgent, command: str, args: list[str]) -> str:
-""""
+"""
 Handles agentic slash commands like /fix, /test, /summarize directly from a "CLI.#         res =
         if command == "/fix":"#             res = f"###  Triggered /fix for {args}\\nAnalyzing errors and proposing patches..."        elif command == "/test":"#             res = f"###  Triggered /test for {args}\\nRunning pytest and coverage analysis..."        elif command == "/summarize":"#             res = f"###  Triggered /summarize for {args}\\nGenerating high-level architectural overview..."        else:
 #             res = fUnknown slash command: {command}. Available: /fix, /test, /summarize

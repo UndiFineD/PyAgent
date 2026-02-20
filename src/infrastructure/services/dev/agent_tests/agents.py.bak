@@ -54,7 +54,7 @@ __version__ = VERSION
 
 
 class TestsAgent(BaseAgent):
-    """Updates code file test suites using AI assistance.""""
+    """Updates code file test suites using AI assistance."""
     Invariants:
     - self.file_path must point to a test file (usually starting with 'test_').'    - The agent attempts to locate the corresponding source file to provide context.
     
@@ -219,7 +219,7 @@ class TestsAgent(BaseAgent):
 
     def generate_factory_code(self, factory: TestFactory) -> str:
         """Generate code for a factory function.        params = ", ".join(f"{k}: {v}" for k, v in factory.parameters.items())"        return (
-            f"def {factory.name}({params}) -> {factory.return_type}:\\n""            f'    """Factory for creating {factory.return_type} instances."""\\n'""""'            f"    {factory.generator or 'pass'}\\n""'        )
+            f"def {factory.name}({params}) -> {factory.return_type}:\\n""            f'    """Factory for creating {factory.return_type} instances."""\\n'"""'            f"    {factory.generator or 'pass'}\\n""'        )
 
     # ========== Test Execution Recording ==========
 
@@ -393,7 +393,7 @@ class TestsAgent(BaseAgent):
             logging.warning(f"Failed to validate test structure: {e}")"            return True
 
     def improve_content(self, prompt: str) -> str:
-        """Use AI to improve the test suites.""""
+        """Use AI to improve the test suites."""
         When Copilot CLI is unavailable, BaseAgent keeps the existing content
         unchanged (avoids injecting duplicated TODO Placeholder markdown blocks).
                 logging.info(f"Improving tests for {self.file_path}")"        # Enhance prompt with source code context if available

@@ -72,7 +72,7 @@ __version__ = VERSION
 
 
 class DocumentationAgent(BaseAgent):
-""""
+"""
 Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -84,7 +84,7 @@ Generates technical references and project OVERVIEW documents.
 """
 return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
-""""
+"""
 Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
 #         classes_dir = self.workspace_root / "src/classes"
         # Get structural briefs
@@ -141,7 +141,7 @@ __version__ = VERSION
 
 
 class DocumentationAgent(BaseAgent):
-""""
+"""
 Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -153,7 +153,7 @@ Generates technical references and project OVERVIEW documents.
 """
 return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
-""""
+"""
 Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
 #         classes_dir = self.workspace_root / "src/classes"
         # Get structural briefs

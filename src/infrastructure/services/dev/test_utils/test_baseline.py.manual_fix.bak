@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import time
 except ImportError:
@@ -45,7 +45,7 @@ __version__ = VERSION
 @dataclass
 class TestBaseline:
 """
-A test baseline for comparison.""""
+A test baseline for comparison.""
 Attributes:
         name: Baseline name.
         values: Baseline values.

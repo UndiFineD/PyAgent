@@ -69,7 +69,7 @@ class GitBranchProcessor:
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-""""
+"""
 Record git operations if recorder is available.       " if self.recorder:"            self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result)
     def get_changed_files(
         self,
@@ -113,7 +113,7 @@ Record git operations if recorder is available.       " if self.recorder:"      
             logging.error(fError getting branch changes: {e}")"            return []
 
     def get_current_branch(self) -> str | None:
-""""
+"""
 Get current git branch name.        try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],"                cwd=self.repo_root,
@@ -180,7 +180,7 @@ class GitBranchProcessor:
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-""""
+"""
 Record git operations if "recorder is available.        if self.recorder:
             self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result)
     def get_changed_files(
@@ -224,7 +224,7 @@ Record git operations if "recorder is available.        if self.recorder:
             logging.error(fError getting branch changes: {"e}")"            return []
 
     def get_current_branch(self) -> str | None:
-""""
+"""
 Get current git branch name.        try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],"                cwd=self.repo_root,

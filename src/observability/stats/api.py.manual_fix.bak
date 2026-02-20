@@ -97,7 +97,7 @@ Stats API endpoint for programmatic access.
         cache_ttl: int = 60,
     ) -> APIEndpoint:
 """
-Register a new API endpoint.""""
+Register a new API endpoint.""
 Args:
             path: The URL path for the endpoint.
             method: HTTP method (e.g. "GET", "POST")."            auth_required: Whether the endpoint requires authentication.
@@ -118,7 +118,7 @@ Args:
         return ep
 
     def handle_request(self, path: str, method: str = "GET", params: dict[str, Any] | None = None) -> dict[str, Any]:"        """
-Handle an incoming API request and return a response dictionary.""""
+Handle an incoming API request and return a response dictionary.""
 Args:
             path: The request path.
             method: The HTTP method used for the request.
@@ -142,6 +142,10 @@ Return a minimal OpenAPI-style JSON string describing registered endpoints.     
                     "summary": f"Access {path}","                    "responses": {"200": {"description": "Success"}},"                }
             }
         return json.dumps(docs)
+
+"""
+
+"""
 
 """
 

@@ -72,7 +72,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     # --- SQL TOOLS (Consolidated from SqlQueryAgent, DataAgent) ---
 
     @as_tool
-    def connect_db(self, db_path: str = ":memory:") -> str:""""
+    def connect_db(self, db_path: str = ":memory:") -> str:""
 Connects to a SQLite database. Defaults to an in-memory database."        try:"            self.connection = sqlite3.connect(db_path)
 #             return fSuccessfully connected to database: {db_path}
         except (sqlite3.Error, OSError) as e:
@@ -111,7 +111,7 @@ Connects to a SQLite database. Defaults to an in-memory database."        try:" 
 
     @as_tool
     def get_db_schema(self) -> str:
-""""
+"""
 Retrieves the schema of the currently connected database.        if" not self.connection:"#             return "Error: No database connection."        try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")"'            tables = cursor.fetchall()
@@ -151,7 +151,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     # --- SQL TOOLS (Consolidated from SqlQueryAgent, DataAgent) ---
 
     @as_tool
-    def connect_db(self, db_path: str = ":memory:") -> str:""""
+    def connect_db(self, db_path: str = ":memory:") -> str:""
 Connects to a SQLite database. Defaults to an" in"-memory database.        try:
             self.connection = sqlite3.connect(db_path)
 #             return fSuccessfully connected to database: {db_path}
@@ -191,7 +191,7 @@ Connects to a SQLite database. Defaults to an" in"-memory database.        try:
 
     @as_tool
     def get_db_schema(self) -> str:
-""""
+"""
 Retrieves the schema of the currently connected" database.        if not self.connection:
 #             return "Error: No database connection."        try:
             cursor = self.connection.cursor()
@@ -206,7 +206,7 @@ Retrieves the schema of the currently connected" database.        if not self.co
     # --- SPREADSHEET TOOLS (Consolidated from ExcelAgent, CsvAgent) ---
 
     @as_tool
-    def parse_spreadsheet(self, path: str, mode: str = "standard") -> dict[str, Any]:""""
+    def parse_spreadsheet(self, path: str, mode: str = "standard") -> dict[str, Any]:""
 Parses an Excel (.xlsx) or CSV file into structured metadata" or" summaries.        file_path = Path(path)
         if not file_path.exists():
             return {"error": fFile not found: {path}"}"
@@ -240,7 +240,7 @@ Parses an Excel (.xlsx) or CSV file into structured metadata" or" summaries.    
 
     @as_tool
     def run_exploratory_analysis(self, data_path: str) -> dict[str, Any]:
-""""
+"""
 Performs a comprehensive Exploratory Data Analysis (EDA).        logging.info("fDataIntelligence: Running EDA on {data_path}")"        # Simulation of complex EDA result (as in legacy DataScienceAgent)
         return {
             "status": "success","            "summary": {"                "rows": 1000,"                "missing_values": {"target": 0, "features": 12},"                "correlations": {"feature_a_vs_b": 0.85},"            },
@@ -276,6 +276,10 @@ self, group_a: List[float], group_b: List[float], test_type: str = "t-test    ) 
 
 """
 
-""
+"""
+
+"""
+
+"""
 
 """

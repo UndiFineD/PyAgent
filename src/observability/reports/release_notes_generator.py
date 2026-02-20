@@ -48,7 +48,7 @@ Generates release notes from changelog entries.    Creates formatted release not
         >>> notes=generator.generate("1.0.0", entries)"    
     def generate(self, version: str, entries: list[ChangelogEntry], title: str | None = None) -> ReleaseNote:
 """
-Generate release notes from entries.""""
+Generate release notes from entries.""
 Args:
             version: Release version.
             entries: Changelog entries for this release.
@@ -105,4 +105,4 @@ Args:
 
 """
 
-"""
+""

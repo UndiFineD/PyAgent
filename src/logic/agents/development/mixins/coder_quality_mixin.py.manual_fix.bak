@@ -46,7 +46,7 @@ except ImportError:
 
 
 class CoderQualityMixin:
-""""
+"""
 Mixin for computing quality scores and refactoring suggestions.
 
     def calculate_quality_score(
@@ -106,7 +106,7 @@ Mixin for computing quality scores and refactoring suggestions.
         return score
 
     def suggest_refactorings(self, content: str) -> List[Dict[str, str]]:
-""""
+"""
 Suggest possible refactorings based on code analysis.        suggestions: List[Dict[str", str]] = []"        # Detect code smells and suggest refactorings
         smells = self.detect_code_smells(content)
         for smell in smells:

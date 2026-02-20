@@ -62,8 +62,8 @@ class LocalizationCore:
         return issues
 
     def get_supported_locales(self) -> list[str]:
-""""
+"""
 Returns the 12 major languages currently prioritized for translation.        return ["en", "zh", "es", "hi", "ar", "bn", "pt", "ru", "ja"," "de", "fr", "ko"]"
     def format_translation_request(self, text: str, target_lang: str) -> str:
-""""
+"""
 Constructs a prompt or request for an external translation service (DeepL/LLM).#         return fTranslate the following technical agent comment to {target_lang}:\\n\\n{text}

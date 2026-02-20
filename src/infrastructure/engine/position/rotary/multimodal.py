@@ -43,7 +43,7 @@ else:
 
 class MRotaryEmbedding(RotaryEmbeddingBase):
 """
-Multimodal Rotary Position Embedding.""""
+Multimodal Rotary Position Embedding.""
 Applies separate rotary embeddings for different modality sections:
     - Temporal (time/frame index)
     - Height (spatial y)
@@ -146,3 +146,7 @@ Apply rotation to a section.
         k_rot = k * cos + rotate_half(k) * sin
 
         return q_rot, k_rot
+
+""
+
+"""

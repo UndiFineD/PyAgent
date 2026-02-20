@@ -95,18 +95,18 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.session_tokens: dict[Any, Any] = {}  # token -> {agent_id, expiry}
 
     def generate_fleet_handshake(self) -> dict[str, Any]:
-""""
+"""
 Generates a default secure handshake for fleet discovery.        return self.secure_handshake(fHANDSHAKE_{time.time()}", "default_secret")"
     def secure_handshake(self, payload: str, secret: str) -> dict[str, str]:
-""""
+"""
 Signs a handshake payload using IdentityCore.        signature = self.core.sign_payload(payload, secret)
         return {"fleet_id": self.fleet_id, "payload": payload, "signature": signature}
     def register_remote_fleet(self, fleet_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
-""""
+"""
 Registers a remote fleet to enable inter-fleet communication.        self.known_fleets[fleet_id] = metadata
         return {"status": "registered", "fleet_id": fleet_id}
     def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> dict[str, Any]:
-""""
+"""
 Authorizes an agent from a remote fleet with specific permissions.        if remote_fleet_id not "in self.known_fleets:"            return {"status": "error", "message": "Unknown fleet ID"}
         self.authorized_agents[agent_id] = {
             "fleet_id": remote_fleet_id,"            "permissions": permissions,"            "authorized_at": time.time(),"        }
@@ -117,7 +117,7 @@ Authorizes an agent from a remote fleet with specific permissions.        if rem
 
         return {"status": "authorized", "session_token": token}
     def verify_token(self, token: str) -> bool:
-""""
+"""
 Verifies if a session token is valid and not expired.        if token not" in self.session_tokens:"            return False
 
         session = self.session_tokens[token]
@@ -127,7 +127,7 @@ Verifies if a session token is valid and not expired.        if token not" in se
         return True
 
     def get_identity_report(self) -> dict[str, Any]:
-""""
+"""
 Returns a summary of the federated identity" state.        return {
             "local_fleet_id": self.fleet_id,"            "remote_fleets_count": len(self.known_fleets),"            "authorized_agents_count": len(self.authorized_agents),"            "active_sessions_count": len(self.session_tokens),"        }
 
@@ -184,16 +184,16 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.session_tokens: dict[Any, Any] = {}  # token -> {agent_id, expiry}
 
     def generate_fleet_handshake(self) -> dict[str, Any]:
-""""
+"""
 Generates a default secure handshake for fleet discovery.        return self.secure_handshake(fH"ANDSHAKE_{time.time()}", "default_secret")
     def secure_handshake(self, payload: str, secret: str) -> dict[str, str]:
-""""
+"""
 Signs a handshake payload using IdentityCore.        signature" = self.core.sign_payload(payload, secret)"        return {"fleet_id": self.fleet_id, "payload": payload, "signature": signature}
     def register_remote_fleet(self, fleet_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
-""""
+"""
 Registers a remote fleet to enable inter-fleet communication. "       self.known_fleets[fleet_id] = metadata"        return {"status": "registered", "fleet_id": fleet_id}
     def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> dict[str, Any]:
-""""
+"""
 Authorizes an agent from a remote fleet with specific permissions. "   "    if remote_fleet_id not in self.known_fleets:"            return {"status": "error", "message": "Unknown fleet ID"}"
         self.authorized_agents[agent_id] = {
             "fleet_id": remote_fleet_id,"            "permissions": permissions,"            "authorized_at": time.time(),"        }
@@ -204,7 +204,7 @@ Authorizes an agent from a remote fleet with specific permissions. "   "    if r
 
         return {"status": "authorized", "session_token": token}
     def verify_token(self, token: str) -> bool:
-""""
+"""
 Verifies if a session token is valid and not expired.        if token not in self.session_tokens:
             return False
 
@@ -215,6 +215,6 @@ Verifies if a session token is valid and not expired.        if token not in sel
         return True
 
     def get_identity_report(self) -> dict[str, Any]:
-""""
+"""
 Returns a summary of the federated identity state.        return {
             "local_fleet_id": self.fleet_id,"            "remote_fleets_count": len(self.known_fleets),"            "authorized_agents_count": len(self.authorized_agents),"            "active_sessions_count": len(self.session_tokens),"        }

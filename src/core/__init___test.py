@@ -12,16 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-try:
-    import pytest
-"""
-except ImportError:
 
-"""
 import pytest
 
 try:
-    from .__init__ import *
+    from core.__init__ import *
 except ImportError:
-    from .__init__ import *
+    from src.core.__init__ import *
 

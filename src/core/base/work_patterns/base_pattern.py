@@ -39,7 +39,7 @@ except ImportError:
 
 class WorkPattern(ABC):
 """
-Abstract base class for work patterns in PyAgent swarm.""""
+Abstract base class for work patterns in PyAgent swarm.""
 Work patterns define how multiple agents collaborate on tasks,
     inspired by agentUniverse PEER pattern and other collaborative frameworks.
 """
@@ -49,7 +49,7 @@ def __init__(self, name: str, description: Optional[str] = None):
     @abstractmethod
     async def execute(self, context: CascadeContext, **kwargs) -> Dict[str, Any]:
 """
-Execute the work pattern with the given context.""""
+Execute the work pattern with the given context.""
 Args:
             context: The cascade context containing task information
             **kwargs: Additional parameters for the pattern
@@ -62,7 +62,7 @@ pass
     @abstractmethod
     def validate_agents(self) -> bool:
 """
-Validate that required agents are available for this pattern.""""
+Validate that required agents are available for this pattern.""
 Returns:
             True if all required agents are present
 """
@@ -70,7 +70,7 @@ pass
 
     def get_required_agents(self) -> list[str]:
 """
-Get the list of agent types required for this pattern.""""
+Get the list of agent types required for this pattern.""
 Returns:
             List of agent type names
         ""

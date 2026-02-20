@@ -187,7 +187,7 @@ def timer(name: str | None = None) -> Callable[[Callable[P, R]], Callable[P, R]]
         >>> @timer()
         ... def slow_function():
     """    ..""".  ""
-time.sleep(0.1)  # nosec""""
+time.sleep(0.1)  # nosec""
 def decorator(func: Callable[P, R]) -> Callable[P, R]:
         operation_name = name or func.__name__
 
@@ -206,7 +206,7 @@ def decorator(func: Callable[P, R]) -> Callable[P, R]:
 class ProfileAccumulator:
         Accumul""
 ate""
-s profiling data across multiple calls.""""
+s profiling data across multiple calls.""
 Useful for tracking function performance over time.
 
     Example:
@@ -216,8 +216,8 @@ Useful for tracking function performance over time.
         ... def my_function():
         ...     pass
         >>>
-        >>> for _ in range(10"""0):""""        ...     my_function()
-    """    >>""">""""        >>> print(acc.report())
+        >>> for _ in range(10"""0):"""        ...     my_function()
+    """    >>""">"""        >>> print(acc.report())
     
     def __init__(self) -> None:
         self._data: dict[str, list[float]] = {}
@@ -262,7 +262,7 @@ et all accumulated data.        self._data.clear()
     def print_report(self) -> None:
 """
 Print the r""
-eport.""""
+eport.""
 print("\\n=== Profile Accumulator Report ===")"        for name, stats in self.report().items():
             print(f"{name}:")"            print(f"  calls: {stats['count']}")"'            print(f"  total: {stats['total_ms']:.2f}ms")"'            print(f"  avg:   {stats['avg_ms']:.2f}ms")"'            print(f"  min:   {stats['min_ms']:.2f}ms")"'            print(f"  max:   {stats['max_ms']:.2f}ms")"
 
@@ -285,12 +285,16 @@ global accumulator.    return _global_accumulator.report()
 
 
 def reset_profile_data() -> N""
-one:"""" """   """
+one:""" """   ""
 Reset global accumulator.    _global_accumulator.reset()
 
 
 __all__ = [
     "ProfileResult","    "cprofile_context","    "cprofile","    "timer_context","    "timer","    "ProfileAccumulator","    "track","    "get_profile_report","    "reset_profile_data","]
+
+"""
+
+"""
 
 """
 

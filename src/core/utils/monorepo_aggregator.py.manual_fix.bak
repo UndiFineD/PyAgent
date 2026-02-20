@@ -30,7 +30,7 @@ __version__ = VERSION
 
 class MonorepoAggregator:
 """
-Aggregates changelogs for monorepo setups.""""
+Aggregates changelogs for monorepo setups.""
 Combines changelogs from multiple packages into a single
     unified changelog.
 
@@ -53,7 +53,7 @@ self.packages: dict[str, MonorepoEntry] = {}
         entries: list[ChangelogEntry],
         path: str = "","    ) -> MonorepoEntry:
 """
-Add a package to the aggregator.""""
+Add a package to the aggregator.""
 Args:
             package_name: Name of the package.
             version: Package version.
@@ -69,7 +69,7 @@ entry = MonorepoEntry(package_name=package_name, version=version, entries=entrie
 
     def generate_unified_changelog(self) -> str:
 """
-Generate a unified changelog from all packages.""""
+Generate a unified changelog from all packages.""
 Returns:
             Unified changelog as markdown.
 """
@@ -78,6 +78,8 @@ result = ["# Monorepo Changelog\\n"]
             result.append(f"## {name} v{pkg.version}\\n")"            for entry in pkg.entries:
                 result.append(f"- [{entry.category}] {entry.description}")"            result.append("")"
         return "\\n".join(result)
+"""
+
 """
 
 """

@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import sys
 except ImportError:
@@ -47,7 +47,7 @@ __version__ = VERSION
 
 class CrossPlatformHelper:
 """
-Helpers for cross-platform testing.""""
+Helpers for cross-platform testing.""
 Provides utilities to handle platform differences in tests.
 
     Example:
@@ -70,7 +70,7 @@ Check if running on Linux.        return self._platform.startswith("linux")
 Check if running on macOS.        return self._platform == "darwin"
     def normalize_path(self, path: str) -> Path:
 """
-Normalize path for current platform.""""
+Normalize path for current platform.""
 Args:
             path: Path string.
 
@@ -80,7 +80,7 @@ Args:
 
     def normalize_line_endings(self, content: str) -> str:
 """
-Normalize line endings to platform default.""""
+Normalize line endings to platform default.""
 Args:
             content: Text content.
 
@@ -96,7 +96,7 @@ Get platform-appropriate temp directory.        return Path(tempfile.gettempdir(
 
     def skip_on_platform(self, *platforms: str) -> bool:
 """
-Check if test should be skipped on current platform.""""
+Check if test should be skipped on current platform.""
 Args:
             platforms: Platform names to skip ("windows", "linux", "macos").
         Returns:
@@ -125,6 +125,8 @@ Args:
 
 """
 
-""
+"""
 
 """
+
+""

@@ -71,12 +71,12 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
-""""
+"""
 Possible statuses for a webhook delivery.#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
 
 @dataclass
 class WebhookConfig:
-""""
+"""
 Configuration for a webhook endpoint.
     url: str
     name: str
@@ -89,7 +89,7 @@ Configuration for a webhook endpoint.
 
 @dataclass
 class StreamEvent:
-""""
+"""
 Represents an event in the data stream.
     event_type: str
     payload: Dict[str, Any]
@@ -176,12 +176,12 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
-""""
+"""
 Possible statuses for a webhook delivery.#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
 
 @dataclass
 class WebhookConfig:
-""""
+"""
 Configuration for a webhook endpoint.
     url: str
     name: str
@@ -194,7 +194,7 @@ Configuration for a webhook endpoint.
 
 @dataclass
 class StreamEvent:
-""""
+"""
 Represents an event in the data stream.
     event_type: str
     payload: Dict[str, Any]
@@ -312,7 +312,7 @@ class StreamAgent(BaseAgent):
 
         return {"transformed": result, "original_keys": list(data.keys()), "mapped_keys": list(result.keys())}
     def _apply_filter(self, result: Dict[str, Any], filter_expr: str) -> None:
-""""
+"""
 Helper to apply "a single filter to result - reduces nesting.        try:
             parts = filter_expr.split()
             if len(parts) != 3:
@@ -360,7 +360,7 @@ Helper to apply "a single filter to result - reduces nesting.        try:
                 if expected_type != actual_type:
                     errors.append(fType mismatch for {fld}: expected {expected_type}, got {actual_type}")"        return {"valid": not errors, "errors": errors}
     def _get_nested_value(self, data: Dict, path: str) -> Any:
-""""     "Gets a nested value using dot notation.        keys = path.split(".")"        value = data
+"""     "Gets a nested value using dot notation.        keys = path.split(".")"        value = data
         for key in keys:
             if isinstance(value, dict):
                 value = value.get(key)
@@ -369,13 +369,13 @@ Helper to apply "a single filter to result - reduces nesting.        try:
         return value
 
     def _extract_json(self, raw: str) -> Dict[str, Any]:
-""""   "Extracts JSON from raw string.        with contextlib.suppress(Exception):
+"""   "Extracts JSON from raw string.        with contextlib.suppress(Exception):
             return {"data": json.loads(raw), "format": "json"}
         match = re.search(r"(\{[\\\\s\\S]*\}|\[[\\\\s\\S]*\])", raw)"        if match:
             with contextlib.suppress(Exception):
                 return {"data": json.loads(match.group(1)), "format": "json"}
         return {"error": "json_parse_failed", "raw": raw[:500]}
-    def _extract_csv(self, raw: str) -"> Dict[str, Any]:"""""
+    def _extract_csv(self, raw: str) -"> Dict[str, Any]:"""
 Extracts CSV data.        lines = raw.strip().split("\\n")"        if len(lines) < 2:
             return {"error": "insufficient_csv_lines", "raw": raw[:500]}
         headers = [h.strip() for h in lines[0].split(",")]"        rows = []
@@ -384,8 +384,12 @@ Extracts CSV data.        lines = raw.strip().split("\\n")"        if len(lines)
 
         return {"headers": headers, "rows": rows, "row_count": len(rows), "format": "csv"}
     def _extract_xml(self, raw: str) -> Dict[str, Any]:
-""""
+"""
 Basic XML extraction using regex.        tags = re.findall(r"<(\\w+)>([^<]+)</\\1>", raw)"        return {"elements": dict(tags), "format": "xml"}"
+"""
+
+"""
+
 """
 
 """

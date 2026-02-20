@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import json
 except ImportError:
@@ -45,7 +45,7 @@ __version__ = VERSION
 @dataclass
 class SnapshotComparisonResult:
 """
-Result of comparing snapshots.""""
+Result of comparing snapshots.""
 Attributes:
         matches: Whether snapshots match.
         expected: Expected content.

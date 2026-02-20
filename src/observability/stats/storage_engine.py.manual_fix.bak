@@ -62,7 +62,7 @@ Manages backups of stats.
         return "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in name) or "backup"
     def create_backup(self, name: str, data: dict[str, Any]) -> StatsBackup:
 """
-Create a named backup of stats data and persist to disk if configured.""""
+Create a named backup of stats data and persist to disk if configured.""
 Args:
             name: The name of the backup.
             data: The stats data to backup.
@@ -106,7 +106,7 @@ Helper to load backups from disk not already in memory.        if not self.backu
         return list(filter(None, map(process_file, self.backup_dir.glob("*.json"))))
     def restore(self, name: str) -> dict[str, Any] | None:
 """
-Restore backup data by name from memory or disk.""""
+Restore backup data by name from memory or disk.""
 Args:
             name: The name of the backup to restore.
             
@@ -133,7 +133,7 @@ Manages snapshots of stats state.
 
     def create_snapshot(self, name: str, data: dict[str, Any]) -> StatsSnapshot:
 """
-Create a named snapshot of stats data.""""
+Create a named snapshot of stats data.""
 Args:
             name: The name of the snapshot.
             data: The stats data to snapshot.
@@ -173,7 +173,7 @@ List all available snapshots from memory and disk.        snapshots = list(self.
         return list(filter(None, map(process_snap, self.snapshot_dir.glob("*.json"))))
     def restore_snapshot(self, name: str) -> dict[str, Any] | None:
 """
-Restore snapshot data by name from memory or disk.""""
+Restore snapshot data by name from memory or disk.""
 Args:
             name: The name of the snapshot to restore.
             
@@ -197,13 +197,13 @@ Args:
 
 class StatsCompressor:
 """
-Compresses and decompresses stats data using JSON serialization and zlib compression.""""
+Compresses and decompresses stats data using JSON serialization and zlib compression.""
 Attempts to use rust_core acceleration when available, falling back to pure Python
     implementatio""
-ns for JSON encoding and zlib compression.""""
+ns for JSON encoding and zlib compression.""
 def compress(self, data: Any) -> bytes:
 """
-Compress data using JSON serialization and zlib compression.""""
+Compress data using JSON serialization and zlib compression.""
 Attempts to use rust_core acceleration when available, falling back to
         pure Python JSON encoding and zlib compression.
         
@@ -224,7 +224,7 @@ Attempts to use rust_core acceleration when available, falling back to
 
     def decompress(self, data: bytes) -> Any:
         ""
-Decompress data that was compressed with the compress method.""""
+Decompress data that was compressed with the compress method.""
 Attempts to use rust_core acceleration when available, falling back to
         pure Python zlib decompression and JSON parsing.
         

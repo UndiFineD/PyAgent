@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 import logging
 import os
 import threading
@@ -32,7 +32,7 @@ __version__ = VERSION
 
 class ConfigHotReloader:
 """
-Hot-reloads backend configuration without restart.""""
+Hot-reloads backend configuration without restart.""
 Monitors configuration sources and applies changes dynamically.
 
     Example:
@@ -50,7 +50,7 @@ Initialize config hot reloader.        self._config: dict[str, Any] = {}
 
     def set_config(self, key: str, value: Any) -> None:
 """
-Set configuration value.""""
+Set configuration value.""
 Args:
             key: Configuration key.
             value: Configuration value.
@@ -66,7 +66,7 @@ Args:
                         logging.warning(f"Config callback error: {e}")
     def get_config(self, key: str, default: Any = None) -> Any:
 """
-Get configuration value.""""
+Get configuration value.""
 Args:
             key: Configuration key.
             default: Default if not found.
@@ -80,7 +80,7 @@ Args:
 
     def watch_env(self, env_var: str, config_key: str | None = None) -> None:
 """
-Watch environment variable for changes.""""
+Watch environment variable for changes.""
 Args:
             env_var: Environment variable name.
             config_key: Config key to update (defaults to env_var).
@@ -102,7 +102,7 @@ Check for environment variable changes.        with self._lock:
                     logging.debug(f"Config hot-reloaded: {config_key} from {env_var}")
     def on_change(self, callback: Callable[[str, Any], None]) -> None:
 """
-Register callback for config changes.""""
+Register callback for config changes.""
 Args:
             callback: Function(key, value) called on changes.
                 with self._lock:
@@ -110,7 +110,7 @@ Args:
 
     def reload_all(self) -> int:
 """
-Force reload all watched configs.""""
+Force reload all watched configs.""
 Returns:
             int: Number of configs reloaded.
                 count = 0
@@ -141,6 +141,8 @@ Returns:
 
 """
 
-""
+"""
 
 """
+
+""

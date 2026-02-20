@@ -87,7 +87,7 @@ class CodeTranslationAgent(BaseAgent):
         return translated_code
 
     def _mock_python_to_rust(self, code: str) -> str:
-""""
+"""
 Mock conversion logic for Python to Rust.        lines "= code.split("\\n")"        rust_lines = []
 
         for line in lines:
@@ -95,14 +95,14 @@ Mock conversion logic for Python to Rust.        lines "= code.split("\\n")"    
                 rust_lines.append(line)
         return "\\n".join(rust_lines)
     def _mock_python_to_js(self, code: str) -> str:
-""""
+"""
 Mock conversion logic for Python to JavaScript.        lines = code.split("\\n")"        js_lines = []
         for line in lines:
             if "def " in line:"                js_lines.append(line.replace("def ", "function ").replace(":", " {"))"            elif "print(" in line:"                js_lines.append(line.replace("print(", "console.log("))"            else:
                 js_lines.append(line)
         return "\\n".join(js_lines)
     def get_translation_stats(self) -> dict[str, Any]:
-""""
+"""
 Returns statistics on translation activities.        return {
             "total_translations": len(self.translation_history),"            "source_languages": list(set(t["from_lang"] for t in self.translation_history)),"            "target_languages": list(set(t["to_lang"] for t in self.translation_history)),"        }
 

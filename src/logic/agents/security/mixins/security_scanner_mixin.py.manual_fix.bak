@@ -42,7 +42,7 @@ except ImportError:
 class SecurityScannerMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Mixin for content and injection scanning.
 
 # [BATCHFIX] Commented metadata/non-Python
@@ -53,7 +53,7 @@ def scan_content(self: SecurityCore, content: str) -> list[SecurityVulnerability
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-vulnerabilities = []""""
+vulnerabilities = []""
         # Rust-accelerated multi-pattern scanning
         if _RUST_AVAILABLE:
             try:
@@ -61,14 +61,14 @@ vulnerabilities = []""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-patterns = [p[0] for p in self.SECURITY_PATTERNS]""""
+patterns = [p[0] for p in self.SECURITY_PATTERNS]""
 matches = scan_lines_multi_pattern_rust(content, patterns)
                 for line_num, pat_idx, _ in matches:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-_, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pat_idx]""""
+_, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pat_idx]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #                     vuln = SecurityVulnerability(
@@ -132,7 +132,7 @@ r"(?i)(congratulations!|security alert: action|verify your account|login to cont
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""
+findings = []""
 for name, pattern in injection_patterns.items():
             if re.search(pattern, content):
 # [BATCHFIX] Commented metadata/non-Python
@@ -144,8 +144,8 @@ for name, pattern in injection_patterns.items():
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""
-self, vulnerabilities: list[SecurityVulnerability], content: str""""
+""
+self, vulnerabilities: list[SecurityVulnerability], content: str""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python

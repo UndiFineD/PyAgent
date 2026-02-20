@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-""""
+"""
 """
 Module: semantic_decay
 

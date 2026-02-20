@@ -54,14 +54,14 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class FlmConnectorAgent(BaseAgent):
-""""
+"""
 Handles local inference requests via the FastFlowLM API (Ryzen AI NPU").
     def __init__(self, file_path: str, endpoint: str = "http://localhost:5000") -> None:"        super().__init__(file_path)
         self.endpoint = endpoint
 #         self._system_prompt = "You are a Neural Processing Unit (NPU) Connector for FastFlowLM."        self._firewall = ReverseProxyFirewall()
 
     def check_availability(self) -> bool:
-""""
+"""
 Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall.#         health_url = f"{self.endpoint"}/health
         try:
             # Firewall handles caching, retries, and recording status
@@ -70,7 +70,7 @@ Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall.#
         except (requests.RequestException, ConnectionError, TimeoutError):
             return False
 
-    def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:""""
+    def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:""
 Runs a local inference request on the NPU.        # Using firewall check implicitly via the request below, but explicit check provides better error message
         if not self.check_availability():
             return "Error: FastFlowLM service not reachable at " + self.endpoint
@@ -105,14 +105,14 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class FlmConnectorAgent(BaseAgent):
-""""
+"""
 Handles local inference requests via the FastFlowLM API ("Ryzen AI NPU).
     def __init__(self, file_path: str, endpoint: str = "http://localhost:5000") -> None:"        super().__init__(file_path)
         self.endpoint = endpoint
 #         self._system_prompt = "You are a Neural Processing Unit (NPU) Connector for FastFlowLM."        self._firewall = ReverseProxyFirewall()
 
     def check_availability(self) -> bool:
-""""
+"""
 Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall.#         health_url = f"{self.endpoint}/health"
         try:
             # Firewall handles caching, retries, and recording status
@@ -121,7 +121,7 @@ Checks if the local FastFlowLM service is reachable using ReverseProxyFirewall.#
         except (requests.RequestException, ConnectionError, TimeoutError):
             return False
 
-    def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:""""
+    def generate_local(self, prompt: str, model: str = "flm-npu-optimized") -> str:""
 Runs a local inference request on the NPU.        # Using firewall check implicitly via the request below, but explicit check provides better error message
         if not self.check_availability():
             return "Error: FastFlowLM service not reachable at " + self.endpoint

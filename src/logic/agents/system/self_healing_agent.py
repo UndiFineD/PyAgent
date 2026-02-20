@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class SelfHealingAgent(BaseAgent):
-""""
+"""
 Monitors telemetry for agent failures and proposes fixes.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -75,7 +75,7 @@ Monitors telemetry for agent failures and proposes fixes.
         self._load_dynamic_prompt()
 
     def _load_dynamic_prompt(self) -> None:
-""""
+"""
 Loads self-healing goals and context from project documentation.        self._system_prompt = (
 #             "You are the Self-Healing Agent."#             "Your goal is to detect failures in the agent fleet and propose corrective actions."#             "Analyze telemetry logs for crashes, timeouts, and logic errors."#             "Suggest patches to the source code or configuration to prevent future failures."#             "Check budget and available remote peers before proposing expensive cloud-based solutions."        )
 
@@ -124,7 +124,7 @@ __version__ = VERSION
 
 
 class SelfHealingAgent(BaseAgent):
-""""
+"""
 Monitors telemetry for agent failures and proposes fixes.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -139,7 +139,7 @@ Monitors telemetry for agent failures and proposes fixes.
         self._load_dynamic_prompt()
 
     def _load_dynamic_prompt(self) -> None:
-""""
+"""
 Loads self-healing goals and context from project documentation.        self._system_prompt = (
 #             "You are the Self-Healing Agent."#             "Your goal is to detect failures in the agent fleet and propose corrective actions."#             "Analyze telemetry logs for crashes, timeouts, and logic errors."#             "Suggest patches to the source code or configuration to prevent future failures."#             "Check budget and available remote peers before proposing expensive cloud-based solutions."        )
 
@@ -198,7 +198,7 @@ Loads self-healing goals and context from project documentation.        self._sy
 return "# Self-Healing Log\\n\\n## Status\\nMonitoring fleet health...\\n
     @as_tool
     def scan_for_failures(self) -> str:
-""""
+"""
 Analyzes telemetry for errors and suggests fixes.      "  self._track_tokens(200, 350)"        self.telemetry.get_summary()
         metrics = self.telemetry.metrics
 

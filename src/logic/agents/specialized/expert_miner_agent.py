@@ -91,14 +91,14 @@ class ExpertMinerAgent(BaseAgent):
             "status": "success","            "specialist": specialist_def,"            "trace_lineage": [t.get("task_id") for t in failed_traces]"        }
 
     def _extract_skills(self, traces: List[Dict[str, Any]]) -> List[str]:
-""""
+"""
 Extracts missing skill keywords from error messages or trace metadata".        skills = []
         for trace in traces:
             error = trace.get("error", ").lower()"            if "pydantic" in error or "schema" in error:"                skills.append("DataValidator")"            elif "timeout" in error or "network" in error:"                skills.append("NetworkOptimizer")"            elif "unauthorized" in error or "permission" in error:"                skills.append("SecurityAuditor")"
         return sorted(list(set(skills)), key=lambda x: skills.count(x), reverse=True)
 
     def _recommend_tools(self, gap: str) -> List[str]:
-""""
+"""
 Recommends a core tool-set for the new specialist".        mapping = {
             "DataValidator": ["validate_json", "schema_check"],"            "NetworkOptimizer": ["ping", "route_trace", "bandwidth_test"],"            "SecurityAuditor": ["scan_ports", "check_permissions", "audit_logs"]"        }
         return mapping.get(gap, ["standard_analysis"])
@@ -147,14 +147,14 @@ class ExpertMinerAgent(BaseAgent):
             "status": "success","            "specialist": specialist_def,"            "trace_lineage": [t.get("task_id") for t in failed_traces]"        }
 
     def _extract_skills(self, traces: List[Dict[str, Any]]) -> List[str]:
-""""
+"""
 Extracts missing skill keywords from error messages or trace metadata.        skills = []
         for trace in traces:
             error = trace.get("error", ").lower()"            if "pydantic" in error or "schema" in error:"                skills.append("DataValidator")"            elif "timeout" in error or "network" in error:"                skills.append("NetworkOptimizer")"            elif "unauthorized" in error or "permission" in error:"                skills.append("SecurityAuditor")"
         return sorted(list(set(skills)), key=lambda x: skills.count(x), reverse=True)
 
     def _recommend_tools(self, gap: str) -> List[str]:
-""""
+"""
 Recommends a core tool-set for the new specialist.        mapping = {
             "DataValidator": ["validate_json", "schema_check"],"            "NetworkOptimizer": ["ping", "route_trace", "bandwidth_test"],"            "SecurityAuditor": ["scan_ports", "check_permissions", "audit_logs"]"        }
         return mapping.get(gap, ["standard_analysis"])

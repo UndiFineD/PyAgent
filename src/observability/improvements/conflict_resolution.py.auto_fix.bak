@@ -56,7 +56,7 @@ __version__ = VERSION
 
 @dataclass
 class ConflictResolution:
-    """Resolution for a conflicting improvement.""""
+    """Resolution for a conflicting improvement."""
     Attributes:
         improvement_id: ID of conflicting improvement.
         resolution: Resolved improvement version.

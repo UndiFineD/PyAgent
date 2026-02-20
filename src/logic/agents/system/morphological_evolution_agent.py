@@ -105,7 +105,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
 
     @as_tool
     def morphological_evolution(self, agent_name: str, call_logs: list[dict[str, Any]]) -> dict[str, Any]:
-""""
+"""
 Alias for morphological analysis used by fleet.        return self.analyze_api_morphology(agent_name, call_logs)
 
     @as_tool

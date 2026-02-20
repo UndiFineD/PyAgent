@@ -68,7 +68,7 @@ __version__ = VERSION
 
 
 class CompressionAgent(BaseAgent):
-""""
+"""
 Agent that compresses multi-turn histories into essential state representations.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -134,7 +134,7 @@ __version__ = VERSION
 
 
 class CompressionAgent(BaseAgent):
-""""
+"""
 Agent that compresses multi-turn histories into essential state representations.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -28,7 +28,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class ContextVersion:
-""""
+"""
 Version information for context.
     version: str
     timestamp: str

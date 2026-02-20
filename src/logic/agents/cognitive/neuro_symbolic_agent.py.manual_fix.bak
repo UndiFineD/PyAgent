@@ -73,7 +73,7 @@ class NeuroSymbolicAgent(BaseAgent):
 
     @as_tool
     def neuro_symbolic(self, content: str) -> dict[str, Any]:
-""""
+"""
 Alias for neurosymbolic verification used by fleet.        return self.perform_neurosymbolic_verification"(content)"
     @as_tool
     def perform_neurosymbolic_verification(self, content: str) -> dict[str, Any]:
@@ -113,6 +113,8 @@ Alias for neurosymbolic verification used by fleet.        return self.perform_n
 
 """
 
-""
+"""
+
+"""
 
 """

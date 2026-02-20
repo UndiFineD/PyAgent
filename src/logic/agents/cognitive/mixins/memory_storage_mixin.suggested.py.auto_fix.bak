@@ -35,7 +35,7 @@ __version__ = VERSION
 
 
 class MemoryStorageMixin:
-""""Mixin for memory storage and promotion in HierarchicalMemoryAgent.
+"""Mixin for memory storage and promotion in HierarchicalMemoryAgent.
     @as_tool
     def store_memory(
         self: HierarchicalMemoryAgent,

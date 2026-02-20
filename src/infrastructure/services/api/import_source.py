@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_changes.py""""
+Auto-extracted class from agent_changes.py""
 try:
     from enum import Enum
 except ImportError:
@@ -63,4 +63,4 @@ External sources for changelog import.
 
 """
 
-"""
+""

@@ -16,10 +16,7 @@ from __future__ import annotations
 
 
 """
-"""
 Change Monitoring Agent for PyAgent.
-
-"""
 Monitors changes in various data sources using incremental update patterns
 inspired by ADSpider's USN-based change detection.
 """
@@ -39,7 +36,9 @@ __version__ = "1.0.0"
 
 class ChangeDataSource(ABC):
 """
-Abstract base class for data sources that support change monitoring.""
+Abstract base class for data sources that support change monitoring.
+"""
+
     @abstractmethod
     async def get_current_usn(self) -> Union[int, str]:
 """
@@ -50,15 +49,17 @@ pass
     @abstractmethod
     async def get_changes_since(self, usn: Union[int, str]) -> List[Dict[str, Any]]:
 """
-Get changes since the given USN.""
+Get changes since the given USN.
+"""
 pass
 
 
     @abstractmethod
     async def get_initial_dump(self) -> List[Dict[str, Any]]:
 """
-Get initial full dump of data (expensive operation).""
-
+Get initial full dump of data (expensive operation).
+"""
+pass
 
 
 # Missing class name, likely intended as a class definition. Assuming 'ChangeMonitorAgent' as placeholder.
@@ -67,7 +68,8 @@ class ChangeMonitorAgent:
 
 class FileSystemDataSource(ChangeDataSource):
 """
-Example data source for file system monitoring.""
+Example data source for file system monitoring.
+"""
 def __init__(self, watch_path: str):
         self.watch_path = Path(watch_path)
         self._last_mtime = 0
@@ -75,7 +77,8 @@ def __init__(self, watch_path: str):
 
     async def get_current_usn(self) -> float:
 """
-Use modification time as USN.""
+Use modification time as USN.
+"""
 if self.watch_path.exists():
             return self.watch_path.stat().st_mtime
         return 0
@@ -83,7 +86,8 @@ if self.watch_path.exists():
 
     async def get_changes_since(self, usn: Union[int, str]) -> List[Dict[str, Any]]:
 """
-Get files changed since last USN.""
+Get files changed since last USN.
+"""
 changes = []
         current_mtime = await self.get_current_usn()
 
@@ -102,7 +106,8 @@ changes = []
 
     async def get_initial_dump(self) -> List[Dict[str, Any]]:
 """
-Get initial file listing.""
+Get initial file listing.
+"""
 files = []
         if self.watch_path.exists() and self.watch_path.is_dir():
             for file_path in self.watch_path.rglob('*'):
@@ -120,7 +125,8 @@ files = []
 
 class HistoryManager:
 """
-Manages change history for comparison and analysis.""
+Manages change history for comparison and analysis.
+"""
 def __init__(self, max_history: int = 1000):
         self.history: List[Dict[str, Any]] = []
         self.max_history = max_history
@@ -128,7 +134,8 @@ def __init__(self, max_history: int = 1000):
 
     def add_change(self, change: Dict[str, Any]) -> None:
 """
-Add a change to history.""
+Add a change to history.
+"""
 self.history.append(change)
         if len(self.history) > self.max_history:
             self.history.pop(0)
@@ -136,7 +143,8 @@ self.history.append(change)
 
     def get_previous_value(self, object_id: str, attribute: str) -> Optional[Any]:
 """
-Get the most recent previous value for an object/attribute.""
+Get the most recent previous value for an object/attribute.
+"""
 found_current = False
         for change in reversed(self.history):
             if (change.get('object') == object_id and change.get('attribute_name') == attribute):
@@ -151,14 +159,16 @@ found_current = False
 
     def save_to_file(self, filepath: str) -> None:
 """
-Save history to JSON file.""
+Save history to JSON file.
+"""
 with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(self.history, f, indent=2, default=str)
 
 
     def load_from_file(self, filepath: str) -> None:
 """
-Load history from JSON file.""
+Load history from JSON file.
+"""
 try:
             if Path(filepath).exists():
                 with open(filepath, 'r', encoding='utf-8') as f:
@@ -192,26 +202,30 @@ def __init__(self, file_path: str) -> None:
 
     def add_data_source(self, name: str, data_source: ChangeDataSource) -> None:
 """
-Add a data source to monitor.""
+Add a data source to monitor.
+"""
 self.data_sources[name] = data_source
         self.history_managers[name] = HistoryManager()
 
 
     def set_output_file(self, filepath: str) -> None:
 """
-Set file to save change data.""
+Set file to save change data.
+"""
 self.output_file = filepath
 
 
     def set_poll_interval(self, interval: int) -> None:
 """
-Set polling interval in seconds.""
+Set polling interval in seconds.
+"""
 self.poll_interval = interval
 
 
     async def _process_task(self, task_data: Dict[str, Any]) -> Dict[str, Any]:
 """
-Process a task from the task queue.""
+Process a task from the task queue.
+"""
 task_type = task_data.get('type')
         try:
             if task_type == 'start_monitoring':
@@ -235,7 +249,8 @@ task_type = task_data.get('type')
 
     async def start_monitoring(self, data_source_name: str) -> None:
 """
-Start monitoring a specific data source.""
+Start monitoring a specific data source.
+"""
 if data_source_name not in self.data_sources:
             raise ValueError(f"Data source {data_source_name} not found")
         # Cancel existing task if running
@@ -249,7 +264,8 @@ if data_source_name not in self.data_sources:
 
     async def stop_monitoring(self, data_source_name: str) -> None:
 """
-Stop monitoring a data source.""
+Stop monitoring a data source.
+"""
 if data_source_name in self.monitoring_tasks:
             self.monitoring_tasks[data_source_name].cancel()
             del self.monitoring_tasks[data_source_name]
@@ -257,7 +273,8 @@ if data_source_name in self.monitoring_tasks:
 
     async def _monitor_loop(self, data_source_name: str) -> None:
 """
-Main monitoring loop for a data source.""
+Main monitoring loop for a data source.
+"""
 data_source = self.data_sources[data_source_name]
         history_manager = self.history_managers[data_source_name]
 
@@ -304,7 +321,8 @@ data_source = self.data_sources[data_source_name]
 
     async def _output_changes(self, changes: List[Dict[str, Any]]) -> None:
 """
-Output changes in configured format.""
+Output changes in configured format.
+"""
 if self.output_file:
             # Append to file
             with open(self.output_file, 'a', encoding='utf-8') as f:
@@ -318,7 +336,8 @@ if self.output_file:
 
     async def get_initial_dump(self, data_source_name: str) -> List[Dict[str, Any]]:
 """
-Get initial full dump from a data source.""
+Get initial full dump from a data source.
+"""
 if data_source_name not in self.data_sources:
             raise ValueError(f"Data source {data_source_name} not found")
         data_source = self.data_sources[data_source_name]
@@ -332,21 +351,24 @@ if data_source_name not in self.data_sources:
 
     async def save_history(self, data_source_name: str, filepath: str) -> None:
 """
-Save change history to file.""
+Save change history to file.
+"""
 if data_source_name in self.history_managers:
             self.history_managers[data_source_name].save_to_file(filepath)
 
 
     async def load_history(self, data_source_name: str, filepath: str) -> None:
 """
-Load change history from file.""
+Load change history from file.
+"""
 if data_source_name in self.history_managers:
             self.history_managers[data_source_name].load_from_file(filepath)
 
 
     async def get_change_summary(self, data_source_name: str) -> Dict[str, Any]:
+"""
+Get summary of changes for a data source.
         ""
-Get summary of changes for a data source.""
 if data_source_name not in self.history_managers:
             return {}
 

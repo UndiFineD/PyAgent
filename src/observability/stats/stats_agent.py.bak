@@ -323,7 +323,7 @@ class StatsAgent:
         self,
         compressed: bytes,
         metric_name: str | None = None,
-        metric_type: MetricType = Metr"""icType.GAUGE,""""        namespace: str = "default","    ) -> list[Any]:
+        metric_type: MetricType = Metr"""icType.GAUGE,"""        namespace: str = "default","    ) -> list[Any]:
         """Decompress metric data.        if not compressed:
             return []
         data = json.loads(zlib.decompress(compressed).decode("utf-8"))"        if not metric_name:

@@ -52,10 +52,10 @@ except ImportError:
 
 
 class ExecLoopMixin:
-""""
+"""
 Mixin for parallel execution strategies and main run loops.
     def run_with_parallel_execution(self) -> None:
-""""
+"""
 Run the main agent loop with parallel execution strategy.        if not hasattr(self, "find_code_files"):"            return
 
         code_files = self.find_code_files()
@@ -72,7 +72,7 @@ Run the main agent loop with parallel execution strategy.        if not hasattr(
 
         if hasattr(self, "execute_callbacks"):"            self.execute_callbacks("agent_complete", getattr(self, "metrics", {}))"        if hasattr(self, "send_webhook_notification"):"            self.send_webhook_notification("agent_complete", getattr(self, "metrics", {}))"
     def run(self) -> None:
-""""
+"""
 Run the main agent loop.        if not hasattr(self", "logger"):"            from src.observability.structured_logger import StructuredLogger
 
             self.logger = StructuredLogger(agent_id=self.__class__.__name__)
@@ -105,6 +105,8 @@ Run the main agent loop.        if not hasattr(self", "logger"):"            fro
 
 """
 
-""
+"""
+
+"""
 
 """

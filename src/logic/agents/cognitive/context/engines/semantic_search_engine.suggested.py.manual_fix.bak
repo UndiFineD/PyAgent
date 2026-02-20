@@ -51,7 +51,7 @@ class SemanticSearchEngine:
         >>> engine=SemanticSearchEngine()
         >>> results=engine.search("function that handles authentication")
     def __init__(self, persist_directory: str | None = None) -> None:
-""""
+"""
 Initialize the semantic search engine.        self.results: list[SemanticSearchResult] = []
         self.algorithm: SearchAlgorithm = SearchAlgorithm.KEYWORD
 #         self.similarity_metric: str = "cosine"        self.documents: dict[str, str] = {}
@@ -60,7 +60,7 @@ Initialize the semantic search engine.        self.results: list[SemanticSearchR
         self._collection = None
 
     def _maybe_patch_pydantic(self) -> None:
-""""
+"""
 Handle Pydantic v2 compatibility for older ChromaDB versions."        try:"            import pydantic  # pylint: disable=import-outside-toplevel
 
             if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):"                from pydantic_settings import BaseSettings  # pylint: disable=import-outside-toplevel
@@ -71,7 +71,7 @@ Handle Pydantic v2 compatibility for older ChromaDB versions."        try:"     
             pass
 
     def _get_collection(self) -> Any:
-""""
+"""
 Lazy initialization of ChromaDB collection.        if self._collection is not None:
             return self._collection
 
@@ -96,16 +96,16 @@ Lazy initialization of ChromaDB collection.        if self._collection is not No
         return self._collection
 
     def set_algorithm(self, algorithm: SearchAlgorithm) -> None:
-""""
+"""
 Set the search algorithm.        self.algorithm = algorithm
 
     def add_document(self, doc_id: str, content: str) -> None:
-""""
+"""
 Add a document to the search index.        self.documents[doc_id] = content
         self.index_content(doc_id, content)
 
     def clear(self) -> None:
-""""
+"""
 Clear all indexed documents and results.    "    self.results.clear()"        self.documents.clear()
         collection = self._get_collection()
         if collection:

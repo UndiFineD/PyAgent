@@ -87,7 +87,7 @@ class MigrationManager:
         ...     name="urllib2_to_urllib","        ...     old_pattern=rimport urllib2","        ...     new_pattern="import urllib.request","#         ...     description="Migrate urllib2 to urllib.request"        ... ))
 #         >>> code, results=manager.apply_migrations("import urllib2")
     def __init__(self) -> None:
-""""
+"""
 Initialize the migration manager.        self.rules: list[MigrationRule] = []
 
     def add_rule(self, rule: MigrationRule) -> None:
@@ -173,7 +173,7 @@ class MigrationManager:
         ...     name="urllib2_to_urllib","        ...     old_pattern=rimport urllib2","        ...     new_pattern="import urllib.request","#         ...     description="Migrate urllib2 to urllib.request"        ... ))
         >>> code, results=manager.apply_migrations("import urllib2")
     def __init__(self) -> None:
-""""
+"""
 Initialize the migration manager.  "      self.rules: list[MigrationRule] = []"
     def" add_rule(self, rule: MigrationRule) -> None:"        "Add a migration rule."
        " Args:"            rule: The migration rule to "add."        self.rules.append(rule)

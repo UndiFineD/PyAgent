@@ -72,7 +72,7 @@ def __init__(self, disassembler: Optional[BaseRpcRegistrationExtractor] = None) 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def scrape_executable(self, pe_path: str) -> Dict[str, Any]:""""
+def scrape_executable(self, pe_path: str) -> Dict[str, Any]:""
 with open(pe_path, "rb") as f:"            pe_data = f.read()
         pe = PE(data=pe_data)
 
@@ -83,7 +83,7 @@ with open(pe_path, "rb") as f:"            pe_data = f.read()
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-rdata = pe_data[rdata_off : rdata_off + rdata_size]""""
+rdata = pe_data[rdata_off : rdata_off + rdata_size]""
 if_offs = self._get_rpc_if_offsets(rdata)
 
         with self._sym_helper(pe_path):
@@ -98,7 +98,7 @@ interface_data["interface_address"] = hex(if_rdata_offset + rdata_rva + pe.OPTIO
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-ret_dict[str(UUID(bytes_le=rdata[if_rdata_offset + 4 : if_rdata_offset + 20]))] = interface_data""""
+ret_dict[str(UUID(bytes_le=rdata[if_rdata_offset + 4 : if_rdata_offset + 20]))] = interface_data""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -125,12 +125,12 @@ ret_dict["interface_registration_info"] = registration_info
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def _get_rpc_if_offsets(self, data: bytes) -> List[int]:""""
+def _get_rpc_if_offsets(self, data: bytes) -> List[int]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return [match.start() for match in self.MIDL_LOOKUP_RE.finditer(data)]""""
+return [match.start() for match in self.MIDL_LOOKUP_RE.finditer(data)]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -202,7 +202,7 @@ res_dict["flags"] = hex(pe.get_qword_from_offset(interface_off + 0x58))"        
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def _check_flags_for_global_cache(flags: Union[int, str]) -> Union[bool, str]:""""
+def _check_flags_for_global_cache(flags: Union[int, str]) -> Union[bool, str]:""
 if isinstance(flags, str):
             if flags.startswith("0x"):"                flags = int(flags, 16)
             elif flags.isdecimal():

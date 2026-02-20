@@ -27,14 +27,14 @@ from src.core.base.common.types.security_vulnerability import SecurityVulnerabil
 class SecurityReporterMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 """
 Mixin for security reporting and recording findings.
 
 """
 def _record_finding(self, issue_type: str, severity: str, desc: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Records security findings for fleet intelligence (Phase 108).        if hasattr(self, "recorder") and self.recorder:"            try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -53,7 +53,7 @@ def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:"D
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-severities = [v.severity for v in vulnerabilities]""""
+severities = [v.severity for v in vulnerabilities]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -75,4 +75,6 @@ if "medium" in severities or "MEDIUM" in [s.upper() for s in severities]:"# [BAT
 return "MEDIUM"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """
 return "LOW"  # [BATCHFIX] closed string
+"""
+
 """

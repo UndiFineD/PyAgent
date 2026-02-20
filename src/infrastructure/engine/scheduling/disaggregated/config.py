@@ -47,7 +47,7 @@ except ImportError:
 @dataclass
 class InstanceInfo:
 """
-Information about a vLLM instance.""""
+Information about a vLLM instance.""
 Inspired by vLLM's proxy server patterns.'    
     instance_id: str
     role: InstanceRole
@@ -88,7 +88,7 @@ Calculate load score (lower is better).        return self.num_running_requests 
 @dataclass
 class DCPConfig:
 """
-Configuration for disaggregated prefill-decode.""""
+Configuration for disaggregated prefill-decode.""
 Inspired by vLLM's kv_transfer configuration.'    
     enabled: bool = False
 
@@ -121,7 +121,7 @@ Inspired by vLLM's kv_transfer configuration.'
 @dataclass
 class KVTransferParams:
 """
-Parameters for KV cache transfer between instances.""""
+Parameters for KV cache transfer between instances.""
 Inspired by vLLM's kv_transfer_params dict structure.'    
     do_remote_prefill: bool = False
     do_remote_decode: bool = False
@@ -172,3 +172,7 @@ A request scheduled for processing.
 
     # Additional parameters
     extra_params: Dict[str, Any] = field(default_factory=dict)
+
+""
+
+"""

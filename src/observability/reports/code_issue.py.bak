@@ -69,7 +69,7 @@ __version__ = VERSION
 
 @dataclass
 class CodeIssue:
-    """Represents a code issue or improvement suggestion.""""    Attributes:
+    """Represents a code issue or improvement suggestion."""    Attributes:
         message: Issue description.
         category: Issue category.
         severity: Severity level.

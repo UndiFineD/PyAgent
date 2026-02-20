@@ -14,7 +14,7 @@
 
 
 """
-""""Multi-Channel Messaging Gateway Core
+"""Multi-Channel Messaging Gateway Core
 
 Inspired by OpenClaw's sophisticated gateway architecture, this module provides'a WebSocket-based control plane for multi-channel agent communication with session
 routing, presence management, and channel abstraction.

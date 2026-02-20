@@ -17,7 +17,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py"""
 
 try:
     import logging
@@ -74,7 +74,7 @@ __version__ = VERSION
 
 
 class MockAIBackend:
-    """Mock AI backend for testing.""""
+    """Mock AI backend for testing."""
     Provides configurable mock responses for AI backend calls
     without making real API requests.
 
@@ -93,20 +93,20 @@ class MockAIBackend:
         prompt_pattern: str,
         response: MockResponse,
     ) -> None:
-        """Add mock response for a prompt pattern.""""
+        """Add mock response for a prompt pattern."""
         Args:
             prompt_pattern: Prompt pattern (can be exact or regex).
             response: Mock response to return.
                 self._responses[prompt_pattern] = response
         logging.debug(f"Added mock response for pattern: {prompt_pattern}")"
     def set_default_response(self, response: MockResponse) -> None:
-        """Set default response for unmatched prompts.""""
+        """Set default response for unmatched prompts."""
         Args:
             response: Default mock response.
                 self._default_response = response
 
     def call(self, prompt: str) -> str:
-        """Call mock backend with prompt.""""
+        """Call mock backend with prompt."""
         Args:
             prompt: Prompt to send.
 
@@ -146,14 +146,14 @@ class MockAIBackend:
         return response.content
 
     def add_response_sequence(self, responses: list[MockResponse]) -> None:
-        """Add a sequence of responses for sequential calls.""""
+        """Add a sequence of responses for sequential calls."""
         Args:
             responses: List of mock responses.
                 self._response_sequence = responses
         self._sequence_index = 0
 
     def set_error_response(self, response_type: MockResponseType, message: str) -> None:
-        """Set an error response to be returned.""""
+        """Set an error response to be returned."""
         Args:
             response_type: Type of error response.
             message: Error message.

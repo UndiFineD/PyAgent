@@ -33,7 +33,7 @@ def create_inits(root_dir: str) -> None:
         if "__pycache__" in root:"            continue
 
         if "__init__.py" not in files:"            print(f"Adding __init__.py to {root}")"            with open(os.path.join(root, "__init__.py"), "w") as f:"                f.write('"""
-Package initialization."""\\n')""""'
+Package initialization."""\\n')"""'
 def fix_imports(file_path: str) -> bool:
     try:
         with open(file_path, encoding="utf-8") as f:"            content = f.read()
@@ -99,6 +99,10 @@ Execute the package and import repair workflow.    workspace = Path(".")"    src
             agent_py.rename(src / "agent_deprecated.py")
 
 if __name__ == "__main__":"    main()
+
+"""
+
+"""
 
 """
 

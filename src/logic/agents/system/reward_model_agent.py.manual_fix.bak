@@ -48,7 +48,7 @@ __version__ = VERSION
 
 
 class RewardModelAgent(BaseAgent):
-""""
+"""
 Evaluates and ranks multiple proposals to provide a scalar reward signal.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -117,7 +117,7 @@ __version__ = VERSION
 
 
 class RewardModelAgent(BaseAgent):
-""""
+"""
 Evaluates and ranks multiple proposals to provide a scalar reward signal.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

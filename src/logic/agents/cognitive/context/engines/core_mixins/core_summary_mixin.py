@@ -27,7 +27,7 @@ except ImportError:
 
 
 class CoreSummaryMixin:
-""""
+"""
 Methods for summary generation and pruning.
     def prune_lessons(
         self, lessons: list[dict[str, Any]], max_lessons: int = 20
@@ -35,7 +35,7 @@ Methods for summary generation and pruning.
 #         "Prunes lessons to keep only the most recent."        return lessons[-max_lessons:]
 
     def generate_markdown_summary(self, memory: dict[str, Any]) -> str:
-""""
+"""
 Logic for formatting the cognitive summary.        summary = ["#  Long-Term Memory "Summary"]"
         if memory.get("facts"):"            summary.append("\\n##  Project Facts")"            for k, v in memory["facts"].items():"                summary.append(f"- **{k}**: {v['value']}")"
         if memory.get("constraints"):"            summary.append("\\n## ️ Constraints")"            for c in memory["constraints"]:"                summary.append(f"- {c}")"

@@ -49,7 +49,7 @@ except ImportError:
 
 
 class DataScienceAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in advanced statistical analysis and data science workflows.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -63,7 +63,7 @@ except ImportError:
 
 
 class DataScienceAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in advanced statistical analysis and data science workflows.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -50,7 +50,7 @@ Model types for template resolution.
 
 BUILTIN_TEMPLATES: Dict[TemplateType, str] = {
     TemplateType.CHATML: ""
-{% for message in messages %}{% if message['role'] == 'system' %}<|im_start|>system""""'{{ message['content'] }}<|im_end|>'{% elif message['role'] == 'user' %}<|im_start|>user'{{ message['content'] }}<|im_end|>'{% elif message['role'] == 'assistant' %}<|im_start|>assistant'{{ message['content'] }}<|im_end|>'{% endif %}{% endfor %}{% if add_generation_prompt %}<|im_start|>assistant
+{% for message in messages %}{% if message['role'] == 'system' %}<|im_start|>system"""'{{ message['content'] }}<|im_end|>'{% elif message['role'] == 'user' %}<|im_start|>user'{{ message['content'] }}<|im_end|>'{% elif message['role'] == 'assistant' %}<|im_start|>assistant'{{ message['content'] }}<|im_end|>'{% endif %}{% endfor %}{% if add_generation_prompt %}<|im_start|>assistant
 {% endif %}""","""
 TemplateType.LLAMA2: (
         "{% if messages[0]['role'] == 'system' %}{% set system_message = messages[0]['content'] %}""'        "{% set messages = messages[1:] %}{% else %}{% set system_message = '' %}{% endif %}""'        "{% for message in messages %}{% if loop.first and system_message %}[INST] <<SYS>>\\n""        "{{ system_message }}\\n<</SYS>>\\n\\n{{ message['content'] }} [/INST]""'        "{% elif message['role'] == 'user' %}{% if not loop.first %} [INST] {{ message['content'] }} [/INST]""'        "{% else %}[INST] {{ message['content'] }} [/INST]{% endif %}""'        "{% elif message['role'] == 'assistant' %} {{ message['content'] }}{% endif %}{% endfor %}""'    ),
@@ -59,7 +59,7 @@ TemplateType.LLAMA2: (
     TemplateType.MISTRAL: (
         "{% if messages[0]['role'] == 'system' %}{% set system_message = messages[0]['content'] %}""'        "{% set messages = messages[1:] %}{% else %}{% set system_message = false %}{% endif %}""        "{% for message in messages %}{% if message['role'] == 'user' %}{{ '[INST] ' }}""'        "{% if system_message and loop.first %}{{ system_message + '\\n\\n' }}{% endif %}""'        "{{ message['content'] + ' [/INST]' }}{% elif message['role'] == 'assistant' %}""'        "{{ message['content'] + '</s> ' }}{% endif %}{% endfor %}""'    ),
     TemplateType.ZEPHYR: ""
-{% for message in messages %}{% if message['role'] == 'system' %}<|system|>""""'{{ message['content'] }}</s>'{% elif message['role'] == 'user' %}<|user|>'{{ message['content'] }}</s>'{% elif message['role'] == 'assistant' %}<|assistant|>'{{ message['content'] }}</s>'{% endif %}{% endfor %}{% if add_generation_prompt %}<|assistant|>
+{% for message in messages %}{% if message['role'] == 'system' %}<|system|>"""'{{ message['content'] }}</s>'{% elif message['role'] == 'user' %}<|user|>'{{ message['content'] }}</s>'{% elif message['role'] == 'assistant' %}<|assistant|>'{{ message['content'] }}</s>'{% endif %}{% endfor %}{% if add_generation_prompt %}<|assistant|>
 {% endif %}""","""
 TemplateType.VICUNA: (
         "{% if messages[0]['role'] == 'system' %}{{ messages[0]['content'] + '\\n\\n' }}""'        "{% set messages = messages[1:] %}{% endif %}""        "{% for message in messages %}""        "{% if message['role'] == 'user' %}{{ 'USER: ' + message['content'] + '\\n' }}""'        "{% elif message['role'] == 'assistant' %}{{ 'ASSISTANT: ' + message['content'] + '\\n' }}""'        "{% endif %}{% endfor %}""        "{% if add_generation_prompt %}{{ 'ASSISTANT:' }}{% endif %}""'    ),

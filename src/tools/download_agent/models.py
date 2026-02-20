@@ -36,7 +36,7 @@ except ImportError:
 @dataclass
 class DownloadResult:
 """
-Outcome of a single download operation.""""
+Outcome of a single download operation.""
 Fields:
     - url: original URL
     - success: True if download succeeded
@@ -109,4 +109,4 @@ Configuration for download operations.    urls_file: str = "docs/download/urls.t
 
 """
 
-"""
+""

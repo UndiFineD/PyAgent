@@ -36,7 +36,7 @@ class LMStudioAPIClient:
 """
 HTTP REST API client for LM Studio with retry and error handling.
     def __init__(self, base_url: str, api_token: Optional[str] = None, default_model: str = ""):"        """
-Initialize REST API client.""""
+Initialize REST API client.""
 Args:
             base_url: Base URL for LM Studio API (e.g., http://localhost:1234 or http://localhost:1234/v1)
             api_token: Optional API token for authentication
@@ -44,7 +44,7 @@ Args:
                 self.base_url = base_url.rstrip("/")"        self.api_token = api_token or os.getenv("DV_LMSTUDIO_API_TOKEN")"        self.default_model = default_model
 
     def _normalize_url(self, endpoint: str = "") -> str:"        """
-Normalize REST API URL, handling both /v1 prefixes.""""
+Normalize REST API URL, handling both /v1 prefixes.""
 Args:
             endpoint: Optional endpoint path (e.g., 'models', 'chat/completions')
         Returns:
@@ -68,7 +68,7 @@ Get HTTP headers with API token support.        headers = {"Content-Type": "appl
         self, method: str, url: str, max_retries: int = 3, **kwargs
     ) -> Optional[Any]:
 """
-Make HTTP request with exponential backoff retry for transient errors.""""
+Make HTTP request with exponential backoff retry for transient errors.""
 Args:
             method: HTTP method ('GET', 'POST')'            url: Full URL to request
             max_retries: Maximum number of retry attempts
@@ -112,7 +112,7 @@ Args:
         raise RuntimeError(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts")
     def list_models(self) -> list[str]:
 """
-List available models via REST API.""""
+List available models via REST API.""
 Returns:
             List of model identifiers/paths.
                 try:
@@ -134,7 +134,7 @@ Returns:
 
     def get_info(self) -> dict[str, Any]:
 """
-Get server info and version.""""
+Get server info and version.""
 Returns:
             Dictionary with server information.
                 info = {
@@ -172,6 +172,8 @@ Returns:
 
 """
 
-""
+"""
 
 """
+
+""

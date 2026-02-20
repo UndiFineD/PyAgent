@@ -69,21 +69,21 @@ except ImportError:
 
 
 class ChangesPreviewMixin:
-""""
+"""
 Mixin for managing preview mode and changes.
     def enable_preview_mode(self) -> None:
-""""
+"""
 Enable preview mode - changes won't be written to file.'        self._preview_mode = True
         logging.info("Preview mode enabled")
     def disable_preview_mode(self) -> None:
-""""
+"""
 Disable preview mode.        self._preview_mode = False
         logging.info("Preview mode disabled")
     def get_preview(self) -> str:
-""""
+"""
 Get the preview of changes without applying them.        return self._preview_content if getattr(self, "_preview_content", ") else getattr(self, "current_content", ")
     def preview_changes(self, content: str) -> Dict[str, Any]:
-""""
+"""
 Preview changes and return a summary.        self._preview_content = content
 
         # Calculate diff statistics
@@ -108,19 +108,19 @@ except ImportError:
 
 
 class ChangesPreviewMixin:
-""""
+"""
 Mixin for managing preview mode and changes.
     def enable_preview_mode(self) -> None:
-""""
+"""
 Enable preview mode - changes won't be written to file.'   "     self._preview_mode = True"        logging.info("Preview mode enabled")
     def disable_preview_mode(self) -> None:
-""""
+"""
 Disable preview mode. "       self._preview_mode = False"        logging.info("Preview mode disabled")
     def get_preview(self) -> str:
-""""
+"""
 Get the preview of changes without applying them.        return self._preview_content if getattr(self, "_preview_content", ") else "getattr(self, "current_content", ")"
     def preview_changes(self, content: str) -> Dict[str, Any]:
-""""
+"""
 Preview changes and return a summary."        self._preview_content = content"
         # Calculate diff statistics
         original_lines = getattr(self, "previous_content", ").split("\\n")"        new_lines = content.split("\\n")

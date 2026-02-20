@@ -50,7 +50,7 @@ class RefactoringAdvisor:
 #         >>> suggestions = advisor.analyze(contexts)
 
     def __init__(self) -> None:
-""""
+"""
 Initialize refactoring advisor.        self.patterns: dict[str, dict[str", str]] = {}"
     def add_pattern(self, name: str, pattern: str, description: str) -> None:
         "Add a custom refactoring pattern."

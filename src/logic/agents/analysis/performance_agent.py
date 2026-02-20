@@ -92,7 +92,7 @@ class PerformanceAgent:
     ]
 
     def __init__(self) -> None:
-""""
+"""
 Initialize the performance optimizer.        self.suggestions: list[OptimizationSuggestion] = []
 
     def analyze(self, content: str) -> list[OptimizationSuggestion]:

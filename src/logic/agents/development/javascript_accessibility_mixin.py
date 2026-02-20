@@ -83,10 +83,10 @@ except ImportError:
 
 
 class JavascriptAccessibilityMixin:
-""""
+"""
 Mixin for Javascript UI accessibility analysis.
     def _analyze_javascript_ui(self, content: str) -> None:
-""""
+"""
 Analyze JavaScript / React UI code for accessibility issues.        # Check for click handlers without keyboard support
 #         click_pattern = ronClick\\\\s*=\\\\s*\{[^}]+\}
         for match in re.finditer(click_pattern, content):
@@ -150,10 +150,10 @@ except ImportError:
 
 
 class JavascriptAccessibilityMixin:
-""""
+"""
 Mixin for Javascript UI accessibility analysis.
     def _analyze_javascript_ui(self, content: str) -> None:
-""""
+"""
 Analyze JavaScript / React UI code for accessibility issues.        # Check for click handlers without keyboard support
 #         click_pattern = ronClick\\\\s*=\\\\s*\{[^}]+\}
         for match in re.finditer(click_pattern, content):

@@ -51,7 +51,7 @@ __version__ = VERSION
 
 
 class ExternalAIRecorderAgent(BaseAgent):
-""""Records interactions with external AI models to build a rich local knowledge repository.
+"""Records interactions with external AI models to build a rich local knowledge repository.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.logs_dir = self._workspace_root / "data" / "logs" / "external_ai_learning"        self.logs_dir.mkdir(parents=True, exist_ok=True)
@@ -83,7 +83,7 @@ class ExternalAIRecorderAgent(BaseAgent):
 
     @as_tool
     def synthesize_local_knowledge(self) -> str:
-""""Analyzes recorded interactions to identify recurring patterns or high-value insights.
+"""Analyzes recorded interactions to identify recurring patterns or high-value insights.
 #         return "Local knowledge synthesis: Identification of 5 high-value patterns from external records completed."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         return "Local knowledge base is thriving with data from external AI sessions."

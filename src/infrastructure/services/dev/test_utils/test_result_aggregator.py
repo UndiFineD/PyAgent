@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from typing import Any
 except ImportError:
@@ -46,7 +46,7 @@ __version__ = VERSION
 
 class TestResultAggregator:
 """
-Aggregates test results for reporting.""""
+Aggregates test results for reporting.""
 Example:
         agg=TestResultAggregator()
         agg.add_result(TestResult(name="test1", status=TestStatus.PASSED))"        report=agg.get_report()
@@ -64,7 +64,7 @@ Initialize result aggregator.        self._results: list[TestResult] = []
         status: str | None = None,
     ) -> None:
 """
-Add a test result.""""
+Add a test result.""
 Args:
             result: Test result object OR suite name (for backwards compatibility).
             test_name: Test name (when result is a string).
@@ -86,7 +86,7 @@ Get all results.        return list(self._results)
 
     def get_report(self) -> dict[str, Any]:
 """
-Get aggregated report.""""
+Get aggregated report.""
 Returns:
             Dict containing test statistics.
                 total = len(self._results)

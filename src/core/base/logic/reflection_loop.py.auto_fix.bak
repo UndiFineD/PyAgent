@@ -135,7 +135,7 @@ class CodeReflectionAgent(LLMReflectionAgent):
         return code.strip()
 
     async def critique(self, context: ReflectionContext, content: str) -> str:
-        """Provide code-specific critique."""prompt = f"""You are a senior software engineer specializing in {self.language} code review.""""
+        """Provide code-specific critique."""prompt = f"""You are a senior software engineer specializing in {self.language} code review."""
 Critically evaluate this {self.language} code based on:
 - Correctness and functionality
 - Code style and best practices

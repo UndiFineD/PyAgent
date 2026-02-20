@@ -58,7 +58,7 @@ except ImportError:
 
 class RotaryEmbeddingEngine:
 """
-Unified engine for rotary position embeddings.""""
+Unified engine for rotary position embeddings.""
 Provides automatic variant detection and unified interface
     for all RoPE implementations.
     
@@ -153,3 +153,7 @@ Create a RoPE embedding instance.    if isinstance(variant, str):
     engine = RotaryEmbeddingEngine(config)
     engine.set_variant(variant)
     return engine.embedding
+
+""
+
+"""

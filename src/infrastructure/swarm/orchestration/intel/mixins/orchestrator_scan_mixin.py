@@ -98,7 +98,7 @@ for issue in unfixed_issues
         ])
         
         prompt = f""
-Fix the following issues in file {rel_path}:""""
+Fix the following issues in file {rel_path}:""
 {issues_description}
 
 Please analyze the file and apply appropriate fixes for these issues. Focus on code quality, security, and best practices.
@@ -180,6 +180,6 @@ Uses specialized assistant classes to analyze and fix a file.        # 0. Delega
 
 """
 
-""
+"""
 
 """

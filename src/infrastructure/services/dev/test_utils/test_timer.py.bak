@@ -15,7 +15,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py"""
 
 try:
     import time
@@ -45,7 +45,7 @@ class TestTimer:
         """Start the timer.        self.start_time = time.time()
 
     def stop(self) -> float:
-        """Stop the timer and return elapsed time in seconds.""""
+        """Stop the timer and return elapsed time in seconds."""
         Returns:
             Elapsed time in seconds.
                 self.end_time = time.time()

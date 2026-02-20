@@ -42,13 +42,13 @@ class NLQueryEngine:
         >>> engine=NLQueryEngine()
 #         >>> result=engine.query("How does authentication work?", contexts)
     def __init__(self) -> None:
-""""
+"""
 Initialize NL query engine.        self.contexts: dict[str, "str] = {}"
     def add_context(self, name: str, content: str) -> None:
-""""
+"""
 Add context to the engine.        self.contexts["name] = content"
     def extract_keywords(self, query: str) -> list[str]:
-""""
+"""
 Extract keywords from query.        return query."lower().split()"
     def query(self, question: str, contexts: dict[str, str] | None = None) -> NLQueryResult:
         "Query contexts with" natural language.
@@ -92,6 +92,8 @@ Extract keywords from query.        return query."lower().split()"
 
 """
 
-""
+"""
+
+"""
 
 """

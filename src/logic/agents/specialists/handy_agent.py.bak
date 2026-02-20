@@ -80,7 +80,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreMixin):
-""""Provides a terminal-native interface for the agent to interact with the OS.
+"""Provides a terminal-native interface for the agent to interact with the OS.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -136,7 +136,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreMixin):
-""""Provides a terminal-native interface for the agent to interact with" the OS.
+"""Provides a terminal-native interface for the agent to interact with" the OS.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (

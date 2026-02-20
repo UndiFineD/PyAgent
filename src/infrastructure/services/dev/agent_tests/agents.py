@@ -58,7 +58,7 @@ Main TestsAgent class for test suite improvement.
 
 class TestsAgent(BaseAgent):
 """
-Updates code file test suites using AI assistance.""""
+Updates code file test suites using AI assistance.""
 Invariants:
     - self.file_path must point to a test file (usually starting with 'test_').'    - The agent attempts to locate the corresponding source file to provide context.
     
@@ -245,7 +245,7 @@ Get all factories.        return self._factories
 """
 Generate code for a factory function.        params = ", ".join(f"{k}: {v}" for k, v in factory.parameters.items())"        return (
             f"def {factory.name}({params}) -> {factory.return_type}:\\n""            f'    """
-Factory for creating {factory.return_type} instances."""\\n'""""'
+Factory for creating {factory.return_type} instances."""\\n'"""'
 f"    {factory.generator or 'pass'}\\n""'        )
 
     # ========== Test Execution Recording ==========
@@ -437,7 +437,7 @@ Validate pytest / unittest-specific patterns.        try:
 
     def improve_content(self, prompt: str) -> str:
 """
-Use AI to improve the test suites.""""
+Use AI to improve the test suites.""
 When Copilot CLI is unavailable, BaseAgent keeps the existing content
         unchanged (avoids injecting duplicated TODO Placeholder markdown blocks).
                 logging.info(f"Improving tests for {self.file_path}")"        # Enhance prompt with source code context if available

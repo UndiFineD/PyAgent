@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 import threading
 from collections.abc import Callable
 from typing import TypeVar
@@ -73,4 +73,4 @@ Retry a function multiple times.        last_exc: BaseException | None = None
 
 """
 
-"""
+""

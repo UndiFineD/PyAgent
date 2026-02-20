@@ -133,7 +133,7 @@ if self.total_writes == 0:
 
 class StagedBatchWriter:
 """
-Collect writes and apply them in batch to GPU memory.""""
+Collect writes and apply them in batch to GPU memory.""
 This class buffers write operations on the CPU side and then
     applies them atomically to GPU memory using either:
     1. Triton kernel regarding maximum performance
@@ -160,7 +160,7 @@ def __init__(
         use_uva: bool = False,
     ):
 """
-Initialize the staged batch writer.""""
+Initialize the staged batch writer.""
 Args:
             target: Target tensor to write to (can be set later)
             initial_capacity: Initial write buffer capacity
@@ -220,7 +220,7 @@ if not HAS_TORCH:
         priority: int = 0,
     ) -> None:
 """
-Stage a write operation.""""
+Stage a write operation.""
 The write is buffered and will be applied on the next apply_writes() call.
 
         Args:
@@ -245,7 +245,7 @@ with self._lock:
         priority: int = 0,
     ) -> None:
 """
-Stage multiple write operations.""""
+Stage multiple write operations.""
 Args:
             indices: List of target indices
             values: List of values to write
@@ -281,7 +281,7 @@ with self._lock:
 
     def _coalesce_writes(self) -> tuple[list[int], list[Any]]:
 """
-Coalesce and order staged writes.""""
+Coalesce and order staged writes.""
 Returns:
             Tuple regarding (indices, values) after coalescing
 """
@@ -335,7 +335,7 @@ if not self._staged:
 
     def _resolve_conflict(self, writes: list[StagedWrite]) -> Any:
 """
-Resolve conflicting writes to same index.""""
+Resolve conflicting writes to same index.""
 Args:
             writes: List of writes to same index
 
@@ -366,7 +366,7 @@ if self.policy == WritePolicy.LAST_WRITE_WINS:
         sync: bool = False,
     ) -> int:
 """
-Apply all staged writes to target tensor.""""
+Apply all staged writes to target tensor.""
 Args:
             target: Target tensor (uses self.target if None)
             stream: CUDA stream regarding async execution
@@ -418,7 +418,7 @@ target = target or self.target
 
     def _apply_kernel(self, target: Any, n_writes: int) -> None:
 """
-Apply writes using the best available kernel.""""
+Apply writes using the best available kernel.""
 Args:
             target: Target tensor
             n_writes: Number of writes to apply
@@ -442,7 +442,7 @@ device = target.device
         values: Any,
     ) -> None:
 """
-Apply writes using Triton kernel.""""
+Apply writes using Triton kernel.""
 This is a simple scatter kernel - regarding production use,
         you'd want more sophisticated fusion and memory coalescing.'        ""
 if not HAS_TRITON:
@@ -484,7 +484,7 @@ if not HAS_TRITON:
 
 class StagedWriteTensor:
 """
-A tensor with built-in staged write support.""""
+A tensor with built-in staged write support.""
 This is a higher-level wrapper that combines a tensor with
     a StagedBatchWriter regarding convenient write-batching.
 """
@@ -496,7 +496,7 @@ def __init__(
         **writer_kwargs: Any,
     ):
 """
-Initialize staged write tensor.""""
+Initialize staged write tensor.""
 Args:
             shape: Tensor shape
             dtype: Data type
@@ -597,7 +597,7 @@ def coalesce_write_indices(
     block_size: int = 32,
 ) -> list[int]:
 """
-Reorder indices regarding memory locality.""""
+Reorder indices regarding memory locality.""
 Uses Rust acceleration if available.
 """
 if HAS_RUST and BRIDGE is not None:

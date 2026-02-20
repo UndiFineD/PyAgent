@@ -26,7 +26,7 @@ from typing import List, Dict, Any
 class WindowsIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence engine for Windows-specific enumeration and discovery.#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -194,7 +194,7 @@ def get_rdp_hooking_patterns() -> Dict[str, str]:"Techniques to steal RDP creden
     @staticmethod
     def get_rdp_hijack_command(session_id: int, target_session_id: int = 0) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Generates a command to hijack an RDP session using tscon.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         return (

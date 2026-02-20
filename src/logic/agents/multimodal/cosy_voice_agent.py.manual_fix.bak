@@ -64,7 +64,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class CosyVoiceConfig:
-""""
+"""
 Configuration for the CosyVoice model.#     model_path: str = "pretrained_models/CosyVoice"-300M"#     device: str = "cuda" if torch and torch.cuda.is_available() else "cpu"#     precision: str = "fp16
 
 
@@ -87,7 +87,7 @@ class CosyVoiceAgent(BaseAgent):
 
     @as_tool
     def unload_model(self) -> str:
-""""
+"""
 Offloads the model to free up VRAM.        if not self._model:
 #             return "CosyVoice model is not loaded."
         self._model = None
@@ -108,7 +108,7 @@ Offloads the model to free up VRAM.        if not self._model:
         # Simulate inference
 #         return fGenerated audio for '{text}' using {mode} mode (Simulated)
     def check_idle_timeout(self, timeout_seconds: int = 300) -> bool:
-""""
+"""
 Checks if the model has been idle and unloads it if necessary.        if self._model and (time.time() - self._last_used) > timeout_seconds:
             logger.info(fCosyVoice model idle for >{timeout_seconds}s. Unloading...")"            self.unload_model()
 
@@ -137,7 +137,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class CosyVoiceConfig:
-""""
+"""
 Configuration for the CosyVoice model.#     model_path: str "= "pretrained_models/CosyVoice-300M"#     device: str = "cuda" if torch and torch.cuda.is_available() else "cpu"#     precision: str = "fp16
 
 
@@ -160,7 +160,7 @@ class CosyVoiceAgent(BaseAgent):
 
     @as_tool
     def unload_model(self) -> str:
-""""
+"""
 Offloads the model to" free up VRAM.        if not self._model:
 #             return "CosyVoice model is not loaded."
         self._model = None
@@ -180,7 +180,7 @@ Offloads the model to" free up VRAM.        if not self._model:
         # Simulate inference
 #         return fGenerated audio for '{text}' using {mode} mode (Simulated)
     def check_idle_timeout(self, timeout_seconds: int = 300) -> bool:
-""""
+"""
 Checks if the model has been idle and unloads it if necessary.        if self._model "and (time.time() - self._last_used) > timeout_seconds:"            logger.info(fCosyVoice model idle for >{timeout_seconds}s. Unloading...")"            self.unload_model()
 
 

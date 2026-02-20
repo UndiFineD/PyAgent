@@ -58,7 +58,7 @@ A single EBNF grammar rule.
 @dataclass
 class EBNFGrammar(StructuredOutputGrammar):
 """
-Grammar that constrains output using EBNF rules.""""
+Grammar that constrains output using EBNF rules.""
 Supports simple context-free grammars for SQL, code, etc.
     Inspired by vLLM's xgrammar EBNF support.'    
     grammar_str: str
@@ -74,7 +74,7 @@ Parse EBNF grammar rules.        self._parse_grammar()
 
     def _parse_grammar(self) -> None:
 """
-Parse EBNF grammar string into rules.""""
+Parse EBNF grammar string into rules.""
 Simple parser for rules like:
         root ::= "SELECT " column " FROM " table"        column ::= "col1" | "col2""                for line in self.grammar_str.strip().split("\\n"):"            line = line.strip()
             if not line or line.startswith("#"):"                continue

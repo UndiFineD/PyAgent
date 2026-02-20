@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -41,7 +41,7 @@ __version__ = VERSION
 @dataclass
 class TestDataFactory:
 """
-Factory for generating test data.""""
+Factory for generating test data.""
 Attributes:
         data_type: Type of data to generate.
         template: Template for generation.

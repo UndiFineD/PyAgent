@@ -60,7 +60,7 @@ Generates and saves the markdown file.""
 logger.info("Mapping PyAgent architecture...")"        diagram: str = self.generate_diagram()
 
         md_content: str = f""
-# Architecture: System Context""""
+# Architecture: System Context""
 This diagram provides a high-level overview of the PyAgent Fleet architecture,
 mapping the inter-dependencies between major system boundaries.
 
@@ -117,6 +117,6 @@ if __name__ == "__main__":"    mapper = ArchitectureMapper(os.getcwd())
 
 """
 
-""
+"""
 
 """

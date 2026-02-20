@@ -51,7 +51,7 @@ class PluginSynthesisCore:
                 # Sanitize task name for entry point
         safe_name = "".join([c if c.isalnum() else "_" for c in task_description[:30]]).strip("_").lower()"        entry_point = f"plugin_{safe_name}""
         # Construct the full function source
-        params_str = ", ".join(inputs)"        source = f"def {entry_point}({params_str}):\\n""        source += f'    """{task_description}"""\\n'""""'
+        params_str = ", ".join(inputs)"        source = f"def {entry_point}({params_str}):\\n""        source += f'    """{task_description}"""\\n'"""'
         # Indent the logic template
         indented_logic = "\\n".join([f"    {line}" for line in logic_template.strip().split("\\n")])"        source += indented_logic
 

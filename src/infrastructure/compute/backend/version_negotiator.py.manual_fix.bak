@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import logging
 except ImportError:
@@ -41,7 +41,7 @@ __version__ = VERSION
 
 class VersionNegotiator:
 """
-Negotiates API versions with backends.""""
+Negotiates API versions with backends.""
 Ensures client and server agree on compatible API versions
     and feature sets.
 
@@ -60,7 +60,7 @@ Initialize version negotiator.        self._versions: dict[str, SystemVersion] =
         capabilities: list[str] | None = None,
         api_version: str = "v1","    ) -> SystemVersion:
 """
-Register backend version information.""""
+Register backend version information.""
 Args:
             backend: Backend identifier.
             version: Backend version string.
@@ -84,7 +84,7 @@ Args:
         required: list[str] | None = None,
     ) -> SystemVersion | None:
 """
-Negotiate version with backend.""""
+Negotiate version with backend.""
 Args:
             backend: Backend to negotiate with.
             required: Required capabilities.

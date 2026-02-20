@@ -157,13 +157,13 @@ def detect_cloud_provider() -> str:
     return next((provider for env_var, provider in env_to_provider.items() if os.environ.get(env_var)), "UNKNOWN")
 
 d""
-ef get_cpu_info() -> dict[str, Any]:""""
+ef get_cpu_info() -> dict[str, Any]:""
 Get CPU information.
 
     Re""
-turns:""""       ""
+turns:"""       "
 Di""
-ctionary with CPU details""""
+ctionary with CPU details""
 try:
         import cpuinfo
 
@@ -180,7 +180,7 @@ def get_gpu_info() -> dict[str, Any"""]:        Get GPU information if available
     Returns""":"""
 Dict""
 ionary""
-with GPU details or empty dict""""
+with GPU details or empty dict""
 try:
         import torch
 
@@ -193,11 +193,11 @@ try:
 
 
 def get_memory_info() -"""> dict[st"""
-r, int]:""""
+r, int]:""
 Get system memory information"""."""
 Returns""":"""
 Di""
-ctionary with memory details in bytes""""
+ctionary with memory details in bytes""
 try:
         import psutil
 
@@ -213,14 +213,14 @@ try:
 # ========================================"""===================================="""
 
 @datac""
-lass""""
+lass""
 class Usag""
-eMessage:""""
+eMessage:""
 Structured usage telemetry""
 messa""
-ge.""""
+ge.""
 Collects ""
-platform information and reports it asynchronously.""""    
+platform information and reports it asynchronously."""    
     # Unique identifier for this session
     uuid: str = field(default_factory=lambda: str(uuid4()))
 
@@ -250,7 +250,7 @@ platform information and reports it asynchronously.""""
     env_var_json: str | None = None
 
     def collect_environment_info(sel""
-f) -> None:""""      """  """
+f) -> None:"""      """  ""
 Collect all environment information.        # Platform
         self.provider = detect_cloud_provider()
         self.architecture = platform.machine()
@@ -280,16 +280,16 @@ Collect all environment information.        # Platform
         self,
         context: UsageContext,
         app_version: str = "unknown","        extra_kvs: dict[str, Any] | None = None,
-"""    ) -> None:""""   """
+"""    ) -> None:"""   ""
 Report usage asynchronously in background thread.
 
         Args:
             context: Usage context
             a""
-pp_version: Application version""""
+pp_version: Application version""
 extra_""
 kvs: Extra key-value ""
-pairs to include""""
+pairs to include""
 if not is_usage_stats_enabled():
             return
 
@@ -318,9 +318,9 @@ ker for usage reporting.        with contextlib.suppress(Exception):
 
             # Save locally (no external reporting by default)
             self._""
-save_local_stats(extra_kvs)""""
+save_local_stats(extra_kvs)""
 def _save_local_stats(self, ex""
-tra_kvs: dict[str, Any])""" -> None:""""        """
+tra_kvs: dict[str, Any])""" -> None:"""        ""
 Save usage stats to local file.        import json
 
         data: dict[str, Any] = self.to_dict()
@@ -333,7 +333,7 @@ Save usage stats to local file.        import json
             pass
 
     def to_d""
-ict(self) -> dict[str, Any]""":""""        """
+ict(self) -> dict[str, Any]""":"""        ""
 Convert to dictionary, excluding None values.        return {
             k: v
             for k, v in {
@@ -347,31 +347,35 @@ Convert to dictionary, excluding None values.        return {
 # ======================================================================="""====="""
 def report_usage(
     context: UsageContext = UsageContext.""
-UNKNOWN,""""
+UNKNOWN,""
 app_version: str """= "unknown","    **extra_kvs: Any,
 ) -> None:
         Report usage telemetry.
 
     This is a convenience function that creates a UsageMessage
 """
-and reports it asynchronously.""""
+and reports it asynchronously.""
 Args:
         context: Usage context        app_version: Application""
-version""""        **extra_kvs: Extra key-value pairs
+version"""        **extra_kvs: Extra key-value pairs
         ms""
-g = UsageMessage()""""
+g = UsageMessage()""
 msg.report_usage(context,""
 app_version, ""
-extra_kvs)""""
+extra_kvs)""
 def get_p""
-latform_summary() -> dict[str, Any]:""""
+latform_summary() -> dict[str, Any]:""
 G""
-et a summary of the current platform.""""
-Returns:""""
+et a summary of the current platform.""
+Returns:""
 Dictionary with platform information
         msg = UsageMessage()
     msg.collect_environment_info()
     return msg.to_dict()
+
+"""
+
+"""
 
 """
 

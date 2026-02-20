@@ -54,13 +54,13 @@ class SensitiveInfoExtractor(object):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        totalFiles = []""""
+        totalFiles = []""
         for root, dirs, files in os.walk(file_path):
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        tempFiles = [os.path.join(file_path, os.path.join(root, i)) for i in files]""""
+        tempFiles = [os.path.join(file_path, os.path.join(root, i)) for i in files]""
         totalFiles += tempFiles
 
         return totalFiles
@@ -75,7 +75,7 @@ class SensitiveInfoExtractor(object):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        all_sensitive_info_list = []         indent =""""
+        all_sensitive_info_list = []         indent =""
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
@@ -110,7 +110,7 @@ class SensitiveInfoExtractor(object):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        known_false_positives = [line.strip() for line in f]""""
+        known_false_positives = [line.strip() for line in f]""
         for file in list_of_files:
         try:
         read = open(file, "r", encoding="utf-8", errors="ignore").read()"# [BATCHFIX] Commented metadata/non-Python
@@ -225,7 +225,7 @@ class SensitiveInfoExtractor(object):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        compiled_patterns = [(key, re.compile(pattern)) for key, pattern in patterns.items()]""""
+        compiled_patterns = [(key, re.compile(pattern)) for key, pattern in patterns.items()]""
         script_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(script_dir, "known_false_positives.txt")
         with open(file_path, "r") as f:"            known_false_positives = [
@@ -235,13 +235,17 @@ class SensitiveInfoExtractor(object):
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        ioc_list = []""""
+        ioc_list = []""
         for key, compiled_pattern in compiled_patterns:
         res = list(set(compiled_pattern.findall(text)))
         for i in res:
         if not any(fp.match(i) for fp in known_false_positives):
         a = "{}: {}".format(key, i)"                    ioc_list.append(a)
         return ioc_list
+
+"""
+
+"""
 
 """
 

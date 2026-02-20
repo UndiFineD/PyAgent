@@ -42,7 +42,7 @@ __version__ = VERSION
 
 
 class GraphBeadsMixin:
-""""
+"""
 Mixin for Beads task graph logic.
     @as_tool
     def create_task(

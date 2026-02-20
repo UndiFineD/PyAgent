@@ -43,7 +43,7 @@ if HAS_NUMPY:
 
 class GptJRotaryEmbedding(RotaryEmbeddingBase):
 """
-GPT-J style rotary position embedding.""""
+GPT-J style rotary position embedding.""
 Interleaved rotation pattern where pairs of dimensions
     are rotated together.
     
@@ -126,4 +126,4 @@ Apply GPT-J style rotary embeddings.        seq_len = int(positions.max()) + 1 i
 
 """
 
-"""
+""

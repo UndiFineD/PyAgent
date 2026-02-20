@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_changes.py""""
+Auto-extracted class from agent_changes.py""
 import logging
 import os
 from pathlib import Path
@@ -39,7 +39,7 @@ __version__ = VERSION
 
 class ExternalImporter:
 """
-Imports changelog entries from external sources.""""
+Imports changelog entries from external sources.""
 Supports importing from GitHub releases, JIRA, and other sources.
 
     Attributes:
@@ -73,7 +73,7 @@ Record an interaction for intelligence harvesting (Phase 108).        if self.re
 
     def import_github_releases(self, owner: str, repo: str, pages: int = 1) -> list[ImportedEntry]:
 """
-Import entries from GitHub releases using the official API (Simulated Tier 1).""""
+Import entries from GitHub releases using the official API (Simulated Tier 1).""
 Args:
             owner: Repository owner.
             repo: Repository name.
@@ -125,7 +125,7 @@ Args:
 
     def import_jira(self, project_key: str, max_results: int = 50) -> list[ImportedEntry]:
 """
-Import entries from JIRA using REST API (v2 feature).""""
+Import entries from JIRA using REST API (v2 feature).""
 Args:
             project_key: JIRA project key.
             max_results: Max issues to fetch.
@@ -170,7 +170,7 @@ Args:
 
     def convert_to_changelog_entries(self) -> list[ChangelogEntry]:
 """
-Convert imported entries to changelog entries.""""
+Convert imported entries to changelog entries.""
 Returns:
             List of ChangelogEntry instances.
                 result: list[ChangelogEntry] = []
@@ -201,6 +201,8 @@ Returns:
 
 """
 
-""
+"""
 
 """
+
+""

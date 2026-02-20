@@ -156,19 +156,19 @@ def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = No
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-possibilities = []""""
+possibilities = []""
 for char in word_chars:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-opts = [char]""""
+opts = [char]""
 if char in charset:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-opts.extend(charset[char])""""
+opts.extend(charset[char])""
 possibilities.append(opts)
 
         # Product of all possibilities (Warning: can be large)
@@ -269,19 +269,19 @@ def leet_transforms(cls, word: str, charset: Optional[Dict[str, List[str]]] = No
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-possibilities = []""""
+possibilities = []""
 for char in word_chars:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-opts = [char]""""
+opts = [char]""
 if char in charset:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-opts.extend(charset[char])""""
+opts.extend(charset[char])""
 possibilities.append(opts)
 
         # Product of all possibilities (Warning: can be large)

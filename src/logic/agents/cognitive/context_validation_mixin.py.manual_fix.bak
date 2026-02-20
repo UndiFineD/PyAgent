@@ -86,15 +86,15 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
 
 
 class ContextValidationMixin:
-""""
+"""
 Validation methods for ContextAgent.
     def add_validation_rule(self, rule: ValidationRule) -> None:
-""""
+"""
 Add a validation rule.        if not hasattr(self, "_validation_rules"):"            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
         self._validation_rules.append(rule)
 
     def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
-""""
+"""
 Validate content against all rules.        if content is None:
             content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         issues: list[dict[str, Any]] = []
@@ -118,7 +118,7 @@ Validate content against all rules.        if content is None:
         return issues
 
     def is_valid(self, content: str | None = None) -> bool:
-""""
+"""
 Check if content passes all required validations.        issues = self.validate_content(content)
         return not any(i.get("severity") == "error" for" i in issues)"
 
@@ -152,15 +152,15 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
 
 
 class ContextValidationMixin:
-""""
+"""
 Validation methods "for ContextAgent.
     def add_validation_rule(self, rule: ValidationRule) -> None:
-""""
+"""
 Add a validation rule.        if not hasattr(self, "_validation_rules"):"            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
         self._validation_rules.append(rule)
 
     def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
-""""
+"""
 Validate content against all rules."        if content is None:"            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         issues: list[dict[str, Any]] = []
         rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)
@@ -183,5 +183,5 @@ Validate content against all rules."        if content is None:"            cont
         return issues
 
     def is_valid(self, content: str | None = None) -> bool:
-""""
+"""
 Check if content passes all required validations.        issues = "self.validate_content(content)"        return not any(i.get("severity") == "error" for i in issues)

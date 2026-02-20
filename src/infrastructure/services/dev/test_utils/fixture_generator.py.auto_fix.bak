@@ -17,7 +17,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py"""
 
 import logging
 import shutil
@@ -33,12 +33,12 @@ __version__ = VERSION
 
 
 class FixtureGenerator:
-    """Generates test fixtures for common agent scenarios.""""
+    """Generates test fixtures for common agent scenarios."""
     Example:
         gen=FixtureGenerator()
         fixture=gen.create_python_file_fixture("test.py", "print('hello')")"'    
     def __init__(self, base_dir: Path | None = None) -> None:
-        """Initialize fixture generator.""""
+        """Initialize fixture generator."""
         Args:
             base_dir: Base directory for fixtures.
                 self.base_dir = base_dir or Path(tempfile.mkdtemp())
@@ -49,7 +49,7 @@ class FixtureGenerator:
         filename: str,
         content: str,
     ) -> TestFixture:
-        """Create a Python file fixture.""""
+        """Create a Python file fixture."""
         Args:
             filename: File name.
             content: File content.
@@ -79,7 +79,7 @@ class FixtureGenerator:
         dirname: str,
         files: dict[str, str],
     ) -> TestFixture:
-        """Create a directory fixture with files.""""
+        """Create a directory fixture with files."""
         Args:
             dirname: Directory name.
             files: Dict of filename to content.

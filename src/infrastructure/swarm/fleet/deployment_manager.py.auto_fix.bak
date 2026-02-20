@@ -41,7 +41,7 @@ class DeploymentManager:
         self.workspace_root = Path(workspace_root)
         self.deployment_dir = self.workspace_root / "deploy""        self.deployment_dir.mkdir(exist_ok=True)
 
-    def generate_docker_manifest(self, component: str = "fleet") -> str:"        """Generates a Dockerfile for the fleet or a specific agent.        dockerfile_content = f"""FROM python:3.13-slim""""WORKDIR /app
+    def generate_docker_manifest(self, component: str = "fleet") -> str:"        """Generates a Dockerfile for the fleet or a specific agent.        dockerfile_content = f"""FROM python:3.13-slim"""WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
@@ -50,7 +50,7 @@ CMD ["python", "src\\agent_remote.py"]"        file_path = self.deployment_dir /
         return str(file_path)
 
     def generate_compose_orchestration(self, num_replicas: int = 3) -> str:
-        """Generates a docker-compose.yaml for multi-node fleet scaling.        compose_content = """version: '3.8'""""'services:
+        """Generates a docker-compose.yaml for multi-node fleet scaling.        compose_content = """version: '3.8'"""'services:
   fleet_master:
     build:
       context: ..

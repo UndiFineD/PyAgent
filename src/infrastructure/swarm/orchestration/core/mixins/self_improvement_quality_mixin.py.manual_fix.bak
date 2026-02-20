@@ -53,7 +53,7 @@ Checks for high cyclomatic complexity.        rust_accel = getattr(self, "_RUST_
 Checks for missing or insufficient docstrings.        findings = []
         # Phase 337: Increased search window to 3000 to accommodate long license headers
         if not re.search(r'""
-[\\s\\S]*?"""|\'\'\'[\\s\\S]*?\'\'\'', content[:3000]):""""'
+[\\s\\S]*?"""|\'\'\'[\\s\\S]*?\'\'\'', content[:3000]):"""'
 findings.append(
                 {
                     "type": "Missing Docstring","                    "message": "Module-level docstring is missing. Documentation is required for Phase 315 parity.","                    "file": file_path_rel,"                }

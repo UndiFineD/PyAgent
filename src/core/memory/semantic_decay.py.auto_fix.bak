@@ -15,7 +15,7 @@ from __future__ import annotations
 
 
 """
-""""Module: semantic_decay
+"""Module: semantic_decay
 Implements advanced Synaptic Decay, Neural Context Pruning, and Semantic Cache Invalidation.
 Phase 91-92: Sliding-window invalidation and attention-entropy maps for KV-cache landmarks.
 """

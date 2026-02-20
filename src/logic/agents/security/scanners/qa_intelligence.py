@@ -17,14 +17,14 @@
 class QAIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 """
 Intelligence engine for automated E2E testing and application state validation.#     @staticmethod
 
 """
 def get_e2e_system_prompt() -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Returns a high-quality system prompt for a testing agent (ported from BrowserUse/qa-use).#         return
 You are a testing agent that validates whether an application works as expected.
 Follow the steps in order exactly as they are given.
@@ -42,7 +42,7 @@ Evaluate the end state of the application against the success criteria.
     @staticmethod
     def get_test_case_template() -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Returns a template for defining E2E test cases.#         return
 <test>
   <steps>

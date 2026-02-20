@@ -56,7 +56,7 @@ __version__ = VERSION
 
 
 class BranchComparer:
-    """Compares errors across git branches.""""
+    """Compares errors across git branches."""
     Identifies errors that exist only in specific branches
     or are common across branches.
 
@@ -67,14 +67,14 @@ class BranchComparer:
         """Initialize the branch comparer.        self.branch_errors: dict[str, set[str]] = {}
 
     def set_branch_errors(self, branch: str, error_ids: list[str]) -> None:
-        """Set errors for a branch.""""
+        """Set errors for a branch."""
         Args:
             branch: Branch name.
             error_ids: List of error IDs in the branch.
                 self.branch_errors[branch] = set(error_ids)
 
     def compare(self, branch_a: str, branch_b: str) -> BranchComparison:
-        """Compare errors between two branches.""""
+        """Compare errors between two branches."""
         Args:
             branch_a: First branch name.
             branch_b: Second branch name.
@@ -93,7 +93,7 @@ class BranchComparer:
         )
 
     def get_new_errors(self, base_branch: str, feature_branch: str) -> list[str]:
-        """Get errors introduced in feature branch.""""
+        """Get errors introduced in feature branch."""
         Args:
             base_branch: Base branch name (e.g., main).
             feature_branch: Feature branch name.
@@ -104,7 +104,7 @@ class BranchComparer:
         return comparison.errors_only_in_b
 
     def get_fixed_errors(self, base_branch: str, feature_branch: str) -> list[str]:
-        """Get errors fixed in feature branch.""""
+        """Get errors fixed in feature branch."""
         Args:
             base_branch: Base branch name.
             feature_branch: Feature branch name.

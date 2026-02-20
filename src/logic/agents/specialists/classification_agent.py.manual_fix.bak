@@ -79,12 +79,12 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
-""""
+"""
 Types of classification supported by the agent.#     SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary"
 
 @dataclass
 class ClassificationResult:
-""""
+"""
 Represents a classification result with confidence.
     category: str
     confidence: float
@@ -94,7 +94,7 @@ Represents a classification result with confidence.
 
 @dataclass
 class Taxonomy:
-""""
+"""
 Represents a hierarchical category taxonomy.
     name: str
     categories: List[str]
@@ -182,12 +182,12 @@ __version__ = VERSION
 
 
 class ClassificationType(Enum):
-""""
+"""
 Types of classification supported by the agent.# "    SINGLE_LABEL = "single_label"#     MULTI_LABEL = "multi_label"#     HIERARCHICAL = "hierarchical"#     BINARY = "binary
 
 @dataclass
 class ClassificationResult:
-""""
+"""
 Represents a classification result with confidence.
     category: str
     confidence: float
@@ -197,7 +197,7 @@ Represents a classification result with confidence.
 
 @dataclass
 class Taxonomy:
-""""
+"""
 Represents a hierarchical category taxonomy.
     name: str
     categories: List[str]

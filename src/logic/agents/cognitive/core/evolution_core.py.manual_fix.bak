@@ -33,7 +33,7 @@ except ImportError:
 
 
 class EvolutionCore:
-""""
+"""
 Core logic for evolutionary algorithms in prompt engineering.
     @staticmethod
     def prompt_crossover(prompt1: str, prompt2: str) -> str:
@@ -76,6 +76,8 @@ Core logic for evolutionary algorithms in prompt engineering.
 
 """
 
-""
+"""
+
+"""
 
 """

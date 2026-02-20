@@ -47,7 +47,7 @@ __version__ = VERSION
 
 @dataclass
 class ReportTemplate:
-    """Template for generating reports.""""
+    """Template for generating reports."""
     Attributes:
         name: Name of the template.
         sections: List of section names to include.

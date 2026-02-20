@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Engine for automated self-repair of agent tools and modules.""""
+Engine for automated self-repair of agent tools and modules.""
 Detects runtime errors and orchestrates CoderAgents to apply fixes.
 
 """
@@ -108,6 +108,8 @@ Returns a summary of healing attempts.        return self.core.format_healing_re
 
 """
 
-""
+"""
 
 """
+
+""

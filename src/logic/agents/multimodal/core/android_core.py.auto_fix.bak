@@ -29,7 +29,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ADBResult(TypedDict):
-""""Result of an ADB command execution.
+"""Result of an ADB command execution.
     success: bool
     output: str
     error: Optional[str]
@@ -38,7 +38,7 @@ class ADBResult(TypedDict):
 
 
 class AndroidCore:
-""""Core logic for ADB command formatting and parsing.
+"""Core logic for ADB command formatting and parsing.
     @staticmethod
     def run_adb_command(
         command: list[str],

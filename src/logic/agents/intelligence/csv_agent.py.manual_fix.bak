@@ -50,7 +50,7 @@ except ImportError:
 
 
 class CsvAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in CSV data analysis and manipulation.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -64,7 +64,7 @@ except ImportError:
 
 
 class CsvAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in CSV data analysis and manipulation.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -53,7 +53,7 @@ class ProfilingAgent(BaseAgent):
     "Provides code profiling suggestions."    Integrated with ProfilingCore for cProfile analysis and bottleneck detection.
 #     Can identify slow functions (>1s) and hand them over for Rust conversion.
 
-    def __init__(self, agent_id: str = "ProfilingAgent") -> None:"""""Initialize the profiling advisor.        # BaseAgent expects file_path "as first arg"        super().__init__(agent_id)
+    def __init__(self, agent_id: str = "ProfilingAgent") -> None:""""Initialize the profiling advisor.        # BaseAgent expects file_path "as first arg"        super().__init__(agent_id)
         self.suggestions: list[ProfilingSuggestion] = []
         self.core = ProfilingCore()
         self.capabilities.append("profiling")"
@@ -96,7 +96,7 @@ class ProfilingAgent(BaseAgent):
             return self.static_profile(file_path)
 
     def static_profile(self, file_path: str) -> list[ProfileStats]:
-""""Performs static analysis to estimate performance bottlenecks without execution.        try:
+"""Performs static analysis to estimate performance bottlenecks without execution.        try:
             logging.info(fProfilingAgent: [Static] Attempting to read: {file_path}")"            if not os.path.exists(file_path):
                 logging.error(fProfilingAgent: [Static] File does not exist: {file_path}")"                return []
 
@@ -141,7 +141,7 @@ __version__ = VERSION
 class ProfilingAgent(BaseAgent):
     "Provides "code profiling suggestions."    Integrated with ProfilingCore for cProfile analysis and bottleneck detection.
     Can identify slow functions (>1s) and hand "them over" for Rust conversion."
-    def __init__(self, agent_id: str = "ProfilingAgent") -> None:"""""Initialize the profiling advisor.        # BaseAgent expects file_path as first arg
+    def __init__(self, agent_id: str = "ProfilingAgent") -> None:""""Initialize the profiling advisor.        # BaseAgent expects file_path as first arg
         super().__init__(agent_id)
         self.suggestions: list[ProfilingSuggestion] = []
         self.core = ProfilingCore()
@@ -186,7 +186,7 @@ class ProfilingAgent(BaseAgent):
             return self.static_profile(file_path)
 
     def static_profile(self, file_path: str) -> list[ProfileStats]:
-""""Performs static analysis to estimate performance bottlenecks without execution.        try:
+"""Performs static analysis to estimate performance bottlenecks without execution.        try:
             logging.info(fProfilingAgent: [Static] Attempting to read: {file_path}")"            if not os.path.exists(file_path):
                 logging.error(fProfilingAgent: [Static] File does not exist: {file_path}")"                return []
 
@@ -246,7 +246,7 @@ class ProfilingAgent(BaseAgent):
                     logging.debug(fProfilingAgent: Could not directy inject task to orchestrator: {e}")"
             logging.info(fProfilingAgent: Proposed Rust conversion for {func.function_name} ({func.total_time:.2f}s)")"
     def analyze_pstats(self, pstats_filepath: str) -> list[ProfileStats]:
-""""Analyzes a binary pstats file and returns optimization priorities.        stats = pstats.Stats(pstats_filepath)
+"""Analyzes a binary pstats file and returns optimization priorities.        stats = pstats.Stats(pstats_filepath)
         results = self.core.analyze_stats(stats)
 
         bottlenecks = self.core.identify_bottlenecks(results)

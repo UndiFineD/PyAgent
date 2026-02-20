@@ -60,7 +60,7 @@ __version__ = VERSION
 @dataclass
 class BranchComparison:
 """
-Comparison of errors across branches.""""
+Comparison of errors across branches.""
 Attributes:
         branch_a: First branch name.
         branch_b: Second branch name.
@@ -96,4 +96,4 @@ Attributes:
 
 """
 
-"""
+""

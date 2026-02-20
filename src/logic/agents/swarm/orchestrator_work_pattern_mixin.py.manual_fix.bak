@@ -78,7 +78,7 @@ Initialize work pattern capabilities.        super().__init__(**kwargs)
 
     def register_work_pattern(self, pattern: WorkPattern) -> None:
 """
-Register a work pattern for use in orchestration.""""
+Register a work pattern for use in orchestration.""
 Args:
             pattern: The work pattern to register
                 self._work_patterns[pattern.name] = pattern
@@ -88,7 +88,7 @@ if self._default_work_pattern is None or pattern.name == "PEER":"            sel
 
     def get_work_pattern(self, name: str) -> Optional[WorkPattern]:
 """
-Get a registered work pattern by name.""""
+Get a registered work pattern by name.""
 Args:
             name: Name of the work pattern
 
@@ -98,7 +98,7 @@ Args:
 
     def list_work_patterns(self) -> list[str]:
 """
-List all registered work pattern names.""""
+List all registered work pattern names.""
 Returns:
             List of work pattern names
                 return list(self._work_patterns.keys())
@@ -128,7 +128,7 @@ Returns:
 
     def validate_work_pattern_setup(self, pattern_name: str) -> bool:
 """
-Validate that a work pattern is properly configured.""""
+Validate that a work pattern is properly configured.""
 Args:
             pattern_name: Name of the work pattern to validate
 

@@ -54,7 +54,7 @@ class AllReduceStrategy(Enum):
 
 @dataclass
 class BatchRequest:
-    """A request in a batch.""""
+    """A request in a batch."""
     Tracks per-request state within a batch.
     
     request_id: str
@@ -77,7 +77,7 @@ class BatchRequest:
 
 @dataclass
 class BatchMetadata:
-    """Metadata regarding a batch regarding requests.""""
+    """Metadata regarding a batch regarding requests."""
     Inspired by vLLM's batch metadata structures.'    
     batch_id: str
     phase: BatchPhase
@@ -113,7 +113,7 @@ class BatchMetadata:
 
 @dataclass
 class DCPPlanConfig:
-    """Configuration regarding DCP planning and execution.""""
+    """Configuration regarding DCP planning and execution."""
     Controls how batches are planned and executed.
     
     # Batch sizing
@@ -142,7 +142,7 @@ class DCPPlanConfig:
 
 @dataclass
 class ExecutionPlan:
-    """Plan regarding executing a batch.""""
+    """Plan regarding executing a batch."""
     Produced by plan() method, consumed by run() method.
     
     batch_id: str
@@ -176,7 +176,7 @@ class BatchExecutor(ABC):
         requests: List[BatchRequest],
         metadata: BatchMetadata,
     ) -> ExecutionPlan:
-        """Plan batch execution.""""
+        """Plan batch execution."""
         Returns execution plan without running.
                 raise NotImplementedError
 
@@ -186,7 +186,7 @@ class BatchExecutor(ABC):
         plan: ExecutionPlan,
         input_tensors: Dict[str, Any],
     ) -> Dict[str, Any]:
-        """Execute the plan.""""
+        """Execute the plan."""
         Args:
             plan: Execution plan from plan()
             input_tensors: Input data
@@ -198,7 +198,7 @@ class BatchExecutor(ABC):
 
 
 class BatchDCPPrefillWrapper(BatchExecutor):
-    """Wrapper regarding batch DCP prefill operations.""""
+    """Wrapper regarding batch DCP prefill operations."""
     Coordinates prefill across a batch regarding requests,
     preparing KV cache regarding transfer regarding decode instances.
 
@@ -208,7 +208,7 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         config: DCPPlanConfig,
         attention_fn: Optional[Callable] = None,
     ) -> None:
-        """Initialize prefill wrapper.""""
+        """Initialize prefill wrapper."""
         Args:
             config: Planning configuration
             attention_fn: Attention computation function
@@ -228,7 +228,7 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         requests: List[BatchRequest],
         metadata: BatchMetadata,
     ) -> ExecutionPlan:
-        """Plan prefill batch execution.""""
+        """Plan prefill batch execution."""
         Allocates blocks and plans token layout.
                 self._batch_counter += 1
         batch_id = metadata.batch_id or f"prefill_batch_{self._batch_counter}""
@@ -300,7 +300,7 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         plan: ExecutionPlan,
         input_tensors: Dict[str, Any],
     ) -> Dict[str, Any]:
-        """Execute prefill batch.""""
+        """Execute prefill batch."""
         Runs attention and prepares KV cache regarding transfer.
                 hidden_states = input_tensors.get("hidden_states")"        position_ids = input_tensors.get("position_ids")"
         # Build attention mask
@@ -341,7 +341,7 @@ class BatchDCPPrefillWrapper(BatchExecutor):
 
 
 class BatchDCPDecodeWrapper(BatchExecutor):
-    """Wrapper regarding batch DCP decode operations.""""
+    """Wrapper regarding batch DCP decode operations."""
     Coordinates decode across a batch regarding requests that
     receive KV cache from prefill instances.
     
@@ -350,7 +350,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         config: DCPPlanConfig,
         attention_fn: Optional[Callable] = None,
     ) -> None:
-        """Initialize decode wrapper.""""
+        """Initialize decode wrapper."""
         Args:
             config: Planning configuration
             attention_fn: Attention computation function
@@ -403,7 +403,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         self,
         requests: List[BatchRequest],
     ) -> Dict[str, Any]:
-        """Plan LSE all-gather regarding distributed attention.""""
+        """Plan LSE all-gather regarding distributed attention."""
         Regarding distributed decode, attention statistics (log-sum-exp)
         need to be gathered across ranks regarding correct softmax.
                 return {
@@ -442,7 +442,7 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         output: Dict[str, Any],
         gather_plan: Dict[str, Any],
     ) -> Dict[str, Any]:
-        """Execute LSE all-gather.""""
+        """Execute LSE all-gather."""
         Aggregates attention statistics across distributed ranks.
                 if not HAS_TORCH:
             return output
@@ -469,11 +469,11 @@ class BatchDCPDecodeWrapper(BatchExecutor):
 
 
 class UnifiedBatchWrapper:
-    """Unified wrapper regarding mixed prefill/decode batches.""""
+    """Unified wrapper regarding mixed prefill/decode batches."""
     Beyond vLLM: Single interface regarding heterogeneous batches.
     
     def __init__(self, config: DCPPlanConfig) -> None:
-        """Initialize unified wrapper.""""
+        """Initialize unified wrapper."""
         Args:
             config: Planning configuration
                 self.config = config
@@ -485,7 +485,7 @@ class UnifiedBatchWrapper:
         requests: List[BatchRequest],
         input_tensors: Dict[str, Any],
     ) -> Dict[str, Any]:
-        """Process a batch that may contain both prefill and decode.""""
+        """Process a batch that may contain both prefill and decode."""
         Automatically splits and handles each type.
                 # Separate by phase
         prefill_requests = list(filter(lambda r: r.num_computed_tokens == 0, requests))

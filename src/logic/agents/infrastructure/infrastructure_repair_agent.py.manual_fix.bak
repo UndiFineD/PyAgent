@@ -51,13 +51,13 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureRepairAgent(BaseAgent):
-""""
+"""
 Monitors and repairs the agent's execution environment.'
     def __init__(self, path: str) -> None:
         super().__init__(path)
 #         self.name = "InfrastructureRepair"
     def audit_environment(self) -> dict:
-""""
+"""
 Checks for common environment issues.        import importlib.util
 
         issues = []
@@ -67,7 +67,7 @@ Checks for common environment issues.        import importlib.util
         if importlib.util.find_spec("yaml") is None:"            issues.append({"type": "missing_package", "package": "pyyaml"})"
         return {"status": "clean" if not issues else "degraded", "issues": issues}
     def repair_issue(self, issue: dict) -> str:
-""""
+"""
 Attempts to fix a detected environment issue.        if issue["type"] == "missing_package":"            package = issue["package"]"            logging.info(fEnvironment: Attempting to install {package}...")"#             cmd_str = fpip install {package}
             try:
                 subprocess.check_call([sys.executable, "-m", "pip", "install", package])"                self._record(cmd_str, "Success", provider="Shell", model="pip")"#                 return fSuccessfully installed {package}.
@@ -76,7 +76,7 @@ Attempts to fix a detected environment issue.        if issue["type"] == "missin
 
 #         return "Unknown issue type."
     def auto_repair(self) -> str:
-""""
+"""
 Runs audit and attempts to fix all issues found.        report = self.audit_environment()
         if report["status"] == "clean":"#             return "Environment is healthy.
         results = []
@@ -97,13 +97,13 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureRepairAgent(BaseAgent):
-""""
+"""
 Monitors and repairs the agent's execution environment.'
     def __init__(self, path: str) -> None:
         super().__init__(path)
 #         self.name = "InfrastructureRepair"
     def audit_environment(self) -> dict:
-""""
+"""
 Checks for common environment issues.     "   import importlib.util"
         issues = []
 
@@ -112,7 +112,7 @@ Checks for common environment issues.     "   import importlib.util"
         if importlib.util.find_spec("yaml") is None:"            issues.append({"type": "missing_package", "package": "pyyaml"})"
         return {"status": "clean" if not issues else "degraded", "issues": issues}
     def repair_issue(self, issue: dict) -> str:
-""""
+"""
 Attempts to fix a detected environment issue.        if issue["type"] == "missing_package":"            package = issue["package"]"            logging.info(fEnvironment: Attempting to install {package}...")"#             cmd_str = fpip install {package}
             try:
                 subprocess.check_call([sys.executable, "-m", "pip", "install", package])"                self._record(cmd_str, "Success", provider="Shell", model="pip")"#                 return fSuccessfully installed {package}.
@@ -121,7 +121,7 @@ Attempts to fix a detected environment issue.        if issue["type"] == "missin
 
 #         return "Unknown issue type."
     def auto_repair(self) -> str:
-""""
+"""
 Runs audit and attempts to fix all issues found.        report = self.audit_environment()
         if report["status"] == "clean":"#             return "Environment is healthy.
         results = []

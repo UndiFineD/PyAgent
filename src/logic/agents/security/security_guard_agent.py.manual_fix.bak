@@ -45,7 +45,7 @@ Instantiate SecurityGuardAgent with the path to a file inside the repository (ty
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" - generate_safety_report(task: str, code_changes: str, commands: list[str]) -> str""""- detect_jailbreak(prompt: str) -> bool
+""" - generate_safety_report(task: str, code_changes: str, commands: list[str]) -> str"""- detect_jailbreak(prompt: str) -> bool
 Call improve_content(prompt, target_file) asynchronously for an agent-driven audit workflow.
 
 WHAT IT DOES:
@@ -86,7 +86,7 @@ __version__ = VERSION
 
 
 class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Protects the workspace by validating diffs and commands.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -146,7 +146,7 @@ def generate_safety_report(self, task: str, code_changes: str, commands: list[st
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-command_reports = []""""
+command_reports = []""
 for cmd in commands:
             level, msg = self.security_core.audit_command(cmd)
             command_reports.append(f"- `{cmd}`: **{level}** - {msg}")
@@ -173,7 +173,7 @@ report.extend(command_reports if command_reports else ["- No commands provided f
         return "\\n".join(report)
     def detect_jailbreak(self, prompt: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Enhanced multi-stage jailbreak detection using structural analysis.# [BATCHFIX] Commented metadata/non-Python
 #         # Check for characteristic jailbreak patterns (DAN," persona adoption, etc.)"  # [BATCHFIX] closed string"        jailbreak_markers = [
             "DAN","            "Do Anything Now","            "Stay in character","            "You are now a","            "bypass","            "unfiltered","        ]
@@ -216,7 +216,7 @@ __version__ = VERSION
 
 
 class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Protects the workspace by validating diffs and commands.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -276,7 +276,7 @@ def generate_safety_report(self, task: str, code_changes: str, commands: list[st
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-command_reports = []""""
+command_reports = []""
 for cmd in commands:
             level, msg = self.security_core.audit_command(cmd)
             command_reports.append(f"- `{cmd}`: **{level}** - {msg}")
@@ -303,7 +303,7 @@ report.extend(command_reports if command_reports else ["- No commands provided f
         return "\\n".join(report)
     def detect_jailbreak(self, prompt: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Enhanced multi-stage jailbreak detection using structural analysis.        # Check for characteristic jailbreak patterns (DAN, persona adoption, etc.)
         jailbreak_markers = [
             "DAN","            "Do Anything Now","            "Stay in character","            "You are now a","            "bypass","            "unfiltered","        ]

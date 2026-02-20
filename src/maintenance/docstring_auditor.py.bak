@@ -51,7 +51,7 @@ from typing import List
 MISSING_DOCSTRING_MARKER = "Missing Docstring: Module-level docstring is missing""
 
 def parse_prompt_file(prompt_path: str | Path) -> List[str]:
-    """Parse analyzer output and return file paths with missing docstring markers.""""
+    """Parse analyzer output and return file paths with missing docstring markers."""
     Args:
         prompt_path: Path to the analyzer output file (plain text).
 
@@ -72,12 +72,12 @@ def parse_prompt_file(prompt_path: str | Path) -> List[str]:
 
 
 def file_path_to_module_name(path: str) -> str:
-    """Convert a filesystem path to a module import path.""""
+    """Convert a filesystem path to a module import path."""
     Example: "src/core/lazy_loader.py" -> "src.core.lazy_loader""        p = Path(path)
     if p.suffix != ".py":"        raise ValueError("Only .py files supported")"    return ".".join(p.with_suffix("").parts)"
 
 def generate_next_batch(prompt_path: str | Path, out_path: str | Path, max_entries: int = 20) -> List[str]:
-    """Generate the next small batch of modules to fix.""""
+    """Generate the next small batch of modules to fix."""
     Writes a newline-separated list of module names to `out_path` and returns
     the list. Modules are chosen in the order they appear in the prompt.
         files = parse_prompt_file(prompt_path)

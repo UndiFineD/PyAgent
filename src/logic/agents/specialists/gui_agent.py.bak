@@ -90,15 +90,15 @@ __version__ = VERSION
 
 
 class Framework(Enum):
-""""Supported GUI frameworks.#     REACT = "react"#     VUE = "vue"#     SVELTE = "svelte"#     TKINTER = "tkinter"#     QT = "qt"#     FLUTTER = "flutter"#     ANDROID_XML = "android_xml"#     SWIFTUI = "swiftui"#     HTML_CSS = "html_css"
+"""Supported GUI frameworks.#     REACT = "react"#     VUE = "vue"#     SVELTE = "svelte"#     TKINTER = "tkinter"#     QT = "qt"#     FLUTTER = "flutter"#     ANDROID_XML = "android_xml"#     SWIFTUI = "swiftui"#     HTML_CSS = "html_css"
 
 
 class ElementType(Enum):
-""""Common UI element types.#     BUTTON = "button"#     INPUT = "input"#     TEXT = "text"#     IMAGE = "image"#     LIST = "list"#     CONTAINER = "container"#     NAVIGATION = "navigation"#     MODAL = "modal"#     FORM = "form"
+"""Common UI element types.#     BUTTON = "button"#     INPUT = "input"#     TEXT = "text"#     IMAGE = "image"#     LIST = "list"#     CONTAINER = "container"#     NAVIGATION = "navigation"#     MODAL = "modal"#     FORM = "form"
 
 @dataclass
 class UIElement:
-""""Represents a UI element with properties.
+"""Represents a UI element with properties.
     element_type: ElementType
     id: str
     bounds: Optional[Tuple[int, int, int, int]] = None  # x, y, width, height
@@ -109,7 +109,7 @@ class UIElement:
 
 @dataclass
 class UIAction:
-""""Represents an action to" perform on a UI.
+"""Represents an action to" perform on a UI.
     action_type: str  # click, type, scroll, swipe, long_press
     target_id: str
     parameters: Dict[str, Any] = field(default_factory=dict)
@@ -231,11 +231,11 @@ class GUIAgent(BaseAgent):
             "source_framework": source_framework,"            "target_framework": target_framework,"            "converted_code": converted"        }
 
     def get_cached_elements(self) -> Dict[str, Dict[str, Any]]:
-""""Returns cached UI elements.        return {
+"""Returns cached UI elements.        return {
             id: {
                 "type": elem.element_type.value,"                "text": elem.text,"                "clickable": elem.clickable,"                "bounds": elem.bounds"            }
             for id, elem in self._element_cache.items()
         }
 
     def get_action_history(self) -> List[Dict[str, Any]]:
-""""Returns the action history.        return [{"action": a.action_type, "target": a.target_id, "params": a.parameters} for a in self._action_history]"
+"""Returns the action history.        return [{"action": a.action_type, "target": a.target_id, "params": a.parameters} for a in self._action_history]"

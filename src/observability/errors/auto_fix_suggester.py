@@ -75,7 +75,7 @@ __version__ = VERSION
 
 class AutoFixSuggester:
 """
-Generates automated fix suggestions for errors.""""
+Generates automated fix suggestions for errors.""
 Uses pattern matching and common fixes to suggest
     resolutions for errors.
 
@@ -90,7 +90,7 @@ Initialize the auto-fix suggester.        self.fix_patterns: dict[str, str] = {
 
     def add_pattern(self, pattern: str, fix_template: str) -> None:
 """
-Add a fix pattern.""""
+Add a fix pattern.""
 Args:
             pattern: Regex pattern to match errors.
             fix_template: Template for the fix suggestion.
@@ -98,7 +98,7 @@ Args:
 
     def suggest(self, error: ErrorEntry) -> FixSuggestion | None:
 """
-Generate a fix suggestion for an error.""""
+Generate a fix suggestion for an error.""
 Args:
             error: The error to fix.
 
@@ -149,4 +149,4 @@ Generate suggestions for multiple errors.        suggestions: list[FixSuggestion
 
 """
 
-"""
+""

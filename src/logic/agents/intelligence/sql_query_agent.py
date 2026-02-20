@@ -43,7 +43,7 @@ except ImportError:
 
 
 class SqlQueryAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in SQL query generation and database schema analysis.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -57,7 +57,7 @@ except ImportError:
 
 
 class SqlQueryAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in SQL query generation and database schema analysis.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

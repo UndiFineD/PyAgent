@@ -141,7 +141,7 @@ r"(?:[\?|#][^\"|']{0,}|))(?:\"|')"  # [BATCHFIX] closed string"'    )
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
+def __init__(self, session: Optional[aiohttp.ClientSession] = None):""
 self.session = session
         self._own_session = False
 
@@ -155,7 +155,7 @@ self.session = session
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def extract_secrets(self, content: str) -> Dict[str, List[str]]:""""
+async def extract_secrets(self, content: str) -> Dict[str, List[str]]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Extracts secrets and sensitive patterns from JS content."  # [BATCHFIX] closed string"        results = {}
         for name, pattern in self.SECRET_PATTERNS.items():
@@ -165,7 +165,7 @@ async def extract_secrets(self, content: str) -> Dict[str, List[str]]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results[name] = list(set(matches))""""
+results[name] = list(set(matches))""
 return results
 
 # [BATCHFIX] Commented metadata/non-Python
@@ -241,3 +241,6 @@ payload += "})();"  # [BATCHFIX] closed string"        return payload
                         "url": url,"                        "status": "success","                        "secrets_found": len(secrets),"                        "links_found": len(links),"                        "details": {"secrets": secrets, "links": list(links)},"                    }
         except Exception as e:
             return {"url": url, "status": "error", "message": str(e)}"        return {"url": url, "status": "error", "message": "Failed to fetch"}"
+""
+
+"""

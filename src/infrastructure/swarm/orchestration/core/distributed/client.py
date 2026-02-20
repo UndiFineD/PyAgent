@@ -84,7 +84,7 @@ T = TypeVar("T")
 
 class MPClient(Generic[T]):
 """
-Client for communicating with worker processes.""""
+Client for communicating with worker processes.""
 Inspired by vLLM's MPClient pattern.'    Synchronous interface for multi-process workers.
     
     def __init__(
@@ -124,7 +124,7 @@ Stop all worker processes.        for worker in self._workers:
         logger.info("Stopped all workers")
     def submit(self, request: RequestMessage) -> None:
 """
-Submit a request to be processed.""""
+Submit a request to be processed.""
 Uses round-robin distribution by default.
                 with self._lock:
             worker_id = hash(request.request_id) % len(self._workers)
@@ -161,7 +161,7 @@ Number of pending requests.        return len(self._pending)
 
 class AsyncMPClient(Generic[T]):
 """
-Async client for communicating with worker processes.""""
+Async client for communicating with worker processes.""
 Inspired by vLLM's AsyncMPClient.'    Async interface for non-blocking operations.
     
     def __init__(
@@ -198,7 +198,7 @@ Get a response asynchronously.        if self._loop:
 
 class DPLBAsyncMPClient(Generic[T]):
 """
-Data-parallel load-balanced async client.""""
+Data-parallel load-balanced async client.""
 Inspired by vLLM's dp_lb_pool and DPAsyncMPClient.'    Combines coordination with async multi-process execution.
     
     def __init__(

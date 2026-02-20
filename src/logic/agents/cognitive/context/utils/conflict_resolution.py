@@ -36,7 +36,7 @@ __version__ = VERSION
 
 
 class ConflictResolution(Enum):
-""""
+"""
 Strategies for merge conflict resolution.
 #     OURS = "ours"#     THEIRS = "theirs"#     MANUAL = "manual"#     AUTO = "auto"
 """

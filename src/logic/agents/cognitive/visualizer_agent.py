@@ -39,7 +39,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VisualizerAgent(BaseAgent):
-""""
+"""
 Maps relationships and handles Visual Workflow Export/Import.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -115,7 +115,7 @@ Maps relationships and handles Visual Workflow Export/Import.
 
     @as_tool
     def import_visual_workflow(self, file_name: str) -> dict[str, Any]:
-""""
+"""
 Imports a JSON visual workflow and converts it to a Task Planner sequence.        logging.info(fVISUALIZER: Importing visual workflow '{file_name}'")"'        input_path = Path(str(self.workspace_root)) / "config" / file_name
         if not input_path.exists():
             return {"error": fFile {file_name} not found in config/"}"
@@ -130,12 +130,12 @@ Imports a JSON visual workflow and converts it to a Task Planner sequence.      
 
         return {"workflow_name": data.get("name"), "tasks": tasks}
     def set_memory_agent(self, agent: GraphMemoryAgent) -> None:
-""""
+"""
 Connects a GraphMemoryAgent for knowledge visualization.        self.memory_agent = agent
 
     @as_tool
     def visualize_knowledge_graph(self) -> str:
-""""
+"""
 Generates a Mermaid graph from the GraphMemory triples.      "  if not self.memory_agent:"#             return "Error: No GraphMemoryAgent connected to VisualizerAgent."
         relationships = self.memory_agent.relationships
         if not relationships:
@@ -145,7 +145,7 @@ Generates a Mermaid graph from the GraphMemory triples.      "  if not self.memo
 #         return "##  Knowledge Graph\\n\\n```mermaid\\n" + "\\n".join(lines) + "\\n```"
     @as_tool
     def generate_fleet_map(self) -> str:
-""""
+"""
 Generates a Mermaid class diagram of the entire agent fleet.        logging.info("VisualizerAgent generating fleet map...")
         # We manually build the core fleet map for now
         diagram = [
@@ -155,7 +155,7 @@ Generates a Mermaid class diagram of the entire agent fleet.        logging.info
 #             "## ️ Fleet Architecture Map\\n\\n```mermaid\\n" + "\\n".join(diagram) + "\\n```"        )
 
     @as_tool
-    def generate_call_graph(self, filter_term: str = ") -> str:"""""
+    def generate_call_graph(self, filter_term: str = ") -> str:"""
 Generates a Mermaid flowchart of function calls based on the graph engine.       " self.graph_engine.scan_project()"        symbols = self.graph_engine.symbols
 
         lines = ["graph TD"]"        count = 0
@@ -179,3 +179,7 @@ Generates a Mermaid flowchart of function calls based on the graph engine.      
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Visualizes the workspace by default."        return self.generate_call_graph()
+
+"""
+
+"""

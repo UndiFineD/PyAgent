@@ -50,7 +50,7 @@ __version__ = VERSION
 
 class AuditLogger:
 """
-Logger for report audit trail.""""
+Logger for report audit trail.""
 Records all actions performed on reports for compliance.
     Attributes:
         entries: Audit log entries.
@@ -70,7 +70,7 @@ Initialize audit logger.
         details: dict[str, Any] | None = None,
     ) -> AuditEntry:
 """
-Log an action.""""
+Log an action.""
 Args:
             action: Action performed.
             user_id: User who performed it.
@@ -78,7 +78,7 @@ Args:
             details: Additional details.
         Returns:
 """
-Created entry.""""
+Created entry.""
 entry = AuditEntry(
             entry_id=f"audit_{int(time.time())}_{len(self.entries)}","            timestamp=time.time(),
             action=action,
@@ -91,22 +91,22 @@ entry = AuditEntry(
 
     def get_history(self, report_id: str) -> list[AuditEntry]:
 """
-Get audit history for report.""""
+Get audit history for report.""
 Args:
             report_id: Report ID.
         Returns:
 """
 Li""
 st ""
-of entries.""""
+of entries.""
 return [e for e in self.entries if e.report_id == report_id]
 
     def get_user_activity(self, user_id: str) -> list[AuditEntry]:
    """   """  ""
-Get activity for user.""""
+Get activity for user.""
 Args:
             user_id: User ID.
         Retu""
-rns:""""     """      """
-List of entries.""""
+rns:"""     """      ""
+List of entries.""
 return [e for e in self.entries if e.user_id == user_id]

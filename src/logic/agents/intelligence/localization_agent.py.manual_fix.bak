@@ -68,7 +68,7 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return await self.solve_translation_task(request)
 
     def extract_strings(self, file_path: str) -> list[str]:
-""""
+"""
 Extracts potential user-facing strings for translation.        # Simple heuristic for potential translatable strings
         # (e.g., strings in print() or gettext calls)
         found_strings = []
@@ -80,7 +80,7 @@ Extracts potential user-facing strings for translation.        # Simple heuristi
             logging.error(fLocalizationAgent: Error reading {file_path}: {e}")"        return found_strings
 
     def generate_translation_file(self, locale: str, strings: list[str]) -> dict[str, str]:
-""""
+"""
 Generates a JSON translation dictionary for a specific locale.        if locale not" in self.supported_locales:"            logging.warning(fLocale {locale} not officially supported.")"
         translation_map = {s: fTRANSLATED_{locale}_{s}" for s in strings}"        return translation_map
 
@@ -121,7 +121,7 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return await self.solve_translation_task(request)
 
     def extract_strings(self, file_path: str) -> list[str]:
-""""
+"""
 Extracts potential user-facing strings for translation.       " # Simple heuristic for potential translatable strings"        # (e.g., strings in print() or gettext calls)
         found_strings = []
         try:
@@ -132,7 +132,7 @@ Extracts potential user-facing strings for translation.       " # Simple heurist
             logging.error(fLocalizationAgent: Error reading {file_path}: {e}")"        return found_strings
 
     def generate_translation_file(self, locale: str, strings: list[str]) -> dict[str, str]:
-""""
+"""
 Generates a JSON translation dictionary for a specific locale.        if locale not in self.supported_locales:
             logging.warning(fLocale {locale} not officially supported.")"
         translation_map = {s: fTRANSLATED_{locale}_{s}" for s in strings}"        return translation_map

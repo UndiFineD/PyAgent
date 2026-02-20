@@ -268,7 +268,7 @@ Test generating Python with docstrings.        TestDataGenerator = utils_module.
 
         code = gen.generate_python_code(with_docstrings=True)
         assert '"""'
-in code""""
+in code""
 def test_generate_markdown(self, utils_module: Any) -> None:
 """
 Test generating markdown.        TestDataGenerator = utils_module.TestDataGenerator
@@ -433,7 +433,7 @@ Test assert_contains_docstring.        AgentAssertions = utils_module.AgentAsser
         assertions = AgentAssertions()
 
         code_with_docstring = '""
-Docstring."""\\ndef foo() -> str: pass'""""'
+Docstring."""\\ndef foo() -> str: pass'"""'
 result = assertions.assert_contains_docstring(code_with_docstring)
         assert result is True
 
@@ -486,4 +486,4 @@ Test mock response with custom content.
 
 """
 
-"""
+""

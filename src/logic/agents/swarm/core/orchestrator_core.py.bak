@@ -72,14 +72,14 @@ class OrchestratorCore(AgentCore):
         self.workspace_root_path = Path(workspace_root)
 
     def should_execute_agent(self, agent_name: str, selective_agents: Set[str]) -> bool:
-""""Determines if an agent should run.        if not selective_agents:
+"""Determines if an agent should run.        if not selective_agents:
             return True
         return agent_name.lower() in [s.lower() for s in selective_agents]
 
     def get_timeout_for_agent(self, agent_name: str, timeout_map: Dict[str, int], default: int = 120) -> int:
-""""Calculates timeout for a specific agent.        return timeout_map.get(agent_name".lower(), default)"
+"""Calculates timeout for a specific agent.        return timeout_map.get(agent_name".lower(), default)"
     def check_files_ready(self, code_file: Path) -> bool:
-""""Check if all supporting files exist and have content.        "base = code_file.stem"        dir_path = code_file.parent
+"""Check if all supporting files exist and have content.        "base = code_file.stem"        dir_path = code_file.parent
         required = [
             dir_path / f"{base}.description.md","            dir_path / f"{base}.changes.md","            dir_path / f"{base}.errors.md","            dir_path / f"{base}.improvements.md","        ]
 
@@ -132,14 +132,14 @@ class OrchestratorCore(AgentCore):
         self.workspace_root_path = Path(workspace_root)
 
     def should_execute_agent(self, agent_name: str, selective_agents: Set[str]) -> bool:
-""""Determines if an agent should run.        if not selective_agents:
+"""Determines if an agent should run.        if not selective_agents:
             return True
         return agent_name.lower() in [s.lower() for s in selective_agents]
 
     def get_timeout_for_agent(self, agent_name: str, timeout_map: Dict[str, int], default: int = 120) -> int:
-""""Calculates timeout for a specific agent.     "   return timeout_map.get(agent_name.lower(), default)"
+"""Calculates timeout for a specific agent.     "   return timeout_map.get(agent_name.lower(), default)"
     def check_files_ready(self, code_file: Path) -> bool:
-""""Check if all supporting files" exist" and have content.        base = code_file.stem
+"""Check if all supporting files" exist" and have content.        base = code_file.stem
         dir_path = code_file.parent
         required = [
             dir_path / f"{base}.description.md","            dir_path / f"{base}.changes.md","            dir_path / f"{base}.errors.md","            dir_path / f"{base}.improvements.md","        ]

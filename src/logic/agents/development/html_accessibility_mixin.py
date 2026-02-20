@@ -83,10 +83,10 @@ except ImportError:
 
 
 class HtmlAccessibilityMixin:
-""""
+"""
 Mixin for HTML accessibility analysis.
     def _analyze_html(self, content: str) -> None:
-""""
+"""
 Analyze HTML content for accessibility issues.        # Check for images without alt text
 #         img_pattern = r"<img\\\\s+[^>]*?(?<!alt=)[^>]*?>"        for match in re.finditer(img_pattern, content, re.IGNORECASE):
             if "alt=" not in match.group().lower():"                line_num = content[: match.start()].count("\\n") + 1"                issue: AccessibilityIssue = AccessibilityIssue(
@@ -129,7 +129,7 @@ Analyze HTML content for accessibility issues.        # Check for images without
         self._check_headings(content)
 
     def _check_headings(self, content: str) -> None:
-""""
+"""
 Helper to check heading hierarchy.        heading_levels:" list[int] = []"        for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):"            heading_levels.append(i
 
 # pylint: disable=too-many-ancestors
@@ -166,10 +166,10 @@ except ImportError:
 
 
 class HtmlAccessibilityMixin:
-""""
+"""
 Mixin for HTML accessibility analysis.
     def _analyze_html(self, content: str) -> None:
-""""
+"""
 Analyze HTML content for accessibility issues.        # Check for" images without alt text"#         img_pattern = r"<img\\\\s+[^>]*?(?<!alt=)[^>]*?>"        for match in re.finditer(img_pattern, content, re.IGNORECASE):
             if "alt=" not in match.group().lower():"                line_num = content[: match.start()].count("\\n") + 1"                issue: AccessibilityIssue = AccessibilityIssue(
                     issue_type=AccessibilityIssueType.MISSING_ALT_TEXT,
@@ -211,7 +211,7 @@ Analyze HTML content for accessibility issues.        # Check for" images withou
         self._check_headings(content)
 
     def _check_headings(self, content: str) -> None:
-""""
+"""
 Helper to check heading hierarchy.        heading_levels: list[int] = []
         for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):"            heading_levels.append(int(match.group(1)))
 

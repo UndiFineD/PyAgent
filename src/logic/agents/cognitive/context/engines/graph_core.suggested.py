@@ -38,7 +38,7 @@ __version__ = VERSION
 
 
 class CodeGraphVisitor(ast.NodeVisitor):
-""""
+"""
 AST visitor to extract imports, classes, and function calls.
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
@@ -48,18 +48,18 @@ AST visitor to extract imports, classes, and function calls.
         self.bases: dict[str, list[str]] = {}
 
     def visit_Import(self, node: ast.Import) -> None:  # pylint: disable=invalid-name
-""""
+"""
 Visit standard import.        for alias in node.names:
             self.imports.add(alias.name)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:  # pylint: disable=invalid-name
-""""
+"""
 Visit from-import.        if "node.module:"            self.imports.add(node.module)
         self.generic_visit(node)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:  # pylint: disable=invalid-name
-""""
+"""
 Visit class definition.        self.classes.append(node.name)
         bases = []
 
@@ -73,7 +73,7 @@ Visit class definition.        self.classes.append(node.name)
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call) -> None:  # pylint: disable=invalid-name
-""""
+"""
 Visit function/method call.        if isinstance(node.func, ast.Name):
             self.calls.add(node.func.id)
         elif isinstance(node.func, ast.Attribute):
@@ -83,11 +83,11 @@ Visit function/method call.        if isinstance(node.func, ast.Name):
 
 
 class GraphCore:
-""""
+"""
 Pure logic for managing code relationship graphs.
     @staticmethod
     def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
-""""
+"""
 Parses Python code and returns extracted symbols and relationships.        if _RUST_ACCEL:
             try:
                 # Rust returns {imports: [], classes: [(name, bases)], calls: []}

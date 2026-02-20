@@ -14,7 +14,7 @@
 
 
 """
-Property-based tests for BenchmarkCore.""""
+Property-based tests for BenchmarkCore.""
 Tests performance calculation logic before Rust conversion.
 
 try:
@@ -238,4 +238,4 @@ Test that regression check is deterministic.        core = BenchmarkCore()
 
 """
 
-"""
+""

@@ -26,7 +26,7 @@ __version__ = VERSION
 
 """
 class QuantumCore:
-""""
+"""
 Logic for quantum-inspired probability modeling.
 
     @staticmethod

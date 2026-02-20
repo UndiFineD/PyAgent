@@ -55,7 +55,7 @@ __version__ = VERSION
 @dataclass
 class RollbackRecord:
 """
-Record of an improvement rollback.""""
+Record of an improvement rollback.""
 Attributes:
         improvement_id: ID of the rolled back improvement.
         rollback_date: When the rollback occurred.
@@ -91,4 +91,4 @@ rollback_commit: str = ""
 
 """
 
-"""
+""

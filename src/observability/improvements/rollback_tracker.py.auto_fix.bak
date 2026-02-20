@@ -67,7 +67,7 @@ __version__ = VERSION
 
 
 class RollbackTracker:
-    """Tracks improvement rollbacks.""""
+    """Tracks improvement rollbacks."""
     Records when and why improvements are rolled back.
 
     Attributes:
@@ -78,7 +78,7 @@ class RollbackTracker:
         self.states: dict[str, str] = {}  # improvement_id -> previous state
 
     def save_state(self, improvement: Improvement) -> None:
-        """Save the current state before an improvement.""""
+        """Save the current state before an improvement."""
         Args:
             improvement: The improvement being applied.
                 self.states[improvement.id] = json.dumps(
@@ -86,7 +86,7 @@ class RollbackTracker:
                 "status": improvement.status.value,"                "updated_at": improvement.updated_at,"                "votes": improvement.votes,"            }
         )
 
-    def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:"        """Record a rollback.""""
+    def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:"        """Record a rollback."""
         Args:
             improvement: The rolled back improvement.
             reason: Why the rollback occurred.

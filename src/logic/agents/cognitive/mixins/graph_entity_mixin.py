@@ -48,7 +48,7 @@ __version__ = VERSION
 
 
 class GraphEntityMixin:
-""""
+"""
 Mixin for entity and relationship management.
     @as_tool
     def add_entity(

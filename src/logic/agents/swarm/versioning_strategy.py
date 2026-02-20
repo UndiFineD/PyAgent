@@ -52,7 +52,7 @@ except ImportError:
 
 
 class VersioningStrategy(Enum):
-""""
+"""
 Supported versioning schemes for the fleet.#     SEMVER = "semver"#     CALVER = "calver"
 try:
     from enum import Enum
@@ -63,6 +63,6 @@ except ImportError:
 
 
 class VersioningStrategy(Enum):
-""""
+"""
 Supported versioning schemes for the fleet.#     SEMVER = "semver"#     CALVER = "calver"
 """

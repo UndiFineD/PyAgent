@@ -53,10 +53,10 @@ if TYPE_CHECKING:
 
 
 class ChangelogValidationMixin:
-""""
+"""
 Mixin for validating changelog entries and content.
     def validate_entry(self, entry: ChangelogEntry) -> list[dict[str, str]]:
-""""
+"""
 Validate a changelog entry against all rules.        issues: list[dict[str, str]] = []
         if not hasattr(self, "_validation_rules"):"            return issues
 
@@ -74,7 +74,7 @@ Validate a changelog entry against all rules.        issues: list[dict[str, str]
         return issues
 
     def validate_changelog(self, content: str) -> list[dict[str, Any]]:
-""""
+"""
 Validate the entire changelog content.        all_issues: list[dict[str", Any]] = []"        # Check for merge conflicts
         conflicts = self.detect_merge_conflicts(content)
         if conflicts:

@@ -92,7 +92,7 @@ AST transformer that replaces subprocess calls with a safe wrapper.    DANGEROUS
 
         SAFE_WRAPPER_SRC = ''
 def safe_subprocess_run(*args, **kwargs):''''    ""
-Conservative TODO Placeholder: replace with secure implementation.""""
+Conservative TODO Placeholder: replace with secure implementation.""
 This wrapper intentionally raises at runtime to force human review before enabling.
         raise RuntimeError('Refactor required: replace safe_subprocess_run with a secure executor')
 ''''''
@@ -188,5 +188,11 @@ if __name__ == '__main__':'    raise SystemExit(main())
 ''
 
 """
+
+''
+
+"""
+
+''
 
 '''

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -35,7 +35,7 @@ __version__ = VERSION
 @dataclass
 class ParallelTestResult:
 """
-Result from parallel test execution.""""
+Result from parallel test execution.""
 Attributes:
         test_name: Name of the test.
         passed: Whether test passed.

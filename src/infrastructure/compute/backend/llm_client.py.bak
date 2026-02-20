@@ -37,7 +37,7 @@ from .local_context_recorder import LocalContextRecorder
 
 
 class LLMClient:
-    """Handles direct HTTP calls to LLM providers.""""    Enhanced with PoolingCore for prompt compression and connection optimization.
+    """Handles direct HTTP calls to LLM providers."""    Enhanced with PoolingCore for prompt compression and connection optimization.
     
     def __init__(self, requests_lib: Any, workspace_root: str | None = None) -> None:
         self.requests = requests_lib

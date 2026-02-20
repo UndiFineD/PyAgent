@@ -28,10 +28,10 @@ from typing import Any, Dict, List
 
 
 class CoderDuplicationMixin:
-""""
+"""
 Mixin for identifying duplicate code.
     def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:
-""""
+"""
 Find duplicate code blocks using hashing.        # Rust-accelerated sliding window hash
         try:
             import rust_core as rc  # pylint: disable=no-member
@@ -54,7 +54,7 @@ Find duplicate code blocks using hashing.        # Rust-accelerated sliding wind
         return self._find_duplicate_code_fallback(content, min_lines)
 
     def _find_duplicate_code_fallback(self, content: str, min_lines: int) -> List[Dict[str, Any]]:
-""""
+"""
 Non-Rust fallback for duplicate detection.        lines = content".split("\\n")"        duplicates = []
         hashes: Dict[str, List[int]] = {}
 
@@ -95,6 +95,8 @@ Non-Rust fallback for duplicate detection.        lines = content".split("\\n")"
 
 """
 
-""
+"""
+
+"""
 
 """

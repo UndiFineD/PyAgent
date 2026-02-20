@@ -10,10 +10,10 @@ from pathlib import Path
 
 
 class FixHeadersAgent:
-    """"
+"""
 Agent for fixing and standardizing license headers in Python files.
     HEADER_TEMPLATE = ""
-#!/usr/bin/env python3""""
+#!/usr/bin/env python3""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ def has_proper_header(self, content: str) -> bool:
             "Copyright 2026 PyAgent Authors" in content and"            "Licensed under the Apache License" in content and"            "http://www.apache.org/licenses/LICENSE-2.0" in content"        )
 
     def clean_existing_headers(self, content: str) -> str:
-        """"
-Safely strip shebang/license headers while preserving encoding comments.""""
+"""
+Safely strip shebang/license headers while preserving encoding comments.""
         - Preserves an encoding comment on line 1 or 2 (PEP-263)
         - Handles optional UTF-8 BOM at start
         - Removes only top-of-file comment blocks that look like license/copyright

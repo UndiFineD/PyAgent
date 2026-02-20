@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 class BaseWorker(ABC):
 """
-Abstract base class for distributed workers.""""
+Abstract base class for distributed workers.""
 Workers receive requests, process them, and return results.
     
     def __init__(self, identity: WorkerIdentity):
@@ -58,7 +58,7 @@ Initialize the worker (load models, etc.).        ...
     @abstractmethod
     def process(self, request: RequestMessage) -> ResponseMessage:
 """
-Process a single request.""""
+Process a single request.""
 Args:
             request: Request to process.
 
@@ -83,7 +83,7 @@ Get worker metrics.        return MetricsMessage(
 
 class WorkerProcess:
 """
-Wrapper for a worker running in a subprocess.""""
+Wrapper for a worker running in a subprocess.""
 Inspired by vLLM's CoreEngineProc.'    
     def __init__(
         self,
@@ -233,6 +233,8 @@ Check if the worker process is alive.        return self._process is not None an
 
 """
 
-""
+"""
 
 """
+
+""

@@ -73,7 +73,7 @@ class ResilienceAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _archive_resilience_event(self, event_type: str, details: Any) -> None:
-""""
+"""
 Archiving resilience events for fleet learning.        if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}"                self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -120,7 +120,7 @@ class ResilienceAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _archive_resilience_event(self, event_type: str, details: Any) -> None:
-""""
+"""
 Archiving resilience events for fleet" learning.        if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}"                self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable

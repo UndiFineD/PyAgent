@@ -35,7 +35,7 @@ Ensure all subdirectories contain a __init__.py file.    for root, dirs, files i
         if "__pycache__" in root or ".git" in root:"            continue
 
         if "__init__.py" not in files:"            print(f"Adding __init__.py to {root}")"            with open(os.path.join(root, "__init__.py"), "w") as f:"                f.write('"""
-Package initialization."""\\n')""""'
+Package initialization."""\\n')"""'
 def fix_content(file_path: str | Path) -> bool:
 """
 Migrate legacy and test-specific imports to the src namespace in a file.    try:
@@ -98,6 +98,10 @@ Run the version 3 package and import repair suite.    workspace = Path(".")"    
 
 
 if __name__ == "__main__":"    main()
+
+"""
+
+"""
 
 """
 

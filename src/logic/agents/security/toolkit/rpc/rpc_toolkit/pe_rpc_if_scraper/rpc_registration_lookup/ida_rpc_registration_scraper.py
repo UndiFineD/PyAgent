@@ -73,7 +73,7 @@ _default_dism_path = "C:\\Program Files\\IDA Pro 7.6\\idat64.exe
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:""""
+def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -110,4 +110,4 @@ p = subprocess.run([self._dism_path, f"-S{SCRIPT_PATH}", "-A", pe_path, "-t"], s
 
 """
 
-"""
+""

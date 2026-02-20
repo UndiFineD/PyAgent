@@ -26,7 +26,7 @@ from typing import Dict, List, Any
 class HardwareIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence module for RF, SDR, and Hardware exploitation (Ported from FISSURE).#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""

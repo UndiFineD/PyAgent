@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from collections.abc import Callable
 except ImportError:
@@ -45,7 +45,7 @@ __version__ = VERSION
 @dataclass
 class TestFixture:
 """
-A test fixture with setup and teardown.""""
+A test fixture with setup and teardown.""
 Attributes:
         name: Fixture name.
         setup_fn: Setup function.

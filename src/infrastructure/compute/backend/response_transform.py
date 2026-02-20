@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     from enum import Enum
 except ImportError:
@@ -61,4 +61,4 @@ Types of response transformations.
 
 """
 
-"""
+""

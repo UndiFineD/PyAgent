@@ -78,14 +78,14 @@ class CloudProviderAgent(BaseAgent):
         self.supported_providers = ["aws", "azure", "gcp"]"        self.credentials: dict[str, bool] = {p: False for p in self.supported_providers}
 
     def configure_provider(self, provider: str, credentials_mock: dict[str, str]) -> str:  # noqa: ARG002
-""""
+"""
 Mocks the configuration of a cloud provider.       " if" self.recorder:"            self.recorder.record_lesson("cloud_provider_config", {"provider": provider})"
         if provider.lower() in self.supported_providers:
             self.credentials[provider.lower()] = True
 #             return fProvider {provider} configured successfully.
 #         return fProvider {provider} not supported.
 
-    def generate_terraform_template(self, provider: str, node_count: int, region: str = "us-east-1") -> str:""""
+    def generate_terraform_template(self, provider: str, node_count: int, region: str = "us-east-1") -> str:""
 Generates a basic Terraform template for fleet expansion.    "   " if self.recorder:"            self.recorder.record_lesson("cloud_iac_generation", {"provider": provider, "nodes": node_count})"
         if not self.credentials.get(provider.lower()):
 #             return fError: Provider {provider} not configured.
@@ -99,7 +99,7 @@ resource "{provider}_instance" "pyagent_node" {{"  count         = {node_count}
 }}
     "   " return template.strip()
     def select_optimal_region(self, latency_data: dict[str, float]) -> str:
-""""
+"""
 Selects the region with the lowest latency from a provided map. "       if not latency_data:"            return "us-east-1"  # Default"        return min(latency_data, key=latency_data.get)
 
 try:
@@ -125,7 +125,7 @@ class CloudProviderAgent(BaseAgent):
         self.supported_providers = ["aws", "azure", "gcp"]"        self.credentials: dict[str, bool] = {p: False for p in self.supported_providers}
 
     def configure_provider(self, provider: str, credentials_mock: dict[str, str]) -> str:  # noqa: ARG002
-""""
+"""
 Mocks the configuration of a cloud" provider.        if self.recorder:
             self.recorder.record_lesson("cloud_provider_config", {"provider": provider})
         if provider.lower() in self.supported_providers:
@@ -133,7 +133,7 @@ Mocks the configuration of a cloud" provider.        if self.recorder:
 #             return fProvider {provider} configured successfully.
 #         return fProvider {provider} not supported.
 
-    def generate_terraform_template(self, provider: str, node_count: int, region: str = "us-east-1") -> str:""""
+    def generate_terraform_template(self, provider: str, node_count: int, region: str = "us-east-1") -> str:""
 Generates a basic Terraform template for fleet expansion.        if self.recorder:
             self.recorder.record_lesson("cloud_iac_generation", {"provider": provider, "nodes": node_count})
         if not self.credentials.get(provider.lower()):
@@ -147,6 +147,6 @@ resource "{provider}_instance" "pyagent_node" {{"  count         = {node_count}
         return template.strip()
 
     def select_optimal_region(self, latency_data: dict[str, float]) -> str:
-""""
+"""
 Selects the region with the lowest latency from a provided map.        if not latency_data:
             return "us-east-1"  # Default"        return min(latency_data, key=latency_data.get)

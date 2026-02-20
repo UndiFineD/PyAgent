@@ -548,7 +548,7 @@ self._value = None
 
 class TempEnv:
 """
-Context manager for temporarily setting environment variables.""""
+Context manager for temporarily setting environment variables.""
 Example usage:
         >>> with TempEnv(DEBUG="1"):"        ...     print(os.environ.get("DEBUG"))  # "1""        >>> print(os.environ.get("DEBUG"))  # Original value"    """
 def __init__(self, **env_vars: str | None) -> None:
@@ -597,3 +597,7 @@ __all__ = [
     "get_env","    "get_env_bool","    "get_env_int","    "get_env_float","    "get_env_list","    "get_env_json","    # Classes
     "EnvConfig","    "EnvConfigMeta","    "NamespacedConfig","    # Context Managers
     "TempEnv","    "temp_env","]
+
+""
+
+"""

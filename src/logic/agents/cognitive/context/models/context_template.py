@@ -35,7 +35,7 @@ __version__ = VERSION
 
 @dataclass
 class ContextTemplate:
-""""
+"""
 Template for context documentation.
     name: str
     file_type: str

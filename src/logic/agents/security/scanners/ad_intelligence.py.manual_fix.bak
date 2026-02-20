@@ -26,7 +26,7 @@ from typing import List, Dict, Any
 class ADIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence engine for Active Directory enumeration and exploitation.#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -58,7 +58,7 @@ def get_weak_permission_abuse_types() -> Dict[str, str]:"A registry of weak AD p
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
-#     def generate_certex_command(action: str, target: str, template: str, cert_path: str = ") -> str:"  # [BATCHFIX] closed string""""
+#     def generate_certex_command(action: str, target: str, template: str, cert_path: str = ") -> str:"  # [BATCHFIX] closed string""
 Generates Certipy-style commands for ADCS abuse.        if action == "find":"#             return fcertipy find -u {target} -p 'password' -dc-ip {target} -vulnerable'        elif action == "req":"#             return fcertipy req -u {target} -p 'password' -ca {target}-CA -template {template} -upn administrator'        elif action == "auth":"#             return fcertipy auth -pfx {cert_path} -dc-ip {target}
 #         return
 
@@ -120,7 +120,7 @@ def get_bitlocker_recovery_attributes() -> List[str]:"Attributes for extracting 
     @staticmethod
     def get_bitlocker_ldap_query() -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 LDAP filter for discovering BitLocker recovery objects.# [BATCHFIX] Commented metadata/non-Python
 """
 return "(objectClass=msFVE-RecoveryInformation)"  # [BATCHFIX] closed string
@@ -214,5 +214,7 @@ def get_critical_event_ids() -> Dict[str, str]:"Mappings of MITRE ATT&CK techniq
 """
 def get_privileged_group_names() -> List[str]:"A list of common privileged group names in AD for targeting.        return [
             "Domain Admins","            "Enterprise Admins","            "Schema Admins","            "Administrators","            "Account Operators","            "Backup Operators","            "Server Operators","            "Print Operators","            "DnsAdmins","            "Group Policy Creator Owners","        ]
+
+"""
 
 """

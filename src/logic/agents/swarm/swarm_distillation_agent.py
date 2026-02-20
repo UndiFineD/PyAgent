@@ -76,7 +76,7 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         "Distills knowledge from an agent into a compressed format (Phase 76)."        _ = knowledge_shard
         logging.info(fDistilling knowledge for {agent_id}")"        return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}
     def get_unified_context(self) -> dict[str, Any]:
-""""
+"""
 Returns the unified distilled context of the swarm (Phase 76).        return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}
 
 try:
@@ -115,5 +115,5 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def distill_agent_knowledge(self, agent_id: str, knowledge_shard: dict[str, Any]) -> dict[str, Any]:
 #         "Distills knowledge from an agent into a compressed format (Phase 76).""        _ = knowledge_shard"        logging.info(fDistilling knowledge for {agent_id}")"        return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}
     def get_unified_context(self) -> dict[str, Any]:
-""""
+"""
 Returns the unified distilled context of the swarm (Phase 76).        return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}

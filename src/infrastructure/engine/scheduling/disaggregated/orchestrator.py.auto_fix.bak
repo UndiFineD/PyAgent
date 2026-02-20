@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProxyOrchestrator:
-    """Orchestrator that wraps DisaggregatedScheduler for easier request management.""""
+    """Orchestrator that wraps DisaggregatedScheduler for easier request management."""
     Acts as a high-level API for disaggregated prefill-decode serving.
     
     def __init__(self, scheduler: DisaggregatedScheduler) -> None:
@@ -51,7 +51,7 @@ class ProxyOrchestrator:
         return request
 
     async def process_request(self, request: ScheduledRequest) -> Dict[str, Any]:
-        """Process a request through prefill and decode phases.""""
+        """Process a request through prefill and decode phases."""
         This is a simplified orchestration flow.
                 try:
             # 1. Schedule Prefill

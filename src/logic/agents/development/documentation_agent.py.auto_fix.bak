@@ -68,7 +68,7 @@ __version__ = VERSION
 
 
 class DocumentationAgent(BaseAgent):
-""""Generates technical references and project OVERVIEW documents.
+"""Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -78,7 +78,7 @@ class DocumentationAgent(BaseAgent):
     def _get_default_content(self) -> str:
 """return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
-""""Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
+"""Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
 #         classes_dir = self.workspace_root / "src/classes"
         # Get structural briefs
         py_files = [
@@ -133,7 +133,7 @@ __version__ = VERSION
 
 
 class DocumentationAgent(BaseAgent):
-""""Generates technical references and project OVERVIEW documents.
+"""Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -143,7 +143,7 @@ class DocumentationAgent(BaseAgent):
     def _get_default_content(self) -> str:
 """return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
-""""Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
+"""Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
 #         classes_dir = self.workspace_root / "src/classes"
         # Get structural briefs
         py_files = [

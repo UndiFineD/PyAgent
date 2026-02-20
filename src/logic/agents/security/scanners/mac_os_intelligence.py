@@ -26,7 +26,7 @@ from typing import List, Dict
 class MacOSIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence engine for macOS-specific enumeration and post-exploitation.#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -58,5 +58,9 @@ def get_persistence_paths() -> List[str]:"Common macOS persistence locations.   
 def get_sensitive_files() -> List[str]:"Paths to sensitive data on macOS.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #        " return ["  # [BATCHFIX] closed string"            "~/Library/Keychains/login.keychain-db","            "~/Library/Application Support/com.apple.spotlight/index.db","            "~/Library/Safari/History.db","            "~/Library/Safari/Bookmarks.plist","            "~/Library/Messages/chat.db","        ]
+
+"""
+
+"""
 
 """

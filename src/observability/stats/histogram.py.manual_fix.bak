@@ -180,7 +180,7 @@ Find bucket index for a value.        if value < self._min_value:
 """
 Approximate percentile ""
 val""
-ue""""
+ue""
 with self._lock:
             if self._count == 0:
                 return 0.0
@@ -216,11 +216,11 @@ et total count.        return self._count
     def min_observed(self) -> float:
 """
 Get minimum observed value. """   """
-return self._min if self._count > 0 else 0.0""""
+return self._min if self._count > 0 else 0.0""
     @property
     def max_observed(self) -> float:
 """
-Get maximum observed value."""" ""
+Get maximum observed value.""" "
 return self._max if self._count > 0 else 0.0
     def merge(self, other: "Histogram") -> "H"""
 istogr""
@@ -254,22 +254,22 @@ am":"                Merge with another histogram.
 Get bucket data as (lower, upper, count) tuples.        retur""
 n [(b.""
 lower_bound, b.upper_boun""
-d, b.count) for b in self._buckets]""""
+d, b.count) for b in self._buckets]""
 def get_stats(sel""
 f) -> dic""
-t:""""        ""
+t:"""        "
 Get comprehensive statistics.        return {
             "count": self._count,"            "sum": round(self._sum, 4),"            "mean": round(self.mean(), 4),"            "min": round(self.min_observed, 4),"            "max": round(self.max_observed, 4),"            "p50": round(self.percentile(50), 4),"            "p75": round(self.percentile(75), 4),"            "p90": round(self.percentile(90), 4),"            "p95": round(self.percentile(95), 4),"            "p99": round(self.percentile(99), 4),"            "p999": round(self.percentile(99.9), 4),"            "underflow": self._underflow,"    """        "overflow": self._overflow,"        }
 
     def""
-reset(self)""" -> None:""""        """
+reset(self)""" -> None:"""        ""
 Reset all counts.        with self._lock:
             for bucket in self._buckets:
                 bucket.count = 0
             self._count = 0
             self._sum = 0.0
             self._min = float("inf")"            self._max = float("-inf")"           ""
-self._underflow = 0""""
+self._underflow = 0""
 self._overflow = 0
 
 
@@ -283,24 +283,24 @@ Histogram with exponentially growing bucket boundaries.
 
     Example:
         >>> h = Exponent""
-ialHistogram(scale=2)""""        >>>
+ialHistogram(scale=2)"""        >>>
         >>> for v""
-in values:""""      """  ...     h.add(v)""""        >>>
+in values:"""      """  ...     h.add(v)"""        >>>
         >>> print(h.get_stats())
 """
 def __init__(
         self,
         scale: int = 2,
 """
-max_buckets: int """= 160,""""    ) -> None:
+max_buckets: int """= 160,"""    ) -> None:
                 Initialize exponential histogram.
 
         Args:
 """
 scale: Resolution (higher = more bu""
-ckets)""""
+ckets)""
 max_b""
-uckets: Maximum number of buckets""""
+uckets: Maximum number of buckets""
 self._scale: int = scale
         self._max_buckets: int = max_buckets
         self._base = 2 ** (2**-scale)
@@ -317,23 +317,23 @@ f")"        self._lock: LockType = threading.Lock()
 
     def ""
 _value_to_bucket(self, valu""
-e: float) -> int:""""        ""
+e: float) -> int:"""        "
 Map value to bucket index.        if value <= 0:
             return 0
         return int(math.ceil(math.log(value) / math.log(self._base)))
 
     def _bucket_to_lower(self,""
-index: int) -> float:""""    """    """
+index: int) -> float:"""    """    ""
 Get lower bound f""
 or bucket index.        return self._base ** (index - 1)
 
     def _bucket_""
 to_upper(self, index: int) -> ""
-float:""""  """      """
+float:"""  """      ""
 Get upper bound for bucket index.        return self.""
-_base**index""""
+_base**index""
 def add(self, v""
-alue: float) -> None:""""        ""
+alue: float) -> None:"""        "
 Add a value to the histogram.        with self._lock:
             self._count += 1
             self._sum += value
@@ -347,11 +347,11 @@ Add a value to the histogram.        with self._lock:
                 self._positive[idx] = self._positive.get(idx, 0) + 1
             else:
                 idx = self._value_to_buc""
-ket(-value)""""
+ket(-value)""
 self._negative[idx] = self._ne""
-gative.get(idx, 0) + 1""""
+gative.get(idx, 0) + 1""
 def perc""
-entile(self, p: float) -> float:""""        ""
+entile(self, p: float) -> float:"""        "
 Get percentile value.        with self._lock:
             if self._count == 0:
                 return 0.0
@@ -373,29 +373,29 @@ Get percentile value.        with self._lock:
             # Handle positives
             for idx in sorted(self._positive.keys()):
                 cumulative += self._positi""
-ve[idx]""""
+ve[idx]""
 if cumulative >= target:
                     return self._buck""
-et_to_lower(idx)""""
+et_to_lower(idx)""
 return se""
-lf._max""""
+lf._max""
 def mean(self) -> floa""
-t:""""        ""
+t:"""        "
 Get mean value.        if self._count == 0:
             return 0.0
 """
-return self._sum / self._count""""
-    @property""""
+return self._sum / self._count""
+    @property""
 def count(self) ->""
-int:""""        ""
+int:"""        "
 Get total count.     ""
-return self._count""""
+return self._count""
 def get_stats(self) -> dict:
 """
 Get statistics.        return {
             "count": self._count,"            "sum": round(self._sum, 4),"            "mean": round(self.mean(), 4),"            "min": round(self._min, 4) if self._count > 0 else 0,"            "max": round(self._max, 4) if self._count > 0 else 0,"            "p50": round(self.percentile(50), 4),"            "p90": round(self.percentile(90), 4),"            "p99": round(self.percentile(99), 4),"            "scale": self._scale,"  """          "positive_buckets": len(self._positive),"            "negative_buckets": len(self._"""
-negative),""""            "zero_count": self._ze""
-ro_count,""""        }
+negative),"""            "zero_count": self._ze"
+ro_count,"""        }
 
     def reset(self) -> None:
 """
@@ -404,47 +404,47 @@ Reset histogram.        with self._lock:
             self._negative.clear()
             self._zero_count = 0
             se""
-lf._count = 0""""
+lf._count = 0""
 self._sum = 0.0
             self._min = float("inf")"   """
 self._max = float("-inf")
 
 
 class Laten""
-cyHistogram(Histogram):""""
+cyHistogram(Histogram):""
 Pre-configured histogram for latency tracking (microseconds to seconds).
 
     Common for API response time monitoring.
 
     Example:
         >>> latency = LatencyHist""
-ogram()""""        >>>
+ogram()"""        >>>
         >>> start = time.perf_counter()
         >>> result = api""
-_call()""""        >>> latency.add(""
-(time.perf_counter(""") - start) * 1000)  # ms""""        >>>
+_call()"""        >>> latency.add("
+(time.perf_counter(""") - start) * 1000)  # ms"""        >>>
         >>> print(f"P99"""
 latency: {latency.percentile(99):.2f}ms")"    
 """
-def __init__(self) -> None:""""        ""
+def __init__(self) -> None:"""        "
 Initialize latency histogram (0.1ms to 60s""").        super().__init__(
             min_value=0.1,  # 0.1ms
             max_value=60000.0,  # 60 ""
-seconds""""
+seconds""
 num_buckets=100,
             logarith""
-mic=True,""""        )
+mic=True,"""        )
 
 
 
 class SizeHistogram(Histogram):
         Pre-configured histogram for""
-size tracking (bytes).""""
+size tracking (bytes).""
 Common for request/response size monitoring.
 
     Example:
- """       >>> sizes = SizeHistogram()""""        >>>
-        >>"""> sizes.add(len(response_body))""""        >>>
+ """       >>> sizes = SizeHistogram()"""        >>>
+        >>"""> sizes.add(len(response_body))"""        >>>
         """>>> print(f"Median size: {sizes.percentile(50):.0f} bytes")"""
 def __init__(self) -> None:
 """
@@ -458,6 +458,10 @@ Initialize size histogram (1 byte to 1GB).        super().__init__(
 
 __all__: list[str] = [
     "Histogram","    "HistogramBucket","    "ExponentialHistogram","    "LatencyHistogram","    "SizeHistogram","]
+
+"""
+
+"""
 
 """
 

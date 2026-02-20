@@ -93,12 +93,12 @@ class EmpathyAgent(BaseAgent):
             "sentiment": self.sentiment_state,"            "resonance": self.interpersonal_resonance,"            "linguistic_adjustment": self.get_tone_recommendation(),"        }
 
     def calibrate_empathy(self, user_feedback_score: float) -> float:
-""""
+"""
 Adjusts the empathy score based on direct user feedback (0.0 to 1.0).        self.empathy_score = (self.empathy_score * 0.7) + (user_feedback_score * 0.3)
         return self.empathy_score
 
     def get_tone_recommendation(self) -> str:
-""""
+"""
 Determines the linguistic style to adopt based on sentiment.        if self.sentiment_state == "frustrated":"#             return "concise_and_apologetic"        if self.sentiment_state == "positive":"#             return "enthusiastic_and_detailed"#         return "professional_neutral"
     @as_tool
     async def mediate_conflict(self, agent_id: str, human_refusal: str) -> str:
@@ -162,11 +162,11 @@ class EmpathyAgent(BaseAgent):
             "sentiment": self.sentiment_state,"            "resonance": self.interpersonal_resonance,"            "linguistic_adjustment": self.get_tone_recommendation(),"        }
 
     def calibrate_empathy(self, user_feedback_score: float) -> float:
-""""
+"""
 Adjusts the empathy score based on direct user feedback (0.0 to 1.0).        self.empathy_score = (self.empathy_score "* 0.7) + (user_feedback_score * 0.3)"        return self.empathy_score
 
     def get_tone_recommendation(self) -> str:
-""""
+"""
 Determines the linguistic style to adopt based on sentiment.      "  if self.sentiment_state == "frustrated":"#             return "concise_and_apologetic"        if self.sentiment_state == "positive":"#             return "enthusiastic_and_detailed"#         return "professional_neutral
     @as_tool
     async def mediate_conflict(self, agent_id: str, human_refusal: str) -> str:

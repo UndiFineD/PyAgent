@@ -79,7 +79,7 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
         self._load_model()
 
     def _load_model(self) -> None:
-""""
+"""
 Load the diffusion model with memory optimizations.        if not HAS_DIFFUSERS:
             raise ImportError("diffusers and PIL are required for image generation")
         if torch is None:

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-"""PEER Work Pattern implementation for PyAgent.""""
+"""PEER Work Pattern implementation for PyAgent."""
 PEER Pattern: Planning, Executing, Expressing, Reviewing
 A collaborative pattern where agents work in sequence to plan, execute,
 express results, and review for improvement.
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 class PeerWorkPattern(WorkPattern):
-    """PEER (Planning, Executing, Expressing, Reviewing) work pattern.""""
+    """PEER (Planning, Executing, Expressing, Reviewing) work pattern."""
     This pattern coordinates four types of agents:
     - Planning: Breaks down tasks and creates execution plans
     - Executing: Performs the actual work
@@ -61,7 +61,7 @@ class PeerWorkPattern(WorkPattern):
         ])
 
     async def execute(self, context: CascadeContext, **kwargs) -> Dict[str, Any]:
-        """Execute the PEER work pattern.""""
+        """Execute the PEER work pattern."""
         Args:
             context: Task context
             **kwargs: Additional parameters (retry_count, jump_step, etc.)

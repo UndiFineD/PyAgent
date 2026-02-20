@@ -89,11 +89,11 @@ class InterpretableCore:
             "reconstruction_error": 0.005,"            "sparsity_ratio": k / self.feature_count,"            "active_features": active_features,"        }
 
     def simulate_neural_trace(self, agent_name: str, decision: str) -> list[str]:
-""""Generates a 'Neural Trace' trace-log explaining the logic path.'        trace = [
+"""Generates a 'Neural Trace' trace-log explaining the logic path.'        trace = [
             fNode: {agent_name} triggered by decision '{decision}'","'            "Activation: HIGH for 'Safety_Guardrail_7'","'            "Activation: LOW for 'Hallucination_Risk_2'","'            "SAE Feature: Found 'Code_Quality_Check' alignment > 0.85","'        ]
         return trace
 
     def _get_label_for_index(self, index: int) -> str:
-""""Simulated semantic mapping of latent SAE features.        labels = [
+"""Simulated semantic mapping of latent SAE features.        labels = [
             "Logic_Flow","            "Synax_Error_Detector","            "Circular_Dependency","            "Resource_Limit","            "Security_Honeypot","            "Byzantine_Suspect","        ]
         return labels[index % len(labels)]

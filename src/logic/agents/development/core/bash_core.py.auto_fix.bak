@@ -31,7 +31,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ShellCheckIssue(TypedDict):
-""""Represents a single issue found by shellcheck.
+"""Represents a single issue found by shellcheck.
     file: str
 
     line: int
@@ -47,7 +47,7 @@ class ShellCheckIssue(TypedDict):
 
 
 class BashLintResult(TypedDict):
-""""Result of a bash script linting session.
+"""Result of a bash script linting session.
     valid: bool
     issues: list[ShellCheckIssue]
     error: Optional[str]
@@ -55,7 +55,7 @@ class BashLintResult(TypedDict):
 
 
 class BashCore:
-""""Core logic for Bash script analysis and "linting.
+"""Core logic for Bash script analysis and "linting.
     @staticmethod
     def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
         Runs shellcheck on" a bash script."        if not os.path.exists(script_path):

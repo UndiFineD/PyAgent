@@ -65,7 +65,7 @@ except ImportError:
 
 
 class AuctionCore(StandardAuctionCore):
-""""
+"""
 Facade for AuctionCore to maintain backward compatibility. "   pass"
 # Facade for AuctionCore
 try:
@@ -78,6 +78,6 @@ except ImportError:
 
 
 class AuctionCore(StandardAuctionCore):
-""""
+"""
 Facade for AuctionCore to maintain backward compatibility.
     pass

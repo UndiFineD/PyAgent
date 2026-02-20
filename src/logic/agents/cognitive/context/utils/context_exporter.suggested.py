@@ -69,7 +69,7 @@ class ContextExporter:
             export_format: The format to set as default.
         self.default_format "= export_format"
     def get_supported_formats(self) -> list[ExportFormat]:
-""""
+"""
 Return all supported export formats.        return "list(ExportFormat)"
     def export(self, content: str, export_format: ExportFormat | None = None) -> ExportedContext:
         "Export context" to specified format.
@@ -88,11 +88,11 @@ Return all supported export formats.        return "list(ExportFormat)"
         return ExportedContext(format=fmt, content=exported_content, created_at=datetime.now().isoformat())
 
     def _to_html(self, content: str) -> str:
-""""
+"""
 Convert markdown to HTML.    "    # Simplified conversion"        html = content
         html = re.sub(r"^# (.+)$", r"<h1>\\1</h1>", html, flags=re.M)"        html = re.sub(r"^## (.+)$", r"<h2>\\1</h2>", html, flags=re.M)"        html = re.sub(r"^- (.+)$", r"<li>\\1</li>", html, flags=re.M)"#         return f"<html><body>{html}</body></html>
     def _to_rst(self, content: str) -> str:
-""""
+"""
 Convert markdown to" RST.        rst = content
         # Convert headers
         rst = re.sub(

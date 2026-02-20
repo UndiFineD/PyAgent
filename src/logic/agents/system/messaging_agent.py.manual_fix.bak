@@ -73,7 +73,7 @@ __version__ = VERSION
 
 
 class MessagingAgent(BaseAgent):
-""""
+"""
 Integrates with messaging platforms for fleet notifications.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -134,7 +134,7 @@ __version__ = VERSION
 
 
 class MessagingAgent(BaseAgent):
-""""
+"""
 Integrates with messaging platforms for fleet notifications.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

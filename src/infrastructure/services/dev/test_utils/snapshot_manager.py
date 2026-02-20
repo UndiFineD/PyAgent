@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 import json
 from pathlib import Path
 from typing import Any
@@ -32,12 +32,12 @@ __version__ = VERSION
 
 class SnapshotManager:
 """
-Manages snapshots for snapshot testing.""""
+Manages snapshots for snapshot testing.""
 Example:
         mgr=SnapshotManager(Path("snapshots"))"        mgr.assert_match("test1", actual_output)"    
     def __init__(self, snapshot_dir: Path) -> None:
 """
-Initialize snapshot manager.""""
+Initialize snapshot manager.""
 Args:
             snapshot_dir: Directory to store snapshots.
                 self.snapshot_dir = snapshot_dir
@@ -49,7 +49,7 @@ Args:
 Get path for a snapshot.        return self.snapshot_dir / f"{name}.snap"
     def save_snapshot(self, name: str, content: Any) -> TestSnapshot:
 """
-Save a new snapshot.""""
+Save a new snapshot.""
 Args:
             name: Snapshot name.
             content: Snapshot content (str or dict/list).
@@ -71,7 +71,7 @@ Args:
 
     def load_snapshot(self, name: str) -> TestSnapshot | None:
 """
-Load an existing snapshot.""""
+Load an existing snapshot.""
 Args:
             name: Snapshot name.
 
@@ -94,7 +94,7 @@ Args:
 
     def compare_snapshot(self, name: str, actual: Any) -> SnapshotComparisonResult:
 """
-Compare actual content with a saved snapshot.""""
+Compare actual content with a saved snapshot.""
 Args:
             name: Snapshot name.
             actual: Actual content to compare.
@@ -122,7 +122,7 @@ Args:
         update: bool = False,
     ) -> bool:
 """
-Assert that actual matches snapshot.""""
+Assert that actual matches snapshot.""
 Args:
             name: Snapshot name.
             actual: Actual content.
@@ -148,7 +148,7 @@ Args:
 
     def get_diff(self, name: str, actual: str) -> list[str]:
 """
-Get diff between snapshot and actual.""""
+Get diff between snapshot and actual.""
 Args:
             name: Snapshot name.
             actual: Actual content.

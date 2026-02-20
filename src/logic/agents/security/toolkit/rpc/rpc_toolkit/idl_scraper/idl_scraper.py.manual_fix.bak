@@ -44,7 +44,7 @@ Fetch the list of protocol names from Microsoft's technical documents page.'#   
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-idl_names = []""""
+idl_names = []""
 for row in table_rows:
         left_cell = row.find("td")"        a = left_cell.find("a")"# [BATCHFIX] Commented metadata/non-Python
 """
@@ -103,7 +103,7 @@ def generate_urls_from_uuids(protocol_name, idl_uuids):
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-result[name] = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, uuid)""""
+result[name] = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, uuid)""
 return result
 
 
@@ -154,7 +154,7 @@ def download_all_protocols_idls(output):
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-status[protocol_name] = download_protocol_idls(protocol_name, output)""""
+status[protocol_name] = download_protocol_idls(protocol_name, output)""
 logging.info(fProtocols' Status: {status}")"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
 
 def get_args():
@@ -181,3 +181,5 @@ if __name__ == "__main__":"    set_logging()
         download_protocol_idls(protocol, output)
     else:
         download_all_protocols_idls(output)
+
+"""

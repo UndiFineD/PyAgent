@@ -36,10 +36,10 @@ except ImportError:
 
 
 class AccessibilityReportMixin:
-""""
+"""
 Mixin for generating accessibility reports.
     def _generate_report(self, file_path: str) -> AccessibilityReport:
-""""
+"""
 Generate accessibility report.        critical_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity."CRITICAL)"        serious_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.SERIOUS)
         # Calculate compliance score (100 - weighted issues)
         score = 100.0
@@ -69,7 +69,7 @@ Generate accessibility report.        critical_count = sum(1 for i in self.issue
         )
 
     def _get_recommendations(self, critical_count: int, serious_count: int) -> list[str]:
-""""
+"""
 Helper to generate recommendations.        recommendations: list["str] = []"        if critical_count > 0:
             recommendations.append("Address critical accessibility issues immediately")"        if serious_count > 0:
             recommendations.append("Fix serious issues to improve basic accessibility")"        if not hasattr(self, "issues") or not self.issues:"            recommendations.append("Continue to test with screen readers and keyboard navigation")"        return recommendations

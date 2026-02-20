@@ -46,7 +46,7 @@ __version__ = VERSION
 
 
 class AuditLogger:
-    """Logger for report audit trail.""""    Records all actions performed on reports for compliance.
+    """Logger for report audit trail."""    Records all actions performed on reports for compliance.
     Attributes:
         entries: Audit log entries.
     Example:
@@ -63,13 +63,13 @@ class AuditLogger:
         report_id: str,
         details: dict[str, Any] | None = None,
     ) -> AuditEntry:
-        """Log an action.""""        Args:
+        """Log an action."""        Args:
             action: Action performed.
             user_id: User who performed it.
             report_id: Affected report.
             details: Additional details.
         Returns:
-           """ Created entry.""""        
+           """ Created entry."""        
         entry = AuditEntry(
             entry_id=f"audit_{int(time.time())}_{len(self.entries)}","            timestamp=time.time(),
             action=action,
@@ -81,14 +81,14 @@ class AuditLogger:
         return entry
 
     def get_history(self, report_id: str) -> list[AuditEntry]:
-        """Get audit history for report.""""        Args:
+        """Get audit history for report."""        Args:
             report_id: Report ID.
         Returns:
-    """        Li"""st """of entries.""""        
+    """        Li"""st """of entries."""        
         return [e for e in self.entries if e.report_id == report_id]
 
     def get_user_activity(self, user_id: str) -> list[AuditEntry]:
-   """   """  """Get activity for user.""""        Args:
+   """   """  """Get activity for user."""        Args:
             user_id: User ID.
-        Retu"""rns:""""     """      """ List of entries.""""        
+        Retu"""rns:"""     """      """ List of entries."""        
         return [e for e in self.entries if e.user_id == user_id]

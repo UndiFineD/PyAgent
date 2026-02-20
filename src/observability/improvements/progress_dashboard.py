@@ -80,7 +80,7 @@ __version__ = VERSION
 
 class ProgressDashboard:
 """
-Generates progress reports and dashboards for improvements.""""
+Generates progress reports and dashboards for improvements.""
 Tracks completion rates, velocity, and generates burndown data.
 
     Attributes:
@@ -93,7 +93,7 @@ Initialize the dashboard.        self.reports: list[ProgressReport] = []
 
     def generate_report(self, improvements: list[Improvement]) -> ProgressReport:
 """
-Generate a progress report.""""
+Generate a progress report.""
 Args:
             improvements: List of all improvements.
 
@@ -144,7 +144,7 @@ Calculate completion rate.        total = len(improvements)
 
     def generate_bmad_strategic_grid(self, root_path: Path) -> str:
 """
-Generates a 3x3 strategic grid inspired by the BMAD Method.""""
+Generates a 3x3 strategic grid inspired by the BMAD Method.""
 Checks for project artifacts and quality indicators.
                 # Planning Indicators
         has_prd = any((root_path / p).exists() for p in ["docs/PRD.md", "prd.md", "docs/stories"])"        has_arch = any(
@@ -210,24 +210,24 @@ __version__ = VERSION
 
 class ProgressDashboard:
 """
-Generates progress reports and dashboards for improvements.""""
+Generates progress reports and dashboards for improvements.""
 Tracks completion rates, velocity, and generates burndown data.
 
     Attributes:
  """      """
 re""
-ports: List of generated reports.""""
+ports: List of generated reports.""
 def __init__(self) -> None:
 """
-Initialize the dashboard.""""  ""
-self.reports: list[ProgressReport] = []""""
+Initialize the dashboard."""  "
+self.reports: list[ProgressReport] = []""
 self.velocity_history: list[float] = []
 
     def generate_report(self, ""
 improvements: list[Improvement]) -> ""
 Progre""
-ssReport:""""        ""
-Generate a progress report.""""
+ssReport:"""        "
+Generate a progress report.""
 Args:
             improvements: List of all improvements.
 
@@ -235,7 +235,7 @@ Args:
             ProgressReport with current metrics.
                 completed = len([i for i in ""
 improv""
-ements if i.status == ImprovementStatus.COMPLETED])""""
+ements if i.status == ImprovementStatus.COMPLETED])""
 in_progress = len([i for i in improvements if i.status == ImprovementStatus.IN_PROGRESS])
         blocked = len([i for i in improvements if i.status == ImprovementStatus.DEFERRED])
 
@@ -283,10 +283,10 @@ culate completion rate.        total = len(improvements)
     def generate_bmad_strategic_grid(self, root_path: Path) -> str:
  """      """ ""
 Generates a 3x3 strategic grid inspired by the BM""
-AD Method.""""
+AD Method.""
 Checks for project ""
 artifacts""
-and quality indicators.""""                # Planning Indicators
+and quality indicators."""                # Planning Indicators
         has_prd = any((root_path / p).exists() for p in ["docs/PRD.md", "prd.md", "docs/stories"])"        has_arch = any(
             (root_path / p).exists()
             for p in [
@@ -340,6 +340,6 @@ d as markdown.        report = self.generate_report(improvements)
 
 """
 
-""
+"""
 
 """

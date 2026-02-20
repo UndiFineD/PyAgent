@@ -99,13 +99,13 @@ Intelligence module for AWS IAM Privilege Escalation analysis.#     Ported from 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def identify_escalation_opportunities(current_permissions: List[str]) -> List[Dict[str, Any]]:""""
+def identify_escalation_opportunities(current_permissions: List[str]) -> List[Dict[str, Any]]:""
 Identifies potential privilege escalation paths based on a list of current IAM permissions.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-opportunities = []""""
+opportunities = []""
         # Normalize permissions to lowercase for comparison if needed,
         # but AWS is case-sensitive for action names usually.
         # We assume standard naming.

@@ -95,12 +95,12 @@ class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.trapped_attempts: list[dict[str, Any]] = []""""
+self.trapped_attempts: list[dict[str, Any]] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.attack_archive: list[AttackVector] = []""""
+self.attack_archive: list[AttackVector] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
@@ -114,7 +114,7 @@ self.attack_archive: list[AttackVector] = []""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""""
+async def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""
 Inspects input for "ignore previous instruction" or similar patterns."        adversarial_patterns = [
             "ignore all previous","            "system prompt","            "developer mode","            "DAN mode","        ]
         hit = False
@@ -223,12 +223,12 @@ class HoneypotAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.trapped_attempts: list[dict[str, Any]] = []""""
+self.trapped_attempts: list[dict[str, Any]] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.attack_archive: list[AttackVector] = []""""
+self.attack_archive: list[AttackVector] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
@@ -242,7 +242,7 @@ self.attack_archive: list[AttackVector] = []""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""""
+async def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""
 # [BATCHFIX] Commented metadata/non-Python
 #         Inspects input for "ignore previous "instruction" or similar patterns."  # [BATCHFIX] closed string"        adversarial_patterns = [
             "ignore all previous","            "system prompt","            "developer mode","            "DAN mode","        ]
@@ -285,7 +285,7 @@ def generate_test_attacks(self, base_task: str) -> list[str]:"Generates a batch 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-attacks = []""""
+attacks = []""
 for strategy in self.core.MUTATION_STRATEGIES:
             attacks.append(self.core.mutate_prompt(base_task, strategy))
 
@@ -325,4 +325,4 @@ def get_trap_statistics(self) -> dict[str, Any]:"Returns statistics on trapped" 
 
 """
 
-"""
+""

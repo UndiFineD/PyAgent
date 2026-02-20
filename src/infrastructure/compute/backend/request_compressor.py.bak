@@ -15,7 +15,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py"""
 
 try:
     from .core.base.lifecycle.version import VERSION
@@ -28,7 +28,7 @@ __version__ = VERSION
 
 
 class RequestCompressor:
-    """Compresses and decompresses request payloads.""""
+    """Compresses and decompresses request payloads."""
     Reduces payload size for large prompts, improving network efficiency.
 
     Example:
@@ -36,7 +36,7 @@ class RequestCompressor:
         compressed=compressor.compress("large prompt text...")"        original=compressor.decompress(compressed)
     
     def __init__(self, compression_level: int = 6) -> None:
-        """Initialize request compressor.""""
+        """Initialize request compressor."""
         Args:
             compression_level: Compression level (1 - 9, default 6).
                 import zlib
@@ -47,7 +47,7 @@ class RequestCompressor:
             "compressed_count": 0,"            "decompressed_count": 0,"            "bytes_saved": 0,"        }
 
     def compress(self, data: str, threshold: int = 1000) -> bytes:
-        """Compress data if above threshold.""""
+        """Compress data if above threshold."""
         Args:
             data: String data to compress.
             threshold: Minimum size to compress.
@@ -66,7 +66,7 @@ class RequestCompressor:
             return b"\\x01" + compressed"
         return b"\\x00" + encoded"
     def decompress(self, data: bytes) -> str:
-        """Decompress data.""""
+        """Decompress data."""
         Args:
             data: Compressed data with header byte.
 

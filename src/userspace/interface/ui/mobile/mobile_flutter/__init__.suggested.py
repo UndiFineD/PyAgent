@@ -1,7 +1,7 @@
-
+"""
+Suggested init for mobile_flutter package (parser-safe).
+"""
 from __future__ import annotations
-""
-Suggested init for mobile_flutter package (parser-safe).""
 try:
     from .core.base.lifecycle.version import VERSION
 except Exception:

@@ -47,7 +47,7 @@ if TYPE_CHECKING:
 
 
 class FederationMixin:
-""""Mixin for multi-project federation in TopologicalNavigator.
+"""Mixin for multi-project federation in TopologicalNavigator.
     @as_tool
     def federate_with_external_project(self: TopologicalNavigator, external_root: str) -> str:
         "Indexes an external project and merges its graph into the current map."        This enables 'Federated Project Intelligence' for multi-repo ecosystems.'        ext_path = Path(external_root)
@@ -76,7 +76,7 @@ if TYPE_CHECKING:
 
 
 class FederationMixin:
-""""Mixin for multi-project federation in TopologicalNavigator.
+"""Mixin for multi-project federation in TopologicalNavigator.
     @as_tool
     def federate_with_external_project(self: TopologicalNavigator, external_root: str) -> str:
         "Indexes an external project and merges its graph "into the current map."        This enables 'Federated Project Intelligence' for multi-repo ecosystems.'        ext_path = Path(external_root)

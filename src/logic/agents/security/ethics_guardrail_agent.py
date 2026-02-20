@@ -68,7 +68,7 @@ __version__ = VERSION
 
 class EthicsGuardrailAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """
-Reviews requests for ethical compliance and safety.""""
+Reviews requests for ethical compliance and safety.""
 Version 2: Real-time swarm monitoring and safety protocol enforcement.
     
     def __init__(self, path: str) -> None:
@@ -137,4 +137,4 @@ Reviews a completed action for unexpected ethical deviations.        _ = action
 
 """
 
-"""
+""

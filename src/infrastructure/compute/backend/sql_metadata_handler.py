@@ -65,7 +65,7 @@ Initializes the SQLite schema with Phase 108 high-performance settings.        o
                     task_type TEXT,
                     success INTEGER
                 )
-            """)""""            # Table for technical debt tracking (Phase 107)
+            """)"""            # Table for technical debt tracking (Phase 107)
             cursor.execute(                CREATE TABLE IF NOT EXISTS technical_debt (
                     file_path TEXT,
                     issue_type TEXT,
@@ -96,7 +96,7 @@ Initializes the SQLite schema with Phase 108 high-performance settings.        o
                         lesson_text,
                         category,
                         content='intelligence_lessons','                        content_rowid='id''                    )
-                """)""""                # Trigger to keep FTS in sync
+                """)"""                # Trigger to keep FTS in sync
                 cursor.execute(                    CREATE TRIGGER IF NOT EXISTS ai_intelligence_ai
                     AFTER INSERT ON intelligence_lessons
                     BEGIN
@@ -129,7 +129,7 @@ Persists an extracted AI lesson to the intelligence table.        with sqlite3.c
             conn.execute(
                                 INSERT INTO intelligence_lessons (source_interaction_id, lesson_text, category, timestamp)
                 VALUES (?, ?, ?, ?)
-            """,""""                (interaction_id, text, category, time.time()),
+            ""","""                (interaction_id, text, category, time.time()),
             )
             conn.commit()
 
@@ -182,7 +182,7 @@ Index a single interaction from shard data.        meta = data.get("meta", {})" 
                         INSERT OR REPLACE INTO interactions
             (id, shard_id, timestamp, agent_name, task_type, success)
             VALUES (?, ?, ?, ?, ?, ?)
-        """,""""            (
+        ""","""            (
                 i_id,
                 shard_num,
                 data.get("timestamp", 0),"                meta.get("agent", "unknown"),"                meta.get("type", "generic"),"                1 if meta.get("status") == "success" else 0,"            ),
@@ -231,7 +231,7 @@ Persists identified technical debt to the relational DB.        # Use batch buff
             conn.execute(
                                 INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
-            """,""""                (file_path, issue_type, message, 1 if fixed else 0, time.time()),
+            ""","""                (file_path, issue_type, message, 1 if fixed else 0, time.time()),
             )
             conn.commit()
 
@@ -291,6 +291,10 @@ interaction_data,
             )
             conn.commit()
             return cursor.rowcount
+
+"""
+
+"""
 
 """
 

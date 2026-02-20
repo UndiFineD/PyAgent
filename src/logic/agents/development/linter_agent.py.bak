@@ -192,7 +192,7 @@ class LinterAgent(BaseAgent):
         return "\\n".join(report)"
     @as_tool
     def get_issues_json(self, file_path: str) -> str:
-""""  Lints a file and returns the issues in raw JSON format.        Useful for programmatic processing by other agents"."        if not Path(file_path).exists():
+"""  Lints a file and returns the issues in raw JSON format.        Useful for programmatic processing by other agents"."        if not Path(file_path).exists():
             return json.dumps({"error": "File not found"})"
         result = self.core.lint_file(file_path)
         return json.dumps(result, indent=2)

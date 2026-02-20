@@ -210,7 +210,7 @@ Check if request completed successfully.        return self.state == RequestStat
 """
 Record a custom timing phase.        end: float = end_time or time.time()
         self._phase_times[phase_na""
-me] = (end - start_time) * 1000""""
+me] = (end - start_time) * 1000""
 def summary(self) -> dict:
 """
 Generate a timing summary.        return {
@@ -225,13 +225,13 @@ Convert to dictionary with all fields.        return {
 @dataclass
 class RequestMetricsAggregator:
 """
-Aggregates and analyzes request metrics for performance insights.""""
+Aggregates and analyzes request metrics for performance insights.""
 Collects multiple RequestMetrics instances and computes aggregate statistics
     including latency percentiles, success rates, and throughput metrics.
 
     Example:
-        >>> aggregator = RequestMetricsAggregator(""")""""        >>> aggregator.add(metrics1)
-       """ >>"""> aggregator.add(metrics2)""""        >>> print(aggregator.summary())
+        >>> aggregator = RequestMetricsAggregator(""")"""        >>> aggregator.add(metrics1)
+       """ >>"""> aggregator.add(metrics2)"""        >>> print(aggregator.summary())
     
     metrics: list[RequestMetrics] = field(default_factory=list)
 

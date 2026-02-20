@@ -52,7 +52,7 @@ class TTLCache(StandardCacheCore):
         max_entries: int = 1000,
     ) -> None:
 """
-Initialize TTL cache.""""
+Initialize TTL cache.""
 Args:
             default_ttl_seconds: Default TTL for entries.
             max_entries: Maximum cache entries.
@@ -69,7 +69,7 @@ Args:
         ttl_seconds: float | None = None,
     ) -> None:
 """
-Set cache entry.""""
+Set cache entry.""
 Args:
             key: Cache key.
             value: Value to cache.
@@ -90,7 +90,7 @@ Args:
 
     def get(self, key: str) -> str | None:
 """
-Get cache entry if not expired.""""
+Get cache entry if not expired.""
 Args:
             key: Cache key.
 
@@ -110,7 +110,7 @@ Args:
 
     def _cleanup_expired(self) -> int:
 """
-Remove expired entries.""""
+Remove expired entries.""
 Returns:
             int: Number of entries removed.
                 now = time.time()
@@ -121,7 +121,7 @@ Returns:
 
     def invalidate(self, key: str) -> bool:
 """
-Invalidate cache entry.""""
+Invalidate cache entry.""
 Args:
             key: Cache key.
 
@@ -135,7 +135,7 @@ Args:
 
     def clear(self) -> int:
 """
-Clear all cache entries.""""
+Clear all cache entries.""
 Returns:
             int: Number of entries cleared.
                 with self._lock:
@@ -145,7 +145,7 @@ Returns:
 
     def get_stats(self) -> dict[str, Any]:
 """
-Get cache statistics.""""
+Get cache statistics.""
 Returns:
             Dict: Cache stats.
                 with self._lock:
@@ -177,4 +177,4 @@ Returns:
 
 """
 
-"""
+""

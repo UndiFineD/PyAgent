@@ -47,7 +47,7 @@ except ImportError:
 
 @dataclass
 class ValidationRule:
-""""Rule used by ChangesAgent to validate changelog entries against standards.    name: str
+"""Rule used by ChangesAgent to validate changelog entries against standards.    name: str
     pattern: str
     message: str
     severity:" str"
@@ -60,6 +60,6 @@ except ImportError:
 
 @dataclass
 class ValidationRule:
-""""Rule used by ChangesAgent to validate changelog entries against standards. "   name: str"    pattern: str
+"""Rule used by ChangesAgent to validate changelog entries against standards. "   name: str"    pattern: str
     message: str
     severity: str

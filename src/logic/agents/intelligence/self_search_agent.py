@@ -49,7 +49,7 @@ except ImportError:
 
 
 class SelfSearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in searching and reflecting on its own knowledge base and logs.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -63,7 +63,7 @@ except ImportError:
 
 
 class SelfSearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in searching and reflecting on its own knowledge base and logs.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -64,7 +64,7 @@ class IntelligenceCore:
             "hallucination": FailureClassification.AI_ERROR,"            "timeout": FailureClassification.NETWORK_FAILURE,"            "connection_refused": FailureClassification.NETWORK_FAILURE,"            "file_not_found": FailureClassification.STATE_CORRUPTION,"            "lock_error": FailureClassification.STATE_CORRUPTION,"            "memory_limit": FailureClassification.RESOURCE_EXHAUSTION,"            "disk_space": FailureClassification.RESOURCE_EXHAUSTION,"            "assertion_error": FailureClassification.TEST_INFRASTRUCTURE,"            "recursion_depth": FailureClassification.RECURSION_LIMIT,"            "shard": FailureClassification.SHARD_CORRUPTION,"            "integrity": FailureClassification.SHARD_CORRUPTION,"            "corrupt": FailureClassification.SHARD_CORRUPTION,"            "distributed": FailureClassification.DISTRIBUTED_STATE_ERROR,"            "synchronization": FailureClassification.DISTRIBUTED_STATE_ERROR,"            "recursive": FailureClassification.RECURSION_LIMIT,  # Map rough matches"            "self_improvement": FailureClassification.RECURSIVE_IMPROVEMENT,"            "self_healing": FailureClassification.RECURSIVE_IMPROVEMENT,"            "swarm_desynchronization": FailureClassification.DISTRIBUTED_STATE_ERROR,"        }
 
     def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
-        """Filters relevant insights from the pool.""""
+        """Filters relevant insights from the pool."""
         Args:
             pool: list of insight dictionaries.
             limit: maximum number of insights to return.
@@ -87,7 +87,7 @@ class IntelligenceCore:
         return insights
 
     def generate_synthesis_prompt(self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]) -> str:
-        """Constructs a prompt for AI synthesis from collected insights.""""
+        """Constructs a prompt for AI synthesis from collected insights."""
         Args:
             insights: List of SwarmInsight objects.
             sql_lessons: List of SQL lesson dictionaries.
@@ -101,7 +101,7 @@ class IntelligenceCore:
             "Analyze these swarm insights and relational lessons. ""            "Synthesize the top 5 high-level patterns or warnings. ""            "For each pattern, provide the following fields if possible: ""            "'file' (path), 'line' (number), and 'description' (what is wrong). ""'            "Format each pattern as: 'File: [path] | Line: [number] | Description: [desc]'\\n""'            f"Insights:\\n{pool_text}""        )
 
     def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[dict[str, Any]]:
-        """Filters raw AI output and converts to structured dictionaries.""""
+        """Filters raw AI output and converts to structured dictionaries."""
         Args:
             raw_patterns: List of raw pattern strings from the AI.
 

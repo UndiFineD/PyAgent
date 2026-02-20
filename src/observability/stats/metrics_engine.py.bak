@@ -87,7 +87,7 @@ class ObservabilityEngine:
         self.log_buffer: list[dict[str, Any]] = []
         self.load()
 
-    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:"        """Logs a system event in a structured format for ELK.""""
+    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:"        """Logs a system event in a structured format for ELK."""
         Args:
             agent_id: The ID of the agent generating the event.
             event_type: The category of event (e.g., 'task_complete', 'error').'            data: Payload of the event.
@@ -177,7 +177,7 @@ class ObservabilityEngine:
         self.log_buffer: list[dict[str, Any]] = []
         self.load()
 
-    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:"        """Logs a system event in a structured format for ELK.""""
+    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:"        """Logs a system event in a structured format for ELK."""
         Args:
             agent_id: The ID of the agent generating the event.
             event_type: The category of event (e.g., 'task_complete', 'error').'            data: Payload of the event.
@@ -208,7 +208,7 @@ class ObservabilityEngine:
         """Returns Prometheus scrape response.        return self.metrics_exporter.get_prometheus_payload()
 
     def generate_dashboard(self, shard_name: str | None = None) -> str:
-                Trigger"""s G"""rafana JSON dashboard generation (Phase 126).""""                try:
+                Trigger"""s G"""rafana JSON dashboard generation (Phase 126)."""                try:
             generator = GrafanaDashboardGenerator(self.workspace_root / "deploy" / "grafana")"            if shard_name:
                 return generator.generate_shard_obs(shard_name)
             return generator.generate_fleet_summary()

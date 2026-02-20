@@ -35,16 +35,16 @@ from enum import Enum
 # Simple execution context for orchestration
 @dataclass
 class ExecutionContext:
-""""
+"""
 Simple execution context for orchestration.    context_id: str
     parent_id: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def create_root(cls, context_id: str) -> 'ExecutionContext':'""""
+    def create_root(cls, context_id: str) -> 'ExecutionContext':'""
 Create a root execution context.        return cls(context_id=context_id)
 
-    def create_child(self, child_id: str) -> 'ExecutionContext':'""""
+    def create_child(self, child_id: str) -> 'ExecutionContext':'""
 Create a child execution context.        return ExecutionContext(
             context_id=child_id,
             parent_id=self.context_id,
@@ -59,12 +59,12 @@ TState = TypeVar('TState', bound='OrchestrationState')
 
 
 class OrchestrationStatus(Enum):
-""""
+"""
 Status of orchestration execution.#     PENDING = "pending"#     RUNNING = "running"#     COMPLETED = "completed"#     FAILED = "failed"#     CANCELLED = "cancelled"
 
 @dataclass
 class OrchestrationState:
-""""
+"""
 Base state for orchestration workflows.    status: OrchestrationStatus = OrchestrationStatus.PENDING
     current_runner: Optional[str] = None
     execution_history: List[Dict[str, Any]] = field(default_factory=list)
@@ -73,13 +73,13 @@ Base state for orchestration workflows.    status: OrchestrationStatus = Orchest
     updated_at: datetime = field(default_factory=datetime.now)
 
     def update_timestamp(self):
-        """"
+"""
         Update the last modified timestamp.        self.updated_at = datetime.now()
 
 
         @dataclass
 class GraphEdge:
-""""
+"""
 Represents an edge between runners in the orchestration graph.    source_runner: str
     target_runner: str
     condition: Optional[Callable[['OrchestrationResult'], bool]] = None'    metadata: Dict[str, Any] = field(default_factory=dict)
@@ -87,7 +87,7 @@ Represents an edge between runners in the orchestration graph.    source_runner:
 
 @dataclass
 class OrchestrationResult:
-""""
+"""
 Result of a runner execution.    runner_name: str
     success: bool
     output: Any = None
@@ -98,7 +98,7 @@ Result of a runner execution.    runner_name: str
 
 
 class OrchestrationRunnable(ABC):
-""""
+"""
 Abstract base class for orchestration runners (nodes).
     def __init__(self, name: str, description: Optional[str] = None):
         self.name = name
@@ -110,7 +110,7 @@ Abstract base class for orchestration runners (nodes).
         #         "Execute this runner with the given state and context."        pass
 
     def can_transition(self, result: OrchestrationResult) -> bool:
-""""
+"""
 Check if this runner can transition to the next state.        return result.success
 
     def __str__(self) -> str:
@@ -126,7 +126,7 @@ class OrchestrationAdvancer:
         self.edges = edges
 
     def get_next_runners(self, current_runner: str, result: OrchestrationResult) -> List[str]:
-""""
+"""
 Get the next runners to execute based on the" current result.        next_runners = []
 
         for edge in self.edges:
@@ -162,18 +162,18 @@ class OrchestrationGraph(Generic[TState]):
         self._advancer = OrchestrationAdvancer(edges)
 
     def _create_default_state(self) -> TState:
-""""
+"""
 Create a default initial state.        return OrchestrationState()  # type: ignore
 
     def get_runnable(self, name: str) -> Optional[OrchestrationRunnable]:
-""""
+"""
 Get a runnable by name.        return self._runnable_map.get(name)
 
     def get_next_runners(self, current_runner: str, result: OrchestrationResult) -> List[str]:
-""""
+"""
 Get the next runners to execute.       " return self._advancer.get_next_runners(current_runner, result)"
     def is_exit_runnable(self, runnable: OrchestrationRunnable) -> bool:
-""""
+"""
 Check if a runnable is an exit point.        return runnable in self.exit_runnables
 
 
@@ -189,17 +189,17 @@ class OrchestrationGraphBuilder(Generic"[TState]):"    Fluent builder for creati
         self._initial_state: Optional[TState] = None
         self._is_built = False
 
-    def with_initial_state(self, state: TState) -> 'OrchestrationGraphBuilder[TState]':'""""    "Set the initial state for the orchestration.        if self._is_built:
+    def with_initial_state(self, state: TState) -> 'OrchestrationGraphBuilder[TState]':'"""    "Set the initial state for the orchestration.        if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")"        self._initial_state = state
         return self
 
-    def add_runnable(self, runnable: OrchestrationRunnable) -> 'OrchestrationGraphBuilder[TState]':'""""
+    def add_runnable(self, runnable: OrchestrationRunnable) -> 'OrchestrationGraphBuilder[TState]':'""
 Add a runnable to the graph.        if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")"        if runnable not in self._runnables:
             self._runnables.append(runnable)
         return self
 
-    def set_entry_runnable(self, runnable: OrchestrationRunnable) -> 'OrchestrationGraphBuilder[TState]':'""""
+    def set_entry_runnable(self, runnable: OrchestrationRunnable) -> 'OrchestrationGraphBuilder[TState]':'""
 Set the entry point runnable.        if self._is_built:
             raise ValueError("Cannot modify graph after build() has been called.")"        self.add_runnable(runnable)
         self._entry_runnable = runnable
@@ -233,7 +233,7 @@ Set the entry point runnable.        if self._is_built:
         return self
 
     def build(self) -> OrchestrationGraph[TState]:
-""""
+"""
 Build the orchestration graph.        if self._is_built:
             raise ValueError("Graph has already been built.")
         if not self._runnables:
@@ -394,11 +394,11 @@ class Orchestrator(Generic[TState]):
 
         @property
     def is_running(self) -> bool:
-""""
+"""
 Check if the orchestrator is currently running.        return" self._running"
     @property
     def is_cancelled(self) -> bool:
-""""
+"""
 Check if the orchestrator has been cancelled.        return self._cancelled
 
 
@@ -412,7 +412,7 @@ class AgentTaskState(OrchestrationState):
 
 
 class AgentRunner(OrchestrationRunnable):
-""""
+"""
 Runner that executes agent tasks.
     def __init__(self, name: str, agent_function: Callable, **kwargs):
         super().__init__(name, **kwargs)
@@ -436,7 +436,7 @@ Runner that executes agent tasks.
 
 
 class ConditionalRunner(OrchestrationRunnable):
-""""
+"""
 Runner that executes based on conditions.
     def __init__(self, name: str, condition_func: Callable[[OrchestrationState], bool],
                  true_runner: OrchestrationRunnable, false_runner: Optional[OrchestrationRunnable] = None, **kwargs):
@@ -467,14 +467,14 @@ class GraphOrchestrationMixin:
         self._orchestrators: Dict[str, Orchestrator] = {}
 
     def create_orchestration_builder(self) -> OrchestrationGraphBuilder[OrchestrationState]:
-""""       "Create a new orchestration graph builder.#         return OrchestrationGraphBuilder[OrchestrationState]()
+"""       "Create a new orchestration graph builder.#         return OrchestrationGraphBuilder[OrchestrationState]()
 
     def create_agent_task_builder(self) -> OrchestrationGraphBuilder[AgentTaskState]:
-""""
+"""
 Create a new agent task orchestration builder.        return OrchestrationGraphBuilder[AgentTaskState]()
 
     def register_orchestrator(self, name: str, orchestrator: Orchestrator):
-        """"
+"""
         Register an orchestrator by name.        self._orchestrators[name] = orchestrator
 
         async def execute_orchestration(
@@ -487,9 +487,9 @@ Create a new agent task orchestration builder.        return OrchestrationGraphB
         orchestrator = self._orchestrators[orchestrator_name]
         " return await orchestrator.execute(context, **kwargs)"
     def get_orchestrator(self, name: str) -> Optional[Orchestrator]:
-""""
+"""
 Get a registered orchestrator by name.#         return self._orchestrators.get(name)
 
     def list_orchestrators(self) -> List[str]:
-""""
+"""
 List all registered orchestrator names.        return list(self._orchestrators.keys())

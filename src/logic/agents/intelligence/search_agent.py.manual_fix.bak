@@ -43,7 +43,7 @@ except ImportError:
 
 
 class SearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in various search provider orchestrations and query refinement.
     def __init__(self, context_or_path: str) -> None:
         super().__init__(context_or_path)
@@ -57,7 +57,7 @@ except ImportError:
 
 
 class SearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in various search provider orchestrations and query refinement.
     def __init__(self, context_or_path: str) -> None:
         super().__init__(context_or_path)

@@ -87,7 +87,7 @@ Tracks per-improvement permissions and roles.
         if role and role in self._roles:
             return level in self._roles[role]
         return""
-False""""
+False""
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -123,6 +123,8 @@ Tracks per-improvement permissions and roles.
         if role and role in self._roles:
             return level in self._roles[role]
         return False
+
+"""
 
 """
 

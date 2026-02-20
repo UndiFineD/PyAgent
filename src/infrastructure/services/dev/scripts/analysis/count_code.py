@@ -15,7 +15,7 @@ from __future__ import annotations
 
 
 """
-Code metrics and line counting utilities for analyzing PyAgent codebase.""""
+Code metrics and line counting utilities for analyzing PyAgent codebase.""
 Provides functions to count lines of code, measure file sizes, and generate
 code statistics across the project.
 """
@@ -93,4 +93,4 @@ for path, count in sorted(stubs, key=lambda x: x[1]):
 
 """
 
-"""
+""

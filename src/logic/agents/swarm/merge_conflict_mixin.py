@@ -59,10 +59,10 @@ except ImportError:
 
 
 class MergeConflictMixin:
-""""
+"""
 Mixin for handling merge conflicts in file content.
     def detect_merge_conflicts(self, content: str) -> list[dict[str, Any]]:
-""""
+"""
 Detect merge conflict markers in the content.        conflicts: list[dict[str", Any]] = []"        lines = content.split("\\n")"        in_conflict = False
         conflict_start = 0
         ours: list[str] = []
@@ -88,7 +88,7 @@ Detect merge conflict markers in the content.        conflicts: list[dict[str", 
                     theirs.append(line)
         return conflicts
 
-    def resolve_merge_conflict(self, content: str, resolution: str = "ours") -> str:""""
+    def resolve_merge_conflict(self, content: str, resolution: str = "ours") -> str:""
 Resolve merge conflicts in the content.        result:" list[str] = []"        lines = content.split("\\n")"        in_conflict = False
         ours_section = True
         ours: list[str] = []
@@ -125,10 +125,10 @@ except ImportError:
 
 
 class MergeConflictMixin:
-""""
+"""
 Mixin for handling merge conflicts" in file content.
     def detect_merge_conflicts(self, content: str) -> list[dict[str, Any]]:
-""""
+"""
 Detect merge conflict markers in the content.        conflicts: list[dict[str, Any]] = []
         lines = content.split("\\n")"        in_conflict = False
         conflict_start = 0
@@ -155,7 +155,7 @@ Detect merge conflict markers in the content.        conflicts: list[dict[str, A
                     theirs.append(line)
         return conflicts
 
-    def resolve_merge_conflict(self, content: str, resolution: str = "ours") -> str:""""
+    def resolve_merge_conflict(self, content: str, resolution: str = "ours") -> str:""
 Resolve merge conflicts in the content.   "     result: list[str] = []"        lines = content.split("\\n")"        in_conflict = False
         ours_section = True
         ours: list[str] = []

@@ -68,7 +68,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class BayesianReasoningAgent(BaseAgent):
-""""
+"""
 Integrates Bayesian methods for robust fleet decision-making.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -157,7 +157,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class BayesianReasoningAgent(BaseAgent):
-""""
+"""
 Integrates Bayesian methods for robust" fleet decision-making.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

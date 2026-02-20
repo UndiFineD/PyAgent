@@ -88,7 +88,7 @@ __version__ = VERSION
 @dataclass
 class AgentChainStep:
 """
-A step in an agent chain.""""
+A step in an agent chain.""
 Attributes:
         agent_name: Name of the agent to execute.
         input_transform: Optional function to transform input.
@@ -124,4 +124,4 @@ Attributes:
 
 """
 
-"""
+""

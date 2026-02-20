@@ -31,7 +31,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class KnowledgeFusionAgent(BaseAgent):
-""""Fuses distributed memory shards and resolves conflicts in the collective knowledge base.
+"""Fuses distributed memory shards and resolves conflicts in the collective knowledge base.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.fusion_dir = self._workspace_root / "data" / "logs" / "knowledge_fusion"        self.fusion_dir.mkdir(parents=True, exist_ok=True)
@@ -44,7 +44,7 @@ class KnowledgeFusionAgent(BaseAgent):
             with open(self.global_graph_path, encoding="utf-8") as f:"                return json.load(f)
         return {"nodes": [], "edges": []}"
     def _save_global_graph(self, graph: dict[str, Any]) -> None:
-""""Saves graph atomically using temp file.        temp_path = self.global_graph_path.with_suffix(".tmp")"        try:
+"""Saves graph atomically using temp file.        temp_path = self.global_graph_path.with_suffix(".tmp")"        try:
             with open(temp_path, "w", encoding="utf-8") as f:"                json.dump(graph, f, indent=2)
             temp_path.replace(self.global_graph_path)
         except Exception as e:  # pylint: disable=broad-exception-caught
@@ -86,7 +86,7 @@ class KnowledgeFusionAgent(BaseAgent):
 
     @as_tool
     def resolve_conflicts(self, keyword: str) -> str:
-""""Scans the global graph for contradictory information regarding a specific topic.        # Mock logic for conflict resolution
+"""Scans the global graph for contradictory information regarding a specific topic.        # Mock logic for conflict resolution
 
 #         return fConflict resolution for '{keyword}': No critical contradictions found. Knowledge remains stable.'
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

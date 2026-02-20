@@ -64,7 +64,7 @@ logger = logging.getLogger(__name__)
 
 class DPCoordinator:
 """
-Coordinator for data-parallel engine instances.""""
+Coordinator for data-parallel engine instances.""
 Inspired by vLLM's DPCoordinator and dp_lb_pool patterns.'    Manages multiple engine instances and distributes requests.
     
     def __init__(
@@ -85,7 +85,7 @@ Inspired by vLLM's DPCoordinator and dp_lb_pool patterns.'    Manages multiple e
 
     def register_engine(self, identity: EngineIdentity) -> None:
 """
-Register a new engine instance.""""
+Register a new engine instance.""
 Args:
             identity: Engine identity.
                 with self._lock:
@@ -95,7 +95,7 @@ Args:
             logger.info("Registered engine: %s", identity)
     def deregister_engine(self, engine_id: str) -> None:
 """
-Deregister an engine instance.""""
+Deregister an engine instance.""
 Args:
             engine_id: Engine ID to deregister.
                 with self._lock:
@@ -105,7 +105,7 @@ Args:
             logger.info("Deregistered engine: %s", engine_id)
     def select_engine(self, request_id: str = None) -> Optional[str]:
 """
-Select an engine for processing.""""
+Select an engine for processing.""
 Args:
             request_id: Request ID (for consistent hashing).
 
@@ -145,7 +145,7 @@ Args:
 
     def update_metrics(self, engine_id: str, metrics: MetricsMessage) -> None:
 """
-Update metrics for an engine.""""
+Update metrics for an engine.""
 Args:
             engine_id: Engine ID.
             metrics: Updated metrics.
@@ -154,7 +154,7 @@ Args:
 
     def set_engine_state(self, engine_id: str, state: EngineState) -> None:
 """
-Set engine state.""""
+Set engine state.""
 Args:
             engine_id: Engine ID.
             state: New state.

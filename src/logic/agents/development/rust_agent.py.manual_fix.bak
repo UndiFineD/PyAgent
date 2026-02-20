@@ -58,7 +58,7 @@ __version__ = VERSION
 
 
 class RustAgent(CoderAgent):
-""""
+"""
 Agent for Rust code improvement and auditing.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -92,7 +92,7 @@ __version__ = VERSION
 
 
 class RustAgent(CoderAgent):
-""""
+"""
 Agent for Rust code improvement and auditing.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

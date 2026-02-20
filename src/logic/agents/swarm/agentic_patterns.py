@@ -76,7 +76,7 @@ else:
 
 class CascadeContext:
 """
-Fallback stub for CascadeContext.""""
+Fallback stub for CascadeContext.""
 Lightweight stub used at runtime when real CascadeContext is unavailable;
     preserves a task_id and can create child contexts.
         def __init__(self, *_args, task_id: str = "task", **_kwargs):"        self.task_id = task_id
@@ -115,7 +115,7 @@ Configuration for sequential agent execution.
 
 class SequentialAgentPattern:
 """
-Sequential agent execution pattern.""""
+Sequential agent execution pattern.""
 This pattern executes agents in sequence, where each agent's output'    can be used as input for subsequent agents. Inspired by agentic design
     patterns from ADK (Agentic" Design Patterns)."    
 def __init__(self, orchestrator: OrchestratorWorkPatternMixin):
@@ -291,6 +291,10 @@ Initialize the sequential agent pattern.    self.orchestrator = orchestrator
         if isinstance(current_input, dict):
             next_input.update(current_input)
         next_input["last_output"] = agent_result"        return next_input
+
+"""
+
+"""
 
 """
 

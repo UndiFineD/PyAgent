@@ -64,10 +64,10 @@ except ImportError:
 
 
 class ContextRAGMixin:
-""""
+"""
 RAG and shard management methods for ContextAgent.
     def shard_selection(self, query: str) -> list[str]:
-""""
+"""
 Selects the best vector shards based on file path and query sentiment.        active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards
@@ -83,10 +83,10 @@ except ImportError:
 
 
 class ContextRAGMixin:
-""""
+"""
 RAG and shard management methods for ContextAgent.
     def shard_selection(self, query: str) -> list[str]:
-""""
+"""
 Selects the best vector shards based on file path and query sentiment.        active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards

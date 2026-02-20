@@ -20,7 +20,7 @@ from typing import List, Dict, Optional, Any
 class PhishingIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence engine for phishing site detection and simulated phishing.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -33,7 +33,7 @@ self.phisherman_api = "https://api.phisherman.gg/v2/domains/check/"  # [BATCHFIX
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def check_domain(self, domain: str) -> Dict[str, Any]:""""
+async def check_domain(self, domain: str) -> Dict[str, Any]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Check if a domain is a known phishing site using Phisherman."  # [BATCHFIX] closed string"        if not self.session:
             self.session = aiohttp.ClientSession()
@@ -44,7 +44,7 @@ async def check_domain(self, domain: str) -> Dict[str, Any]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-data: Dict[str, Any] = await resp.json()""""
+data: Dict[str, Any] = await resp.json()""
 return data
         except Exception:
             pass
@@ -66,5 +66,9 @@ def get_phishing_templates() -> Dict[str, str]:"Common phishing templates for re
 def get_phishing_evasion_techniques() -> List[str]:"Techniques used to hide phishing pages from scanners.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #        " return ["  # [BATCHFIX] closed string"            "User-Agent filtering (block common scanner bots)","            "IP Geofencing (allow only target country)","            "Browser fingerprinting (allow only real browsers)","            "CAPTCHA before landing page","            "URL shortening and multiple redirects","            "Zero-width characters in domain names","        ]
+
+"""
+
+"""
 
 """

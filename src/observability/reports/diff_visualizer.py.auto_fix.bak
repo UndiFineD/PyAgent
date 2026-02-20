@@ -43,7 +43,7 @@ class DiffVisualizer:
         >>> result=visualizer.compare("old content", "new content")"        >>> html=visualizer.render_html(result, DiffViewMode.SIDE_BY_SIDE)
     
     def compare(self, old_content: str, new_content: str) -> DiffResult:
-        """Compare two changelog versions.""""
+        """Compare two changelog versions."""
         Args:
             old_content: Original changelog content.
             new_content: New changelog content.
@@ -66,7 +66,7 @@ class DiffVisualizer:
         )
 
     def render_html(self, result: DiffResult, mode: DiffViewMode) -> str:
-        """Render diff result as HTML.""""
+        """Render diff result as HTML."""
         Args:
             result: DiffResult to render.
             mode: Visualization mode.

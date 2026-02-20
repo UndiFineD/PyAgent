@@ -89,7 +89,7 @@ class ProfileStats:
 
 class ProfilingCore:
 """
-Pure logic for cProfile aggregation and bottleneck analysis.""""
+Pure logic for cProfile aggregation and bottleneck analysis.""
 Identifies slow methods and calculates optimization priority.
     
     def analyze_stats(self, pstats_obj: pstats.Stats, limit: int = 10) -> list[ProfileStats]:
@@ -156,4 +156,4 @@ Heuristic for optimization: time * frequency.        return stats.total_time * s
 
 """
 
-"""
+""

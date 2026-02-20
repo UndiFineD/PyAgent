@@ -128,7 +128,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "forecasted_tokens": forecast,"            "confidence": 0.8 if len(self.usage_history) > 20 else 0.4,"            "provisioning_recommendation": "scale_up" if forecast > 1000 else "stable","            "weights": self.weights,"        }
 
     def evaluate_scaling_needs(self, current_nodes: int) -> dict[str, Any]:
-""""
+"""
 Recommends scaling actions based on predicted load.        forecast" = self.forecast_usage()"        needed_nodes = current_nodes
 
         if forecast["forecasted_tokens"] > 5000:"            needed_nodes += 2
@@ -216,7 +216,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "forecasted_tokens": forecast,"            "confidence": 0.8 if len(self.usage_history) > 20 else 0.4,"            "provisioning_recommendation": "scale_up" if forecast > 1000 else "stable","            "weights": self.weights,"        }
 
     def evaluate_scaling_needs(self, current_nodes: int) -> dict[str, Any]:
-""""
+"""
 Recommends scaling actions based on predicted load.        forecast = self.forecast_usage()
         needed_nodes = current_nodes
 
@@ -225,6 +225,10 @@ Recommends scaling actions based on predicted load.        forecast = self.forec
 
         return {
             "current_nodes": current_nodes,"            "recommended_nodes": needed_nodes,"            "trigger_scaling": needed_nodes > current_nodes,"        }
+
+"""
+
+"""
 
 """
 

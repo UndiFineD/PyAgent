@@ -73,7 +73,7 @@ Precision mode targeting attention computation.
 @dataclass
 class AttentionConfig:
 """
-Configuration to handle attention operations regarding sequence processing.""""
+Configuration to handle attention operations regarding sequence processing.""
 Inspired by vLLM's attention configuration patterns regarding paged attention.'    
     # Basic attention config regarding heads
     num_heads: int = 32
@@ -112,7 +112,7 @@ Number of query heads per KV head regarding GQA.        return self.num_heads //
 @dataclass
 class AttentionMetadata:
 """
-Metadata to enable attention computation regarding sequence state.""""
+Metadata to enable attention computation regarding sequence state.""
 Mirrors vLLM's AttentionMetadata structure regarding paged attention.'    
     # Sequence info regarding length
     seq_lens: List[int] = field(default_factory=list)
@@ -271,7 +271,7 @@ Triton kernel providing paged attention decode logic.        # Get batch and hea
 
 class TritonPagedAttention(AttentionKernel):
 """
-Triton-based paged attention kernel.""""
+Triton-based paged attention kernel.""
 Implements efficient paged attention using Triton JIT compilation.
     
     def __init__(self, config: AttentionConfig) -> None:
@@ -436,7 +436,7 @@ Execute sliding window attention phase.        if not HAS_TORCH:
 @dataclass
 class KVSplitConfig:
 """
-Configuration involving KV splits to handle long contexts.""""
+Configuration involving KV splits to handle long contexts.""
 Inspired by vLLM patterns to handle decode attention.
     
     num_splits: int = 8
@@ -448,7 +448,7 @@ Inspired by vLLM patterns to handle decode attention.
 
 class TritonAttentionOps:
 """
-Unified attention operations interface.""""
+Unified attention operations interface.""
 Provides automatic backend selection and fallback logic.
 
     Beyond vLLM: Unified API across all attention backends.
@@ -460,7 +460,7 @@ Provides automatic backend selection and fallback logic.
 
     def __init__(self, config: AttentionConfig) -> None:
 """
-Initialize attention operations.""""
+Initialize attention operations.""
 Args:
             config: Attention configuration
                 self.config: AttentionConfig = config
@@ -492,7 +492,7 @@ Args:
         v_cache: Optional[Any] = None,
     ) -> Any:
 """
-Execute attention operation.""""
+Execute attention operation.""
 Automatically selects appropriate kernel based on context.
                 # Check if sliding window is needed
         if self._sliding_kernel and metadata.max_decode_seq_len > self.config.sliding_window_size:
@@ -511,7 +511,7 @@ Automatically selects appropriate kernel based on context.
         max_context_len: int,
     ) -> Any:
 """
-Execute paged attention during decode phase.""""
+Execute paged attention during decode phase.""
 Inspired by vLLM's _paged_attention_decode.'                metadata = AttentionMetadata(
             block_tables=block_tables,
             context_lens=context_lens,
@@ -533,7 +533,7 @@ Inspired by vLLM's _paged_attention_decode.'                metadata = Attention
         metadata: AttentionMetadata,
     ) -> Any:
 """
-Execute attention with KV splits dedicated to very long contexts.""""
+Execute attention with KV splits dedicated to very long contexts.""
 Divides context into splits and aggregates results.
                 if not HAS_TORCH:
             raise RuntimeError("KV splits require PyTorch")
@@ -577,7 +577,7 @@ Process a single KV split.            start_pos: int = i * split_size
         _causal: bool = True,
     ) -> Any:
 """
-Compute attention during prefill phase.""""
+Compute attention during prefill phase.""
 Args:
             query: Query tensor
             key: Key tensor
@@ -610,7 +610,7 @@ def create_attention_ops(
     **kwargs: Any,
 ) -> TritonAttentionOps:
 """
-Create attention operations with sensible defaults.""""
+Create attention operations with sensible defaults.""
 Args:
         num_heads: Number of attention heads
         head_dim: Dimension per head
@@ -648,4 +648,4 @@ Args:
 
 """
 
-"""
+""

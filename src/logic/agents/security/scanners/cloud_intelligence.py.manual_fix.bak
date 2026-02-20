@@ -48,7 +48,7 @@ Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets).# 
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        self.session: Optional[aiohttp.ClientSession] = None""""
+        self.session: Optional[aiohttp.ClientSession] = None""
         async def get_session(self):
         if self.session is None or self.session.closed:
         self.session = aiohttp.ClientSession(headers={"User-Agent": "PyAgent CloudAudit/1.0"})"        return self.session
@@ -57,7 +57,7 @@ Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets).# 
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        async def check_bucket_accessibility(self, bucket_url: str) -> Dict[str, Any]:""""
+        async def check_bucket_accessibility(self, bucket_url: str) -> Dict[str, Any]:""
         # [BATCHFIX] Commented metadata/non-Python
         """         "Checks if a cloud bucket is public, private, or non-existent."  # [BATCHFIX] closed string"        session = await self.get_session()
         try:
@@ -73,19 +73,19 @@ Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets).# 
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        async def list_public_files(self, _bucket_url: str) -> List[str]:""""
+        async def list_public_files(self, _bucket_url: str) -> List[str]:""
         # [BATCHFIX] Commented metadata/non-Python
         """         "Attempts to list files in a public S3 bucket."  # [BATCHFIX] closed string"        # Simple XML parsing would happen here
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        return []""""
+        return []""
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        async def audit_target_on_cloud(self, target: str) -> List[Dict[str, Any]]:""""
+        async def audit_target_on_cloud(self, target: str) -> List[Dict[str, Any]]:""
         # [BATCHFIX] Commented metadata/non-Python
         """         "Scans for common bucket names based on target name."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented unterminated string"""
@@ -93,7 +93,7 @@ Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets).# 
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        tasks = []""""
+        tasks = []""
         for pattern in self.BUCKET_PATTERNS:
         url = "https://" + pattern.format(target=target, region="us-east-1")"            tasks.append(self.check_bucket_accessibility(url))
 
@@ -145,6 +145,10 @@ def get_ciem_path_finding_logic() -> Dict[str, str]:"Techniques for identifying 
 """
 def get_ai_spm_indicators() -> Dict[str, str]:"Indicators for AI service exposure and data leakage.        return {
             "exposed_llm_endpoints": "Identifying public-facing SageMaker, Vertex AI, or OpenAI-proxy endpoints","            "unprotected_vector_stores": "Public unauthenticated access to Pinecone, Qdrant, or Milvus instances","            "sensitive_data_in_training": "Identification of PII within datasets used for fine-tuning or RAG","            "model_inversion_potential": "API configurations allowing prompts that could leak training set data","        }
+
+"""
+
+"""
 
 """
 

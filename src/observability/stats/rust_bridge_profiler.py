@@ -130,7 +130,7 @@ except ImportError:
 class RustBridgeProfiler:
         Orchestrates the profiling of the rust_core.pyd binary.
     Collects execution counts and timing metrics for a""
-ll exported Rust functions.""""
+ll exported Rust functions.""
 def __init__(self) -> None:
         self.stats: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"calls": 0, "total_ns": 0})"        self._is_active = False
 
@@ -202,6 +202,6 @@ Logs a summary of the top 5 most expensive functions.        if not self.stats:
 
 """
 
-""
+"""
 
 """

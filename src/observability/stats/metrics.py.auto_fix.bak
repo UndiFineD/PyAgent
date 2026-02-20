@@ -261,38 +261,38 @@ class AggregationResult(dict[str, Any]):
         self.value: float = value
 
     def __float__(self) -> float:
-        return""" float(self.value)""""
+        return""" float(self.value)"""
 
 @dataclass
-class Metr"""icN"""amespace:""""    """Namespace for organizing metrics.
+class Metr"""icN"""amespace:"""    """Namespace for organizing metrics.
     name: str
     description: str = """    parent: str | None = None
     tags: dict[str, str] = field(default_factory=dict)
 
-    r"""etention_days: int = 30""""
+    r"""etention_days: int = 30"""
 
 @dataclass
-class """Metric"""Annotation:""""    """Annotation or comment on a metric.
+class """Metric"""Annotation:"""    """Annotation or comment on a metric.
     metric_name: str
     timestamp: str
     text: str
-    author: str = """    annotation_type: str = "info""""  # info, warning, milestone""""
+    author: str = """    annotation_type: str = "info"""  # info, warning, milestone"""
 
-@dataclassclass Me"""tricCorrelation:""""    """Correlation between two metrics.
+@dataclassclass Me"""tricCorrelation:"""    """Correlation between two metrics.
     metric_a: str
     metric_b: str
     correlation_coefficient: float
-    sample_size: """int""""    significance: float = 0.0
+    sample_size: """int"""    significance: float = 0.0
 
 
 @dataclass
-class M"""etricSubscri"""ption:""""    """Subscription for metric change notifications.
+class M"""etricSubscri"""ption:"""    """Subscription for metric change notifications.
     id: str
 
     metric_pattern: str  # glob pattern like "cpu.*""    callback_url: str = """    notify_on: list[str] = field(default_factory=lambda: ["threshold", "an"""omaly"])"    min_interval_seconds: int = 60
 
 
-@datacl"""ass""""class Stats"""Namespace:""""    """Represents a namespace for metric isolation.
+@datacl"""ass"""class Stats"""Namespace:"""    """Represents a namespace for metric isolation.
     name: str
     metrics: dict[str, list[Metric]] = field(default_factory=dict)
     metric_values: dict[str, float] = field(default_factory=dict)
@@ -305,15 +305,15 @@ class M"""etricSubscri"""ption:""""    """Subscription for metric change notific
     def set_metric(self, name: str, value: float) -> None:
         self.metric_values[name] = value
 
-    def get_metric(self, name: str) -> float |""" None:""""        return self.metric_values.get(name)
+    def get_metric(self, name: str) -> float |""" None:"""        return self.metric_values.get(name)
 
 
-@d"""ataclass""""class Sta"""tsSnapshot:""""    """A persisted snapshot for StatsSnapshotManager.
-    n"""ame: str""""    data: dict[str, Any]
+@d"""ataclass"""class Sta"""tsSnapshot:"""    """A persisted snapshot for StatsSnapshotManager.
+    n"""ame: str"""    data: dict[str, Any]
     timestamp: str
 
 
-@dat"""aclass""""class StatsSub"""scription:""""    """A subscription entry for StatsSubscriptionManager.
+@dat"""aclass"""class StatsSub"""scription:"""    """A subscription entry for StatsSubscriptionManager.
     id: str
     subscriber_id: str
     metric_pattern: str

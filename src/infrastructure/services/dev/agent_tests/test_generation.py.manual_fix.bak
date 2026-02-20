@@ -58,7 +58,7 @@ Add a test template.        self._templates[name] = template
 Generate test from specification.        test_name = f"test_{function_name}_{len(self.generated)}"
         code = (
             f"import pytest\\n\\n""            f"def {test_name}():\\n""            f'    ""
-Pre-Validation: {specification}"""\\n'""""'
+Pre-Validation: {specification}"""\\n'"""'
 f"    # This test was auto-generated from specification before implementation.\\n""            f"    # Ensure the code matches the intent: {function_name}\\n""            f"    # Requirement: {specification}\\n""            f"    try:\\n""            f"        from src.infrastructure.services.dev.generated import {function_name}\\n""            f"    except ImportError:\\n""            f"        pytest.fail(f'Implementation {function_name} not found in src.generated')\\n"
 f"    \\n""            f"    # Mock data based on types\\n""            f"    # result = {function_name}(...)\\n""            f"    # assert result is not None\\n""            f"    pass\\n""        )
 
@@ -110,7 +110,7 @@ f"    sys.maxsize, -sys.maxsize - 1, float('inf'), float('nan'), # Numeric Edges
 f"    {{'nested': 'data' * 100}}, [0] * 1000, # Large Collections\\n"
 f"    '<b>Unsanitized</b> <script>alert(1)</script>', # Injection stubs\\n"
 f"])\\n""            f"def {test_name}_edge_cases(adversarial_input):\\n""            f'    ""
-SCA Red-Team: Targeting edge cases for {function_name}"""\\n'""""'
+SCA Red-Team: Targeting edge cases for {function_name}"""\\n'"""'
 f"    # This test verifies that the implementation handles extreme inputs gracefully\\n""            f"    try:\\n""            f"        result = {function_name}(adversarial_input)\\n""            f"        # If it returns, we check it doesn't crash internally or leak memory\\n""'
 f"        assert True\\n""            f"    except (ValueError, TypeError, KeyError):\\n""            f"        # Expected graceful failures are acceptable\\n""            f"        pytest.skip('Accepted domain error')\\n""
 f"    except Exception as e:\\n""            f"        # Unhandled exceptions are red-team victories\\n""            f"        pytest.fail(f'Red-Team Win: Unhandled {{type(e).__name__}}: {{e}}')\\n""'        )
@@ -210,6 +210,10 @@ Group tests by module.        result: dict[str, list[dict[str, Any]]] = {}
                 result[module] = []
             result[module].append(test)
         return result
+
+"""
+
+"""
 
 """
 

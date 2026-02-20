@@ -74,7 +74,7 @@ _default_dism_path: str = "r2
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:""""
+def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -105,6 +105,8 @@ p = subprocess.run([self._dism_path, "-q", "-i", SCRIPT_PATH, pe_path], stdout=s
 
 """
 
-""
+"""
 
 """
+
+""

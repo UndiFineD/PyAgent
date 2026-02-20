@@ -1,7 +1,7 @@
-
+"""
+userspace.interface.ui.mobile.mobile_flutter package init (parser-safe stub).
+"""
 from __future__ import annotations
-""
-userspace.interface.ui.mobile.mobile_flutter package init (parser-safe stub).""
 try:
     from .core.base.lifecycle.version import VERSION
 except Exception:

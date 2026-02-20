@@ -17,7 +17,7 @@
 
 
 """
-src.maintenance.artifact_cleanup""""
+src.maintenance.artifact_cleanup""
 Provides the ArtifactCleanupCore which runs background cleanup cycles to
 remove temporary/generated artifacts from disk based on configurable TTLs.
 
@@ -114,7 +114,7 @@ Clean up artifacts in a specific directory.        # Keep for backward compatibi
 
     async def _cleanup_all_dirs_once(self, current_time: float, target_dir: Optional[str] = None) -> int:
 """
-Run a single pass over configured cleanup directories (or a single target dir).""""
+Run a single pass over configured cleanup directories (or a single target dir).""
 This consolidates file iteration into a single loop to reduce duplicated
         traversal logic and lower measured loop complexity.
                 removed = 0

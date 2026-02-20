@@ -59,7 +59,7 @@ __version__ = VERSION
 
 
 class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Detects and mitigates security threats and prompt injections across the swarm.
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -71,7 +71,7 @@ self.name = "ImmuneSystem"  # [BATCHFIX] closed string"        self.injection_pa
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.quarantined_nodes: list[str] = []""""
+self.quarantined_nodes: list[str] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
@@ -100,7 +100,7 @@ self.quarantined_nodes: list[str] = []""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def scan_for_injections(self, input_text: str) -> dict[str, Any]:""""
+def scan_for_injections(self, input_text: str) -> dict[str, Any]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #         "Scans a prompt or message for known injection patterns."  # [BATCHFIX] closed string"        Args:
@@ -113,7 +113,7 @@ def scan_for_injections(self, input_text: str) -> dict[str, Any]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import scan_injections_rust  # type: ignore[attr-defined]""""
+from rust_core import scan_injections_rust  # type: ignore[attr-defined]""
 rust_findings = scan_injections_rust(input_text)
             for idx, _ in rust_findings:
                 if idx < len(self.injection_patterns):
@@ -166,7 +166,7 @@ __version__ = VERSION
 
 
 class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Detects and mitigates security threats and prompt injections across the swarm.
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -178,7 +178,7 @@ self.name = "ImmuneSystem"  # [BATCHFIX] closed string"        self.injection_pa
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.quarantined_nodes: list[str] = []""""
+self.quarantined_nodes: list[str] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
@@ -206,7 +206,7 @@ self.quarantined_nodes: list[str] = []""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def scan_for_injections(self, input_text: str) -> dict[str, Any]:""""
+def scan_for_injections(self, input_text: str) -> dict[str, Any]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #         "Scans a prompt or message for known injection patterns."  # [BATCHFIX] closed string"        Args:
@@ -216,13 +216,13 @@ def scan_for_injections(self, input_text: str) -> dict[str, Any]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-findings = []""""
+findings = []""
 try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import scan_injections_rust  # type: ignore[attr-defined]""""
+from rust_core import scan_injections_rust  # type: ignore[attr-defined]""
 rust_findings = scan_injections_rust(input_text)
             for idx, _ in rust_findings:
                 if idx < len(self.injection_patterns):
@@ -257,7 +257,7 @@ def monitor_swarm_behavior(self, agent_logs: list[dict[str, Any]]) -> str:"Analy
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-anomalies = []""""
+anomalies = []""
 for log in agent_logs:
             agent_id = log.get("agent_id")"# [BATCHFIX] Commented metadata/non-Python
 #             activity = log.get("activity", ")"  # [BATCHFIX] closed string
@@ -272,7 +272,7 @@ return "Swarm behavior is stable."  # [BATCHFIX] closed string"        return "A
     @as_tool
     def quarantine_node(self, agent_id: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Disables an agent node suspected of being compromised or corrupted.  "   "   if agent_id not in self.quarantined_nodes:"            self.quarantined_nodes.append(agent_id)
 # [BATCHFIX] Commented metadata/non-Python
 #             logging.error(fImmuneSystem: Quarantining node '{agent_id}' due to safety breach.")"  # [BATCHFIX] closed string"'#             return fNode {agent_id} has been quarantined.
@@ -281,7 +281,7 @@ Disables an agent node suspected of being compromised or corrupted.  "   "   if 
     @as_tool
     def sanitize_input(self, input_text: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Removes common dangerous characters or patterns from" an" input string.        sanitized = input_text
         for pattern in self.injection_patterns:
 # [BATCHFIX] Commented metadata/non-Python
@@ -319,6 +319,10 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
     main = create_main_function(ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 #     main()
+
+"""
+
+"""
 
 """
 

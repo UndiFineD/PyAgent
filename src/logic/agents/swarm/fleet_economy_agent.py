@@ -57,7 +57,7 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         self.db_path = self.workspace_path / "data/db/swarm_economy.db"        self._init_db()
 
     def _init_db(self) -> None:
-""""
+"""
 Initializes the persistent fleet ledger (Phase 284)."        try:"            self.db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
@@ -70,7 +70,7 @@ Initializes the persistent fleet ledger (Phase 284)."        try:"            se
             logging.info(fFleetEconomyAgent: Persistent ledger initialized at {self.db_path}")"        except (sqlite3.Error, OSError) as e:
             logging.error(fFleetEconomyAgent: DB initialization failed: {e}")"
     def deposit_credits(self, agent_id: str, amount: float) -> dict[str, Any]:
-""""
+"""
 Funds an agent's wallet or deducts if negative (Phase 284).'        with sqlite3.connect(self.db_path) as conn:
             conn.execute(
 #                 "INSERT INTO wallets (agent_id, balance) VALUES (?, ?)"                "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?","                (agent_id, amount, amount),
@@ -79,7 +79,7 @@ Funds an agent's wallet or deducts if negative (Phase 284).'        with sqlite3
             conn.commit()
         return {"agent": agent_id, "balance": balance}
     def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
-""""
+"""
 Places a bid for compute resources (Phase 284).        with sqlite3.connect(self".db_path) as conn:"            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))"            row = cursor.fetchone()
             balance = row[0] if row else 0.0
 
@@ -98,7 +98,7 @@ Places a bid for compute resources (Phase 284).        with sqlite3.connect(self
             "status": "bid_placed","            "task_id": task_id,"            "remaining_balance": balance - bid_amount,"        }
 
     def resolve_auction(self, task_id: str) -> dict[str, Any]:
-""""
+"""
 Implement Second-Price (Vickrey) auction for task allocation (Phase 284).        with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 "SELECT agent_id, bid FROM bids WHERE task_id = ? ORDER BY bid DESC","                (task_id,),
@@ -133,7 +133,7 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         self.db_path = self.workspace_path / "data/db/swarm_economy.db"        self._init_db()
 
     def _init_db(self) -> None:
-""""
+"""
 Initializes the persistent fleet" ledger (Phase 284).        try:
             self.db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(self.db_path) as conn:
@@ -147,7 +147,7 @@ Initializes the persistent fleet" ledger (Phase 284).        try:
             logging.info(fFleetEconomyAgent: Persistent ledger initialized at {self.db_path}")"        except (sqlite3.Error, OSError) as e:
             logging.error(fFleetEconomyAgent: DB initialization failed: {e}")"
     def deposit_credits(self, agent_id: str, amount: float) -> dict[str, Any]:
-""""
+"""
 Funds an agent's wallet or deducts if negative (Phase 284).'        with" sqlite3.connect(self.db_path) as conn:"            conn.execute(
 #                 "INSERT INTO wallets (agent_id, balance) VALUES (?, ?)"                "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?","                (agent_id, amount, amount),
             )
@@ -155,7 +155,7 @@ Funds an agent's wallet or deducts if negative (Phase 284).'        with" sqlite
             conn.commit()
         return {"agent": agent_id, "balance": balance}
     def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
-""""
+"""
 Places a bid for compute resources (Phase 284).        with" sqlite3.connect(self.db_path) as conn:"            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))"            row = cursor.fetchone()
             balance = row[0] if row else 0.0
 
@@ -174,7 +174,7 @@ Places a bid for compute resources (Phase 284).        with" sqlite3.connect(sel
             "status": "bid_placed","            "task_id": task_id,"            "remaining_balance": balance - bid_amount,"        }
 
     def resolve_auction(self, task_id: str) -> dict[str, Any]:
-""""
+"""
 Implement Second-Price (Vickrey) auction for task allocation (Phase 284).      "  with sqlite3.connect(self.db_path) as conn:"            cursor = conn.execute(
                 "SELECT agent_id, bid FROM bids WHERE task_id = ? ORDER BY bid DESC","                (task_id,),
             )
@@ -199,7 +199,7 @@ Implement Second-Price (Vickrey) auction for task allocation (Phase 284).      "
             "winner": winner_id,"            "paid": second_bid,"            "savings": refund,"            "task": task_id,"        }
 
     def resolve_bids(self) -> dict[str, Any]:
-""""
+"""
 Resolves all pending auctions (Phase 77).        allocated = []
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute("SELECT DISTINCT task_id FROM bids WHERE status = 'active'")"'            tasks = [row[0] for row in cursor.fetchall()]
@@ -209,7 +209,7 @@ Resolves all pending auctions (Phase 77).        allocated = []
             if "winner" in res:"                allocated.append(res["task"])"
         return {"allocated_tasks": allocated}
     def get_wallet_summary(self) -> Dict[str, float]:
-""""
+"""
 Returns a mapping of agent_id to current balance.        summary = {}
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute("SELECT agent_id, balance FROM wallets")"            for agent_id, balance in cursor.fetchall():
@@ -217,7 +217,7 @@ Returns a mapping of agent_id to current balance.        summary = {}
         return summary
 
     def log_hardware_savings(self, agent_id: str, tokens: int, tps: float, savings_usd: float) -> None:
-""""
+"""
 Logs the efficiency and "economic data for oxidized operations.        try:
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
@@ -227,7 +227,7 @@ Logs the efficiency and "economic data for oxidized operations.        try:
             logging.info(fFleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}")"        except (sqlite3.Error, RuntimeError) as e:
             logging.debug(fFleetEconomyAgent: Failed to log savings: {e}")"
     def get_total_savings(self) -> float:
-""""
+"""
 Returns the aggregate hardware savings from oxidized operations.        try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.execute("SELECT SUM(savings_usd) FROM hardware_savings")"                res = cursor.fetchone()[0]

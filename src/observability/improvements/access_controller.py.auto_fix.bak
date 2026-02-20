@@ -80,7 +80,7 @@ class AccessController:
         role = self._assigned_roles.get(improvement_id, {}).get(user)
         if role and role in self._roles:
             return level in self._roles[role]
-        return""" False""""
+        return""" False"""
 
 try:
     from .core.base.lifecycle.version import VERSION

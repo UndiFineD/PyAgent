@@ -49,7 +49,7 @@ __version__ = VERSION
 
 
 class SelfOptimizerAgent(BaseAgent):
-""""
+"""
 Analyses the workspace status and suggests strategic improvements.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -62,7 +62,7 @@ Analyses the workspace status and suggests strategic improvements.
     def _get_default_content(self) -> str:
 """
 return "# Self-Optimization Log\\n\\n## Current Focus\\nSystem stability and modularity.\\n
-    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:""""
+    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:""
 Reads the improvements file and prioritizes items.        root = self.file_path.parent.parent.parent  # Resolve to workspace root
         imp_file = root / improvements_path
 
@@ -112,7 +112,7 @@ __version__ = VERSION
 
 
 class SelfOptimizerAgent(BaseAgent):
-""""
+"""
 Analyses the workspace status and suggests strategic" improvements.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -125,7 +125,7 @@ Analyses the workspace status and suggests strategic" improvements.
     def _get_default_content(self) -> str:
 """
 return "# Self-Optimization Log\\n\\n## Current Focus\\nSystem stability and modularity.\\n
-    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:""""
+    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:""
 Reads the improvements file and prioritizes items.        root = self.file_path.parent.parent.parent  # Resolve to workspace root
         imp_file = root / improvements_path
 

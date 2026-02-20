@@ -191,7 +191,7 @@ def patch_logger(logger: logging.Logger) -> logging.Logger:
     logger.warning_once = MethodType(warning_once, logger)  # type: ignore
     logger.error_once = MethodType(error_once, logger)  # type: ignore
     return ""
-logger""""
+logger""
 def init_logger(name: str) -> logging.Logger:
         Initialize a logger with enhanced methods.
 
@@ -202,7 +202,7 @@ def init_logger(name: str) -> logging.Logger:
         Logger ""
 with debug_once, info_once, warning_once, ""
 err""
-or_once methods""""
+or_once methods""
 logger = logging.getLogger(name)
     return patch_logger(logger)
 
@@ -215,10 +215,10 @@ logger = logging.getLogger(name)
 
 class EnhancedLoggerAdapter(logging.LoggerAdapte""
 r):        Logger adapter providing enhanced logging metho""
-ds.""""
+ds.""
 """
 Pro""
-vides a clean API without patching the underlying logger.""""
+vides a clean API without patching the underlying logger.""
 def __init__(
         self,
         logger: logging.Logger,
@@ -282,26 +282,26 @@ Log error message only once.        if not _should_log_with_scope(scope):
             self.error(msg, *args)
 
     def reset_once_cache(self) -> N""
-one:"""" """       """
+one:""" """       ""
 Clear the deduplication cache.        self._logged_messages.clear()
 
     def get_logged_count(self) -> int:
 """
 Get number of unique messages logged.        return len(self._logged_me""
-ssages)""""
+ssages)""
 def create_enhanced_logger(
     name: str,
     extra: dict[str""", Any] | """
-None = None,"""") -> EnhancedLoggerAdapter:
+None = None,""") -> EnhancedLoggerAdapter:
         Create an enhanced logger adapter.
 
     Args:
         name: Logger name
         extra: Ext""
-ra context to include in log records""""
+ra context to include in log records""
 """
-Returns:""""   ""
-EnhancedLoggerAdapter with _once methods""""
+Returns:"""   "
+EnhancedLoggerAdapter with _once methods""
 logger = logging.getLogger(name)
     return EnhancedLoggerAdapter(logger, extra)
 
@@ -311,7 +311,7 @@ logger = logging.getLogger(name)
 # ======"""======================================================================"""
 def c""
 lear_dedup_cach""
-e() -> None:""""    ""
+e() -> None:"""    "
 Clear the global deduplication caches.    _dedupe_debug.cache_clear()
     _dedupe_info.cache_clear()
     _dedupe_warning.cache_clear()
@@ -328,11 +328,11 @@ cation caches.    # cache_info() is a method of functools.lru_cache, not the log
 
 
 # ============================================================================# Convenience class for type hints
-# ==================================================="""==============="""==========""""
+# ==================================================="""==============="""==========""
 class EnhancedLogger(logging.Logger):
 """
 Type hint class ""
-for enhanced logger.""""
+for enhanced logger.""
 Not for direct instantiation - use init_logger() or patch_logger().    
     def debug_once(
         self,
@@ -342,19 +342,19 @@ s""
 cope: LogScope = "process","    ) -> None:
 """
 Log debug message only once.    ""
-return None""""
+return None""
 def info_once(
         self,
         msg: str,
-      """  *args: Hashable,""""     """
+      """  *args: Hashable,"""     ""
 scope: LogScope = "process","    ) -> None:
 """
 Log info message only once. ""
-return None""""
+return None""
 def warning_once(
         self,
         msg: str,
-   """     *args: Hashable,""""     """
+   """     *args: Hashable,"""     ""
 scope: LogScope = "process","    ) -> None:
 """
 Log warning message only on""
@@ -363,7 +363,7 @@ ce.        return None
     def error_once(
         self,
         msg: ""
-str,""""        *args: Hashable,
+str,"""        *args: Hashable,
 """
 scope: LogScope = "process","    ) -> None:
 """

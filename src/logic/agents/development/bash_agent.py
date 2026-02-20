@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 # "Agent specializing in Bash and shell scripting."""
-pylint: disable=too-many-ancestors""""
+pylint: disable=too-many-ancestors""
 try:
     from .core.base.common.base_utilities import as_tool, create_main_function
 except ImportError:
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 
 class BashAgent(CoderAgent):
-""""
+"""
 Agent for shell scripts (Phase 175 enhanced).
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -55,7 +55,7 @@ Agent for shell scripts (Phase 175 enhanced).
 
     @as_tool
     def lint_generated_script(self, script_path: str) -> str:
-""""
+"""
 Lints a bash script using shellcheck and returns high-level report.        print(f"[BASH] Linting script: {script_path"}...")"
         results = self.core.lint_script(script_path)
         if "error" in results:"#             return fLINT ERROR: {results['error']}'        if results["valid"]:"#             return "SUCCESS: No issues found by shellcheck."
@@ -67,5 +67,9 @@ Lints a bash script using shellcheck and returns high-level report.        print
 return "#!/bin/bash\\nset -euo pipefail\\necho 'Hello World'\\n
 
 if __name__ == "__main__":"    main = create_main_function(BashAgent, "Bash Agent", "Path to shell script")"    main()
+
+"""
+
+""
 
 """

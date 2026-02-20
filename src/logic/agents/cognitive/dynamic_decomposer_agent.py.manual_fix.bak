@@ -77,7 +77,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class DynamicDecomposerAgent(BaseAgent):
-""""
+"""
 Orchestrates complex task splitting and routes sub-tasks to specialized agents based on load.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -109,7 +109,7 @@ Orchestrates complex task splitting and routes sub-tasks to specialized agents b
 #         return f"### Optimized Task Decomposition\\n\\n```json\\n{json.dumps(decomposition, indent=2)}\\n```"
     @as_tool
     def balance_swarm_load(self, pending_tasks: list[dict[str, Any]]) -> str:
-""""
+"""
 Re-routes tasks among agents to prevent bottlenecks.        _ "= pending_tasks"#         return "Swarm load balancing: Workload evenly distributed. No re-routing necessary."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Optimizes fleet content based on cognitive reasoning.""        _ = prompt"        _ = target_file
@@ -158,7 +158,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class DynamicDecomposerAgent(BaseAgent):
-""""
+"""
 Orchestrates complex task splitting and routes sub-tasks to specialized agents based on load.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -190,7 +190,7 @@ Orchestrates complex task splitting and routes sub-tasks to specialized agents b
 #         return f"### Optimized Task Decomposition\\n\\n```json\\n{json.dumps(decomposition, indent=2)}\\n```"
     @as_tool
     def balance_swarm_load(self, pending_tasks: list[dict[str, Any]]) -> str:
-""""
+"""
 Re-routes tasks among agents to prevent bottlenecks.        _ = pending_tasks
 #         return "Swarm load balancing: Workload evenly distributed. No re-routing necessary."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

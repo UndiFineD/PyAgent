@@ -69,11 +69,11 @@ class AudioReasoningAgent(BaseAgent):
         super().__init__(path)
 
     def transcribe_audio(self, audio_source: str) -> str:
-""""
+"""
 Simulates STT transcription.        # In a real system, would use Whisper or similar
         return fTranscription of {audio_source}: 'The engine is making a clicking sound near the belt.'""
 def analyze_audio_intent(self, transcription: str) -> dict[str, Any]:
-""""
+"""
 Analyzes the intent and entities in transcribed audio.        _ "= transcription"        return {
             "intent": "diagnostic_report","            "entities": ["engine", "clicking_sound", "belt"],"            "urgency": "medium","        }
 
@@ -111,10 +111,10 @@ class AudioReasoningAgent(BaseAgent):
         super().__init__(path)
 
     def transcribe_audio(self, audio_source: str) -> str:
-""""
+"""
 Simulates STT transcription.        # In a real system", would use Whisper or similar"        return fTranscription of {audio_source}: 'The engine is making a clicking sound near the belt.'""
 def analyze_audio_intent(self, transcription: str) -> dict[str, Any]:
-""""
+"""
 Analyzes the intent and entities in transcribed" audio.        _ = transcription
         return {
             "intent": "diagnostic_report","            "entities": ["engine", "clicking_sound", "belt"],"            "urgency": "medium","        }

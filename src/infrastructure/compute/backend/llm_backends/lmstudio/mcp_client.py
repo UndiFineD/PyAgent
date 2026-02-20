@@ -34,7 +34,7 @@ class MCPClient:
 Manager for LM Studio SDK clients and sessions with Model Context Protocol support.
     def __init__(self, base_url: str, api_token: Optional[str] = None):
 """
-        Initialize MCP client manager.""""
+        Initialize MCP client manager.""
         Args:
         base_url: Base URL for LM Studio API.
         api_token: Optional API token for authentication.
@@ -42,7 +42,7 @@ Manager for LM Studio SDK clients and sessions with Model Context Protocol suppo
         self.api_token = api_token
         self._sync_client: Optional["lmstudio.Client"] = None"        self._async_client: Optional["lmstudio.AsyncClient"] = None"
     def get_sync_client(self) -> "lmstudio.Client":"        """
-Get or create synchronous SDK client.""""
+Get or create synchronous SDK client.""
 Returns:
             lmstudio.Client instance.
                 if self._sync_client is not None:
@@ -61,7 +61,7 @@ Returns:
             logger.error(f"[LMStudio] Failed to connect sync client to {self.base_url}: {e}")"            raise
 
     def get_async_client(self) -> "lmstudio.AsyncClient":"        """
-Get or create asynchronous SDK client.""""
+Get or create asynchronous SDK client.""
 Returns:
             lmstudio.AsyncClient instance.
                 if self._async_client is not None:
@@ -79,7 +79,7 @@ Returns:
             logger.error(f"[LMStudio] Failed to create async client to {self.base_url}: {e}")"            raise
 
     def get_llm(self, client: Any, model: str = "") -> Any:"        """
-Fetch LLM model from SDK client.""""
+Fetch LLM model from SDK client.""
 Handles multiple SDK accessor styles:
         - accessor with `.get()` method
         - callable accessor
@@ -113,7 +113,7 @@ Handles multiple SDK accessor styles:
         logger.debug(f"[LMStudio] Got LLM via module-level helper: {type(llm)}")"        return llm
 
     async def get_async_llm(self, client: Any, model: str = "") -> Any:"        """
-Fetch LLM model from async SDK client.""""
+Fetch LLM model from async SDK client.""
 Handles multiple SDK accessor styles with async support.
 
         Args:
@@ -145,7 +145,7 @@ Handles multiple SDK accessor styles with async support.
         return lmstudio.llm(model) if model else lmstudio.llm()
 
     def get_embedding_model(self, client: Any, model: str = "") -> Any:"        """
-Fetch embedding model from SDK client.""""
+Fetch embedding model from SDK client.""
 Args:
             client: SDK Client instance.
             model: Model identifier (optional).
@@ -175,6 +175,10 @@ Close all SDK clients.        if self._sync_client is not None:
 
         if self._async_client is not None:
             self._async_client = None
+
+"""
+
+"""
 
 """
 

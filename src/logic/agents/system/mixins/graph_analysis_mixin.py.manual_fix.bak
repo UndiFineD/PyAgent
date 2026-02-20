@@ -65,12 +65,12 @@ if TYPE_CHECKING:
 
 
 class GraphAnalysisMixin:
-""""
+"""
 Mixin for graph analysis and impact assessment in TopologicalNavigator.
 
     @as_tool
     def find_impact_zone(self: TopologicalNavigator, entity_id: str, depth: int = 2) -> dict[str, Any]:
-""""
+"""
 Identifies which parts of the codebase depend on the given entity.        # Need reverse graph to find dependents
         if not self.reverse_graph:
             self._build_reverse_graph()
@@ -94,7 +94,7 @@ Identifies which parts of the codebase depend on the given entity.        # Need
             "target": entity_id,"            "impact_zone": list(affected),"            "total_affected": len(affected),"        }
 
     def _build_reverse_graph(self: TopologicalNavigator) -> None:
-""""
+"""
 Constructs the reverse dependency graph (A depends on B -> B is used by A).        self.reverse_graph = {}
         for source, dependencies in self.graph.items():
             for dep in dependencies:
@@ -104,7 +104,7 @@ Constructs the reverse dependency graph (A depends on B -> B is used by A).     
 
     @as_tool
     def get_topological_order(self: TopologicalNavigator) -> list[str]:
-""""
+"""
 Returns nodes in topological order (safe initialization/build sequence).        "visited = set()"        stack = []
 
         def visit(node: str) -> None:
@@ -142,11 +142,11 @@ if TYPE_CHECKING:
 
 
 class GraphAnalysisMixin:
-""""
+"""
 Mixin for graph analysis and impact assessment in TopologicalNavigator.
     @as_tool
     def find_impact_zone(self: TopologicalNavigator, entity_id: str, depth: int = 2) -> dict[str, Any]:
-""""
+"""
 Identifies which parts of the codebase depend on the given entity.        # Need reverse "graph to find dependents"        if not self.reverse_graph:
             self._build_reverse_graph()
 
@@ -169,7 +169,7 @@ Identifies which parts of the codebase depend on the given entity.        # Need
             "target": entity_id,"            "impact_zone": list(affected),"            "total_affected": len(affected),"        }
 
     def _build_reverse_graph(self: TopologicalNavigator) -> None:
-""""
+"""
 Constructs the reverse dependency graph (A depends on B -> B is used by A).    "    self.reverse_graph = {}"        for source, dependencies in self.graph.items():
             for dep in dependencies:
                 if dep not in self.reverse_graph:
@@ -178,7 +178,7 @@ Constructs the reverse dependency graph (A depends on B -> B is used by A).    "
 
     @as_tool
     def get_topological_order(self: TopologicalNavigator) -> list[str]:
-""""
+"""
 Returns nodes in topological order (safe initialization/build sequence).        visited = set()
         stack = []
 

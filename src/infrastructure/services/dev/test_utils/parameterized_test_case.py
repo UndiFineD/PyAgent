@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -40,7 +40,7 @@ __version__ = VERSION
 @dataclass
 class ParameterizedTestCase:
 """
-A parameterized test case.""""
+A parameterized test case.""
 Attributes:
         name: Test case name.
         params: Parameters for the test.

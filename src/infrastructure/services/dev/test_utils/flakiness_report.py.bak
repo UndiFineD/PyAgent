@@ -15,7 +15,7 @@
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py"""
 
 
 from __future__ import annotations
@@ -38,7 +38,7 @@ __version__ = VERSION
 
 @dataclass
 class FlakinessReport:
-    """Report of test flakiness analysis.""""
+    """Report of test flakiness analysis."""
     Attributes:
         test_name: Name of the test.
         runs: Number of test runs.

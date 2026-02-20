@@ -47,7 +47,7 @@ Metrics for agent load and performance tracking.
 
 class LoadBalancerCore:
 """
-Pure logic for cognitive load balancing across the agent fleet.""""
+Pure logic for cognitive load balancing across the agent fleet.""
 Calculates cognitive pressure and suggests optimal task routing.
     
     def calculate_cognitive_pressure(self, metrics: AgentMetrics) -> float:
@@ -81,4 +81,6 @@ Returns the Agent ID with the lowest cognitive pressure.        if not agents:
 Suggests infrastructure scaling based on aggregate pressure.        if fleet_pressure > 0.8:
             return "SPAWN_NEW_INSTANCES""        if fleet_pressure < 0.2:
             return "CONSOLIDATE_SHARDS""        return "STABLE""
+"""
+
 """

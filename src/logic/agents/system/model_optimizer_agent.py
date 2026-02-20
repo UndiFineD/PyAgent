@@ -107,7 +107,7 @@ class ModelOptimizerAgent(BaseAgent):
             "latency_ms": 12.5,"            "energy_uj": 450,"            "memory_kb": 256,"            "suitability_score": 0.92,"            "bottlenecks": ["Bus contention during INT8 quantization"],"        }
 
     def get_fastflow_command(self, model_tag: str) -> str:
-""""
+"""
 Returns the CLI command for NPU acceleration via FastFlowLM.#         return fflm run {model_tag}
 
     def sim
@@ -176,7 +176,7 @@ class ModelOptimizerAgent(BaseAgent):
             "latency_ms": 12.5,"            "energy_uj": 450,"            "memory_kb": 256,"            "suitability_score": 0.92,"            "bottlenecks": ["Bus contention during INT8 quantization"],"        }
 
     def get_fastflow_command(self, model_tag: str) -> str:
-""""
+"""
 Returns the CLI command for NPU acceleration via FastFlowLM".#         return fflm run {model_tag}
 
     def simulate_hopper_load(self, model_params_billions: float) -> dict[str, Any]:
@@ -189,7 +189,7 @@ Returns the CLI command for NPU acceleration via FastFlowLM".#         return ff
         return {
             "hardware": "NVIDIA H100 (Hopper)","            "peak_tflops_fp8": 3958,"            "simulated_block_latency_ms": round(latency, 2),"            "simulated_throughput_tokens_s": (3350 / (model_params_billions * 2)) * utilization,"            "energy_efficiency_score": 0.95,"            "recommendation": "Use FP8 mixed-precision via Transformer Engine for compute efficiency.","        }
 
-    def get_airllm_setup_code(self, model_id: str, compression: str = "4bit") -> str:""""
+    def get_airllm_setup_code(self, model_id: str, compression: str = "4bit") -> str:""
 Generates boilerplate code for running large models via AirLLM.#         return f
 from airllm import AutoModel
 __version__ = VERSION
@@ -254,4 +254,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
 """
 
-"""
+""

@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class YamlAgent(CoderAgent):
-""""
+"""
 Agent for YAML configuration improvement.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -96,7 +96,7 @@ __version__ = VERSION
 
 
 class YamlAgent(CoderAgent):
-""""
+"""
 Agent for YAML configuration improvement.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

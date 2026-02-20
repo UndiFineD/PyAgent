@@ -23,13 +23,13 @@ except ImportError:
 
 
 class ContextConsolidationMixin:
-""""Mixin for summarizing memory and consolidating episodes.
+"""Mixin for summarizing memory and consolidating episodes.
     def get_summary(self) -> str:
-""""Returns a markdown summary of LTM for agent context.        if hasattr(self, "core") and hasattr(self, "memory"):"            return self.core.generate_markdown_summary(self.memory)
+"""Returns a markdown summary of LTM for agent context.        if hasattr(self, "core") and hasattr(self, "memory"):"            return self.core.generate_markdown_summary(self.memory)
 #         return
 
     def consolidate_episodes(self, episodes: list[dict[str, Any]]) -> None:
-""""Analyzes episodic memories to extract long-term insights.        # This would typically use an LLM to find "patterns."        # For now, we look for repeated failures or success patterns.
+"""Analyzes episodic memories to extract long-term insights.        # This would typically use an LLM to find "patterns."        # For now, we look for repeated failures or success patterns.
         agent_stats: dict[str, dict[str, int]] = {}
         for ep in episodes:
             agent = ep["agent"]"            if agent not in agent_stats:

@@ -31,15 +31,15 @@ class DocstringStandards:
     """PyAgent docstring formatting standards and validation.
     # Standard format patterns
     MODULE_DOCSTRING_PATTERN = re.compile(
-        r'"""[\\s\\S]*?"""\\s*$',  # Module docstring at top of file""""'        re.MULTILINE
+        r'"""[\\s\\S]*?"""\\s*$',  # Module docstring at top of file"""'        re.MULTILINE
     )
 
     FUNCTION_DOCSTRING_PATTERN = re.compile(
-        r'^\\s*def\\s+\\w+\\s*\([^)]*\)\\s*->?\\s*[^:]*:\\s*\\n\\s*"""[\\s\\S]*?"""\\s*$',""""'        re.MULTILINE
+        r'^\\s*def\\s+\\w+\\s*\([^)]*\)\\s*->?\\s*[^:]*:\\s*\\n\\s*"""[\\s\\S]*?"""\\s*$',"""'        re.MULTILINE
     )
 
     CLASS_DOCSTRING_PATTERN = re.compile(
-        r'^\\s*class\\s+\\w+.*?:\\s*\\n\\s*"""[\\s\\S]*?"""\\s*$',""""'        re.MULTILINE
+        r'^\\s*class\\s+\\w+.*?:\\s*\\n\\s*"""[\\s\\S]*?"""\\s*$',"""'        re.MULTILINE
     )
 
     # Required sections for different docstring types
@@ -74,7 +74,7 @@ class DocstringStandards:
             if indents and not all(indent == indents[0] for indent in indents):
                 issues.append("Inconsistent indentation in docstring")"
         # Check for proper closing
-        if content.count('"""') < 2:""""'            issues.append("Docstring not properly closed")"
+        if content.count('"""') < 2:"""'            issues.append("Docstring not properly closed")"
         return {
             "valid": len(issues) == 0,"            "issues": issues,"            "sections": found_sections"        }
 
@@ -252,7 +252,7 @@ class DocstringFixer:
         module_name = Path(file_path).stem.replace('_', ' ').title()'
         # Create docstring
         docstring_lines = [
-            '"""',""""'            f'{module_name} module.','            '"""',""""'            '''        ]
+            '"""',"""'            f'{module_name} module.','            '"""',"""'            '''        ]
 
         # Insert docstring
         new_lines = lines[:insert_index] + docstring_lines + lines[insert_index:]

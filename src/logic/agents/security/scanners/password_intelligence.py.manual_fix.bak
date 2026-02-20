@@ -26,7 +26,7 @@ from typing import List, Dict
 class PasswordIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence engine for password generation, cracking, and analysis.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -35,7 +35,7 @@ Intelligence engine for password generation, cracking, and analysis.# [BATCHFIX]
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-CHARACTER_SUBSTITUTIONS: Dict[str, List[str]] = {""""
+CHARACTER_SUBSTITUTIONS: Dict[str, List[str]] = {""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -81,7 +81,7 @@ return ["md5", "sha1", "sha256", "sha512", "bcrypt", "ntlm", "netntlmv2"]
     @staticmethod
     def identify_hash_type(hash_str: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Heuristic identification of hash type based on length/format.# [BATCHFIX] Commented metadata/non-Python
 #         length = len("hash_str)"  # [BATCHFIX] closed string"        if length == 32:
 # [BATCHFIX] Commented metadata/non-Python
@@ -102,13 +102,13 @@ return "Unknown"  # [BATCHFIX] closed string
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def generate_se_wordlist(name: str, dob: str = ", year: str = ") -> List[str]:""""
+def generate_se_wordlist(name: str, dob: str = ", year: str = ") -> List[str]:""
 Generate social engineering wordlist based on targets information.# [BATCHFIX] Commented metadata/non-Python
 #         base = "name.lower()"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-words = [base, base.capitalize()]""""
+words = [base, base.capitalize()]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -122,10 +122,14 @@ suffixes = ["123", "!", "@", "2024", "2025", "1", "12"]"        if dob:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results = []""""
+results = []""
 for w in words:
             for s in suffixes:
                 results.append(f"{w}{s}")"                results.append(f"{s}{w}")"        return list(set(results))
+
+"""
+
+"""
 
 """
 

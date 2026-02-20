@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import logging
 except ImportError:
@@ -51,7 +51,7 @@ __version__ = VERSION
 
 class TestProfileManager:
 """
-Manages test configuration profiles.""""
+Manages test configuration profiles.""
 Allows switching between test configurations easily.
 
     Example:
@@ -68,7 +68,7 @@ Initialize profile manager.        self._profiles: dict[str, TestProfile] = {}
 
     def add_profile(self, profile: TestProfile) -> None:
 """
-Add a profile.""""
+Add a profile.""
 Args:
             profile: Profile to add.
                 self._profiles[profile.name] = profile
@@ -79,7 +79,7 @@ Get a profile by name.        return self._profiles.get(name)
 
     def activate(self, name: str) -> None:
 """
-Activate a profile.""""
+Activate a profile.""
 Args:
             name: Profile name.
 
@@ -117,7 +117,7 @@ Deactivate current profile.        if not self._active:
 
     def get_setting(self, key: str, default: Any = None) -> Any:
 """
-Get setting from active profile.""""
+Get setting from active profile.""
 Args:
             key: Setting key.
             default: Default value.
@@ -158,4 +158,4 @@ Get currently active profile.        if self._active:
 
 """
 
-"""
+""

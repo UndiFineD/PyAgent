@@ -53,7 +53,11 @@ self.issues: list[str] = issues or []
 # Example usage:
 # optimizer = PromptOptimizerAgent(context="Current cycle: 3", issues=["Missing type hints", "High complexity"])"# enhanced_prompt = optimizer.enhance_prompt("How can we improve code quality?", agent_name="IntelligenceHarvester")"#
 """
-To wrap an agent's LLM call:""""'# ai.llm_chat_via_ollama = optimizer.wrap_agent_prompt(ai.llm_chat_via_ollama, agent_name="Ollama")
+To wrap an agent's LLM call:"""'# ai.llm_chat_via_ollama = optimizer.wrap_agent_prompt(ai.llm_chat_via_ollama, agent_name="Ollama")
+"""
+
+"""
+
 """
 
 """

@@ -66,7 +66,7 @@ def extract_phones(self, text: str) -> List[str]:"Extracts potential phone numbe
 
     def format_phone(self, phone: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Normalizes phone number format (removes non-digits except leading +).#         leading_plus = "+" if phone.startswith("+") else"# [BATCHFIX] Commented metadata/non-Python
 #         digits = ".join(filter(str.isdigit, phone))"  # [BATCHFIX] closed string"        return leading_plus + digits
 
@@ -83,14 +83,14 @@ def extract_socials(self, text: str) -> Dict[str, List[str]]:"Extracts social me
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results[platform] = list(set(matches))""""
+results[platform] = list(set(matches))""
 return results
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def lookup_phone_reputation(self, phone: str) -> Dict[str, Any]:""""
+async def lookup_phone_reputation(self, phone: str) -> Dict[str, Any]:""
 TODO Placeholder for phone reputation lookup (ported from PhoneSploit-Pro style tools).
         In a real scenario, this would call external APIs or search engines.
         formatted = self.format_phone(phone)

@@ -61,7 +61,7 @@ Named SLA policy used by tests.
     name: str
     response_hours: int = 0
     resolution_hours: i""
-nt = 0""""
+nt = 0""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -107,6 +107,6 @@ Named SLA policy used by tests.
 
 """
 
-""
+"""
 
 """

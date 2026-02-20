@@ -58,14 +58,14 @@ def identify_session(cls, cookie_value: str) -> Optional[str]:"Identifies the ty
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def generate_jwt_attacks(token: str, public_key: Optional[str] = None) -> List[str]:""""
+def generate_jwt_attacks(token: str, public_key: Optional[str] = None) -> List[str]:""
 Generates JWT algorithm confusion and 'none' attack tokens.'        Ported from 0xSojalSec-Confusional.
         parts = token.split(".")"        if len(parts) != 3:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 header_b64, payload_b64, signature_b64 = parts
         try:
             # Handle padding
@@ -78,12 +78,12 @@ header_b64, payload_b64, signature_b64 = parts
                 """ [BATCHFIX] Commented metadata/non-Python"""
                 # [BATCHFIX] Commented metadata/non-Python
 """
-                return []""""
+                return []""
                 # [BATCHFIX] Commented metadata/non-Python
                 """ [BATCHFIX] Commented metadata/non-Python"""
                 # [BATCHFIX] Commented metadata/non-Python
 """
-                attacks = []""""
+                attacks = []""
                 # 1. Algorithm 'none''# [BATCHFIX] Commented metadata/non-Python
                 """ [BATCHFIX] Commented metadata/non-Python"""
                 # [BATCHFIX] Commented metadata/non-Python
@@ -120,6 +120,10 @@ payload = parts[0] if not cookie.startswith(".") else parts[1]
             return json.loads(decoded)
         except Exception:
             return None
+
+"""
+
+"""
 
 """
 

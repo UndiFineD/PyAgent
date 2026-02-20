@@ -21,7 +21,7 @@ from typing import List, Optional
 class ProxyIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Intelligence engine for proxy discovery and validation.#     SOURCES = [
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -35,14 +35,14 @@ Intelligence engine for proxy discovery and validation.#     SOURCES = [
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
+def __init__(self, session: Optional[aiohttp.ClientSession] = None):""
 self.session = session
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def scrape_proxies(self) -> List[str]:""""
+async def scrape_proxies(self) -> List[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Scrape common free proxy lists."  # [BATCHFIX] closed string"        if not self.session:
             self.session = aiohttp.ClientSession()
@@ -51,7 +51,7 @@ async def scrape_proxies(self) -> List[str]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-all_proxies = []""""
+all_proxies = []""
 for url in self.SOURCES:
             try:
                 async with self.session.get(url, timeout=15) as resp:
@@ -78,7 +78,7 @@ for url in self.SOURCES:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""
+""
 def get_proxy_evasion_tips() -> List[str]:"Tips for using proxies to evade detection.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #        " return ["  # [BATCHFIX] closed string"            "Use SOCKS5 for better protocol support and encryption","            "Rotate proxies every 10-50 requests","# [BATCHFIX] Commented metadata/non-Python

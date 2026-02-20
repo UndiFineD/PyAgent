@@ -50,7 +50,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class MemoryConsolidationAgent(BaseAgent):
-""""
+"""
 Refines project knowledge by analyzing past interactions and outcomes from federated shards.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -65,7 +65,7 @@ Refines project knowledge by analyzing past interactions and outcomes from feder
 return "# Memory Consolidation Log\\n\\n## Status\\nReady for federated consolidation.\\n
     @as_tool
     def consolidate_all(self) -> str:
-""""
+"""
 Performs a full review of all federated memory shards.        # Querying for common themes across federation
         recent_memories = self.ltm.federated_query(
             ", n_results=100"        )  # Empty query to get general recent ones

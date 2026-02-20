@@ -72,7 +72,7 @@ __version__ = VERSION
 
 class RollbackTracker:
 """
-Tracks improvement rollbacks.""""
+Tracks improvement rollbacks.""
 Records when and why improvements are rolled back.
 
     Attributes:
@@ -85,7 +85,7 @@ Initialize the rollback tracker.        self.rollbacks: list[RollbackRecord] = [
 
     def save_state(self, improvement: Improvement) -> None:
 """
-Save the current state before an improvement.""""
+Save the current state before an improvement.""
 Args:
             improvement: The improvement being applied.
                 self.states[improvement.id] = json.dumps(
@@ -94,7 +94,7 @@ Args:
         )
 
     def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:"        """
-Record a rollback.""""
+Record a rollback.""
 Args:
             improvement: The rolled back improvement.
             reason: Why the rollback occurred.
@@ -122,3 +122,7 @@ Get rollback records.        if improvement_id:
 Calculate rollback rate.        if total_completed == 0:
             return 0.0
         return (len(self.rollbacks) / total_completed) * 100
+
+""
+
+"""

@@ -40,7 +40,7 @@ OUTPUT_FILENAME = "rpc_interfaces.json"  # [BATCHFIX] closed string
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def scrape_folder(folder_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:""""
+def scrape_folder(folder_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:""
 output_dict = {}
     interface_scraper = PeRpcInterfaceScraper(disassembler)
     for filename in os.listdir(folder_path):
@@ -52,7 +52,7 @@ output_dict = {}
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-output_dict[filename] = interface_scraper.scrape_executable(pe_path)""""
+output_dict[filename] = interface_scraper.scrape_executable(pe_path)""
 except (NoRpcImportException, CantDetermineRpcSideException, DotNetPeException, CantFindRDataSectionException):
             pass
     return output_dict
@@ -62,13 +62,13 @@ except (NoRpcImportException, CantDetermineRpcSideException, DotNetPeException, 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def scrape_file(file_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:""""
+def scrape_file(file_path: str, disassembler: Optional[BaseRpcRegistrationExtractor] = None) -> Dict[str, Dict]:""
 interface_scraper = PeRpcInterfaceScraper(disassembler)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return {os.path.split(file_path)[1]: interface_scraper.scrape_executable(file_path)}""""
+return {os.path.split(file_path)[1]: interface_scraper.scrape_executable(file_path)}""
 if __name__ == "__main__":"    parser = argparse.ArgumentParser()
     parser.add_argument("scrape_path", help="path we wish to scrape, could be file or folder", type=str)"    parser.add_argument("--output_path", help="path for json output file", default=OUTPUT_FILENAME, type=str)"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""

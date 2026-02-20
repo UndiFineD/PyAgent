@@ -65,7 +65,7 @@ from ..validation_rule import ValidationRule
 
 
 class ChangesEntryMixin:
-""""
+"""
 Mixin for managing changelog entries.
     # Default validation rules
     DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
@@ -78,7 +78,7 @@ Mixin for managing changelog entries.
     ]
 
     def add_validation_rule(self, rule: ValidationRule) -> None:
-""""
+"""
 Add a custom validation rule.        if not hasattr(self, "_validation_rules"):"            self._validation_rules = self.DEFAULT_VALIDATION_RULES.copy()
         self._validation_rules.append(rule)
 
@@ -105,14 +105,14 @@ Add a custom validation rule.        if not hasattr(self, "_validation_rules"):"
         return entry
 
     def get_entries_by_category(self, category: str) -> List[ChangelogEntry]:
-""""
+"""
 Get all entries for a specific category.        return [e for e in getattr(self, "_entries", []) if e.category == category]
     def get_entries_by_priority(self, min_priority: int = 0) -> List[ChangelogEntry]:
-""""
+"""
 Get entries with priority >= min_priority, sorted by priority.        filtered = [e for e in getattr(self, "_entries", []) if e.priority >= min_priority]"        return sorted(filtered, key=lambda e: e.priority, reverse=True)
 
     def deduplicate_entries(self) -> int:
-""""
+"""
 Remove duplicate entries, returns count of removed.        if not hasattr(self, "_entries"):"            return 0
         seen: set[str] = set()
         unique_entries = []
@@ -127,7 +127,7 @@ Remove duplicate entries, returns count of removed.        if not hasattr(self, 
         return removed_count
 
     def format_entries_as_markdown(self) -> str:
-""""
+"""
 Format all entries as markdown changelog.        if not hasattr(self, "_entries") or not self._entries:"#             return
         # Group by version
         by_version: dict[str, list[ChangelogEntry]] = {}
@@ -151,7 +151,7 @@ from ..validation_rule import ValidationRule
 
 
 class ChangesEntryMixin:
-""""
+"""
 Mixin for managing changelog entries.
     # Default validation rules
     DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
@@ -164,7 +164,7 @@ Mixin for managing changelog entries.
     ]
 
     def add_validation_rule(self, rule: ValidationRule) -> None:
-""""
+"""
 Add a custom validation rule.        if not" hasattr(self, "_validation_rules"):"            self._validation_rules = self.DEFAULT_VALIDATION_RULES.copy()
         self._validation_rules.append(rule)
 
@@ -192,14 +192,14 @@ Add a custom validation rule.        if not" hasattr(self, "_validation_rules"):
         return entry
 
     def get_entries_by_category(self, category: str) -> List[ChangelogEntry]:
-""""
+"""
 Get all entries for a specific category.        return [e for e in getattr(self, "_entries", []) if e.category == category]
     def get_entries_by_priority(self, min_priority: int = 0) -> List[ChangelogEntry]:
-""""
+"""
 Get entries with priority >= min_priority, sorted by priority.        filtered = [e for e in getattr(self, "_entries", []) if e.priority >= min_priority]"        return sorted(filtered, key=lambda e: e.priority, reverse=True)
 
     def deduplicate_entries(self) -> int:
-""""
+"""
 Remove duplicate entries, returns count of removed.        if not hasattr(self, "_entries"):"            return 0
         seen: set[str] = set()
         unique_entries = []
@@ -214,7 +214,7 @@ Remove duplicate entries, returns count of removed.        if not hasattr(self, 
         return removed_count
 
     def format_entries_as_markdown(self) -> str:
-""""
+"""
 Format all entries as markdown changelog.        if "not hasattr(self, "_entries") or not self._entries:"#             return
         # Group by version
         by_version: dict[str, list[ChangelogEntry]] = {}

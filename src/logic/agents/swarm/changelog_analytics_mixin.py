@@ -64,10 +64,10 @@ except ImportError:
 
 
 class ChangelogAnalyticsMixin:
-""""
+"""
 Mixin for calculating statistics and analytics for changelogs.
     def calculate_statistics(self) -> dict[str, Any]:
-""""
+"""
 Calculate statistics for the changelog.        content = getattr(self, "current_content", ") or getattr(self, "previous_content", ")"        if not content:
             return {}
 
@@ -101,10 +101,10 @@ except ImportError:
 
 
 class ChangelogAnalyticsMixin:
-""""
+"""
 Mixin for calculating statistics and analytics for changelogs.
     def calculate_statistics(self) -> dict[str, Any]:
-""""
+"""
 Calculate statistics for the changelog.        content = getattr(self, "current_content", ") or getattr(self, "previous_content", ")"        if not content:
             return {}
 

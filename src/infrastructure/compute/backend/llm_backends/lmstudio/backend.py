@@ -116,7 +116,7 @@ Get or create an LM Studio client.        try:
 
     def list_loaded_models(self) -> list[str]:
 """
-List currently loaded models in LM Studio.""""
+List currently loaded models in LM Studio.""
 Prefer SDK helpers but fall back to HTTP when SDK is unavailable.
                 try:
             if not self._check_sdk():
@@ -137,7 +137,7 @@ Prefer SDK helpers but fall back to HTTP when SDK is unavailable.
 
     def list_downloaded_models(self) -> list[str]:
 """
-List downloaded models available in LM Studio.""""
+List downloaded models available in LM Studio.""
 Use the same fallback strategy as `list_loaded_models`.
                 try:
             if not self._check_sdk():
@@ -159,7 +159,7 @@ Use the same fallback strategy as `list_loaded_models`.
         return self._api_client.list_models()
 
     def get_model(self, model: str = "") -> Any:"        """
-Get a loaded model handle, using cache if available.""""
+Get a loaded model handle, using cache if available.""
 Use MCPClient to manage SDK connections and accessor styles.
                 # Check cache first
         cache_key = model or "_default_""        cached = self._model_cache.get(cache_key)
@@ -211,7 +211,7 @@ Internal shim for HTTP-based LLM access when SDK is unavailable.
                         raise RuntimeError(f"Failed to get model '{model}'")
     def _extract_prompt_from_chat(self, chat: Any) -> str:
 """
-Extract prompt string from Chat object.""""
+Extract prompt string from Chat object.""
 Args:
             chat: Chat object from SDK or dict-like.
 
@@ -410,6 +410,10 @@ Get backend information, including REST API version and server details.        l
 
         return {
             "provider": self.PROVIDER_ID,"            "host": self.config.api_host,"            "base_url": self.config.base_url,"            "api_base_url": api_info.get("api_base_url"),"            "sdk_available": self._check_sdk(),"            "api_version": api_info.get("api_version"),"            "loaded_models": loaded,"            "downloaded_models": downloaded,"            "is_healthy": bool(loaded),"        }
+
+"""
+
+"""
 
 """
 

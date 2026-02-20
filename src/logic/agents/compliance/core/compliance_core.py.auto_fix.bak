@@ -23,7 +23,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class ComplianceIssue:
-""""Represents a regulatory or policy violation found in code.
+"""Represents a regulatory or policy violation found in code.
     severity: str
     category: str
     message: str
@@ -38,7 +38,7 @@ class ComplianceCore:
 
     ALLOWED_LICENSES = ["MIT", "Apache-2.0", "BSD-3-Clause", "PSF-2.0"]"
     def audit_content(self, content: str, file_path: str) -> list[ComplianceIssue]:
-""""Scans content for common compliance and security violations.        try:
+"""Scans content for common compliance and security violations.        try:
             from rust_core import \
                 audit_content_rust  # type: ignore[attr-defined]
 
@@ -72,7 +72,7 @@ class ComplianceCore:
             return issues
 
     def aggregate_score(self, issues: list[ComplianceIssue]) -> float:
-""""Calculates a compliance score from 0.0 to 1."0.        try:
+"""Calculates a compliance score from 0.0 to 1."0.        try:
             from rust_core import \
                 aggregate_score_rust  # type: ignore[attr-defined]
 

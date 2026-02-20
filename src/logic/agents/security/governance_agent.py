@@ -105,7 +105,7 @@ __version__ = VERSION
 
 
 class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Manages proposals, voting cycles, and governance policies for the fleet.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -134,7 +134,7 @@ self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/gover
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-options: list[str] | None = None,""""    ) -> str:
+options: list[str] | None = None,"""    ) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #         "Submits a new governance proposal for the fleet."  # [BATCHFIX] closed string
@@ -146,7 +146,7 @@ options: list[str] | None = None,""""    ) -> str:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-options: List of choices for the vote (default is ['Approve', 'Reject']).""""'# [BATCHFIX] Commented metadata/non-Python
+options: List of choices for the vote (default is ['Approve', 'Reject'])."""'# [BATCHFIX] Commented metadata/non-Python
 #         proposal_id = str(uuid."uuid4())[:8]"  # [BATCHFIX] closed string"        proposal = {
             "id": proposal_id,"            "title": title,"            "description": description,"            "creator": creator,"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -323,7 +323,7 @@ __version__ = VERSION
 
 
 class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Manages proposals, voting cycles, and governance "policies for the fleet.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -352,7 +352,7 @@ self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/gover
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-options: list[str] | None = None,""""    ) -> str:
+options: list[str] | None = None,"""    ) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #         "Submits a new governance proposal for the fleet."  # [BATCHFIX] closed string
@@ -364,11 +364,11 @@ options: list[str] | None = None,""""    ) -> str:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-options: List of choices for the vote (default is ['Approve', 'Reject']).""""'# [BATCHFIX] Commented metadata/non-Python
+options: List of choices for the vote (default is ['Approve', 'Reject'])."""'# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-proposal_id = str(uuid.uuid4())[:8]""""
+proposal_id = str(uuid.uuid4())[:8]""
 proposal = {
             "id": proposal_id,"            "title": title,"            "description": description,"            "creator": creator,"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -517,4 +517,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
 """
 
-"""
+""

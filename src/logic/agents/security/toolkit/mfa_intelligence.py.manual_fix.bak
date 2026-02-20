@@ -35,7 +35,7 @@ O365_ENDPOINTS = {
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
+def __init__(self, session: Optional[aiohttp.ClientSession] = None):""
 self.session = session
         self._own_session = False
 
@@ -79,7 +79,7 @@ url = fhttps://login.microsoftonline.com/getuserrealm.srf?login={quote(username)
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-results[name] = {""""                        "status_code": response.status,"# [BATCHFIX] Commented metadata/non-Python
+results[name] = {"""                        "status_code": response.status,"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #                         "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", "),"  # [BATCHFIX] closed string"                    }
             except Exception as e:
@@ -109,6 +109,8 @@ results[name] = {"error": str(e)}
 
 """
 
-""
+"""
 
 """
+
+""

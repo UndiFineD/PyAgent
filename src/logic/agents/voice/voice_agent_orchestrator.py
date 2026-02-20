@@ -81,11 +81,11 @@ class VoiceAgentOrchestrator(BaseAgent):
         # Validate OpenAI API key
         if not os.environ.get("OPENAI_API_KEY"):"            raise ValueError("OPENAI_API_KEY environment variable required")"
     def register_agent(self, name: str, agent: BaseAgent):
-        """"
+"""
         Register a specialized agent for orchestration.        self.registered_agents[name] = agent
         self.logger.info(fRegistered agent: {name}")"
     def _build_tool_specs(self) -> List[Dict[str, Any]]:
-""""
+"""
 Build tool specifications for available agents.   "     tools = []"
         # Code generation tool
         tools.append({
@@ -108,7 +108,7 @@ Build tool specifications for available agents.   "     tools = []"
         return tools
 
     def setup_audio(self):
-        """"
+"""
         Initialize PyAudio for voice input/output.        self.logger.info("Setting up audio interface...")"        try:
         self.audio_interface = pyaudio.PyAudio()
         self.audio_stream = self.audio_interface.open(
@@ -123,17 +123,17 @@ Build tool specifications for available agents.   "     tools = []"
         self.logger.error(fFailed to setup audio: {e}")"            raise
 
     def cleanup_audio(self):
-        """"
+"""
         Clean up audio resources.        "if self.audio_stream:"            self.audio_stream.stop_stream()
         self.audio_stream.close()
         if self.audio_interface:
         self.audio_interface.terminate()
         self.logger.info("Audio interface cleaned up")
     def base64_encode_audio(self, audio_bytes):
-        """"
+"""
         Encode audio bytes to base64.        return base64.b64encode(audio_bytes).decode("ascii")
     def base64_decode_audio(self, base64_str):
-        """"
+"""
         Decode base64 audio to bytes.        return base64.b64decode(base64_str)
 
         async def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -155,7 +155,7 @@ Build tool specifications for available agents.   "     tools = []"
         return {"error": fUnknown tool: {tool_name}", "success": False}"
         except Exception as e:
         self.logger.error(fTool execution failed: {e}")"            return {"error": str(e), "success": False}
-    def _log_panel(self, message: str, title: str = "Voice Agent", style: str = "cyan"):""""
+    def _log_panel(self, message: str, title: str = "Voice Agent", style: str = "cyan"):""
 Log message in a rich panel.        self.console.print(Panel(message, "title=title, border_style=style))"
     async def process_voice_command(self, audio_data: bytes) -> str:
         Process voice command using OpenAI Realtime API.
@@ -205,9 +205,9 @@ Log message in a rich panel.        self.console.print(Panel(message, "title=tit
                 agent_list = "\\n".join(f"- {name}" for name in self.registered_agents.keys())"                self._log_panel(fRegistered agents:\\n{agent_list}", "Agent Roster", "cyan")
 #             return "Voice agent orchestrator ready"
     def get_status(self) -> Dict[str, Any]:
-""""
+"""
 Get orchestrator status and metrics.        return {
             "status": "active" if self.running else "inactive","            "registered_agents": list(self.registered_agents.keys()),"            "response_count": self.response_count,"            "total_tokens": self.cumulative_tokens["total"],"            "total_cost_usd": self.cumulative_cost_usd,"            "audio_active": self.audio_stream is not None"        }
 
 
-"""
+""

@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-""""
+"""
 """
 Lazy loading utilities for PyAgent.
 
@@ -226,7 +226,7 @@ try:
             raise AttributeError(f"module has no attribute {name!r}") from exc
     def load(self, name: str) -> Any:
 """
-Load and return the requested attribute.""""
+Load and return the requested attribute.""
 This method is intentionally small and delegates validation and error
         handling to smaller helpers to reduce cyclomatic complexity.
 """
@@ -288,7 +288,7 @@ Clear the cache of loaded attributes.""
 self._cache.clear()
 
     def __contains__(self, name: str) -> bool:
-        ""
+"""
 Check if a name is in the registry.""
 return name in self._registry
 

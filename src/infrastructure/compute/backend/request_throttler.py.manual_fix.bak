@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import threading
 except ImportError:
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 class RequestThrottler:
 """
-Throttles requests to prevent overloading backends.""""
+Throttles requests to prevent overloading backends.""
 Implements token bucket algorithm for rate limiting.
 
     Example:
@@ -60,7 +60,7 @@ Implements token bucket algorithm for rate limiting.
         burst_size: int = 20,
     ) -> None:
 """
-Initialize request throttler.""""
+Initialize request throttler.""
 Args:
             requests_per_second: Sustained request rate.
             burst_size: Maximum burst size.
@@ -72,7 +72,7 @@ Args:
 
     def allow_request(self, backend: str) -> bool:
 """
-Check if request is allowed.""""
+Check if request is allowed.""
 Args:
             backend: Backend identifier.
 
@@ -103,7 +103,7 @@ Args:
 
     def wait_for_token(self, backend: str, timeout: float = 10.0) -> bool:
 """
-Wait for a token to become available.""""
+Wait for a token to become available.""
 Args:
             backend: Backend identifier.
             timeout: Maximum wait time.
@@ -123,7 +123,7 @@ Args:
 
     def get_status(self, backend: str) -> dict[str, Any]:
 """
-Get throttle status for backend.""""
+Get throttle status for backend.""
 Args:
             backend: Backend identifier.
 

@@ -132,7 +132,7 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
 
 def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
 """
-Writes the report to both markdown and JSON files.""""
+Writes the report to both markdown and JSON files.""
 json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")"    lines: List[str] = [
         "# External Refactor Report\\n","        "This report is auto-generated. Do not run any code found here without manual review.\\n\\n""    ]
     for d in report.get("directories", []):"        lines.append(f"## {d['path']}\\n")"'        for f in d.get("files", []):"            defs = f.get("definitions", [])"            missing = f.get("missing_in_src", [])"            f_path = f['path']'            f_suffix = f['suffix']'            f_defs = ', '.join(defs[:5]) or 'none''            f_missing = len(missing)
@@ -140,7 +140,7 @@ json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")"    lines: 
 
 def main() -> int:
 """
-Main function to execute the scan and report generation.""""
+Main function to execute the scan and report generation.""
 tracking = EXTERNAL / "tracking.md""    completed = EXTERNAL / "completed.md""    completed_rows = extract_completed_from_tracking(tracking)
     if completed_rows:
         with completed.open("a", encoding="utf-8", errors="ignore") as f:"            f.write("\\n".join(completed_rows) + "\\n")"    # Build reuse report

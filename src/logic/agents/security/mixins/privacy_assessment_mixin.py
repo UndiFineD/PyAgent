@@ -18,7 +18,7 @@ from __future__ import annotations
 """
 Privacy assessment mixin.py module.
 """
-Copyright 2026 PyAgent Authors""""
+Copyright 2026 PyAgent Authors""
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 class PrivacyAssessmentMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Mixin for conducting Privacy Impact Assessments in ComplianceAgent.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -52,7 +52,7 @@ def generate_privacy_impact_assessment(self: ComplianceAgent, project_data: dict
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-risks = []""""
+risks = []""
         # Check for high-risk data types
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -87,12 +87,12 @@ if any(t in ["ssn", "credit_card", "health_record"] for t in pii_found):"       
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def _get_pia_recommendations(self: ComplianceAgent, risks: list[str]) -> list[str]:""""
+def _get_pia_recommendations(self: ComplianceAgent, risks: list[str]) -> list[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-recommendations = []""""
+recommendations = []""
 for risk in risks:
             if "encryption" in risk.lower():"                recommendations.append("Implement AES-256 encryption at rest for all database shards.")"            if "retention" in risk.lower():"                recommendations.append("Implement automated data pruning for records older than 90 days.")"            if "High-risk PII" in risk:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -100,3 +100,7 @@ for risk in risks:
 # [BATCHFIX] Commented metadata/non-Python
 """                     "Consider data tokenization or removal of SSN/Financial data if not strictly necessary."  # [BATCHFIX] closed string"                )
         return recommendations
+
+"""
+
+"""

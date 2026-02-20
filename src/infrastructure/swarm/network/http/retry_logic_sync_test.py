@@ -49,7 +49,7 @@ Initialize the dummy response with a status code and optional data.        self.
 
 class DummyConnection(RetryHTTPMixin):
 """
-A dummy connection class that simulates""""
+A dummy connection class that simulates""
 HTTP requests and uses RetryHTTPMixin for retry logic.
         def __init__(self):
 """
@@ -82,4 +82,4 @@ HTTP requests and uses RetryHTTPMixin for retry logic.
 
 """
 
-"""
+            ""

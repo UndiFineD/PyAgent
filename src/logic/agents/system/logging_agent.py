@@ -52,7 +52,7 @@ __version__ = VERSION
 
 
 class LoggingAgent(BaseAgent):
-""""
+"""
 Manages distributed fleet logs and integrates with external aggregators.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -150,7 +150,7 @@ __version__ = VERSION
 
 
 class LoggingAgent(BaseAgent):
-""""
+"""
 Manages distributed fleet logs and integrates "with external aggregators.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -228,7 +228,7 @@ Manages distributed fleet logs and integrates "with external aggregators.
 
     @as_tool
     def get_aggregated_logs(self) -> list[dict[str, Any]]:
-""""
+"""
 Returns the internal buffer logs. (Sync for test" access)        return self._internal_buffer
 
 """

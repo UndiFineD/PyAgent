@@ -34,7 +34,7 @@ Refactored vulnerability scanners from Artemis.#     Focuses on web application 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def generate_crlf_payloads() -> List[str]:""""
+def generate_crlf_payloads() -> List[str]:""
 Generates CRLF injection payloads.
         Ported from 0xSojalSec-crlfmap.
 # [BATCHFIX] Commented metadata/non-Python
@@ -46,7 +46,7 @@ Generates CRLF injection payloads.
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def generate_content_type_bypasses(original_ct: str) -> List[str]:""""
+def generate_content_type_bypasses(original_ct: str) -> List[str]:""
 Generates unusual Content-Type variations to bypass WAFs or filter logic.
         Ported from 0xSojalSec-content-type-research.
         if "json" in original_ct.lower():"            return [
@@ -55,12 +55,12 @@ Generates unusual Content-Type variations to bypass WAFs or filter logic.
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return [original_ct]""""
+return [original_ct]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_vulnerable_params(self) -> Dict[str, List[str]]:""""
+def get_vulnerable_params(self) -> Dict[str, List[str]]:""
 Returns a mapping of vulnerability types to common parameter names.
         Ported from 0xSojalSec-Bambdas (OWASP Top 25).
         return {
@@ -84,12 +84,12 @@ LFI_PAYLOAD = "php://filter/convert.base64-encode/resource="  # [BATCHFIX] close
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def scan_vcs(cls, url: str) -> List[str]:""""
+async def scan_vcs(cls, url: str) -> List[str]:""
 #         "Detect exposed Version Control Systems (.git, .svn, .hg")."# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-found = []""""
+found = []""
 checks = [
             ("git", ".git/HEAD", cls.GIT_MAGIC),"            ("svn", ".svn/wc.db", re.compile(r"^SQLite")),"            ("hg", ".hg/store/00manifest.i", re.compile(r"^\\x00\\x00\\x00\\x01")),"        ]
 
@@ -116,14 +116,14 @@ target = f"{url.rstrip('/')}/{path}"  # [BATCHFIX] closed string"'# [BATCHFIX] C
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def scan_php_lfi(cls, url: str) -> List[str]:""""
+async def scan_php_lfi(cls, url: str) -> List[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 #         Check for PHP LFI by attempting to encode" the file itself in base64."  # [BATCHFIX] closed string"        Expects a URL like http://example.com/index.php?page=
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-confirmed = []""""        # Artemis logic: find candidate params like ?page=, ?file=
+confirmed = []"""        # Artemis logic: find candidate params like ?page=, ?file=
         # For simplicity, we assume the user provides the base URL.
         # Here we just implement the verification logic.
 
@@ -163,7 +163,7 @@ test_url = f"{base_path}?{param}={cls.LFI_PAYLOAD}{filename}"  # [BATCHFIX] clos
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def parse_robots(cls, url: str) -> Dict[str, List[str]]:""""
+async def parse_robots(cls, url: str) -> Dict[str, List[str]]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Parse robots.txt and identify high-value paths."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -204,7 +204,7 @@ results["sensitive"].append(path)"            except (asyncio.TimeoutError, aioh
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def scan_ssti(cls, url: str) -> List[str]:""""
+async def scan_ssti(cls, url: str) -> List[str]:""
 Check for Server-Side Template Injection using standard math payloads.
         Injected into URL parameters.
         # Math payloads for different engines (Jinja2, Mako, Twig, etc.)
@@ -216,7 +216,7 @@ payloads = ["{{7*7}}", "{{7+7}}", "${7*7}", "<%= 7*7 %>", "#{7*7}"]"# [BATCHFIX]
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-confirmed = []""""
+confirmed = []""
 parsed = urlparse(url)
         params = parse_qs(parsed.query)
         if not params:
@@ -224,7 +224,7 @@ parsed = urlparse(url)
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 async with aiohttp.ClientSession() as session:
             for param_name in params:
                 for payload in payloads:
@@ -233,7 +233,7 @@ async with aiohttp.ClientSession() as session:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-new_params[param_name] = [payload]""""
+new_params[param_name] = [payload]""
 test_url = urlunparse(parsed._replace(query=urlencode(new_params, doseq=True)))
 
                     try:
@@ -251,14 +251,14 @@ test_url = urlunparse(parsed._replace(query=urlencode(new_params, doseq=True)))
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def scan_ssrf(cls, url: str, callback_host: str) -> List[str]:""""
+async def scan_ssrf(cls, url: str, callback_host: str) -> List[str]:""
 Check for SSRF by injecting a callback host (e.g., collaborator or local IP).
 # [BATCHFIX] Commented metadata/non-Python
 #         payloads = [callback_host, fhttp://"{callback_host}", fhttps://{callback_host}"]"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-confirmed = []""""
+confirmed = []""
 parsed = urlparse(url)
         params = parse_qs(parsed.query)
         if not params:
@@ -266,7 +266,7 @@ parsed = urlparse(url)
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 async with aiohttp.ClientSession() as session:
             for param_name in params:
                 for payload in payloads:
@@ -275,7 +275,7 @@ async with aiohttp.ClientSession() as session:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-new_params[param_name] = [payload]""""
+new_params[param_name] = [payload]""
 test_url = urlunparse(parsed._replace(query=urlencode(new_params, doseq=True)))
 
                     try:

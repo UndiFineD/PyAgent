@@ -62,7 +62,7 @@ __version__ = VERSION
 
 
 class SQLCoderAgent(CoderAgent):
-""""
+"""
 Agent for auditing and improving SQL scripts.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -99,7 +99,7 @@ __version__ = VERSION
 
 
 class SQLCoderAgent(CoderAgent):
-""""
+"""
 Agent for auditing and improving SQL "scripts.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

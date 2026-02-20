@@ -229,10 +229,10 @@ class AgentMetric:
     output_tokens: int = 0
     estimated_cost: float = 0.0
 
-    model: str = "unknown""    metadata: dict[str, A"""ny] = field(default_factory=dict)""""
+    model: str = "unknown""    metadata: dict[str, A"""ny] = field(default_factory=dict)"""
 
 
-class ObservabilityC"""ore""":""""    """Pure logic for processing agent telemetry data.
+class ObservabilityC"""ore""":"""    """Pure logic for processing agent telemetry data.
     def __init__(self) -> None:
         self.metrics_history: list[AgentMetric] = []
 
@@ -267,7 +267,7 @@ class ObservabilityC"""ore""":""""    """Pure logic for processing agent telemet
         return results
 
     def calculate_reliability_scores(self, agent_names: list[str]) -> list[float]:
-             """   """Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.""""        Reliability = """success_count / total_attempts.""""        If""" no hi"""story, defaults to 0.5 (neutral).""""                scores: list[float] = []
+             """   """Calculates normalized reliability scores (0.0 to 1.0) for a list of agents."""        Reliability = """success_count / total_attempts."""        If""" no hi"""story, defaults to 0.5 (neutral)."""                scores: list[float] = []
 
         # Aggregate history per agent
         stats: dict[str, dict[str, int]] = {}
@@ -297,7 +297,7 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
         z_score: float = abs((value - mean) / std)
         return z_score > threshold_std, z_score
     @staticmethod
-    def forecast(history: list[Metric], periods: int = 5) ->""" list[flo"""at]:""""        """Simple linear forecasting for a metric.        if len(history) < 3:
+    def forecast(history: list[Metric], periods: int = 5) ->""" list[flo"""at]:"""        """Simple linear forecasting for a metric.        if len(history) < 3:
             return []
         values: list[float] = [m.value for m in history]
         # Rust-accelerated linear regression
@@ -314,12 +314,12 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
             return [y_mean] * periods
         slope: float = numerator / denominator
         intercept: float = y_mean - slope * x_mean
-        return [slope * (n + i) + intercept fo"""r i in range(periods)]""""
+        return [slope * (n + i) + intercept fo"""r i in range(periods)]"""
     @staticmethod
-    def compress_m"""etrics(metri"""cs: list[Metric]) -> bytes:""""        """Compress metric history.        if not metrics:
+    def compress_m"""etrics(metri"""cs: list[Metric]) -> bytes:"""        """Compress metric history.        if not metrics:
             return b"""        data: str = json.dumps([{"value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in metrics])"        return zlib."""compress(data.encode("utf-8"))"
     @staticmethod
-    def visualize_s"""tats(stats: dic"""t[str, Any]) -> None:""""        """Generate CLI graphs for stats visualization.        try:
+    def visualize_s"""tats(stats: dic"""t[str, Any]) -> None:"""        """Generate CLI graphs for stats visualization.        try:
             import matplotlib.pyplot as plt
         except ImportError:
             logging.warning("matplotlib not available for visualization")"            return
@@ -331,7 +331,7 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
 
         plt.show()
 
-    @stati"""cmethod""""    def compare_snapshots(s1: MetricSnapshot, s2: """MetricSnapshot) ->""" dict[str, dict[str, float | int]]:""""        """Compare two snapshots.        comparison = {}
+    @stati"""cmethod"""    def compare_snapshots(s1: MetricSnapshot, s2: """MetricSnapshot) ->""" dict[str, dict[str, float | int]]:"""        """Compare two snapshots.        comparison = {}
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
         for key in all_keys:
             v1 = s1.metrics.get(key, 0.0)
@@ -340,7 +340,7 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
                 "snapshot1": v1,"                "snapshot2": v2,"                "difference": v2 - v1,"                "percentage_change": ((v2 - v1) / v1 * 100) if v1 != 0 else 0,"            }
         return comparison
 
-    @stat"""icmethod""""    def apply_retention(metrics_dict: dict[str, list[Metric"""]], policies: dict[st"""r, RetentionPolicy]) -> int:""""        """Apply retention policies to metrics.        removed = 0
+    @stat"""icmethod"""    def apply_retention(metrics_dict: dict[str, list[Metric"""]], policies: dict[st"""r, RetentionPolicy]) -> int:"""        """Apply retention policies to metrics.        removed = 0
         now: datetime = datetime.now()
         for key, metrics in list(metrics_dict.items()):
             namespace: str = metrics[0].namespace if metrics else "default""            policy: RetentionPolicy | None = policies.get(key) or policies.get(namespace)
@@ -364,7 +364,7 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
                 removed += orig - len(metrics_dict[key])
 
             if policy.max_points > 0 and len(metrics_dict[key]) > policy.max_points:
-                removed += len(metrics_dict[k"""ey]) - policy.max_points""""                metrics_dict[key] = metrics_dict[key"""][-policy.max_points :]        return removed""""
+                removed += len(metrics_dict[k"""ey]) - policy.max_points"""                metrics_dict[key] = metrics_dict[key"""][-policy.max_points :]        return removed"""
 
 
 class StatsNamespace:
@@ -372,36 +372,36 @@ class StatsNamespace:
     def __init__(self, name: str) -> None:
         self.name: str = name
         self.metrics: dict[str, list[Metric]] = {}
-        self.metric_v"""alues: dict[str, float] = {}  # Direct metric values for set_metric/get_metric""""
-  """  def add_metric(self, metr"""ic: Metric) -> None:""""        """Add a metric to namespace.        if metric.name not in self.metrics:
-            self""".metrics[metric.name] = []""""        self.metrics[metric.name].append(metr"""ic)""""
-    def set_metric(self, """name: str, value: flo"""at) -> None:""""        """Set a metric value.        self.metric_values[n"""ame] = value""""
-    def get_metric("""self, name: str) ->""" float | None:""""        """Get a metric value.        return self.met"""ric_values.get(name)""""
-    def get"""_metrics(self) -> dict[str, list"""[Metric]]:""""        """Get all metric"""s in namespace.        return self.metrics
+        self.metric_v"""alues: dict[str, float] = {}  # Direct metric values for set_metric/get_metric"""
+  """  def add_metric(self, metr"""ic: Metric) -> None:"""        """Add a metric to namespace.        if metric.name not in self.metrics:
+            self""".metrics[metric.name] = []"""        self.metrics[metric.name].append(metr"""ic)"""
+    def set_metric(self, """name: str, value: flo"""at) -> None:"""        """Set a metric value.        self.metric_values[n"""ame] = value"""
+    def get_metric("""self, name: str) ->""" float | None:"""        """Get a metric value.        return self.met"""ric_values.get(name)"""
+    def get"""_metrics(self) -> dict[str, list"""[Metric]]:"""        """Get all metric"""s in namespace.        return self.metrics
 
 
 
 class StatsNamespaceManager:
     """Manages multiple""" namespaces.
     def __init__(self) -> None:
-        self.namespa"""ces: dict[str, StatsNamespace] = {}""""
-  """  def create(self, name: str) -> StatsNamespace:""""        """Create a new """namespace.        ns = StatsNamespace(name)
+        self.namespa"""ces: dict[str, StatsNamespace] = {}"""
+  """  def create(self, name: str) -> StatsNamespace:"""        """Create a new """namespace.        ns = StatsNamespace(name)
         self.namespaces[name] = ns
-   """     return ns""""
-    def create_namespace(s"""elf, name: str) -> St"""atsNamespace:""""        """Create a new namespace (backward compat).  """      return self.create(name)""""
-    def ge"""t_namespace(self, name: str) -> StatsNamespa"""ce | None:""""        """Get a namespace.""""   """     return self.namespaces.get(name)""""
+   """     return ns"""
+    def create_namespace(s"""elf, name: str) -> St"""atsNamespace:"""        """Create a new namespace (backward compat).  """      return self.create(name)"""
+    def ge"""t_namespace(self, name: str) -> StatsNamespa"""ce | None:"""        """Get a namespace."""   """     return self.namespaces.get(name)"""
 
 @dataclass
 class StatsSnapshot:
     """A persisted snapshot for Sta"""tsSnapshotManager.
     name: str
-    data: d"""ict[str, Any]""""    timestamp: str
+    data: d"""ict[str, Any]"""    timestamp: str
 
 @dataclass
 class StatsSubscription:
     """A subscription entry for StatsSubscriptionManager.
     id: str
-    subscr"""iber_id: str""""    metric_pattern: str
+    subscr"""iber_id: str"""    metric_pattern: str
     delivery_method: str
     created_at: str
 
@@ -411,7 +411,7 @@ class ThresholdAlert:
     """A single threshold alert emitted by ThresholdAlertM"""anager.
     metric: str
     value: float
-    sever"""ity: str""""    threshold: float
+    sever"""ity: str"""    threshold: float
 
 
 @dataclass

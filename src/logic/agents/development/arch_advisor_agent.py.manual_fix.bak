@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 # "Agent specializing in architectural analysis and decoupled system design."""
-pylint: disable=too-many-ancestors""""
+pylint: disable=too-many-ancestors""
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -51,7 +51,7 @@ __version__ = VERSION
 
 
 class ArchAdvisorAgent(BaseAgent):
-""""
+"""
 Analyzes codebase coupling and suggests architectural refactors.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -65,7 +65,7 @@ Analyzes codebase coupling and suggests architectural refactors.
 """
 return "# Architectural Analysis\\n\\n## Summary\\nWaiting for scan...\\n
     def analyze_coupling(self) -> str:
-""""
+"""
 Identifies modules with too many outgoing or incoming dependencies.        self.graph_engine.scan_project()
         graph = self.graph_engine.graph
 
@@ -88,5 +88,7 @@ Identifies modules with too many outgoing or incoming dependencies.        self.
 
 
 if __name__ == "__main__":"    main = create_main_function(ArchAdvisorAgent, "ArchAdvisor Agent", "Task")"    main()
+
+"""
 
 """

@@ -63,7 +63,7 @@ __version__ = VERSION
 
 
 class KernelAgent(BaseAgent):
-""""
+"""
 Interacts directly with the host OS to manage environments and perform diagnostics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -140,7 +140,7 @@ __version__ = VERSION
 
 
 class KernelAgent(BaseAgent):
-""""
+"""
 Interacts directly with the host OS to manage environments and "perform diagnostics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

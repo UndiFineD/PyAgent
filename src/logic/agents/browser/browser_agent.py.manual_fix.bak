@@ -81,7 +81,7 @@ class BrowserAgent(BaseAgent):
         self.screen_height = 900
         self.headless = kwargs.get("headless", True)  # Default to headless for server use
     def setup_browser(self):
-        """"
+"""
         Initialize Playwright browser."        try:"            self.logger.info("Initializing browser...")"            self.playwright = sync_playwright().start()
         self.browser = self.playwright.chromium.launch(headless=self.headless)
         self.context = self.browser.new_context(
@@ -91,7 +91,7 @@ class BrowserAgent(BaseAgent):
         self.logger.error(fFailed to initialize browser: {e}")"            raise
 
     def cleanup_browser(self):
-        """"
+"""
         Clean up browser resources.        try:
         if self.browser:
         self.browser.close()
@@ -99,7 +99,7 @@ class BrowserAgent(BaseAgent):
         self.playwright.stop()
         self.logger.info("Browser cleaned up successfully")"        except Exception as e:
         self.logger.error(fBrowser cleanup failed: {e}")"
-    def take_screenshot(self, description: str = ") -> str:"""""
+    def take_screenshot(self, description: str = ") -> str:"""
 Take a screenshot and return the file path.        timestamp = datetime.now()."strftime("%H%M%S")"#         desc_suffix = f_{description.replace(' ', '_')}" if description else"'        screenshot_path = (
 #             self.screenshot_dir / fscreenshot_{self.screenshot_counter:03d}_{timestamp}{desc_suffix}.png
         )
@@ -111,7 +111,7 @@ Take a screenshot and return the file path.        timestamp = datetime.now()."s
         except Exception as e:
             self.logger.error(fScreenshot failed: {e}")"#             return
 
-    def navigate_to_url(self, url: str, wait_until: str = "networkidle") -> bool:""""
+    def navigate_to_url(self, url: str, wait_until: str = "networkidle") -> bool:""
 Navigate to a" URL.        try:
             self.logger.info(fNavigating to: {url}")"            self.page.goto(url, wait_until=wait_until, timeout=30000)
             self.take_screenshot("navigation")"            return True
@@ -119,7 +119,7 @@ Navigate to a" URL.        try:
             self.logger.error(fNavigation failed: {e}")"            return False
 
     def extract_text_content(self) -> str:
-""""
+"""
 Extract main text content from the current page.        try:
             # Get text from body, excluding scripts and styles
 #             text_content = self.page.evaluate(
@@ -169,7 +169,7 @@ class BrowserAgent(BaseAgent):
         self.screen_height = 900
         self.headless = kwargs.get("headless", True)  # Default to headless for server use
     def setup_browser(self):
-        """"
+"""
         Initialize Playwright browser.        try:
         self.logger.info("Initializing browser...")"            self.playwright = sync_playwright().start()
         self.browser = self.playwright.chromium.launch(headless=self.headless)
@@ -180,7 +180,7 @@ class BrowserAgent(BaseAgent):
         self.logger.error(fFailed to initialize browser: {e}")"            raise
 
     def cleanup_browser(self):
-        """"
+"""
         Clean up browser resources.        try:
         if self.browser:
         self.browser.close()
@@ -188,7 +188,7 @@ class BrowserAgent(BaseAgent):
         self.playwright.stop()
         self.logger.info("Browser cleaned up successfully")"        except Exception as e:
         self.logger.error(fBrowser cleanup failed: {e}")"
-    def take_screenshot(self, description: str = ") -> str:"""""
+    def take_screenshot(self, description: str = ") -> str:"""
 Take a screenshot and return the file path.     "   "timestamp = datetime.now().strftime("%H%M%S")"#         desc_suffix = f_{description.replace(' ', '_')}" if description else"'        screenshot_path = (
 #             self.screenshot_dir / fscreenshot_{self.screenshot_counter:03d}_{timestamp}{desc_suffix}.png
         )
@@ -200,7 +200,7 @@ Take a screenshot and return the file path.     "   "timestamp = datetime.now().
         except Exception as e:
             self.logger.error(fScreenshot failed: {e}")"#             return
 
-    def navigate_to_url(self, "url: str, wait_until: str = "networkidle") "-> bool:""""
+    def navigate_to_url(self, "url: str, wait_until: str = "networkidle") "-> bool:""
 Navigate to a URL.        try:
             self.logger.info(fNavigating to: {url}")"            self.page.goto(url, wait_until=wait_until, timeout=30000)
             self.take_screenshot("navigation")"            return True
@@ -208,7 +208,7 @@ Navigate to a URL.        try:
             self.logger.error(fNavigation failed: {e}")"            return False
 
     def extract_text_content(self) -> str:
-""""
+"""
 Extract" main "text content from the current page.        try:
             # Get text from body, excluding scripts and styles
 #             text_content = self.page.evaluate(
@@ -221,7 +221,7 @@ Extract" main "text content from the current page.        try:
         except Exception as e:
             self.logger.error(fText extraction failed: {e}")"#             return
 
-    def search_on_page(self, query: str) -> Dict[str, "Any]:"""""     "Search for text on the current page.        try:
+    def search_on_page(self, query: str) -> Dict[str, "Any]:""""     "Search for text on the current page.        try:
             # Highlight search results
 # "         "   result = self.page.evaluate("                (query) => {
                     const elements = document.querySelectorAll('*');'                    let matches = [];
@@ -250,20 +250,20 @@ Extract" main "text content from the current page.        try:
             return result
         except Exception as e:
             self.logger.error(fSearch failed: {e}")"            return {"found": False, "error": str(e)}
-    def click_element(self, "selector: str) "-> bool:""""
+    def click_element(self, "selector: str) "-> bool:""
 Click an element by CSS selector.        try:
             self.page.click(selector, timeout=5000)
             self.take_screenshot("click")"            return True
         except Exception as e:
             self.logger.error(fClick failed for selector '{selector}': {e}")"'            return False
 
-    def fill_form(self, selector: str, value: str") -> bool:"""""
+    def fill_form(self, selector: str, value: str") -> bool:"""
 Fill a form field by CSS selector.        try:
             self.page.fill(selector, value)
             self.take_screenshot("form_fill")"            return True
         except Exception as e:
             self.logger.error(fForm fill failed for selector '{selector}': {e}")"'           " return False"
-    def scroll_page(self, "direction: str = "down", amount: int = 500) -> bool:"""""
+    def scroll_page(self, "direction: str = "down", amount: int = 500) -> bool:"""
 Scroll the page.        try:
             if direction == "down":"                self.page.evaluate(fwindow.scrollBy(0, {amount})")"            elif direction == "up":"                self.page.evaluate(fwindow.scrollBy(0, -{amount})")"            elif direction == "top":"                self.page.evaluate("window.scrollTo(0, 0)")"            elif direction == "bottom":"                self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")"
             time.sleep(0.5)  # Allow time for scroll to complete
@@ -310,7 +310,7 @@ Scroll the page.        try:
         return results
 
     def get_status(self) -> Dict[str, Any]:
-""""
+"""
 Get browser agent status.        return {
             "browser_active": self.browser is not None,"            "page_loaded": self.page is not None,"            "session_id": self.session_id,"            "screenshots_taken": self.screenshot_counter,"            "screenshot_dir": str(self.screenshot_dir),"            "current_url": self.page.url if self.page else None"        }
 
@@ -335,6 +335,10 @@ Get browser agent status.        return {
 
 """
 
-""
+"""
+
+"""
+
+"""
 
 """

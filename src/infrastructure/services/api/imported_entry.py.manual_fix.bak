@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_changes.py""""
+Auto-extracted class from agent_changes.py""
 from dataclasses import dataclass, field
 
 from src.core.base.lifecycle.version import VERSION
@@ -31,7 +31,7 @@ __version__ = VERSION
 @dataclass
 class ImportedEntry:
 """
-An entry imported from external source.""""
+An entry imported from external source.""
 Attributes:
         source: Where the entry was imported from.
         external_id: ID in the external system.

@@ -65,7 +65,7 @@ __version__ = VERSION
 
 
 class DocumentationIndexerAgent(BaseAgent):
-""""
+"""
 Indexes workspace documentation and provides structured navigation/search.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -73,7 +73,7 @@ Indexes workspace documentation and provides structured navigation/search.
 #             "You are the Documentation Indexer Agent."#             "Your role is to crawl the workspace, build a map of all documentation,"#             "and provide semantic pointers to relevant sections when asked."        )
 
     def build_index(self, root_path: str) -> dict[str, list[str]]:
-""""
+"""
 Crawls the workspace for markdown and text documentation.        index = {"docs": [], "source_comments": [], "readmes": []}"        root = Path(root_path)
 
         for p in root.rglob("*.md"):"            if "README" in p.name:"                index["readmes"].append(str(p.relative_to(root)))"            else:
@@ -84,7 +84,7 @@ Crawls the workspace for markdown and text documentation.        index = {"docs"
         return index
 
     def get_semantic_pointers(self, query: str) -> str:
-""""
+"""
 Returns pointers to documentation relevant to the query.        # This would use semantic search in a real implementation
 #         return fSearching index for: {query}... (Pointers to be generated via embeddings)
 
@@ -120,7 +120,7 @@ __version__ = VERSION
 
 
 class DocumentationIndexerAgent(BaseAgent):
-""""
+"""
 Indexes workspace documentation and provides structured navigation/search.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -128,7 +128,7 @@ Indexes workspace documentation and provides structured navigation/search.
 #             "You are the Documentation Indexer Agent."#             "Your role is to crawl the workspace, build a map of all documentation,"#             "and provide semantic pointers to relevant sections when asked."        )
 
     def build_index(self, root_path: str) -> dict[str, list[str]]:
-""""
+"""
 Crawls the workspace for markdown and text documentation.        index = {"docs": [], "source_comments": [], "readmes": []}"        root = Path(root_path)
 
         for p in root.rglob("*.md"):"            if "README" in p.name:"                index["readmes"].append(str(p.relative_to(root)))"            else:
@@ -139,7 +139,7 @@ Crawls the workspace for markdown and text documentation.        index = {"docs"
         return index
 
     def get_semantic_pointers(self, query: str) -> str:
-""""
+"""
 Returns pointers to documentation relevant to the query.        # This would use semantic search in a real implementation
 #         return fSearching index for: {query}... (Pointers to be generated via embeddings)
 

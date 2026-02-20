@@ -65,7 +65,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
+SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         (
@@ -83,7 +83,7 @@ SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-r'os\\.system\\\\s*\([^)]*\+',""""
+r'os\\.system\\\\s*\([^)]*\+',""
 SecurityIssueType.COMMAND_INJECTION,
             "critical","            "Potential command injection vulnerability","            "Use subprocess with shell=False and proper escaping","        ),
 # [BATCHFIX] Commented metadata/non-Python
@@ -109,13 +109,13 @@ SecurityIssueType.COMMAND_INJECTION,
 
     def __init__(self, file_path: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Initialize the security scanner agent.        super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.vulnerabilities: list[SecurityVulnerability] = []""""
+self.vulnerabilities: list[SecurityVulnerability] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """
 self._system_prompt = "You are a Security Scanner Agent."  # [BATCHFIX] closed string
@@ -123,7 +123,7 @@ self._system_prompt = "You are a Security Scanner Agent."  # [BATCHFIX] closed s
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def scan(self, content: str) -> list[SecurityVulnerability]:""""
+def scan(self, content: str) -> list[SecurityVulnerability]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #         "Scan code for security vulnerabilities."  # [BATCHFIX] closed string
@@ -136,13 +136,13 @@ def scan(self, content: str) -> list[SecurityVulnerability]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.vulnerabilities = []""""
+self.vulnerabilities = []""
 try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-defined]""""
+from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-defined]""
             # Rust returns (line_number, pattern_index, matched_text)
             rust_results = scan_code_vulnerabilities_rust(content)
             for line_num, pattern_idx, _ in rust_results:
@@ -151,7 +151,7 @@ from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-define
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-_, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pattern_idx]""""
+_, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pattern_idx]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #                     self.vulnerabilities.append(
@@ -210,7 +210,7 @@ class SecurityScannerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
+SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         (
@@ -250,12 +250,12 @@ SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
 
     def __init__(self, file_path: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Initialize the security scanner agent.  "   "   super().__init__(file_path)"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.vulnerabilities: list[SecurityVulnerability] = []""""
+self.vulnerabilities: list[SecurityVulnerability] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """
 self._system_prompt = "You are a Security Scanner Agent."  # [BATCHFIX] closed string
@@ -263,7 +263,7 @@ self._system_prompt = "You are a Security Scanner Agent."  # [BATCHFIX] closed s
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def scan(self, content: str) -> list[SecurityVulnerability]:""""
+def scan(self, content: str) -> list[SecurityVulnerability]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #         "Scan code for security vulnerabilities."  # [BATCHFIX] closed string
@@ -276,13 +276,13 @@ def scan(self, content: str) -> list[SecurityVulnerability]:""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.vulnerabilities = []""""
+self.vulnerabilities = []""
 try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-defined]""""
+from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-defined]""
             # Rust returns (line_number, pattern_index, matched_text)
             rust_results = scan_code_vulnerabilities_rust(content)
             for line_num, pattern_idx, _ in rust_results:
@@ -291,7 +291,7 @@ from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-define
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-_, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pattern_idx]""""
+_, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pattern_idx]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #                     self.vulnerabilities.append(
@@ -362,6 +362,8 @@ _, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pattern_idx]""""
 
 """
 
-""
+"""
 
 """
+
+""

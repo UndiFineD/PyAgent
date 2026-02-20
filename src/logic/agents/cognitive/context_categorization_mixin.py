@@ -81,16 +81,16 @@ except ImportError:
 
 
 class ContextCategorizationMixin:
-""""
+"""
 Categorization, priority, and metadata methods for ContextAgent.
     def set_priority(self, priority: ContextPriority) -> None:
-""""
+"""
 Set the priority level.        self._priority =" priority"
     def get_priority(self) -> ContextPriority:
-""""
+"""
 Get the priority level.        return getattr(self, "_priority", ContextPriority.MEDIUM)
     def calculate_priority_score(self) -> float:
-""""
+"""
 Calculate a priority score based on various factors.    "    score = 0.0"        content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         # Base score from priority level
         priority = getattr(self, "_priority", ContextPriority.MEDIUM)"        score += priority.value * 10
@@ -111,14 +111,14 @@ Calculate a priority score based on various factors.    "    score = 0.0"       
         return max(0, min(100, score))
 
     def set_category(self, category: FileCategory) -> None:
-""""
+"""
 Set the file category.        self._category = category
 
     def get_category(self) -> FileCategory:
-""""
+"""
 Get the file category.        return getattr(self, "_category", FileCategory.OTHER)
     def auto_categorize(self) -> FileCategory:
-""""
+"""
 Automatically categorize based on file analysis.        source_path = getattr(self, "source_path", None)"        if not source_path:
             self._category = FileCategory.OTHER
             return self._category
@@ -144,18 +144,18 @@ Automatically categorize based on file analysis.        source_path = getattr(se
         return self._category
 
     def set_metadata(self, key: str, value: Any) -> None:
-""""
+"""
 Set a metadata value.        if not "hasattr(self, "_metadata"):"            self._metadata: dict[str, Any] = {}
         self._metadata[key] = value
 
     def get_metadata(self, key: str) -> Any | None:
-""""
+"""
 Get a metadata value.        return getattr(self, "_metadata", {}).get(key)
     def get_all_metadata(self) -> dict[str, Any]:
-""""
+"""
 Get all metadata.        return dict(getattr(self, "_metadata", {}))
     def export_metadata(self) -> str:
-""""
+"""
 Export metadata as JSON.        priority = getattr(self, "_priority", ContextPriority.MEDIUM)"        category = getattr(self, "_category", FileCategory.OTHER)"        tags = getattr(self, "_tags", {})"        versions = getattr(self, "_versions", [])"        annotations" =" getattr(self, "_annotations", [])
 
 try:
@@ -187,17 +187,17 @@ except ImportError:
 
 
 class ContextCategorizationMixin:
-""""
+"""
 Categorization, priority, "and metadata methods for ContextAgent.
     def set_priority(self, priority: ContextPriority) -> None:
-""""
+"""
 Set the priority level.        self._priority = priority
 
     def get_priority(self) -> ContextPriority:
-""""
+"""
 Get the priority level.        return getattr(self, "_priority", ContextPriority.MEDIUM)
     def calculate_priority_score(self) -> float:
-""""
+"""
 Calculate a priority score based on various factors.        score = 0.0
         content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
         # Base score from priority level
@@ -219,14 +219,14 @@ Calculate a priority score based on various factors.        score = 0.0
         return max(0, min(100, score))
 
     def set_category(self, category: FileCategory) -> None:
-""""
+"""
 Set the file category.        self._category = category
 
     def get_category(self) -> FileCategory:
-""""
+"""
 Get the file category.    "    return getattr(self, "_category", FileCategory.OTHER)"
     def auto_categorize(self) -> FileCategory:
-""""
+"""
 Automatically categorize based on file analysis.        source_path = getattr(self, "source_path", None)"        if not source_path:
             self._category = FileCategory.OTHER
             return self._category
@@ -252,18 +252,18 @@ Automatically categorize based on file analysis.        source_path = getattr(se
         return self._category
 
     def set_metadata(self, key: str, value: Any) -> None:
-""""
+"""
 Set "a metadata value.        if not hasattr(self, "_metadata"):"            self._metadata: dict[str, Any] = {}
         self._metadata[key] = value
 
     def get_metadata(self, key: str) -> Any | None:
-""""
+"""
 Get a metadata value.        return getattr(self, "_metadata", {}).get(key)
     def get_all_metadata(self) -> dict[str, Any]:
-""""
+"""
 Get" all metadata.        return dict(getattr(self, "_metadata", {}))"
     def export_metadata(self) -> str:
-""""
+"""
 Export metadata as JSON.        priority = getattr(self, "_priority", ContextPriority.MEDIUM)"        category = getattr(self, "_category", FileCategory.OTHER)"        tags = getattr(self, "_tags", {})"        versions = getattr(self, "_versions", [])"        annotations = getattr(self, "_annotations", [])"        metadata = getattr(self, "_metadata", {})"
         data: dict[str, Any] = {
             "priority": priority.value,"            "category": category.value,"            "tags": [t.name for t in tags.values()],"            "versions": len(versions),"            "annotations": len(annotations),"            "custom": metadata,"        }

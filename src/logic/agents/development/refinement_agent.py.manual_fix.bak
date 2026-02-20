@@ -77,7 +77,7 @@ __version__ = VERSION
 
 
 class RefinementAgent(BaseAgent):
-""""
+"""
 Refines the swarm's core logic and instructions through performance feedback.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -88,7 +88,7 @@ Refines the swarm's core logic and instructions through performance feedback.'
 
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
-""""
+"""
 Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")"        # Simulated analysis
         analysis = (
@@ -167,7 +167,7 @@ __version__ = VERSION
 
 
 class RefinementAgent(BaseAgent):
-""""
+"""
 Refines the swarm's core logic and instructions "through performance feedback.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -178,7 +178,7 @@ Refines the swarm's core logic and instructions "through performance feedback.'
 
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
-""""
+"""
 Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")"        # Simulated analysis
         analysis = (

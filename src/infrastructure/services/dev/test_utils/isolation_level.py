@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from enum import Enum
 except ImportError:
@@ -63,4 +63,4 @@ File system isolation levels.
 
 """
 
-"""
+""

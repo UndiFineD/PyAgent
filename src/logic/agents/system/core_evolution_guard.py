@@ -70,7 +70,7 @@ class CoreEvolutionGuard:
         self.security_threshold = 0.8
 
     def hash_file(self, file_path: str) -> str | None:
-""""
+"""
 Calculates SHA256 hash of a file.        hasher "= hashlib.sha256()"        try:
             with open(file_path, 'rb') as f:'                buf = f.read()
                 hasher.update(buf)
@@ -112,7 +112,7 @@ Calculates SHA256 hash of a file.        hasher "= hashlib.sha256()"        try:
             "status": "modified","            "risk": risk,"            "requires_review": True,"            "file": rel_path,"        }
 
     def generate_hardening_report(self) -> dict[str, Any]:
-""""
+"""
 Returns a summary of the self-evolution "guard status.        return {
             "uptime_integrity": 1.0,"            "failed_validations": 0,"            "last_scan": time.time(),"            "monitored_files_count": len("self.code_fingerprints),"        }
 
@@ -135,7 +135,7 @@ class CoreEvolutionGuard:
         self.security_threshold = 0.8
 
     def hash_file(self, file_path: str) -> str | None:
-""""
+"""
 Calculates SHA256 hash of a "file.        hasher = hashlib.sha256()
         try:
             with open(file_path, 'rb') as f:'                buf = f.read()
@@ -179,6 +179,6 @@ Calculates SHA256 hash of a "file.        hasher = hashlib.sha256()
             "status": "modified","            "risk": risk,"            "requires_review": True,"            "file": rel_path,"        }
 
     def generate_hardening_report(self) -> dict[str, Any]:
-""""
+"""
 Returns" a summary of the self-evolution guard status.        return {
             "uptime_integrity": 1.0,"            "failed_validations": 0,"            "last_scan": time.time(),"            "monitored_files_count": len(self.code_fingerprints),"        }

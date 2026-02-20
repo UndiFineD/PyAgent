@@ -15,7 +15,7 @@
 
 
 """
-Engine for automated self-repair of agent tools and modules.""""Detects runtime errors and orchestrates CoderAgents to apply fixes.
+Engine for automated self-repair of agent tools and modules."""Detects runtime errors and orchestrates CoderAgents to apply fixes.
 """
 
 

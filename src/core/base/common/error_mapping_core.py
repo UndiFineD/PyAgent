@@ -1,26 +1,10 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+from __future__ import annotations
 
+"""Unified Error Mapping core (minimal, parser-safe fallback).
 
-"""
-"""
-Unified Error Mapping core.
-
-"""
-Provides a minimal, parser-safe implementation used by tests when the
-full implementation is unavailable. This preserves the public API
-used by other modules.
+This lightweight implementation provides a stable API used by tests and
+other modules when the full implementation is not available.
 """
 from typing import Dict, Optional
 
@@ -35,9 +19,9 @@ except Exception:  # pragma: no cover - fallback for test environment
 
 
 class ErrorMappingCore(BaseCore):
-    ""
-Minimal error mapping helper.""
-ERROR_CODES: Dict[str, str] = {
+    """Minimal error mapping helper."""
+
+    ERROR_CODES: Dict[str, str] = {
         "FileSystemError": "PA-1001",
         "NetworkTimeout": "PA-1002",
         "DiskFull": "PA-1003",

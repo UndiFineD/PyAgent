@@ -48,7 +48,7 @@ A static class for which contain some useful variables and methods
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        filename, line_no, func_name, text = stack[-2]""""
+        filename, line_no, func_name, text = stack[-2]""
         # [BATCHFIX] Commented metadata/non-Python
 """
         formatted_message = f"{filename}:{line_no}: {text_output}"  # [BATCHFIX] closed string"        print(color + formatted_message + UtilHelper.ENDC)
@@ -175,7 +175,7 @@ class AutoApkScanner(object):
 
     def return_abs_path(self, path):
         pass  # [BATCHFIX] inserted for empty block
-        """"   "        Returns the absolute path
+        """   "        Returns the absolute path
         """ ""        return os.path.abspath(path)
 
     def apk_exists(self, apk_filename):
@@ -410,3 +410,5 @@ class AutoApkScanner(object):
         # [BATCHFIX] Commented metadata/non-Python
 """
         UtilHelper.mod_print(f"[-] {str(e)} at line {line_number}", UtilHelper.FAIL)"        exit(1)
+
+"""

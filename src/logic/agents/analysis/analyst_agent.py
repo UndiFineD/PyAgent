@@ -14,7 +14,7 @@
 
 
 """
-""""
+"""
 """
 AnalystAgent - Code analysis and orchestration
 
@@ -87,4 +87,8 @@ Specialized agent for code analysis, performance profiling, and dependency manag
 """
         if isinstance(task_data, dict) and "target_path" in task_data:"            target_path = task_data["target_path"]"            context = task_data.get("context", CascadeContext())"            return await self.run_analysis(target_path, context)
         return {"error": "Invalid task format"}
+"""
+
+"""
+
 """

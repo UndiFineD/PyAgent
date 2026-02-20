@@ -88,7 +88,7 @@ class ChunkMetrics:
 
 @dataclass
 class PrefillChunk:
-    """A single chunk of prefill tokens.""""
+    """A single chunk of prefill tokens."""
     Attributes:
         chunk_id: Unique identifier for this chunk
         request_id: Parent request identifier
@@ -133,7 +133,7 @@ class PrefillChunk:
 
 @dataclass
 class ChunkedRequest:
-    """A request split into multiple chunks.""""
+    """A request split into multiple chunks."""
     Attributes:
         request_id: Unique request identifier
         total_tokens: Total prompt tokens

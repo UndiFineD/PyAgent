@@ -15,7 +15,7 @@
 
 
 """
-Auto-extracted class from agent_changes.py""""
+Auto-extracted class from agent_changes.py"""
 
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ __version__ = VERSION
 
 
 class ExternalImporter:
-    """Imports changelog entries from external sources.""""
+    """Imports changelog entries from external sources."""
     Supports importing from GitHub releases, JIRA, and other sources.
 
     Attributes:
@@ -70,7 +70,7 @@ class ExternalImporter:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
 
     def import_github_releases(self, owner: str, repo: str, pages: int = 1) -> list[ImportedEntry]:
-        """Import entries from GitHub releases using the official API (Simulated Tier 1).""""
+        """Import entries from GitHub releases using the official API (Simulated Tier 1)."""
         Args:
             owner: Repository owner.
             repo: Repository name.
@@ -121,7 +121,7 @@ class ExternalImporter:
         return entries
 
     def import_jira(self, project_key: str, max_results: int = 50) -> list[ImportedEntry]:
-        """Import entries from JIRA using REST API (v2 feature).""""
+        """Import entries from JIRA using REST API (v2 feature)."""
         Args:
             project_key: JIRA project key.
             max_results: Max issues to fetch.
@@ -165,7 +165,7 @@ class ExternalImporter:
         return entries
 
     def convert_to_changelog_entries(self) -> list[ChangelogEntry]:
-        """Convert imported entries to changelog entries.""""
+        """Convert imported entries to changelog entries."""
         Returns:
             List of ChangelogEntry instances.
                 result: list[ChangelogEntry] = []

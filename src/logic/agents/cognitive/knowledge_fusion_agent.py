@@ -34,7 +34,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class KnowledgeFusionAgent(BaseAgent):
-""""
+"""
 Fuses distributed memory shards and resolves conflicts in the collective knowledge base.
 
     def __init__(self, file_path: str) -> None:
@@ -49,7 +49,7 @@ Fuses distributed memory shards and resolves conflicts in the collective knowled
             with open(self.global_graph_path, encoding="utf-8") as f:"                return json.load(f)
         return {"nodes": [], "edges": []}
     def _save_global_graph(self, graph: dict[str, Any]) -> None:
-""""
+"""
 Saves graph atomically using temp file.        temp_path = self.global_graph_path.with_suffix(".tmp")"        try:
             with open(temp_path, "w", encoding="utf-8") as f:"                json.dump(graph, f, indent=2)
             temp_path.replace(self.global_graph_path)
@@ -92,7 +92,7 @@ Saves graph atomically using temp file.        temp_path = self.global_graph_pat
 
     @as_tool
     def resolve_conflicts(self, keyword: str) -> str:
-""""
+"""
 Scans the global graph for contradictory information regarding a specific topic.        # Mock logic for conflict resolution
 
 #         return fConflict resolution for '{keyword}': No critical contradictions found. Knowledge remains stable.

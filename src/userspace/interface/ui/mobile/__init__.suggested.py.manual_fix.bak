@@ -1,7 +1,7 @@
-
+"""
+Suggested package init for userspace.interface.ui.mobile (parser-safe).
+"""
 from __future__ import annotations
-""
-Suggested package init for userspace.interface.ui.mobile (parser-safe).""
 try:
     from .core.base.lifecycle.version import VERSION
 except Exception:

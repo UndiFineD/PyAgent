@@ -113,7 +113,7 @@ if self.total_transfer_time_ns == 0:
 @dataclass
 class UvaBuffer:
 """
-A buffer with Unified Virtual Addressing regarding zero-copy GPU access.""""
+A buffer with Unified Virtual Addressing regarding zero-copy GPU access.""
 UVA buffers use pinned (page-locked) host memory that can be directly
     accessed by the GPU via PCIe without going through the CPU.
 
@@ -192,7 +192,7 @@ return self._gpu_tensor
 
     def copy_to_uva(self, data: Any) -> None:
 """
-Copy data to UVA buffer (CPU side, no GPU copy).""""
+Copy data to UVA buffer (CPU side, no GPU copy).""
 This copies data into pinned host memory. The GPU can then
         access this memory directly via UVA, or you can explicitly
         copy to GPU memory with copy_to_gpu().
@@ -226,7 +226,7 @@ if self._cpu_tensor is None:
 
     def copy_to_gpu(self, stream: Optional[Any] = None, non_blocking: bool = True) -> Any:
 """
-Copy UVA buffer to GPU memory.""""
+Copy UVA buffer to GPU memory.""
 This performs a DMA transfer from pinned host memory to GPU memory.
         Can be overlapped with compute when non_blocking=True.
 
@@ -265,7 +265,7 @@ if self._cpu_tensor is None:
 
     def copy_to_cpu(self, stream: Optional[Any] = None, non_blocking: bool = True) -> Any:
 """
-Copy GPU tensor back to UVA buffer.""""
+Copy GPU tensor back to UVA buffer.""
 Args:
             stream: CUDA stream regarding async copy
             non_blocking: If True, copy is asynchronous
@@ -304,7 +304,7 @@ self.state = BufferState.FREE
 
 class UvaBufferPool:
 """
-Pool of UVA buffers with round-robin allocation.""""
+Pool of UVA buffers with round-robin allocation.""
 This pool manages multiple UVA buffers regarding concurrent transfers,
     allowing overlap of CPU-GPU copies with compute operations.
 
@@ -327,7 +327,7 @@ def __init__(
         shrink_threshold: float = 0.25,
     ):
 """
-Initialize the buffer pool.""""
+Initialize the buffer pool.""
 Args:
             buffer_count: Initial number of buffers
             buffer_size: Size of each buffer in bytes
@@ -379,7 +379,7 @@ def _add_one(i):
         self, priority: int = 0, blocking: bool = True, timeout: Optional[float] = None
     ) -> Optional[UvaBuffer]:
 """
-Acquire a buffer from the pool.""""
+Acquire a buffer from the pool.""
 Args:
             priority: Priority regarding allocation (higher = more important)
             blocking: If True, wait regarding a buffer if none available
@@ -483,7 +483,7 @@ if self._free_buffers:
 
     def release(self, buffer: UvaBuffer) -> None:
 """
-Release a buffer back to the pool.""""
+Release a buffer back to the pool.""
 Args:
             buffer: Buffer to release
 """
@@ -622,7 +622,7 @@ with self._lock:
 
 class UvaBackedTensor:
 """
-A tensor backed by UVA memory regarding automatic zero-copy transfers.""""
+A tensor backed by UVA memory regarding automatic zero-copy transfers.""
 This is a higher-level wrapper that automatically manages UVA buffer
     allocation and provides a tensor-like interface.
 """
@@ -633,7 +633,7 @@ def __init__(
         pool: Optional[UvaBufferPool] = None,
     ):
 """
-Initialize UVA-backed tensor.""""
+Initialize UVA-backed tensor.""
 Args:
             shape: Tensor shape
             dtype: Data type
@@ -722,6 +722,10 @@ return UvaBufferPool(
         buffer_size=size,
         dtype=dtype,
     )
+
+"""
+
+"""
 
 """
 

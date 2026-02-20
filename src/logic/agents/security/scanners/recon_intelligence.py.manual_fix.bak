@@ -116,7 +116,7 @@ def get_eviltree_sensitive_patterns() -> Dict[str, str]:"Regex and keywords for 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_common_http_ports(scale: str = "medium") -> List[int]:""""
+def get_common_http_ports(scale: str = "medium") -> List[int]:""
 Returns lists of common HTTP ports for probing (Ported from fprobe).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 # "        scales = {"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -221,7 +221,7 @@ return scales.get(scale, scales["medium"])
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
+def __init__(self, session: Optional[aiohttp.ClientSession] = None):""
 self.session = session
         self._own_session = False
 
@@ -267,7 +267,7 @@ async def calculate_favicon_hash(self, url: str, mode: str = "mmh3") -> Optional
 
     def get_shodan_favicon_query(self, mmh3_hash: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Returns the Shodan query string for a given favicon hash.#         return fhttp.favicon.hash:{mmh3_hash}
 
 # [BATCHFIX] Commented metadata/non-Python
@@ -358,7 +358,7 @@ found = re.findall(r"[a-zA-Z0-9_\-\\.]+", js_content)"        words = set()
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def scan_favicon_network(self, targets: List[str], source_favicon_url: str) -> List[str]:""""
+async def scan_favicon_network(self, targets: List[str], source_favicon_url: str) -> List[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Scans a list of targets for a matching favicon hash."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 #         source_hash =" await self.calculate_favicon_hash(source_favicon_url)"  # [BATCHFIX] closed string"        if not source_hash:
@@ -366,12 +366,12 @@ async def scan_favicon_network(self, targets: List[str], source_favicon_url: str
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
+return []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-matches = []""""
+matches = []""
 async def check_target(target):
             # Try /favicon.ico
             if not target.startswith("http"):"#                 target = fhttp://{target}
@@ -389,7 +389,7 @@ favicon_url = target.rstrip("/") + "/favicon.ico"  # [BATCHFIX] closed string"  
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def discover_subdomains_ct(self, domain: str) -> List[str]:""""
+async def discover_subdomains_ct(self, domain: str) -> List[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Discovers subdomains via Google Transparency Report (CT logs)."  # [BATCHFIX] closed string"        subdomains = set()
         try:
@@ -411,12 +411,12 @@ url = f"{base_url}?include_subdomains=true&domain={domain}"  # [BATCHFIX] closed
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-if data and len(data) > 0 and len(data[0]) > 1:""""
+if data and len(data) > 0 and len(data[0]) > 1:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-for entry in data[0][1]:""""
+for entry in data[0][1]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -426,7 +426,7 @@ if isinstance(entry, list) and len(entry) > 1:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-subdomains.add(entry[1])""""
+subdomains.add(entry[1])""
 except Exception:
             pass
         return sorted(list(subdomains))
@@ -451,7 +451,7 @@ except Exception:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def generate_403_bypass_payloads(self, url: str, path: str) -> List[Dict]:""""
+def generate_403_bypass_payloads(self, url: str, path: str) -> List[Dict]:""
 Generates common 403 bypass payloads (Path and Header manipulation).
 # [BATCHFIX] Commented metadata/non-Python
 #         Ported from 0xSojalSec-Bypass-Four03 and 0xSojalSec-"BurpSuite_403Bypasser."  # [BATCHFIX] closed string"        base_url = url.rstrip("/")"        clean_path = path.strip("/")
@@ -459,7 +459,7 @@ Generates common 403 bypass payloads (Path and Header manipulation).
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-payloads = []""""
+payloads = []""
         # Path manipulation
         fuzz_suffixes = [
             "/%2f/","            "/./","            "//","            "?","            "#","            "%3b/","            "..;/","            ";","            "/%00/","            "/%0d/","            "/%23/","            "/*/","            "/%252e**/","        ]
@@ -498,6 +498,10 @@ methods = ["POST", "PUT", "PATCH", "TRACE", "CONNECT"]"        for method in met
 
 """
 
-""
+"""
+
+"""
+
+"""
 
 """

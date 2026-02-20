@@ -54,7 +54,7 @@ __version__ = VERSION
 
 
 class ConfigAgent(BaseAgent):
-""""
+"""
 Ensures the agent fleet has all necessary configurations and API keys.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -65,7 +65,7 @@ Ensures the agent fleet has all necessary configurations and API keys.
 
     @as_tool
     def validate_env(self) -> str:
-""""
+"""
 Checks for required environment variables.        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]"        success, missing = self.validator.validate_env_vars(required)
 
         report = ["## ️ Environment Validation\\n"]"        if success:
@@ -74,7 +74,7 @@ Checks for required environment variables.        required = ["OPENAI_API_KEY", 
         return "\\n".join(report)
     @as_tool
     def validate_models_yaml(self) -> str:
-""""
+"""
 Verifies the integrity of models.yaml.#         config_path = self.workspace_root / "config" / "models.yaml"        if not config_path.exists():
 #             return " `config/models.yaml` not found."
         try:
@@ -98,7 +98,7 @@ __version__ = VERSION
 
 
 class ConfigAgent(BaseAgent):
-""""
+"""
 Ensures the agent fleet has all necessary configurations" and API keys.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -109,7 +109,7 @@ Ensures the agent fleet has all necessary configurations" and API keys.
 
     @as_tool
     def validate_env(self) -> str:
-""""
+"""
 Checks for required environment variables.        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]"        success, missing = self.validator.validate_env_vars(required)
 
         report = ["## ️ Environment Validation\\n"]"        if success:
@@ -118,7 +118,7 @@ Checks for required environment variables.        required = ["OPENAI_API_KEY", 
         return "\\n".join(report)
     @as_tool
     def validate_models_yaml(self) -> str:
-""""
+"""
 Verifies the integrity of models.yaml.#         config_path = self.workspace_root / "config" / "models.yaml"        if not config_path.exists():
 #             return " `config/models.yaml` not found."
         try:

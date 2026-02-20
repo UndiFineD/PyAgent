@@ -43,7 +43,7 @@ Searches changelog content across project history.    Provides search functional
         >>> results=searcher.search("bug fix", changelog_content)"    
     def search(self, query: str, content: str) -> list[SearchResult]:
 """
-Search for query in changelog content.""""
+Search for query in changelog content.""
 Args:
             query: Search query string.
             content: Changelog content to search.
@@ -101,7 +101,7 @@ Args:
 
     def _calculate_score(self, query: str, text: str) -> float:
 """
-Calculate relevance score for a match.""""
+Calculate relevance score for a match.""
 Args:
             query: Search query.
             text: Text containing the match.

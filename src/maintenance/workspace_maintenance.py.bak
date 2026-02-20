@@ -77,7 +77,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
         ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache","        ".ruff_cache", ".agent_cache", "target", "node_modules","        ".hypothesis", "__pycache__", "reports", "archive""    }
 
     STANDARD_HEADER = """
-#!/usr/bin/env python3""""
+#!/usr/bin/env python3"""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -215,7 +215,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                     if "limitations under the License." in line:"                        header_end_idx = i + 1
                         break
 
-                module_name: str = path.stem.replace("_", " ").title()"                docstring: str = f'\\n"""\\n{module_name} module.\\n"""\\n'""""'                new_content: str = "\\n".join(lines[:header_end_idx]) + docstring + "\\n".join(lines[header_end_idx:])"                path.write_text(new_content, encoding="utf-8")"        except (IOError, OSError, UnicodeEncodeError) as e:
+                module_name: str = path.stem.replace("_", " ").title()"                docstring: str = f'\\n"""\\n{module_name} module.\\n"""\\n'"""'                new_content: str = "\\n".join(lines[:header_end_idx]) + docstring + "\\n".join(lines[header_end_idx:])"                path.write_text(new_content, encoding="utf-8")"        except (IOError, OSError, UnicodeEncodeError) as e:
             logger.error(f"Error applying docstring to {path}: {e}")"
     def fix_pylint_violations(self) -> None:
         """Walks through the workspace and applies available Pylint fixes.        for root, _, files in os.walk(self.workspace_root):

@@ -63,7 +63,7 @@ __version__ = VERSION
 
 class ErrorBudgetManager:
 """
-Manages error budgets for SLO tracking.""""
+Manages error budgets for SLO tracking.""
 Tracks error budget consumption over time periods
     to support SLO management.
 
@@ -76,7 +76,7 @@ Initialize the error budget manager.        self.budgets: dict[str, ErrorBudget]
 
     def create_budget(self, name: str, total: float, period_days: int = 30) -> ErrorBudget:
 """
-Create an error budget.""""
+Create an error budget.""
 Args:
             name: Budget name.
             total: Total budget amount.
@@ -97,7 +97,7 @@ Args:
 
     def consume(self, name: str, amount: float) -> bool:
 """
-Consume error budget.""""
+Consume error budget.""
 Args:
             name: Budget name.
             amount: Amount to consume.
@@ -114,7 +114,7 @@ Args:
 
     def get_remaining(self, name: str) -> float:
 """
-Get remaining budget.""""
+Get remaining budget.""
 Args:
             name: Budget name.
 

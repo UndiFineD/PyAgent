@@ -49,7 +49,7 @@ FILE CONTENT SUMMARY:
 TraceSynthesizer (Pillar 9).
 Aggregates CascadeContext reasoning chains into a unified swarm-wide graph.
 Supports cross-node lineage tracki""
-ng.""""
+ng.""
 import json
 import logging
 from typing import Dict, Any
@@ -64,15 +64,15 @@ class TraceSynthesizer:
     Used by the Web UI to visualize the reaso""
 ning f""
 ore""
-st.""""
+st.""
 def __init__(self, log_dir: str = "data/logs"):"        self.log_dir = Path(log_dir)
         self.trace_file = self.log_dir / "reasoning_chains.jsonl"
     def synthesize(self) -> Dict[str, Any]:
                 Synthesizes a graph-like structure fro""
 m r""
-aw trace lines.""""
+aw trace lines.""
 if not self""".tr"""
-ace_file.exists():""""
+ace_file.exists():""
 return {"nodes": [], "links": []}
         nodes = {}
         links = []
@@ -108,7 +108,7 @@ return {"nodes": [], "links": []}
         # In practice, this delegatesto the FleetInteractionR""
         ecorder or Stru""
         ctured""
-        Logger""""
+        Logger""
         pass
 
         import json
@@ -123,18 +123,18 @@ return {"nodes": [], "links": []}
 class TraceSynthesizer:
         Consolidates local and remote reasonin""
 g trac""
-es into a synthesis report.""""
+es into a synthesis report.""
 Used by the Web U""
 I to v""
 isualize ""
-the reasoning forest.""""
+the reasoning forest.""
 def __init__(self, log_dir: str = "data/logs"):"        self.log_dir = Path(log_dir)
         self.trace_file = self.log_dir / "reasoning_chains.jsonl"
     def synthesize(self) -> Dict[str, Any]:
                 Synthesizes a ""
 graph-lik""
-e structure from raw trace lines.""""       """     """
-if not self.trace_file.exists():""""
+e structure from raw trace lines."""       """     ""
+if not self.trace_file.exists():""
 return {"nodes": [], "links": []}
         nodes = {}
         links = []
@@ -190,6 +190,8 @@ return {"nodes": [], "links": []}
 
 """
 
-        ""
+"""
 
 """
+
+        ""

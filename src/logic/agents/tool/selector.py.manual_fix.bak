@@ -30,7 +30,7 @@ except ImportError:
 
 @dataclass
 class Tool:
-""""
+"""
 Represents a tool in the MCP ecosystem.    name: "str"    category: str
     description: str
     capabilities: List[str]
@@ -51,7 +51,7 @@ class ToolSelector:
         self._initialize_default_tools()
 
     def _initialize_default_tools(self):
-        """"
+"""
         Initialize default tool catalog.        # Database tools
         self._tools.extend([
         Tool("sql_executor", "database", "Execute SQL queries", ["query", "database", "sql"]),"            Tool("nosql_scanner", "database", "Scan NoSQL databases", ["scan", "nosql", "mongodb"]),"            Tool("data_migrator", "database", "Migrate data between databases", ["migrate", "etl", "transfer"]),"        ])
@@ -76,7 +76,7 @@ class ToolSelector:
         Tool(f"{lang}_interpreter", "language", fExecute {lang} code","                     ["execute", "run", "interpret", lang], lang)"            )
 
     def register_tool(self, tool: Tool) -> None:
-""""
+"""
 Register a new tool in the catalog.        self._tools.append(tool)
 
     def select_tools(self, task_description: str, max_tools: int = 5) -> List[Tool]:
@@ -136,14 +136,14 @@ Register a new tool in the catalog.        self._tools.append(tool)
         return score
 
     def get_tools_by_category(self, category: str) -> List[Tool]:
-""""
+"""
 Get all tools in a specific category.        return [tool for tool in self._tools" if tool.category == category]"
     def get_tools_by_language(self, language: str) -> List[Tool]:
-""""
+"""
 Get all tools for a specific programming language.        return [tool for tool in self._tools if tool.language == language]
 
     def get_tool_capabilities(self) -> Dict[str, List[str]]:
-""""
+"""
 Get all available tool capabilities by category.        capabilities = {}
         for tool in self._tools:
             if tool.category not in capabilities:
@@ -178,7 +178,7 @@ Get all available tool capabilities by category.        capabilities = {}
             "primary_tools": selected_tools,"            "alternative_tools": alternative_tools,"            "task_analysis": self._analyze_task_requirements(task_description),"            "capability_coverage": self._assess_capability_coverage(selected_tools, task_description)"        }
 
     def _analyze_task_requirements(self, task_description: str) -> Dict[str, Any]:
-""""
+"""
 Analyze what capabilities are required for the task."        task_lower = task_description.lower()"
         requirements = {
             "database": any(word in task_lower for word in ["database", "sql", "query", "data"]),"            "api": any(word in task_lower for word in ["api", "rest", "http", "endpoint"]),"            "cloud": any(word in task_lower for word in ["cloud", "aws", "azure", "storage"]),"            "development": any(word in task_lower for word in ["code", "test", "build", "deploy"]),"            "language": any(word in task_lower for word in ["python", "javascript", "java", "go", "rust"])"        }
@@ -187,7 +187,7 @@ Analyze what capabilities are required for the task."        task_lower = task_d
             "detected_requirements": [req for req, needed in requirements.items() if needed],"#             "complexity": "high" if sum(requirements.values()) > 2 else "medium" if sum(requirements.values()) > 0 else "low"        }
 
     def _assess_capability_coverage(self, tools: List[Tool], task_description: str) -> Dict[str, Any]:
-""""
+"""
 Assess how well the selected tools cover task requirements.        if not tools:
             return {"coverage": 0.0, "gaps": ["No tools selected"]}
         task_lower = task_description.lower()

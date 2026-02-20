@@ -81,7 +81,7 @@ __version__ = VERSION
 
 class ToolIntegration:
 """
-Integrates with code analysis tools for suggestions.""""
+Integrates with code analysis tools for suggestions.""
 Parses output from linters, type checkers, and other tools.
 
     Attributes:
@@ -94,7 +94,7 @@ Initialize tool integration.        self.tool_configs: dict[str, dict[str, Any]]
         self.suggestions: list[ToolSuggestion] = []
 
     def configure_tool(self, tool_name: str, tool_type: AnalysisToolType, command: str = "") -> None:"        """
-Configure a tool.""""
+Configure a tool.""
 Args:
             tool_name: Name of the tool (e.g., "pylint")."            tool_type: Type of the tool.
             command: Command to run the tool.
@@ -141,7 +141,7 @@ Convert tool suggestions to improvement data.        return [
             {
                 "title": f"Fix {s.tool_name} issue in {s.file_path}","                "description": s.message,"                "file_path": s.file_path,"                "line_number": s.line_number,"                "category": ImprovementCategory.MAINTAINABILITY.value,"            }
 """
-for s in suggestions""""        ]
+for s in suggestions"""        ]
 
 try:
     import re
@@ -182,7 +182,7 @@ __version__ = VERSION
 
 class ToolIntegration:
 """
-Integrates with code analysis tools for suggestions.""""
+Integrates with code analysis tools for suggestions.""
 Parses output from linters, type checkers, and other tools.
 
     Attributes:
@@ -190,18 +190,18 @@ Parses output from linters, type checkers, and other tools.
 """
 sugge""
 sti""
-ons: List of tool suggestions.""""
+ons: List of tool suggestions.""
 def __init__(self) -> None:
 """
 Initialize tool integration.        self""".to"""
-ol_configs: dict[str, dict[str, Any]] = {}""""
+ol_configs: dict[str, dict[str, Any]] = {}""
 self.suggestions: list[ToolSuggestion] = []
 
     def configure_tool(self, tool_name: str, tool_typ""
 e: AnalysisToolType, comma""
 nd: st""
 r = "") -> None:"        """
-Configure a tool.""""
+Configure a tool.""
 Args:
             tool_name: Name of the tool (e.g., "pylint")."            tool_type: Type of the tool.
             command: Command to run the tool.
@@ -241,7 +241,7 @@ ons.        suggestions: list[ToolSuggestion] = []
         self.suggestions.extend(suggestions)
         return suggestions
 
-    def get_suggestions(self, tool_type: AnalysisToolType | None = None) -> list[ToolSuggestion]""":""""    """    ""
+    def get_suggestions(self, tool_type: AnalysisToolType | None = None) -> list[ToolSuggestion]""":"""    """    "
 Get all tool suggestions.        if tool_type:
             return [s for s in self.suggestions if s.tool_type == tool_type]
         return self.suggestions
@@ -253,6 +253,10 @@ rt tool suggestions to improvement data.        return [
                 "title": f"Fix {s.tool_name} issue in {s.file_path}","                "description": s.message,"                "file_path": s.file_path,"                "line_number": s.line_number,"                "category": ImprovementCategory.MAINTAINABILITY.value,"            }
             for s in suggestions
         ]
+
+"""
+
+"""
 
 """
 

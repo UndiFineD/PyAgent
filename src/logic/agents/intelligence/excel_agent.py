@@ -49,7 +49,7 @@ except ImportError:
 
 
 class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in Excel spreadsheet processing and data extraction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -63,7 +63,7 @@ except ImportError:
 
 
 class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in Excel spreadsheet processing and data extraction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

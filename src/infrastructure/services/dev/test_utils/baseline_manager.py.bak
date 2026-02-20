@@ -15,7 +15,7 @@
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py"""
 
 
 from __future__ import annotations
@@ -54,7 +54,7 @@ __version__ = VERSION
 
 
 class BaselineManager:
-    """Manages test baselines for comparison.""""
+    """Manages test baselines for comparison."""
     Stores and compares baselines for regression testing.
 
     Example:
@@ -63,7 +63,7 @@ class BaselineManager:
         # Later...
         baseline=manager.load_baseline("perf")"        diff=manager.compare("perf", {"latency": 120, "data/memory": 50})"    
     def __init__(self, baseline_dir: Path) -> None:
-        """Initialize manager.""""
+        """Initialize manager."""
         Args:
             baseline_dir: Directory for baseline files.
                 self.baseline_dir = baseline_dir
@@ -72,7 +72,7 @@ class BaselineManager:
     def _get_path(self, name: str) -> Path:
         """Get path for baseline file.        return self.baseline_dir / f"{name}.baseline.json""
     def save_baseline(self, name: str, values: dict[str, Any]) -> TestBaseline:
-        """Save a baseline.""""
+        """Save a baseline."""
         Args:
             name: Baseline name.
             values: Baseline values.
@@ -94,7 +94,7 @@ class BaselineManager:
         return baseline
 
     def load_baseline(self, name: str) -> TestBaseline | None:
-        """Load a baseline.""""
+        """Load a baseline."""
         Args:
             name: Baseline name.
 
@@ -115,7 +115,7 @@ class BaselineManager:
         current: dict[str, Any],
         tolerance: float = 0.1,
     ) -> dict[str, Any]:
-        """Compare current values against baseline.""""
+        """Compare current values against baseline."""
         Args:
             name: Baseline name.
             current: Current values.

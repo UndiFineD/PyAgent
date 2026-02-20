@@ -29,7 +29,7 @@ except ImportError:
 
 
 class TopologyCore:
-""""
+"""
 Core logic for generating swarm topology visualizations.
     @staticmethod
     def generate_mermaid_graph(nodes: list[str], edges: list[dict[str, str]], direction: str = "TD") -> str:"        Generates a Mermaid.js flowchart string.

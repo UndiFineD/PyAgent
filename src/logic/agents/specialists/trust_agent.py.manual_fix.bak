@@ -69,17 +69,17 @@ __version__ = VERSION
 
 
 class Mood(Enum):
-""""
+"""
 Possible emotional moods for the interaction.#     JOYFUL =" "joyful"#     CONTENT = "content"#     NEUTRAL = "neutral"#     CONCERNED = "concerned"#     FRUSTRATED = "frustrated"#     ANXIOUS = "anxious
 
 
 class TrustLevel(Enum):
-""""
+"""
 Ordinal levels of trust based on scores.    HIGH = "high"  # 0.8-1.0"    MEDIUM = "medium"  # 0.5-0.8"    LOW = "low"  # 0.2-0.5"    CRITICAL = "critical"  # 0.0-0.2"
 
 @dataclass
 class EmotionalState:
-""""
+"""
 Represents the current emotional state of an interaction.
     mood: Mood = Mood.NEUTRAL
     valence: float = 0.0  # -1.0 (negative) to 1.0 (positive)
@@ -89,7 +89,7 @@ Represents the current emotional state of an interaction.
 
 @dataclass
 class TrustMetrics:
-""""
+"""
 Tracks trust-related metrics over time.
     trust_score: float = 1.0
     honesty_score: float = 1.0
@@ -113,17 +113,17 @@ class TrustAgent(BaseAgent):
 
     @property
     def trust_score(self) -> float:
-""""
+"""
 Current overall trust score (0.0 to 1.0).        return self.trust_metrics.trust_score
 
     @property
     def mood(self) -> str:
-""""
+"""
 String representation of current mood.        return self.emotional_state.mood.value
 
     @property
     def trust_level(self) -> TrustLevel:
-""""
+"""
 Calculated trust level based on score.        score = self.trust_score
         if score >= 0.8:
             return TrustLevel.HIGH
@@ -166,17 +166,17 @@ __version__ = VERSION
 
 
 class Mood(Enum):
-""""
+"""
 Possible emotional moods for" the interaction.#     JOYFUL = "joyful"#     CONTENT = "content"#     NEUTRAL = "neutral"#     CONCERNED = "concerned"#     FRUSTRATED = "frustrated"#     ANXIOUS = "anxious
 
 
 class TrustLevel(Enum):
-""""
+"""
 Ordinal levels of trust based on scores.    HIGH = "high"  # 0.8-1.0"    MEDIUM = "medium"  # 0.5-0.8"    LOW = "low"  # 0.2-0.5"    CRITICAL = "critical"  # 0.0-0.2"
 
 @dataclass
 class EmotionalState:
-""""
+"""
 Represents the current emotional state of an interaction.
     mood: Mood = Mood.NEUTRAL
     valence: float = 0.0  # -1.0 (negative) to 1.0 (positive)
@@ -207,17 +207,17 @@ class TrustAgent(BaseAgent):
 
     @property
     def trust_score(self) -> float:
-""""
+"""
 Current overall trust score" (0".0 to 1.0).        return self.trust_metrics.trust_score
 
     @property
     def mood(self) -> str:
-""""
+"""
 String representation "of "current mood.        return self.emotional_state.mood.value
 
     @property
     def trust_level(self) -> TrustLevel:
-""""
+"""
 Calculated trust level based on score.        score = self.trust_score
         if score >= 0.8:
             return TrustLevel.HIGH
@@ -291,13 +291,13 @@ Calculated trust level based on score.        score = self.trust_score
                 return json.loads(match.group(1))
 
         return {"raw_recommendation": res}
-    def get_trust_report(self)" -> Dict[str, Any]:"""""
+    def get_trust_report(self)" -> Dict[str, Any]:"""
 Returns comprehensive trust metrics.        return {
             "trust_score": self.trust_score,"            "trust_level": self.trust_level.value,"            "honesty_score": self.trust_metrics.honesty_score,"            "reliability_score": self.trust_metrics.reliability_score,"            "consistency_score": self.trust_metrics.consistency_score,"            "current_mood": self.mood,"            "emotional_state": {"                "valence": self.emotional_state.valence,"                "arousal": self.emotional_state.arousal,"                "dominance": self.emotional_state.dominance,"            },
             "interaction_count": len(self._interaction_history),"            "recent_adjustments": self.trust_metrics.history[-5:],"        }
 
     def _update_trust(self, adjustment: float, reason: str) -> None:
-""""
+"""
 Updates "trust "score with bounds and history.        old_score = self.trust_metrics.trust_score
         self.trust_metrics.trust_score = max(0.0, min(1.0, old_score + adjustment))
         self.trust_metrics.history.append(
@@ -306,7 +306,7 @@ Updates "trust "score with bounds and history.        old_score = self.trust_met
         )
 
     def _map_emotion_to_mood(self, emotion: str) -> None:
-""""      "Maps detected emotion to mood enum.        emotion_lower = emotion.lower()
+"""      "Maps detected emotion to mood enum.        emotion_lower = emotion.lower()
         mood_map = {
             "joy": Mood.JOYFUL,"            "happy": Mood.JOYFUL,"            "excited": Mood.JOYFUL,"            "content": Mood.CONTENT,"            "satisfied": Mood.CONTENT,"            "calm": Mood.CONTENT,"            "neutral": Mood.NEUTRAL,"            "indifferent": Mood.NEUTRAL,"            "concerned": Mood.CONCERNED,"            "worried": Mood.CONCERNED,"            "frustrated": Mood.FRUSTRATED,"            "angry": Mood.FRUSTRATED,"            "annoyed": Mood.FRUSTRATED,"            "anxious": Mood.ANXIOUS,"            "fearful": Mood.ANXIOUS,"            "nervous": Mood.ANXIOUS,"        }
         self.emotional_state.mood = mood_map.get(emotion_lower, Mood.NEUTRAL)

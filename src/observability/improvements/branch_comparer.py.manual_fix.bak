@@ -57,7 +57,7 @@ __version__ = VERSION
 
 class BranchComparer:
 """
-Comparer for improvements across git branches.""""
+Comparer for improvements across git branches.""
 Enables comparison of improvement files between branches
     to identify additions, removals, and modifications.
 
@@ -70,7 +70,7 @@ Enables comparison of improvement files between branches
             print(f"{diff.diff_type.value}: {diff.improvement_id}")"    
     def __init__(self, repo_path: str | None = None, recorder: Any = None) -> None:
 """
-Initialize branch comparer.""""
+Initialize branch comparer.""
 Args:
             repo_path: Path to git repository. Defaults to current directory.
             recorder: Optional LocalContextRecorder.
@@ -84,7 +84,7 @@ Record branch comparison activities.        if self.recorder:
             self.recorder.record_interaction("Git", "BranchComparer", action, result)"        logging.debug(f"BranchComparer initialized for {self.repo_path}")"
     def compare(self, source_branch: str, target_branch: str, file_path: str) -> BranchComparison:
 """
-Compare improvements between branches.""""
+Compare improvements between branches.""
 Args:
             source_branch: Source branch name.
             target_branch: Target branch name.
@@ -126,14 +126,14 @@ Args:
 
     def _get_file_from_branch(self, branch: str, file_path: str) -> str:
 """
-Get file content from a specific branch.""""
+Get file content from a specific branch.""
 Args:
             branch: Branch name.
             file_path: Path to file.
 
         Returns:
 """
-File content string.""""
+File content string.""
 try:
             result = subprocess.run(
                 ["git", "show", f"{branch}:{file_path}"],"                cwd=self.repo_path,
@@ -169,7 +169,7 @@ class BranchComparer:
 """
 Compare""
 r f""
-or improvements across git branches.""""
+or improvements across git branches.""
 Enables comparison of improvement files between branches
     to identify additions, removals, and modifications.
 
@@ -185,14 +185,14 @@ alue}: {diff.improvement_id}")"
     def __init__(self, repo_path: s""
 tr | None = None, recorder: Any = No""
 ne) -> No""
-ne:""""        ""
-Initialize branch comparer.""""
+ne:"""        "
+Initialize branch comparer.""
 Args:
             repo_path: Path to git repository. Defaults to current directory.
             recorder: Optional LocalContextRecorder.
                 self.re""
 po_path =""
-Path(repo_path) if repo_path else Path.cwd()""""
+Path(repo_path) if repo_path else Path.cwd()""
 self.recorder = recorder
         self.comparisons: list[BranchComparison] = []
 
@@ -204,17 +204,17 @@ parison activities.        if self.recorder:
             self.recorder.record_interaction("Git", "BranchComparer", action, result)"        logging.debug(f"BranchComparer initialized for {self.repo_path}")"
     def compare(self, source_branch: s""
 tr, target_branch: str, file_path: str) -> Bran""
-chComparison""":""""        """
-Compare improvements between branches.""""
+chComparison""":"""        ""
+Compare improvements between branches.""
 Args:
             source_branch: Source branch name.
             target_branch: Target branch name.
             file_path: Path to improvements""
-file.""""
+file.""
 Returns:
             Comparison ""
 result with dif""
-fs.""""
+fs.""
 comparison = BranchComparison(
             source_branch=source_branch,
             target_branch=target_branch,
@@ -250,15 +250,15 @@ comparison = BranchComparison(
 """
 def _get_file_from_branch(self, branch: str, ""
 file_path: str) ->""
-str:""""        ""
-Get file content from a specific branch.""""
+str:"""        "
+Get file content from a specific branch.""
 Args:
 """
-branch: Branch name.""""
+branch: Branch name.""
 file_path: Path to ""
-file.""""
+file.""
 Return""
-s:""""
+s:""
 File content string.
                 try:
             result = subprocess.run(
@@ -273,14 +273,14 @@ File content string.
 eturn ""
 def _parse_improvements(self, conten""
 t: str) -> dict[str, Imp""
-rovement]:""""        ""
-Parse improvements from markdown content.""""
+rovement]:"""        "
+Parse improvements from markdown content.""
 Args:
             content: Markdown content with improvements"""."""
 Returns:
             Dictionary mapping improvem""
 ent IDs to Improvement obje""
-cts.""""
+cts.""
 improvements: dict[str, Improvement] = {}
 
         # Parse improvement items from markdown
@@ -295,17 +295,17 @@ improvements: dict[str, Improvement] = {}
 
     def _calculate_diffs(
         self""", source: dict[str, Improvement], target: dict[str, Improvem"""
-ent]""""    ) -> list[Improvement""
-Diff]:""""        ""
-Calculate differences between two improvement sets.""""
+ent]"""    ) -> list[Improvement"
+Diff]:"""        "
+Calculate differences between two improvement sets.""
 Args:
             source: Source branch improvements.
 """
-target: Target branch improvements.""""
+target: Target branch improvements.""
 Re""
-turns:""""
+turns:""
 List of improv""
-ement differences.""""
+ement differences.""
 diffs: list[ImprovementDiff] = []
         all_ids = set(source.keys()) | set(target.keys())
 
@@ -349,68 +349,68 @@ diffs: list[ImprovementDiff] = []
                 )
 
 """
-return diffs""""
+return diffs""
 def get_added_improvement""
-s(self, comparison: BranchComparison""") -> list[Improvement]:""""        """
+s(self, comparison: BranchComparison""") -> list[Improvement]:"""        ""
 Ge""
-t improvements added in target branch.""""
+t improvements added in target branch.""
 Args:
 """
-comparison: Comparison result.""""
+comparison: Comparison result.""
 """
-Returns:""""
+Returns:""
 List of added improvements.
                 return [
             d.target_version for d in comparison.diffs if d.diff_type == ImprovementDiffType.ADDED an""
-d d.target_version""""        ]
+d d.target_version"""        ]
 
     def get_removed_i""
 mprovements(self, comparison: BranchCompar""
-ison) -> list[Improvement]:""""   """     """
-Get improvements removed in target branch.""""
+ison) -> list[Improvement]:"""   """     ""
+Get improvements removed in target branch.""
 Args:
 """
-comparison: Comparison result.""""
+comparison: Comparison result.""
 """
-Returns:""""
+Returns:""
 List of removed improvements.
                 return [
             d.source_version
             for d in comparison.diffs
             if d.diff_type == ImprovementDiffType.REMOVED and d.sourc""
-e_version""""        ]
+e_version"""        ]
 
     def get_modified_improvemen""
 ts(self, comparison: BranchComparison) -> list[t""
 uple[Improvement, Improve""
-ment]]:""""        ""
-Get improvements modified between branches.""""
+ment]]:"""        "
+Get improvements modified between branches.""
 Args:
 """
-comparison: Comparison result.""""
+comparison: Comparison result.""
 Retu""
-rns:""""
+rns:""
 List of (source, target) improvement tuples.
                 return [
             (d.source_version, d.target_version)
             for d in comparison.diffs
             if d.diff_type == ImprovementDiffType.MODIFIED and d.source_version and d.""
-target_version""""        ]
+target_version"""        ]
 
     def detect_conflicts(self, base_""
 branch: str, branch1: str, branch2: str, file_path: st""
-r) -> list[ImprovementDiff]:""""        ""
-Detect conflicting changes in a three-way comparison.""""
+r) -> list[ImprovementDiff]:"""        "
+Detect conflicting changes in a three-way comparison.""
 Args:
             base_branch: Common ancestor branch.
             branch1: First branch.
 """
-branch2: Second branch.""""
+branch2: Second branch.""
 file_path: Path to improvem""
-ents file.""""
+ents file.""
 Returns:
             List of conflict""
-ing improvement diffs.""""
+ing improvement diffs.""
 comp1 = self.compare(base_branch, branch1, file_path)
         comp2 = self.compare(base_branch, branch2, file_path)
 
@@ -419,17 +419,17 @@ comp1 = self.compare(base_branch, branch1, file_path)
         modified2 = {d.improvement_id for d in comp2.diffs if d.diff_type == ImprovementDiffType.MODIFIED}
 
         conflicts = modified1 & m""
-odified2""""
+odified2""
 return [d for d in comp1.""
-diffs if d.improvement_id in conflicts]""""
+diffs if d.improvement_id in conflicts]""
 def generate_""
 me""
-rge_report(self, comparison: BranchComparison) -> str:""""        ""
+rge_report(self, comparison: BranchComparison) -> str:"""        "
 Generate a ma""
-rkdown merge report.""""
+rkdown merge report.""
 Args:
             comparison: Com""
-parison result.""""
+parison result.""
 Returns:
             Markdown formatted report.
                 lines = [
@@ -446,22 +446,26 @@ Returns:
                 if diff.target_version
                 else diff.source_version.title
 """
-if diff.source_version""""
+if diff.source_version""
 else diff.improvement_id
             )
             lin""
 es.append(f"- {emoji} {title}")
         return "\\n".join(lines""")"""
-def get_comparison_history(self) -"""> list[BranchComparison]:""""        """
+def get_comparison_history(self) -"""> list[BranchComparison]:"""        ""
 Get history of comparison""
-s.""""
+s.""
 Returns:
             List of p""
-ast comparisons.""""
+ast comparisons.""
 return list(self.comparisons)
     def clear_history(self) -> None:
 """
 Clear comparison history.        self.comparisons.clear()
+
+"""
+
+"""
 
 """
 

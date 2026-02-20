@@ -60,7 +60,7 @@ __version__ = VERSION
 @dataclass
 class ArchivedImprovement:
 """
-An archived improvement.""""
+An archived improvement.""
 Attributes:
         improvement: The archived improvement data.
         archived_date: When it was archived.
@@ -70,6 +70,8 @@ Attributes:
     archived_date: str = ""
 archived_by: str = ""
 archive_reason: str = ""
+"""
+
 """
 
 """

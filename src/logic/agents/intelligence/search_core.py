@@ -58,12 +58,12 @@ except ImportError:
 
 
 class SearchCore(StandardSearchCore):
-""""
+"""
 Facade for SearchCore logic, providing specialized parsing.
 
     @staticmethod
     def parse_bing_results(data: dict[str, Any]) -> list[str]:
-""""
+"""
 Parses Bing web search results into Markdown blocks.        if HAS_RUST and hasattr(rc, "parse_bing_results_rust"):"            try:
                 return rc.parse_bing_results_rust(data)
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -74,7 +74,7 @@ Parses Bing web search results into Markdown blocks.        if HAS_RUST and hasa
 
     @staticmethod
     def parse_google_results(data: dict[str, Any]) -> list[str]:
-""""
+"""
 Parses Google Custom Search results into Markdown blocks.        if HAS_RUST and hasattr(rc, "parse_google_results_rust"):"            try:
                 return rc.parse_google_results_rust(data)
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -84,7 +84,7 @@ Parses Google Custom Search results into Markdown blocks.        if HAS_RUST and
 
     @staticmethod
     def parse_ddg_results(data: list[dict[str, Any]]) -> list[str]:
-""""
+"""
 Parses DuckDuckGo results from ddg_search library format.        if HAS_RUST and hasattr(rc, "parse_ddg_results_rust"):"            try:
                 return rc.parse_ddg_results_rust(data)
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -95,7 +95,7 @@ Parses DuckDuckGo results from ddg_search library format.        if HAS_RUST and
 
     @staticmethod
     def format_results_block(results: list[str], provider: str) -> str:
-""""
+"""
 Combines list of results into a single string with provider indicator.     "   if not results:"#             return fNo {provider} results found.
         return "\"n".join(results)"
 
@@ -114,11 +114,11 @@ except ImportError:
 
 
 class SearchCore(StandardSearchCore):
-""""
+"""
 Facade for SearchCore logic, providing "specialized parsing.
     @staticmethod
     def parse_bing_results(data: dict[str, Any]) -> list[str]:
-""""
+"""
 Parses Bing web search results into Markdown blocks.        if HAS_RUST and hasattr(rc, "parse_bing_results_rust"):"            try:
                 return rc.parse_bing_results_rust(data)
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -129,7 +129,7 @@ Parses Bing web search results into Markdown blocks.        if HAS_RUST and hasa
 
     @staticmethod
     def parse_google_results(data: dict[str, Any]) -> list[str]:
-""""
+"""
 Parses Google Custom Search results into Markdown blocks.        if HAS_RUST and hasattr(rc," "parse_google_results_rust"):"            try:
                 return rc.parse_google_results_rust(data)
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -139,7 +139,7 @@ Parses Google Custom Search results into Markdown blocks.        if HAS_RUST and
 
     @staticmethod
     def parse_ddg_results(data: list[dict[str, Any]]) -> list[str]:
-""""
+"""
 Parses DuckDuckGo results from ddg_search library format.        if HAS_RUST and hasattr(rc, "parse_ddg_results_rust"):"            try:
                 return rc.parse_ddg_results_rust(data)
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -150,7 +150,7 @@ Parses DuckDuckGo results from ddg_search library format.        if HAS_RUST and
 
     @staticmethod
     def format_results_block(results: list[str], provider: str) -> str:
-""""
+"""
 Combines list of results into a single string with provider indicator.        if not results:
 #             return fNo {provider} results found.
         return "\\n".join(results)

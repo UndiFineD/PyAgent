@@ -33,7 +33,7 @@ __version__ = VERSION
 
 
 class MemoryQueryMixin:
-""""Mixin for hierarchical memory querying in HierarchicalMemoryAgent.
+"""Mixin for hierarchical memory querying in HierarchicalMemoryAgent.
     @as_tool
     def hierarchical_query(
         self: HierarchicalMemoryAgent, query: str, deep_search: bool = False

@@ -69,7 +69,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     # --- SQL TOOLS (Consolidated from SqlQueryAgent, DataAgent) ---
 
     @as_tool
-    def connect_db(self, db_path: str = ":memory:") -> str:"""""Connects to a SQLite database. Defaults to an in-memory database."        try:"            self.connection = sqlite3.connect(db_path)
+    def connect_db(self, db_path: str = ":memory:") -> str:""""Connects to a SQLite database. Defaults to an in-memory database."        try:"            self.connection = sqlite3.connect(db_path)
 #             return fSuccessfully connected to database: {db_path}
         except (sqlite3.Error, OSError) as e:
 #             return fError connecting to database: {e}
@@ -107,7 +107,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def get_db_schema(self) -> str:
-""""Retrieves the schema of the currently connected database.        if" not self.connection:"#             return "Error: No database connection."        try:
+"""Retrieves the schema of the currently connected database.        if" not self.connection:"#             return "Error: No database connection."        try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")"'            tables = cursor.fetchall()
             schema_info = []
@@ -146,7 +146,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     # --- SQL TOOLS (Consolidated from SqlQueryAgent, DataAgent) ---
 
     @as_tool
-    def connect_db(self, db_path: str = ":memory:") -> str:"""""Connects to a SQLite database. Defaults to an" in"-memory database.        try:
+    def connect_db(self, db_path: str = ":memory:") -> str:""""Connects to a SQLite database. Defaults to an" in"-memory database.        try:
             self.connection = sqlite3.connect(db_path)
 #             return fSuccessfully connected to database: {db_path}
         except (sqlite3.Error, OSError) as e:
@@ -185,7 +185,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def get_db_schema(self) -> str:
-""""Retrieves the schema of the currently connected" database.        if not self.connection:
+"""Retrieves the schema of the currently connected" database.        if not self.connection:
 #             return "Error: No database connection."        try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")"'            tables = cursor.fetchall()
@@ -199,7 +199,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     # --- SPREADSHEET TOOLS (Consolidated from ExcelAgent, CsvAgent) ---
 
     @as_tool
-    def parse_spreadsheet(self, path: str, mode: str = "standard") -> dict[str, Any]:"""""Parses an Excel (.xlsx) or CSV file into structured metadata" or" summaries.        file_path = Path(path)
+    def parse_spreadsheet(self, path: str, mode: str = "standard") -> dict[str, Any]:""""Parses an Excel (.xlsx) or CSV file into structured metadata" or" summaries.        file_path = Path(path)
         if not file_path.exists():
             return {"error": fFile not found: {path}"}"
         if file_path.suffix.lower() == ".csv":"            return self._parse_csv(file_path)
@@ -232,7 +232,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def run_exploratory_analysis(self, data_path: str) -> dict[str, Any]:
-""""Performs a comprehensive Exploratory Data Analysis (EDA).        logging.info("fDataIntelligence: Running EDA on {data_path}")"        # Simulation of complex EDA result (as in legacy DataScienceAgent)
+"""Performs a comprehensive Exploratory Data Analysis (EDA).        logging.info("fDataIntelligence: Running EDA on {data_path}")"        # Simulation of complex EDA result (as in legacy DataScienceAgent)
         return {
             "status": "success","            "summary": {"                "rows": 1000,"                "missing_values": {"target": 0, "features": 12},"                "correlations": {"feature_a_vs_b": 0.85},"            },
             "insights": ["High correlation detected between features A and B.", "Target variable is balanced."],"        }

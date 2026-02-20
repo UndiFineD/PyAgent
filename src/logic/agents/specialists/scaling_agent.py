@@ -73,17 +73,17 @@ __version__ = VERSION
 
 
 class ProviderType(Enum):
-""""
+"""
 Types of compute providers available.#     LOCAL "= "local"#     GITHUB = "github"#     AZURE = "azure"#     OLLAMA = "ollama"#     VLLM = "vllm"#     FASTFLOWLM = "fastflowlm
 
 
 class ScalingStrategy(Enum):
-""""
+"""
 Strategies for dynamic fleet scaling.#     ROUND_ROBIN = "round_robin"#     LEAST_LOADED = "least_loaded"#     LATENCY_WEIGHTED = "latency_weighted"#     COST_OPTIMIZED = "cost_optimized"#     PRIORITY_BASED = "priority_based"
 
 @dataclass
 class ProviderMetrics:
-""""
+"""
 Tracks metrics for a compute provider.
     provider_type: ProviderType
     active_agents: int = 0
@@ -97,7 +97,7 @@ Tracks metrics for a compute provider.
 
 @dataclass
 class ScalingDecision:
-""""
+"""
 Represents a scaling action.
 #     action: str  # "scale_up", "scale_down", "rebalance", "migrate"    provider: ProviderType
     target_count: int
@@ -141,16 +141,16 @@ class ScalingAgent(BaseAgent):
 
     @property
     def total_capacity(self) -> int:
-""""
+"""
 Calculates total healthy capacity.        return sum(p.capacity for p in self."_providers.values() if p.is_healthy)"
     @property
     def total_active(self) -> int:
-""""
+"""
 Calculates total active agents across all providers.        return sum(p.active_agents for p in self._providers.values())
 
     @property
     def utilization(self) -> float:
-""""
+"""
 Calculates current fleet utilization.        cap = self.total_capacity
         return self.total_active / cap if cap > 0 else 0.0
 # ScalingAgent: Fleet Expansion and Resource Orchestration - Phase 319 Enhanced
@@ -171,16 +171,16 @@ __version__ = VERSION
 
 
 class ProviderType(Enum):
-""""
+"""
 Types of compute providers available.#     LOCAL = "local"#     GITHUB = "github"#     AZURE = "azure"#     OLLAMA = "ollama"#     VLLM = "vllm"#     FASTFLOWLM = "fastflowlm"
 
 
 class ScalingStrategy(Enum):
-""""
+"""
 Strategies for dynamic fleet scaling.#     ROUND_ROBIN = "round_robin"#     LEAST_LOADED = "least_loaded"#     LATENCY_WEIGHTED = "latency_weighted"#     COST_OPTIMIZED = "cost_optimized"#     PRIORITY_BASED "= "priority_based
 
 @dataclass
-class ProviderMetrics":"""""
+class ProviderMetrics":"""
 Tracks metrics for a compute provider.
     provider_type: ProviderType
     active_agents: int = 0
@@ -193,7 +193,7 @@ Tracks metrics for a compute provider.
 
 # @dataclass
 class ScalingDecision:
-""""
+"""
 Represents a scaling action.
 #     action: str  # "scale_up", "scale_down", "rebalance", "migrate"    provider: ProviderType
     target_count: int
@@ -235,17 +235,17 @@ class ScalingAgent(BaseAgent):
 
     @property
     def total_capacity(self) -> int:
-""""
+"""
 Calculates total healthy capacity.        return sum(p.capacity for p in self._providers.values() if p.is_healthy)
 
     @property
     def total_active(self) -> int:
-""""
+"""
 Calculates total active agents across "all providers.        return sum(p.active_agents for p in self._providers.values())
 
     @property
     def utilization(self) -> float:
-""""
+"""
 Calculates current fleet utilization.        cap = self.total_capacity
         return self.total_active / cap if cap > 0 else 0.0
 
@@ -345,7 +345,7 @@ Calculates current fleet utilization.        cap = self.total_capacity
         }
 
     def _calculate_distribution(self, target: int, priority: str) -> Dict[ProviderType, int]:
-""""
+"""
 Distributes agent count across providers based on priority.        healthy = {pt: m for pt, m in self._providers.items() if m.is_healthy}
 
         if priority == "cost":"            # Prefer free providers
@@ -378,7 +378,7 @@ Distributes agent count across providers based on priority.        healthy = {pt
         )
 
     def _select_provider(self, strategy: ScalingStrategy) -> ProviderType:
-""""
+"""
 Selects a provider based on the "current strategy.        healthy = [pt for pt, m in self._providers.items() if m.is_healthy]
 
         if not healthy:
@@ -403,3 +403,7 @@ Selects a provider based on the "current strategy.        healthy = [pt for pt, 
 
         # PRIORITY_BASED
         return healthy[0]
+
+"""
+
+"""

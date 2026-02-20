@@ -76,7 +76,7 @@ __version__ = VERSION
 
 
 class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Analyzes research papers and drafts new tool implementations using the SGI-Bench DCAP Cycle.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -86,7 +86,7 @@ Analyzes research papers and drafts new tool implementations using the SGI-Bench
 
     @as_tool
     def dcap_research(self, topic: str, content: str) -> dict[str, str]:
-""""
+"""
 Executes a full Deliberation-Conception-Action-Perception cycle on a topic.        logging.info(fRESEARCH: Executing DCAP cycle for "{topic}")
         result = self.core.execute_dcap_cycle(topic, content)
 
@@ -95,7 +95,7 @@ Executes a full Deliberation-Conception-Action-Perception cycle on a topic.     
 
     @as_tool
     def ingest_paper(self, title: str, summary: str) -> str:
-""""
+"""
 Analyzes a research paper summary and identifies new capabilities.
         logging.info(fRESEARCH: Ingesting paper '{title}'")"'        analysis = self.core.analyze_paper(title, summary)
 
@@ -103,7 +103,7 @@ Analyzes a research paper summary and identifies new capabilities.
 #         return fSuccessfully ingested paper '{title}'. Capabilities identified for tool generation.
     @as_tool
     def generate_tool_from_research(self, title: str) -> str:
-""""
+"""
 Drafts a Python tool implementation based on an ingested paper.        logging.info(fRESEARCH: Generating tool based on {title}")"        tool_code = self.core.draft_tool_code(title)
         return tool_code
 
@@ -149,7 +149,7 @@ __version__ = VERSION
 
 
 class ResearchAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Analyzes research papers and drafts new tool implementations using the SGI-"Bench DCAP Cycle.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -159,7 +159,7 @@ Analyzes research papers and drafts new tool implementations using the SGI-"Benc
 
     @as_tool
     def dcap_research(self, topic: str, content: str) -> dict[str, str]:
-""""
+"""
 Executes a full Deliberation-Conception-Action-Perception cycle on a topic.        logging.info(fRESEARCH: Executing "DCAP cycle for {topic}")
         result = self.core.execute_dcap_cycle(topic, content)
 
@@ -168,7 +168,7 @@ Executes a full Deliberation-Conception-Action-Perception cycle on a topic.     
 
     @as_tool
     def ingest_paper(self, title: str, summary: str) -> str:
-""""
+"""
 Analyzes a research paper summary and identifies new capabilities.
         logging.info(fRESEARCH: Ingesting paper '{title}'")"'        analysis = self.core.analyze_paper(title, summary)
 
@@ -176,7 +176,7 @@ Analyzes a research paper summary and identifies new capabilities.
 #         return fSuccessfully ingested paper '{title}'. Capabilities identified for tool generation.
     @as_tool
     def generate_tool_from_research(self, title: str) -> str:
-""""
+"""
 Drafts a Python tool implementation based on an ingested paper.        logging.info(fRESEARCH: Generating tool based on {title}")"        tool_code = self.core.draft_tool_code(title)
         return tool_code
 

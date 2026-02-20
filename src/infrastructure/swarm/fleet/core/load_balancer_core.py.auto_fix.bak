@@ -42,7 +42,7 @@ class AgentMetrics:
 
 
 class LoadBalancerCore:
-    """Pure logic for cognitive load balancing across the agent fleet.""""    Calculates cognitive pressure and suggests optimal task routing.
+    """Pure logic for cognitive load balancing across the agent fleet."""    Calculates cognitive pressure and suggests optimal task routing.
     
     def calculate_cognitive_pressure(self, metrics: AgentMetrics) -> float:
         """Heuristic for 'Cognitive Pressure': (complexity * history_len).'        # score = (tokens * 0.4) + (queue * 0.4) + (latency * 0.2)

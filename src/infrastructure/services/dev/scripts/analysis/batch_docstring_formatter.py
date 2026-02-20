@@ -37,19 +37,19 @@ PyAgent docstring formatting standards and validation.
     # Standard format patterns
     MODULE_DOCSTRING_PATTERN = re.compile(
         r'""
-[\\s\\S]*?"""\\s*$',  # Module docstring at top of file""""'
+[\\s\\S]*?"""\\s*$',  # Module docstring at top of file"""'
 re.MULTILINE
     )
 
     FUNCTION_DOCSTRING_PATTERN = re.compile(
         r'^\\s*def\\s+\\w+\\s*\([^)]*\)\\s*->?\\s*[^:]*:\\s*\\n\\s*""
-[\\s\\S]*?"""\\s*$',""""'
+[\\s\\S]*?"""\\s*$',"""'
 re.MULTILINE
     )
 
     CLASS_DOCSTRING_PATTERN = re.compile(
         r'^\\s*class\\s+\\w+.*?:\\s*\\n\\s*""
-[\\s\\S]*?"""\\s*$',""""'
+[\\s\\S]*?"""\\s*$',"""'
 re.MULTILINE
     )
 
@@ -273,7 +273,7 @@ Adds a module docstring to a file.        lines = content.split('\\n')
         # Create docstring
         docstring_lines = [
             '"""',"""
-f'{module_name} module.','            '"""',""""'            '''        ]
+f'{module_name} module.','            '"""',"""'            '''        ]
 
         # Insert docstring
         new_lines = lines[:insert_index] + docstring_lines + lines[insert_index:]
@@ -388,6 +388,14 @@ Main entry point for the docstring batch processor.    parser = argparse.Argumen
 
 
 if __name__ == "__main__":"    sys.exit(main())
+
+"""
+
+''
+
+"""
+
+''
 
 """
 

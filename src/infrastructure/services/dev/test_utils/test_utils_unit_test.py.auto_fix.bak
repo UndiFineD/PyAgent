@@ -231,7 +231,7 @@ class TestTestDataGenerator:
         gen = TestDataGenerator()
 
         code = gen.generate_python_code(with_docstrings=True)
-        assert '"""' in code""""'
+        assert '"""' in code"""'
     def test_generate_markdown(self, utils_module: Any) -> None:
         """Test generating markdown.        TestDataGenerator = utils_module.TestDataGenerator
         gen = TestDataGenerator()
@@ -376,7 +376,7 @@ class TestAgentAssertions:
         """Test assert_contains_docstring.        AgentAssertions = utils_module.AgentAssertions
         assertions = AgentAssertions()
 
-        code_with_docstring = '"""Docstring."""\\ndef foo() -> str: pass'""""'        result = assertions.assert_contains_docstring(code_with_docstring)
+        code_with_docstring = '"""Docstring."""\\ndef foo() -> str: pass'"""'        result = assertions.assert_contains_docstring(code_with_docstring)
         assert result is True
 
     def test_assert_json_valid(self, utils_module: Any) -> None:

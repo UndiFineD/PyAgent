@@ -26,7 +26,7 @@ from typing import Any
 
 def _parse_dv_base_url() -> tuple[str, int]:
 """
-Parse DV_LMSTUDIO_BASE_URL into host and port (backwards compatible).""""
+Parse DV_LMSTUDIO_BASE_URL into host and port (backwards compatible).""
 Returns a tuple (host, port). If DV_LMSTUDIO_BASE_URL is not set or cannot be
     parsed, fallback to LMSTUDIO_HOST/LMSTUDIO_PORT or the defaults.
         base = os.environ.get("DV_LMSTUDIO_BASE_URL")"    if base:
@@ -46,7 +46,7 @@ Returns a tuple (host, port). If DV_LMSTUDIO_BASE_URL is not set or cannot be
 @dataclass
 class LMStudioConfig:
 """
-Configuration for LM Studio connection.""""
+Configuration for LM Studio connection.""
 This config prefers the DV-prefixed environment variables used by the
     higher-level orchestrator (`DV_LMSTUDIO_BASE_URL`, `DV_LMSTUDIO_MODEL`,
     `DV_LMSTUDIO_MAX_CONTEXT`) but remains backwards-compatible with the
@@ -95,7 +95,7 @@ Return host:port string.        return f"{self.host}:{self.port}"
     @property
     def base_url(self) -> str:
 """
-Return full base URL to connect to LM Studio.""""
+Return full base URL to connect to LM Studio.""
 Prefers `DV_LMSTUDIO_BASE_URL` (including path) when present, otherwise
         constructs a URL using host and port.
                 dv = os.environ.get("DV_LMSTUDIO_BASE_URL")"        if dv:
@@ -137,6 +137,8 @@ Update last used timestamp.        self.last_used = time.time()
 
 """
 
-""
+"""
 
 """
+
+""

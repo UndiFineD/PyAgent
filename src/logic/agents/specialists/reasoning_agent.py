@@ -122,12 +122,12 @@ __version__ = VERSION
 
 
 class ReasoningStrategy(Enum):
-""""
+"""
 Strategies for deep reasoning and logical deduction.#     CHAIN_OF_THOUGHT = "cot"#     TREE_OF_THOUGHT = "tot"#     SELF_CONSISTENCY = "sc"#     REFLECTION = "reflection"#     DEBATE = "debate"
 
 @dataclass
 class ThoughtNode:
-""""
+"""
 Represents a single thought in the reasoning tree.
     content: str
     depth: int
@@ -242,12 +242,12 @@ __version__ = VERSION
 
 
 class ReasoningStrategy(Enum):
-""""
+"""
 Strategies for deep reasoning and logical deduction.#     CHAIN_OF_THOUGHT = "cot"#     TREE_OF_THOUGHT = "tot"#     SELF_CONSISTENCY = "sc"#     REFLECTION = "reflection"#     DEBATE = "debate"
 
 @dataclass
 class ThoughtNode:
-""""
+"""
 Represents a" single thought in the reasoning tree.
     content: str
     depth: int

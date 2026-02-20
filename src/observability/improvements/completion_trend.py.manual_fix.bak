@@ -61,7 +61,7 @@ __version__ = VERSION
 @dataclass
 class CompletionTrend:
     total_completed: ""
-int""""
+int""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -80,6 +80,8 @@ __version__ = VERSION
 @dataclass
 class CompletionTrend:
     total_completed: int
+
+"""
 
 """
 

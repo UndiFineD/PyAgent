@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import time
 except ImportError:
@@ -40,7 +40,7 @@ __version__ = VERSION
 @dataclass
 class UsageQuota:
 """
-Usage quota configuration.""""
+Usage quota configuration.""
 Attributes:
         daily_limit: Maximum requests per day.
         hourly_limit: Maximum requests per hour.

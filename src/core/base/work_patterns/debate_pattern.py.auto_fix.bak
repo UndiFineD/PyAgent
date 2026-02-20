@@ -56,7 +56,7 @@ class DebateConfig:
 
 
 class DebateWorkPattern(WorkPattern):
-    """Implements opponent processor / multi-agent debate pattern.""""
+    """Implements opponent processor / multi-agent debate pattern."""
     This pattern spawns opposing agents with different goals or perspectives
     to debate solutions, reducing bias and improving decision quality through
     adversarial reasoning.
@@ -69,7 +69,7 @@ class DebateWorkPattern(WorkPattern):
         self.additional_agents = debate_agents
 
     def validate_agents(self, agents: List[Any]) -> bool:
-        """Validate that agents are suitable for debate pattern.""""
+        """Validate that agents are suitable for debate pattern."""
         Args:
             agents: List of agents to validate
 
@@ -87,7 +87,7 @@ class DebateWorkPattern(WorkPattern):
         return True
 
     def _find_agent_by_id(self, agent_id: str) -> Any:
-        """Find an agent instance by its ID.""""
+        """Find an agent instance by its ID."""
         Args:
             agent_id: The agent ID to find
 
@@ -105,7 +105,7 @@ class DebateWorkPattern(WorkPattern):
         return None
 
     async def execute(self, context: CascadeContext) -> Dict[str, Any]:
-        """Execute the debate pattern.""""
+        """Execute the debate pattern."""
         Args:
             context: The cascade context containing task information
 
@@ -154,7 +154,7 @@ class DebateWorkPattern(WorkPattern):
         participants: List[DebateAgent],
         history: List[Dict]
     ) -> Dict[str, Any]:
-        """Execute a single round of debate.""""
+        """Execute a single round of debate."""
         Args:
             round_num: Current round number
             context: Cascade context
@@ -191,7 +191,7 @@ class DebateWorkPattern(WorkPattern):
         context: CascadeContext,
         history: List[Dict]
     ) -> Dict[str, Any]:
-        """Generate a position for an agent in the debate.""""
+        """Generate a position for an agent in the debate."""
         Args:
             agent: The debate agent
             context: Cascade context
@@ -220,7 +220,7 @@ class DebateWorkPattern(WorkPattern):
         context: CascadeContext,
         history: List[Dict]
     ) -> Dict[str, Any]:
-        """Generate a counter-argument to an opposing position.""""
+        """Generate a counter-argument to an opposing position."""
         Args:
             agent: The agent generating the counter-argument
             opposing_position: The position to counter
@@ -244,7 +244,7 @@ class DebateWorkPattern(WorkPattern):
                 "critique": f"Counter-argument from {agent.role}","                "weaknesses_identified": ["Potential bias", "Missing context"],"                "alternative_suggestion": "Consider alternative approach""            }
 
     def _check_consensus(self, round_results: Dict[str, Any]) -> bool:
-        """Check if consensus has been reached in the debate.""""
+        """Check if consensus has been reached in the debate."""
         Args:
             round_results: Results from the current round
 
@@ -264,7 +264,7 @@ class DebateWorkPattern(WorkPattern):
         debate_history: List[Dict],
         participants: List[DebateAgent]
     ) -> Dict[str, Any]:
-        """Synthesize final decision from debate history.""""
+        """Synthesize final decision from debate history."""
         Args:
             debate_history: Complete debate history
             participants: Debate participants
@@ -283,7 +283,7 @@ class DebateWorkPattern(WorkPattern):
         debate_history: List[Dict],
         participants: List[DebateAgent]
     ) -> Dict[str, Any]:
-        """Automatically synthesize decision from debate.""""
+        """Automatically synthesize decision from debate."""
         Args:
             debate_history: Debate history
             participants: Participants
@@ -304,7 +304,7 @@ class DebateWorkPattern(WorkPattern):
         debate_history: List[Dict],
         participants: List[DebateAgent]
     ) -> Dict[str, Any]:
-        """Synthesize decision using weighted voting.""""
+        """Synthesize decision using weighted voting."""
         Args:
             debate_history: Debate history
             participants: Participants

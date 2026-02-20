@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     import json
 except ImportError:
@@ -54,7 +54,7 @@ Initialize config loader.        self.config_path = config_path or Path("test_co
 
     def load(self, path: Path | None = None, defaults: dict[str, Any] | None = None) -> dict[str, Any]:
 """
-Load configuration.""""
+Load configuration.""
 Compatibility:
         - Tests pass a `Path` to load.
         - Tests may pass `defaults=` to be merged.

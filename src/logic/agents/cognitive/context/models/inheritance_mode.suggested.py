@@ -35,7 +35,7 @@ __version__ = VERSION
 
 
 class InheritanceMode(Enum):
-""""
+"""
 Modes for context inheritance.
 #     OVERRIDE = "override"#     MERGE = "merge"#     APPEND = "append"
 """

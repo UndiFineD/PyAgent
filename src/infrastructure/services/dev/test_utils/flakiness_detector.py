@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 from collections.abc import Callable
 
 from src.core.base.lifecycle.version import VERSION
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 class FlakinessDetector:
 """
-Detects flaky tests through repeated execution.""""
+Detects flaky tests through repeated execution.""
 Runs tests multiple times to identify intermittent failures.
 
     Example:
@@ -41,7 +41,7 @@ Runs tests multiple times to identify intermittent failures.
             print(f"Test is flaky: {report.flakiness_score}")"    
     def __init__(self, default_runs: int = 5) -> None:
 """
-Initialize detector.""""
+Initialize detector.""
 Args:
             default_runs: Default number of test runs.
                 self.default_runs = default_runs
@@ -54,7 +54,7 @@ Args:
         test_name: str | None = None,
     ) -> FlakinessReport:
 """
-Analyze test for flakiness.""""
+Analyze test for flakiness.""
 Args:
             test_fn: Test function to analyze.
             runs: Number of runs.

@@ -54,7 +54,7 @@ BANNED_IMPORTS = {'ctypes', 'cffi', 'subprocess', 'multiprocessing', 'socket', '
 def safe_module(ast_mod: ast.Module, allow_top_level: bool = False, allow_no_defs: bool = False,
                 allow_banned_imports: bool = False) -> tuple[bool, list[str]]:
 """
-Return (is_safe, list_of_defs)""""
+Return (is_safe, list_of_defs)""
 allow_top_level: when True, permit assignments and other top-level statements
     allow_no_defs: when True, accept modules with no defs (useful for data or constants)
     allow_banned_imports: when True, skip checking banned imports
@@ -225,6 +225,6 @@ if __name__ == '__main__':'    raise SystemExit(main())
 
 """
 
-""
+"""
 
 """

@@ -30,11 +30,11 @@ from src.core.base.common.types.style_rule import StyleRule
 
 
 class CoderStyleMixin:
-""""
+"""
 Mixin for style checking and auto-fixing.
 
     def check_style(self, content: str, rules: List[StyleRule]) -> List[Dict[str, Any]]:
-""""
+"""
 Run regex-based style checks.        # Rust optimization
         if hasattr(self, "_rust_core") and self._rust_core:"            return self._check_style_rust(content, rules)
 
@@ -49,7 +49,7 @@ Run regex-based style checks.        # Rust optimization
         return violations
 
     def _check_style_rust(self, content: str, rules: List[StyleRule]) -> List[Dict[str, Any]]:
-""""
+"""
 Internal helper for Rust-accelerated style checking.        patterns = []
         for rule in rules:
             if rule.enabled and (not rule.language or rule.language == self.language):
@@ -72,7 +72,7 @@ Internal helper for Rust-accelerated style checking.        patterns = []
             logging.warning(fRust optimization failed for check_style: {e}")"            return []
 
     def _check_multiline_rule(self, content: str, rule: StyleRule) -> List[Dict[str, Any]]:
-""""
+"""
 Check a rule that spans multiple lines or requires multiline mode.        "violations = []"        for match in re.finditer(rule.pattern, content, re.MULTILINE):
             line_no = content.count("\\n", 0, match.start()) + 1"            violations.append(
                 {
@@ -81,7 +81,7 @@ Check a rule that spans multiple lines or requires multiline mode.        "viola
         return violations
 
     def _check_line_rule(self, lines: List[str], rule: StyleRule) -> List[Dict[str, Any]]:
-""""
+"""
 Check a rule against individual lines.     "   "violations = []"        for i, line in enumerate(lines, 1):
             if re.search(rule.pattern, line):
                 violations.append(
@@ -91,7 +91,7 @@ Check a rule against individual lines.     "   "violations = []"        for i, l
         return violations
 
     def auto_fix_style(self, content: str, rules: List[StyleRule]) -> Tuple[str, int]:
-""""
+"""
 Apply rules that have auto-fix capabilities.        fixed_content = content
         fix_count = 0
         for rule in rules:

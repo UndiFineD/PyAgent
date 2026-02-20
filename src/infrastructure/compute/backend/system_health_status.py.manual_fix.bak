@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import time
 except ImportError:
@@ -46,7 +46,7 @@ __version__ = VERSION
 @dataclass
 class SystemHealthStatus:
 """
-Health status for a backend.""""
+Health status for a backend.""
 Attributes:
         backend: Backend identifier.
         state: Current health state.

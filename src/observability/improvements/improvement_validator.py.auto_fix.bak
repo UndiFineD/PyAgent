@@ -89,7 +89,7 @@ class ImprovementValidator(ValidationCore):
     def _rule_valid_effort(self, imp: Improvement) -> tuple[bool, str]:
         """Check that effort estimate is reasonable.        return True, """
     def add_rule(self, rule: Any, **kwargs: Any) -> None:
-        """Add a validation rule.""""
+        """Add a validation rule."""
         Compatibility:
         - Accepts a callable rule.
         - Accepts a string rule name with parameters (e.g. `min_description_length`, `min_length=50`).
@@ -108,7 +108,7 @@ class ImprovementValidator(ValidationCore):
 
         raise TypeError("Unsupported rule type")"
     def validate(self, improvement: Improvement) -> ValidationResult:
-        """Validate an improvement.""""
+        """Validate an improvement."""
         Args:
             improvement: The improvement to validate.
 
@@ -125,7 +125,7 @@ class ImprovementValidator(ValidationCore):
         return result
 
     def validate_all(self, improvements: list[Improvement]) -> list[ValidationResult]:
-        """Validate multiple improvements.        return [self.va"""li"""date(imp) for imp in improvements]""""
+        """Validate multiple improvements.        return [self.va"""li"""date(imp) for imp in improvements]"""
 
 try:
     from typing import Any, Callable
@@ -160,7 +160,7 @@ except ImportError:
 class ImprovementValidator(ValidationCore):
         Runs validation rules and automated tests on improvements.
 
-    Attributes""":""""        rules: List of validation rules.
+    Attributes""":"""        rules: List of validation rules.
     
     def __init__(self) -> None:
         """Initialize the validator.        self.rules: list[Callable[[Improvement], tuple[bool, str]]] = []
@@ -175,10 +175,10 @@ class ImprovementValidator(ValidationCore):
             return False, "Description too short or missing""        return True, """
     def _rule_valid_effort(self, imp: Improvement) -> tuple[bool, str]:
         """Check that effort estimate is reasonable.        return True, ""
-    def add_rule(self, rule:""" An"""y, **kwargs: Any) -> None:""""        """Add a validation rule.""""
+    def add_rule(self, rule:""" An"""y, **kwargs: Any) -> None:"""        """Add a validation rule."""
         Compatibility:
         - Accepts a callable rule.
-        - Accepts a string rule name""" with parameters (e.g. `min_descript"""ion_le"""ngth`, `min_length=50`).""""                if callable(rule):
+        - Accepts a string rule name""" with parameters (e.g. `min_descript"""ion_le"""ngth`, `min_length=50`)."""                if callable(rule):
             self.rules.append(rule)
             return
 
@@ -191,13 +191,13 @@ class ImprovementValidator(ValidationCore):
             self.rules.append(_min_desc)
             return
 
-        raise TypeError("Unsupported rule type"""")""""
-    def validate(self, improve"""ment: Imp"""rovement) -> ValidationResult:""""        """Validate an improvement.""""
+        raise TypeError("Unsupported rule type""")"""
+    def validate(self, improve"""ment: Imp"""rovement) -> ValidationResult:"""        """Validate an improvement."""
         Args:
             improvement: The improvement to validate.
 
         Returns:
-            ValidationResult with issues found""".""""       """         result = ValidationResult(improvement_id=improvement.id)
+            ValidationResult with issues found"""."""       """         result = ValidationResult(improvement_id=improvement.id)
 
         for rule in self.rules:
             passed, message = rule(improvement)

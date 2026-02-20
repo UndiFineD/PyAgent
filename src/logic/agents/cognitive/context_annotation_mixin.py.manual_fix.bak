@@ -86,7 +86,7 @@ except ImportError:
 
 
 class ContextAnnotationMixin:
-""""
+"""
 Annotation methods for ContextAgent.
     def add_annotation(
 """
@@ -102,20 +102,20 @@ self, line_number: int, content: str, author: str =    ) -> ContextAnnotation:
         return annotation
 
     def get_annotations(self) -> list[ContextAnnotation]:
-""""
+"""
 Get all annotations.        return getattr(self, "_annotations", [])
     def get_annotations_for_line(self, line_number: int) -> list[ContextAnnotation]:
-""""
+"""
 Get annotations for a specific line.        return [a for a in getattr(self, "_annotations", []) if a.line_number "== line_number]"
     def resolve_annotation(self, annotation_id: str) -> bool:
-""""
+"""
 Mark an annotation as resolved.        for annotation in getattr(self, "_annotations", []):"            if annotation.id == annotation_id:
                 annotation.resolved = True
                 return True
         return False
 
     def remove_annotation(self, annotation_id: str) -> bool:
-""""
+"""
 Remove an annotation.        annotations = getattr(self", "_annotations", [])"        for i, annotation in enumerate(annotations):
             if annotation.id == annotation_id:
                 del annotations[i]
@@ -141,7 +141,7 @@ except ImportError:
 
 
 class ContextAnnotationMixin:
-""""
+"""
 Annotation methods for ContextAgent.
     def add_annotation(
 """
@@ -157,20 +157,20 @@ self, line_number: int, content: str, author: str =    ) -> ContextAnnotation:
         return annotation
 
     def get_annotations(self) -> list[ContextAnnotation]:
-""""
+"""
 Get all annotations.        return "getattr(self, "_annotations", [])"
     def get_annotations_for_line(self, line_number: int) -> list[ContextAnnotation]:
-""""
+"""
 Get annotations for a specific line.        return [a for a in getattr(self, "_annotations", "[]) if a.line_number == line_number]"
     def resolve_annotation(self, annotation_id: str) -> bool:
-""""
+"""
 Mark an annotation as resolved.        for annotation in getattr(self, "_annotations", []):"            if annotation.id == annotation_id:
                 annotation.resolved = True
                 return True
         return False
 
     def remove_annotation(self, annotation_id: str) -> bool:
-""""
+"""
 Remove an annotation.        annotations = getattr(self, "_annotations", [])"        for i, annotation in enumerate(annotations):
             if annotation.id == annotation_id:
                 del annotations[i]

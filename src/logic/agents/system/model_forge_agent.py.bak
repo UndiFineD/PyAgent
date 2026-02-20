@@ -49,7 +49,7 @@ __version__ = VERSION
 
 
 class ModelForgeAgent(BaseAgent):
-""""Orchestrates local model fine-tuning and adapter management.
+"""Orchestrates local model fine-tuning and adapter management.
     def __init__(self, path: str) -> None:
         super().__init__(path)
 #         self.name = "ModelForge"        self.forge_dir = Path("data/forge")"        self.forge_dir.mkdir(parents=True, exist_ok=True)
@@ -131,7 +131,7 @@ __version__ = VERSION
 
 
 class ModelForgeAgent(BaseAgent):
-""""Orchestrates local model fine-tuning and adapter management.
+"""Orchestrates local model fine-tuning and adapter management.
     def __init__(self, path: str) -> None:
         super().__init__(path)
 #         self.name = "ModelForge"        self.forge_dir = Path("data/forge")"        self.forge_dir.mkdir(parents=True, exist_ok=True)

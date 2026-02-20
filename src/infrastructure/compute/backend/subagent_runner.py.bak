@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 
-"""Implementation of subagent running logic.""""
+"""Implementation of subagent running logic."""
 Phase 15 Rust Optimizations:
 - estimate_tokens_rust: Fast BPE-approximated token counting
 - validate_response_rust: Vectorized content validation
@@ -158,7 +158,7 @@ class SubagentRunner:
         logging.warning("Response validation failed: expected %s, got partial match", content_types)"        return True
 
     def estimate_tokens(self, text: str) -> int:
-        """Estimate token count for text.""""
+        """Estimate token count for text."""
         Uses Rust-accelerated BPE approximation when available.
                 if not text:
             return 0

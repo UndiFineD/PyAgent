@@ -72,7 +72,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
         self._load_standards()
 
     def _load_standards(self) -> None:
-""""
+"""
 Load formatting standards from documentation files.        # Try to load from standards file
 #         standards_file = Path(__file__).parent.parent.parent.parent / "docs" / "standards" / "DOCSTRING_STANDARDS.md"        if standards_file.exists():
             try:
@@ -243,7 +243,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         )
 
     def get_learning_insights(self) -> str:
-""""
+"""
 Get insights learned from past mistakes.        total_mistakes = sum(self.common_mistakes.values())
 
         if total_mistakes == 0:
@@ -259,7 +259,7 @@ Get insights learned from past mistakes.        total_mistakes = sum(self.common
         return insights
 
     def _extract_file_path(self, content: str) -> Optional[str]:
-""""
+"""
 Extract file path from message content.   "     # Look for file extensions or path patterns"        path_patterns = [
             r'["\']([^"\']*\\.py[^"\']*)["\']',  # Quoted paths"'            r'(\\S+\\.py)',  # Unquoted paths'            r'(src/[^\'"\\\\s]+)',  # Relative paths"'        ]
 
@@ -337,7 +337,7 @@ Extract file path from message content.   "     # Look for file extensions or pa
         return results
 
     def _validate_syntax(self, content: str) -> List[str]:
-""""
+"""
 Validate Python "syntax and return critical issues.        issues = []
         try:
             ast.parse(content)
@@ -346,7 +346,7 @@ Validate Python "syntax and return critical issues.        issues = []
             issues.append("Parse Error")"        return issues
 
     def _validate_indentation(self, lines: List[str]) -> Dict[str, List[str]]:
-""""
+"""
 Strictly validate indentation - only 4 spaces allowed, no tabs.        issues = {"critical": [], "warnings": []}
         for i, line in enumerate(lines, 1):
             if line.strip():  # Skip empty lines
@@ -358,7 +358,7 @@ Strictly validate indentation - only 4 spaces allowed, no tabs.        issues = 
         return issues
 
     def _validate_line_length(self, lines: List[str]) -> List[str]:
-""""
+"""
 Validate line length does not exceed 120 characters.        issues = []
         max_length = self.standards["max_line_length"]
         for i, line in enumerate(lines, 1):
@@ -366,7 +366,7 @@ Validate line length does not exceed 120 characters.        issues = []
                 issues.append(fLine {i}: Too long ({len(line)} chars > {max_length})")"
         return issues
 
-    def _validate_trailing_whitespace(self, lines: List[str]) -> List[str]":"""""
+    def _validate_trailing_whitespace(self, lines: List[str]) -> List[str]":"""
 Check for trailing whitespace.        issues = []
 
         for i, line in enumerate(lines, 1):
@@ -374,14 +374,14 @@ Check for trailing whitespace.        issues = []
                 issues.append(fLine {i}: Trailing whitespace")"
         return issues
 
-    def _validate_final_newline(self, content: str) -> "List[str]:"""""
+    def _validate_final_newline(self, content: str) -> "List[str]:"""
 Check for final newline.        issues = []
 
         if not content.endswith('\\n'):'            issues.append("File must end with a newline")
         return issues
 
     def _validate_naming_conventions(self, content: str) -> Dict[str, List[str]]:
-""""
+"""
 Validate naming conventions for variables, "functions, classes.        issues = {"critical": [], "warnings": []}"
         try:
             tree = ast.parse(content)
@@ -404,7 +404,7 @@ Validate naming conventions for variables, "functions, classes.        issues = 
         return issues
 
     def _validate_brackets_and_quotes(self, content: str, lines: List[str]) -> Dict[str, List[str]]:
-""""
+"""
 Strictly validate brackets, "quotes", and related spacing.        issues = {"critical": [], "warnings": []}
         # 1. Bracket matching
         bracket_issues = self._validate_bracket_matching(content)
@@ -420,7 +420,7 @@ Strictly validate brackets, "quotes", and related spacing.        issues = {"cri
         issues["critical"].extend(comma_colon_issues)
         return issues
 
-    def _validate_bracket_matching(self, content: str) -> List[str]":"""""    "Validate that all brackets are properly matched.        issues = []
+    def _validate_bracket_matching(self, content: str) -> List[str]":""""    "Validate that all brackets are properly matched.        issues = []
         stack = []
         bracket_pairs = {')': '(', ']': '[', '}': '{', '>': '<'}'        opening_brackets = set('([{<')'        closing_brackets = set(')]}>')
         for i, char in enumerate(content):
@@ -437,7 +437,7 @@ Strictly validate brackets, "quotes", and related spacing.        issues = {"cri
                 line_num = content[:pos].count('\\n') + 1'                issues.append(fLine {line_num}: Unmatched opening bracket '{opening}'")"'
        " return issues"
     def _validate_bracket_spacing(self, lines: List[str]) -> List[str]:
-""""
+"""
 Validate strict bracket spacing rules.        issues = []
 
         for i, line in enumerate(lines, 1):
@@ -484,7 +484,7 @@ Handle string literals"'                if char in ('"', "'") and (j == 0 or lin
         return issues
 
     def _validate_quote_consistency(self, lines: List[str]) -> List[str]:
-""""     "Validate quote style consistency (prefer double quotes).        issues = []
+"""     "Validate quote style consistency (prefer double quotes).        issues = []
 
         for i, line in enumerate(lines, 1):
             # Skip comments and docstrings
@@ -518,7 +518,7 @@ not in string_content:"'                            issues.append(fLine {i}: Pre
         return issues
 
     def _validate_comma_colon_spacing(self, lines: List[str]) -> List[str]:
-""""
+"""
 Validate comma and colon spacing rules.        issues = []
 
         for i, line in enumerate(lines, 1):
@@ -561,7 +561,7 @@ j = 0"'            while j < len(line):
 
         return issues
 
-    def _validate_docstrings(self, file_path: str") -> Dict[str, List[str]"]:""""
+    def _validate_docstrings(self, file_path: str") -> Dict[str, List[str]"]:""
 Comprehensive docstring validation.        issues = {"critical": [], "warnings": []}
         try:
             # Import the batch formatter for comprehensive docstring analysis
@@ -721,4 +721,4 @@ Comprehensive docstring validation.        issues = {"critical": [], "warnings":
 
 """
 
-"""
+""

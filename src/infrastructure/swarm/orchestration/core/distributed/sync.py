@@ -57,7 +57,7 @@ Fetch state from a specific remote rank.        ...
 
 class NixlSyncProvider(DistributedSyncProvider):
 """
-Synchronization provider using NIXL RDMA primitives.""""
+Synchronization provider using NIXL RDMA primitives.""
 Utilizes zero-copy memory mapping for low-latency synchronization.
     
     def __init__(self, rank: int, world_size: int):
@@ -142,4 +142,4 @@ Fallback TCP-based synchronization.
 
 """
 
-"""
+""

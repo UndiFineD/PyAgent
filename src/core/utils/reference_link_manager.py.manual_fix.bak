@@ -37,7 +37,7 @@ __version__ = VERSION
 
 class ReferenceLinkManager:
 """
-Manages links to commits and issues in changelog entries.""""
+Manages links to commits and issues in changelog entries.""
 Provides functionality to add, validate, and format references
     to commits and issues.
 
@@ -53,7 +53,7 @@ Initialize the reference link manager.""
 self.references: dict[str, list[LinkedReference]] = {}
 
     def add_commit_reference(self, entry_id: str, commit_sha: str, url: str = "", title: str = "") -> LinkedReference:"        """
-Add a commit reference to an entry.""""
+Add a commit reference to an entry.""
 Args:
             entry_id: ID of the changelog entry.
             commit_sha: Git commit SHA.
@@ -69,7 +69,7 @@ ref = LinkedReference(ref_type="commit", ref_id=commit_sha[:7], url=url, title=t
         return ref
 
     def add_issue_reference(self, entry_id: str, issue_number: str, url: str = "", title: str = "") -> LinkedReference:"        """
-Add an issue reference to an entry.""""
+Add an issue reference to an entry.""
 Args:
             entry_id: ID of the changelog entry.
             issue_number: Issue number.
@@ -86,7 +86,7 @@ ref = LinkedReference(ref_type="issue", ref_id=f"#{issue_number}", url=url, titl
 
     def format_references(self, entry_id: str) -> str:
 """
-Format references for display.""""
+Format references for display.""
 Args:
             entry_id: ID of the changelog entry.
 
@@ -97,6 +97,10 @@ refs = self.references.get(entry_id, [])
         if not refs:
             return ""
 return " (" + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs) + ")"
+"""
+
+"""
+
 """
 
 """

@@ -38,7 +38,7 @@ class ContextCompressor:
         self.core = ContextCompressorCore()
 
     def compress_file(self, file_path_raw: Any) -> str:
-""""
+"""
 Determines compression strategy based on file extension and handles I/O.        file_path = Path(file_path_raw)
 
         if not file_path.exists():
@@ -85,6 +85,8 @@ if __name__ == "__main__":"    # Test
 
 """
 
-""
+"""
+
+"""
 
 """

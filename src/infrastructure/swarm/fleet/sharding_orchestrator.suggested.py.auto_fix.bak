@@ -42,7 +42,7 @@ __version__ = VERSION
 
 
 class ShardingOrchestrator:
-    """Analyzes agent interactions and suggests/implements logical grouping.""""    Phase 234: Implements Dynamic Shard Rebalancing via DBSCAN and Live Migration.
+    """Analyzes agent interactions and suggests/implements logical grouping."""    Phase 234: Implements Dynamic Shard Rebalancing via DBSCAN and Live Migration.
     
     def __init__(self, workspace_root: Path, interaction_threshold: int = 1000) -> None:
         self.workspace_root = workspace_root

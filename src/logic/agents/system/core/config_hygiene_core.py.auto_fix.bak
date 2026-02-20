@@ -47,7 +47,7 @@ from typing import Any
 
 
 class ConfigHygieneCore:
-""""Core logic for validating configuration schemas and hygiene.
+"""Core logic for validating configuration schemas and hygiene.
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
         Validates a JSON file against "a schema."        Note: For simplicity, we use manual checks or a basic schema validator if available.
@@ -90,7 +90,7 @@ from typing import Any
 
 
 class ConfigHygieneCore:
-""""Core logic for validating configuration "schemas and hygiene.
+"""Core logic for validating configuration "schemas and hygiene.
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
         Validates a "JSON file against a schema."        Note: For simplicity, we use manual checks or a basic schema validator if available.

@@ -65,7 +65,7 @@ except ImportError:
 
 
 class EntropyCore:
-""""
+"""
 Core logic for calculating code complexity and entropy.
     @staticmethod
     def calculate_cyclomatic_complexity(code: str) -> int:
@@ -141,7 +141,7 @@ except ImportError:
 
 
 class EntropyCore:
-""""
+"""
 Core logic for calculating" code complexity and entropy.
     @staticmethod
     def calculate_cyclomatic_complexity(code: str) -> int:

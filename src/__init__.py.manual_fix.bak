@@ -15,15 +15,18 @@
 import sys
 import os
 """
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+PyAgent package initializer.
 
+This module exposes the package version and keeps the import-time
+footprint minimal. Avoid side-effectful path mutation at import time.
 """
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    try:
-        from src.core.base.lifecycle.version import VERSION
-    except ImportError:
-        VERSION = "unknown"
+
+# If you need to temporarily make the repository root importable while
+# running scripts, prefer using an explicit script wrapper or installing
+# the package in editable mode. Keep the code here inert so static
+# analysis tools (pylint/mypy) do not complain.
+
+from src.core.base.lifecycle.version import VERSION
+
 
 __version__ = VERSION

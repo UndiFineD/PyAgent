@@ -41,11 +41,11 @@ except ImportError:
 
 
 class CoderMetricsMixin:
-""""
+"""
 Mixin for CoderCore to handle complex metrics calculations.
 
     def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
-""""
+"""
 Deep AST analysis for Python.        from src.core.rust_bridge import RustBridge
 
         # Optimize import counting if rust is available
@@ -75,7 +75,7 @@ Deep AST analysis for Python.        from src.core.rust_bridge import RustBridge
         return metrics
 
     def compute_maintainability_index(self, metrics: CodeMetrics) -> float:
-""""
+"""
 Computes the Maintainability Index (MI) based on Halstead and CC.        if metrics.lines_of_code <= 0:
             return 100.0
 

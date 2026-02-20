@@ -43,7 +43,7 @@ if HAS_NUMPY:
 
 class XDRotaryEmbedding(RotaryEmbeddingBase):
 """
-Extended Dynamic Rotary Position Embedding.""""
+Extended Dynamic Rotary Position Embedding.""
 Implements dynamic NTK-aware scaling for extended context lengths.
     
     def __init__(self, config: RoPEConfig) -> None:
@@ -143,4 +143,4 @@ Apply XD rotary embeddings with dynamic scaling.        if HAS_TORCH and isinsta
 
 """
 
-"""
+""

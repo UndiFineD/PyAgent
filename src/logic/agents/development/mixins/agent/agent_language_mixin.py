@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 # "Language detection and validation logic for CoderAgent."""
-pylint: disable=too-many-ancestors""""
+pylint: disable=too-many-ancestors""
 try:
     from .core.base.common.types.code_language import CodeLanguage
 except ImportError:
@@ -28,10 +28,10 @@ except ImportError:
 
 
 class AgentLanguageMixin:
-""""
+"""
 Mixin for code language detection and syntax validation.
     def _detect_language(self) -> CodeLanguage:
-""""
+"""
 Detect the programming language from file extension.        if not hasattr(self, "file_path"):"            return CodeLanguage.UNKNOWN
         ext = self.file_path.suffix.lower()
         return self.LANGUAGE_EXTENSIONS.get(ext, CodeLanguage.UNKNOWN)
@@ -46,19 +46,23 @@ Detect the programming language from file extension.        if not hasattr(self,
 
     @property
     def language(self) -> CodeLanguage:
-""""
+"""
 Get the detected language.        return getattr(self, "_language", CodeLanguage.UNKNOWN)
     @property
     def _is_python_file(self) -> bool:
-""""
+"""
 Check if the file is a Python file.        return self.language == CodeLanguage.PYTHON
 
     def _validate_syntax(self, content: str) -> bool:
-""""
+"""
 Validate Python syntax using ast.        if hasattr(self, "core"):"            return self.core.validate_syntax(content)
         return True
 
     def _validate_flake8(self, content: str) -> bool:
-""""
+"""
 Validate Python code using flake8 if available.        if hasattr(self, "core"):"            return self.core.validate_flake8(content)
         return True
+
+""
+
+"""

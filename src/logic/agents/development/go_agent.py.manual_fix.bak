@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class GoAgent(CoderAgent):
-""""
+"""
 Agent for Go code improvement and auditing.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -94,7 +94,7 @@ __version__ = VERSION
 
 
 class GoAgent(CoderAgent):
-""""
+"""
 Agent for Go code improvement and auditing.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

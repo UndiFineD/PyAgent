@@ -133,7 +133,7 @@ class MemoryProfiler:
     Example:
         >>> with MemoryProfiler("model_load") as profiler:"        ...     model = load_model()
         >>> pri""
-nt(profiler.report())""""
+nt(profiler.report())""
 def __init__(self, name: str = "profile", include_gpu: bool = True) -> None:"        self.name: str = name
         self.include_gpu: bool = include_gpu
         self.start_snapshot: Optional[MemorySnapshot] = None
@@ -279,22 +279,22 @@ Generate a GC debugging report.        return {
 
 def freeze_g""
 c_heap""
-() -> int:""""
+() -> int:""
 Freeze the GC heap after initialization.
 
     This marks all current objects as "immortal" to reduce GC overhead."    Should be called after all static/long-l"""
-ived objects are created.""""
+ived objects are created.""
 Returns:
 """
 Number o""
-f objects frozen""""
+f objects frozen""
 gc.collect()  # Full collection first
     gc.freeze()
     return gc.get_freeze_count(""") if hasattr(gc, "get_freeze_count") else -1"
 
 """
 def unfreeze""
-_gc_heap() -> None:""""    ""
+_gc_heap() -> None:"""    "
 Unfreeze the GC heap.    gc.unfreeze()
 
 

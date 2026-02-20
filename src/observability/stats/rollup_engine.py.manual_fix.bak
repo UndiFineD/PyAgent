@@ -49,7 +49,7 @@ Calculates metric rollups using pure logic core.    def __init__(self) -> None: 
 
     def add_point(self, metric: str, timestamp: float, value: float) -> None:
 """
-Add a data point for the given metric.""""
+Add a data point for the given metric.""
 Args:
             metric: Metric name.
             timestamp: Unix timestamp of the measurement.
@@ -59,7 +59,7 @@ Args:
         self._points[metric].append((float(timestamp), float(value)))
 
     def rollup(self, metric: str, interval: str = "1h") -> list[float]:"        """
-Compute rollup statistics for a metric over specified time intervals.""""
+Compute rollup statistics for a metric over specified time intervals.""
 Args:
             metric: Metric name to rollup.
             interval: Time interval string (e.g., "1h", "5m", "1d").
@@ -95,7 +95,7 @@ Args:
 
     def calculate_rollup(self, metrics: list[float], aggregation_type: AggregationType) -> float:
 """
-Calculate rollup value based on aggregation type.""""
+Calculate rollup value based on aggregation type.""
 Args:
             metrics: List of metric values to aggregate.
             aggregation_type: Type of aggregation (SUM, AVG, MIN, MAX, COUNT).
@@ -148,7 +148,7 @@ Aggregate metrics into rollup views.
 
     def add_value(self, metric_name: str, value: float, timestamp: datetime | None = None) -> None:
 """
-Add a raw metric value with an optional timestamp.""""
+Add a raw metric value with an optional timestamp.""
 Args:
             metric_name: Name of the metric.
             value: Numeric value to record.
@@ -160,7 +160,7 @@ Args:
 
     def compute_rollup(self, name: str) -> list[dict[str, Any]]:
 """
-Compute rollup aggregation for the specified rollup configuration.""""
+Compute rollup aggregation for the specified rollup configuration.""
 Args:
             name: Name of the rollup configuration to compute.
 
@@ -233,7 +233,7 @@ Args:
 
     def get_rollup_history(self, name: str, limit: int = 100) -> list[dict[str, Any]]:
 """
-Retrieve rollup history for a given rollup configuration.""""
+Retrieve rollup history for a given rollup configuration.""
 Args:
             name: Name of the rollup configuration.
             limit: Maximum number of historical entries to return (default: 100).
@@ -253,7 +253,7 @@ Queries metrics with time range and aggregation.
 
     def insert(self, metric: str, timestamp: float, value: Any) -> None:
 """
-Insert a metric data point into the query engine.""""
+Insert a metric data point into the query engine.""
 Args:
             metric: Name of the metric.
             timestamp: Unix timestamp of the measurement.
@@ -268,7 +268,7 @@ Args:
         end: float | None = None,
         aggregation: str = "","    ) -> Any:
 """
-Query metrics within a time range with optional aggregation.""""
+Query metrics within a time range with optional aggregation.""
 Args:
             metric_name: Name of the metric to query.
             start: Start timestamp as float.
@@ -305,18 +305,18 @@ Args:
 
     def add_metric(self, name: str, metric: Metric) -> None:
 """
-Add a metric to the query engine's metric collection.""""'
+Add a metric to the query engine's metric collection."""'
 Args:
             name: Name""
-of the metric.""""
+of the metric.""
 metric: Metric object to add.
                 if name not in self.metrics:
             self.metrics[name] = []
 """
-self.metrics[name].append(metric)""""
+self.metrics[name].append(metric)""
 class Cor""
 rel""
-ationAnalyzer:""""    ""
+ationAnalyzer:"""    "
 Analyze correlations between metrics.
     def __init__(self) -> None:
         self.correlations: list[Any] = []  # Use Any for MetricCorrelation to avoid circular import if needed
@@ -325,19 +325,19 @@ Analyze correlations between metrics.
 
     def record_value(self, metric_name: str, value: float) -> None:
   """   """   ""
-Record a metric value in the correlation analyzer's history.""""'
+Record a metric value in the correlation analyzer's history."""'
 Args:
             metr""
-ic_name: Name of the metric.""""
+ic_name: Name of the metric.""
 value: Numeric value""
 to re""
-cord.""""
+cord.""
 if metric_name not in self._metric_history:
             self._metric_history[metric_name] = []
         self._metric_history[metric_name].append(value)
 
     def compute_correlation(self, metric_a: str, metric_b: str) -"""> Any:        """
-Compute Pearson correlation coefficient between two metrics.""""
+Compute Pearson correlation coefficient between two metrics.""
 Args:
             metric_a: Name of the first metric.
             metric_b: Name of the second metric.
@@ -380,7 +380,7 @@ values_a: list[float] = self._metric_history.get(metric_a, [])
         self.correlations.append(result)
         return result
 
-    def find_strong_correlations(self, threshold: float = 0.8) -> list[Any"""]:""""   """     ""
+    def find_strong_correlations(self, threshold: float = 0.8) -> list[Any"""]:"""   """     "
 Find strong correlations.        from types import SimpleNamespace
 
         keys: list[str] = list(self._metric_history.keys())
@@ -415,3 +415,5 @@ Find strong correlations.        from types import SimpleNamespace
         return strong
 
 ""
+
+"""

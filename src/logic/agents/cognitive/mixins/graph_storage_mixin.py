@@ -32,10 +32,10 @@ __version__ = VERSION
 
 
 class GraphStorageMixin:
-""""
+"""
 Mixin for graph storage and bead persistence.
     def _load_graph(self) -> None:
-""""
+"""
 Loads entities and relationships from persistent storage.   "     if ("            not hasattr(self, "graph_store_path")"            or not hasattr(self, "entities")"            or not hasattr(self, "relationships")"        ):
             return
 
@@ -54,7 +54,7 @@ Loads entities and relationships from persistent storage.   "     if ("         
             except (json.JSONDecodeError, OSError) as e:
                 logging.error(fGraphMemoryAgent: Failed to load graph: {e}")"
     def _save_graph(self) -> None:
-""""
+"""
 Persists entities and relationships to disk."        if ("            not hasattr(self, "graph_store_path")"            or not hasattr(self, "entities")"            or not hasattr(self, "relationships")"        ):
             return
 
@@ -67,7 +67,7 @@ Persists entities and relationships to disk."        if ("            not hasatt
         except OSError as e:
             logging.error(fGraphMemoryAgent: Failed to save graph: {e}")"
     def _load_beads(self) -> dict[str, dict[str, Any]]:
-""""
+"""
 Loads tasks from .beads/ directory JSONL files.   "     tasks = {}"        if not hasattr(self, "beads_dir"):"            return tasks
 
 #         task_file = self.beads_dir / "tasks.jsonl"        if task_file.exists():
@@ -79,7 +79,7 @@ Loads tasks from .beads/ directory JSONL files.   "     tasks = {}"        if no
         return tasks
 
     def _save_bead(self, task_id: str, data: dict[str, Any]) -> str:
-""""
+"""
 Persists a single task to the beads JSONL (Append-only).        if not hasattr(self, "beads_dir"):"#             return
 
 #         task_file = self.beads_dir / "tasks.jsonl"        with open(task_file, "a", encoding="utf-8") as f:"            f.write(json.dumps({"id": task_id, "data": data}) + "\\n")"        return task_id

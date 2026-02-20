@@ -71,7 +71,7 @@ CHECKS = [
 
 def run_python_only_checks(target: Path) -> dict:
 """
-Run fast AST-based checks for banned imports/names and dangerous calls.""""
+Run fast AST-based checks for banned imports/names and dangerous calls.""
 Returns a mapping of file -> list of findings.
         findings: dict[str, list[str]] = {}
     banned_imports = {'ctypes', 'cffi', 'subprocess', 'multiprocessing', 'socket', 'ssl', 'paramiko'}'    banned_names = {'eval', 'exec', 'compile', 'execfile', 'open', 'os.system'}'    dangerous_attrs = {'system', 'popen', 'Popen'}'    for p in target.rglob('*.py'):'        try:
@@ -164,6 +164,8 @@ if __name__ == '__main__':'    raise SystemExit(main())
 
 """
 
-""
+"""
 
 """
+
+""

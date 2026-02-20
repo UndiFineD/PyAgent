@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 
-# "Auto-extracted class from agent_coder.py"""" pylint: disable=too-many-ancestors""""
+# "Auto-extracted class from agent_coder.py""" pylint: disable=too-many-ancestors"""
 
 try:
     import logging
@@ -151,7 +151,7 @@ class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMix
         self._duplicate_hashes: dict[str, list[int]] = {}
 
     def _detect_language(self) -> CodeLanguage:
-""""Detect the programming language from file extension.        ext = self.file_path.suffix.lower()
+"""Detect the programming language from file extension.        ext = self.file_path.suffix.lower()
         return self.LANGUAGE_EXTENSIONS.get(ext, CodeLanguage.UNKNOWN)
 
     def detect_language(self) -> CodeLanguage:
@@ -164,15 +164,15 @@ class CoderAgent(BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMix
 
     # ========== Documentation Generation ==========
     def generate_documentation(self, content: str | None = None) -> str:
-""""Generate documentation from code.        if content is None:
+"""Generate documentation from code.        if content is None:
 #             content = self.current_content or self.previous_content or
         return self.core.generate_documentation(content)
 
     # ========== Core Methods ==========
     def _get_default_content(self) -> str:
-""""Return default content for new code files.#         return "# Code file\"n\\n# Add code here\\n"
+"""Return default content for new code files.#         return "# Code file\"n\\n# Add code here\\n"
     def _get_fallback_response(self) -> str:
-""""Return fallback response when Copilot is unavailable.        return (
+"""Return fallback response when Copilot is unavailable.        return (
 #             "# AI Improvement Unavailable\\n"#             "# GitHub CLI not found. Install from https://cli.github.com/\\n\\n"#             "# Original code preserved below:\\n\\n"        )
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

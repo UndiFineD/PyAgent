@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-Engine for Self-Referential Swarm Optimization.""""
+Engine for Self-Referential Swarm Optimization.""
 Monitors fleet performance and suggests structural or configuration changes.
 
 """
@@ -98,4 +98,4 @@ Applies the suggested optimizations to the fleet.        results = []
 
 """
 
-"""
+""

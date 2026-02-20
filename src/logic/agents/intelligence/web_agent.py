@@ -46,7 +46,7 @@ except ImportError:
 
 
 class WebAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in web content extraction and scraping orchestration.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -60,7 +60,7 @@ except ImportError:
 
 
 class WebAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Agent specialized in web content extraction and scraping orchestration.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -84,7 +84,7 @@ class DependencyInjector:
         """Generate pytest fixture code for a dependency.        dep = self.dependencies.get(name)
         if not dep:
             return """        scope = self._scopes.get(name, "function")"        return (
-            f"@pytest.fixture(scope='{scope}')\\n""'            f"def {name}() -> {dep.dependency_type}:\\n""            f'    """{name} fixture."""\\n'""""'            f"    {dep.implementation or 'pass'}\\n""'        )
+            f"@pytest.fixture(scope='{scope}')\\n""'            f"def {name}() -> {dep.dependency_type}:\\n""            f'    """{name} fixture."""\\n'"""'            f"    {dep.implementation or 'pass'}\\n""'        )
 
     def get_all_fixtures(self) -> str:
         """Generate all fixture code.        fixtures: list[str] = []

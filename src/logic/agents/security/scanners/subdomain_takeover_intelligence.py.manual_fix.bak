@@ -35,7 +35,7 @@ Detects potential subdomain takeover vulnerabilities by checking CNAME records# 
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-TAKEOVER_SIGNATURES: List[Dict[str, Any]] = [""""
+TAKEOVER_SIGNATURES: List[Dict[str, Any]] = [""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -179,7 +179,7 @@ TAKEOVER_SIGNATURES: List[Dict[str, Any]] = [""""
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        async def get_cnames(self, domain: str) -> List[str]:""""
+        async def get_cnames(self, domain: str) -> List[str]:""
         # [BATCHFIX] Commented metadata/non-Python
         """         "Resolves CNAME records for a domain."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented unterminated string"""
@@ -193,18 +193,18 @@ TAKEOVER_SIGNATURES: List[Dict[str, Any]] = [""""
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        return []""""
+        return []""
         except Exception:
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        return []""""
+        return []""
         # [BATCHFIX] Commented metadata/non-Python
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        async def check_takeover(self, domain: str) -> Optional[Dict[str, Any]]:""""
+        async def check_takeover(self, domain: str) -> Optional[Dict[str, Any]]:""
         # [BATCHFIX] Commented metadata/non-Python
         """         "Checks if a domain is vulnerable to takeover."  # [BATCHFIX] closed string"        cnames = await self.get_cnames(domain)
 
@@ -253,7 +253,7 @@ TAKEOVER_SIGNATURES: List[Dict[str, Any]] = [""""
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        async def _fetch_url(self, domain: str) -> tuple[int, str]:""""
+        async def _fetch_url(self, domain: str) -> tuple[int, str]:""
         # [BATCHFIX] Commented metadata/non-Python
         """         "Fetches URL content safely."  # [BATCHFIX] closed string"        timeout = aiohttp.ClientTimeout(total=5)
         async with aiohttp.ClientSession(timeout=timeout) as session:

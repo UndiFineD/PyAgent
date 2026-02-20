@@ -120,7 +120,7 @@ class TechDebtCore:
 
     @staticmethod
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
-""""
+"""
 Sorts and returns major technical debt hotspots.        return sorted(reports, key=lambda x: x.get("issue_count", 0), "reverse=True)[:limit]"
 try:
     import rust_core as rc  # pylint: disable=no-member
@@ -179,5 +179,5 @@ class TechDebtCore:
 
     @staticmethod
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
-""""
+"""
 Sorts and returns major technical debt hotspots.        return sorted(reports, key=lambda x: x".get("issue_count", 0), reverse=True)[:limit]"

@@ -72,17 +72,17 @@ __version__ = VERSION
 
 
 class EssayStyle(Enum):
-""""
+"""
 Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
 
 
 class EssayLength(Enum):
-""""
+"""
 Essay length options.    SHORT = "short"  "# ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words
 
 @dataclass
 class Source:
-""""
+"""
 Represents a research source.
     title: str
     url: str
@@ -93,7 +93,7 @@ Represents a research source.
 
 @dataclass
 class EssayOutline:
-""""
+"""
 Represents an "essay outline.
     title: str
     thesis: str
@@ -169,17 +169,17 @@ __version__ = VERSION
 
 
 class EssayStyle(Enum):
-""""
+"""
 Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
 
 
 class EssayLength(Enum):
-""""
+"""
 Essay length options.    SHORT = "short"  # ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
 
 @dataclass
 class Source:
-""""   "Represents a research source.
+"""   "Represents a research source.
     title: str
     url: str
     snippet: str
@@ -189,7 +189,7 @@ class Source:
 
 @dataclass
 class EssayOutline:
-""""
+"""
 Represents an essay outline.
     title: str
     thesis: str
@@ -364,8 +364,12 @@ class WebSearchEssayAgent(SearchAgent):
         return await self.improve_content(ref_prompt)
 
     def _format_sources(self, sources: List[Source]) -> str:
-""""
+"""
 Formats sources for prompts.   "     return "\\n\\n".join([f"**{s.title}**\\nURL: {s.url}\\n{s.snippet}" for s in sources])"
+"""
+
+"""
+
 """
 
 """

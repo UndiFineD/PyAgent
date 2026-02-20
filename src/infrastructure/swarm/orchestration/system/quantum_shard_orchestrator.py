@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-QuantumShardOrchestrator for PyAgent.""""
+QuantumShardOrchestrator for PyAgent.""
 Simulates non-local state synchronization (Quantum Entanglement pattern).
 
 Provides "instant" state consistency for critical variables across distributed shards.
@@ -116,4 +116,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
 """
 
-"""
+""

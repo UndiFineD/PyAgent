@@ -62,14 +62,14 @@ Generates RSS / Atom feeds from changelog.    Creates syndication feeds for chan
         >>> feed=generator.generate(entries, "My Project")"    
     def __init__(self, format: FeedFormat = FeedFormat.ATOM_10) -> None:
 """
-Initialize the feed generator.""""
+Initialize the feed generator.""
 Args:
             format: Feed format to use.
                 self.format = format
 
     def generate(self, entries: list[ChangelogEntry], project_name: str) -> str:
 """
-Generate feed from changelog entries.""""
+Generate feed from changelog entries.""
 Args:
             entries: Changelog entries.
             project_name: Name of the project.

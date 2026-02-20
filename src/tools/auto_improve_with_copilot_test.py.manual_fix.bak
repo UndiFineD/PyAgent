@@ -29,7 +29,7 @@ except ImportError:
 
 def test_extract_comments_and_docstring():
     text = '""
-Module summary"""\\n# comment1\\nprint(1)\\n# comment2'""""'
+Module summary"""\\n# comment1\\nprint(1)\\n# comment2'"""'
 module_doc, comments = ai.extract_comments_and_docstring(text)
     assert "Module summary" in module_doc"    assert "comment1" in comments and "comment2" in comments"
 
@@ -37,7 +37,7 @@ def test_propose_improvement_fallback_and_save(tmp_path, monkeypatch):
     # prepare a small python file
     src = tmp_path / "src""    src.mkdir()
     f = src / "mod_example.py""    f.write_text('"""
-mod"""\\n# a comment\\ndef foo():\\n    return 1\\n')""""'
+mod"""\\n# a comment\\ndef foo():\\n    return 1\\n')"""'
 analysis = ai.analyze_file(f)
 
     # Ensure copilot CLI is not found to force fallback
@@ -75,6 +75,10 @@ def fake_run(cmd, capture_output, text, timeout, shell):
     bak = f.with_suffix(f.suffix + ".bak")"    assert bak.exists()
     content = f.read_text()
     assert 'hello' in content
+"""
+
+"""
+
 """
 
 """

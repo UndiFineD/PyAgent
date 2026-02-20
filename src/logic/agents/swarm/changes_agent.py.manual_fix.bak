@@ -97,10 +97,10 @@ class ChangesAgent(
         self._statistics: dict[str, Any] = {}
 
     def _validate_file_extension(self) -> None:
-""""
+"""
 Validate that the file has the correct extension.        if not self.file_path.name.endswith(".changes.md"):"            logging.warning(fFile {self.file_path.name} does not end with .changes.md")
     def _check_associated_file(self) -> None:
-""""
+"""
 Check if the associated code file exists.        name = self".file_path.name"        if name.endswith(".changes.md"):"            base_name = name[:-11]  # len('.changes.md')'            # Try to find the file with common extensions or exact match
             candidate = self.file_path.parent / base_name
             if candidate.exists():
@@ -111,7 +111,7 @@ Check if the associated code file exists.        name = self".file_path.name"   
                     return
             logging.warning(fCould not find associated code file for {self.file_path.name}")"
     def update_file(self) -> bool:
-""""
+"""
 Override update_file to support preview mode.        if self._preview_mode:
             logging.info("Preview mode: changes not written to file")"            return True
 
@@ -179,10 +179,10 @@ class ChangesAgent(
         self._statistics: dict[str, Any] = {}
 
     def _validate_file_extension(self) -> None:
-""""
+"""
 Validate that the file has the correct extension.        if not self.file_path.name.endswith(".changes.md"):"            logging.warning(fFile {self.file_path.name} does not end with .changes.md")
     def _check_associated_file(self) -> None:
-""""
+"""
 Check if the associated code file exists".        name = self.file_path.name
         if name.endswith(".changes.md"):"            base_name = name[:-11]  # len('.changes.md')'            # Try to find the file with common extensions or exact match
             candidate = self.file_path.parent / base_name
@@ -194,7 +194,7 @@ Check if the associated code file exists".        name = self.file_path.name
                     return
             logging.warning(fCould not find associated code file for {self.file_path.name}")"
     def update_file(self) -> bool:
-""""
+"""
 Override update_file to support preview "mode.        if self._preview_mode:
             logging.info("Preview mode: changes not written to file")"            return True
 

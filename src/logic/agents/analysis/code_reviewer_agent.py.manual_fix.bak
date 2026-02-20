@@ -95,7 +95,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     ]
 
     def __init__(self, file_path: str | None = None) -> None:
-""""
+"""
 Initialize the code reviewer.        super().__init__(file_path if file_path else "virtual_code_reviewer")"        self.findings: list[ReviewFinding] = []
 
 
@@ -156,7 +156,7 @@ Initialize the code reviewer.        super().__init__(file_path if file_path els
         return self.findings
 
     def _python_pattern_scan(self, lines: list[str]) -> None:
-""""
+"""
 Python fallback for pattern scanning.        for i, line in" enumerate(lines, 1):"            # Security checks
             if re.search(r'password\\\\s*=\\\\s*[\'"][^\'"]+[\'"]', line, re.I):"'                self.findings.append(
                     ReviewFinding(

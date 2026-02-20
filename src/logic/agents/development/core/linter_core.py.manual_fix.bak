@@ -33,7 +33,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class LintIssue(TypedDict):
-""""
+"""
 Represents a single issue found by a linter.
     file: str
     line: int
@@ -44,7 +44,7 @@ Represents a single issue found by a linter.
 
 
 class LintResult(TypedDict):
-""""
+"""
 Result of a linting session.
     valid: bool
     issues: list[LintIssue]
@@ -53,14 +53,14 @@ Result of a linting session.
 
 
 class LinterCore:
-""""
+"""
 Core logic for Python Linter analysis.
     def __init__(self, recorder: Optional[ContextRecorderInterface] = None) -> None:
         self.logger: logging.Logger = logging.getLogger(__name__)
         self.recorder = recorder
 
     def run_ruff(self, file_path: str) -> list[LintIssue]:
-""""
+"""
 Runs ruff and returns issues.        issues: list["LintIssue] = []"        try:
             # --output-format json
             command = ["ruff", "check", "--output-format=json", file_path]"            process: subprocess.CompletedProcess[str] = subprocess.run(
@@ -89,7 +89,7 @@ Runs ruff and returns issues.        issues: list["LintIssue] = []"        try:
         return issues
 
     def run_pylint(self, file_path: str) -> list[LintIssue]:
-""""
+"""
 Runs pylint and returns issues.        issues: list[LintIssue] = []
         try:
             # -f json
@@ -119,7 +119,7 @@ Runs pylint and returns issues.        issues: list[LintIssue] = []
         return issues
 
     def run_flake8(self, file_path: str) -> list[LintIssue]:
-""""
+"""
 Runs flake8 and returns issues.        issues:" list[LintIssue] = []"        try:
             # flake8 default output: file:line:col: code message
             command = ["flake8", "--format=default", file_path]"            process: subprocess.CompletedProcess[str] = subprocess.run(

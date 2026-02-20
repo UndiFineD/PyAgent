@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 
-# "Agent specializing in C++ programming."""" pylint: disable=too-many-ancestors""""
+# "Agent specializing in C++ programming.""" pylint: disable=too-many-ancestors"""
 
 try:
     from .core.base.common.base_utilities import create_main_function
@@ -37,7 +37,7 @@ __version__ = VERSION
 
 
 class CPlusPlusAgent(CoderAgent):
-""""Agent for C++ code improvement and auditing.
+"""Agent for C++ code improvement and auditing.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._language = "cpp"

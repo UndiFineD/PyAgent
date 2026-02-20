@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import threading
 except ImportError:
@@ -46,7 +46,7 @@ __version__ = VERSION
 
 class ABTester:
 """
-Conducts A / B tests across backends.""""
+Conducts A / B tests across backends.""
 Enables comparing performance between different backends or configurations.
 
     Example:
@@ -71,7 +71,7 @@ Initialize A / B tester.        self._tests: dict[str, dict[str, ABTestVariant]]
         weight_a: float = 0.5,
     ) -> tuple[ABTestVariant, ABTestVariant]:
 """
-Create an A / B test.""""
+Create an A / B test.""
 Args:
             test_name: Test identifier.
             backend_a: First backend.
@@ -102,7 +102,7 @@ Args:
         user_id: str,
     ) -> ABTestVariant | None:
 """
-Assign user to a variant.""""
+Assign user to a variant.""
 Args:
             test_name: Test identifier.
             user_id: User identifier.
@@ -135,7 +135,7 @@ Args:
         **metrics: float,
     ) -> None:
 """
-Record test result for a variant.""""
+Record test result for a variant.""
 Args:
             test_name: Test identifier.
             variant_name: Variant name ("A" or "B")."            **metrics: Metric values to record.
@@ -157,7 +157,7 @@ Args:
 
     def get_results(self, test_name: str) -> dict[str, Any] | None:
 """
-Get test results.""""
+Get test results.""
 Args:
             test_name: Test identifier.
 
@@ -182,7 +182,7 @@ Args:
         higher_is_better: bool = True,
     ) -> str | None:
 """
-Determine winning variant.""""
+Determine winning variant.""
 Args:
             test_name: Test identifier.
             metric: Metric to compare.
@@ -235,6 +235,8 @@ Args:
 
 """
 
-""
+"""
 
 """
+
+""

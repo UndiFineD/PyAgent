@@ -37,7 +37,7 @@ __version__ = VERSION
 
 
 class GraphBeadsMixin:
-""""Mixin for Beads task graph logic.
+"""Mixin for Beads task graph logic.
     @as_tool
     def create_task(
         self, title: str, parent_id: str | None = None, priority: int = 2

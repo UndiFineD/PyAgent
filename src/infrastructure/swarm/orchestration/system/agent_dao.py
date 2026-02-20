@@ -18,7 +18,7 @@ from __future__ import annotations
 
 
 """
-AgentDAO for PyAgent.""""
+AgentDAO for PyAgent.""
 Orchestration layer for Decentralized Autonomous Organization protocols.
 
 Manages resource allocation and task prioritization through agent deliberation.
@@ -66,7 +66,7 @@ Orchestrates resource and task governance across the fleet.
     @as_tool
     def execute_resource_allocation(self, allocation_plan: dict[str, float]) -> str:
 """
-Applies a resource allocation plan to the fleet.""""
+Applies a resource allocation plan to the fleet.""
 Args:
             allocation_plan: Mapping of agent/sub-swarm names to percentage of total resources.
 

@@ -56,7 +56,7 @@ except ImportError:
 
 
 class DocInferenceAgent(BaseAgent):
-""""Manages high-accuracy OCR and document layout reconstruction.
+"""Manages high-accuracy OCR and document layout reconstruction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -102,7 +102,7 @@ class DocInferenceAgent(BaseAgent):
             "status": "success","            "message": fSuccessfully ingested {doc_path} into {knowledge_file}","            "char_count": len(content),"        }
 
     @as_tool
-    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:"""""Converts a document (PDF/Image) into a structured format (markdown, html, json).        "path = Path(doc_path)"        if not path.exists():
+    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:""""Converts a document (PDF/Image) into a structured format (markdown, html, json).        "path = Path(doc_path)"        if not path.exists():
 #             return fError: Document {doc_path} not found.
 
         logging.info(fDocInference: Processing {doc_path} into {output_format}")"        # Mocking the layout conversion logic
@@ -110,7 +110,7 @@ class DocInferenceAgent(BaseAgent):
                 "Tables extracted: 2, Handwriting detected: Yes.")"
     @as_tool
     def extract_form_data(self, image_path: str) -> dict[str, Any]:
-""""Extracts key-value pairs and checkbox states from a form image.        logging.info(fDocInference: Extracting "form from {image_path}")"
+"""Extracts key-value pairs and checkbox states from a form image.        logging.info(fDocInference: Extracting "form from {image_path}")"
         return {
             "fields": {"Full Name": "John Doe", "Date": "2025-10-14"},"            "checkboxes": {"Priority": True, "Reviewed": False},"            "status": "Verified"," "       }"
     @as_tool
@@ -138,7 +138,7 @@ except ImportError:
 
 
 class DocInferenceAgent(BaseAgent):
-""""Manages high-accuracy OCR and document layout reconstruction.
+"""Manages high-accuracy OCR and document layout reconstruction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -184,7 +184,7 @@ class DocInferenceAgent(BaseAgent):
             "status": "success","            "message": fSuccessfully ingested {doc_path} into {knowledge_file}","            "char_count": len(content),"        }
 
     @as_tool
-    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:"""""Converts a document (PDF/Image) into a structured format (markdown, "html, json).        path = Path(doc_path)
+    def process_document(self, doc_path: str, output_format: str = "markdown") -> str:""""Converts a document (PDF/Image) into a structured format (markdown, "html, json).        path = Path(doc_path)
         if not path.exists():
 #             return fError: Document {doc_path} not found.
 
@@ -193,13 +193,13 @@ class DocInferenceAgent(BaseAgent):
                 "Tables extracted: 2, Handwriting detected: Yes.")"
     @as_tool
     def extract_form_data(self, image_path: str) -> dict[str, Any]:
-""""Extracts key-value pairs and checkbox states from a form image.        logging.info(fD"ocInference: Extracting form from {image_path}")"
+"""Extracts key-value pairs and checkbox states from a form image.        logging.info(fD"ocInference: Extracting form from {image_path}")"
         return {
             "fields": {"Full Name": "John Doe", "Date": "2025-10-14"},"            "checkboxes": {"Priority": True, "Reviewed": False},"            "status": "Verified","        }
 
     @as_tool
     def transcribe_handwriting(self, image_path: str) -> str:
-""""Uses advanced vision-language models to transcribe handwritten notes.        _ = image_path
+"""Uses advanced vision-language models to transcribe handwritten notes.        _ = image_path
         return "Transcribed Note: 'Meeting at 5pm to discuss the new agent architecture. Don't forget the coffee.'""'
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         Specialized content improvement for Documentation Inference.

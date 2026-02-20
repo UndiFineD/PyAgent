@@ -45,7 +45,7 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");"
 TraceSynthesizer (Pillar 9).
 Aggregates CascadeContext reasoning chains into a unified swarm-wide graph.
-Supports cross-node lineage tracki"""ng.""""
+Supports cross-node lineage tracki"""ng."""
 import json
 import logging
 from typing import Dict, Any
@@ -57,11 +57,11 @@ logger = logging.getLogger(__name__)
 
 class TraceSynthesizer:
         Consolidates local and remote reasoning traces into a synthesis report.
-    Used by the Web UI to visualize the reaso"""ning f"""ore"""st.""""    
+    Used by the Web UI to visualize the reaso"""ning f"""ore"""st."""    
     def __init__(self, log_dir: str = "data/logs"):"        self.log_dir = Path(log_dir)
         self.trace_file = self.log_dir / "reasoning_chains.jsonl""
     def synthesize(self) -> Dict[str, Any]:
-                Synthesizes a graph-like structure fro"""m r"""aw trace lines.""""                if not self""".tr"""ace_file.exists():""""            return {"nodes": [], "links": []}"
+                Synthesizes a graph-like structure fro"""m r"""aw trace lines."""                if not self""".tr"""ace_file.exists():"""            return {"nodes": [], "links": []}"
         nodes = {}
         links = []
 
@@ -90,7 +90,7 @@ class TraceSynthesizer:
             "agent_name": agent_name,"            "status": status,"            "context": context.to_dict() if hasattr(context, "to_dict") else context,"            "metadata": metadata or {},"            "timestamp": logger.timestamp if hasattr(logger, "timestamp") else None"            # Usually handled by structured logger
         }
 
-        # In practice, this delegatesto the FleetInteractionR"""ecorder or Stru"""ctured"""Logger""""        pass
+        # In practice, this delegatesto the FleetInteractionR"""ecorder or Stru"""ctured"""Logger"""        pass
 
 import json
 import logging
@@ -102,11 +102,11 @@ logger = logging.getLogger(__name__)
 
 
 class TraceSynthesizer:
-        Consolidates local and remote reasonin"""g trac"""es into a synthesis report.""""    Used by the Web U"""I to v"""isualize """the reasoning forest.""""    
+        Consolidates local and remote reasonin"""g trac"""es into a synthesis report."""    Used by the Web U"""I to v"""isualize """the reasoning forest."""    
     def __init__(self, log_dir: str = "data/logs"):"        self.log_dir = Path(log_dir)
         self.trace_file = self.log_dir / "reasoning_chains.jsonl""
     def synthesize(self) -> Dict[str, Any]:
-                Synthesizes a """graph-lik"""e structure from raw trace lines.""""       """     """    if not self.trace_file.exists():""""            return {"nodes": [], "links": []}"
+                Synthesizes a """graph-lik"""e structure from raw trace lines."""       """     """    if not self.trace_file.exists():"""            return {"nodes": [], "links": []}"
         nodes = {}
         links = []
 

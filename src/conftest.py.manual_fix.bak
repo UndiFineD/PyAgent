@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Pytest configuration for PyAgent tests.
+
+This file provides a few lightweight fixtures and import hooks that make
+auto-generated or environment-specific tests importable across platforms.
 """
 import types
 import tempfile
@@ -23,23 +25,26 @@ import importlib.util
 import re
 from pathlib import Path
 
-# Normalize Windows-style absolute paths embedded in generated tests when running on non-Windows CI
-_orig_spec_from_file_location = importlib.util.spec_from_file_location
 # Robustly determine repo root (handles shallow nesting)
 _repo_root = Path(__file__).resolve().parents[1]
+# Normalize Windows-style absolute paths embedded in generated tests when running on non-Windows CI
+_orig_spec_from_file_location = importlib.util.spec_from_file_location
 
 
 def _spec_from_file_location(name, location, *args, **kwargs):
 """
-Custom importlib hook to rewrite Windows absolute paths in test modules to point to the correct location in the repo.""
+Custom importlib hook to rewrite Windows absolute paths in test modules.
+
+    Rewrites Windows absolute paths that point into the repo (e.g., C:\Dev\PyAgent\src\...)
+    to a repo-relative path so tests generated on Windows can be imported on other OSes.
+"""
 try:
         loc = str(location)
-        # Detect Windows absolute path like C:\\Dev\\PyAgent\\... or C:/Dev/PyAgent/...
+        # Detect Windows absolute path like C:\Dev\PyAgent\... or C:/Dev/PyAgent/...
         if re.match(r'^[A-Za-z]:[\\/]', loc):
             m = re.search(r'^[A-Za-z]:[\\/](.*)', loc)
             if m:
                 # Only rewrite Windows absolute paths that point into repo subfolders
-                # like 'src/' or 'tests/'. Otherwise leave location untouched.
                 rest = m.group(1).replace('\\', '/').replace('\\\\', '/')
                 if rest.startswith(('src/', 'tests/', 'data/', 'temp/', 'agent_workspace/')):
                     newpath = _repo_root.joinpath(rest)
@@ -54,12 +59,8 @@ importlib.util.spec_from_file_location = _spec_from_file_location
 
 def pytest_ignore_collect(collection_path, config):
 """
-Ignore auto-generated tests that reference Windows absolute paths or external_candidates.""
-    # Many auto-generated tests include hard-coded Windows-style paths (C:\\Dev\\...) which
-    # cause collection errors on non-Windows CI runners. Skip these tests during collection.
-    # This hook accepts either a `py.path.local` or a `pathlib.Path` to be compatible with
-    # different pytest versions and avoid deprecation warnings.
-    try:
+Ignore auto-generated tests that reference Windows absolute paths or external candidates.""
+try:
         # support both py.path.local (has .strpath) and pathlib.Path
         if hasattr(collection_path, "strpath"):
             p = collection_path.strpath
@@ -80,7 +81,11 @@ Ignore auto-generated tests that reference Windows absolute paths or external_ca
 @pytest.fixture
 def agent_module():
 """
-Provides a mock module with Agent and CircuitBreaker classes.""
+Provides a mock module with Agent and CircuitBreaker classes.
+
+    This fixture allows tests to import these classes without requiring the
+    full implementation, which may have heavy dependencies or side effects.
+"""
     # Lazy imports to avoid circular dependencies
     try:
         from .core.base.lifecycle.base_agent import BaseAgent
@@ -98,7 +103,7 @@ Provides a mock module with Agent and CircuitBreaker classes.""
         from .core.base.common.models.core_enums import HealthStatus
     except ImportError:
         from src.core.base.common.models.core_enums import HealthStatus
-    
+
     mod = types.SimpleNamespace()
     mod.Agent = BaseAgent
     mod.CircuitBreaker = CircuitBreaker
@@ -110,7 +115,10 @@ Provides a mock module with Agent and CircuitBreaker classes.""
 @pytest.fixture
 def agent_backend_module():
 """
-Provides backend infrastructure classes.""
+Provides backend infrastructure classes.
+
+    Allows tests to import backend components without the full implementation.
+"""
 mod = types.SimpleNamespace()
     # Lazy imports to avoid circular dependencies
     try:
@@ -193,14 +201,15 @@ with tempfile.TemporaryDirectory() as temp_dir:
 def transactional_test_env(agent_sandbox):
 """
 Provides a transactional wrapper around the sandbox.
+
     Ensures that file modifications are tracked and can be rolled back on failure.
-"""
+    ""
     # Lazy import to avoid circular dependencies
     try:
         from .core.base.state.agent_state_manager import StateTransaction
     except ImportError:
         from src.core.base.state.agent_state_manager import StateTransaction
-    
+
     # Track core files in the sandbox
     target_files = list(agent_sandbox.glob("**/*.py"))
     with StateTransaction(target_files) as txn:

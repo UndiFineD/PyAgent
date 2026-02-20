@@ -58,7 +58,7 @@ command = [jadx_path, "-d", output_dir, apk_path]"        subprocess.run(command
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-target_classes = []""""
+target_classes = []""
 for root, _, files in os.walk(output_dir):
         for file in files:
             if file.endswith(".java"):"                package_path = target_package.replace(".", os.sep)"                if package_path in os.path.normpath(root):
@@ -84,6 +84,8 @@ for root, _, files in os.walk(output_dir):
 
 """
 
-""
+"""
 
 """
+
+""

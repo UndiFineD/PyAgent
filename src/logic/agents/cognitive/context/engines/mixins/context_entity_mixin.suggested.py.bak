@@ -29,14 +29,14 @@ except ImportError:
 
 
 class ContextEntityMixin:
-""""Mixin for tracking entities and project lessons.
+"""Mixin for tracking entities and project lessons.
     def add_entity_info(self, entity_name: str, attributes: dict[str, Any]) -> None:
-""""Tracks specific entities (files, classes, modules) and their metadata.        if not hasattr(self, "memory") or not hasattr(self, "core"):"            return
+"""Tracks specific entities (files, classes, modules) and their metadata.        if not hasattr(self, "memory") or not hasattr(self, "core"):"            return
 
         existing = self.memory["entities"].get(entity_name, {})"        self.memory["entities"][entity_name] = self.core.merge_entity_info(existing, attributes)"        if hasattr(self, "save"):"            self.save()
 
     def record_lesson(self, failure_context: str, correction: str, agent: str) -> None:
-""""Records a learned lesson to prevent future errors.        if not hasattr(self, "memory") or not hasattr(self," "core"):"            return
+"""Records a learned lesson to prevent future errors.        if not hasattr(self, "memory") or not hasattr(self," "core"):"            return
 
         lesson = {
             "failure": failure_context,"            "correction": correction,"            "agent": agent,"            "timestamp": datetime.now().isoformat(),"        }

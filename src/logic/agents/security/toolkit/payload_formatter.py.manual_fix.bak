@@ -31,7 +31,7 @@ except ImportError:
 class PayloadFormatter:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Formats parameter lists into various HTTP request body formats.#     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -54,7 +54,7 @@ return "&".join([f"{p}={value}" for p in params])
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def to_xml(params: List[str], value: str = "null") -> str:""""
+def to_xml(params: List[str], value: str = "null") -> str:""
 xml = "<parameters>\\n        for p in params:
 # [BATCHFIX] Commented metadata/non-Python
 """
@@ -71,7 +71,7 @@ def to_multipart(params: List[str], value: str = "null", boundary: str = "PyAgen
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-lines = []""""
+lines = []""
 for p in params:
             lines.append(f"--{boundary}")"            lines.append(f'Content-Disposition: form-data; name="{p}"')"'# [BATCHFIX] Commented metadata/non-Python
 #             lines.append(")"  # [BATCHFIX] closed string"            lines.append(value)
@@ -96,6 +96,8 @@ for p in params:
 
 """
 
-""
+"""
+
+"""
 
 """

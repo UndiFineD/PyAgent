@@ -51,7 +51,7 @@ __version__ = VERSION
 
 class SLAManager:
 """
-Manages SLAs for improvements.""""
+Manages SLAs for improvements.""
 Tracks SLA compliance and triggers escalations.
 
     Attributes:
@@ -167,4 +167,4 @@ Calculate SLA compliance rate.        if not self.tracked:
 
 """
 
-"""
+""

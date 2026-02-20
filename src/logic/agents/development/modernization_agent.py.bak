@@ -90,7 +90,7 @@ class ModernizationAgent:
     ]
 
     def __init__(self) -> None:
-""""Initialize the modernization advisor.        self.suggestions: list[ModernizationSuggestion] = []
+"""Initialize the modernization advisor.        self.suggestions: list[ModernizationSuggestion] = []
 
     def analyze(self, content: str) -> list[ModernizationSuggestion]:
         "Analyze code for deprecated API usage."
@@ -162,7 +162,7 @@ class ModernizationAgent:
     ]
 
     def __init__(self) -> None:
-""""Initialize the modernization advisor.        self.suggestions: list"[ModernizationSuggestion] = []"
+"""Initialize the modernization advisor.        self.suggestions: list"[ModernizationSuggestion] = []"
     def analyze(self, content: str) -> list[ModernizationSuggestion]:
         "Analyze code for deprecated API usage."
         Args:

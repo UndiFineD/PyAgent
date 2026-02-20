@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 import time
 from collections.abc import Callable
 from typing import Any
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 class ParallelTestRunner:
 """
-Helper for parallel test execution.""""
+Helper for parallel test execution.""
 Manages parallel execution of tests with worker pools.
 
     Example:
@@ -40,7 +40,7 @@ Manages parallel execution of tests with worker pools.
     
     def __init__(self, workers: int = 4) -> None:
 """
-Initialize runner.""""
+Initialize runner.""
 Args:
             workers: Number of worker threads.
                 self.workers = workers
@@ -51,7 +51,7 @@ Args:
 
     def add_test(self, name: str, test_fn: Callable[[], None]) -> None:
 """
-Add test to run.""""
+Add test to run.""
 Args:
             name: Test name.
             test_fn: Test function.
@@ -59,7 +59,7 @@ Args:
 
     def run(self, test_functions: list[Callable[[], Any]], fail_fast: bool = True) -> list[Any]:
 """
-Run tests in parallel.""""
+Run tests in parallel.""
 Args:
             test_functions: List of test functions to run.
             fail_fast: Stop on first failure.
@@ -113,7 +113,7 @@ Run a single test.        start = time.time()
 
     def run_all(self) -> list[ParallelTestResult]:
 """
-Run all tests in parallel.""""
+Run all tests in parallel.""
 Returns:
             List of test results.
                 from concurrent.futures import Future, ThreadPoolExecutor, as_completed

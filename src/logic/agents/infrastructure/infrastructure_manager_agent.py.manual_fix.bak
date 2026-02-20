@@ -73,7 +73,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
-""""
+"""
 Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -103,7 +103,7 @@ Manages remote infrastructure including Proxmox virtualization and HomeAssistant
 
     @as_tool
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
-""""
+"""
 Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP.        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
         return {
             "server": server_ip,"            "cpu_usage": "15%","            "ram_free": "8.2GB","            "disk_status": "Healthy","            "uptime": "14 days, 3 hours","        }
@@ -149,7 +149,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
-""""
+"""
 Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -179,7 +179,7 @@ Manages remote infrastructure including Proxmox virtualization and HomeAssistant
 
     @as_tool
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
-""""
+"""
 Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP.        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
         return {
             "server": server_ip,"            "cpu_usage": "15%","            "ram_free": "8.2GB","            "disk_status": "Healthy","            "uptime": "14 days, 3 hours","        }

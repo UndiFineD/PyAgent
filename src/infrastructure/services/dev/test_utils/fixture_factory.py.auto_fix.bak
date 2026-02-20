@@ -17,7 +17,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py"""
 
 try:
     from pathlib import Path
@@ -41,12 +41,12 @@ __version__ = VERSION
 
 
 class FixtureFactory:
-    """Factory for creating test fixtures.""""
+    """Factory for creating test fixtures."""
     Creates pre-configured fixtures for tests including agents,
     files, and other resources with optional dependencies.
     
     def __init__(self, base_dir: Path | None = None) -> None:
-        """Initialize fixture factory.""""
+        """Initialize fixture factory."""
         Args:
             base_dir: Base directory for file fixtures.
                 self.base_dir = base_dir or Path.cwd()
@@ -57,7 +57,7 @@ class FixtureFactory:
         config: dict[str, Any] | None = None,
         dependencies: list[Any] | None = None,
     ) -> Any:
-        """Create an agent fixture.""""
+        """Create an agent fixture."""
         Args:
             name: Fixture name.
             config: Agent configuration.
@@ -80,7 +80,7 @@ class FixtureFactory:
 
         return AgentFixture(name, config, dependencies)
 
-    def create_file_fixture(self, name: str, content: str = "") -> Any:"        """Create a file fixture.""""
+    def create_file_fixture(self, name: str, content: str = "") -> Any:"        """Create a file fixture."""
         Args:
             name: File name.
             content: File content.

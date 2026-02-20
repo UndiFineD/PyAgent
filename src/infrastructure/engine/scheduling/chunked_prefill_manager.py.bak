@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 
-"""ChunkedPrefillManager - Chunked prefill orchestration for long prompts.""""
+"""ChunkedPrefillManager - Chunked prefill orchestration for long prompts."""
 This module implements chunked prefill for processing long prompts across
 multiple forward passes, enabling better memory utilization and latency.
 
@@ -83,7 +83,7 @@ T = TypeVar("T")"
 
 
 class ChunkedPrefillManager:
-    """Manager for chunked prefill operations.""""
+    """Manager for chunked prefill operations."""
     This class handles splitting long prompts into chunks and
     orchestrating their execution across multiple forward passes.
 
@@ -96,7 +96,7 @@ class ChunkedPrefillManager:
         config: Optional[ChunkedPrefillConfig] = None,
         tokenize_fn: Optional[Callable[[str], list[int]]] = None,
     ) -> None:
-        """Initialize the manager.""""
+        """Initialize the manager."""
         Args:
             config: Manager configuration
             tokenize_fn: Function to tokenize prompts
@@ -115,7 +115,7 @@ class ChunkedPrefillManager:
         self._total_tokens_processed = 0
 
     def should_chunk(self, token_count: int) -> bool:
-        """Determine if prompt should be chunked.""""
+        """Determine if prompt should be chunked."""
         Args:
             token_count: Number of tokens in prompt
 
@@ -129,7 +129,7 @@ class ChunkedPrefillManager:
         chunk_size: Optional[int] = None,
         memory_pressure: float = 0.0,
     ) -> list[tuple[int, int]]:
-        """Compute optimal chunk boundaries.""""
+        """Compute optimal chunk boundaries."""
         Args:
             total_tokens: Total number of tokens
             chunk_size: Override chunk size (uses config if None)
@@ -178,7 +178,7 @@ class ChunkedPrefillManager:
         chunk_size: Optional[int] = None,
         memory_pressure: float = 0.0,
     ) -> list[PrefillChunk]:
-        """Create chunks for a request.""""
+        """Create chunks for a request."""
         Args:
             request_id: Unique request identifier
             prompt_tokens: List of token IDs
@@ -252,7 +252,7 @@ class ChunkedPrefillManager:
         priority: ChunkPriority = ChunkPriority.NORMAL,
         chunk_size: Optional[int] = None,
     ) -> list[PrefillChunk]:
-        """Create chunks from text prompt.""""
+        """Create chunks from text prompt."""
         Args:
             request_id: Unique request identifier
             prompt: Text prompt
@@ -285,7 +285,7 @@ class ChunkedPrefillManager:
         self._pending_chunks.sort(key=chunk_priority)
 
     def schedule_chunk(self) -> Optional[PrefillChunk]:
-        """Get next chunk to execute.""""
+        """Get next chunk to execute."""
         Returns:
             Next chunk or None if no chunks available
                 with self._lock:
@@ -315,7 +315,7 @@ class ChunkedPrefillManager:
             return None
 
     def start_chunk(self, chunk_id: str) -> bool:
-        """Mark chunk as started.""""
+        """Mark chunk as started."""
         Args:
             chunk_id: Chunk to start
 
@@ -336,7 +336,7 @@ class ChunkedPrefillManager:
         output: Optional[Any] = None,
         kv_cache: Optional[Any] = None,
     ) -> bool:
-        """Mark chunk as completed.""""
+        """Mark chunk as completed."""
         Args:
             chunk_id: Chunk to complete
             output: Output from execution
@@ -365,7 +365,7 @@ class ChunkedPrefillManager:
             return True
 
     def fail_chunk(self, chunk_id: str, _error: Optional[str] = None) -> bool:
-        """Mark chunk as failed.""""
+        """Mark chunk as failed."""
         Args:
             chunk_id: Chunk that failed
             _error: Error message
@@ -382,7 +382,7 @@ class ChunkedPrefillManager:
             return True
 
     def iterate_chunks(self, request_id: str) -> Iterator[PrefillChunk]:
-        """Iterate over chunks for a request in order.""""
+        """Iterate over chunks for a request in order."""
         Args:
             request_id: Request to iterate
 
@@ -398,7 +398,7 @@ class ChunkedPrefillManager:
         yield from chunks
 
     def get_next_chunk(self, request_id: str) -> Optional[PrefillChunk]:
-        """Get next pending chunk for a request.""""
+        """Get next pending chunk for a request."""
         Args:
             request_id: Request to get chunk for
 
@@ -415,7 +415,7 @@ class ChunkedPrefillManager:
         request_id: str,
         merge_fn: Optional[Callable[[list[Any]], Any]] = None,
     ) -> Optional[Any]:
-        """Merge chunk outputs for a completed request.""""
+        """Merge chunk outputs for a completed request."""
         Args:
             request_id: Request to merge
             merge_fn: Custom merge function (default: concatenate lists)
@@ -445,7 +445,7 @@ class ChunkedPrefillManager:
         return outputs
 
     def get_kv_caches(self, request_id: str) -> list[Any]:
-        """Get KV caches from all chunks.""""
+        """Get KV caches from all chunks."""
         Args:
             request_id: Request to get caches for
 
@@ -459,7 +459,7 @@ class ChunkedPrefillManager:
             return [c.kv_cache for c in request.chunks if c.kv_cache is not None]
 
     def cancel_request(self, request_id: str) -> bool:
-        """Cancel all chunks for a request.""""
+        """Cancel all chunks for a request."""
         Args:
             request_id: Request to cancel
 
@@ -479,7 +479,7 @@ class ChunkedPrefillManager:
             return True
 
     def cleanup_request(self, request_id: str) -> bool:
-        """Remove request and its chunks from tracking.""""
+        """Remove request and its chunks from tracking."""
         Args:
             request_id: Request to cleanup
 
@@ -498,7 +498,7 @@ class ChunkedPrefillManager:
             return True
 
     def get_request_progress(self, request_id: str) -> dict[str, Any]:
-        """Get progress information for a request.""""
+        """Get progress information for a request."""
         Args:
             request_id: Request to check
 
@@ -540,7 +540,7 @@ def chunk_prompt(
     tokens: list[int],
     chunk_size: int = 512,
 ) -> list[list[int]]:
-    """Simple utility to chunk tokens.""""
+    """Simple utility to chunk tokens."""
     Args:
         tokens: Token list to chunk
         chunk_size: Size of each chunk

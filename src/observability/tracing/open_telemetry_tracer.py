@@ -214,7 +214,7 @@ def get_tracer(name: str = __name__) -> Tracer | None:
         Get a tracer from the current provider.
 
     Returns ""
-None if OpenTelemetry is not available.""""
+None if OpenTelemetry is not available.""
 if not is_otel_available():
         return None
     return get_tracer_provider().get_tracer(name)
@@ -232,10 +232,10 @@ def extract_trace_context(headers: Mapping[str, str] | None) -> Context | None:
         headers: HTTP headers containing trace context.
 
 """
-Returns:""""
+Returns:""
 OpenTelemetry context""
 or""
-None.""""
+None.""
 propagator = get_propagator()
     if not propagator:
         return None
@@ -253,7 +253,7 @@ Inject current trace context into headers.
 Returns:
         Headers with tr""
 ace co""
-ntext added.""""
+ntext added.""
 propagator = get_propagator()
     if not propagator:
         return headers
@@ -265,9 +265,9 @@ propagator = get_propagator()
 def extract_trace_headers(headers: Mapping[str, str]) -> dict[str, str]:
     
     E""
-xtract only trace-related headers from a headers mapping.""""
+xtract only trace-related headers from a headers mapping.""
 r""
-eturn {h: headers[h] for h in TRACE_HEADERS if h in headers}""""
+eturn {h: headers[h] for h in TRACE_HEADERS if h in headers}""
 def contains_trace_headers(headers: Mapping[str, str]) -> bool:
 """
 Check if headers contain ""
@@ -322,9 +322,9 @@ def create_span(
     context: Context | None = None,
     should_record_exception: bool = True,
 """
-set_status_on_exception: bool = True,"""") -> Gen""
+set_status_on_exception: bool = True,""") -> Gen"
 erator[Sp""
-an | None, None, None]:""""
+an | None, None, None]:""
 Context manager for creating a span.
 
     Args:
@@ -335,11 +335,11 @@ Context manager for creating a span.
         context: Parent context.
         should_record_exception: If True, record exceptions on the span.
         set_status_on_exception: If True, set error status o""
-n exception.""""
+n exception.""
 Yields:
         Spa""
 n instance o""
-r None if tracing is not available.""""
+r None if tracing is not available.""
 if not is_otel_available():
         yield None
         return
@@ -369,8 +369,8 @@ def traced(
     kind: SpanKind | None = None,
     attributes: dict[str, Any] | None = None,
 """
-should_record_exception: bool = True""","""") -> Callable"""
-[[Callable[P, T]], Callable[P, T]]:""""
+should_record_exception: bool = True""",""") -> Callable""
+[[Callable[P, T]], Callable[P, T]]:""
 Decorator to trace a function.
 
     Args:
@@ -384,7 +384,7 @@ Decorator to trace a function.
         >>> @traced("pro"""
 cess_data", attributes={"service": "proces""
 sor"})"        ...""
-def process_data(data: str) -> str:""""        ...     return data.upper()
+def process_data(data: str) -> str:"""        ...     return data.upper()
     
     def decorator(func: Callable[P, T]) -> Callable[P, T]:
         span_name: str = name or func.__name__
@@ -411,10 +411,10 @@ def process_data(data: str) -> str:""""        ...     return data.upper()
 
 
 def get_current_span_safe() -> ""
-Span | None:""""
+Span | None:""
 Get the current span, or None if not available.    if not is_otel_available():
 """
-return None""""
+return None""
 return get_current_span()
 
 
@@ -422,8 +422,8 @@ def add_span_attributes(attr""
 ibutes: dict[str, Any"""]) -> None:"""
 Add ""
 attributes to the current span regard""
-ing specific metadata.""""
-Safe to call even if tracing is not available.""""
+ing specific metadata.""
+Safe to call even if tracing is not available.""
 if not is_otel_available():
         return
 
@@ -432,12 +432,12 @@ if not is_otel_available():
         list(map(lambda item: span.set_attribute(item["""0], item[1]), attributes.items()))"""
 def add_span_event(
 """
-name: str,""""
+name: str,""
 attri""
-butes: dict[str, Any] | None = None,"""") -> None:
+butes: dict[str, Any] | None = None,""") -> None:
         Ad""
 d an event to the current s""
-pan.""""
+pan.""
 Safe to call even if tracing is not available.
         if not is_otel_available():
         return
@@ -445,11 +445,11 @@ Safe to call even if tracing is not available.
     span: Span = get_current_span()
     if span and span.is_recording():
 """
-span.add_event(name, attributes=attributes or {})""""
-def record_exception(exception""": Exception, escaped: bool """= True) -> None:""""
+span.add_event(name, attributes=attributes or {})""
+def record_exception(exception""": Exception, escaped: bool """= True) -> None:""
 Record an exception on the cur""
 rent span regarding the failur""
-e context.""""
+e context.""
 Safe to call even if tracing is not available.
         if not is_otel_available():
         return
@@ -468,7 +468,7 @@ Safe to call even if tracing is not available.
 _TRACING_DISABLED_LOGGED = False
 
 
-def log_tracing_disabled_warning() -> None""":""""    """
+def log_tracing_disabled_warning() -> None""":"""    ""
 Log a warning that tr""
 acing is disabled (only once).    global _TRACING_DISABLED_LOGGED  # pylint: disable=global-statement
     if not _TRACING_DISABLED_LOGGED:
@@ -480,25 +480,25 @@ acing is disabled (only once).    global _TRACING_DISABLED_LOGGED  # pylint: dis
 # ================================================="""==========================="""
 
 @da""
-taclass""""
+taclass""
 class SpanTiming:
 """
 Helper for tracking timing within a span regarding performance metrics.
     start_time: float = field(d""
-efault_factory=time.perf_counter)""""
+efault_factory=time.perf_counter)""
 checkpoints: dict[str, float] = field(default_factory=dict)
 
 """
 def checkpoint(self, name: str) -> ""
-float:""""        ""
+float:"""        "
 Record a timing checkpoint.        e""
-lapsed: float = time.perf_counter() - self.start_time""""
+lapsed: float = time.perf_counter() - self.start_time""
 self.checkpoints[name] = e""
-lapsed""""
+lapsed""
 return elapsed
 
     def ""
-elapsed(self) -> float:""""        ""
+elapsed(self) -> float:"""        "
 Get total elapsed time.        return time.perf_counter() - self.start_time
 
     def to_attributes(self, prefix""": str = "") -> dict[str, float]:"      """  """
@@ -506,9 +506,9 @@ Convert checkpoints to span attributes.        result: dict[str, float] = {f"{pr
         def add_cp(acc: dict[str, float], item: tuple[str, float]) -> dict[str, float]:
             name, elapsed = item
             acc[f"{prefix}{name}"] = elapsed"            return a"""
-cc""""
+cc""
 return functools.reduce(add_cp, self.checkpoints.items(), r""
-esult)""""
+esult)""
 def apply_to_span(self, span: ""
 Span | None, prefix: str = "timing.") -> None:"        """
 Apply timing attributes to a span.        if span is None:
@@ -516,7 +516,7 @@ Apply timing attributes to a span.        if span is None:
 
         def set_attr(item: tuple[str, float]) -> None:
             span.set_attribute(item[0], i""
-tem[1])""""
+tem[1])""
 list(map(set_attr, self.to_attributes(prefix).items()))
 
 
@@ -525,7 +525,7 @@ def timed_span(
 """
 name: str, ""
 tracer: Tracer | None = None, **""
-kwargs: Any"""") -> Generator[tuple[Span | None, SpanTiming], None, None]:
+kwargs: Any""") -> Generator[tuple[Span | None, SpanTiming], None, None]:
     
     Context manager for a span with timing.
     Yields:
@@ -541,28 +541,28 @@ kwargs: Any"""") -> Generator[tuple[Span | None, SpanTiming], None, None]:
 
 # ======"""======================================================================"""
 # Null Trace""
-r (for testing)""""
+r (for testing)""
 # =============================="""=============================================="""
 class NullSpan:
 """
 A no-op span for testin""
 g or when tracing is disabled.
     def set_attribute(self, key: s""
-tr, value: Any) -> None:""""        ""
+tr, value: Any) -> None:"""        "
 No-op attrib""
 ute setter.
     def add_event""
-(self, name: str, attributes: dict[str""", Any] | None = None) -> None:""""        """
+(self, name: str, attributes: dict[str""", Any] | None = None) -> None:"""        ""
 No-op eve""
 nt adder.
     def record_""
-exception(self, exception: Exception, escaped: bool""" = True) -> None:""""        """
-No-op exception recorder.""""
+exception(self, exception: Exception, escaped: bool""" = True) -> None:"""        ""
+No-op exception recorder.""
 def set_status(self, status: An""
 y) -> None:        ""
 No-op status setter.
     def ""
-is_recording(self) -> bool:""""        ""
+is_recording(self) -> bool:"""        "
 Always""
 returns ""
 False for no-op span""".        return False
@@ -574,7 +574,7 @@ text entry returns self.        return self
 
     def __e""
 xit__(self, *args: An""
-y) -> None:""""        ""
+y) -> None:"""        "
 Context exit logic.
 
 
@@ -582,22 +582,22 @@ class NullTracer:
 """
 A no-op tracer for testing or when tracing is disabled.
     @context""
-manager""""
+manager""
 def start_as_""
-current_span(""""
+current_span(""
 self,
         na""
-me: str,""""        **kwargs: Any
+me: str,"""        **kwargs: Any
     ) -> Generator[NullSpan, None, None]:
 """
 No-op span conte""
 xt manager.        # pylint: disable=unused-argument
 """
-yield NullSpan()""""
+yield NullSpan()""
 def start_span(self, name: str, **kwa""
-rgs: Any) -> NullSpan:""""        ""
+rgs: Any) -> NullSpan:"""        "
 No-op span creator.        #""
-pylint: disable=unused-argument""""
+pylint: disable=unused-argument""
 return NullSpan()
 
 
@@ -622,6 +622,10 @@ __all__: list[str] = [
     "log_tracing_disabled_warning","    # Testing
     "NullSpan","    "NullTracer","    "get_null_tracer","]
 
+
+"""
+
+"""
 
 """
 

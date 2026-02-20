@@ -36,14 +36,14 @@ class ChatHandler:
 Handler for chat operations with SDK-first and HTTP fallback support.
     def __init__(self, api_client: LMStudioAPIClient):
 """
-        Initialize chat handler.""""
+        Initialize chat handler.""
         Args:
         api_client: LMStudioAPIClient instance for HTTP fallback.
         self.api_client = api_client
 
     def _build_prediction_config(self, sdk_available: bool, **kwargs) -> Optional[Any]:
 """
-Build prediction config from kwargs.""""
+Build prediction config from kwargs.""
 Args:
             sdk_available: Whether LM Studio SDK is available.
             **kwargs: Configuration parameters.
@@ -59,7 +59,7 @@ Args:
             temperature=kwargs.get("temperature", 0.7),"            max_tokens=kwargs.get("max_tokens", 2048),"            top_p=kwargs.get("top_p", 1.0),"            stop_strings=kwargs.get("stop", []),"        )
 
     def _extract_chat_from_lmstudio(self, system_prompt: str) -> "lmstudio.Chat":"        """
-Create an LM Studio Chat object.""""
+Create an LM Studio Chat object.""
 Args:
             system_prompt: System prompt/context.
 
@@ -76,7 +76,7 @@ Args:
         **kwargs,
     ) -> str:
 """
-Execute chat via LM Studio SDK.""""
+Execute chat via LM Studio SDK.""
 Args:
             llm: LM Studio LLM model handle.
             prompt: User prompt/message.
@@ -99,7 +99,7 @@ Args:
         **kwargs,
     ) -> str:
 """
-Execute chat via HTTP REST API fallback.""""
+Execute chat via HTTP REST API fallback.""
 Args:
             prompt: User prompt/message.
             model: Model identifier.
@@ -149,7 +149,7 @@ def chat(
         **kwargs,
     ) -> str:
 """
-Execute chat completion with SDK-first and HTTP fallback.""""
+Execute chat completion with SDK-first and HTTP fallback.""
 Args:
             llm: LM Studio LLM model handle (from SDK).
             prompt: User prompt/message.
@@ -168,6 +168,10 @@ Args:
                 logger.warning(f"LM Studio SDK chat failed: {e}; will try HTTP fallback.")
         # HTTP fallback
         return self._http_fallback_chat(prompt, model, system_prompt, **kwargs)
+
+"""
+
+"""
 
 """
 

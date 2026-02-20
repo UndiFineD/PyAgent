@@ -52,7 +52,7 @@ except ImportError:
 
 
 class MultiModalCore:
-""""
+"""
 Core logic for multi-modal interactions (Vision/Image").
     @staticmethod
     def encode_image(image_path: str) -> str:
@@ -89,7 +89,7 @@ except ImportError:
 
 
 class MultiModalCore:
-""""
+"""
 Core logic for multi-modal interactions (Vision/Image).
     @staticmethod
     def encode_image(image_path: str) -> str:

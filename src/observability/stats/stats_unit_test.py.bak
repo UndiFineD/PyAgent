@@ -73,7 +73,7 @@ class TestExportFormats(unittest.TestCase):
         """Test exporting to JSON format.        stats = {"tests": 100, "pass": 95, "timestamp": "2024-12-16"}"        json_str: str = json.dumps(stats)
         assert '"tests": 100' in json_str"'        assert '"pass": 95' in json_str"'
     def test_export_html_format(self) -> None:
-        """Test exporting to HTML format.        html = """<table>""""<tr><td>Test</td><td>100</td></tr>
+        """Test exporting to HTML format.        html = """<table>"""<tr><td>Test</td><td>100</td></tr>
 <tr><td>Pass</td><td>95</td></tr>
 </table>        assert "<table>" in html"        assert "</table>" in html"        assert "100" in html"
     def test_export_excel_metadata(self) -> None:

@@ -39,11 +39,11 @@ CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
 
 
 class CoderSmellMixin:
-""""
+"""
 Mixin for detecting code smells.
 
     def detect_code_smells(self, content: str) -> List[CodeSmell]:
-""""
+"""
 Detect common architectural code smells.        from src.core.rust_bridge import RustBridge
 
         smells: List[CodeSmell] = []
@@ -63,7 +63,7 @@ Detect common architectural code smells.        from src.core.rust_bridge import
         return smells
 
     def _detect_python_smells(self, content: str) -> List[CodeSmell]:
-""""
+"""
 Python-specific AST-based smell detection.        smells: List[CodeSmell] = []
         try:
             tree = ast.parse(content)
@@ -99,7 +99,7 @@ Python-specific AST-based smell detection.        smells: List[CodeSmell] = []
             )
 
     def _check_python_class_smells(self, node: ast.ClassDef, smells: List[CodeSmell]) -> None:
-""""
+"""
 Check for god classes.        method_count = sum(1 for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
         threshold = CODE_SMELL_PATTERNS["god_class"]["threshold"]"        if method_count > threshold:
             smells.append(
@@ -109,7 +109,7 @@ Check for god classes.        method_count = sum(1 for n in node.body if isinsta
             )
 
     def _detect_generic_smells(self, content: str) -> List[CodeSmell]:
-""""
+"""
 Language-agnostic smell detection (e.g. nesting).        smells:" List[CodeSmell] = []"        lines = content.split("\\n")"        # Deep nesting detection
         for i, line in enumerate(lines, 1):
             indent = len(line) - len(line.lstrip())

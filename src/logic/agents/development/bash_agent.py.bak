@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 
-# "Agent specializing in Bash and shell scripting."""" pylint: disable=too-many-ancestors""""
+# "Agent specializing in Bash and shell scripting.""" pylint: disable=too-many-ancestors"""
 
 try:
     from .core.base.common.base_utilities import as_tool, create_main_function
@@ -42,7 +42,7 @@ __version__ = VERSION
 
 
 class BashAgent(CoderAgent):
-""""Agent for shell scripts (Phase 175 enhanced).
+"""Agent for shell scripts (Phase 175 enhanced).
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.capabilities.extend(["bash", "shell-scripting", "posix-compliance"])  # Phase 241"#         self._language = "bash"        self.core = BashCore()
@@ -51,7 +51,7 @@ class BashAgent(CoderAgent):
 
     @as_tool
     def lint_generated_script(self, script_path: str) -> str:
-""""Lints a bash script using shellcheck and returns high-level report.        print(f"[BASH] Linting script: {script_path"}...")"
+"""Lints a bash script using shellcheck and returns high-level report.        print(f"[BASH] Linting script: {script_path"}...")"
         results = self.core.lint_script(script_path)
         if "error" in results:"#             return fLINT ERROR: {results['error']}'        if results["valid"]:"#             return "SUCCESS: No issues found by shellcheck."
         issues = results["issues"]"        report = [fFound {len(issues)} issues:"]"        for issue in issues[:5]:  # Top 5

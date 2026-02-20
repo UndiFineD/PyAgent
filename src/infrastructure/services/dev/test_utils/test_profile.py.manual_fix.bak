@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -40,7 +40,7 @@ __version__ = VERSION
 @dataclass
 class TestProfile:
 """
-A test configuration profile.""""
+A test configuration profile.""
 Attributes:
         name: Profile name.
         settings: Profile settings.

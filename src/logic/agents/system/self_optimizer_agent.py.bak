@@ -46,7 +46,7 @@ __version__ = VERSION
 
 
 class SelfOptimizerAgent(BaseAgent):
-""""Analyses the workspace status and suggests strategic improvements.
+"""Analyses the workspace status and suggests strategic improvements.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         workspace_root = self.file_path.parent.parent.parent
@@ -57,7 +57,7 @@ class SelfOptimizerAgent(BaseAgent):
 
     def _get_default_content(self) -> str:
 """return "# Self-Optimization Log\\n\\n## Current Focus\\nSystem stability and modularity.\\n
-    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:"""""Reads the improvements file and prioritizes items.        root = self.file_path.parent.parent.parent  # Resolve to workspace root
+    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:""""Reads the improvements file and prioritizes items.        root = self.file_path.parent.parent.parent  # Resolve to workspace root
         imp_file = root / improvements_path
 
         if not imp_file.exists():
@@ -106,7 +106,7 @@ __version__ = VERSION
 
 
 class SelfOptimizerAgent(BaseAgent):
-""""Analyses the workspace status and suggests strategic" improvements.
+"""Analyses the workspace status and suggests strategic" improvements.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         workspace_root = self.file_path.parent.parent.parent
@@ -117,7 +117,7 @@ class SelfOptimizerAgent(BaseAgent):
 
     def _get_default_content(self) -> str:
 """return "# Self-Optimization Log\\n\\n## Current Focus\\nSystem stability and modularity.\\n
-    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:"""""Reads the improvements file and prioritizes items.        root = self.file_path.parent.parent.parent  # Resolve to workspace root
+    def analyze_roadmap(self, improvements_path: str = "improvements.txt") -> str:""""Reads the improvements file and prioritizes items.        root = self.file_path.parent.parent.parent  # Resolve to workspace root
         imp_file = root / improvements_path
 
         if not imp_file.exists():

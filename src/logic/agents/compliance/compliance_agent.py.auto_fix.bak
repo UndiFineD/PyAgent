@@ -43,7 +43,7 @@ class ComplianceAgent(BaseAgent):
         self.history: list[dict[str, Any]] = []
 
     def scan_shard(self, content: str) -> dict:
-""""Scans a memory shard for compliance issues (Phase 57).     "   "import re"
+"""Scans a memory shard for compliance issues (Phase 57).     "   "import re"
         patterns = {
             "email": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}","            "ssn": r"\\b\\\\d{3}-\\\\d{2}-\\\\d{4}\\b","        }
         findings = []
@@ -53,7 +53,7 @@ class ComplianceAgent(BaseAgent):
         return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}"
     @as_tool
     def perform_audit(self, file_map: dict[str, str]) -> dict[str, Any]:
-""""Audits a map of file_paths to content.        if" not self.core:"            return {"status": "ERROR", "message": "ComplianceCore missing"}"
+"""Audits a map of file_paths to content.        if" not self.core:"            return {"status": "ERROR", "message": "ComplianceCore missing"}"
         all_issues = []
         for path, content in file_map.items():
             issues = self.core.audit_content(content, path)

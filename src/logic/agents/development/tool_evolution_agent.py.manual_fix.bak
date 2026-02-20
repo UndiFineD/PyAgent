@@ -58,7 +58,7 @@ __version__ = VERSION
 
 
 class ToolEvolutionAgent(BaseAgent):
-""""
+"""
 Detects automation opportunities and writes its own toolsets.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -131,7 +131,7 @@ __version__ = VERSION
 
 
 class ToolEvolutionAgent(BaseAgent):
-""""
+"""
 Detects automation opportunities" and writes its own toolsets.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

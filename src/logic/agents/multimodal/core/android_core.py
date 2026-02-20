@@ -32,7 +32,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ADBResult(TypedDict):
-""""
+"""
 Result of an ADB command execution.
     success: bool
     output: str
@@ -42,7 +42,7 @@ Result of an ADB command execution.
 
 
 class AndroidCore:
-""""
+"""
 Core logic for ADB command formatting and parsing.
     @staticmethod
     def run_adb_command(

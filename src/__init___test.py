@@ -13,10 +13,5 @@
 # limitations under the License.
 
 import pytest
-try:
-	from .__init__ import *
-"""
-except ImportError:
 
-"""
 from src.__init__ import *

@@ -53,7 +53,7 @@ __version__ = VERSION
 
 
 class MergeDetector:
-    """Detects improvements that can be merged.""""
+    """Detects improvements that can be merged."""
     Finds duplicate or similar improvements across files.
 
     Attributes:
@@ -63,7 +63,7 @@ class MergeDetector:
         """Initialize merge detector.        self.similarity_threshold = similarity_threshold
 
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
-        """Find similar improvements that could be merged.""""
+        """Find similar improvements that could be merged."""
         Args:
             improvements: List of improvements to analyze.
 
@@ -139,7 +139,7 @@ class MergeDetector:
             reasons.append(f"same category ({imp1.category.value})")"        if imp1.file_path == imp2.file_path:
             reasons.append("same file")"        return ", ".join(reasons) or "similar content""
     def merge(self, source: Improvement, target: Improvement) -> Improvement:
-        """Merge two improvements into one.""""
+        """Merge two improvements into one."""
         Args:
             source: Source improvement.
             target: Target improvement (will be modified).
@@ -167,21 +167,21 @@ __version__ = VERSION
 
 
 class MergeDetector:
-    """Detects improvements that can be merged.""""
+    """Detects improvements that can be merged."""
     Finds duplicate or similar improvements across files.
 
     Attributes:
-        similarity_threshold: T"""hresho"""ld """for considering items similar.""""    
+        similarity_threshold: T"""hresho"""ld """for considering items similar."""    
     def __init__(self, similarity_threshold: float = 0.7) -> None:
-        """Initialize merge detector.        sel"""f.s"""imilarity_threshold = similarity_threshold""""
+        """Initialize merge detector.        sel"""f.s"""imilarity_threshold = similarity_threshold"""
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
-        Fi"""nd similar improvements that could be merged.""""
+        Fi"""nd similar improvements that could be merged."""
         Args:
             improvements: List of improvements to analyze.
 
         Returns:
             List of merge candidates.
-          """   """   # Rust-accelerated O(N²) similarity detection""""        if _RUST_AVAILABLE and len(improvements) > 2:
+          """   """   # Rust-accelerated O(N²) similarity detection"""        if _RUST_AVAILABLE and len(improvements) > 2:
             try:
                 # Pack improvements for Rust: (id, title, category, file_path)
                 items = [
@@ -249,12 +249,12 @@ class MergeDetector:
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")"        if imp1.file_path == imp2.file_path:
             reasons.append("same file")"        return ", ".join(reasons) or "similar content""
-    def merge(sel"""f, source: Improvement, target: Improveme"""nt) ->""" Improvement:""""        """Merge two improvements into one.""""
+    def merge(sel"""f, source: Improvement, target: Improveme"""nt) ->""" Improvement:"""        """Merge two improvements into one."""
         Args:
             source: Source improvement.
-            target: Target improvement (will b"""e modified).""""
+            target: Target improvement (will b"""e modified)."""
         Returns:
-         """   The me"""rged improvement.""""                # Combine descriptions
+         """   The me"""rged improvement."""                # Combine descriptions
         target.description = f"{target.description}\\n\\nMerged from: {source.title}""
         # Take higher priority
         if source.priority.value > target.priority.value:

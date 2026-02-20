@@ -73,29 +73,29 @@ class PolicyEnforcementAgent:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.active_policies: dict[str, Any] = {""""            "no_external_data_leak": True,"            "max_token_spend_per_hour": 100000,"            "required_security_scan": True,"        }
+self.active_policies: dict[str, Any] = {"""            "no_external_data_leak": True,"            "max_token_spend_per_hour": 100000,"            "required_security_scan": True,"        }
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.violation_log: list[dict[str, Any]] = []""""
+self.violation_log: list[dict[str, Any]] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.quarantine_list: set[str] = set()""""
+self.quarantine_list: set[str] = set()""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:""""
+def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:""
 Evaluates if an agent action complies with active policies.
         _ = (agent_id, action_type, metadata)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-violations = []""""
+violations = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -114,13 +114,13 @@ if action_type == "external_push" and self.active_policies["no_external_data_lea
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:""""
+def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:""
 Isolates an agent from the fleet.
         self.quarantine_list.add(agent_id)
         return {"agent_id": agent_id, "status": "quarantined", "reason": reason}
     def is_agent_quarantined(self, agent_id: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Checks if an agent is in the quarantine list.# [BATCHFIX] Commented metadata/non-Python
 #         return agent_id" in self.quarantine_list"  # [BATCHFIX] closed string
 
@@ -155,22 +155,22 @@ class PolicyEnforcementAgent:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.active_policies: dict[str, Any] = {""""            "no_external_data_leak": True,"            "max_token_spend_per_hour": 100000,"            "required_security_scan": True,"        }
+self.active_policies: dict[str, Any] = {"""            "no_external_data_leak": True,"            "max_token_spend_per_hour": 100000,"            "required_security_scan": True,"        }
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.violation_log: list[dict[str, Any]] = []""""
+self.violation_log: list[dict[str, Any]] = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.quarantine_list: set[str] = set()""""
+self.quarantine_list: set[str] = set()""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:""""
+def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:""
 Evaluates if an agent action complies with active policies.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -178,7 +178,7 @@ Evaluates if an agent action complies with active policies.
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-violations = []""""
+violations = []""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -197,11 +197,11 @@ if action_type == "external_push" and self.active_policies["no_external_data_lea
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:""""
+def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:""
 Isolates an agent from the fleet.
         self.quarantine_list.add(agent_id)
         return {"agent_id": agent_id, "status": "quarantined", "reason": reason}
     def is_agent_quarantined(self, agent_id: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Checks if an agent is in the quarantine list.        return agent_id in self.quarantine_list

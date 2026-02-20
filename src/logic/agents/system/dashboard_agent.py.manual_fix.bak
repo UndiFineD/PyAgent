@@ -60,7 +60,7 @@ except ImportError:
 
 
 class DashboardAgent(BaseAgent):
-""""
+"""
 Generates and maintains the Fleet Dashboard UI.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -69,7 +69,7 @@ Generates and maintains the Fleet Dashboard UI.
 
     @as_tool
     def generate_component(self, name: str, description: str) -> str:
-""""
+"""
 Generates a React/Next.js component based on the description.        logging.info(fGenerating UI component:" {name}")"        # Simplified boilerplate generation
 #         component = f
 try:
@@ -106,7 +106,7 @@ export default {name};
 
     @as_tool
     def update_dashboard_layout(self, active_agents: list[str]) -> str:
-""""
+"""
 Updates the dashboard layout with the current fleet status.        logging.info("Updating Dashboard Layout...")"        # In a real scenario, this might write to a JSON config for a Next.js frontend
 #         return fDashboard layout updated for {len(active_agents)} agents.
 
@@ -135,7 +135,7 @@ except ImportError:
 
 
 class DashboardAgent(BaseAgent):
-""""
+"""
 Generates and maintains the" Fleet Dashboard UI.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -144,7 +144,7 @@ Generates and maintains the" Fleet Dashboard UI.
 
     @as_tool
     def generate_component(self, name: str, description: str) -> str:
-""""
+"""
 Generates a React/Next.js component based on the description.        logging.info(fGenerating UI component: {name}")"        # Simplified boilerplate generation
 #         component = f
 try:
@@ -180,7 +180,7 @@ export default {name"};"
 
     @as_tool
     def update_dashboard_layout(self, active_agents: list[str]) -> str:
-""""
+"""
 Updates the dashboard layout with the current fleet status.        logging."info("Updating Dashboard Layout...")"        # In a real scenario, this might write to a JSON config for a Next.js frontend
 #         return fDashboard layout updated for {len(active_agents)} agents.
 

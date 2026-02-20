@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class PowershellAgent(CoderAgent):
-""""
+"""
 Agent for PowerShell scripts.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -96,7 +96,7 @@ __version__ = VERSION
 
 
 class PowershellAgent(CoderAgent):
-""""
+"""
 Agent for PowerShell "scripts.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

@@ -224,7 +224,7 @@ class MultiprocExecutor(Executor):
                 pass
 
     def _monitor_workers(self) -> None:
-        """Monitor worker health.""""
+        """Monitor worker health."""
         Uses the shutdown event's wait() method so the loop can be interrupted'        promptly during shutdown rather than being stuck in a blocking sleep.
                 while not self._shutdown_event.is_set():
             # Use the Event.wait to be interruptible on shutdown

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 try:
     from typing import Any
 except ImportError:
@@ -45,7 +45,7 @@ Initialize formatter.        self.results: list[tuple[str, str, float]] = []
     @staticmethod
     def format_success(test_name: str, duration_ms: float) -> str:
 """
-Format a successful test result.""""
+Format a successful test result.""
 Args:
             test_name: Name of the test.
             duration_ms: Duration of the test in milliseconds.
@@ -56,7 +56,7 @@ Args:
     @staticmethod
     def format_failure(test_name: str, error: str) -> str:
 """
-Format a failed test result.""""
+Format a failed test result.""
 Args:
             test_name: Name of the test.
             error: Error message.
@@ -67,7 +67,7 @@ Args:
     @staticmethod
     def format_summary(passed: int, failed: int, total: int) -> str:
 """
-Format test summary.""""
+Format test summary.""
 Args:
             passed: Number of passed tests.
             failed: Number of failed tests.
@@ -77,7 +77,7 @@ Args:
             Formatted summary.
                 return f"{passed} passed, {failed} failed out of {total} tests"
     def format_result(self, test_name: str, status: Any, duration_ms: float, error_message: str = "") -> str:"        """
-Format a test result based on status.""""
+Format a test result based on status.""
 Args:
             test_name: Name of the test.
             status: Status (TestStatus enum, str).
@@ -95,7 +95,7 @@ Args:
 
     def add_result(self, test_name: str, status: Any, duration_ms: float) -> None:
 """
-Add a test result.""""
+Add a test result.""
 Args:
             test_name: Name of the test.
             status: Status of the test.
@@ -104,8 +104,11 @@ Args:
 
     def get_summary(self) -> dict[str, int]:
 """
-Get a summary of all results as a dict.""""
+Get a summary of all results as a dict.""
 Returns:
             Summary dict with counts.
                 passed = sum(1 for _, status, _ in self.results if "pass" in status.lower())"        failed = sum(1 for _, status, _ in self.results if "fail" in status.lower())"        total = len(self.results)
         return {"passed": passed, "failed": failed, "total": total}
+""
+
+"""

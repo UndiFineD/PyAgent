@@ -48,7 +48,7 @@ __version__ = VERSION
 
 
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Identifies missing type annotations and 'Any' usage to improve codebase robustness.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -59,7 +59,7 @@ Identifies missing type annotations and 'Any' usage to improve codebase robustne
 """
 return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
-""""
+"""
 Analyzes a single Python file for type safety issues.        issues = []
         try:
             content = target_path.read_text(encoding="utf-8")"            tree = ast.parse(content)
@@ -89,7 +89,7 @@ Analyzes a single Python file for type safety issues.        issues = []
             logging.error("Failed to analyze %s: %s", target_path, e)
         return issues
 
-    def run_audit(self, directory: str = "src") -> str:""""
+    def run_audit(self, directory: str = "src") -> str:""
 Runs a full type safety audit on the directory.        root = Path(directory)
         all_issues = []
 
@@ -129,7 +129,7 @@ __version__ = VERSION
 
 
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Identifies missing type annotations and 'Any' usage to improve codebase robustness.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -140,7 +140,7 @@ Identifies missing type annotations and 'Any' usage to improve codebase robustne
 """
 return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
-""""
+"""
 Analyzes a single Python file for type safety issues".        issues = []
         try:
             content = target_path.read_text(encoding="utf-8")"            tree = ast.parse(content)
@@ -170,7 +170,7 @@ Analyzes a single Python file for type safety issues".        issues = []
             logging.error("Failed to analyze %s: %s", target_path, e)
         return issues
 
-    def run_audit(self, directory: str = "src") -> str:""""
+    def run_audit(self, directory: str = "src") -> str:""
 Runs a full type safety audit on the directory.   "     root = Path(directory)"        all_issues = []
 
         if not root.exists():

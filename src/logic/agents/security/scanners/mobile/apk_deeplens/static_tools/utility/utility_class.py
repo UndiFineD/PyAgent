@@ -61,7 +61,7 @@ UNDERLINE = "\\033[4m"  # [BATCHFIX] closed string
         """ [BATCHFIX] Commented metadata/non-Python"""
         # [BATCHFIX] Commented metadata/non-Python
 """
-        filename, line_no, func_name, text = stack[-2]""""
+        filename, line_no, func_name, text = stack[-2]""
         # [BATCHFIX] Commented metadata/non-Python
 """
         formatted_message = f"{filename}:{line_no}: {text_output}"  # [BATCHFIX] closed string"        print(color + formatted_message + Util.ENDC)
@@ -96,4 +96,4 @@ UNDERLINE = "\\033[4m"  # [BATCHFIX] closed string
 
 """
 
-"""
+        ""

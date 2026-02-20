@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_backend.py""""
+Auto-extracted class from agent_backend.py""
 try:
     import json
 except ImportError:
@@ -61,7 +61,7 @@ __version__ = VERSION
 
 class RequestRecorder:
 """
-Records and replays requests for debugging and testing.""""
+Records and replays requests for debugging and testing.""
 Captures request / response pairs for later replay, enabling
     offline testing and debugging.
 
@@ -73,7 +73,7 @@ Captures request / response pairs for later replay, enabling
             print(f"{req.prompt} -> {req.response}")"    
     def __init__(self, max_recordings: int = 1000) -> None:
 """
-Initialize request recorder.""""
+Initialize request recorder.""
 Args:
             max_recordings: Maximum recordings to keep.
                 self.max_recordings = max_recordings
@@ -90,7 +90,7 @@ Args:
         metadata: dict[str, Any] | None = None,
     ) -> RecordedRequest:
 """
-Record a request.""""
+Record a request.""
 Args:
             prompt: Request prompt.
             backend: Backend used.
@@ -126,7 +126,7 @@ Args:
         success_only: bool = False,
     ) -> list[RecordedRequest]:
 """
-Get recorded requests.""""
+Get recorded requests.""
 Args:
             backend: Filter by backend.
             success_only: Only return successful requests.
@@ -145,7 +145,7 @@ Args:
 
     def replay(self, request_id: str) -> RecordedRequest | None:
 """
-Get recording by ID for replay.""""
+Get recording by ID for replay.""
 Args:
             request_id: Recording ID.
 
@@ -159,7 +159,7 @@ Args:
 
     def export_recordings(self) -> str:
 """
-Export recordings as JSON.""""
+Export recordings as JSON.""
 Returns:
             str: JSON string of recordings.
                 with self._lock:
@@ -172,7 +172,7 @@ Returns:
 
     def clear(self) -> int:
 """
-Clear all recordings.""""
+Clear all recordings.""
 Returns:
             int: Number of recordings cleared.
                 with self._lock:

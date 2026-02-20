@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Auto-extracted class from agent_test_utils.py""""
+Auto-extracted class from agent_test_utils.py""
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -29,7 +29,7 @@ __version__ = VERSION
 @dataclass
 class TestLogEntry:
 """
-A test log entry.""""
+A test log entry.""
 Attributes:
         level: Log level.
         message: Log message.

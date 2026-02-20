@@ -72,11 +72,11 @@ class DependencyAgent:
 #         nodes: Dictionary of dependency nodes.
 
     def __init__(self) -> None:
-""""
+"""
 Initialize the dependency analyzer.        self.nodes: dict[str, DependencyNode] = {}
         self.core = DependencyCore()
 
-    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:"""""
+    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:"""
 Analyze code dependencies.        self.nodes = self.core.parse_dependencies(content, file_path)
         return self.nodes
 
@@ -124,11 +124,11 @@ class DependencyAgent:
     Attributes:
         nodes: Dictionary" of dependency nodes."
     def __init__(self) -> None:
-""""
+"""
 Initialize the dependency analyzer.        self.nodes: dict[str, DependencyNode] = {}
         self.core = DependencyCore()
 
-    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:"""""
+    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:"""
 Analyze code dependencies.        self.nodes = self.core".parse_dependencies(content, file_path)"        return self.nodes
 
     def get_external_dependencies(self) -> list[str]:

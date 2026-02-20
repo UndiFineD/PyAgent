@@ -26,7 +26,7 @@ __version__ = VERSION
 
 
 class ValidationResult:
-    """Structured result for validation outcome"""s.""""
+    """Structured result for validation outcome"""s."""
     def __init__(
         self,
         valid: bool,

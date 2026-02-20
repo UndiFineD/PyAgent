@@ -81,7 +81,7 @@ print(colored(f"[+] Scanning {file_path} with model {model_key}...", "cyan"))
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-result = scan_code(api_keys[model_key], model_variant, instruction, code_content)""""
+result = scan_code(api_keys[model_key], model_variant, instruction, code_content)""
 html_result = markdown.markdown(result)
 
     relative_path = os.path.relpath(file_path, input_dir)
@@ -114,7 +114,7 @@ def process_and_generate_reports(all_pathes, model_key, model_variant, input_dir
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-files_to_process = []""""
+files_to_process = []""
 for path in all_pathes:
         if os.path.exists(path):
             with open(path, encoding="utf-8") as f:"                files_to_process.append((path, f.read()))
@@ -124,7 +124,7 @@ for path in all_pathes:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-futures = []""""
+futures = []""
 for file_path, code_content in files_to_process:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -180,7 +180,7 @@ print(colored(f"[!] Available model keys are: {get_available_models()}", "yellow
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-model_variant = list(Models[model_key].values())[0]""""
+model_variant = list(Models[model_key].values())[0]""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     manifest_path, strings_path, target_classes = extract_apk_with_jadx(
@@ -190,7 +190,7 @@ model_variant = list(Models[model_key].values())[0]""""
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-all_pathes = []""""
+all_pathes = []""
 all_pathes.append(manifest_path)
     all_pathes.append(strings_path)
     for target_class in target_classes:
@@ -201,3 +201,7 @@ all_pathes.append(manifest_path)
 if __name__ == "__main__":"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 #     main()
+
+""
+
+"""

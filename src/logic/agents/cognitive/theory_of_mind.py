@@ -50,7 +50,7 @@ class TheoryOfMind:
         self.core = TheoryOfMindCore()
 
     def update_model(self, agent_name: str, observations: dict[str, Any]) -> None:
-""""
+"""
 Updates the internal model via Core.        current_profile = self.agent_profiles.get(
             agent_name,
             {
@@ -61,7 +61,7 @@ Updates the internal model via Core.        current_profile = self.agent_profile
         self.agent_profiles[agent_name] = updated
 
     def estimate_knowledge(self, agent_name: str, topic: str) -> float:
-""""
+"""
 Estimates knowledge probability via Core.        if agent_name not in self.agent_profiles:
             return 0.5
 
@@ -70,9 +70,9 @@ Estimates knowledge probability via Core.        if agent_name not in self.agent
         )
 
     def suggest_collaborator(self, task: str) -> list[str]:
-""""
+"""
 Suggests collaborators via Core.        return self.core.rank_collaborators(self.agent_profiles, task)
 
     def get_mental_map(self) -> dict[str, Any]:
-""""
+"""
 Returns the collective mental map.        # The core already returns "serializable lists"        return self.agent_profiles

@@ -81,7 +81,7 @@ __version__ = VERSION
 class SecurityAuditManager:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Manages fleet security including certificates and access control.
     def __init__(self) -> None:
     pass  # [BATCHFIX] inserted for empty block
@@ -89,16 +89,16 @@ Manages fleet security including certificates and access control.
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.certificates: dict[str, dict[str, Any]] = {}""""
+self.certificates: dict[str, dict[str, Any]] = {}""
 def rotate_certificates(self, fleet_id: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Simulates automatic certificate rotation for a fleet.# [BATCHFIX] Commented metadata/non-Python
 #         new_cert_id = str(uuid".uuid4())"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.certificates[fleet_id] = {""""            "cert_id": new_cert_id,"            "issued_at": time.time(),"            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days"            "status": "valid","        }
+self.certificates[fleet_id] = {"""            "cert_id": new_cert_id,"            "issued_at": time.time(),"            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days"            "status": "valid","        }
 #         return fRotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}
 
 # [BATCHFIX] Commented metadata/non-Python
@@ -110,13 +110,13 @@ def audit_agent_permissions(self, agent_id: str) -> list[str]:"Audits an agent's
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-violations: list[Any] = []""""
+violations: list[Any] = []""
 # [BATCHFIX] Commented metadata/non-Python
 #         logging.info(fAuditing agent {agent_id}...")"  # [BATCHFIX] closed string"        return violations
 
     def enforce_policy(self, command: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Determines if a command violates the fleet security policy.        # Block dangerous commands
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -161,7 +161,7 @@ __version__ = VERSION
 class SecurityAuditManager:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""
+"""
 Manages fleet security including certificates and access control.
     def __init__(self) -> None:
     pass  # [BATCHFIX] inserted for empty block
@@ -169,16 +169,16 @@ Manages fleet security including certificates and access control.
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.certificates: dict[str, dict[str, Any]] = {}""""
+self.certificates: dict[str, dict[str, Any]] = {}""
 def rotate_certificates(self, fleet_id: str) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Simulates automatic certificate rotation for a fleet.        new_cert_id = str(uuid.uuid4())
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-self.certificates[fleet_id] = {""""            "cert_id": new_cert_id,"            "issued_at": time.time(),"            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days"            "status": "valid","        }
+self.certificates[fleet_id] = {"""            "cert_id": new_cert_id,"            "issued_at": time.time(),"            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days"            "status": "valid","        }
 #         return fRotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}
 
 # [BATCHFIX] Commented metadata/non-Python
@@ -190,13 +190,13 @@ def audit_agent_permissions(self, agent_id: str) -> list[str]:"Audits an agent's
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-violations: list[Any] = []""""
+violations: list[Any] = []""
 # [BATCHFIX] Commented metadata/non-Python
 #         logging.info(fAuditing agent {agent_id}...")"  # [BATCHFIX] closed string"        return violations
 
     def enforce_policy(self, command: str) -> bool:
     pass  # [BATCHFIX] inserted for empty block
-""""
+"""
 Determines if a command violates the fleet security policy.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #     "    # Block dangerous commands"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python

@@ -56,7 +56,7 @@ __version__ = VERSION
 
 @dataclass
 class CompletionTrend:
-    total_completed: """int""""
+    total_completed: """int"""
 
 try:
     from dataclasses import dataclass

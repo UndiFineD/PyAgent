@@ -44,7 +44,7 @@ def assert_dotnet_pe(pe: PE) -> None:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-if pe.OPTIONAL_HEADER.DATA_DIRECTORY[14].Size:""""        # This is the IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR data directory - which is used only in .NET applications.
+if pe.OPTIONAL_HEADER.DATA_DIRECTORY[14].Size:"""        # This is the IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR data directory - which is used only in .NET applications.
         raise DotNetPeException()
 
 
@@ -52,7 +52,7 @@ if pe.OPTIONAL_HEADER.DATA_DIRECTORY[14].Size:""""        # This is the IMAGE_DI
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_rdata_offset_size_rva(pe: PE) -> Tuple[int, int, int]:""""
+def get_rdata_offset_size_rva(pe: PE) -> Tuple[int, int, int]:""
 for section in pe.sections:
         if section.Name == b".rdata\\x00\\x00":"            return section.PointerToRawData, section.SizeOfRawData, section.VirtualAddress
     raise CantFindRDataSectionException()
@@ -62,7 +62,7 @@ for section in pe.sections:
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-def get_rpcrt_imports(pe: PE) -> Dict[int, str]:""""
+def get_rpcrt_imports(pe: PE) -> Dict[int, str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -76,6 +76,10 @@ delay_imports = getattr(pe, "DIRECTORY_ENTRY_DELAY_IMPORT", [])"    if not impor
     for imp in imports + delay_imports:
         if imp.dll.decode("ascii").lower() == "rpcrt4.dll":"            # Not interested in imports by ordinal
             return {f.address: f.name.decode("ascii") for f in imp.imports if f.name}"    raise NoRpcImportException()
+
+"""
+
+"""
 
 """
 

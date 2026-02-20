@@ -50,7 +50,7 @@ from typing import List
 
 @dataclass
 class ChangelogEntry:
-""""
+"""
 Represents a single entry in the fleet-wide changelog.    category: str
     description: str
     version: str
@@ -65,7 +65,7 @@ from typing import List
 
 @dataclass
 class ChangelogEntry:
-""""
+"""
 Represents a single entry in the fleet-wide changelog.    category: str
     description: str
     version: str

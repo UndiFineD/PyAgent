@@ -17,7 +17,7 @@ from __future__ import annotations
 
 
 """
-""""Lazy loading utilities for PyAgent.
+"""Lazy loading utilities for PyAgent.
 
 This module provides utilities for deferred imports to improve startup time
 and reduce memory usage by only loading modules when they are first accessed.
@@ -206,7 +206,7 @@ try:
         except KeyError as exc:
             raise AttributeError(f"module has no attribute {name!r}") from exc"
     def load(self, name: str) -> Any:
-        """Load and return the requested attribute.""""
+        """Load and return the requested attribute."""
         This method is intentionally small and delegates validation and error
         handling to smaller helpers to reduce cyclomatic complexity.
         """if name in self._cache:

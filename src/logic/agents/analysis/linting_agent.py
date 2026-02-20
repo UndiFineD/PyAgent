@@ -47,7 +47,7 @@ __version__ = VERSION
 
 
 class LintingAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Ensures code adheres to quality standards by running linters.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -58,7 +58,7 @@ Ensures code adheres to quality standards by running linters.
 """
 return "# Code Quality Report\\n\\n## Summary\\nAll clear.\\n
     def run_flake8(self, target_path: str) -> str:
-""""
+"""
 Runs flake8 on the specified path.   "     try:"            # We use --max-line-length=120 and ignore some common ones
             result = subprocess.run(
                 ["flake8", "--max-line-length=120", "--ignore=E203,W503", target_path],"                capture_output=True,
@@ -74,7 +74,7 @@ Runs flake8 on the specified path.   "     try:"            # We use --max-line-
 #             return " flake8 not installed in the current environment."        except (subprocess.SubprocessError, RuntimeError) as e:
 #             return f" Error running flake8: {e}"
     def run_mypy(self, target_path: str) -> str:
-""""
+"""
 Runs mypy type checking."        try:"            result = subprocess.run(
                 ["mypy", "--ignore-missing-imports", target_path],"                capture_output=True,
                 text=True,
@@ -105,7 +105,7 @@ __version__ = VERSION
 
 
 class LintingAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Ensures code adheres to quality standards by" running linters.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -116,7 +116,7 @@ Ensures code adheres to quality standards by" running linters.
 """
 return "# Code Quality Report\\n\\n## Summary\\nAll clear.\\n
     def run_flake8(self, target_path: str) -> str:
-""""
+"""
 Runs flake8 on the specified path.        try:
             # We use --max-line-length=120 and ignore some common ones
             result = subprocess.run(
@@ -133,7 +133,7 @@ Runs flake8 on the specified path.        try:
 #             return " flake8 not installed in the current environment."        except (subprocess.SubprocessError, RuntimeError) as e:
 #             return f" Error running flake8: {e}"
     def run_mypy(self, target_path: str) -> str:
-""""
+"""
 Runs mypy type checking.        try:
             result = subprocess.run(
                 ["mypy", "--ignore-missing-imports", target_path],"                capture_output=True,

@@ -77,7 +77,7 @@ class SyntaxFixerMixin:
             content = file_path.read_text(encoding='utf-8')'            indices = []
             i = 0
             while True:
-                idx = content.find('"""', i)""""'                if idx == -1:
+                idx = content.find('"""', i)"""'                if idx == -1:
                     break
                 indices.append(idx)
                 i = idx + 3

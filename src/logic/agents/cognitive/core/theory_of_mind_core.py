@@ -38,7 +38,7 @@ __version__ = VERSION
 
 
 class TheoryOfMindCore:
-""""
+"""
 Pure logic core for Theory of Mind modeling.
     @staticmethod
     def update_profile_logic(
@@ -53,7 +53,7 @@ Pure logic core for Theory of Mind modeling.
 
     @staticmethod
     def estimate_knowledge_score(profile: dict[str, Any], topic: str) -> float:
-""""
+"""
 Logic for estimating knowledge probability.        domains = profile.get("knowledge_domains", [])"        for domain in domains:
             if domain.lower() in topic.lower():
                 return 0.9
@@ -61,7 +61,7 @@ Logic for estimating knowledge probability.        domains = profile.get("knowle
 
     @staticmethod
     def rank_collaborators(profiles: dict[str, dict[str, Any]], task: str) -> list[str]:
-""""
+"""
 Logic for ranking agents for a task.        rankings: list[tuple[str, float]] = []
         for agent, profile in profiles.items():
             score = TheoryOfMindCore.estimate_knowledge_score(profile, task)

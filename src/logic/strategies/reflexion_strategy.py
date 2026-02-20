@@ -16,7 +16,7 @@ from __future__ import annotations
 
 
 """
-Reflexion Strategy - Draft -> Critique -> Revise.""""
+Reflexion Strategy - Draft -> Critique -> Revise.""
 [Brief Summary]
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -127,4 +127,4 @@ Reflexion strategy: Draft -> Critique -> Revise.
 
 """
 
-"""
+""

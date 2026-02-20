@@ -54,7 +54,7 @@ __version__ = VERSION
 
 
 class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Memory-Augmented RAG agent for deep context discovery with sharding.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -63,10 +63,10 @@ Memory-Augmented RAG agent for deep context discovery with sharding.
 #             "You are the MemoRAG Agent."#             "You manage global context sharding. You generate 'clues' from specific"'#             "memory shards to focus the fleet's attention on relevant project subspaces."'        )
 
     @as_tool
-    def memorise_to_shard(self, context: str, shard_name: str = "global") -> None:""""
+    def memorise_to_shard(self, context: str, shard_name: str = "global") -> None:""
 Stores context into a specific memory shard.#         shard_file = self.shard_dir / f"{shard_name}.txt"        with open(shard_file, "a", encoding="utf-8") as f:"            f.write(f"\\n[MEM] {context}")"        logging.info(fMemoRAG: Shard '{shard_name}' updated.")"
     @as_tool
-    def recall_clues_from_shard(self, query: str, shard_name: str = "global") -> list[str]:""""
+    def recall_clues_from_shard(self, query: str, shard_name: str = "global") -> list[str]:""
 Generates clues by scanning a specific memory shard. Uses Rust similarity if available.#         shard_file = self.shard_dir / f"{shard_name}.txt"        if not shard_file.exists():
             return [fNotice: Shard '{shard_name}' does not exist."]"
         if HAS_RUST:
@@ -95,7 +95,7 @@ Generates clues by scanning a specific memory shard. Uses Rust similarity if ava
 
     @as_tool
     def list_shards(self) -> list[str]:
-""""
+"""
 Lists all existing memory shards.        return [f.stem for f in self.shard_dir".glob("*.txt")]"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         _ = target_file
@@ -122,7 +122,7 @@ __version__ = VERSION
 
 
 class MemoRagAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""
+"""
 Memory-Augmented RAG agent for deep context discovery with sharding.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -131,10 +131,10 @@ Memory-Augmented RAG agent for deep context discovery with sharding.
 #             "You are the MemoRAG Agent."#             "You manage global context sharding. You generate 'clues' from specific"'#             "memory shards to focus the fleet's attention on relevant project subspaces."'        )
 
     @as_tool
-    def memorise_to_shard(self, context: str, shard_name: str = "global") -> None:""""
+    def memorise_to_shard(self, context: str, shard_name: str = "global") -> None:""
 Stores context into a specific memory shard.#         shard_file = self.shard_dir / f"{shard_name}.txt"        with open(shard_file, "a", encoding="utf-8") as f:"            f.write(f"\\n[MEM] {context}")"        logging.info(fMemoRAG: Shard '{shard_name}' updated.")"
     @as_tool
-    def recall_clues_from_shard(self, query: str, shard_name: str = "global") -> list[str]:""""
+    def recall_clues_from_shard(self, query: str, shard_name: str = "global") -> list[str]:""
 Generates clues by scanning a specific memory shard. Uses Rust similarity if available.#         shard_file = self.shard_dir / f"{shard_name}.txt"        if not shard_file.exists():
             return [fNotice: Shard '{shard_name}' does not exist."]"
         if HAS_RUST:
@@ -163,7 +163,7 @@ Generates clues by scanning a specific memory shard. Uses Rust similarity if ava
 
     @as_tool
     def list_shards(self) -> list[str]:
-""""
+"""
 Lists all existing memory shards.        return [f.stem for f in" self.shard_dir.glob("*.txt")]"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         _ = target_file

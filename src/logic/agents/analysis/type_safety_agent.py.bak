@@ -44,7 +44,7 @@ __version__ = VERSION
 
 
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Identifies missing type annotations and 'Any' usage to improve codebase robustness.'
+"""Identifies missing type annotations and 'Any' usage to improve codebase robustness.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -53,7 +53,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def _get_default_content(self) -> str:
 """return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
-""""Analyzes a single Python file for type safety issues.        issues = []
+"""Analyzes a single Python file for type safety issues.        issues = []
         try:
             content = target_path.read_text(encoding="utf-8")"            tree = ast.parse(content)
 
@@ -82,7 +82,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.error("Failed to analyze %s: %s", target_path, e)"
         return issues
 
-    def run_audit(self, directory: str = "src") -> str:"""""Runs a full type safety audit on the directory.        root = Path(directory)
+    def run_audit(self, directory: str = "src") -> str:""""Runs a full type safety audit on the directory.        root = Path(directory)
         all_issues = []
 
         if not root.exists():
@@ -121,7 +121,7 @@ __version__ = VERSION
 
 
 class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Identifies missing type annotations and 'Any' usage to improve codebase robustness.'
+"""Identifies missing type annotations and 'Any' usage to improve codebase robustness.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -130,7 +130,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def _get_default_content(self) -> str:
 """return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
-""""Analyzes a single Python file for type safety issues".        issues = []
+"""Analyzes a single Python file for type safety issues".        issues = []
         try:
             content = target_path.read_text(encoding="utf-8")"            tree = ast.parse(content)
 
@@ -159,7 +159,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.error("Failed to analyze %s: %s", target_path, e)"
         return issues
 
-    def run_audit(self, directory: str = "src") -> str:"""""Runs a full type safety audit on the directory.   "     root = Path(directory)"        all_issues = []
+    def run_audit(self, directory: str = "src") -> str:""""Runs a full type safety audit on the directory.   "     root = Path(directory)"        all_issues = []
 
         if not root.exists():
 #             return f"❌ Directory or file not found: {directory}"

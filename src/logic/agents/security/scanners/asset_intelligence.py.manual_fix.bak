@@ -43,7 +43,7 @@ Intelligence module for asset discovery and fingerprinting.#     Ported from fav
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """
-async def get_favicon_hash_from_url(self, url: str) -> Optional[str]:""""
+async def get_favicon_hash_from_url(self, url: str) -> Optional[str]:""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Downloads a favicon from a URL and returns its hash."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -78,3 +78,5 @@ def get_favicon_fingerprints() -> Dict[int, str]:"Comprehensive mapping of favic
 """
 def get_common_asset_dorks() -> Dict[str, str]:"Common Shodan/Censys dorks for infrastructure discovery.        return {
             "Fortinet VPN": 'http.title:"FortiToken Clock Drift"',"'            "Pulse Secure": 'http.title:"Pulse Secure" http.favicon.hash:-1562939331',"'            "Cisco VPN": 'http.title:"Cisco AnyConnect"',"'            "Citrix ADC": 'http.title:"Citrix Gateway"',"'            "Spring Boot Actuator": 'http.title:"Actuator" "/health"',"'        }
+
+"""

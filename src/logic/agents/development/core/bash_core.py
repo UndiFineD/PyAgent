@@ -35,7 +35,7 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ShellCheckIssue(TypedDict):
-""""
+"""
 Represents a single issue found by shellcheck.
 
     file: str
@@ -53,7 +53,7 @@ Represents a single issue found by shellcheck.
 
 
 class BashLintResult(TypedDict):
-""""
+"""
 Result of a bash script linting session.
     valid: bool
     issues: list[ShellCheckIssue]
@@ -62,7 +62,7 @@ Result of a bash script linting session.
 
 
 class BashCore:
-""""
+"""
 Core logic for Bash script analysis and "linting.
     @staticmethod
     def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
