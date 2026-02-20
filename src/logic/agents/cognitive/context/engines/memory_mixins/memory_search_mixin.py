@@ -19,8 +19,16 @@ This mixin provides small, deterministic search helpers used by tests
 and environments where a vector DB (e.g., Chroma) may not be present.
 """
 
-import logging
-from typing import Any, List
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, List
+except ImportError:
+    from typing import Any, List
+
 
 
 class MemorySearchMixin:

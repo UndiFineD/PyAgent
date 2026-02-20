@@ -46,7 +46,11 @@ Vibe-Coding 2026persona and track definitions.
 """
 
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
+
 
 
 VIBE_CODING_2025_TRACKS = {

@@ -15,10 +15,22 @@
 
 """Priority queue for ordered agent execution with simple dependency support."""
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import logging
-from typing import Any, Dict, List
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
 
 
 class AgentPriorityQueue:

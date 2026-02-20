@@ -16,7 +16,11 @@
 """Standard exception types for the PyAgent base framework."""
 
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
+
 
 
 

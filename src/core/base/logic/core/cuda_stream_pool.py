@@ -3,12 +3,32 @@
 
 Provides lightweight classes and functions expected by tests without GPU deps.
 """
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import Any, Deque, List, Optional
-from collections import deque
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum, auto
+except ImportError:
+    from enum import Enum, auto
+
+try:
+    from typing import Any, Deque, List, Optional
+except ImportError:
+    from typing import Any, Deque, List, Optional
+
+try:
+    from collections import deque
+except ImportError:
+    from collections import deque
+
 
 
 class StreamPriority(Enum):

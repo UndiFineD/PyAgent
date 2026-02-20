@@ -16,12 +16,36 @@
 
 
 
-from .base import Executor, Scheduler  # noqa: F401
-from .config import EngineCoreOutput, EngineCoreOutputs, FinishReason, ModelRunnerOutput, Request, RequestStatus, SchedulerOutput  # noqa: F401
-from .engine import EngineCore  # noqa: F401
-from .executor import MockExecutor  # noqa: F401
-from .messaging import EngineCoreProc  # noqa: F401
-from .scheduler import SimpleScheduler  # noqa: F401
+try:
+    from .base import Executor, Scheduler  # noqa: F401
+except ImportError:
+    from .base import Executor, Scheduler # noqa: F401
+
+try:
+    from .config import EngineCoreOutput, EngineCoreOutputs, FinishReason, ModelRunnerOutput, Request, RequestStatus, SchedulerOutput  # noqa: F401
+except ImportError:
+    from .config import EngineCoreOutput, EngineCoreOutputs, FinishReason, ModelRunnerOutput, Request, RequestStatus, SchedulerOutput # noqa: F401
+
+try:
+    from .engine import EngineCore  # noqa: F401
+except ImportError:
+    from .engine import EngineCore # noqa: F401
+
+try:
+    from .executor import MockExecutor  # noqa: F401
+except ImportError:
+    from .executor import MockExecutor # noqa: F401
+
+try:
+    from .messaging import EngineCoreProc  # noqa: F401
+except ImportError:
+    from .messaging import EngineCoreProc # noqa: F401
+
+try:
+    from .scheduler import SimpleScheduler  # noqa: F401
+except ImportError:
+    from .scheduler import SimpleScheduler # noqa: F401
+
 
 
 

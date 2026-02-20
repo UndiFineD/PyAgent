@@ -27,7 +27,7 @@ except ImportError:
     from src.core.base.common.lesson_core import LessonCore as StandardLessonCore
 
 
-__all__ = ["LessonCore", "Lesson"]"
+__all__ = ["LessonCore", "Lesson"]
 
 
 class LessonCore(StandardLessonCore):

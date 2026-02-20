@@ -19,10 +19,22 @@ Implements database connection and query patterns from ADSyncDump-BOF.
 """
 
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import ctypes
-from typing import Any, Dict, List, Optional
+
+try:
+    import ctypes
+except ImportError:
+    import ctypes
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
 
 # ODBC constants
 SQL_HANDLE_ENV = 1

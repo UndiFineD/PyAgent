@@ -14,9 +14,21 @@
 
 
 
-from typing import Any, Dict, Optional, Tuple
-import numpy as np
-from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
+try:
+    from typing import Any, Dict, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, Optional, Tuple
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+try:
+    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
+except ImportError:
+    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
+
 
 
 class ImageProcessor(BaseMultiModalProcessor[Any]):

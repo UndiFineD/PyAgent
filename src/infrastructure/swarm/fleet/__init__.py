@@ -19,14 +19,34 @@ Fleet package.
 """
 
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
 
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.async_fleet_manager import AsyncFleetManager
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .infrastructure.swarm.fleet.async_fleet_manager import AsyncFleetManager
+except ImportError:
+    from src.infrastructure.swarm.fleet.async_fleet_manager import AsyncFleetManager
+
+try:
+    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
+except ImportError:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+try:
+    from .infrastructure.swarm.fleet.workflow_state import WorkflowState
+except ImportError:
+    from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
+
 
 
 __version__ = VERSION

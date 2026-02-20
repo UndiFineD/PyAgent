@@ -33,30 +33,86 @@ Phase 30 additions:
 """
 
 # Phase 30: Engine Core
-from .engine_core import EngineCore, EngineCoreOutput, EngineCoreOutputs, EngineCoreProc, Executor  # noqa: F401
-from .engine_core import FinishReason as CoreFinishReason  # noqa: F401
+try:
+    from .engine_core import EngineCore, EngineCoreOutput, EngineCoreOutputs, EngineCoreProc, Executor  # noqa: F401
+except ImportError:
+    from .engine_core import EngineCore, EngineCoreOutput, EngineCoreOutputs, EngineCoreProc, Executor # noqa: F401
 
-from .engine_core import MockExecutor, ModelRunnerOutput  # noqa: F401
+try:
+    from .engine_core import FinishReason as CoreFinishReason  # noqa: F401
+except ImportError:
+    from .engine_core import FinishReason as CoreFinishReason # noqa: F401
 
-from .engine_core import Request as CoreRequest  # noqa: F401
 
-from .engine_core import RequestStatus as CoreRequestStatus  # noqa: F401
+try:
+    from .engine_core import MockExecutor, ModelRunnerOutput  # noqa: F401
+except ImportError:
+    from .engine_core import MockExecutor, ModelRunnerOutput # noqa: F401
 
-from .engine_core import Scheduler, SchedulerOutput, SimpleScheduler, create_engine_core  # noqa: F401
+
+try:
+    from .engine_core import Request as CoreRequest  # noqa: F401
+except ImportError:
+    from .engine_core import Request as CoreRequest # noqa: F401
+
+
+try:
+    from .engine_core import RequestStatus as CoreRequestStatus  # noqa: F401
+except ImportError:
+    from .engine_core import RequestStatus as CoreRequestStatus # noqa: F401
+
+
+try:
+    from .engine_core import Scheduler, SchedulerOutput, SimpleScheduler, create_engine_core  # noqa: F401
+except ImportError:
+    from .engine_core import Scheduler, SchedulerOutput, SimpleScheduler, create_engine_core # noqa: F401
+
 # Phase 30: Engine Core Client
-from .engine_core_client import AsyncMPClient, ClientConfig, EngineCoreClient, InprocClient, RequestType, SyncMPClient, create_client  # noqa: F401
-from .engine_lifecycle import EngineConfig, EngineLifecycleManager, EngineState  # noqa: F401
+try:
+    from .engine_core_client import AsyncMPClient, ClientConfig, EngineCoreClient, InprocClient, RequestType, SyncMPClient, create_client  # noqa: F401
+except ImportError:
+    from .engine_core_client import AsyncMPClient, ClientConfig, EngineCoreClient, InprocClient, RequestType, SyncMPClient, create_client # noqa: F401
+
+try:
+    from .engine_lifecycle import EngineConfig, EngineLifecycleManager, EngineState  # noqa: F401
+except ImportError:
+    from .engine_lifecycle import EngineConfig, EngineLifecycleManager, EngineState # noqa: F401
+
 
 # Phase 30: Incremental Detokenizer
-from .incremental_detokenizer import INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET, BaseIncrementalDetokenizer, FastIncrementalDetokenizer, IncrementalDetokenizer, NoOpDetokenizer, SlowIncrementalDetokenizer, StopMatch, check_stop_strings, check_stop_strings_rust, validate_utf8, validate_utf8_rust  # noqa: F401
-# Phase 30: Output Processor
-from .output_processor import EngineCoreRequest, EventType, IterationStats, LoRARequest, LoRARequestStates, OutputProcessor, OutputProcessorOutput, ParentRequest  # noqa: F401
-from .output_processor import RequestEvent as OutputRequestEvent  # noqa: F401
+try:
+    from .incremental_detokenizer import INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET, BaseIncrementalDetokenizer, FastIncrementalDetokenizer, IncrementalDetokenizer, NoOpDetokenizer, SlowIncrementalDetokenizer, StopMatch, check_stop_strings, check_stop_strings_rust, validate_utf8, validate_utf8_rust  # noqa: F401
+except ImportError:
+    from .incremental_detokenizer import INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET, BaseIncrementalDetokenizer, FastIncrementalDetokenizer, IncrementalDetokenizer, NoOpDetokenizer, SlowIncrementalDetokenizer, StopMatch, check_stop_strings, check_stop_strings_rust, validate_utf8, validate_utf8_rust # noqa: F401
 
-from .output_processor import RequestOutput, RequestOutputCollector, RequestState, SamplingParams  # noqa: F401
+# Phase 30: Output Processor
+try:
+    from .output_processor import EngineCoreRequest, EventType, IterationStats, LoRARequest, LoRARequestStates, OutputProcessor, OutputProcessorOutput, ParentRequest  # noqa: F401
+except ImportError:
+    from .output_processor import EngineCoreRequest, EventType, IterationStats, LoRARequest, LoRARequestStates, OutputProcessor, OutputProcessorOutput, ParentRequest # noqa: F401
+
+try:
+    from .output_processor import RequestEvent as OutputRequestEvent  # noqa: F401
+except ImportError:
+    from .output_processor import RequestEvent as OutputRequestEvent # noqa: F401
+
+
+try:
+    from .output_processor import RequestOutput, RequestOutputCollector, RequestState, SamplingParams  # noqa: F401
+except ImportError:
+    from .output_processor import RequestOutput, RequestOutputCollector, RequestState, SamplingParams # noqa: F401
+
 # Phase 30: Prefix Cache Manager
-from .prefix_cache_manager import BlockHash, CacheBlock, HashAlgorithm, PrefixCacheManager, compute_cache_keys, compute_cache_keys_rust, compute_prefix_match, compute_prefix_match_rust, get_hash_function, hash_block_tokens, hash_block_tokens_rust, init_none_hash  # noqa: F401
-from .request_lifecycle import FinishReason, Request, RequestEvent, RequestEventType, RequestQueue, RequestStatus, RequestTracker  # noqa: F401
+try:
+    from .prefix_cache_manager import BlockHash, CacheBlock, HashAlgorithm, PrefixCacheManager, compute_cache_keys, compute_cache_keys_rust, compute_prefix_match, compute_prefix_match_rust, get_hash_function, hash_block_tokens, hash_block_tokens_rust, init_none_hash  # noqa: F401
+except ImportError:
+    from .prefix_cache_manager import BlockHash, CacheBlock, HashAlgorithm, PrefixCacheManager, compute_cache_keys, compute_cache_keys_rust, compute_prefix_match, compute_prefix_match_rust, get_hash_function, hash_block_tokens, hash_block_tokens_rust, init_none_hash # noqa: F401
+
+try:
+    from .request_lifecycle import FinishReason, Request, RequestEvent, RequestEventType, RequestQueue, RequestStatus, RequestTracker  # noqa: F401
+except ImportError:
+    from .request_lifecycle import FinishReason, Request, RequestEvent, RequestEventType, RequestQueue, RequestStatus, RequestTracker # noqa: F401
+
 
 __all__: list[str] = [
     # Request Lifecycle

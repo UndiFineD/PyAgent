@@ -15,10 +15,22 @@
 
 """Connectivity utilities used in tests."""
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import logging
-from typing import Any
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
 
 logger = logging.getLogger(__name__)
 

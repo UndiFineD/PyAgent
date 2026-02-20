@@ -40,101 +40,162 @@ from src.core.base.common.base_core import BaseCore
 
 # Setup logger
 logger = logging.getLogger(__name__)
-
-
-
 class Role(str, Enum):
-    """Message role enumeration."""USER = "user""    AGENT = "agent""
+    """Message role enumeration."""
+    USER = "user"
+    AGENT = "agent"
 
 
 class TaskState(str, Enum):
-    """Task execution states."""PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""
+    """Task execution states."""
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
 
 
 class SecuritySchemeType(str, Enum):
-    """Supported security scheme types."""OAUTH2 = "oauth2""    HTTP = "http""    API_KEY = "apiKey""    OPENID_CONNECT = "openIdConnect""
+    """Supported security scheme types."""
+    OAUTH2 = "oauth2"
+    HTTP = "http"
+    API_KEY = "apiKey"
+    OPENID_CONNECT = "openIdConnect"
 
 
 class MessagePart(BaseModel):
-    """Base class for message parts."""kind: str = Field(..., description="Type of content part")"
-    model_config = ConfigDict(validate_by_name=True)
-
+    """Base class for message parts."""
+    kind: str = Field(..., description="Type of content part")
 
 
 class TextPart(BaseModel):
-    """Text content part."""kind: str = Field(default="text", description="Type of content part")"    text: str = Field(..., description="Text content")"
-    model_config = ConfigDict(validate_by_name=True)
-
+    """Text content part."""
+    kind: str = Field(default="text", description="Type of content part")
+    text: str = Field(..., description="Text content")
 
 
 class FilePart(BaseModel):
-    """File content part."""kind: str = Field(default="file", description="Type of content part")"    filename: str = Field(..., description="File name")"    mime_type: str = Field(..., description="MIME type")"    data: bytes = Field(..., description="File data")"
-    model_config = ConfigDict(validate_by_name=True)
-
+    """File content part."""
+    kind: str = Field(default="file", description="Type of content part")
+    filename: str = Field(..., description="File name")
+    mime_type: str = Field(..., description="MIME type")
+    data: bytes = Field(..., description="File data")
 
 
 class DataPart(BaseModel):
-    """Structured data part."""kind: str = Field(default="data", description="Type of content part")"    mime_type: str = Field(..., description="MIME type")"    data: Any = Field(..., description="Structured data")"
-    model_config = ConfigDict(validate_by_name=True)
-
+    """Structured data part."""
+    kind: str = Field(default="data", description="Type of content part")
+    mime_type: str = Field(..., description="MIME type")
+    data: Any = Field(..., description="Structured data")
 
 
 class Message(BaseModel):
-    """Agent message with multi-part content."""content: List[Union[TextPart, FilePart, DataPart]] = Field(
-        default_factory=list, description="Message content parts""    )
-    role: Role = Field(..., description="Message sender role")"    timestamp: Optional[datetime] = Field(
+    """Agent message with multi-part content."""
+    content: List[Union[TextPart, FilePart, DataPart]] = Field(
+        default_factory=list, description="Message content parts"
+    )
+    role: Role = Field(..., description="Message sender role")
+    timestamp: Optional[datetime] = Field(
         default_factory=lambda: datetime.now(timezone.utc),
-        description="Message timestamp""    )
-    metadata: Optional[Dict[str, Any]] = Field(default=None, description="Additional metadata")"
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary representation."""return {
-            "content": [part.dict() for part in self.content],"            "role": self.role.value,"            "timestamp": self.timestamp.isoformat() if self.timestamp else None,"            "metadata": self.metadata,"        }
+        description="Message timestamp",
+    )
+    metadata: Optional[Dict[str, Any]] = Field(default=None, description="Additional metadata")
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary representation."""
+        return {
+            "content": [part.dict() for part in self.content],
+            "role": self.role.value,
+            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
+            "metadata": self.metadata,
+        }
 
 
 class AgentCapabilities(BaseModel):
-    """Agent capabilities declaration."""streaming: bool = Field(default=False, description="Supports streaming responses")"    push_notifications: Optional[bool] = Field(default=None, description="Supports push notifications")"    state_transition_history: Optional[bool] = Field(default=None, description="Tracks state transitions")"    extensions: List[Dict[str, Any]] = Field(default_factory=list, description="Custom extensions")"
+    """Agent capabilities declaration."""
+    streaming: bool = Field(default=False, description="Supports streaming responses")
+    push_notifications: Optional[bool] = Field(default=None, description="Supports push notifications")
+    state_transition_history: Optional[bool] = Field(default=None, description="Tracks state transitions")
+    extensions: List[Dict[str, Any]] = Field(default_factory=list, description="Custom extensions")
 
 
 class AgentAuthentication(BaseModel):
-    """Agent authentication configuration."""schemes: List[str] = Field(default_factory=list, description="Supported authentication schemes")"    credentials: Optional[str] = Field(default=None, description="Authentication credentials")"
+    """Agent authentication configuration."""
+    schemes: List[str] = Field(default_factory=list, description="Supported authentication schemes")
+    credentials: Optional[str] = Field(default=None, description="Authentication credentials")
 
 
 class AgentCard(BaseModel):
-    """Agent capability and configuration card."""name: str = Field(..., description="Agent name")"    description: str = Field(..., description="Agent description")"    version: str = Field(default="1.0.0", description="Agent version")"    protocol_version: str = Field(default="0.2.6", description="A2A protocol version")"    url: str = Field(..., description="Agent endpoint URL")"
-    capabilities: AgentCapabilities = Field(default_factory=AgentCapabilities, description="Agent capabilities")"    authentication: Optional[AgentAuthentication] = Field(default=None, description="Authentication config")"
-    default_input_modes: List[str] = Field(default_factory=lambda: ["text"], description="Default input modes")"    default_output_modes: List[str] = Field(default_factory=lambda: ["text"], description="Default output modes")"
-    skills: List[Dict[str, Any]] = Field(default_factory=list, description="Agent skills/capabilities")"    additional_interfaces: List[Dict[str, Any]] = Field(default_factory=list, description="Additional interfaces")"
-    documentation_url: Optional[str] = Field(default=None, description="Documentation URL")"    icon_url: Optional[str] = Field(default=None, description="Icon URL")"
+    """Agent capability and configuration card."""
+    name: str = Field(..., description="Agent name")
+    description: str = Field(..., description="Agent description")
+    version: str = Field(default="1.0.0", description="Agent version")
+    protocol_version: str = Field(default="0.2.6", description="A2A protocol version")
+    url: str = Field(..., description="Agent endpoint URL")
+    capabilities: AgentCapabilities = Field(default_factory=AgentCapabilities, description="Agent capabilities")
+    authentication: Optional[AgentAuthentication] = Field(default=None, description="Authentication config")
+    default_input_modes: List[str] = Field(default_factory=lambda: ["text"], description="Default input modes")
+    default_output_modes: List[str] = Field(default_factory=lambda: ["text"], description="Default output modes")
+    skills: List[Dict[str, Any]] = Field(default_factory=list, description="Agent skills/capabilities")
+    additional_interfaces: List[Dict[str, Any]] = Field(default_factory=list, description="Additional interfaces")
+    documentation_url: Optional[str] = Field(default=None, description="Documentation URL")
+    icon_url: Optional[str] = Field(default=None, description="Icon URL")
 
 
 class TaskStatus(BaseModel):
-    """Task execution status."""state: TaskState = Field(..., description="Current task state")"    message: Optional[Message] = Field(default=None, description="Status message")"    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Status timestamp")"    progress: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Progress percentage")"    error: Optional[str] = Field(default=None, description="Error message if failed")"
+    """Task execution status."""
+    state: TaskState = Field(..., description="Current task state")
+    message: Optional[Message] = Field(default=None, description="Status message")
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Status timestamp")
+    progress: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Progress percentage")
+    error: Optional[str] = Field(default=None, description="Error message if failed")
 
 
 class Task(BaseModel):
-    """Agent task representation."""id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique task ID")"    agent_id: str = Field(..., description="Target agent ID")"    message: Message = Field(..., description="Task message")"    status: TaskStatus = Field(default_factory=lambda: TaskStatus(state=TaskState.PENDING), description="Task status")"    created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp")"    updated_at: datetime = Field(default_factory=datetime.utcnow, description="Last update timestamp")"
-    metadata: Optional[Dict[str, Any]] = Field(default=None, description="Task metadata")"
+    """Agent task representation."""
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique task ID")
+    agent_id: str = Field(..., description="Target agent ID")
+    message: Message = Field(..., description="Task message")
+    status: TaskStatus = Field(default_factory=lambda: TaskStatus(state=TaskState.PENDING), description="Task status")
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp")
+    updated_at: datetime = Field(default_factory=datetime.utcnow, description="Last update timestamp")
+    metadata: Optional[Dict[str, Any]] = Field(default=None, description="Task metadata")
 
 
 class JsonRpcRequest(BaseModel):
-    """JSON-RPC request structure."""jsonrpc: str = Field(default="2.0", description="JSON-RPC version")"    id: Union[str, int] = Field(..., description="Request ID")"    method: str = Field(..., description="Method name")"    params: Dict[str, Any] = Field(default_factory=dict, description="Method parameters")"
+    """JSON-RPC request structure."""
+    jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
+    id: Union[str, int] = Field(..., description="Request ID")
+    method: str = Field(..., description="Method name")
+    params: Dict[str, Any] = Field(default_factory=dict, description="Method parameters")
 
 
 class JsonRpcResponse(BaseModel):
-    """JSON-RPC response structure."""jsonrpc: str = Field(default="2.0", description="JSON-RPC version")"    id: Union[str, int] = Field(..., description="Request ID")"    result: Any = Field(..., description="Response result")"
+    """JSON-RPC response structure."""
+    jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
+    id: Union[str, int] = Field(..., description="Request ID")
+    result: Any = Field(..., description="Response result")
 
 
 class JsonRpcError(BaseModel):
-    """JSON-RPC error structure."""jsonrpc: str = Field(default="2.0", description="JSON-RPC version")"    id: Union[str, int] = Field(..., description="Request ID")"    error: Dict[str, Any] = Field(..., description="Error details")"
+    """JSON-RPC error structure."""
+    jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
+    id: Union[str, int] = Field(..., description="Request ID")
+    error: Dict[str, Any] = Field(..., description="Error details")
 
 
 class A2AMessage(BaseModel):
-    """A2A protocol message envelope."""request: Optional[JsonRpcRequest] = Field(default=None, description="RPC request")"    response: Optional[JsonRpcResponse] = Field(default=None, description="RPC response")"    error: Optional[JsonRpcError] = Field(default=None, description="RPC error")"
+    """A2A protocol message envelope."""
+    request: Optional[JsonRpcRequest] = Field(default=None, description="RPC request")
+    response: Optional[JsonRpcResponse] = Field(default=None, description="RPC response")
+    error: Optional[JsonRpcError] = Field(default=None, description="RPC error")
 
 
 class AgentEndpoint(BaseModel):
-    """Agent endpoint configuration."""url: str = Field(..., description="Agent service URL")"    agent_card: Optional[AgentCard] = Field(default=None, description="Cached agent card")"    authentication: Optional[Dict[str, Any]] = Field(default=None, description="Authentication config")"
+    """Agent endpoint configuration."""
+    url: str = Field(..., description="Agent service URL")
+    agent_card: Optional[AgentCard] = Field(default=None, description="Cached agent card")
+    authentication: Optional[Dict[str, Any]] = Field(default=None, description="Authentication config")
 
 
 class InterAgentCommunicationCore(BaseCore):

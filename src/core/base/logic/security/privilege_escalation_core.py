@@ -19,9 +19,17 @@ Implements token manipulation and privilege enabling patterns from ADSyncDump-BO
 """
 
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from typing import Optional, Tuple
+
+try:
+    from typing import Optional, Tuple
+except ImportError:
+    from typing import Optional, Tuple
+
 
 
 class PrivilegeEscalationCore:

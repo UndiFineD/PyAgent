@@ -1,11 +1,27 @@
 #!/usr/bin/env python3
 """Minimal Active Directory attack/defense core for tests."""
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum
-from typing import List, Dict, Any
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import List, Dict, Any
+except ImportError:
+    from typing import List, Dict, Any
+
 
 
 class KillChainPhase(Enum):

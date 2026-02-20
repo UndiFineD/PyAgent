@@ -17,9 +17,17 @@
 """
 
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from typing import TypeAlias, TypeVar, Any
+
+try:
+    from typing import TypeAlias, TypeVar, Any
+except ImportError:
+    from typing import TypeAlias, TypeVar, Any
+
 
 _T = TypeVar("_T")
 _U = TypeVar("_U")

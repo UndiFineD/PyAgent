@@ -1,10 +1,26 @@
 #!/usr/bin/env python3
 """Minimal egress lockdown core for tests."""
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import re
-from typing import List, Optional, Set
-from urllib.parse import urlparse
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import List, Optional, Set
+except ImportError:
+    from typing import List, Optional, Set
+
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
+
 
 
 class EgressLockdownCore:

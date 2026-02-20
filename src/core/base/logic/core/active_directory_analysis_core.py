@@ -5,12 +5,32 @@
 
 """Minimal Active Directory Analysis Core used in tests."""
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import logging
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Dict, List, Optional, Set
+except ImportError:
+    from typing import Any, Dict, List, Optional, Set
+
 
 logger = logging.getLogger(__name__)
 

@@ -15,9 +15,17 @@
 
 """Iteration helpers for JSON-like trees."""
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from typing import Generator, Iterable, Tuple, TypeVar, Any
+
+try:
+    from typing import Generator, Iterable, Tuple, TypeVar, Any
+except ImportError:
+    from typing import Generator, Iterable, Tuple, TypeVar, Any
+
 
 _T = TypeVar("_T")
 JSONTree = Any

@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 """Minimal InferenceScalingCore used by tests."""
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, Dict, List
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
 
 
 class ScalingStrategy:

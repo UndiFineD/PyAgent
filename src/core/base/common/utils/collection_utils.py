@@ -5,12 +5,32 @@ This file provides a small, well-tested subset of collection helpers used
 throughout the codebase. Implementations favor clarity and robustness.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import itertools
-from collections import defaultdict
-from collections.abc import Callable, Generator, Hashable, Iterable
-from typing import Any, Dict, List, TypeVar
+
+try:
+    import itertools
+except ImportError:
+    import itertools
+
+try:
+    from collections import defaultdict
+except ImportError:
+    from collections import defaultdict
+
+try:
+    from collections.abc import Callable, Generator, Hashable, Iterable
+except ImportError:
+    from collections.abc import Callable, Generator, Hashable, Iterable
+
+try:
+    from typing import Any, Dict, List, TypeVar
+except ImportError:
+    from typing import Any, Dict, List, TypeVar
+
 
 
 T = TypeVar("T")

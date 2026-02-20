@@ -18,9 +18,17 @@
 Minimal, import-safe implementation used in tests.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from typing import Any, Dict, List, Tuple
+
+try:
+    from typing import Any, Dict, List, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Tuple
+
 
 
 class KnowledgeIndexingAssistant:

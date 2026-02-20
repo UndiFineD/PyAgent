@@ -7,12 +7,32 @@ The real cryptographic implementation is intentionally out of scope
 for these unit tests.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Dict, Optional, Tuple
-import logging
-import os
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Dict, Optional, Tuple
+except ImportError:
+    from typing import Dict, Optional, Tuple
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import os
+except ImportError:
+    import os
+
 
 
 logger = logging.getLogger("pyagent.e2e_encryption")

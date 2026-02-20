@@ -35,12 +35,13 @@ class TestAuthCore(unittest.TestCase):
         try:
             int(challenge, 16)
         except ValueError:
-            self.fail("Challenge is not valid hex")"
+            self.fail("Challenge is not valid hex")
     @given(challenge=st.text(min_size=1), secret_key=st.text(min_size=1))
     def test_generate_proof(self, challenge, secret_key):
         proof = self.core.generate_proof(challenge, secret_key)
 
-        expected = hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()"        self.assertEqual(proof, expected)
+        expected = hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
+        self.assertEqual(proof, expected)
         self.assertEqual(len(proof), 128)  # sha512 is 128 chars hex
 
     @given(challenge=st.text(min_size=1), secret=st.text(min_size=1))
@@ -82,4 +83,5 @@ class TestAuthCore(unittest.TestCase):
             self.assertFalse(self.core.is_proof_expired(fresh_time, ttl))
 
 
-if __name__ == "__main__":"    unittest.main()
+if __name__ == "__main__":
+    unittest.main()

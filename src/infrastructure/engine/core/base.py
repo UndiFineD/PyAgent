@@ -16,9 +16,21 @@
 """Base abstract classes for the engine core."""
 
 
-from abc import ABC, abstractmethod
-from typing import Dict, List, Set
-from .config import EngineCoreOutput, EngineCoreOutputs, FinishReason, ModelRunnerOutput, Request, RequestStatus, SchedulerOutput
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
+try:
+    from typing import Dict, List, Set
+except ImportError:
+    from typing import Dict, List, Set
+
+try:
+    from .config import EngineCoreOutput, EngineCoreOutputs, FinishReason, ModelRunnerOutput, Request, RequestStatus, SchedulerOutput
+except ImportError:
+    from .config import EngineCoreOutput, EngineCoreOutputs, FinishReason, ModelRunnerOutput, Request, RequestStatus, SchedulerOutput
+
 
 
 class Scheduler(ABC):

@@ -18,7 +18,11 @@
 """
 
 
-from src.core.base.common.validation_core import ValidationCore as StandardValidationCore
+try:
+    from .core.base.common.validation_core import ValidationCore as StandardValidationCore
+except ImportError:
+    from src.core.base.common.validation_core import ValidationCore as StandardValidationCore
+
 
 
 class ValidationCore(StandardValidationCore):

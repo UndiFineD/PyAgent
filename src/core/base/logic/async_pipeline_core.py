@@ -14,14 +14,42 @@
 
 """Minimal Async Pipeline Core used in tests."""
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import asyncio
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Awaitable, Callable, Dict, List, Optional
+
+try:
+    import asyncio
+except ImportError:
+    import asyncio
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import Any, Awaitable, Callable, Dict, List, Optional
+except ImportError:
+    from typing import Any, Awaitable, Callable, Dict, List, Optional
+
 
 logger = logging.getLogger(__name__)
 

@@ -12,10 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import importlib
+try:
+    import importlib
+except ImportError:
+    import importlib
 
 
-from core.base.common.utils.dynamic_importer import (
+
+try:
+    from core.base.common.utils.dynamic_importer import (
+except ImportError:
+    from core.base.common.utils.dynamic_importer import (
+
     PlaceholderModule,
     LazyModuleRegistry,
     LazyAttribute,

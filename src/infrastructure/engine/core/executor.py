@@ -17,8 +17,16 @@
 
 
 
-from .base import Executor
-from .config import ModelRunnerOutput, SchedulerOutput
+try:
+    from .base import Executor
+except ImportError:
+    from .base import Executor
+
+try:
+    from .config import ModelRunnerOutput, SchedulerOutput
+except ImportError:
+    from .config import ModelRunnerOutput, SchedulerOutput
+
 
 
 class MockExecutor(Executor):

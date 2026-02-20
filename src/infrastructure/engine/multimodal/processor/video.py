@@ -14,10 +14,26 @@
 
 
 
-from typing import Any, Dict, Optional, Tuple
-import numpy as np
-from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
-from .image import ImageProcessor  # Replace with concrete implementation if abstract
+try:
+    from typing import Any, Dict, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, Optional, Tuple
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+try:
+    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
+except ImportError:
+    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
+
+try:
+    from .image import ImageProcessor  # Replace with concrete implementation if abstract
+except ImportError:
+    from .image import ImageProcessor # Replace with concrete implementation if abstract
+
 
 
 class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]]):

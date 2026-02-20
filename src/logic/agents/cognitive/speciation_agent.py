@@ -20,14 +20,38 @@ is out of scope for the test harness and should be restored from
 history if full behavior is required.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import logging
-from typing import Any, Dict
-from pathlib import Path
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict
+except ImportError:
+    from typing import Any, Dict
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.common.base_utilities import as_tool
+except ImportError:
+    from src.core.base.common.base_utilities import as_tool
+
 
 
 class SpeciationAgent(BaseAgent):

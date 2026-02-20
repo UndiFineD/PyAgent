@@ -16,8 +16,16 @@
 """Standard scheduler implementations."""
 
 
-from .base import Scheduler
-from .config import RequestStatus, SchedulerOutput
+try:
+    from .base import Scheduler
+except ImportError:
+    from .base import Scheduler
+
+try:
+    from .config import RequestStatus, SchedulerOutput
+except ImportError:
+    from .config import RequestStatus, SchedulerOutput
+
 
 
 class SimpleScheduler(Scheduler):

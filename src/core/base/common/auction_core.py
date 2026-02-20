@@ -16,9 +16,17 @@
 """Core logic for Swarm Resource Auctioning.
 """
 
-from typing import Any, Dict, List
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
 
-from .base_core import BaseCore
+
+try:
+    from .base_core import BaseCore
+except ImportError:
+    from .base_core import BaseCore
+
 
 
 class AuctionCore(BaseCore):

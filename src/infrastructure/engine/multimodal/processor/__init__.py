@@ -15,13 +15,37 @@
 
 # Processor package.
 
-from .audio import AudioProcessor  # noqa: F401
-from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig, MultiModalData, MultiModalInputs, PlaceholderInfo  # noqa: F401
+try:
+    from .audio import AudioProcessor  # noqa: F401
+except ImportError:
+    from .audio import AudioProcessor # noqa: F401
 
-from .embed import TextEmbedProcessor  # noqa: F401
-from .image import ImageProcessor  # noqa: F401
-from .registry import MULTIMODAL_REGISTRY, MultiModalRegistry, get_placeholder_tokens, process_multimodal_inputs  # noqa: F401
-from .video import VideoProcessor  # noqa: F401
+try:
+    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig, MultiModalData, MultiModalInputs, PlaceholderInfo  # noqa: F401
+except ImportError:
+    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig, MultiModalData, MultiModalInputs, PlaceholderInfo # noqa: F401
+
+
+try:
+    from .embed import TextEmbedProcessor  # noqa: F401
+except ImportError:
+    from .embed import TextEmbedProcessor # noqa: F401
+
+try:
+    from .image import ImageProcessor  # noqa: F401
+except ImportError:
+    from .image import ImageProcessor # noqa: F401
+
+try:
+    from .registry import MULTIMODAL_REGISTRY, MultiModalRegistry, get_placeholder_tokens, process_multimodal_inputs  # noqa: F401
+except ImportError:
+    from .registry import MULTIMODAL_REGISTRY, MultiModalRegistry, get_placeholder_tokens, process_multimodal_inputs # noqa: F401
+
+try:
+    from .video import VideoProcessor  # noqa: F401
+except ImportError:
+    from .video import VideoProcessor # noqa: F401
+
 
 
 __all__ = [

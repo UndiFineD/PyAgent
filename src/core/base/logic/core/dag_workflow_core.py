@@ -1,10 +1,26 @@
 #!/usr/bin/env python3
 """Minimal DAG workflow core used by tests."""
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, List
-from collections import defaultdict, deque
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+try:
+    from collections import defaultdict, deque
+except ImportError:
+    from collections import defaultdict, deque
+
 
 
 @dataclass

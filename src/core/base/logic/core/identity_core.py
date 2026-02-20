@@ -1,10 +1,26 @@
 #!/usr/bin/env python3
 """Minimal IdentityCore implementation for tests."""
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Dict
-import uuid
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Dict
+except ImportError:
+    from typing import Dict
+
+try:
+    import uuid
+except ImportError:
+    import uuid
+
 
 
 @dataclass

@@ -16,12 +16,20 @@
 """Manager regarding plugin discovery, loading, and registration.
 (Facade regarding src.core.base.common.plugin_core)
 """
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
 
 
 
-from src.core.base.common.plugin_core import PluginCore as StandardPluginManager, PluginMetadata as StandardPluginMetadata
+
+try:
+    from .core.base.common.plugin_core import PluginCore as StandardPluginManager, PluginMetadata as StandardPluginMetadata
+except ImportError:
+    from src.core.base.common.plugin_core import PluginCore as StandardPluginManager, PluginMetadata as StandardPluginMetadata
+
 
 
 

@@ -31,28 +31,43 @@ from src.core.base.logic.core.inter_agent_communication_core import (
 class TestInterAgentCommunicationCore:
     """Test suite for inter-agent communication core."""
     def test_agent_card_creation(self):
-        """Test agent card creation and validation."""card = AgentCard(
-            name="TestAgent","            description="A test agent","            version="1.0.0","            protocol_version="0.2.6","            url="http://localhost:3000","            capabilities=AgentCapabilities(
+        """Test agent card creation and validation."""
+        card = AgentCard(
+            name="TestAgent",
+            description="A test agent",
+            version="1.0.0",
+            protocol_version="0.2.6",
+            url="http://localhost:3000",
+            capabilities=AgentCapabilities(
                 streaming=True,
-                push_notifications=True
+                push_notifications=True,
             ),
-            default_input_modes=["text"],"            default_output_modes=["text"],"        )
-        assert card.name == "TestAgent""        assert card.capabilities.streaming is True
+            default_input_modes=["text"],
+            default_output_modes=["text"],
+        )
+
+        assert card.name == "TestAgent"
+        assert card.capabilities.streaming is True
         assert card.capabilities.push_notifications is True
 
     def test_message_creation(self):
-        """Test message creation and serialization."""message = Message(
+        """Test message creation and serialization."""
+        message = Message(
             content=[
-                TextPart(text="Hello, agent!")"            ],
+                TextPart(text="Hello, agent!"),
+            ],
             role=Role.USER,
         )
+
         assert len(message.content) == 1
         assert isinstance(message.content[0], TextPart)
-        assert message.content[0].text == "Hello, agent!""        assert message.role == Role.USER
+        assert message.content[0].text == "Hello, agent!"
+        assert message.role == Role.USER
 
     @pytest.mark.asyncio
     async def test_core_initialization(self):
-        """Test core initialization."""comm_core = InterAgentCommunicationCore()
+        """Test core initialization."""
+        comm_core = InterAgentCommunicationCore()
         try:
             assert comm_core.registered_agents == {}
             assert comm_core.active_tasks == {}

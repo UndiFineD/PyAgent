@@ -27,13 +27,37 @@ The goal is to provide a stable API that higher-level code and tests can
 depend on while leaving room to plug in a real model later.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import List, Optional, Sequence
-import math
-import random
-import re
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import List, Optional, Sequence
+except ImportError:
+    from typing import List, Optional, Sequence
+
+try:
+    import math
+except ImportError:
+    import math
+
+try:
+    import random
+except ImportError:
+    import random
+
+try:
+    import re
+except ImportError:
+    import re
+
 
 
 @dataclass

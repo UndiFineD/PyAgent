@@ -19,12 +19,28 @@ performing real encryption. This keeps imports and API compatibility
 for unit tests while avoiding dependency on the full crypto stack.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Tuple
 
-from src.core.base.logic.memory_core import MemoryNode, MemoryStore
-from src.core.base.logic.security.e2e_encryption_core import E2EEncryptionCore
+try:
+    from typing import Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple
+
+
+try:
+    from .core.base.logic.memory_core import MemoryNode, MemoryStore
+except ImportError:
+    from src.core.base.logic.memory_core import MemoryNode, MemoryStore
+
+try:
+    from .core.base.logic.security.e2e_encryption_core import E2EEncryptionCore
+except ImportError:
+    from src.core.base.logic.security.e2e_encryption_core import E2EEncryptionCore
+
 
 
 class EncryptedMemoryStore:

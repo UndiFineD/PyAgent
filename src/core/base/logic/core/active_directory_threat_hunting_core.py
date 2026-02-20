@@ -1,11 +1,27 @@
 #!/usr/bin/env python3
 """Minimal Active Directory threat hunting core for tests."""
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import List, Dict, Any, Optional
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from enum import Enum
+except ImportError:
+    from enum import Enum
+
+try:
+    from typing import List, Dict, Any, Optional
+except ImportError:
+    from typing import List, Dict, Any, Optional
+
 
 
 class ThreatLevel(Enum):

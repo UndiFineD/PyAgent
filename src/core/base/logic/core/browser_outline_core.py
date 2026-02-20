@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 """Minimal browser outline helpers used by tests."""
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
 
 
 @dataclass

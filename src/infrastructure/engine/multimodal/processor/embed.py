@@ -16,9 +16,21 @@
 # Embed.py module.
 
 
-from typing import Any, Dict, Tuple
-import numpy as np
-from .base import BaseMultiModalProcessor, ModalityType
+try:
+    from typing import Any, Dict, Tuple
+except ImportError:
+    from typing import Any, Dict, Tuple
+
+try:
+    import numpy
+except ImportError:
+    import numpy
+ as np
+try:
+    from .base import BaseMultiModalProcessor, ModalityType
+except ImportError:
+    from .base import BaseMultiModalProcessor, ModalityType
+
 
 
 class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):

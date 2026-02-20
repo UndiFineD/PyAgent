@@ -15,11 +15,31 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Request lifecycle management sub-package."""
-from .enums import FINISH_REASON_STRINGS, FinishReason, RequestEventType, RequestStatus, is_valid_transition  # noqa: F401
-from .event import RequestEvent  # noqa: F401
-from .queue import RequestQueue  # noqa: F401
-from .request import Request  # noqa: F401
-from .tracker import RequestTracker  # noqa: F401
+try:
+    from .enums import FINISH_REASON_STRINGS, FinishReason, RequestEventType, RequestStatus, is_valid_transition  # noqa: F401
+except ImportError:
+    from .enums import FINISH_REASON_STRINGS, FinishReason, RequestEventType, RequestStatus, is_valid_transition # noqa: F401
+
+try:
+    from .event import RequestEvent  # noqa: F401
+except ImportError:
+    from .event import RequestEvent # noqa: F401
+
+try:
+    from .queue import RequestQueue  # noqa: F401
+except ImportError:
+    from .queue import RequestQueue # noqa: F401
+
+try:
+    from .request import Request  # noqa: F401
+except ImportError:
+    from .request import Request # noqa: F401
+
+try:
+    from .tracker import RequestTracker  # noqa: F401
+except ImportError:
+    from .tracker import RequestTracker # noqa: F401
+
 
 
 __all__ = [

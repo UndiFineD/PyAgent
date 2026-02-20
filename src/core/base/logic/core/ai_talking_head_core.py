@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 """Minimal AITalkingHead core for tests."""
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Optional, Dict, Any
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Optional, Dict, Any
+except ImportError:
+    from typing import Optional, Dict, Any
+
 
 
 @dataclass

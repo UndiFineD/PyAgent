@@ -5,12 +5,32 @@ Provides simple in-memory stores used by unit tests. This is a
 lightweight replacement for the more featureful production code.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
-from abc import ABC, abstractmethod
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass, field
+except ImportError:
+    from dataclasses import dataclass, field
+
+try:
+    from typing import Any, Dict, List, Optional, Tuple
+except ImportError:
+    from typing import Any, Dict, List, Optional, Tuple
+
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from abc import ABC, abstractmethod
+
 
 
 @dataclass

@@ -17,15 +17,43 @@ Enables agents to launch sub-tasks by spawning other specialized agents.
 """
 
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import logging
-from pathlib import Path
-from typing import Any
 
-from src.core.base.common.models import AgentPriority, CascadeContext
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.registry.module_loader import ModuleLoader
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.common.models import AgentPriority, CascadeContext
+except ImportError:
+    from src.core.base.common.models import AgentPriority, CascadeContext
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+try:
+    from .core.base.registry.module_loader import ModuleLoader
+except ImportError:
+    from src.core.base.registry.module_loader import ModuleLoader
+
 
 __version__ = VERSION
 

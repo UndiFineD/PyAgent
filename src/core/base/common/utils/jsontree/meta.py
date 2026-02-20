@@ -21,7 +21,11 @@ filtering leaves by predicate, and validating leaf values.
 """
 
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
+
 
 """JSON Tree Meta Utilities.
 
@@ -30,10 +34,22 @@ across the codebase. Functions include counting leaves, computing depth,
 filtering leaves by predicate, and validating leaf values.
 """
 
-from typing import Callable, Any, TypeVar
+try:
+    from typing import Callable, Any, TypeVar
+except ImportError:
+    from typing import Callable, Any, TypeVar
 
-from .iteration import json_iter_leaves, json_iter_leaves_with_path
-from .types import _T, JSONTree
+
+try:
+    from .iteration import json_iter_leaves, json_iter_leaves_with_path
+except ImportError:
+    from .iteration import json_iter_leaves, json_iter_leaves_with_path
+
+try:
+    from .types import _T, JSONTree
+except ImportError:
+    from .types import _T, JSONTree
+
 
 
 def json_count_leaves(value: JSONTree[_T]) -> int:

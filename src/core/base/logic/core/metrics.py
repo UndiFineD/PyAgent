@@ -17,7 +17,11 @@
 (Facade regarding src.core.base.common.metrics_core)
 """
 
-from src.core.base.common.metrics_core import MetricsCore as StandardMetricsCore
+try:
+    from .core.base.common.metrics_core import MetricsCore as StandardMetricsCore
+except ImportError:
+    from src.core.base.common.metrics_core import MetricsCore as StandardMetricsCore
+
 
 
 class MetricsCore(StandardMetricsCore):

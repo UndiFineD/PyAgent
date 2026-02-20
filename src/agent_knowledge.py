@@ -39,7 +39,11 @@ Wrapper for Knowledge Agent CLI.
 
 
 
-from src.logic.agents.cognitive.context.knowledge_main import main
+try:
+    from .logic.agents.cognitive.context.knowledge_main import main
+except ImportError:
+    from src.logic.agents.cognitive.context.knowledge_main import main
+
 
 
 if __name__ == "__main__":

@@ -35,33 +35,56 @@ class McpValidatorCore:
     """
     # Indicators of potential prompt injection or malicious instructions
     INJECTION_KEYWORDS = [
-        r"ignore previous","        r"system prompt","        r"do not disclose","        r"delete all files","        r"secret key","        r"override","        r"hidden tag""    ]
+        r"ignore previous",
+        r"system prompt",
+        r"do not disclose",
+        r"delete all files",
+        r"secret key",
+        r"override",
+        r"hidden tag",
+    ]
 
     # High-impact tool patterns requiring user confirmation
     HIGH_IMPACT_TOOLS = [
-        r"delete","        r"remove","        r"format","        r"execute","        r"shell","        r"bash","        r"send_money","        r"write_file","        r"edit_file""    ]
+        r"delete",
+        r"remove",
+        r"format",
+        r"execute",
+        r"shell",
+        r"bash",
+        r"send_money",
+        r"write_file",
+        r"edit_file",
+    ]
 
     def validate_tool_definition(self, tool_def: Dict[str, Any]) -> List[str]:
         """Runs multiple security checks on a tool definition.
+
         Returns a list of warning messages.
-        """warnings = []
-        name = tool_def.get("name", "unknown")"        description = tool_def.get("description", "")"
+        """
+        warnings: List[str] = []
+        name = tool_def.get("name", "unknown")
+        description = tool_def.get("description", "")
+
         # 1. Check for injection keywords in description
         for keyword in self.INJECTION_KEYWORDS:
             if re.search(keyword, description, re.IGNORECASE):
-                warnings.append(f"Potential injection trigger in tool '{name}' description: '{keyword}'")"'
+                warnings.append(f"Potential injection trigger in tool '{name}' description: '{keyword}'")
+
         # 2. Identify high-impact tools
         for pattern in self.HIGH_IMPACT_TOOLS:
             if re.search(pattern, name, re.IGNORECASE):
-                warnings.append(f"High-impact tool detected: '{name}'. Requires explicit confirmation.")"'
+                warnings.append(f"High-impact tool detected: '{name}'. Requires explicit confirmation.")
+
         return warnings
 
     def check_metadata_isolation(self, mcp_server_config: Dict[str, Any]) -> bool:
-        """Ensures metadata (like API keys) is not exposed in the server schema.
-        """
-# Search recursively for 'key', 'secret', 'token' in the config structure'        def find_secrets(obj):
+        """Ensures metadata (like API keys) is not exposed in the server schema."""
+
+        def find_secrets(obj: Any) -> bool:
             if isinstance(obj, str):
-                if any(x in obj.lower() for x in ["key", "secret", "token"]):"                    return True
+                if any(x in obj.lower() for x in ["key", "secret", "token"]):
+                    return True
             elif isinstance(obj, dict):
                 return any(find_secrets(v) for v in obj.values())
             elif isinstance(obj, list):
@@ -71,7 +94,10 @@ class McpValidatorCore:
         return not find_secrets(mcp_server_config)
 
     def validate_environment_variables(self, env_vars: Dict[str, str]) -> List[str]:
-        """Checks if environment variables passed to MCP servers are safe."""risky_vars = ["PATH", "LD_PRELOAD", "PYTHONPATH"]"        warnings = []
+        """Checks if environment variables passed to MCP servers are safe."""
+        risky_vars = ["PATH", "LD_PRELOAD", "PYTHONPATH"]
+        warnings: List[str] = []
         for var in risky_vars:
             if var in env_vars:
-                warnings.append(f"MCP server attempting to override critical env var: {var}")"        return warnings
+                warnings.append(f"MCP server attempting to override critical env var: {var}")
+        return warnings

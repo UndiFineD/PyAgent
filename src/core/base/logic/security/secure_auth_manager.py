@@ -5,15 +5,43 @@ Provides minimal behavior for creating and verifying sessions.
 Real WebAuthn / OAuth flows are out of scope for unit tests.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import logging
-import secrets
-import time
-from dataclasses import dataclass
-from typing import Dict, Optional, Any
 
-from .e2e_encryption_core import E2EEncryptionCore
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import secrets
+except ImportError:
+    import secrets
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Dict, Optional, Any
+except ImportError:
+    from typing import Dict, Optional, Any
+
+
+try:
+    from .e2e_encryption_core import E2EEncryptionCore
+except ImportError:
+    from .e2e_encryption_core import E2EEncryptionCore
+
 
 logger = logging.getLogger("pyagent.secure_auth")
 

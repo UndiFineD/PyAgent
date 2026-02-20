@@ -20,9 +20,17 @@ transforming JSON-like trees (dicts/lists). Implementations are intentionally
 minimal to keep test collection robust.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from typing import Any, Generator, Iterable, List, Tuple
+
+try:
+    from typing import Any, Generator, Iterable, List, Tuple
+except ImportError:
+    from typing import Any, Generator, Iterable, List, Tuple
+
 
 JSONTree = Any
 

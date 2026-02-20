@@ -21,10 +21,22 @@ imports. The full production implementation may use ChromaDB or other
 vector stores; here we keep behavior deterministic and side-effect free.
 """
 
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-import logging
-from typing import Any, Dict, List, Optional
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
 
 
 class TieredMemoryEngine:

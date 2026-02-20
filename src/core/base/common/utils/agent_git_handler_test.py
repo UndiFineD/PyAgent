@@ -12,9 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from types import SimpleNamespace
+try:
+    from types import SimpleNamespace
+except ImportError:
+    from types import SimpleNamespace
 
-from core.base.common.utils.agent_git_handler import AgentGitHandler
+
+try:
+    from core.base.common.utils.agent_git_handler import AgentGitHandler
+except ImportError:
+    from core.base.common.utils.agent_git_handler import AgentGitHandler
+
 
 
 class DummyShell:

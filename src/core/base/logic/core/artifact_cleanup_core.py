@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 """Minimal Artifact Cleanup core for tests."""
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from typing import List
+
+try:
+    from typing import List
+except ImportError:
+    from typing import List
+
 
 
 class ArtifactCleanupCore:

@@ -16,15 +16,51 @@
 """Logic Package - Core implementation of agent reasoning and utilities.
 """
 
-from .acceleration_manager import NeuralPruningEngine  # noqa: F401
-from .agent_plugin_base import AgentPluginBase  # noqa: F401
-from .agent_verification import AgentVerifier, CodeHealthAuditor, CodeIntegrityVerifier  # noqa: F401
-from .circuit_breaker import CircuitBreaker  # noqa: F401
-from .connectivity_manager import ConnectivityManager  # noqa: F401
-from .dependency_graph import DependencyGraph  # noqa: F401
-from .incremental_processor import IncrementalProcessor  # noqa: F401
-from .logging_config import setup_logging  # noqa: F401
-from .sandbox_manager import SandboxManager  # noqa: F401
+try:
+    from .acceleration_manager import NeuralPruningEngine  # noqa: F401
+except ImportError:
+    from .acceleration_manager import NeuralPruningEngine # noqa: F401
+
+try:
+    from .agent_plugin_base import AgentPluginBase  # noqa: F401
+except ImportError:
+    from .agent_plugin_base import AgentPluginBase # noqa: F401
+
+try:
+    from .agent_verification import AgentVerifier, CodeHealthAuditor, CodeIntegrityVerifier  # noqa: F401
+except ImportError:
+    from .agent_verification import AgentVerifier, CodeHealthAuditor, CodeIntegrityVerifier # noqa: F401
+
+try:
+    from .circuit_breaker import CircuitBreaker  # noqa: F401
+except ImportError:
+    from .circuit_breaker import CircuitBreaker # noqa: F401
+
+try:
+    from .connectivity_manager import ConnectivityManager  # noqa: F401
+except ImportError:
+    from .connectivity_manager import ConnectivityManager # noqa: F401
+
+try:
+    from .dependency_graph import DependencyGraph  # noqa: F401
+except ImportError:
+    from .dependency_graph import DependencyGraph # noqa: F401
+
+try:
+    from .incremental_processor import IncrementalProcessor  # noqa: F401
+except ImportError:
+    from .incremental_processor import IncrementalProcessor # noqa: F401
+
+try:
+    from .logging_config import setup_logging  # noqa: F401
+except ImportError:
+    from .logging_config import setup_logging # noqa: F401
+
+try:
+    from .sandbox_manager import SandboxManager  # noqa: F401
+except ImportError:
+    from .sandbox_manager import SandboxManager # noqa: F401
+
 
 
 __all__ = [

@@ -4,10 +4,22 @@
 Provides lightweight dataclasses and a simple core
 implementation sufficient for unit tests to import.
 """
-from __future__ import annotations
+try:
+    from __future__ import annotations
+except ImportError:
+    from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import List, Optional
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import List, Optional
+except ImportError:
+    from typing import List, Optional
+
 
 
 @dataclass
